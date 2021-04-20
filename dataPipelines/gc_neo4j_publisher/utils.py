@@ -115,12 +115,14 @@ class Neo4jJobManager:
             session.run("DROP CONSTRAINT unique_docs IF EXISTS")
             session.run("DROP CONSTRAINT unique_ents IF EXISTS")
             session.run("DROP CONSTRAINT unique_resps IF EXISTS")
+            session.run("DROP CONSTRAINT unique_pars IF EXISTS")
 
             # next set up a few things to make sure that entities/documents/pubs aren't being inserted more than once.
             session.run("CREATE CONSTRAINT unique_pubs IF NOT EXISTS ON (p:Publication) ASSERT p.name IS UNIQUE")
             session.run("CREATE CONSTRAINT unique_docs IF NOT EXISTS ON (d:Document) ASSERT d.doc_id IS UNIQUE")
             session.run("CREATE CONSTRAINT unique_ents IF NOT EXISTS ON (e:Entity) ASSERT e.name IS UNIQUE")
             session.run("CREATE CONSTRAINT unique_resps IF NOT EXISTS ON (r:Responsibility) ASSERT r.name IS UNIQUE")
+            session.run("CREATE CONSTRAINT unique_pars IF NOT EXISTS ON (p:Paragraph) ASSERT p.par_id IS UNIQUE")
 
         publisher = Neo4jPublisher()
         publisher.populate_verified_ents()

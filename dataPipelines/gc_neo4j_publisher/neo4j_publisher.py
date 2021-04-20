@@ -157,7 +157,18 @@ class Neo4jPublisher:
                 + '\", a.type = \"' + type
                 + '\", a.name = \"' + docName
                 + '\", a.ref_list = ' + str(ref_list)
-                + " , a.page_count = " + str(pageCount)
+                + ', a.page_count = ' + str(pageCount)
+                + ', a.init_date = \"' + j.get('init_date', '')
+                + '\", a.change_date = \"' + j.get('change_date', '')
+                + '\", a.author = \"' + j.get('author', '')
+                + '\", a.signature = \"' + j.get('signature', '')
+                + '\", a.subject = \"' + j.get('subject', '')
+                + '\", a.classification = \"' + j.get('classification', '')
+                + '\", a.group_s = \"' + j.get('group_s' '')
+                + '\", a.pagerank_r = ' + str((j.get('pagerank_r', 0) or 0))
+                + ', a.kw_doc_score_r = ' + str((j.get('kw_doc_score_r', 0) or 0))
+                + ', a.version_hash_s = \"' + (j.get('version_hash_s' '') or "")
+                + '\", a.is_revoked_b = ' + str((j.get('is_revoked_b', False) or False))
                 + ' '
                 + 'MERGE (b:Publication {name: \"' + pubName + '\"}) '
                 + 'SET b.doc_type = \"' + docType
@@ -178,6 +189,9 @@ class Neo4jPublisher:
             # responsibilities
             text = j["text"]
             self.process_responsibilities(text)
+
+            # paragraphs
+            self.process_paragraphs(j, doc_id)
 
         q.put(1)
         return id
@@ -257,6 +271,21 @@ class Neo4jPublisher:
                 tu.squash_non_word_characters
             ]
         )
+
+    def process_paragraphs(self, j: t.Dict[str, t.Any], doc_id: str) -> None:
+        for idx, p in enumerate(j["paragraphs"]):
+            process_query(
+                'MERGE (a: Document {doc_id: \"'
+                + doc_id
+                + '\"}) '
+                + 'MERGE (p:Paragraph {par_id: \"' + p['id'] + '\"}) '
+                + 'SET p.page_num_i = ' + str(p['page_num_i'])
+                + ', p.par_count_i = ' + str(p['par_count_i'])
+                + ', p.par_raw_text_t = \"' + self._normalize_string(p['par_raw_text_t']) + '\" '
+                + ', p.doc_id = \"' + doc_id + '\" '
+                + 'CREATE (a)-[:CONTAINS]->(p);'
+            )
+        return
 
     def process_entity_list(self, j: t.Dict[str, t.Any], doc_id: str) -> None:
         entityDict: t.Dict[str, t.Any] = {}
