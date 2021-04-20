@@ -27,6 +27,13 @@ def is_pdf(file: t.Union[Path, str]) -> bool:
     """Check if given file is a readable PDF file"""
     file_path = Path(file).resolve()
 
+    # try:
+    #     PyPDF2.PdfFileReader(open(file_path, "rb"))
+    # except PyPDF2.utils.PdfReadError as e:
+    #     if 'no objects found' in e.args:
+    #         return False
+    #     return False
+
     try:
         doc = fitz.open(file_path)
         doc.close()

@@ -156,7 +156,7 @@ class S3Utils:
 
         # Upload the file
         s3_client = self.ch.s3_client
-        s3_client.download_file(self.bucket, object_path, str(file_path))
+        s3_client.download_file(bucket_name, object_path, str(file_path))
 
         return file_path
 

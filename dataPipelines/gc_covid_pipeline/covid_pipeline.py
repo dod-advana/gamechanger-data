@@ -155,7 +155,7 @@ def run(staging_folder: str, s3_covd_dataset: str,
     # Delete old records from Elasticsearch
     print("Delete file no longer need in S3 (PDF/Generated JSONs")
     delete_records_in_elasticsearch(file_list_records=staging_folder + "/modification/files_to_remove.txt",
-                                    index_name=es_index,  ingest_dir=staging_folder + "/modification/json")
+                                    index_name=es_index, alias=es_alias, ingest_dir=staging_folder + "/modification/json")
 
     # TAR new RAW JSONs
     print("TAR up new Raw JSONs")

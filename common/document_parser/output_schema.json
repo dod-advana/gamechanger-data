@@ -30,17 +30,7 @@
       "pages",
       "pagerank_r",
       "kw_doc_score_r",
-      "orgs_rs",
-      "download_url_s",
-      "topics_rs",
-      "cac_login_required_b",
-      "publication_date_dt",
-      "version_hash_s",
-      "source_fqdn_s",
-      "crawler_used_s",
-      "access_timestamp_dt",
-      "source_page_url_s",
-      "is_revoked_b"
+      "orgs_rs"
    ],
    "properties":{
       "type":{
@@ -138,50 +128,7 @@
          "required":[
 
          ],
-         "additionalProperties":true
-      },
-      "download_url_s":{
-         "type": "string"
-      },
-      "topics_rs":{
-         "type":"object",
-         "required":[
-
-         ],
-         "additionalProperties":true
-      },
-      "cac_login_required_b": {
-         "type": "boolean"
-      },
-      "is_revoked_b": {
-         "type": "boolean"
-      },
-      "publication_date_dt": {
-         "type": ["string", "null"]
-      },
-      "version_hash_s": {
-         "type": "string"
-      },
-      "source_fqdn_s": {
-         "type": "string"
-      },
-      "crawler_used_s": {
-         "type": "string"
-      },
-      "display_doc_type_s": {
-         "type": "string"
-      },
-      "display_org_s": {
-         "type": "string"
-      },
-      "display_title_s": {
-         "type": "string"
-      },
-      "access_timestamp_dt": {
-         "type": "string"
-      },
-      "source_page_url_s": {
-         "type": "string"
+         "additionalProperties":false
       },
       "text":{
          "type":"string"

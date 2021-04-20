@@ -1,5 +1,5 @@
 import os
-from elasticsearch import helpers, Elasticsearch
+from elasticsearch import helpers, Elasticsearch,ElasticsearchException,TransportError
 from pathlib import Path
 import json
 import hashlib
@@ -8,13 +8,9 @@ import traceback
 from .config import Config
 import typing as t
 from configuration import RENDERED_DIR
-import pandas as pd
+import glob
 
-def clean_string(string):
 
-    return " ".join(
-        [i.lstrip("\n").strip().lstrip().replace("'", "") for i in string.split(" ")]
-    )
 
 class ElasticsearchPublisher:
 
@@ -35,9 +31,9 @@ class ElasticsearchPublisher:
                                     http_auth=(str(username), str(password)), use_ssl=True)
 
     def get_jdicts(self):
-        for f in Path(self.ingest_dir).glob("*.json"):
+        # for f in Path(self.ingest_dir).glob("*.json"):
+        for f in glob.glob(pathname=self.ingest_dir + "/**/*.json", recursive=True):
             filename = re.sub('\.json', '', os.path.basename(f))
-            print(f"ES inserting {filename}")
             # record_id = uuid.uuid1()
             record_id = hashlib.sha256(filename.encode())
             with open(f, 'r', encoding="utf-8") as file:
@@ -45,10 +41,15 @@ class ElasticsearchPublisher:
                 json_data = json.loads(data)
                 if 'text' in json_data:
                     del json_data['text']
-                if 'pages' in json_data:
-                    del  json_data['pages']
+                if 'paragraphs' in json_data:
+                    del  json_data['paragraphs']
                 if 'raw_text' in json_data:
                     del json_data['raw_text']
+                if 'pages' in json_data:
+                    pages = json_data['pages']
+                    for page in pages:
+                        if 'p_text' in page:
+                            del page['p_text']
                 json_data['_id'] = record_id.hexdigest()
                 # json_data['_id'] = record_id
                 yield json_data
@@ -60,6 +61,33 @@ class ElasticsearchPublisher:
                 _index=self.index_name,
                 **json_dict
             )
+
+    def index_json(self, path_json: str, record_id: str) -> bool:
+        with open(path_json, 'r', encoding='utf-8') as f:
+            json_data = json.load(f)
+            if 'text' in json_data:
+                del json_data['text']
+            if 'paragraphs' in json_data:
+                del json_data['paragraphs']
+            if 'raw_text' in json_data:
+                del json_data['raw_text']
+            if 'pages' in json_data:
+                pages = json_data['pages']
+                for page in pages:
+                    if 'p_text' in page:
+                        del page['p_text']
+            try:
+                response = self.es.index(index=self.index_name, id=record_id.hexdigest(), body=json_data)
+                return True
+            except TransportError as te:
+                print(f"Failed -- Unexpected Elasticsearch Transport Exception: {path_json}  {record_id.hexdigest()}")
+                print(te.error)
+                print(te.info)
+                return False
+            except ElasticsearchException as ee:
+                print(ee)
+                return False
+
 
     def index_jsons(self):
         print("Starting to indexing json files")
@@ -130,13 +158,29 @@ class ElasticsearchPublisher:
                 else:
                     print("Missing: " + record_id.hexdigest() + "  " + filename)
 
+    def insert_record(self, json_record: dict, id: str):
+        try:
+            response = self.es.index(index=self.index_name, id=id, body=json_record)
+            # print(f"Insert Record {id} into ES")
+        except Exception:
+            traceback.print_exc()
+
+    def get_by_id(self, id: str):
+        response = self.es.get(index=self.index_name, id=id)
+        return response['_source']
+
+    def exists(self, id: str) -> bool:
+        return self.es.exists(index=self.index_name, id=id)
+
+    def ping(self):
+        return self.es.ping
 
 class ConfiguredElasticsearchPublisher(ElasticsearchPublisher):
     """ES Publisher that leverages repo configuration"""
 
     def __init__(self, ingest_dir: t.Union[str, Path], index_name: str, mapping_file: t.Optional[t.Union[str, Path]] = None, alias: t.Optional[str] = None):
-        if ingest_dir:
-            ingest_dir = str(Path(ingest_dir).resolve())
+
+        ingest_dir = str(Path(ingest_dir).resolve())
         mapping_file = str(Path(mapping_file).resolve()) if mapping_file else None
 
         super().__init__(
@@ -159,91 +203,3 @@ class ConfiguredElasticsearchPublisher(ElasticsearchPublisher):
             self.mapping_file = mapping_file
         self.alias = alias
         self.es = Config.connection_helper.es_client
-
-class ConfiguredEntityPublisher(ConfiguredElasticsearchPublisher):
-    """ES Publisher that leverages repo configuration"""
-
-    def __init__(self, entity_csv_path: t.Union[str, Path], index_name: str, mapping_file: t.Optional[t.Union[str, Path]] = None, alias: t.Optional[str] = None):
-
-        entity_csv_path = str(Path(entity_csv_path).resolve())
-        mapping_file = str(Path(mapping_file).resolve()) if mapping_file else None
-
-        super().__init__(
-            ingest_dir="/data/",
-            index_name=index_name,
-            mapping_file=mapping_file,
-            alias=alias
-        )
-
-        self.entity_csv_path = entity_csv_path
-        self.agencies = self.read_agencies()
-
-    def read_agencies(self):
-
-        agencies = pd.read_csv(self.entity_csv_path)
-        agencies = agencies[agencies["in_corpus"] == True]
-        agencies.fillna("", inplace=True)
-
-        keep_cols = [
-            "Agency_Name",
-            "Website",
-            "Address",
-            "Government_Branch",
-            "Parent_Agency",
-            "Related_Agency",
-        ]
-
-        for i in keep_cols:
-            agencies[i] = agencies[i].apply(lambda x: clean_string(x))
-
-        agencies["Agency_Aliases"] = agencies["Agency_Aliases"].apply(
-            lambda x: x.split(";")
-        )
-
-        return agencies
-
-    def get_docs(self):
-
-        docs = []
-        for i in self.agencies.index:
-            mydict = {}
-            mydict["name"] = self.agencies.loc[i, "Agency_Name"]
-            mydict["website"] = self.agencies.loc[i, "Website"]
-            mydict["address"] = self.agencies.loc[i, "Address"]
-            mydict["government_branch"] = self.agencies.loc[i, "Government_Branch"]
-            mydict["parent_agency"] = self.agencies.loc[i, "Parent_Agency"]
-            mydict["related_agency"] = self.agencies.loc[i, "Related_Agency"]
-            mydict["aliases"] = [
-                {"name": x} for x in self.agencies.loc[i, "Agency_Aliases"]
-            ]
-            header = {"_index": self.index_name, "_source": mydict}
-            docs.append(header)
-
-        return docs
-
-    def index_jsons(self):
-        print("Starting to index entities")
-
-        count_success, error_count = 0, 0
-        try:
-            for success, info in helpers.parallel_bulk(
-                client=self.es,
-                actions=self.get_docs(),
-                thread_count=10,
-                chunk_size=1,
-                raise_on_exception=False,
-                queue_size=1
-            ):
-                if not success:
-                    error_count += 1
-                    print('Doc failed', info)
-                else:
-                    count_success += 1
-        except UnicodeEncodeError as e:
-            print(e)
-            print("------------------  Failed to index files. --------------------------")
-
-        # results = queue.deque(load_gen, maxlen=0)
-        print("Number of Successfully index: " + str(count_success))
-        print("Number of Failed index: " + str(error_count))
-        print("Finished indexing json files")

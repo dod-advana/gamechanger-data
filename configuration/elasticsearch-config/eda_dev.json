@@ -5,7 +5,7 @@
       "index.mapping.nested_objects.limit": 100000,
       "index": {
         "number_of_shards": 3,
-        "number_of_replicas": 1,
+        "number_of_replicas": 2,
         "mapping.nested_fields.limit": 20000
       },
       "analysis": {
@@ -122,8 +122,7 @@
           "rank_feature": {
             "match": "*_r",
             "mapping": {
-            "type": "rank_feature",
-            "store": true
+            "type": "rank_feature"
             }
           }
         },
@@ -131,8 +130,7 @@
           "rank_features": {
             "match": "*_rs",
             "mapping": {
-            "type": "rank_features",
-            "store": true
+            "type": "rank_features"
             }
           }
         },
@@ -145,8 +143,8 @@
           }
       },
       {
-        "default_type": {
-          "path_match": "*",
+        "default_eda_ext_type": {
+          "path_match": "*_eda_ext",
           "mapping": {
             "type": "text",
             "store": true,
@@ -155,19 +153,12 @@
                 "type": "keyword",
                 "store": true,
                 "ignore_above": 256,
-                "fields": {
-                  "search": {
-                    "type": "keyword",
-                    "store": true,
-                    "normalizer": "lowercase_normalizer",
-                    "ignore_above": 256
-                  }
-                }
+                "normalizer": "lowercase_normalizer"
               }
             }
           }
         }
-        }
+      }
       ],
       "properties": {
         "pagerank": {
@@ -305,6 +296,42 @@
             },
             "par_inc_count": {
               "type": "long",
+              "store": true
+            }
+          }
+        },
+        "pages": {
+          "dynamic": "true",
+          "type": "nested",
+          "properties": {
+             "id": {
+              "type": "keyword",
+              "store": true
+            },
+            "filename": {
+              "type": "keyword",
+              "store": true,
+              "fields": {
+                "search": {
+                  "type": "keyword",
+                  "normalizer": "lowercase_normalizer"
+                }
+              }
+            },
+            "type": {
+              "type": "keyword",
+              "store": true
+            },
+            "entities": {
+              "type": "nested",
+              "dynamic": "true"
+            },
+            "p_page": {
+              "type": "long",
+              "store": true
+            },
+            "p_text": {
+              "type": "text",
               "store": true
             }
           }

@@ -1,4 +1,3 @@
-
 """
 This module contains functions for date extractions
 """
@@ -8,11 +7,13 @@ import datetime
 
 PAT_DAY_MONTH_YEAR = r"(\d{1,2}\s*(?:january|february|march|april|may|june|july|august|september|october|november|december)\s*,*\s*\d{4})"
 PAT_DAY_MONTH_YEAR_SHORT = r"(\d{1,2}\s*(?:jan\.?|feb\.?|mar\.?|apr\.?|may\.?|jun\.?|jul\.?|aug\.?|sep\.?|sept\.?|oct\.?|nov\.?|dec\.?)\s*,*\s*\d{4})"
+
+# PAT_DAY_MONTH_YEAR_SHORT = r"(\d{1,2}\s*(?:january|february|march|april|may|june|july|august|september|october|november|december|jan\.?|feb\.?|mar\.?|apr\.?|may\.?|jun\.?|jul\.?|aug\.?|sep\.?|sept\.?|oct\.?|nov\.?|dec\.?)\s*,*\s*\d{2})"
 PAT_MONTH_DAY_YEAR = r"((?:january|february|march|april|may|june|july|august|september|october|november|december)\s*\d{1,2}\s*,*\s*\d{4})"
 PAT_MONTH_DAY_YEAR_SHORT = r"((?:jan\.?|feb\.?|mar\.?|apr\.?|may\.?|jun\.?|jul\.?|aug\.?|sep\.?|sept\.?|oct\.?|nov\.?|dec\.?)\s*\d{1,2}\s*,*\s*\d{4})"
 
 
-def extract_d_B_Y(text: str):
+def extract_d_B_Y(text:str):
     """
     Function to extract date from text
     Args:
@@ -36,7 +37,7 @@ def extract_d_B_Y(text: str):
     return date_list
 
 
-def extract_d_B_Y_short(text: str):
+def extract_d_B_Y_short(text:str):
     """
     Function to extract date from text
     Args:
@@ -65,8 +66,7 @@ def extract_d_B_Y_short(text: str):
 
     return date_list
 
-
-def extract_B_d_Y(text: str):
+def extract_B_d_Y(text:str):
     """
     Function to extract date from text
     Args:
@@ -89,8 +89,7 @@ def extract_B_d_Y(text: str):
 
     return date_list
 
-
-def extract_B_d_Y_short(text: str):
+def extract_B_d_Y_short(text:str):
     """
     Function to extract date from text
     Args:
@@ -120,11 +119,11 @@ def extract_B_d_Y_short(text: str):
     return date_list
 
 
-def dates_to_list(text: str):
+def dates_to_list(text:str):
     """
     Takes as an input a string of any lenght and outputs a list of datetime objects
     that were found in the string
-
+    
     Formats currently supported:
     %B %d %Y
     %d %B %Y
@@ -149,14 +148,3 @@ def dates_to_list(text: str):
     date_list += extract_B_d_Y_short(text)
 
     return date_list
-
-
-def add_dates_list(doc_dict):
-    doc_dict["date_list"] = dates_to_list(doc_dict["text"])
-    doc_dict["date_list"] = [str(d) for d in doc_dict["date_list"]]
-    return doc_dict
-
-
-def process(doc_dict):
-    dates_dict = add_dates_list(doc_dict)
-    return dates_dict

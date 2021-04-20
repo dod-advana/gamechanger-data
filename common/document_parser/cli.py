@@ -17,56 +17,90 @@ def cli():
     pass
 
 
+def json_to_csv(source:str, destination:str) -> None:
+    """
+    Converts Json file to csv
+    Args:
+        source: A source directory to be processed.
+        destination:A destination directory to be processed
+
+    """
+    # delays load of ml models to speed up cli
+    from common.document_parser import Document
+
+    doc_logger = get_default_logger()
+
+    if Path(source).is_file():
+        iss_list = []
+        iss = Document.Issuance(Path(source), f_type="json")
+        iss_list.append(iss.to_dict(full_text=False, clean=False))
+        df = pd.DataFrame(iss_list)
+        df.reset_index(drop=True, inplace=True)
+        if destination == '-':
+            df.to_csv(sys.stdout)
+        else:
+            df.to_csv(destination)
+    else:
+        p = Path(source).glob("**/*.json")
+        files = [x for x in p if x.is_file()]
+        iss_list = []
+        for m_file in files:
+            doc_logger.info("Processing: %s", Path(m_file).name)
+            iss = Document.Issuance(m_file, f_type="json")
+            iss_list.append(iss.to_dict(full_text=False, clean=False))
+        df = pd.DataFrame(iss_list)
+        df.reset_index(drop=True, inplace=True)
+        if destination == '-':
+            df.to_csv(sys.stdout)
+        else:
+            df.to_csv(destination)
+
+
 def pdf_to_json(
-        parser_path: str,
-        source: str,
-        destination: str,
-        verify: bool = False,
-        metadata: str = None,
-        multiprocess: int = -1,
-        ocr_missing_doc: bool = False,
-        num_ocr_threads: int = 2,
+        clean:bool,
+        source:str,
+        destination:str,
+        verify:bool=False,
+        metadata:str=None,
+        multiprocess:int=-1,
+        skip_optional_ds:bool=False,
+        ocr_missing_doc:bool=False,
+        num_ocr_threads:int=2,
+        ultra_simple:bool=False
 ) -> None:
     """
     Converts input pdf file to json
     Args:
-        parser_path: path to parser module or json config file that creates a parser
+        clean: boolean to determine if text is to be cleaned or not. The text is cleaned from special characters and extra spaces
         source: A source directory to be processed.
         destination: A destination directory to be processed
         verify: Boolean to determine if output jsons are to be verified vs a json schema
         metadata: file path of metadata to be processed.
         multiprocess: Multiprocessing. Will take integer for number of cores,
+        skip_optional_ds: Skip generating certain DS fields like entities
         ocr_missing_doc: OCR non-OCR'ed files
         num_ocr_threads: Number of threads to use for OCR (per file)
     """
-    from common.document_parser.process import process_dir, single_process, resolve_dynamic_parser
-
-    parser = resolve_dynamic_parser(parser_path)
+    # delays load of ml models to speed up cli
+    from common.document_parser import Document
 
     doc_logger = get_default_logger()
 
     if Path(source).is_file():
         doc_logger.info("Parsing Single Document")
-
-        parser_input = (
-            parser,
-            source,
-            metadata,
-            ocr_missing_doc,
-            num_ocr_threads,
-            destination)
-
-        single_process(parser_input)
-
+        doc = Document.Issuance(source, meta_data=metadata, ocr_missing_doc=ocr_missing_doc, num_ocr_threads=num_ocr_threads)
+        doc.json_write(clean=clean, out_dir=destination)
     else:
-        process_dir(
-            parser,
+        Document.process_dir(
             dir_path=source,
             out_dir=destination,
+            clean=clean,
             meta_data=metadata,
             multiprocess=multiprocess,
+            skip_optional_ds=skip_optional_ds,
             ocr_missing_doc=ocr_missing_doc,
             num_ocr_threads=num_ocr_threads,
+            ultra_simple=ultra_simple
         )
     if verify:
         verified = validators.verify(destination)
@@ -77,12 +111,47 @@ def pdf_to_json(
             exit(1)
 
 
+@cli.command(name="validate-json")
+@click.option(
+    '-s',
+    '--source',
+    help='A source directory to be processed.',
+    type=click.Path(resolve_path=True, exists=True),
+    required=True,
+)
+def validate_json(source:str) -> None:
+    """
+    Takes in a directory of Jsons, or one specific json, and verifies vs a json schema
+    Args:
+        source:A source directory to be processed.
+
+    """
+    result = validators.verify(source)
+    if result:
+        print("Jsons have been validated")
+    else:
+        print("Jsons do not match the schema")
+
+
+@cli.command(name="json-to-csv")
+@click.option(
+    '-s', '--source', help='A source directory to be processed.', required=True
+)
+@click.option(
+    '-d', '--destination', help='Output file path for resulting csv .', default='-'
+)
+def json_to_csv_cmd_wrapper(source:str, destination:str) -> None:
+    """Convert JSON files in a dir to CSV"""
+    json_to_csv(source, destination)
+
+
 @cli.command(name="pdf-to-json")
 @click.option(
-    '--parser-path',
-    help='A path to an existing parser function',
-    required=False,
-    default="common.document_parser.parsers.policy_analytics.parse::parse"
+    '-c',
+    '--clean',
+    is_flag=True,
+    help='The text is cleaned from special characters and extra spaces',
+    default=False,
 )
 @click.option(
     '-v',
@@ -102,8 +171,7 @@ def pdf_to_json(
     '-d',
     '--destination',
     required=True,
-    type=click.Path(exists=True, file_okay=False,
-                    dir_okay=True, resolve_path=True),
+    type=click.Path(exists=True, file_okay=False, dir_okay=True, resolve_path=True),
     help='A destination directory to be processed.',
 )
 @click.option(
@@ -112,10 +180,10 @@ def pdf_to_json(
     help='Meta data from ingestion can be passed here as a json file, '
          + 'or pass same directory as pdfs if meta data is available there. '
          + 'Looks for matching *.metadata if directory',
-    type=click.Path(exists=True, file_okay=True,
-                    dir_okay=True, resolve_path=True),
+    type=click.Path(exists=True, file_okay=True, dir_okay=True, resolve_path=True),
     default=None,
 )
+
 @click.option(
     '-p',
     '--multiprocess',
@@ -132,6 +200,22 @@ def pdf_to_json(
     is_flag=True
 )
 @click.option(
+    '-x',
+    '--skip_optional_ds',
+    required=False,
+    is_flag=True,
+    help='Optional data science steps like entity extraction are skipped',
+    default=False,
+)
+@click.option(
+    '-u',
+    '--ultra_simple',
+    required=False,
+    is_flag=True,
+    help='Optional most steps are skipped',
+    default=False,
+)
+@click.option(
     '-z',
     '--memory_percentage',
     required=False,
@@ -146,30 +230,32 @@ def pdf_to_json(
     help="Number of threads to use for OCR (per file)"
 )
 def pdf_to_json_cmd_wrapper(
-        parser_path: str,
+        clean: bool,
         source: str,
         destination: str,
         metadata: str,
         multiprocess: int,
         verify: bool,
         memory_percentage: float,
+        skip_optional_ds: bool,
         ocr_missing_doc: bool,
         num_ocr_threads: int,
-) -> None:
+        ultra_simple: bool) -> None:
     """Parse OCR'ed PDF files into JSON schema"""
     if platform.system() == "Linux":
         memory_limit(memory_percentage)
 
     pdf_to_json(
-        parser_path=parser_path,
+        clean=clean,
         source=source,
         destination=destination,
         verify=verify,
         metadata=metadata,
         multiprocess=multiprocess,
+        skip_optional_ds=skip_optional_ds,
         ocr_missing_doc=ocr_missing_doc,
         num_ocr_threads=num_ocr_threads,
-    )
+        ultra_simple=ultra_simple)
 
 
 def memory_limit(memory_percentage: float):
@@ -179,10 +265,8 @@ def memory_limit(memory_percentage: float):
         memory_percentage: the percent allowed as a float
     """
     soft, hard = resource.getrlimit(resource.RLIMIT_AS)
-    print("Memory Hard Limit: " + str(hard) + " Soft Limit: " + str(soft) +
-          " Maximum of percentage of memory use: " + str(memory_percentage))
-    resource.setrlimit(resource.RLIMIT_AS, (get_memory()
-                                            * 1024 * memory_percentage, hard))
+    print("Memory Hard Limit: " + str(hard) + " Soft Limit: " + str(soft) + " Maximum of percentage of memory use: " + str(memory_percentage))
+    resource.setrlimit(resource.RLIMIT_AS, (get_memory() * 1024 * memory_percentage, hard))
 
 
 def get_memory():

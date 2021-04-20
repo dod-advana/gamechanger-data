@@ -8,15 +8,8 @@ logger = logging.getLogger(__name__)
 ref_regex = make_dict()
 
 def check(check_str, ref_type, exp_result):
-    count = 0
-    matches = ref_regex[ref_type][1].findall(check_str)
-    for match in matches:
-        num_match = ref_regex[ref_type][0].search(match[0])
-        if not num_match:
-            continue
-        ref = (str(ref_type) + " " + str(num_match[0])).strip()
-        count += 1
-    return count==exp_result
+    print((ref_regex[ref_type][1].findall(check_str)))
+    return len(ref_regex[ref_type][1].findall(check_str))==exp_result
 
 def test_dod():
     check_str= "reference DoD 4160.28-M DoD 7000.14-R DoDD 5134.12 DoDI 4140.01 DoDI 3110.06 DoD"

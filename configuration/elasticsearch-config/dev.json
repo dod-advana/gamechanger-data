@@ -1,6 +1,7 @@
 {
   "index": {
     "settings": {
+      "index.mapping.total_fields.limit": 2000,
       "index.mapping.nested_objects.limit": 100000,
       "index": {
         "number_of_shards": 3,
@@ -16,34 +17,9 @@
               "lowercase"
             ]
           }
-        },
-      "filter": {
-        "gc_stop": {
-          "type":       "stop",
-          "stopwords":  []
-        },
-        "english_stemmer": {
-          "type":       "stemmer",
-          "language":   "english"
-        },
-        "english_possessive_stemmer": {
-          "type":       "stemmer",
-          "language":   "possessive_english"
-        }
-      },
-      "analyzer": {
-        "gc_english": {
-          "tokenizer":  "standard",
-          "filter": [
-            "english_possessive_stemmer",
-            "lowercase",
-            "gc_stop",
-            "english_stemmer"
-          ]
         }
       }
-    }
-  },
+    },
     "mappings": {
       "dynamic_templates": [
         {
@@ -52,8 +28,7 @@
             "match_mapping_type": "string",
             "mapping": {
               "type": "keyword",
-              "store": true,
-              "analyzer": "gc_english"
+              "store": true
             }
           }
         },
@@ -63,8 +38,7 @@
             "match_mapping_type": "string",
             "mapping": {
               "type": "text",
-              "store": true,
-              "analyzer": "gc_english"
+              "store": true
             }
           }
         },
@@ -140,7 +114,7 @@
             "mapping": {
               "type": "date",
               "store": true,
-              "format": "yyyy-MM-dd'T'HH:mm:ss"
+              "format": "YYYYMMDDHHmmss||yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis||basic_date_time"
             }
           }
         },
@@ -184,6 +158,7 @@
                 "fields": {
                   "search": {
                     "type": "keyword",
+                    "store": true,
                     "normalizer": "lowercase_normalizer",
                     "ignore_above": 256
                   }

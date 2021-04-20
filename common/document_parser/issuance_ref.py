@@ -1,3 +1,7 @@
+"""
+This module contains functions to extract references inside of documents using regular expressions
+"""
+
 import re
 import json
 import argparse
@@ -6,10 +10,11 @@ from common.document_parser.ref_utils import make_dict
 from collections import defaultdict
 from typing import Pattern, List
 import typing as t
+
 ref_regex = make_dict()
 
 
-def look_for_general(m_str: str, ref_dict: defaultdict, base_num: t.Pattern[str], full_num: t.Pattern[str], doc_type: str) -> defaultdict:
+def look_for_general(m_str:str, ref_dict:defaultdict, base_num: t.Pattern[str], full_num: t.Pattern[str], doc_type:str)->defaultdict:
     """
     Reference Extraction by Regular Expression: For general use
 
@@ -41,7 +46,7 @@ def look_for_general(m_str: str, ref_dict: defaultdict, base_num: t.Pattern[str]
     return ref_dict
 
 
-def collect_ref_list(text: str) -> defaultdict:
+def collect_ref_list(text:str)->defaultdict:
     """
     Collection of all reference function calls
 
@@ -53,8 +58,7 @@ def collect_ref_list(text: str) -> defaultdict:
     """
     ref_dict = defaultdict(int)
     text = text.replace("\n", "")
-    # allows regex to interpret the unicode as a -
-    text = text.replace("\u2013", "-")
+    text = text.replace("\u2013","-") #allows regex to interpret the unicode as a - 
     text = re.sub(r"[()]", " ", text)
 
     for key, value in ref_regex.items():
@@ -64,7 +68,33 @@ def collect_ref_list(text: str) -> defaultdict:
     return ref_dict
 
 
-def add_ref_list(doc_dict):
-    iss_ref = collect_ref_list(doc_dict["text"])
-    doc_dict["ref_list"] = list(iss_ref)
+def read_doc_dict(fname:Path)->defaultdict:
+    """
+    Reading in Json format for extraction
+
+    Args:
+        fname: name of json file
+
+    Returns:
+        dictionary of json contents
+    """
+    with open(fname) as f_in:
+        doc_dict=json.load(f_in)
+
     return doc_dict
+
+
+def read_plain_text(fname:Path)->str:
+    """
+    Reading Plain text file
+
+    Args:
+        fname: name of text file
+
+    Returns:
+        text string from file
+    """
+    with open(fname) as f_in:
+        text=f_in.read()
+
+    return text

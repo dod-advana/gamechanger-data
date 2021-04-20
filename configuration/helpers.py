@@ -158,7 +158,7 @@ class ConnectionHelper:
             hosts=[{
                 'host': self.conf['es']['host'],
                 'port': self.conf['es']['port'],
-                'http_compress': True,
+                'http_compress': False,
                 'timeout': 60 * 5
             }]
         )
