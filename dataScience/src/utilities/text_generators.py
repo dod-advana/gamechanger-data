@@ -14,7 +14,7 @@ def gen_json_mult_keys(data_dir, keys=("title", "f_name")):
     Args:
         data_dir (str): path to the JSON files
 
-        key (str): JSON element to yield common options
+        keys (str): JSON element to yield common options
             are pages or paragraphs
 
     Yields:
@@ -44,10 +44,6 @@ def gen_json_mult_keys(data_dir, keys=("title", "f_name")):
                 json_doc = json.load(fp)
                 values = [json_doc[key] for key in keys if key in json_doc]
                 yield values
-            # if key in json_doc:
-            #     yield json_doc[key]
-            # else:
-            #     logger.warning("no {} in {}".format(key, f_name))
     except (IOError, json.JSONDecodeError, RuntimeError) as e:
         logger.exception("{}: {}".format(type(e), str(e)), exc_info=True)
         raise

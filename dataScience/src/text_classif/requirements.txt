@@ -1,0 +1,12 @@
+matplotlib==3.3.0
+mlflow==1.0.0
+numpy==1.19.5
+pytest==6.0.1
+pyyaml==5.4.1
+tensorboard==2.4.1
+torch==1.7.1
+torchvision==0.8.2
+transformers==4.1.1
+tqdm==4.46.1
+packaging==20.4
+scikit-learn==0.23.1
