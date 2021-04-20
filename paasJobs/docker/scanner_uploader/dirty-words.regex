@@ -1,0 +1,21 @@
+^[[:blank:]]*(TS|S|C|U)(//?[[:alpha:]]{2}|[[:blank:]]*$)
+\b([`'"])(TS|S|C|U)\b.*\1\b
+\b<(TS|S|C|U)\b.*>\b
+\b\[(TS|S|C|U)\b.*\]\b
+\b\{(TS|S|C|U)\b.*\}\b
+\b\((TS|S|C|U)\b.*\)\b
+\b(TOP[[:blank:]]SECRET|SECRET|CONFIDENTIAL|UNCLASSIFIED|UNCLASS)\b
+\b(SCI|NO[[:blank:]]?FORN)\b
+\b(CUI|FOUO|CII|SBU|SSI|LES|PARD|ORCON)\b
+\b(CONTROLLED UNCLASSIFIED INFORMATION|FOR OFFICIAL USE ONLY|CONTROLLED|LIMITED|PROPRIETARY|RESTRICTED|SENSITIVE)\b
+\b(PII)\b
+\b(EDIPI|[[:digit:]]{10}([[:digit:]]{6})?)\b
+\b(SSN|[0-8][[:digit:]]{2}([-_/. ]?)[[:digit:]]{2}\2[[:digit:]]{4})\b
+\b(PHI)\b
+\b(solicitation|private|personal)\b
+\b(contractor|labor|wage|weekly|daily|hourly)[[:blank:]]rate\b
+\b(wage(s)?)\b
+\b(labor[[:blank:]]cost)\b
+\b(salary|rate)\b
+\b(per?[/[:blank:]](diem|week|day|hour|hr))\b
+\b(solic|sol|poc|point of contact)\b

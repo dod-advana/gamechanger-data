@@ -1,0 +1,373 @@
+{
+   "$schema":"http://json-schema.org/draft-07/schema",
+   "type":"object",
+   "title":"Parsed Document Schema",
+   "required":[
+      "type",
+      "id",
+      "filename",
+      "page_count",
+      "par_count_i",
+      "doc_type",
+      "doc_num",
+      "ref_list",
+      "summary_30",
+      "abbreviations_n",
+      "init_date",
+      "change_date",
+      "entities",
+      "author",
+      "signature",
+      "subject",
+      "title",
+      "word_count",
+      "classification",
+      "group_s",
+      "keyw_5",
+      "paragraphs",
+      "text",
+      "raw_text",
+      "pages",
+      "pagerank_r",
+      "kw_doc_score_r",
+      "orgs_rs",
+      "download_url_s",
+      "topics_rs",
+      "cac_login_required_b",
+      "publication_date_dt",
+      "version_hash_s",
+      "source_fqdn_s",
+      "crawler_used_s",
+      "access_timestamp_dt",
+      "source_page_url_s",
+      "is_revoked_b"
+   ],
+   "properties":{
+      "type":{
+         "type":"string"
+      },
+      "id":{
+         "type":"string"
+      },
+      "filename":{
+         "type":"string"
+      },
+      "page_count":{
+         "type":"integer"
+      },
+      "par_count_i":{
+         "type":"integer"
+      },
+      "doc_type":{
+         "type":"string"
+      },
+      "doc_num":{
+         "type":"string"
+      },
+      "ref_list":{
+         "type":"array",
+         "items":{
+            "type":"string"
+         }
+      },
+      "summary_30":{
+         "type":["string","null"]
+      },
+        "abbreviations_n": {
+            "$id": "#/properties/abbreviations_n",
+            "type": "array",
+            "title": "The abbreviations_n schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": [],
+            "examples": [
+                []
+            ],
+            "additionalItems": false,
+            "items": {
+                "type": ["object","null"]
+            }
+        },
+      "init_date":{
+         "type":"string"
+      },
+      "change_date":{
+         "type":"string"
+      },
+      "entities":{
+         "type":"array",
+         "items":{
+            "type":"string"
+         }
+      },
+      "author":{
+         "type":"string"
+      },
+      "signature":{
+         "type":"string"
+      },
+      "subject":{
+         "type":"string"
+      },
+      "title":{
+         "type":"string"
+      },
+      "word_count":{
+         "type":"integer"
+      },
+      "classification":{
+         "type":"string"
+      },
+      "group_s":{
+         "type":"string"
+      },
+      "keyw_5":{
+         "type":"array",
+         "additionalItems":false,
+         "items":{
+            "type":"string"
+         }
+      },
+      "pagerank_r":{
+         "type":"number"
+      },
+      "kw_doc_score_r":{
+         "type":["number","null"]
+      },
+      "orgs_rs":{
+         "type":"object",
+         "required":[
+
+         ],
+         "additionalProperties":true
+      },
+      "download_url_s":{
+         "type": "string"
+      },
+      "topics_rs":{
+         "type":"object",
+         "required":[
+
+         ],
+         "additionalProperties":true
+      },
+      "cac_login_required_b": {
+         "type": "boolean"
+      },
+      "is_revoked_b": {
+         "type": "boolean"
+      },
+      "publication_date_dt": {
+         "type": ["string", "null"]
+      },
+      "version_hash_s": {
+         "type": "string"
+      },
+      "source_fqdn_s": {
+         "type": "string"
+      },
+      "crawler_used_s": {
+         "type": "string"
+      },
+      "display_doc_type_s": {
+         "type": "string"
+      },
+      "display_org_s": {
+         "type": "string"
+      },
+      "display_title_s": {
+         "type": "string"
+      },
+      "access_timestamp_dt": {
+         "type": "string"
+      },
+      "source_page_url_s": {
+         "type": "string"
+      },
+      "text":{
+         "type":"string"
+      },
+      "raw_text":{
+         "type":"string"
+      },
+      "pages":{
+         "type":"array",
+         "items":{
+            "$ref":"#/definitions/page"
+         },
+         "minItems":1
+      },
+      "paragraphs":{
+         "type":"array",
+         "items":{
+            "$ref":"#/definitions/paragraph"
+         },
+         "minItems":1
+      },
+        "text_length_r": {
+            "$id": "#/properties/text_length_r",
+            "type": "number",
+            "title": "The text_length_r schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": 0.0,
+            "examples": [
+                0.0027639693900703365
+            ]
+        }
+   },
+   "additionalProperties":false,
+   "definitions":{
+      "paragraph":{
+         "anyOf":[
+            {
+               "type":"object",
+               "required":[
+                  "type",
+                  "id",
+                  "filename",
+                  "page_num_i",
+                  "par_raw_text_t",
+                  "par_count_i",
+                  "par_inc_count",
+                  "entities"
+               ],
+               "properties":{
+                  "type":{
+                     "type":"string"
+                  },
+                  "id":{
+                     "type":"string"
+                  },
+                  "filename":{
+                     "type":"string"
+                  },
+                  "page_num_i":{
+                     "type":"integer"
+                  },
+                  "par_raw_text_t":{
+                     "type":"string"
+                  },
+                  "par_count_i":{
+                     "type":"integer"
+                  },
+                  "par_inc_count":{
+                     "type":"integer"
+                  },
+                  "entities":{
+                     "type":"object",
+                     "required":[
+                        "ORG_s",
+                        "GPE_s",
+                        "NORP_s",
+                        "LAW_s",
+                        "LOC_s",
+                        "PERSON_s"
+                     ],
+                     "properties":{
+                        "ORG_s":{
+                           "type":"array",
+                           "additionalItems":false,
+                           "items":{
+                              "anyOf":[
+                                 {
+                                    "type":"string"
+                                 }
+                              ]
+                           }
+                        },
+                        "GPE_s":{
+                           "type":"array",
+                           "additionalItems":false,
+                           "items":{
+                              "anyOf":[
+                                 {
+                                    "type":"string"
+                                 }
+                              ]
+                           }
+                        },
+                        "NORP_s":{
+                           "type":"array",
+                           "additionalItems":false,
+                           "items":{
+                              "anyOf":[
+                                 {
+                                    "type":"string"
+                                 }
+                              ]
+                           }
+                        },
+                        "LAW_s":{
+                           "type":"array",
+                           "additionalItems":false,
+                           "items":{
+                              "anyOf":[
+                                 {
+                                    "type":"string"
+                                 }
+                              ]
+                           }
+                        },
+                        "LOC_s":{
+                           "type":"array",
+                           "additionalItems":false,
+                           "items":{
+                              "anyOf":[
+                                 {
+                                    "type":"string"
+                                 }
+                              ]
+                           }
+                        },
+                        "PERSON_s":{
+                           "type":"array",
+                           "additionalItems":false,
+                           "items":{
+                              "anyOf":[
+                                 {
+                                    "type":"string"
+                                 }
+                              ]
+                           }
+                        }
+                     },
+                     "additionalProperties":false
+                  }
+               },
+               "additionalProperties":false
+            }
+         ]
+      },
+      "page":{
+         "type":"object",
+         "required":[
+            "type",
+            "id",
+            "filename",
+            "p_page",
+            "p_text",
+            "p_raw_text"
+         ],
+         "properties":{
+            "type":{
+               "type":"string"
+            },
+            "id":{
+               "type":"string"
+            },
+            "filename":{
+               "type":"string"
+            },
+            "p_page":{
+               "type":"integer"
+            },
+            "p_text":{
+               "type":"string"
+            },
+            "p_raw_text":{
+               "type":"string"
+            }
+         },
+         "additionalProperties":false
+      }
+   }
+}

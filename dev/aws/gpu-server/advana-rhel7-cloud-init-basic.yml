@@ -1,0 +1,7 @@
+#cloud-config
+chpasswd:
+  expire: false
+  ssh_pwauth: False
+  list: |
+    ec2-user:gamechanger
+    root:gamechanger

@@ -1,0 +1,14 @@
+../.git/
+../dataPipelines/
+../img/
+../mlruns/
+../out/
+../../.git/
+../../dataPipelines/
+../../img/
+../../mlruns/
+../../out/
+out/
+.git/
+dataPipelines/
+

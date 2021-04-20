@@ -1,0 +1,11 @@
+../.git
+../dataPipelines
+../out
+../common
+.git
+../models
+../transformer_cache.zip
+../src/DrQA/data/
+dataPipelines
+out
+common

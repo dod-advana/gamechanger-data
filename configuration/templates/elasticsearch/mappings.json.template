@@ -1,0 +1,1 @@
+{{ {"mappings": elasticsearch_config.index.mappings} | tojson(indent=4) }}

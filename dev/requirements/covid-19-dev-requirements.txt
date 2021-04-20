@@ -1,0 +1,2 @@
+xhtml2pdf==0.2.5
+WeasyPrint==51

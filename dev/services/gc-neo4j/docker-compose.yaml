@@ -1,0 +1,21 @@
+version: '3.7'
+services:
+  neo4j:
+    restart: "unless-stopped"
+    image: "neo4j:4.2.3"
+    container_name: neo4j
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    network_mode: host
+    volumes:
+      - ./plugins:/plugins
+      - ./data:/data
+      - ./logs:/logs
+      - ./conf:/conf
+    environment:
+      NEO4J_AUTH: neo4j/admin
+      NEO4JLABS_PLUGINS: '["graph-data-science", "apoc"]'
+      NEO4J_dbms_security_procedures_unrestricted: gds.*,apoc.*
+      NEO4J_dbms_security_procedures_whitelist: gds.*,apoc.*
+

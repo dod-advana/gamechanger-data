@@ -1,0 +1,25 @@
+version: "3.5"
+
+services:
+  solr:
+    container_name: "${COMPOSE_PROJECT_NAME:-gc-dev}-solr"
+    image: "solr:5.5.5"
+    ports:
+      - "8983:8983"
+    volumes:
+      # default core data location varies between different versions of SOLR
+      - "solr-data:/opt/solr/server/solr/mycores"
+    # environment:
+    #   - "SOLR_HEAP=1024m"
+    command:
+      - solr-precreate
+      - "${SOLR_DEFAULT_CORE:-dev-core}"
+    networks:
+      - app-net
+
+volumes:
+  solr-data:
+
+networks:
+  app-net:
+    name: "${COMPOSE_PROJECT_NAME:-gc-dev}-network"

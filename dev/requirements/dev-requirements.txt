@@ -1,0 +1,11 @@
+hypothesis
+ipython
+mypy
+pylint
+pytest
+flake8
+devtools
+typing_extensions
+jedi==0.17.2
+matplotlib
+seaborn

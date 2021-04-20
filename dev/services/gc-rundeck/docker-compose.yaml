@@ -1,0 +1,6 @@
+version: "3.5"
+
+services:
+  gc-streamsets:
+    container_name: "gc-rundeck"
+    image: rundeck/rundeck:latest

@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "title": "ElasticSearch Configuration Schema",
+  "required": [
+    "index"
+  ],
+  "properties": {
+    "index": {
+      "$ref": "#/definitions/index"
+    }
+  },
+  "additionalProperties": true,
+  "definitions": {
+    "index": {
+      "required": [
+        "mappings",
+        "settings"
+      ],
+      "properties": {
+        "mappings": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "settings": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    }
+  }
+}

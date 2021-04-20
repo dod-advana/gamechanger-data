@@ -1,0 +1,1 @@
+{{ {"settings" : elasticsearch_config.index.settings} | tojson(indent=4) }}

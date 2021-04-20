@@ -1,0 +1,1 @@
+DROP VIEW IF EXISTS dafa_charter_map_flattened_vw CASCADE;

@@ -1,0 +1,32 @@
+{
+  "index": {
+    "settings": {
+      "index.mapping.nested_objects.limit": 100000,
+      "index": {
+        "number_of_shards": 3,
+        "number_of_replicas": 2,
+        "mapping.nested_fields.limit": 20000
+      }
+    },
+    "mappings": {
+      "properties": {
+        "run_time": {
+          "type": "date",
+          "format": "yyyy-MM-dd HH:mm:ss || epoch_millis"
+        },
+        "search_query": {
+          "type": "keyword"
+        },
+        "completed": {
+          "type": "text"
+        },
+        "results": {
+          "type": "long"
+        },
+        "user_id": {
+          "type": "keyword"
+        }
+      }    
+    }
+  }
+}

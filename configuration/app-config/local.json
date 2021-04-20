@@ -1,0 +1,64 @@
+{
+  "ml_api": {
+    "flask_env": "local",
+    "flask_host": "localhost",
+    "worker_count": 1,
+    "env_type": "local",
+    "redis_host": "localhost",
+    "redis_port": 6379,
+    "flask_port": 5000,
+    "data_api_base_url": "http://localhost:9346/v2/data",
+    "ml_model_name": "20201011",
+    "ml_model_parent_dir": "/models"
+  },
+  "aws": {
+    "endpoint_type": "minio",
+    "endpoint_s3_signature_version": "s3v4",
+    "endpoint_url": "http://localhost:9000",
+    "endpoint_host": "localhost",
+    "endpoint_port": 9000,
+    "auth_type": "key",
+    "secret_key": "dev-secret-key",
+    "access_key": "dev-access-key",
+    "bucket_name": "advana-raw-zone",
+    "default_region": "us-east-1"
+  },
+  "orch_db": {
+    "username": "postgres",
+    "password": "password",
+    "port": 5432,
+    "host": "localhost",
+    "database": "postgres"
+  },
+  "web_db": {
+    "username": "postgres",
+    "password": "password",
+    "port": 5432,
+    "host": "localhost",
+    "database": "postgres"
+  },
+  "es": {
+    "ssl": false,
+    "basic_auth": false,
+    "username": null,
+    "password": null,
+    "host": "localhost",
+    "port": 9200,
+    "default_mappings_file": "configuration/rendered/elasticsearch/mappings.json",
+    "default_settings_file": "configuration/rendered/elasticsearch/settings.json"
+  },
+
+  "data_api": {
+    "api_base_url": "http://localhost:9346/v2/data",
+    "host": "localhost",
+    "port": 9346
+  },
+
+  "neo4j": {
+    "host": "localhost",
+    "port": 7687,
+    "username": "neo4j",
+    "password": "password",
+    "connection_protocol": "bolt"
+  }
+}

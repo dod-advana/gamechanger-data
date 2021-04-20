@@ -1,0 +1,5 @@
+{
+  "GC_APP_CONFIG_NAME": {{ ext_configs.defaults.GC_APP_CONFIG_NAME | tojson }},
+  "GC_ELASTICSEARCH_CONFIG_NAME": {{ ext_configs.defaults.GC_ELASTICSEARCH_CONFIG_NAME | tojson}},
+  "GC_APP_CONFIG_EXT_NAME": {{  ext_configs.defaults.GC_APP_CONFIG_EXT_NAME | tojson }}
+}

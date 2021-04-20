@@ -1,0 +1,78 @@
+version: '3.5'
+
+services:
+  neo4j:
+    container_name: "${COMPOSE_PROJECT_NAME:-gc-dev}-neo4j"
+    environment:
+      NEO4J_AUTH: "neo4j/password"
+    image: "neo4j:4.2.3"
+    ports:
+      - "7687:7687"
+      - "7474:7474"
+    volumes:
+      - "neo4j-data:/neo4j/data"
+    networks:
+      - app-net
+
+  elasticsearch:
+    container_name: "${COMPOSE_PROJECT_NAME:-gc-dev}-elasticsearch"
+    image: elasticsearch:7.4.2
+    ports:
+      - 9200:9200
+      - 9300:9300
+    volumes:
+      - "es-data:/usr/share/elasticsearch/data"
+    environment:
+      - "discovery.type=single-node"
+    networks:
+      - app-net
+
+  kibana:
+    container_name: "${COMPOSE_PROJECT_NAME:-gc-dev}-kibana"
+    image: kibana:7.4.2
+    ports:
+      - 5601:5601
+    networks:
+      - app-net
+
+  s3-server:
+    container_name: "${COMPOSE_PROJECT_NAME:-gc-dev}-s3-server"
+    image: "minio/minio:RELEASE.2020-07-24T22-43-05Z"
+    ports:
+      - "9000:9000"
+    volumes:
+      - "s3-data:/s3-data"
+    environment: 
+      - "MINIO_ACCESS_KEY=dev-access-key"
+      - "MINIO_SECRET_KEY=dev-secret-key"
+      - "MINIO_REGION_NAME=us-east-1"
+    command:
+      - server
+      - /s3-data
+    networks:
+      - app-net
+
+  postgres:
+    container_name: "${COMPOSE_PROJECT_NAME:-gc-dev}-postgres"
+    image: "postgres:9.6.19-alpine"
+    ports:
+      - "5432:5432"
+    volumes:
+      - "pg-data:/pg-data"
+    environment: 
+      - "POSTGRES_USER=postgres"
+      - "POSTGRES_PASSWORD=password"
+      - "POSTGRES_DB=postgres"
+      - "PGDATA=/pg-data"
+    networks:
+      - app-net
+
+volumes:
+  s3-data:
+  pg-data:
+  neo4j-data:
+  es-data:
+
+networks:
+  app-net:
+    name: "${COMPOSE_PROJECT_NAME:-gc-dev}-network"

@@ -1,0 +1,14 @@
+version: "3.5"
+
+services:
+  gc-streamsets:
+    container_name: "gc-streamsets"
+    image: "gamechanger/devtools/streamsets:latest"
+    environment:
+      - "BITBUCKET_GIT_CREDENTIALS="
+    ports:
+      - "8443:18630"
+    volumes:
+      - "/srv/gc-streamsets/sdc-data:/var/log/sdc"
+      - "/srv/gc-streamsets/sdc-logs:/var/lib/sdc"
+    restart: "unless-stopped"

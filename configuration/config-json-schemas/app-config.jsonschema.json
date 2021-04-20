@@ -1,0 +1,309 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "title": "App Configuration Schema",
+  "required": [
+    "ml_api",
+    "aws",
+    "orch_db",
+    "web_db",
+    "es",
+    "data_api"
+  ],
+  "properties": {
+    "ml_api": {
+      "$ref": "#/definitions/ml_api"
+    },
+    "aws": {
+      "$ref": "#/definitions/aws"
+    },
+    "orch_db": {
+      "$ref": "#/definitions/orch_db"
+    },
+    "web_db": {
+      "$ref": "#/definitions/web_db"
+    },
+    "es": {
+      "$ref": "#/definitions/es"
+    },
+    "data_api": {
+      "$ref": "#/definitions/data_api"
+    },
+    "neo4j": {
+      "$ref": "#/definitions/neo4j"
+    }
+  },
+  "additionalProperties": true,
+  "definitions": {
+    "ml_api": {
+      "title": "Configuration Schema for ML-API",
+      "type": "object",
+      "required": [
+        "flask_env",
+        "flask_host",
+        "flask_port",
+        "redis_host",
+        "redis_port",
+        "data_api_base_url",
+        "worker_count",
+        "env_type",
+        "ml_model_name",
+        "ml_model_parent_dir"
+      ],
+      "properties": {
+        "flask_env": {
+          "type": "string",
+          "enum": ["jenkins", "local", "docker", "prod"]
+        },
+        "flask_host": {
+          "type":  "string"
+        },
+        "flask_port": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "redis_host": {
+          "type": "string"
+        },
+        "redis_port": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "data_api_base_url": {
+          "type": "string",
+          "pattern": "^https?://\\S+$"
+        },
+        "worker_count": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "env_type": {
+          "type": "string",
+          "enum": ["jenkins", "local", "docker", "prod"]
+        },
+        "ml_model_name": {
+          "type": "string"
+        },
+        "ml_model_parent_dir": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "aws": {
+      "title": "Configuration Schema for AWS resources",
+      "type": "object",
+      "required": [
+        "endpoint_type",
+        "endpoint_s3_signature_version",
+        "endpoint_url",
+        "endpoint_host",
+        "endpoint_port",
+        "auth_type",
+        "secret_key",
+        "access_key",
+        "bucket_name",
+        "default_region"
+      ],
+      "properties": {
+        "endpoint_type": {
+          "type": "string",
+          "description": "Type of AWS api endpoint used, important for custom endpoints or api-compatible services",
+          "enum": ["minio", "aws", "custom_aws", "localstack"]
+        },
+        "endpoint_s3_signature_version": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "endpoint_url": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "string",
+              "pattern": "^https?://\\S+$"
+            }
+          ]
+        },
+        "endpoint_host": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "endpoint_port": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "auth_type": {
+          "type": "string",
+          "description": "How is AWS auth performed? i.e. by passing a key with request or via host role",
+          "enum": ["role", "key"]
+        },
+        "secret_key": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "access_key": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "bucket_name": {
+          "type":  "string"
+        },
+        "default_region": {
+          "type":  "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "es": {
+      "type": "object",
+      "required": [
+        "ssl",
+        "basic_auth",
+        "username",
+        "password",
+        "host",
+        "port",
+        "default_mappings_file",
+        "default_settings_file"
+      ],
+      "properties": {
+        "ssl": {
+          "type": "boolean"
+        },
+        "basic_auth": {
+          "type": "boolean"
+        },
+        "username": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "password": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "host": {
+          "type": "string"
+        },
+        "port": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "default_mappings_file": {
+          "type": "string"
+        },
+        "default_settings_file": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "data_api": {
+      "type": "object",
+      "required": [
+        "api_base_url",
+        "host",
+        "port"
+      ],
+      "properties": {
+        "api_base_url": {
+          "type": "string",
+          "pattern": "^https?://\\S+$"
+        },
+        "host": {
+          "type": "string"
+        },
+        "port": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "additionalProperties": true
+    },
+    "orch_db": {
+      "$ref": "#/definitions/db_info"
+    },
+    "web_db": {
+      "$ref": "#/definitions/db_info"
+    },
+    "db_info": {
+      "type": "object",
+      "required": [
+        "username",
+        "password",
+        "port",
+        "host",
+        "database"
+      ],
+      "properties": {
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "port": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "host": {
+          "type": "string"
+        },
+        "database": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "neo4j": {
+      "type": "object",
+      "required": [
+        "host",
+        "port",
+        "username",
+        "password",
+        "connection_protocol"
+      ],
+      "properties": {
+        "host": {
+          "type": "string"
+        },
+        "port": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "connection_protocol": {
+          "type": "string",
+          "enum": ["bolt", "bolt+s", "bolt+ssc", "neo4j", "neo4j+s", "neo4j+ssc"]
+        }
+      },
+      "additionalProperties": true
+    }
+  }
+}
