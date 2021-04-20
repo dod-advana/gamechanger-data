@@ -10,9 +10,11 @@ import pandas as pd
 import logging
 import pickle
 
-from dataScience.src.text_handling.corpus import LocalCorpus
+from dataScience.src.text_handling.corpus import LocalCorpus, SentCorpus
 
 import torch
+
+from tqdm import tqdm
 
 logger = logging.getLogger(__name__)
 
@@ -43,6 +45,8 @@ class SentenceEncoder(object):
         self.embedder = Embeddings(
             {"method": "transformers", "path": self.encoder_model, "gpu": self.use_gpu}
         )
+
+        self.mapper = {}
 
     def _index(self, corpus, index_path, overwrite=False):
         """
@@ -125,8 +129,13 @@ class SentenceEncoder(object):
         # Build the index
         self.embedder.embeddings.index(embeddings)
 
+        # Save id mapper to JSON
+        with open(os.path.join(index_path, "mapper.json"), "w") as fp:
+            json.dump(self.mapper, fp)
+
+
     def index_documents(
-        self, corpus_path, index_path, min_token_len=10, overwrite=False
+        self, corpus_path, index_path, min_token_len=10, overwrite=False, new_parser = False
     ):
         """
         Create the index and accompanying dataframe to perform text
@@ -139,14 +148,58 @@ class SentenceEncoder(object):
         """
         logging.info(f"Indexing documents from {corpus_path}")
 
-        corp = LocalCorpus(
-            corpus_path, return_id=True, min_token_len=min_token_len, verbose=True
-        )
+        if new_parser:
+            corp = SentCorpus(
+                corpus_path, return_id=True, min_token_len=min_token_len, verbose=True
+            )
 
+            for _, para_id, old_id in corp:
+                self.mapper[para_id] = old_id
+
+            self._index(
+                [(para_id, " ".join(tokens), None) for tokens, para_id, old_id in corp],
+                index_path,
+                overwrite=overwrite,
+            )
+
+        else:
+            corp = LocalCorpus(
+                corpus_path, return_id=True, min_token_len=min_token_len, verbose=True
+            )
+            self._index(
+                [(para_id, " ".join(tokens), None) for tokens, para_id in corp],
+                index_path,
+                overwrite=overwrite,
+            )
+
+        self.embedder.save(index_path)
+
+    def new_index_documents(
+        self, new_sent_corpus, old_sent_corpus, index_path, min_token_len=10, overwrite=False, new_parser = False
+    ):
+        """
+        This is a rough approach for index two corpuses with
+        different parsing approaches. new_sent_corpus is for
+        the directory that contains the new sentence parsing approach
+        while old_sent_corpus contains the old approach.
+        """
+        logging.info(f"Indexing documents from {new_sent_corpus}")
+
+        print("Getting Sentence Corpus")
+        new_corp = SentCorpus(new_sent_corpus, return_id = True, min_token_len = min_token_len)
+        new_corp = [(para_id, " ".join(tokens), None) for tokens, para_id, old_id in tqdm(new_corp)]
+        
+        print("Getting Old Corpus")
+        old_corp = LocalCorpus(old_sent_corpus, return_id = True, min_token_len = min_token_len)
+        old_corp = [(para_id, " ".join(tokens), None) for tokens, para_id in tqdm(old_corp) if not para_id.lower().startswith("dod")]
+
+        corp = old_corp + new_corp
+
+        print("Indexing")
         self._index(
-            [(para_id, " ".join(tokens), None) for tokens, para_id in corp],
+            tqdm(corp),
             index_path,
-            overwrite=overwrite,
+            overwrite = overwrite
         )
 
         self.embedder.save(index_path)
