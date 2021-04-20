@@ -22,16 +22,17 @@ class AdditionalFieldsPipeline:
 
         item['crawler_used'] = spider.name
 
-        if item.get('source_page_url') is None:
+        source_page_url = item.get('source_page_url')
+        if source_page_url is None:
             source_page_url = spider.start_urls[0]
             item['source_page_url'] = source_page_url
+
+        if item.get('source_fqdn') is None:
+            item['source_fqdn'] = get_fqdn_from_web_url(source_page_url)
 
         if item.get('version_hash') is None:
             item['version_hash'] = dict_to_sha256_hex_digest(
                 item.get('version_hash_raw_data'))
-
-        if item.get('source_fqdn') is None:
-            item['source_fqdn'] = get_fqdn_from_web_url(source_page_url)
 
         if item.get('access_timestamp') is None:
             item['access_timestamp'] = datetime.now().strftime(
