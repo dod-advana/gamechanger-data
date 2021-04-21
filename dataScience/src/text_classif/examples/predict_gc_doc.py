@@ -20,10 +20,8 @@ import re
 import dataScience.src.text_classif.utils.classifier_utils as cu
 from dataScience.src.text_classif.distilbert_classifier import (
     DistilBertClassifier,
-)  # noqa
-from dataScience.src.text_classif.roberta_classifier_no_decay import (
-    RobertaClassifier,
-)  # noqa
+)
+from dataScience.src.text_classif.roberta_classifier import RobertaClassifier
 from dataScience.src.text_classif.utils.log_init import initialize_logger
 from dataScience.src.utilities.spacy_model import get_lg_vectors
 
@@ -86,8 +84,8 @@ def main(config_yaml, data_file, model_type):
 
         for idx, sent in enumerate(sents):
             logger.info(
-                "{} : p={:0.3f}  {}".format(
-                    pred_labels[idx], pred_probs[idx], sent
+                "{}: {} : p={:0.3f}  {}".format(
+                    input_f, pred_labels[idx], pred_probs[idx], sent
                 )
             )
 

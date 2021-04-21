@@ -17,7 +17,6 @@ optional arguments:
                         number of random samples
   -p MODEL_PATH, --model-path MODEL_PATH
                         Optional. load the torch model from this directory
-
 """
 import logging
 import os
@@ -55,8 +54,8 @@ def main(config_yaml, data_file, model_type, topn, model_path):
         None
 
     """
-    if topn < 1:
-        raise ValueError("topn must be > 0, got {}".format(topn))
+    if topn < 0:
+        raise ValueError("topn must be >= 0, got {}".format(topn))
 
     here = os.path.dirname(os.path.realpath(__file__))
 
@@ -65,12 +64,12 @@ def main(config_yaml, data_file, model_type, topn, model_path):
 
     # custom function to read / parse the GC data set
     dev_text, dev_labels, dev_src = cu.gc_data(
-        data_file, None, shuffle=True, topn=topn
+        data_file, None, shuffle=False, topn=topn
     )
     logger.info("num samples : {:,}".format(len(dev_labels)))
 
     try:
-        if model_type in ("roberta", "roberta-nd"):
+        if model_type == "roberta":
             clf = RobertaClassifier(config_yaml)
         elif model_type == "distilbert":
             clf = DistilBertClassifier(config_yaml)
@@ -95,18 +94,16 @@ def main(config_yaml, data_file, model_type, topn, model_path):
         logger.info("MCC : {:>0.3f}".format(mcc))
 
         output_df = pd.DataFrame(
-            columns=["source", "predicted", "p", "actual", "text"]
+            columns=["source", "predicted", "p", "text"]
         )
         for idx, sent in enumerate(dev_text):
             output_dict = {
                 "source": dev_src[idx],
                 "predicted": pred_labels[idx],
                 "p": pred_probs[idx],
-                "actual": dev_labels[idx],
                 "text": sent,
             }
             output_df = output_df.append(output_dict, ignore_index=True)
-        output_df = output_df.sort_values(by="source")
         return output_df
     except (FileNotFoundError, ValueError, AttributeError) as e:
         logger.fatal("{}: {}".format(type(e), str(e)), exc_info=True)
@@ -114,7 +111,6 @@ def main(config_yaml, data_file, model_type, topn, model_path):
 
 
 if __name__ == "__main__":
-    import sys
     from argparse import ArgumentParser
 
     desc = "Loads the checkpoint file and predicts labels for GC training data"
@@ -138,17 +134,17 @@ if __name__ == "__main__":
     parser.add_argument(
         "-m",
         "--model-type",
-        choices=("bert", "roberta", "roberta-nd", "distilbert"),
+        choices=("bert", "roberta", "distilbert"),
         default=None,
         dest="model_type",
-        help="supported model type; default is `roberta'",
+        help="supported model type; default is `None'",
     )
     parser.add_argument(
         "-n",
         "--num-samples",
         dest="num_samples",
         type=int,
-        required=True,
+        default=0,
         help="number of random samples",
     )
     parser.add_argument(
@@ -163,7 +159,6 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    sys.exit(
-        main(args.config_yaml, args.data_file, args.model_type,
-             args.num_samples, args.model_path)
-    )
+    out_df = main(args.config_yaml, args.data_file, args.model_type,
+                  args.num_samples, args.model_path)
+    out_df.to_csv("predict_gc.csv", header=False, index=False)

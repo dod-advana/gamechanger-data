@@ -10,9 +10,12 @@ import re
 import numpy as np
 import pandas as pd
 from tqdm import tqdm
+import dataScience.src.utilities.spacy_model as spacy_m
+
 
 logger = logging.getLogger(__name__)
 here = os.path.dirname(os.path.realpath(__file__))
+nlp_ = None
 
 
 def next_pow_two(max_sent_tokens):
@@ -93,7 +96,7 @@ def gc_data_item_labels(data_file, cp=0.50, cm=0.50, shuffle=True, topn=0):
             else:  # randomly add an item label
                 mobj = re.search(r"(^\w\. )", sent)
                 if np.random.uniform() > 1. - cm:
-                    if mobj is  None:
+                    if mobj is None:
                         idx = np.random.randint(0, len(alpha))
                         sent = alpha[idx] + ". " + sent
 
@@ -180,16 +183,33 @@ def gc_data_tvt(data_file, topn=0, lbl=""):
         raise e
 
 
-def gen_gc_docs(doc_path, glob, key="raw_text"):
-    file_list = [f for f in os.listdir(doc_path) if fnmatch.fnmatch(f, glob)]
+def gen_gc_docs(doc_path_, glob, key="raw_text"):
+    file_list = [f for f in os.listdir(doc_path_) if fnmatch.fnmatch(f, glob)]
     logger.info("num files : {:>3,d}".format(len(file_list)))
     for input_f in sorted(file_list):
-        with open(os.path.join(doc_path, input_f)) as fin:
+        with open(os.path.join(doc_path_, input_f)) as fin:
             jdoc = json.load(fin)
             if key in jdoc:
                 yield jdoc[key], input_f
             else:
                 logger.warning("`{}` not found in {}".format(key, input_f))
+
+
+def scrubber(txt):
+    txt = re.sub("[\\n\\t\\r]+", " ", txt)
+    txt = re.sub("\\s{2,}", " ", txt)
+    return txt.strip()
+
+
+def make_sentences(text, src, nlp, counter):
+    sents = [scrubber(s.text) for s in nlp(text).sents]
+    logger.info("{:>30s} : {:>4,d}".format(src, len(sents)))
+    df = pd.DataFrame(columns=["src", "label", "sentence"])
+    for sent in sents:
+        src_ = src + "_{}".format(counter)
+        df = df.append({"src": src_, "label": 0, "sentence": sent}, ignore_index=True)
+        counter += 1
+    return df, counter
 
 
 if __name__ == "__main__":
@@ -199,7 +219,20 @@ if __name__ == "__main__":
     )
     logging.basicConfig(level=logging.INFO, format=log_fmt)
 
+    logger.info('loading spacy')
+    nlp_ = spacy_m.get_lg_vectors()
+    nlp_.add_pipe(nlp_.create_pipe("sentencizer"))
+    logger.info('spacy is loaded')
+
     bp = "/Users/chrisskiscim/projects/classifier_data"
-    doc_path = os.path.join(bp, "dodi", "dodi_all.csv")
+    doc_path = os.path.join(bp, "dodi", "dod_idm_sentences.csv")
     # gc_data_tvt(doc_path, lbl="dodi")
-    gc_data_item_labels(doc_path)
+    # gc_data_item_labels(doc_path)
+    src_path = "/Users/chrisskiscim/projects/gamechanger/repo/gamechanger/dataScience/data/test_data"
+    glob = "*.json"
+    out_df = pd.DataFrame(columns=["src", "label", "sentence"])
+    count = 0
+    for raw_text, fname in gen_gc_docs(src_path, glob, key="raw_text"):
+        sent_df, count = make_sentences(raw_text, fname, nlp_, count)
+        out_df = out_df.append(sent_df, ignore_index=True)
+    out_df.to_csv("dodimd_sentences.csv", index=False, header=False, sep=",")
