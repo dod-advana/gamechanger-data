@@ -111,18 +111,22 @@ class Neo4jJobManager:
 
             print("Recreating constraints ... ", file=sys.stderr)
             # first drop constraints
-            session.run("DROP CONSTRAINT unique_pubs IF EXISTS")
             session.run("DROP CONSTRAINT unique_docs IF EXISTS")
             session.run("DROP CONSTRAINT unique_ents IF EXISTS")
             session.run("DROP CONSTRAINT unique_resps IF EXISTS")
-            session.run("DROP CONSTRAINT unique_pars IF EXISTS")
+            session.run("DROP CONSTRAINT unique_topics IF EXISTS")
 
             # next set up a few things to make sure that entities/documents/pubs aren't being inserted more than once.
-            session.run("CREATE CONSTRAINT unique_pubs IF NOT EXISTS ON (p:Publication) ASSERT p.name IS UNIQUE")
             session.run("CREATE CONSTRAINT unique_docs IF NOT EXISTS ON (d:Document) ASSERT d.doc_id IS UNIQUE")
             session.run("CREATE CONSTRAINT unique_ents IF NOT EXISTS ON (e:Entity) ASSERT e.name IS UNIQUE")
             session.run("CREATE CONSTRAINT unique_resps IF NOT EXISTS ON (r:Responsibility) ASSERT r.name IS UNIQUE")
-            session.run("CREATE CONSTRAINT unique_pars IF NOT EXISTS ON (p:Paragraph) ASSERT p.par_id IS UNIQUE")
+            session.run("CREATE CONSTRAINT unique_topics IF NOT EXISTS ON (t:Topic) ASSERT t.name IS UNIQUE")
+
+            # Create indicies
+            session.run("CREATE INDEX document_index IF NOT EXISTS FOR (d:Document) ON (d.doc_id, d.ref_name)")
+            session.run("CREATE INDEX entity_index IF NOT EXISTS FOR (e:Entity) ON (e.name)")
+            session.run("CREATE INDEX topic_index IF NOT EXISTS FOR (t:Topic) ON (t.name)")
+            session.run("CREATE INDEX responsibility_index IF NOT EXISTS FOR (r:Responsibility) ON (r.name)")
 
         publisher = Neo4jPublisher()
         publisher.populate_verified_ents()
@@ -143,6 +147,36 @@ class Neo4jJobManager:
             publisher.process_crowdsourced_ents(without_web_scraping, infobox_dir)
 
         with Config.connection_helper.neo4j_session_scope() as session:
+            # Make ref connections
+            session.run(
+                "MATCH (d:Document) " +
+                "WITH d " +
+                "UNWIND d.ref_list as ref " +
+                "MATCH (d2:Document) " +
+                "WHERE d2.ref_name = ref AND NOT d = d2 "
+                "MERGE (d)-[:REFERENCES]->(d2);"
+            )
+
+            # Create Sub Graph
+            session.run(
+                "call gds.graph.create('sim-graph', ['Document', 'Entity', 'Topic'], ['REFERENCES', 'MENTIONS', 'CONTAINS']);"
+            )
+
+            # Create Similarity Links
+            session.run(
+                "CALL gds.nodeSimilarity.stream('sim-graph') " +
+                "YIELD node1, node2, similarity " +
+                "WITH gds.util.asNode(node1) AS NODE1, gds.util.asNode(node2) AS NODE2, similarity " +
+                "MATCH (NODE1) WHERE 'Document' in labels(NODE1) AND NOT NODE1 = NODE2 AND similarity > 0.5 " +
+                "MATCH (NODE2) WHERE 'Document' in labels(NODE2) AND NOT NODE2 = NODE1 AND similarity > 0.5 " +
+                "MERGE (NODE1)-[:SIMILAR_TO {similarity: similarity}]->(NODE2);"
+            )
+
+            # Drop Sub Graph
+            session.run(
+                "call gds.graph.drop('sim-graph');"
+            )
+
             # delete any entity nodes without a name
             session.run("MATCH (e:Entity {name: ''}) detach delete (e);")
 

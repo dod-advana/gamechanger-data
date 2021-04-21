@@ -156,6 +156,7 @@ class Neo4jPublisher:
                 + '\", a.doc_type = \"' + docType
                 + '\", a.type = \"' + type
                 + '\", a.name = \"' + docName
+                + '\", a.ref_name = \"' + pubName
                 + '\", a.ref_list = ' + str(ref_list)
                 + ', a.page_count = ' + str(pageCount)
                 + ', a.init_date = \"' + j.get('init_date', '')
@@ -169,20 +170,12 @@ class Neo4jPublisher:
                 + ', a.kw_doc_score_r = ' + str((j.get('kw_doc_score_r', 0) or 0))
                 + ', a.version_hash_s = \"' + (j.get('version_hash_s' '') or "")
                 + '\", a.is_revoked_b = ' + str((j.get('is_revoked_b', False) or False))
-                + ' '
-                + 'MERGE (b:Publication {name: \"' + pubName + '\"}) '
-                + 'SET b.doc_type = \"' + docType
-                + '\", b.doc_num = \"' + docNum
-                + '\", b.display_org_s = \"' + displayOrg
-                + '\", b.display_doc_type_s = \"' + displayType
-                + '\" '
-                + 'MERGE (a)-[:BELONGS_TO]->(b);'
+                + ';'
             )
 
             process_query(query)
 
             # relationships
-            self.process_ref_list(ref_list, pubName)
             self.process_entity_list(j, doc_id)
             self.process_topics(topics, doc_id)
 
@@ -233,27 +226,6 @@ class Neo4jPublisher:
                                 + '\"}) '
                                 + 'MERGE (e)-[:RESPONSIBLE_FOR]->(r);'
                             )
-        return
-
-    def process_ref_list(self, ref_list: t.List[str], name: str) -> None:
-        if len(ref_list) <= 0:
-            return
-
-        query = ('MERGE (a:Publication {name: \"'
-                 + name
-                 + '\"}) ')
-        for idx, ref in enumerate(ref_list):
-            char_code = idx
-            ref_var = ''
-            for i in range(int(char_code / 24) + 1):
-                ref_var += chr(char_code % 24 + 98)
-            query += ('MERGE (' + ref_var + ':Publication {name: \"'
-                      + ref
-                      + '\"}) '
-                      + 'MERGE (a)-[:REFERENCES]->(' + ref_var + ') ')
-
-        query += ';'
-        process_query(query)
         return
 
     # TODO: refactor param injection logic for cypher statements to guarantee valid statements for all valid strings
