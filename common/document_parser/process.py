@@ -152,7 +152,7 @@ def process_dir(
 
     p = Path(dir_path).glob("**/*")
     files = [x for x in p if x.is_file() and filetype.guess(str(x)) is not None and (
-        filetype.guess(str(x)).mime == "pdf" or filetype.guess(str(x)) != "application/pdf")]
+        filetype.guess(str(x)).mime == "pdf" or filetype.guess(str(x)).mime == "application/pdf")]
     # files.sort()
 
     data_inputs = [(parse_func, f_name, meta_data, ocr_missing_doc,
