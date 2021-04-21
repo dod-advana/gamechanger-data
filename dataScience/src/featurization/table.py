@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 
 class Table:
-    def __init__(self, input_dir, output, spacy_model, agency_file, glob):
+    def __init__(self, input_dir, output, spacy_model, agency_file, glob, indicators):
         self.input_dir = input_dir
         self.output = output
         self.spacy_model = spacy_model
@@ -27,10 +27,11 @@ class Table:
         self.resp = "RESPONSIBILITIES"
         self.decimal_digits = r'(\d+)(?!.*\d)'
         self.glob = glob
+        self.indicators = indicators
 
         # finds number decimal, number in parenthesis, letter decimal, and
         # letter in parenthesis at start of row
-        self.find = r"(^|\n)(\d+\.|\(\s*\d+\s*\)|[a-z]\.|\(\s*[a-z]+\s*\))"
+        self.find = r"(^|\n)(\d+\.\d+\.|\d+\.|\(\s*\d+\s*\)|[a-z]\.|\(\s*[a-z]+\s*\))"
         self.doc_dict = None
 
     def extract_all(self):
@@ -57,6 +58,12 @@ class Table:
                 resp_text, entity = self.get_section(text, file)
             else:
                 continue
+            self.it = re.sub(self.decimal_digits, lambda x: str(int(x.group(1)) - 1), self.next_it)
+            self.num = re.search(self.decimal_digits,self.it)
+            if self.num:
+                self.num = self.num[1]
+            else:
+                self.num=""
             if "." in self.it and self.it + "1." in resp_text:
                 temp_df, doc_dups = self.decimal_parse(resp_text, file, entity)
             else:
@@ -71,9 +78,8 @@ class Table:
     def get_section(self, text, file):
         new = text.rsplit("RESPONSIBILITIES", 1)[1].lstrip()
         prev = text.rsplit("RESPONSIBILITIES", 1)[0].strip().split("\n")[-1].strip()  # noqa
-        self.it = re.sub(self.decimal_digits,
-                         lambda x: str(int(x.group(1)) + 1), prev)
-        new = new.split("\n" + self.it + " ", 1)[0]
+        self.next_it = re.sub(self.decimal_digits, lambda x: str(int(x.group(1)) + 1), prev)
+        new = new.split("\n" + self.next_it + " ", 1)[0]
         new = new.split("GLOSSARY", 1)[0]
         entity = new.split(":", 1)[0]
         entity = entity.split("shall", 1)[0]
@@ -102,8 +108,10 @@ class Table:
             if this == re.sub(self.decimal_digits,
                               lambda x: str(int(x.group(1)) + 1), num):
                 num = this
-
-                text = self.it+i
+                if self.indicators:
+                    text = self.it+i
+                else:
+                    text = i[i.index(' ') + 1:]
                 text = re.sub('\n','',text)
                 text = text.replace(entity, '', 1)
 
@@ -114,7 +122,10 @@ class Table:
                 if level not in temp_df.columns:
                     temp_df[level] = ""
                 num = this
-                text = self.it+i
+                if self.indicators:
+                    text = self.it+i
+                else:
+                    text = i[i.index(' ') + 1:]
                 text = re.sub('\n','',text)
                 text = text.replace(entity, '', 1)
                 temp_df = self.add_row(text,cols,temp_df)
@@ -126,7 +137,10 @@ class Table:
                         level -= 1
                         cols.pop()
                 num = this
-                text = self.it+i
+                if self.indicators:
+                    text = self.it+i
+                else:
+                    text = i[i.index(' ') + 1:]
                 text = re.sub('\n','',text)
                 text = text.replace(entity, '', 1)
                 cols.pop()
@@ -154,7 +168,7 @@ class Table:
         prev = 0
         while len(found)>1:
             it = found[2]
-            if vals[0]+"." == found[2]:
+            if vals[0]+"." == found[2] or self.num+"."+vals[0]+"." == found[2]:
                 if levels[0] == 0:
                     level += 1
                     levels[0] = level
@@ -172,11 +186,10 @@ class Table:
                     cols.pop()
                 if prev >= levels[0]:
                     cols.pop()
-                if past:
-                    cols.append(past+it+found[0])
-                    past = None
-                else:
+                if self.indicators:
                     cols.append(it+found[0])
+                else:
+                    cols.append(found[0])
                 prev=levels[0]
                 temp_df=self.add_row2(temp_df,cols,levels[0])
 
@@ -199,11 +212,10 @@ class Table:
                     cols.pop()
                 if prev >= levels[1]:
                     cols.pop()
-                if past:
-                    cols.append(past+it+found[0])
-                    past = None
-                else:
+                if self.indicators:
                     cols.append(it+found[0])
+                else:
+                    cols.append(found[0])
                 prev=levels[1]
                 temp_df=self.add_row2(temp_df,cols,levels[1])
             elif re.compile("\(\s*"+vals[2]+"\s*\)").search(found[2]):
@@ -224,11 +236,10 @@ class Table:
                     cols.pop()
                 if prev >= levels[2]:
                     cols.pop()
-                if past:
-                    cols.append(past+it+found[0])
-                    past = None
-                else:
+                if self.indicators:
                     cols.append(it+found[0])
+                else:
+                    cols.append(found[0])
                 prev=levels[2]
                 temp_df=self.add_row2(temp_df,cols,levels[2])
             elif re.compile("\(\s*"+vals[3]+"\s*\)").search(found[2]):
@@ -249,23 +260,29 @@ class Table:
                     cols.pop()
                 if prev >= levels[3]:
                     cols.pop()
-                if past:
-                    cols.append(past+it+found[0])
-                    past = None
-                else:
+                if self.indicators:
                     cols.append(it+found[0])
+                else:
+                    cols.append(found[0])
                 prev=levels[3]
                 temp_df=self.add_row2(temp_df,cols,levels[3])
             else:
-                past = found[0] + " " + found[2]
                 found = re.split(self.find, found[3], 1)
+                if len(temp_df)>0:
+                    pop = cols.pop()
+                    cols.append(pop+it+found[0])
+                    add = [""] * (len(temp_df.columns) - len(cols))
+                    if len(cols)>5:
+                        newcols = cols[0:2] + cols[-3:]
+                        temp_df.iloc[-1] =newcols
+                    else:
+                        temp_df.iloc[-1] = cols+add
 
             doc_dups.append(
                 check_duplicates(self.raw_text, self.duplicates, self.aliases))
         return temp_df, doc_dups
 
     def add_row2(self, temp_df, cols, lev):
-
         add = [""] * (len(temp_df.columns) - len(cols))
         if lev > 3:
             newcols = cols[0:2] + cols[-3:]
@@ -370,7 +387,12 @@ if __name__ == "__main__":
                         "--glob",
                         dest="glob",
                         type=str,
-                        default="DoDM*.json")
+                        default="DoD*.json")
+    parser.add_argument('-n',
+                        '--indicators',
+                        dest='indicator',
+                        action='store_true')
+    parser.set_defaults(indicator=False)
 
     args = parser.parse_args()
 
@@ -378,6 +400,7 @@ if __name__ == "__main__":
                       args.output,
                       spacy_model_,
                       args.agencies_file,
-                      args.glob)
+                      args.glob,
+                      args.indicator)
 
     table_obj.extract_all()
