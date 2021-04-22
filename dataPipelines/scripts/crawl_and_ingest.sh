@@ -70,6 +70,11 @@ function crawl_and_ingest() {
     ( docker container rm -f "$crawler_container_name" || true ) &> /dev/null
     ( docker container rm -f "$ingest_container_name" || true ) &> /dev/null
     ( docker container rm -f "$initializer_container_name" || true) &> /dev/null
+    echo Pulling topic models...
+    ( mkdir -p $HOST_REPO_DIR/dataScience/models/topic_models/models/ \
+      && \ 
+      aws s3 cp s3://advana-raw-zone/gamechanger/models/topic_model/v1/20210208.tar.gz - | tar -xzf - -C $HOST_REPO_DIR/dataScience/models/topic_models/models/ ) || echo Failed to pull topic models
+
     echo Running Job...
     (
         # first docker run: checking the connections
