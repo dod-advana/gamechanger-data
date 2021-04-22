@@ -12,7 +12,7 @@ set -o nounset
 # full-path-to-ingester-output-dir: local directory where the output of the parser and db_backup
 
 BASE_JOB_IMAGE="10.194.9.80:5000/gamechanger/core/dev-env:latest"
-HOST_REPO_DIR="$HOME/gamechanger"
+HOST_REPO_DIR="$HOME/gamechanger-data"
 CONTAINER_PYTHON_CMD="/opt/gc-venv/bin/python"
 
 DEPLOYMENT_ENV="dev"
@@ -102,22 +102,22 @@ function crawl_and_ingest() {
             --mount type=bind,source="$ingest_host_job_dir",destination="$ingest_container_job_dir" \
             --mount type=bind,source="$crawler_host_dl_dir",destination="$ingest_container_raw_dir" \
             --workdir /gamechanger \
-            "$ingest_container_image" "$CONTAINER_PYTHON_CMD" -m dataPipelines.gc_ingest pipelines core ingest \
+            "$ingest_container_image" bash -c 'source opt/gc-venv/bin/activate; '"$CONTAINER_PYTHON_CMD"' -m dataPipelines.gc_ingest pipelines core ingest \
                 --skip-snapshot-backup=yes \
-                --crawler-output="$crawler_json_file" \
-                --batch-timestamp="$job_timestamp" \
-                --index-name="$es_index_name" \
-                --alias-name="$es_alias_name" \
-                --max-threads="$max_parser_threads" \
-                --max-ocr-threads="$max_ocr_threads" \
-                --job-dir="$ingest_container_job_dir"  \
+                --crawler-output='"$crawler_json_file"' \
+                --batch-timestamp='"$job_timestamp"' \
+                --index-name='"$es_index_name"' \
+                --alias-name='"$es_alias_name"' \
+                --max-threads='"$max_parser_threads"' \
+                --max-ocr-threads='"$max_ocr_threads"' \
+                --job-dir='"$ingest_container_job_dir"'  \
                 --current-snapshot-prefix gamechanger/ \
                 --backup-snapshot-prefix gamechanger/backup/ \
                 --db-backup-base-prefix gamechanger/backup/db/ \
                 --load-archive-base-prefix gamechanger/load-archive/ \
                 --bucket-name advana-raw-zone \
             local \
-                --local-raw-ingest-dir "$ingest_container_raw_dir"
+                --local-raw-ingest-dir '"$ingest_container_raw_dir"''
 
     ) 2>&1 | tee -a "$local_job_log_file"
 
