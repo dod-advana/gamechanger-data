@@ -107,7 +107,7 @@ function crawl_and_ingest() {
             --mount type=bind,source="$ingest_host_job_dir",destination="$ingest_container_job_dir" \
             --mount type=bind,source="$crawler_host_dl_dir",destination="$ingest_container_raw_dir" \
             --workdir /gamechanger \
-            "$ingest_container_image" bash -c 'source opt/gc-venv/bin/activate; '"$CONTAINER_PYTHON_CMD"' -m dataPipelines.gc_ingest pipelines core ingest \
+            "$ingest_container_image" bash -c 'source /opt/gc-venv/bin/activate; '"$CONTAINER_PYTHON_CMD"' -m dataPipelines.gc_ingest pipelines core ingest \
                 --skip-snapshot-backup=yes \
                 --crawler-output='"$crawler_json_file"' \
                 --batch-timestamp='"$job_timestamp"' \
