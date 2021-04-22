@@ -215,11 +215,15 @@ def make_sentences(text, src, nlp, counter):
 
 
 if __name__ == "__main__":
+    #
+    # TODO Clean up this shambles
+    #
     log_fmt = (
             "[%(asctime)s %(levelname)-8s], [%(filename)s:%(lineno)s - "
             + "%(funcName)s()], %(message)s"
     )
     logging.basicConfig(level=logging.INFO, format=log_fmt)
+    csv_out = "dodd_5105.20_sentences.csv"
 
     # data_csv = '/Users/chrisskiscim/projects/classifier_data/dodi-dodd/dodi_dodd.csv'
     #
@@ -227,5 +231,20 @@ if __name__ == "__main__":
     # dodi_dodd_trn_val = train_df.append(validate_df, ignore_index=True)
     # dodi_dodd_trn_val.to_csv("dodi_dodd_trn_val.csv", header=False, index=False)
 
-    data_csv_ = "/Users/chrisskiscim/projects/classifier_data/dodi-dodd/dodi_dodd_trn_val.csv"
-    gc_data_item_labels(data_csv_, cp=0.50, cm=0.50, shuffle=True, topn=0)
+    # data_csv_ = "/Users/chrisskiscim/projects/classifier_data/dodi-dodd/dodi_dodd_trn_val.csv"
+    # gc_data_item_labels(data_csv_, cp=0.50, cm=0.50, shuffle=True, topn=0)
+    src_path = "/Users/chrisskiscim/projects/gamechanger-data/dataScience/src/text_classif/tests/test_data/docs"
+    glob = "*.json"
+    out_df = pd.DataFrame(columns=["src", "label", "sentence"])
+
+    logger.info("loading spaCy")
+    nlp_ = spacy_m.get_lg_vectors()
+    nlp_.add_pipe(nlp_.create_pipe('sentencizer'))
+
+    logger.info("making sentences")
+    count = 0
+    for raw_text, fname in gen_gc_docs(src_path, glob, key="raw_text"):
+        sent_df, count = make_sentences(raw_text, fname, nlp_, count)
+        out_df = out_df.append(sent_df, ignore_index=True)
+
+    out_df.to_csv(csv_out, index=False, header=False, sep=",")

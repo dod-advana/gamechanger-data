@@ -161,4 +161,4 @@ if __name__ == "__main__":
 
     out_df = main(args.config_yaml, args.data_file, args.model_type,
                   args.num_samples, args.model_path)
-    out_df.to_csv("predict_gc.csv", header=False, index=False)
+    out_df.to_csv("predict_gc.csv", header=True, index=False)
