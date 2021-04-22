@@ -27,7 +27,7 @@ logger = logging.getLogger(__name__)
 class ExtractRespText(Table):
     def __init__(self, input_dir, output, spacy_model, agency_file, glob):
         super(ExtractRespText, self).__init__(
-            input_dir, output, spacy_model, agency_file, glob
+            input_dir, output, spacy_model, agency_file, glob, True
         )
         logger.info("input dir : {}".format(input_dir))
         self.spacy_model.add_pipe(self.spacy_model.create_pipe("sentencizer"))
@@ -36,10 +36,10 @@ class ExtractRespText(Table):
     def _list_dir(self):
         pass
 
-    @staticmethod
-    def scrubber(txt):
+    def scrubber(self, txt):
         txt = re.sub("[\\n\\t\\r]+", " ", txt)
         txt = re.sub("\\s{2,}", " ", txt)
+        txt = re.sub(r"^\d\.(.*?) ", "", txt)
         return txt.strip()
 
     def extract_positive(self):
@@ -77,7 +77,6 @@ class ExtractRespText(Table):
         total_pos = 0
         total_neg = 0
         for pos_ex, fname, raw_text in self.extract_positive():
-            logger.info("--> {}".format(fname))
             try:
                 if not neg_only:
                     total_pos += len(pos_ex)
@@ -127,7 +126,7 @@ if __name__ == "__main__":
                         "--glob",
                         dest="glob",
                         type=str,
-                        default="DoDM*.json",
+                        default="DoDD*.json",
                         help="file glob to use in extracting from input_dir")
 
     args = parser.parse_args()

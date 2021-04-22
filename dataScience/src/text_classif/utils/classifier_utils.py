@@ -105,7 +105,7 @@ def gc_data_item_labels(data_file, cp=0.50, cm=0.50, shuffle=True, topn=0):
                 ignore_index=True
             )
         logger.info("writing file...")
-        out_df.to_csv("dodi_train_lbl_flipped.csv", index=False, header=False)
+        out_df.to_csv("dodi_dodd_train_lbl_flipped.csv", index=False, header=False)
 
         sents = out_df.sentence.values
         labels = out_df.label.values
@@ -161,22 +161,23 @@ def gc_data_tvt(data_file, topn=0, lbl=""):
                 pos += 1
                 if re.search(r"^\w\. ", row.sentence) is not None:
                     pos_lbl += 1
-        print("item label positives {:,} / {:,}".format(pos_lbl, pos))
+        logger.info("item label positives {:,} / {:,}".format(pos_lbl, pos))
         # 80, 10, 10 split
         train, validate, test = np.split(df.sample(frac=1),
                                          [int(.8*len(df)), int(.9*len(df))])
-        logger.info("train : {:5,d}".format(len(train)))
-        logger.info("  val : {:5,d}".format(len(validate)))
-        logger.info(" test : {:5,d}".format(len(test)))
+        logger.info("train : {:>5,d}".format(len(train)))
+        logger.info("  val : {:>5,d}".format(len(validate)))
+        logger.info(" test : {:>5,d}".format(len(test)))
         train.to_csv(
-            os.path.join(
-                here, "train_" + lbl + ".csv"), sep=",", index=False, header=False)
+            os.path.join(here, "train_" + lbl + ".csv"),
+            sep=",", index=False, header=False)
         validate.to_csv(
-            os.path.join(
-                here, "validate_" + lbl + ".csv"), sep=",", index=False, header=False)
+            os.path.join(here, "validate_" + lbl + ".csv"),
+            sep=",", index=False, header=False)
         test.to_csv(
-            os.path.join(
-                here, "test_" + lbl + ".csv"), sep=",", index=False, header=False)
+            os.path.join(here, "test_" + lbl + ".csv"),
+            sep=",", index=False, header=False)
+        return train, validate, test
     except FileNotFoundError as e:
         logger.fatal("{} : {}".format(type(e), str(e)))
         logger.fatal("\n\n\tThat was a fatal error my friend")
@@ -207,7 +208,8 @@ def make_sentences(text, src, nlp, counter):
     df = pd.DataFrame(columns=["src", "label", "sentence"])
     for sent in sents:
         src_ = src + "_{}".format(counter)
-        df = df.append({"src": src_, "label": 0, "sentence": sent}, ignore_index=True)
+        df = df.append({"src": src_, "label": 0, "sentence": sent},
+                       ignore_index=True)
         counter += 1
     return df, counter
 
@@ -219,20 +221,11 @@ if __name__ == "__main__":
     )
     logging.basicConfig(level=logging.INFO, format=log_fmt)
 
-    logger.info('loading spacy')
-    nlp_ = spacy_m.get_lg_vectors()
-    nlp_.add_pipe(nlp_.create_pipe("sentencizer"))
-    logger.info('spacy is loaded')
+    # data_csv = '/Users/chrisskiscim/projects/classifier_data/dodi-dodd/dodi_dodd.csv'
+    #
+    # train_df, validate_df, test_df = gc_data_tvt(data_csv, topn=0, lbl="dodi_dodd")
+    # dodi_dodd_trn_val = train_df.append(validate_df, ignore_index=True)
+    # dodi_dodd_trn_val.to_csv("dodi_dodd_trn_val.csv", header=False, index=False)
 
-    bp = "/Users/chrisskiscim/projects/classifier_data"
-    doc_path = os.path.join(bp, "dodi", "dod_idm_sentences.csv")
-    # gc_data_tvt(doc_path, lbl="dodi")
-    # gc_data_item_labels(doc_path)
-    src_path = "/Users/chrisskiscim/projects/gamechanger/repo/gamechanger/dataScience/data/test_data"
-    glob = "*.json"
-    out_df = pd.DataFrame(columns=["src", "label", "sentence"])
-    count = 0
-    for raw_text, fname in gen_gc_docs(src_path, glob, key="raw_text"):
-        sent_df, count = make_sentences(raw_text, fname, nlp_, count)
-        out_df = out_df.append(sent_df, ignore_index=True)
-    out_df.to_csv("dodimd_sentences.csv", index=False, header=False, sep=",")
+    data_csv_ = "/Users/chrisskiscim/projects/classifier_data/dodi-dodd/dodi_dodd_trn_val.csv"
+    gc_data_item_labels(data_csv_, cp=0.50, cm=0.50, shuffle=True, topn=0)
