@@ -67,20 +67,20 @@ function reparse() {
             --mount type=bind,source="$host_repo_dir",destination="/gamechanger" \
             --mount type=bind,source="$ingest_host_job_dir",destination="$ingest_container_job_dir" \
             --workdir /gamechanger \
-            "$ingest_container_image" "$CONTAINER_PYTHON_CMD" -m dataPipelines.gc_ingest pipelines core ingest \
+            "$ingest_container_image" bash -c 'source /opt/gc-venv/bin/activate; '"$CONTAINER_PYTHON_CMD"' -m dataPipelines.gc_ingest pipelines core ingest \
                 --skip-snapshot-backup=yes \
-                --batch-timestamp="$job_timestamp" \
-                --index-name="$es_index_name" \
-                --alias-name="$es_alias_name" \
-                --max-threads="$max_parser_threads" \
-                --max-ocr-threads="$max_ocr_threads" \
-                --job-dir="$ingest_container_job_dir"  \
+                --batch-timestamp='"$job_timestamp"' \
+                --index-name='"$es_index_name"' \
+                --alias-name='"$es_alias_name"' \
+                --max-threads='"$max_parser_threads"' \
+                --max-ocr-threads='"$max_ocr_threads"' \
+                --job-dir='"$ingest_container_job_dir"'  \
                 --current-snapshot-prefix gamechanger/ \
                 --backup-snapshot-prefix gamechanger/backup/ \
                 --db-backup-base-prefix gamechanger/backup/db/ \
                 --load-archive-base-prefix gamechanger/load-archive/ \
                 --bucket-name advana-raw-zone \
-            reparse
+            reparse'
     ) 2>&1 | tee -a "$local_job_log_file"
 
 }
