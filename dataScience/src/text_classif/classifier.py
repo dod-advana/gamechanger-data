@@ -325,6 +325,7 @@ class Classifier(object):
         self.attention_masks = list()
 
         # `encode_plus()` does all the heavy lifting
+        logger.info("tokenizing, encoding...")
         for text in texts:
             encoded_dict = self.tokenizer.encode_plus(
                 text,
@@ -342,6 +343,7 @@ class Classifier(object):
         # make into tensors
         self.input_ids = torch.cat(self.input_ids, dim=0)
         self.attention_masks = torch.cat(self.attention_masks, dim=0)
+        logger.info("done tokenizing, encoding...")
 
     def train(self, train_ds, val_ds):
         avg_loss_items = list()
