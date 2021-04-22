@@ -3,20 +3,19 @@ import scrapy
 from scrapy import Selector
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.ui import Select, WebDriverWait
+from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver import Chrome
 from selenium.common.exceptions import NoSuchElementException
-import re
-from urllib.parse import urljoin, urlparse
-from datetime import datetime
 
-from dataPipelines.gc_scrapy.gc_scrapy.middleware_utils.selenium_request import SeleniumRequest
 from dataPipelines.gc_scrapy.gc_scrapy.items import DocItem
 from dataPipelines.gc_scrapy.gc_scrapy.GCSeleniumSpider import GCSeleniumSpider
-from time import sleep
 
 
 class CoastGuardSpider(GCSeleniumSpider):
+    """
+        Parser for Coast Guard Commandant Instruction Manuals
+    """
+
     name = 'Coast_Guard'
     allowed_domains = ['dcms.uscg.mil']
     start_urls = [
@@ -34,16 +33,6 @@ class CoastGuardSpider(GCSeleniumSpider):
         "wait_until": EC.element_to_be_clickable(
             (By.CSS_SELECTOR, current_page_selector))
     }
-
-    @staticmethod
-    def clean(text):
-        return text.encode('ascii', 'ignore').decode('ascii').strip()
-
-    @staticmethod
-    def get_file_type(url):
-        file_url, _, _ = url.partition('?')
-        _, _, extension = file_url.rpartition('.')
-        return extension.lower()
 
     def parse(self, response):
 
@@ -78,13 +67,10 @@ class CoastGuardSpider(GCSeleniumSpider):
             doc_num = doc_num_raw.replace('CIM_', '').replace('_', '.')
 
             doc_title_raw = row.css('td:nth-child(2) a::text').get()
-            doc_title = self.clean(doc_title_raw)
+            doc_title = self.ascii_clean(doc_title_raw)
             href_raw = row.css('td:nth-child(2) a::attr(href)').get()
 
-            if href_raw.startswith('/'):
-                web_url = urljoin(driver.current_url, href_raw)
-            else:
-                web_url = href_raw
+            web_url = self.ensure_full_href_url(href_raw, driver.current_url)
 
             publication_date = row.css('td:nth-child(5)::text').get()
 
@@ -95,7 +81,11 @@ class CoastGuardSpider(GCSeleniumSpider):
                 "document_number": doc_num
             }
 
-            file_type = self.get_file_type(web_url)
+            try:
+                file_type = self.get_href_file_extension(href_raw)
+            except:
+                print('SKIPPED: no filetype on href', href_raw)
+                continue
 
             downloadable_items = [
                 {
@@ -109,7 +99,6 @@ class CoastGuardSpider(GCSeleniumSpider):
                 doc_name=f"{self.doc_type} {doc_num}",
                 doc_title=doc_title,
                 doc_num=doc_num,
-                # doc_type=doc_type,
                 publication_date=publication_date,
                 # cac_login_required=cac_login_required,
                 downloadable_items=downloadable_items,

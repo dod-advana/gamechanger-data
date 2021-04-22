@@ -1,12 +1,13 @@
 import scrapy
-from datetime import datetime
-import re
-from urllib.parse import urljoin
 from dataPipelines.gc_scrapy.gc_scrapy.items import DocItem
 from dataPipelines.gc_scrapy.gc_scrapy.GCSpider import GCSpider
 
 
 class CNGBISpider(GCSpider):
+    """
+        Parser for Chief National Guard Bureau Instructions
+    """
+
     name = "Chief_National_Guard_Bureau_Instructions"
     allowed_domains = ['ngbpmc.ng.mil']
     start_urls = [
@@ -17,27 +18,19 @@ class CNGBISpider(GCSpider):
     doc_type = "CNGBI"
     cac_login_required = False
 
-    @staticmethod
-    def clean(text):
-        return text.encode('ascii', 'ignore').decode('ascii').strip()
-
-    @staticmethod
-    def get_file_type(url):
-        file_url, _, _ = url.partition('?')
-        _, _, extension = file_url.rpartition('.')
-        return extension.lower()
-
     def parse(self, response):
         rows = response.css('div.WordSection1 table.MsoNormalTable tbody tr')
 
         for row in rows:
-            href_raw: str = row.css('td:nth-child(1) a::attr(href)').get()
-            if href_raw.startswith('/'):
-                web_url = urljoin(self.start_urls[0], href_raw)
-            else:
-                web_url = href_raw
+            href_raw = row.css('td:nth-child(1) a::attr(href)').get()
 
-            file_type = self.get_file_type(web_url)
+            web_url = self.ensure_full_href_url(href_raw, self.start_urls[0])
+
+            try:
+                file_type = self.get_href_file_extension(href_raw)
+            except:
+                print('SKIPPED: no filetype for href', href_raw)
+                continue
 
             downloadable_items = [
                 {
@@ -55,8 +48,11 @@ class CNGBISpider(GCSpider):
             doc_title_raw = row.css('td:nth-child(3) a::text').get()
             if doc_title_raw is None:
                 doc_title_raw = row.css('td:nth-child(3) span::text').get()
-
-            doc_title = self.clean(doc_title_raw)
+            # print(rdoc_title_raw)
+            doc_title = doc_title_raw.encode(
+                'ascii', 'xmlcharrefreplace').decode()
+            # self.ascii_clean(doc_title_raw.replace('\u00a0', ' '))
+            # self.ascii_clean(doc_title_raw)
 
             version_hash_fields = {
                 "item_currency": href_raw.replace(' ', '%20'),
