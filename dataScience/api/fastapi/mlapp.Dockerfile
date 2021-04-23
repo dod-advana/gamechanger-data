@@ -1,4 +1,4 @@
-FROM python:3.6.13-buster
+FROM pytorch/pytorch:1.2-cuda10.0-cudnn7-runtime
 ADD api/requirements.txt .
 RUN apt-get update
 #RUN apt install --yes gcc python3-dev libc-dev
