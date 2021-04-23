@@ -8,7 +8,7 @@ class CNGBISpider(GCSpider):
         Parser for Chief National Guard Bureau Instructions
     """
 
-    name = "Chief_National_Guard_Bureau_Instructions"
+    name = "National_Guard"
     allowed_domains = ['ngbpmc.ng.mil']
     start_urls = [
         'https://www.ngbpmc.ng.mil/publications1/cngbi/'
