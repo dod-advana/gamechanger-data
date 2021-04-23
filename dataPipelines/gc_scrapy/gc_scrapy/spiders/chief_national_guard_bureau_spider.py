@@ -16,7 +16,6 @@ class CNGBISpider(GCSpider):
 
     file_type = "pdf"
     doc_type = "CNGBI"
-    cac_login_required = False
 
     def parse(self, response):
         rows = response.css('div.WordSection1 table.MsoNormalTable tbody tr')
@@ -24,13 +23,14 @@ class CNGBISpider(GCSpider):
         for row in rows:
             href_raw = row.css('td:nth-child(1) a::attr(href)').get()
 
+            if not href_raw.startswith('/'):
+                cac_login_required = True
+            else:
+                cac_login_required = False
+
             web_url = self.ensure_full_href_url(href_raw, self.start_urls[0])
 
-            try:
-                file_type = self.get_href_file_extension(href_raw)
-            except:
-                print('SKIPPED: no filetype for href', href_raw)
-                continue
+            file_type = self.get_href_file_extension(href_raw)
 
             downloadable_items = [
                 {
@@ -48,14 +48,11 @@ class CNGBISpider(GCSpider):
             doc_title_raw = row.css('td:nth-child(3) a::text').get()
             if doc_title_raw is None:
                 doc_title_raw = row.css('td:nth-child(3) span::text').get()
-            # print(rdoc_title_raw)
-            doc_title = doc_title_raw.encode(
-                'ascii', 'xmlcharrefreplace').decode()
-            # self.ascii_clean(doc_title_raw.replace('\u00a0', ' '))
-            # self.ascii_clean(doc_title_raw)
+
+            doc_title = self.ascii_clean(doc_title_raw)
 
             version_hash_fields = {
-                "item_currency": href_raw.replace(' ', '%20'),
+                "item_currency": href_raw,
                 "document_title": doc_title,
                 "document_number": doc_num_raw
             }
@@ -65,7 +62,7 @@ class CNGBISpider(GCSpider):
                 doc_title=doc_title,
                 doc_num=doc_num_raw,
                 publication_date=publication_date,
-                # cac_login_required=False,
+                cac_login_required=cac_login_required,
                 downloadable_items=downloadable_items,
                 version_hash_raw_data=version_hash_fields,
             )

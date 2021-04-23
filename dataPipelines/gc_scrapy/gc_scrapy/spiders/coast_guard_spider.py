@@ -76,16 +76,12 @@ class CoastGuardSpider(GCSeleniumSpider):
 
             # all fields that will be used for versioning
             version_hash_fields = {
-                "item_currency": href_raw.replace(' ', '%20'),
+                "item_currency": href_raw,
                 "document_title": doc_title,
                 "document_number": doc_num
             }
 
-            try:
-                file_type = self.get_href_file_extension(href_raw)
-            except:
-                print('SKIPPED: no filetype on href', href_raw)
-                continue
+            file_type = self.get_href_file_extension(href_raw)
 
             downloadable_items = [
                 {
@@ -100,7 +96,6 @@ class CoastGuardSpider(GCSeleniumSpider):
                 doc_title=doc_title,
                 doc_num=doc_num,
                 publication_date=publication_date,
-                # cac_login_required=cac_login_required,
                 downloadable_items=downloadable_items,
                 version_hash_raw_data=version_hash_fields,
                 source_page_url=driver.current_url
