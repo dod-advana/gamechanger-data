@@ -70,7 +70,7 @@ trap cleanup_hooks EXIT
 
 function setup_venv_and_other_commands() {
 
-  source "/opt/gc-venv/bin/activate"
+  source "/opt/gc-venv-current/bin/activate"
   export PATH="$PATH:/usr/local/bin"
 
   case "$SCRIPT_ENV" in
