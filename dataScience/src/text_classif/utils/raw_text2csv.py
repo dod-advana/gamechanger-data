@@ -1,18 +1,26 @@
+"""
+usage: python raw_text2csv.py [-h] [-i INPUT_PATH] [-o OUTPUT_CSV] [-g GLOB]
+
+csv of each sentence in a json doc
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -i INPUT_PATH, --input-path INPUT_PATH
+                        corpus path
+  -o OUTPUT_CSV, --output-csv OUTPUT_CSV
+                        output .csv path, name
+  -g GLOB, --glob GLOB  file pattern to match
+
+"""
 # The MIT License (MIT)
 # Subject to the terms and conditions contained in LICENSE
-import datetime
-import fnmatch
 import logging
-import json
 import os
-import re
 
-import numpy as np
 import pandas as pd
-from tqdm import tqdm
-import dataScience.src.utilities.spacy_model as spacy_m
-import dataScience.src.text_classif.utils.classifier_utils as cu
 
+import dataScience.src.text_classif.utils.classifier_utils as cu
+import dataScience.src.utilities.spacy_model as spacy_m
 
 logger = logging.getLogger(__name__)
 here = os.path.dirname(os.path.realpath(__file__))
