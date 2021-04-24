@@ -10,7 +10,6 @@ import re
 import numpy as np
 import pandas as pd
 from tqdm import tqdm
-import dataScience.src.utilities.spacy_model as spacy_m
 
 
 logger = logging.getLogger(__name__)
@@ -144,12 +143,12 @@ def gc_data(data_file, neg_data_file, shuffle=True, topn=0):
         src = df.src.values
         return sents, labels, src
     except FileNotFoundError as e:
-        logger.fatal("{} : {}".format(type(e), str(e)))
+        logger.fatal("\n{} : {}".format(type(e), str(e)))
         logger.fatal("\n\n\tThat was a fatal error my friend")
         raise e
 
 
-def gc_data_tvt(data_file, topn=0, lbl=""):
+def gc_data_tvt(data_file, topn=0, ident="", split=0.90):
     try:
         df = _read_gc_df(data_file)
         if topn > 0:
@@ -157,7 +156,7 @@ def gc_data_tvt(data_file, topn=0, lbl=""):
         pos_lbl = 0
         pos = 0
         for _, row in df.iterrows():
-            if row.label == 0:
+            if row.label == 1:
                 pos += 1
                 if re.search(r"^\w\. ", row.sentence) is not None:
                     pos_lbl += 1
@@ -169,17 +168,17 @@ def gc_data_tvt(data_file, topn=0, lbl=""):
         logger.info("  val : {:>5,d}".format(len(validate)))
         logger.info(" test : {:>5,d}".format(len(test)))
         train.to_csv(
-            os.path.join(here, "train_" + lbl + ".csv"),
+            os.path.join(here, "train_" + ident + ".csv"),
             sep=",", index=False, header=False)
         validate.to_csv(
-            os.path.join(here, "validate_" + lbl + ".csv"),
+            os.path.join(here, "validate_" + ident + ".csv"),
             sep=",", index=False, header=False)
         test.to_csv(
-            os.path.join(here, "test_" + lbl + ".csv"),
+            os.path.join(here, "test_" + ident + ".csv"),
             sep=",", index=False, header=False)
         return train, validate, test
     except FileNotFoundError as e:
-        logger.fatal("{} : {}".format(type(e), str(e)))
+        logger.fatal("\n{} : {}".format(type(e), str(e)))
         logger.fatal("\n\n\tThat was a fatal error my friend")
         raise e
 

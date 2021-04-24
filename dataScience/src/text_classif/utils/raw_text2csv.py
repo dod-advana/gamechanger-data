@@ -1,14 +1,14 @@
 """
 usage: python raw_text2csv.py [-h] [-i INPUT_PATH] [-o OUTPUT_CSV] [-g GLOB]
 
-csv of each sentence in a json doc
+csv of each sentence in the text
 
 optional arguments:
   -h, --help            show this help message and exit
   -i INPUT_PATH, --input-path INPUT_PATH
                         corpus path
   -o OUTPUT_CSV, --output-csv OUTPUT_CSV
-                        output .csv path, name
+                        output path for .csv files
   -g GLOB, --glob GLOB  file pattern to match
 
 """
@@ -34,26 +34,36 @@ def make_sentences(text, src_, nlp):
     sents = [cu.scrubber(s.text) for s in nlp(text).sents]
     df = new_df()
     for sent in sents:
-        df = df.append({"src": src_, "label": 0, "sentence": sent},
-                       ignore_index=True)
+        df = df.append(
+                {"src": src_, "label": 0, "sentence": sent}, ignore_index=True
+        )
     return df
 
 
-def raw2df(src_path, glob, nlp, out_df):
+def raw2df(src_path, glob, nlp):
     for raw_text, fname in cu.gen_gc_docs(src_path, glob, key="raw_text"):
         sent_df = make_sentences(raw_text, fname, nlp)
-        out_df = out_df.append(sent_df, ignore_index=True)
         logger.info("{:>25s} : {:>3,d}".format(fname, len(sent_df)))
-    return out_df
+        yield sent_df, fname
 
 
-def main(src_path, glob, output_csv):
+def main(src_path, glob, output_path):
     logger.info("loading spaCy")
     nlp = spacy_m.get_lg_vectors()
     nlp.add_pipe(nlp.create_pipe('sentencizer'))
+
     output_df = new_df()
-    out_df = raw2df(src_path, glob, nlp, output_df)
-    out_df.to_csv(output_csv, header=False, index=False)
+    fname = None
+    try:
+        for sent_df, fname in raw2df(src_path, glob, nlp):
+            output_df = output_df.append(sent_df, ignore_index=True)
+            base, ext = os.path.splitext(os.path.basename(fname))
+            output_csv = base.replace(" ", "_") + "_sentences" + ".csv"
+            output_csv = os.path.join(output_path, output_csv)
+            output_df.to_csv(output_csv, header=False, index=False)
+    except(FileNotFoundError, IOError) as e:
+        logger.exception("current file : {}".format(fname))
+        raise e
 
 
 if __name__ == "__main__":
@@ -66,7 +76,7 @@ if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, format=log_fmt)
 
     parser = ArgumentParser(prog="python raw_text2csv.py",
-                            description="csv of each sentence in a json doc")
+                            description="csv of each sentence in the text")
     parser.add_argument(
         "-i",
         "--input-path",
@@ -79,7 +89,8 @@ if __name__ == "__main__":
         "--output-csv",
         dest="output_csv",
         type=str,
-        help="output .csv path, name"
+        default=None,
+        help="output path for .csv files"
     )
     parser.add_argument(
         "-g",
