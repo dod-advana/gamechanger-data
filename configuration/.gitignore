@@ -1,4 +1,4 @@
 # Protective gitignore for app configs
 app-config/*
-!app-config/local.json
-!app-config/docker.json
+!app-config/*local.json
+!app-config/*docker.json
