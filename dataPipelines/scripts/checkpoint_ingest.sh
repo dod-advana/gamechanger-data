@@ -58,7 +58,7 @@ function checkpoint_ingest() {
     local ingest_container_raw_dir="/input"
     local ingest_container_job_dir="/job"
 
-    local crawler_json_file="${ingest_container_raw_dir}/crawler_output.json"
+    local crawler_json_file="${ingest_container_raw_dir}/raw_docs/crawler_output.json"
 
     local es_index_name="$INDEX_NAME"
     local es_alias_name="${ALIAS_NAME:-}"
