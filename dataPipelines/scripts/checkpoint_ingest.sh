@@ -58,7 +58,7 @@ function checkpoint_ingest() {
     local ingest_container_raw_dir="/input"
     local ingest_container_job_dir="/job"
 
-    local crawler_json_file="${ingest_container_raw_dir}/raw_docs/crawler_output.json"
+    local crawler_json_file="${ingest_container_job_dir}/raw_docs/crawler_output.json"
 
     local es_index_name="$INDEX_NAME"
     local es_alias_name="${ALIAS_NAME:-}"
@@ -112,8 +112,8 @@ function checkpoint_ingest() {
                 --load-archive-base-prefix gamechanger/load-archive/ \
                 --bucket-name advana-raw-zone \
             checkpoint \
-                --checkpoint_file_path=gamechanger/external-uploads/crawler-downloader/checkpoint.txt \
-                --checkpointed_dir_path=gamechanger/external-uploads/crawler-downloader/'
+                --checkpoint-file-path=gamechanger/external-uploads/crawler-downloader/checkpoint.txt \
+                --checkpointed-dir-path=gamechanger/external-uploads/crawler-downloader/'
 
     ) 2>&1 | tee -a "$local_job_log_file"
 
