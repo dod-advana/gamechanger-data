@@ -7,19 +7,28 @@ of the CLI commands called to run the scripts can be found in
 `/gc_ingest/core/cli.py`.
 
 The scripts include:
+* **checkpoint_ingest.sh**: script that grabs the latest checkpoint from 
+  s3 and parses/ingests from the local directory. This is the main 
+  gc_ingest function used in production, and this script is important 
+  to mirror production's pipeline.
+  
+
 * **crawl_and_ingest.sh**: the main ingest script consisting of three docker runs: 
   the first checks that the connections to the databases are 
   functional, the second runs the crawl+download, and the third performs
   the ingests in neo4j, ElasticSearch, postgres, and s3.
   
+
 * **neo4j_reingest**: This script pulls down documents from s3's `json` directory
   (jsons resulting from the corpus parse) and reingests them into 
   the neo4j database, all in a docker container.  
   
+
 * **reindex.sh**: pulls down documents from s3's `json` directory
   (jsons resulting from the corpus parse) and reingests the results 
   into ElasticSearch.
   
+
 * **reparse.sh**: pulls down documents from s3's `pdf` directory 
   (raw pdfs/metadata), parses them, reingests the output into neo4j and
   ElasticSearch, then pushes the output into s3's `json` directory.
