@@ -163,7 +163,7 @@
           "type": "string",
           "title": "Document Type",
           "description": "The ultimate document file type when decompressed",
-          "enum": ["pdf","xml","xhtml"]
+          "enum": ["pdf","xml","xhtml", "html"]
         },
         "web_url": {
           "type": "string",
