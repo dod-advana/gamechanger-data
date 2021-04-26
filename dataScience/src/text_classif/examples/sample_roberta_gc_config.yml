@@ -10,7 +10,7 @@ random_state: 42
 # update these for your environment
 checkpoint_path: ~
 tensorboard_path: ~
-use_checkpoint: /Users/chrisskiscim/projects/gamechanger/repo/gamechanger/dataScience/src/text_classif/examples/checkpoint/roberta_dodd_dodi_epoch_1
+use_checkpoint: ~
 
 # Training args
 num_labels: 2

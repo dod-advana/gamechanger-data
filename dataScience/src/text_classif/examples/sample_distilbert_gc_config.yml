@@ -4,13 +4,12 @@ log_id: "distilbert-gc-example-dodd.log"
 # class instantiation
 model_name: "distilbert-base-uncased"
 epochs: 1
-batch_size: 16
+batch_size: 8
 random_state: 42
 
 # update these for your environment (note `~` means `None`)
 checkpoint_path: ~
 tensorboard_path: ~
-use_checkpoint: ~
 
 # Training args
 num_labels: 2

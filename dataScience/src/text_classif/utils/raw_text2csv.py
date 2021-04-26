@@ -35,7 +35,7 @@ def make_sentences(text, src_, nlp):
     df = new_df()
     for sent in sents:
         df = df.append(
-                {"src": src_, "label": 0, "sentence": sent}, ignore_index=True
+            {"src": src_, "label": 0, "sentence": sent}, ignore_index=True
         )
     return df
 
@@ -50,7 +50,7 @@ def raw2df(src_path, glob, nlp):
 def main(src_path, glob, output_path):
     logger.info("loading spaCy")
     nlp = spacy_m.get_lg_vectors()
-    nlp.add_pipe(nlp.create_pipe('sentencizer'))
+    nlp.add_pipe(nlp.create_pipe("sentencizer"))
 
     output_df = new_df()
     fname = None
@@ -60,8 +60,8 @@ def main(src_path, glob, output_path):
             base, ext = os.path.splitext(os.path.basename(fname))
             output_csv = base.replace(" ", "_") + "_sentences" + ".csv"
             output_csv = os.path.join(output_path, output_csv)
-            output_df.to_csv(output_csv, header=False, index=False)
-    except(FileNotFoundError, IOError) as e:
+            output_df.to_csv(output_csv, header=True, index=False)
+    except (FileNotFoundError, IOError) as e:
         logger.exception("current file : {}".format(fname))
         raise e
 
@@ -70,19 +70,17 @@ if __name__ == "__main__":
     from argparse import ArgumentParser
 
     log_fmt = (
-            "[%(asctime)s %(levelname)-8s], [%(filename)s:%(lineno)s - "
-            + "%(funcName)s()], %(message)s"
+        "[%(asctime)s %(levelname)-8s], [%(filename)s:%(lineno)s - "
+        + "%(funcName)s()], %(message)s"
     )
     logging.basicConfig(level=logging.INFO, format=log_fmt)
 
-    parser = ArgumentParser(prog="python raw_text2csv.py",
-                            description="csv of each sentence in the text")
+    parser = ArgumentParser(
+        prog="python raw_text2csv.py",
+        description="csv of each sentence in the text",
+    )
     parser.add_argument(
-        "-i",
-        "--input-path",
-        dest="input_path",
-        type=str,
-        help="corpus path"
+        "-i", "--input-path", dest="input_path", type=str, help="corpus path"
     )
     parser.add_argument(
         "-o",
@@ -90,13 +88,10 @@ if __name__ == "__main__":
         dest="output_csv",
         type=str,
         default=None,
-        help="output path for .csv files"
+        help="output path for .csv files",
     )
     parser.add_argument(
-        "-g",
-        "--glob",
-        dest="glob",
-        help="file pattern to match"
+        "-g", "--glob", dest="glob", help="file pattern to match"
     )
     args = parser.parse_args()
 

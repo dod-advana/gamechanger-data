@@ -21,7 +21,9 @@ import os
 
 import dataScience.src.text_classif.utils.classifier_utils as cu
 from dataScience.src.text_classif.bert_classifier import BertClassifier
-from dataScience.src.text_classif.distilbert_classifier import DistilBertClassifier  # noqa
+from dataScience.src.text_classif.distilbert_classifier import (
+    DistilBertClassifier,
+)
 from dataScience.src.text_classif.roberta_classifier import RobertaClassifier
 from dataScience.src.text_classif.utils.log_init import initialize_logger
 
@@ -30,8 +32,8 @@ logger = logging.getLogger(__name__)
 
 def main(config_yaml, data_file, model_type, num_samples):
     """
-    Example illustrating how to train the `roberta-base` model using the
-    COLA data set.
+    Example illustrating how to train the classifier model using the
+    on a given dataset.
 
     Args:
         config_yaml(str): path to the configuration file
@@ -44,7 +46,7 @@ def main(config_yaml, data_file, model_type, num_samples):
             be read and used to balance the classes
 
     Returns:
-        None
+        dict
 
     """
     here = os.path.dirname(os.path.realpath(__file__))
@@ -61,12 +63,12 @@ def main(config_yaml, data_file, model_type, num_samples):
         initialize_logger(
             to_file=True, log_name=clf.cfg.log_id, output_dir=here
         )
-        # custom function to read / parse the GC data set
         train_txt, train_labels, _ = cu.gc_data(
             data_file, None, shuffle=True, topn=num_samples
         )
         _, data_name = os.path.split(data_file)
         clf.runtime["training data"] = data_name
+
         # train on all samples
         rs = clf.fit(train_txt, train_labels)
         return rs
@@ -104,7 +106,7 @@ if __name__ == "__main__":
         choices=("bert", "roberta", "distilbert"),
         required=True,
         dest="model_type",
-        help="supported model type; default is `roberta'",
+        help="supported model type",
     )
     parser.add_argument(
         "-n",

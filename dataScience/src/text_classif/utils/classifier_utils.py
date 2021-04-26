@@ -11,7 +11,6 @@ import numpy as np
 import pandas as pd
 from tqdm import tqdm
 
-
 logger = logging.getLogger(__name__)
 here = os.path.dirname(os.path.realpath(__file__))
 nlp_ = None
@@ -69,7 +68,7 @@ def _read_gc_df(data_file):
 
 def gc_data_item_labels(data_file, cp=0.50, cm=0.50, shuffle=True, topn=0):
     out_df = pd.DataFrame(columns=["src", "label", "sentence"])
-    alpha = list('abcdefghijklmnopqrstuvwxyz0123456789')
+    alpha = list("abcdefghijklmnopqrstuvwxyz0123456789")
     try:
         df = _read_gc_df(data_file)
         if shuffle:
@@ -89,22 +88,24 @@ def gc_data_item_labels(data_file, cp=0.50, cm=0.50, shuffle=True, topn=0):
             sent = row.sentence
             if row.label == 1:
                 mobj = re.search(r"(^\w\. |\(?\d+\) )", sent)
-                if np.random.uniform() > 1. - cp:
+                if np.random.uniform() > 1.0 - cp:
                     if mobj is not None:
                         sent = re.sub(re.escape(mobj.group(1)), "", sent)
             else:  # randomly add an item label
                 mobj = re.search(r"(^\w\. )", sent)
-                if np.random.uniform() > 1. - cm:
+                if np.random.uniform() > 1.0 - cm:
                     if mobj is None:
                         idx = np.random.randint(0, len(alpha))
                         sent = alpha[idx] + ". " + sent
 
             out_df = out_df.append(
                 {"src": src, "label": label, "sentence": sent},
-                ignore_index=True
+                ignore_index=True,
             )
         logger.info("writing file...")
-        out_df.to_csv("dodi_dodd_train_lbl_flipped.csv", index=False, header=False)
+        out_df.to_csv(
+            "dodi_dodd_train_lbl_flipped.csv", index=False, header=False
+        )
 
         sents = out_df.sentence.values
         labels = out_df.label.values
@@ -162,20 +163,30 @@ def gc_data_tvt(data_file, topn=0, ident="", split=0.90):
                     pos_lbl += 1
         logger.info("item label positives {:,} / {:,}".format(pos_lbl, pos))
         # 80, 10, 10 split
-        train, validate, test = np.split(df.sample(frac=1),
-                                         [int(.8*len(df)), int(.9*len(df))])
+        train, validate, test = np.split(
+            df.sample(frac=1), [int(0.8 * len(df)), int(0.9 * len(df))]
+        )
         logger.info("train : {:>5,d}".format(len(train)))
         logger.info("  val : {:>5,d}".format(len(validate)))
         logger.info(" test : {:>5,d}".format(len(test)))
         train.to_csv(
             os.path.join(here, "train_" + ident + ".csv"),
-            sep=",", index=False, header=False)
+            sep=",",
+            index=False,
+            header=False,
+        )
         validate.to_csv(
             os.path.join(here, "validate_" + ident + ".csv"),
-            sep=",", index=False, header=False)
+            sep=",",
+            index=False,
+            header=False,
+        )
         test.to_csv(
             os.path.join(here, "test_" + ident + ".csv"),
-            sep=",", index=False, header=False)
+            sep=",",
+            index=False,
+            header=False,
+        )
         return train, validate, test
     except FileNotFoundError as e:
         logger.fatal("\n{} : {}".format(type(e), str(e)))
@@ -195,7 +206,66 @@ def gen_gc_docs(doc_path_, glob, key="raw_text"):
                 logger.warning("`{}` not found in {}".format(key, input_f))
 
 
+def load_data(data_file, n_samples, shuffle=False):
+    df = pd.read_csv(data_file)
+    if "sentence" not in df.keys():
+        raise AttributeError("no column labeled 'sentence' in data_file")
+    if "label" not in df.keys():
+        raise AttributeError("no column labeled 'label' in data_file")
+    else:
+        df["label"] = df["label"].astype(int)
+    if shuffle:
+        df = df.sample(frac=1)
+    if n_samples > 0:
+        df = df.head(n_samples)
+
+    _, csv_name = os.path.split(data_file)
+
+    examples = [
+        {
+            "src": row["src"],
+            "label": row["label"],
+            "sentence": row["sentence"],
+        }
+        for _, row in df.iterrows()
+    ]
+    return examples
+
+
 def scrubber(txt):
     txt = re.sub("[\\n\\t\\r]+", " ", txt)
     txt = re.sub("\\s{2,}", " ", txt)
     return txt.strip()
+
+
+def _extract_batch_length(preds):
+    """
+    Extracts batch length of predictions.
+    """
+    batch_length = None
+    for key, value in preds.items():
+        batch_length = batch_length or value.shape[0]
+        if value.shape[0] != batch_length:
+            raise ValueError(
+                "Batch length of predictions should be same. %s has "
+                "different batch length than others." % key
+            )
+    return batch_length
+
+
+def unbatch_preds(preds):
+    """
+    Unbatch predictions, as in estimator.predict().
+
+    Args:
+      preds: Dict[str, np.ndarray], where all arrays have the same first
+        dimension.
+    Yields:
+      sequence of Dict[str, np.ndarray], with the same keys as preds.
+    """
+    if not isinstance(preds, dict):
+        for pred in preds:
+            yield pred
+    else:
+        for i in range(_extract_batch_length(preds)):
+            yield {key: value[i] for key, value in preds.items()}

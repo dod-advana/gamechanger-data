@@ -10,7 +10,6 @@ random_state: 42
 # update these for your environment
 checkpoint_path: ~
 tensorboard_path: ~
-use_checkpoint: ~
 
 # Training args
 num_labels: 2

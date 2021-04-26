@@ -17,7 +17,6 @@ cfg_schema = {
     "batch_size": int,
     "random_state": int,
     "checkpoint_path": (str, type_none),
-    "use_checkpoint": (str, type_none),
     "tensorboard_path": (str, type_none),
     "num_labels": int,
     "split": float,
@@ -28,7 +27,7 @@ cfg_schema = {
     "clip_grad_norm": (float, type_none),
     "drop_last": bool,
     "truncate": bool,
-    "max_seq_len": (int, type_none)
+    "max_seq_len": (int, type_none),
 }
 
 supported_types = {
@@ -157,11 +156,6 @@ def _is_verified(cfg_data):
         logger.error(
             "model type not supported : {}".format(cfg_data["model_name"])
         )
-    if cfg_data["use_checkpoint"]:
-        if cfg_data["use_checkpoint"] is not None:
-            if not os.path.isdir(cfg_data["use_checkpoint"]):
-                verified = False
-                logger.error("checkpoint_path is not a directory")
     if cfg_data["max_seq_len"] is None:
         return verified
     if not 0 < int(cfg_data["max_seq_len"]) <= 512:

@@ -44,7 +44,6 @@ for obvious errors.
 |clip_grad_norm|`(float, None)`|Limits the gradient to a function of this value|
 |drop_last|`bool`|If `True`, drop the last batch if it is incomplete|
 |truncate|`bool`|If `True`, truncate to the max length. Recommend `False`|
-|use_checkpoint|`(str, None)`|If `not None`, the model and tokenizer are read from this directory for prediction.|
 |max_seq_len|`(int, None)`|If `None`, this value is computed from the encoded text. Otherwise, this value is used|
 
 The schema is in `utils/config.py`. Changes to the schema are encouraged.
@@ -73,38 +72,43 @@ optional arguments:
 ```
 If all goes well, you'll see a summary of the configuration parameters, and the training will begin:
 ```
-[config.py:173 - log_config()], ---------------------------------------------------------
-[config.py:188 - log_config()],                class : RobertaClassifier
-[config.py:188 - log_config()],              version :  0.6.5  
-[config.py:188 - log_config()],               config : sample_roberta_cola_config_ccs.yml
-[config.py:188 - log_config()],               log id : roberta-cli-example-1-epoch.log
-[config.py:188 - log_config()],           model name : roberta-base
-[config.py:185 - log_config()],               epochs :       1
-[config.py:185 - log_config()],           batch size :      32
-[config.py:185 - log_config()],         random state :      84
-[config.py:182 - log_config()],      checkpoint path : test_roberta_checkpoint_ex1.pt
-[config.py:182 - log_config()],     tensorboard path : tensorboard
-[config.py:185 - log_config()],           num labels :       2
-[config.py:191 - log_config()],                split :   9.0E-01
-[config.py:185 - log_config()],         warmup steps :       0
-[config.py:191 - log_config()],                   lr :   2.0E-05
-[config.py:191 - log_config()],         weight decay :   2.0E-06
-[config.py:191 - log_config()],                  eps :   1.0E-08
-[config.py:191 - log_config()],       clip grad norm :   1.0E+00
-[config.py:185 - log_config()],            drop last :       0
-[config.py:188 - log_config()],           model type : roberta 
-[config.py:188 - log_config()],               device :   cpu   
-[config.py:185 - log_config()],        max token len :      64
-[config.py:185 - log_config()],     training samples :   7,695
-[config.py:185 - log_config()],   validation samples :     856
-[config.py:188 - log_config()],            optimizer :  AdamW  
-[config.py:185 - log_config()],          total steps :     241
-[config.py:198 - log_config()], ---------------------------------------------------------
-[classifier.py:348 - train()], into the breach...
-[classifier.py:353 - train()],           ==================== Epoch   1 /   1 ====================
-[classifier.py:394 - _train_batch()], 	batch     1 /   241 	loss : 0.789	elapsed : 0:00:15
-[classifier.py:394 - _train_batch()], 	batch     2 /   241 	loss : 0.721	elapsed : 0:00:29
+[config.py:184 - log_config()], ------------------------------------------------------
+[config.py:199 - log_config()],                class : DistilBertClassifier
+[config.py:199 - log_config()],              version :  0.7.4  
+[config.py:199 - log_config()],               config : sample_distilbert_gc_config.yml
+[config.py:199 - log_config()],               log id : distilbert-gc-example-dodd.log
+[config.py:199 - log_config()],           model name : distilbert-base-uncased
+[config.py:196 - log_config()],               epochs :       1
+[config.py:196 - log_config()],           batch size :       8
+[config.py:196 - log_config()],         random state :      42
+[config.py:193 - log_config()],      checkpoint path :   None  
+[config.py:193 - log_config()],     tensorboard path :   None  
+[config.py:196 - log_config()],           num labels :       2
+[config.py:202 - log_config()],                split :   9.0E-01
+[config.py:196 - log_config()],         warmup steps :       0
+[config.py:202 - log_config()],                   lr :   1.0E-05
+[config.py:202 - log_config()],         weight decay :   0.0E+00
+[config.py:202 - log_config()],                  eps :   1.0E-08
+[config.py:202 - log_config()],       clip grad norm :   1.0E+00
+[config.py:196 - log_config()],            drop last :       0
+[config.py:196 - log_config()],             truncate :       1
+[config.py:196 - log_config()],          max seq len :     256
+[config.py:199 - log_config()],           model type : distilbert
+[config.py:199 - log_config()],               device :   cpu   
+[config.py:199 - log_config()],        training data : dodd_resp_test.csv
+[config.py:196 - log_config()],     training samples :   3,541
+[config.py:196 - log_config()],   validation samples :     394
+[config.py:199 - log_config()],            optimizer :  AdamW  
+[config.py:196 - log_config()],          total steps :     443
+[config.py:209 - log_config()], ------------------------------------------------------
+[classifier.py:305 - train()], into the breach...
+[classifier.py:310 - train()],          ==================== Epoch   1 /   1 ====================
+[classifier.py:353 - _train_batch()], 	batch     1 /   443 	loss : 0.633	elapsed : 0:00:08
 ```
+
+## Prediction
+The commandline example `predict_cli.py` reads a model from a checkpoint directory and runs a user-supplied
+`.csv` to effect predictions. Usage is documented in that script.
 
 ## TensorBoard
 If `tensorboard_path` is a valid directory, events are logged for use in TensorBoard. Tensorboard
@@ -142,8 +146,8 @@ model parameters such as the number of epochs.
 
 
 ## Logging and Metrics
-Console and/or file logging is supported via `bert_utils/initialize_logger()`. 
-See `examples/example_cola_cli.py` for example usage. You'll need to alter the
+Console and/or file logging is supported via `utills/initialize_logger()`. 
+See `examples/example_gc_cli.py` for example usage. You'll need to alter the
 configuration file to accommodate your paths and names.
 
 At the end of each epoch, a `scikit-learn` classification report is logged as well

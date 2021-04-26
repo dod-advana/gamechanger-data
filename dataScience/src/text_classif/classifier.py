@@ -8,7 +8,6 @@ import time
 
 import numpy as np
 import torch
-import torch.nn.functional as nnf
 from torch.utils.data import DataLoader, RandomSampler, SequentialSampler
 from torch.utils.data import TensorDataset, random_split
 from torch.utils.tensorboard import SummaryWriter
@@ -231,62 +230,6 @@ class Classifier(object):
             train_sentences, train_labels
         )
         self.train(train_ds, test_ds)
-
-    def load_checkpoint(self, model_class, tokenizer_class):
-        """
-        Restores the model from a checkpoint file
-        """
-        try:
-            self.model, self.tokenizer = ch.load_checkpoint(
-                self.cfg.checkpoint_path, model_class, tokenizer_class,
-                str(self.device), 0.)
-            logger.info("checkpoint loaded")
-            return self.model, self.tokenizer
-        except (FileNotFoundError, RuntimeError) as e:
-            raise e
-
-    def predict(self, texts):
-        """
-        Predicts the label and probability for each entry in texts.
-
-        Args:
-            texts (list): Non-empty list of text to predict
-
-        Yields:
-            tuple: predicted label, probability
-
-        """
-        if not isinstance(texts, list):
-            raise TypeError("texts must be a list")
-        logger.info("device : {}".format(str(self.device)))
-
-        self._tokenize_encode(texts)
-        pred_dataset = TensorDataset(self.input_ids)
-        batch_size = min(len(texts), self.cfg.batch_size)
-
-        start_t = time.time()
-        elapsed = 0.0
-        pred_dataloader = DataLoader(
-            pred_dataset,
-            sampler=SequentialSampler(pred_dataset),
-            batch_size=batch_size,
-        )
-        self.model.eval()
-        for batch in tqdm(pred_dataloader):
-            batch = tuple(t.to(self.device) for t in batch)
-            inputs = {"input_ids": batch[0]}
-
-            with torch.no_grad():
-                outputs = self.model(**inputs)
-
-            logits = outputs["logits"]
-            prob = nnf.softmax(logits, dim=1)
-            top_p, top_class = prob.topk(1, dim=1)
-            top_p_ = top_p.cpu().numpy().flatten()
-            top_class_ = top_class.cpu().numpy().flatten()
-            elapsed += time.time() - start_t
-            yield top_class_, top_p_
-        logger.info("time / sent : {:0.3f}".format(elapsed / len(texts)))
 
     def _dataloader(self, train_dataset, val_dataset):
         train_dataloader = DataLoader(

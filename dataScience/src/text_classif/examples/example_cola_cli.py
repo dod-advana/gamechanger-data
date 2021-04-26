@@ -18,16 +18,10 @@ import os
 
 import dataScience.src.text_classif.utils.classifier_utils as cu
 from dataScience.src.text_classif.bert_classifier import BertClassifier
-from dataScience.src.text_classif.bert_classifier_no_decay import (
-    BertClassifierNoDecay,
-)  # noqa
 from dataScience.src.text_classif.distilbert_classifier import (
     DistilBertClassifier,
 )  # noqa
 from dataScience.src.text_classif.roberta_classifier import RobertaClassifier
-from dataScience.src.text_classif.roberta_classifier_no_decay import (
-    RobertaClassifierNoDecay,
-)  # noqa
 from dataScience.src.text_classif.utils.log_init import initialize_logger
 
 logger = logging.getLogger(__name__)
@@ -57,12 +51,8 @@ def main(config_yaml, data_file, model_type, trunc):
     try:
         if model_type == "roberta":
             clf = RobertaClassifier(config_yaml)
-        elif model_type == "roberta-nd":
-            clf = RobertaClassifierNoDecay(config_yaml)
         elif model_type == "bert":
             clf = BertClassifier(config_yaml)
-        elif model_type == "bert-nd":
-            clf = BertClassifierNoDecay(config_yaml)
         elif model_type == "distilbert":
             clf = DistilBertClassifier(config_yaml)
         else:
