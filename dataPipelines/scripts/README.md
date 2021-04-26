@@ -1,10 +1,10 @@
 ## dataPipeline Scripts
 In this directory are a number of scripts to run the gc_ingest package 
 in dev, dependent on the type of task that needs to be completed. The
-required inputs for each script are listed at the top of the .sh files,
-while the corresponding images used for the docker containers are set
-as variables at the top of the scripts. Information of the CLI commands
-called to run the scripts can be found in gc_ingest/core/cli.py.
+required inputs for each and the corresponding images used for the docker 
+containers script are listed at the top of the .sh files. Information 
+of the CLI commands called to run the scripts can be found in 
+gc_ingest/core/cli.py.
 
 The scripts include:
 * **crawl_and_ingest.sh**: the main ingest script consisting of three docker runs: 
