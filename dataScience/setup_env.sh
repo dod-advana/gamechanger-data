@@ -26,7 +26,7 @@ then
   export S3_TRANS_MODEL_PATH
   S3_SENT_INDEX_PATH="${S3_SENT_INDEX_PATH:=s3://advana-raw-zone/gamechanger/models/sentence_index/v2/sent_index_20210223.tar.gz}"
   export S3_SENT_INDEX_PATH
-  S3_QEXP_PATH="${S3_QEXP_PATH:=s3://advana-raw-zone/gamechanger/models/qexp_model/v3/20211217.tar.gz}"
+  S3_QEXP_PATH="${S3_QEXP_PATH:=s3://advana-raw-zone/gamechanger/models/qexp_model/v3/qexp_20211217.tar.gz}"
   export S3_QEXP_PATH
   
   export DEV_ENV="PROD"
