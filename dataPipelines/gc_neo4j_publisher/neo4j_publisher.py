@@ -184,7 +184,7 @@ class Neo4jPublisher:
             self.process_responsibilities(text)
 
             # paragraphs
-            self.process_paragraphs(j, doc_id)
+            #self.process_paragraphs(j, doc_id)
 
         q.put(1)
         return id

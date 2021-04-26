@@ -72,7 +72,7 @@ class Neo4jJobManager:
         for i in range(n):
             yield lst[chunk_start:chunk_end]
             chunk_start = chunk_end
-            chunk_end = chunk_start + (max_chunk_size if i == n-2 else min_chunk_size)
+            chunk_end = chunk_start + (max_chunk_size if i == n - 2 else min_chunk_size)
 
     def run_update(self, source: t.Union[str, Path],
                    clear: bool,
@@ -147,12 +147,35 @@ class Neo4jJobManager:
             publisher.process_crowdsourced_ents(without_web_scraping, infobox_dir)
 
         with Config.connection_helper.neo4j_session_scope() as session:
-            # Make ref connections
+            # Make Docs not in Corpus from Refs
+            print("Finding any REFERENCES to documents we do not currently have and creating a document node for them ... ", file=sys.stderr)
             session.run(
-                "MATCH (d:Document) " +
-                "WITH d " +
-                "UNWIND d.ref_list as ref " +
-                "MATCH (d2:Document) " +
+                "MATCH (d:Document) "
+                "UNWIND d.ref_list as ref "
+                "WITH COLLECT(distinct(ref)) as full_refs_list, COLLECT(distinct(d.ref_name)) as have_refs_list "
+                "WITH [n IN full_refs_list WHERE NOT n IN have_refs_list] as needed_refs_list "
+                "UNWIND needed_refs_list as ref "
+                "MERGE (d:Document {ref_name: ref}) "
+                "ON CREATE "
+                "  SET d.type = 'UKN_document', "
+                "  d.doc_id = 'Unkown' + ref, "
+                "  d.keyw_5 = [], "
+                "  d.topics = [], "
+                "  d.filename = 'Unknown', "
+                "  d.title = ref, "
+                "  d.display_title_s = ref, "
+                "  d.display_org_s = 'Unknown', "
+                "  d.display_doc_type_s = 'Unknown', "
+                "  d.name = ref, "
+                "  d.ref_list = [] "
+            )
+
+            # Make ref connections
+            print("Looping through documents creating REFERENCES connections to the documents they reference ... ", file=sys.stderr)
+            session.run(
+                "MATCH (d:Document) "
+                "UNWIND d.ref_list as ref "
+                "MATCH (d2:Document) "
                 "WHERE d2.ref_name = ref AND NOT d = d2 "
                 "MERGE (d)-[:REFERENCES]->(d2);"
             )
@@ -163,6 +186,7 @@ class Neo4jJobManager:
             )
 
             # Create Similarity Links
+            print("Creating SIMILARITY connections ... ", file=sys.stderr)
             session.run(
                 "CALL gds.nodeSimilarity.stream('sim-graph') " +
                 "YIELD node1, node2, similarity " +
