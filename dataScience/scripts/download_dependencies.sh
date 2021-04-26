@@ -13,3 +13,9 @@ aws s3 cp "$S3_SENT_INDEX_PATH" $PWD/dataScience/models/.
 echo "Downloading QE Model"
 echo "S3 QE MODEL: $S3_QEXP_PATH"
 aws s3 cp "$S3_QEXP_PATH" $PWD/dataScience/models/.
+
+echo "Uncompressing all tar files in models"
+for f in ./dataScience/models/*.tar.gz; do
+  tar kxvfz "$f" --exclude '*/.git/*' --exclude '*/.DS_Store/*' -C ./dataScience/models/;
+done
+
