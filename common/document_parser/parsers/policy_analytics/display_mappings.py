@@ -46,7 +46,11 @@ DISPLAY_TYPE_LOOKUP = defaultdict(lambda: "Document", {
     "dfar": "Regulation",
     "far": "Regulation",
     "cngbi": "Instruction",
-    "cim": "Manual"
+    "cim": "Manual",
+    "ci": "Instruction",
+    "cn": "Notice",
+    "ccn": "Notice",
+    "dcmsi": "Instruction"
 })
 
 
@@ -78,4 +82,34 @@ CRAWLER_TO_DISPLAY_ORG_LOOKUP = defaultdict(lambda: "Uncategorized", {
     "jumbo_FAR": "FAR",
     "National_Guard": "National Guard",
     "Coast_Guard": "Coast Guard"
+})
+
+CRAWLER_TO_DISPLAY_SOURCE_LOOKUP = defaultdict(lambda: None, {
+    "army_pubs": "Army Publishing Directorate",
+    "jcs_pubs": "Joint Chiefs of Staff Library",
+    "jcs_manual_uploads": "Joint Chiefs of Staff",
+    "dod_manual_uploads": "Dept. of Defense",
+    "army_manual_uploads": "US Army",
+    "ic_policies": "Director of National Intelligence",
+    "us_code": "Office of the Law Revision Counsel",
+    "ex_orders": "Federal Register",
+    "opm_pubs": "OMB Publication",
+    "air_force_pubs": "Dept. of the Air Force E-Publishing",
+    "marine_pubs": "Marine Corps Publications Electronic Library",
+    "secnav_pubs": "Dept. of the Navy Issuances",
+    "navy_reserves": "U.S. Navy Reserve Publications",
+    "navy_med_pubs": "Navy Medicine Directives",
+    "Bupers_Crawler": "Bureau of Naval Personnel Instructions",
+    "milpersman_crawler": "Navy Personnel Command Instructions",
+    "nato_stanag": "NATO Publications",
+    "fmr_pubs": "DoD Financial Management Regulation",
+    "legislation_pubs": "Congressional Legislation",
+    "Army_Reserve": "U.S. Army Reserve Publications",
+    "Memo": "OSD Executive Executive Secretary",
+    "dha_pubs": "Military Health System",
+    "jumbo_FAR": "Federal Acquisition Regulation",
+    "jumbo_DFAR": "Defense Federal Acquisition Regulation",
+    "jumbo_far_dfar_crawler": "Acquisition Regulation",
+    "National_Guard": "National Guard Bureau Publications Library",
+    "Coast_Guard": "US Coast Guard Directives"
 })

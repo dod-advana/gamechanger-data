@@ -67,7 +67,17 @@ class CoastGuardSpider(GCSeleniumSpider):
 
         for row in webpage.css(self.rows_selector):
             doc_type_num_raw = row.css('td:nth-child(1)::text').get()
-            doc_type_raw, _, doc_num_raw = doc_type_num_raw.partition('_')
+
+            if '_' in doc_type_num_raw:
+                doc_type_raw, _, doc_num_raw = doc_type_num_raw.partition('_')
+            else:
+                # catch case where text doesnt use _ separators
+                doc_type_raw, _, doc_num_raw = doc_type_num_raw.partition(' ')
+
+            # catch case of COMDTINST spelled out
+            if doc_type_raw == 'COMDTINST':
+                doc_type_raw = 'CI'
+
             doc_num = doc_num_raw.replace('_', '.')
 
             doc_title_raw = row.css('td:nth-child(2) a::text').get()
