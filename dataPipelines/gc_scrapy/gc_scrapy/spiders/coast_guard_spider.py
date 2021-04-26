@@ -19,52 +19,56 @@ class CoastGuardSpider(GCSeleniumSpider):
     name = 'Coast_Guard'
     allowed_domains = ['dcms.uscg.mil']
     start_urls = [
-        'https://www.dcms.uscg.mil/Our-Organization/Assistant-Commandant-for-C4IT-CG-6/The-Office-of-Information-Management-CG-61/About-CG-Directives-System/Commandant-Instruction-Manuals/smdpage2823/1/'
+        'https://www.dcms.uscg.mil/Our-Organization/Assistant-Commandant-for-C4IT-CG-6/The-Office-of-Information-Management-CG-61/About-CG-Directives-System/'
     ]
-    doc_type = 'CIM'
-    file_type = "pdf"
+    pages = [
+        'https://www.dcms.uscg.mil/Our-Organization/Assistant-Commandant-for-C4IT-CG-6/The-Office-of-Information-Management-CG-61/About-CG-Directives-System/Commandant-Instruction-Manuals/',
+        'https://www.dcms.uscg.mil/Our-Organization/Assistant-Commandant-for-C4IT-CG-6/The-Office-of-Information-Management-CG-61/About-CG-Directives-System/Commandant-Instructions/',
+        'https://www.dcms.uscg.mil/Our-Organization/Assistant-Commandant-for-C4IT-CG-6/The-Office-of-Information-Management-CG-61/About-CG-Directives-System/Commandant-Notice/',
+        'https://www.dcms.uscg.mil/Our-Organization/Assistant-Commandant-for-C4IT-CG-6/The-Office-of-Information-Management-CG-61/About-CG-Directives-System/Commandant-Change-Notices/',
+        'https://www.dcms.uscg.mil/Our-Organization/Assistant-Commandant-for-C4IT-CG-6/The-Office-of-Information-Management-CG-61/About-CG-Directives-System/DCMS-Instructions/'
+    ]
 
     cac_login_required = False
     current_page_selector = 'div.numericDiv ul li.active a.Page'
     next_page_selector = 'div.numericDiv ul li.active + li a'
     rows_selector = "table.Dashboard tbody tr"
 
-    selenium_request_overrides = {
-        "wait_until": EC.element_to_be_clickable(
-            (By.CSS_SELECTOR, current_page_selector))
-    }
-
     def parse(self, response):
-
         driver: Chrome = response.meta["driver"]
 
-        has_next_page = True
-        while(has_next_page):
-            try:
-                el = driver.find_element_by_css_selector(
-                    self.next_page_selector)
+        for page_url in self.pages:
+            # navigate to page for each doc type
+            driver.get(page_url)
 
-            except NoSuchElementException:
-                # expected when on last page, set exit condition then parse table
-                has_next_page = False
+            self.wait_until_css_clickable(
+                driver, css_selector=self.current_page_selector)
 
-            for item in self.parse_table(driver):
-                yield item
+            has_next_page = True
+            while(has_next_page):
+                try:
+                    el = driver.find_element_by_css_selector(
+                        self.next_page_selector)
 
-            if has_next_page:
-                el.click()
-                WebDriverWait(driver, 5).until(
-                    EC.presence_of_element_located(
-                        (By.CSS_SELECTOR, self.rows_selector)
-                    )
-                )
+                except NoSuchElementException:
+                    # expected when on last page, set exit condition then parse table
+                    has_next_page = False
+
+                for item in self.parse_table(driver):
+                    yield item
+
+                if has_next_page:
+                    el.click()
+                    self.wait_until_css_clickable(
+                        driver, css_selector=self.rows_selector)
 
     def parse_table(self, driver):
         webpage = Selector(text=driver.page_source)
 
         for row in webpage.css(self.rows_selector):
-            doc_num_raw = row.css('td:nth-child(1)::text').get()
-            doc_num = doc_num_raw.replace('CIM_', '').replace('_', '.')
+            doc_type_num_raw = row.css('td:nth-child(1)::text').get()
+            doc_type_raw, _, doc_num_raw = doc_type_num_raw.partition('_')
+            doc_num = doc_num_raw.replace('_', '.')
 
             doc_title_raw = row.css('td:nth-child(2) a::text').get()
             doc_title = self.ascii_clean(doc_title_raw)
@@ -74,11 +78,9 @@ class CoastGuardSpider(GCSeleniumSpider):
 
             publication_date = row.css('td:nth-child(5)::text').get()
 
-            # all fields that will be used for versioning
             version_hash_fields = {
                 "item_currency": href_raw,
-                "document_title": doc_title,
-                "document_number": doc_num
+                "document_title": doc_title
             }
 
             file_type = self.get_href_file_extension(href_raw)
@@ -92,7 +94,8 @@ class CoastGuardSpider(GCSeleniumSpider):
             ]
 
             yield DocItem(
-                doc_name=f"{self.doc_type} {doc_num}",
+                doc_type=doc_type_raw,
+                doc_name=f"{doc_type_raw} {doc_num}",
                 doc_title=doc_title,
                 doc_num=doc_num,
                 publication_date=publication_date,
