@@ -42,7 +42,7 @@ DISPLAY_TYPE_LOOKUP = defaultdict(lambda:"Document",{"dod": 'Issuance',
                        "usar pam": 'Pamphlet',
                        "usar reg": 'Regulation',
                        "memo": "Memorandum",
-                       "dfar": "Regulation",
+                       "dfars": "Regulation",
                        "far": "Regulation"})
 
 
@@ -69,5 +69,5 @@ CRAWLER_TO_DISPLAY_ORG_LOOKUP = defaultdict(lambda: "Uncategorized", {"dod_issua
                                   "Army_Reserve": "US Army",
                                   "Memo": "Dept. of Defense",
                                   "dha_pubs": "Defense Health Agency",
-                                  "jumbo_DFAR": "DFAR",
+                                  "jumbo_DFARS": "DFARS",
                                   "jumbo_FAR": "FAR"})
