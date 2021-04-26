@@ -2,7 +2,8 @@ from datetime import datetime
 
 from common.document_parser.parsers.policy_analytics.display_mappings import (
     DISPLAY_TYPE_LOOKUP,
-    CRAWLER_TO_DISPLAY_ORG_LOOKUP
+    CRAWLER_TO_DISPLAY_ORG_LOOKUP,
+    CRAWLER_TO_DISPLAY_SOURCE_LOOKUP
 )
 
 from common.utils.parsers import parse_timestamp
@@ -51,6 +52,17 @@ def get_display_org(meta_data):
     return display_org
 
 
+def get_display_source(meta_data):
+    """
+    get display source for cards on web app
+    :return: string
+    """
+    crawler_used = meta_data["crawler_used"]
+    display_source = CRAWLER_TO_DISPLAY_SOURCE_LOOKUP[crawler_used]
+
+    return display_source
+
+
 def get_display_title(meta_data):
     """
     get display org for cards on web app
@@ -73,6 +85,8 @@ def rename_and_format(doc_dict):
             doc_dict, doc_dict["meta_data"])
         doc_dict["display_title_s"] = get_display_title(doc_dict["meta_data"])
         doc_dict["display_org_s"] = get_display_org(doc_dict["meta_data"])
+        doc_dict["display_source_s"] = get_display_source(
+            doc_dict["meta_data"])
 
     doc_dict["is_revoked_b"] = False
 
@@ -126,5 +140,3 @@ def rename_and_format(doc_dict):
 def process(doc_dict):
     processed_dict = rename_and_format(doc_dict)
     return processed_dict
-
-
