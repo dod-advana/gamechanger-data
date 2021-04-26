@@ -4,25 +4,25 @@ in dev, dependent on the type of task that needs to be completed. The
 required inputs for each and the corresponding images used for the docker 
 containers script are listed at the top of the .sh files. Information 
 of the CLI commands called to run the scripts can be found in 
-gc_ingest/core/cli.py.
+`/gc_ingest/core/cli.py`.
 
 The scripts include:
 * **crawl_and_ingest.sh**: the main ingest script consisting of three docker runs: 
   the first checks that the connections to the databases are 
   functional, the second runs the crawl+download, and the third performs
-  the ingests.
+  the ingests in neo4j, ElasticSearch, postgres, and s3.
   
-* **neo4j_reingest**: This script pulls down documents from s3's json directory
+* **neo4j_reingest**: This script pulls down documents from s3's `json` directory
   (jsons resulting from the corpus parse) and reingests them into 
   the neo4j database, all in a docker container.  
   
-* **reindex.sh**: pulls down documents from s3's json directory
+* **reindex.sh**: pulls down documents from s3's `json` directory
   (jsons resulting from the corpus parse) and reingests the results 
   into ElasticSearch.
   
-* **reparse.sh**: pulls down documents from s3's pdf directory 
+* **reparse.sh**: pulls down documents from s3's `pdf` directory 
   (raw pdfs/metadata), parses them, reingests the output into neo4j and
-  ElasticSearch, then pushes the output into s3's json directory.
+  ElasticSearch, then pushes the output into s3's `json` directory.
   
 There are two other scripts that are not related to ingests but are needed
 for testing purposes and for email notifications:
