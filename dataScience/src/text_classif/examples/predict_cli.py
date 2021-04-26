@@ -1,6 +1,7 @@
 """
 usage: python predict_cli.py [-h] -m MODEL_PATH -d DATA_PATH -b BATCH_SIZE -l
                              MAX_SEQ_LEN [--n N_SAMPLES] [-o OUTPUT_CSV]
+                             [--metrics]
 
 predicts a set of examples
 
@@ -15,10 +16,11 @@ optional arguments:
   -l MAX_SEQ_LEN, --max-seq-len MAX_SEQ_LEN
                         maximum sequence length, up to 512
   --n N_SAMPLES, --num-samples N_SAMPLES
-                        if > 0, number of random samples to draw from the data
-                        file
+                        if > 0, number of sequential samples to draw from the
+                        data file
   -o OUTPUT_CSV, --output-csv OUTPUT_CSV
                         (optional) destination .csv file
+  --metrics             uses the label column in the input data to log metrics
 """
 import logging
 import os
@@ -153,7 +155,7 @@ if __name__ == "__main__":
         dest="n_samples",
         type=int,
         default=0,
-        help="if > 0, number of random samples to draw from the data file",
+        help="if > 0, number of sequential samples to draw from the data file",
     )
     parser.add_argument(
         "-o",
