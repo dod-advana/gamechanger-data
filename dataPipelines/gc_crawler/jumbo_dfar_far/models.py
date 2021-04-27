@@ -67,7 +67,7 @@ class JumboFarDFarParser(Parser):
                     doc_name = doc_type + ' ' + doc_num
             if data == dfar_url:
                 for row in table.find_all('tr')[1:]:
-                    doc_title = 'Defense Federal Acquisition Regulation'
+                    doc_title = 'Defense Federal Acquisition Regulation Supplement'
                     doc_num = row.find_all('td')[0].text.split()
                     doc_num = doc_num[2].replace("/", "-")
                     publication_date = row.find_all('td')[1].text.strip()
@@ -76,7 +76,7 @@ class JumboFarDFarParser(Parser):
                         doc_type='pdf',
                         web_url=pdf_url
                     )
-                    doc_type = "DFAR"
+                    doc_type = "DFARS"
                     doc_name = doc_type + ' ' + doc_num
 
             version_hash_fields = {
