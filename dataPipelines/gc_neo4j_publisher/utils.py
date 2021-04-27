@@ -155,7 +155,7 @@ class Neo4jJobManager:
                 "WITH COLLECT(distinct(ref)) as full_refs_list, COLLECT(distinct(d.ref_name)) as have_refs_list "
                 "WITH [n IN full_refs_list WHERE NOT n IN have_refs_list] as needed_refs_list "
                 "UNWIND needed_refs_list as ref "
-                "MERGE (d:Document {ref_name: ref}) "
+                "MERGE (d:UKN_Document {ref_name: ref}) "
                 "ON CREATE "
                 "  SET d.type = 'UKN_document', "
                 "  d.doc_id = 'Unkown' + ref, "
@@ -177,8 +177,19 @@ class Neo4jJobManager:
                 "WHERE d.type = 'document' "
                 "WITH d.ref_list as ref_list, d "
                 "MATCH (d2:Document) "
-                "WHERE d2.ref_name IN ref_list AND NOT d = d2 "
+                "WHERE d2.type = 'document' AND d2.ref_name IN ref_list AND NOT d = d2 "
                 "MERGE (d)-[:REFERENCES]->(d2);"
+            )
+
+            print("Looping through documents creating REFERENCES_UNKNOWN connections to the documents they reference ... ",
+                  file=sys.stderr)
+            session.run(
+                "MATCH (d:Document) "
+                "WHERE d.type = 'document' "
+                "WITH d.ref_list as ref_list, d "
+                "MATCH (d2:UKN_Document) "
+                "WHERE d2.ref_name IN ref_list "
+                "MERGE (d)-[:REFERENCES_UNKNOWN]->(d2);"
             )
 
             # Create Sub Graph
