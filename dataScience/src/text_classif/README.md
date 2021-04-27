@@ -121,10 +121,19 @@ You should see something very close to
 Serving TensorBoard on localhost; to expose to the network, use a proxy or pass --bind_all
 TensorBoard 2.4.1 at http://localhost:6006/ (Press CTRL+C to quit)
 ``` 
-Point your browser to the TensorBoard URL to visualize various metrics. See the `torch` [recipe here](https://pytorch.org/tutorials/recipes/recipes/tensorboard_with_pytorch.html).
+Point your browser to the TensorBoard URL to visualize various metrics. 
+See the `torch` [recipe here](https://pytorch.org/tutorials/recipes/recipes/tensorboard_with_pytorch.html).
 
 ## Saving and Loading your Trained Models
-Coming soon...
+The configuration file has the entry `checkpoint_path` and if this is not `None`, the model is written to 
+a subdirectory suffixed by `_epoch_1`, etc., one for each epoch.
+
+The example `examples/predict_cli.py` shows how to load a specific checkpoint and use it to classify a
+set of texts. The `raw_text` of a document can be converted to a `.csv` of sentences using `utils/raw_text2csv.py`.
+`predict_cli.py` will optionally write a `.csv` with predicted classes, its likelihood as well as all the
+columns in the input `.csv`. 
+
+See the documentation in `predict_cli.py` for usage. 
 
 ## Test Data
 The benchmark test data is the *Corpus of Linguistic Acceptability* (CoLA) and is included in the `tests/test_data/cola_public`
@@ -132,9 +141,9 @@ directory. The full data set has 8,551 sentences labeled as 0 or 1 (*not grammat
 See [Warstadt *et al*., (2019)](https://arxiv.org/pdf/1805.12471.pdf) for additional detail.
 
 The directory `test_data/responsibility` has Gamechanger-specific data that can also be
-used.
+used for testing purposes.
 
-### Training
+## Training
 `example_cola_cli.py` will train a classification model on the CoLA data.
 
 For `CONFIG_YAML`, the file `sample_distilbert_cola_config.yml` has the necessary configuration. The
@@ -156,8 +165,7 @@ as a formatted confusion matrix.
 ## Subclassing
 Since different models
 require their own `transformers` class for tokenizing and sequence classification,
-subclassing `Classifier` allows different models to be trained and tested. Two such subclassed classifiers
-are in `roberta_classifier.py` and `bert_classifier.py`.
+subclassing `Classifier` allows different models to be trained and tested. 
 
 A subclass must implement the following method:
 
@@ -166,9 +174,7 @@ A subclass must implement the following method:
 The modules `roberta_classifier.py`, `bert_classifier.py`, and `distilbert_classifier.py` are examples of subclasses. These
 can be further subclassed for your custom methods.
 
-## Metrics
-At the end of each epoch, validation is run
-
+## Example Metrics
 ```
 [classifier.py:511 - _validate()], 
 

@@ -30,23 +30,27 @@ from dataScience.src.text_classif.utils.log_init import initialize_logger
 logger = logging.getLogger(__name__)
 
 
-def main(config_yaml, data_file, model_type, num_samples):
+def main(config_yaml, data_file, model_type, num_samples, checkpoint_path):
     """
     Example illustrating how to train the classifier model using the
     on a given dataset.
 
     Args:
-        config_yaml(str): path to the configuration file
+        config_yaml (str): path to the configuration file
 
-        data_file(str): path to the data set
+        data_file (str): path to the data set
 
-        model_type(str): one of ("bert", "roberta", "distilbert")
+        model_type (str): one of ("bert", "roberta", "distilbert")
 
-        num_samples(str): path where additional negative samples can
+        num_samples (int): path where additional negative samples can
             be read and used to balance the classes
 
+        checkpoint_path (str): if not None, subdirectories of this directory
+            will contain a checkpoint for each epoch. The subdirectory name is
+            `checkpoint_path_epoch_1`, etc.
+
     Returns:
-        dict
+        dict of runtime stats
 
     """
     here = os.path.dirname(os.path.realpath(__file__))
@@ -60,6 +64,11 @@ def main(config_yaml, data_file, model_type, num_samples):
         else:
             raise ValueError("unsupported model; got `{}`".format(model_type))
 
+        if checkpoint_path is not None and not os.path.isdir(checkpoint_path):
+            raise ValueError("no directory named {}".format(checkpoint_path))
+        else:
+            clf.cfg.checkpoint_path = checkpoint_path
+
         initialize_logger(
             to_file=True, log_name=clf.cfg.log_id, output_dir=here
         )
@@ -67,6 +76,9 @@ def main(config_yaml, data_file, model_type, num_samples):
             data_file, None, shuffle=True, topn=num_samples
         )
         _, data_name = os.path.split(data_file)
+
+        # `runtime` is a dictionary where various runtime parameters can be
+        # stored.
         clf.runtime["training data"] = data_name
 
         # train on all samples
@@ -115,6 +127,14 @@ if __name__ == "__main__":
         dest="num_samples",
         default=0,
         help="if > 0, use this many samples for training",
+    )
+    parser.add_argument(
+        "-k",
+        "--checkpoint-path",
+        type=str,
+        dest="checkpoint_path",
+        default=None,
+        help="directory to write each epoch's checkpoint files",
     )
 
     args = parser.parse_args()

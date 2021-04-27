@@ -11,7 +11,7 @@ optional arguments:
                         directory of the torch model
   -d DATA_PATH, --data-path DATA_PATH
                         path + file.csv, for input data .csv
-  -b BATCH_SIZE, --batch_size BATCH_SIZE
+  -b BATCH_SIZE, --batch-size BATCH_SIZE
                         batch size for the data samples
   -l MAX_SEQ_LEN, --max-seq-len MAX_SEQ_LEN
                         maximum sequence length, up to 512
@@ -20,7 +20,8 @@ optional arguments:
                         data file
   -o OUTPUT_CSV, --output-csv OUTPUT_CSV
                         (optional) destination .csv file
-  --metrics             uses the label column in the input data to log metrics
+  --metrics             uses the label column in the input csv to compute/log
+                        metrics
 """
 import logging
 import os
@@ -52,10 +53,18 @@ def main(
     dataset. The various arguments are shown in `__main__`.
 
     The .csv  `data_file` is assumed to have a columns "src", "label", and
-    "sentence". "label" can be all 0 for new prediction.
+    "sentence". "label" can be all 0. For example, you may not have labeled
+    data for a particular document.
+
+    The `raw_text` of a document can be converted to a conforming .csv using
+    `utils/raw_text2csv.py` in this package.
 
     If `metrics` is `True`, `label` is used as ground-truth. Metrics are
-    logged.
+    logged. For sentences whose label is unknown, the label should be set
+    to `0` and the `metrics` flag omitted.
+
+    if `output_csv` is not `None`, the results will be written to this
+    file.
 
     Returns:
         List[Dict]: Each entry will have all the columns in `data_file`
@@ -84,7 +93,7 @@ def main(
             batch_size=int(batch_size),
             max_seq_len=int(max_seq_len),
         ),
-        desc="predicted",
+        desc="predict",
     ):
         out_list += output
 
@@ -105,14 +114,12 @@ def main(
     if output_csv is not None:
         df = pd.DataFrame(data=out_list)
         df.to_csv(output_csv, header=True, index=False)
-        logger.info(".csv written to : {}".format(output_csv))
-    else:
-        return out_list
+        logger.info("csv written to : {}".format(output_csv))
+    return out_list
 
 
 if __name__ == "__main__":
     from argparse import ArgumentParser
-    import sys
 
     parser = ArgumentParser(
         prog="python predict_cli.py", description="predicts a set of examples"
@@ -135,7 +142,7 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "-b",
-        "--batch_size",
+        "--batch-size",
         dest="batch_size",
         type=str,
         required=True,
@@ -163,23 +170,21 @@ if __name__ == "__main__":
         dest="output_csv",
         type=str,
         default=None,
-        help="(optional) destination .csv file",
+        help="destination .csv file; optional",
     )
     parser.add_argument(
         "--metrics",
         dest="metrics",
         action="store_true",
-        help="uses the label column in the input data to log metrics",
+        help="uses the label column in the input csv to compute/log metrics",
     )
     args = parser.parse_args()
-    sys.exit(
-        main(
-            args.model_path,
-            args.data_path,
-            args.batch_size,
-            args.max_seq_len,
-            args.n_samples,
-            args.output_csv,
-            args.metrics,
-        )
+    main(
+        args.model_path,
+        args.data_path,
+        args.batch_size,
+        args.max_seq_len,
+        args.n_samples,
+        args.output_csv,
+        args.metrics,
     )

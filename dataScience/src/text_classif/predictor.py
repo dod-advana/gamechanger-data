@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 
 def _from_pretrained(cls, *args, **kw):
     """
-    Load a transformers model in PyTorch
+    Load the transformers model
     """
     try:
         return cls.from_pretrained(*args, **kw)
@@ -82,7 +82,7 @@ class Predictor:
         try:
             self.tokenizer = trf.AutoTokenizer.from_pretrained(
                 model_name_or_path
-            )  # noqa
+            )
             model_config = trf.AutoConfig.from_pretrained(
                 model_name_or_path,
                 num_labels=self.num_labels,
@@ -96,6 +96,7 @@ class Predictor:
             )
             _log_metadata(model_name_or_path, self.__version__)
             self.model.eval()
+
             logging.info("model loaded")
         except (OSError, RuntimeError) as e:
             raise e
@@ -106,7 +107,9 @@ class Predictor:
 
         Args:
             inputs (list): text to be classified, one example per entry
+
             batch_size (int): batch size to use
+
             max_seq_len (int): number of tokens to use
 
         Yields:
