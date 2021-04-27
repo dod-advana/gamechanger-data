@@ -1,4 +1,4 @@
-## dataPipeline Scripts
+# dataPipeline Scripts
 In this directory are a number of scripts to run the gc_ingest package 
 in dev, dependent on the type of task that needs to be completed. The
 required inputs for each and the corresponding images used for the docker 
@@ -8,7 +8,7 @@ of the CLI commands called to run the scripts can be found in
 
 The scripts include:
 * **checkpoint_ingest.sh**: script that grabs the latest checkpoint from 
-  s3 and parses/ingests from the local directory. This is the main 
+  s3 and parses/ingests from a local directory. This is the main 
   gc_ingest function used in production, and this script is important 
   to mirror production's pipeline.
   
@@ -39,5 +39,10 @@ for testing purposes and for email notifications:
 * **parse.sh**: parses a given directory of raw pdfs/metadata to a specified
   output directory. This basically just calls the _common.document_parser pdf-to-json_ function.
   
+
 * **email_notifications_utils.sh**: a script that's sourced in _run_prod_gc_crawler_downloader.sh_
   to send email notifications for crawler statuses when ingests are run.
+  
+# How to get the scripts running
+Near the top of each script are four parameters that are often changed
+* The ElasticSearch 
