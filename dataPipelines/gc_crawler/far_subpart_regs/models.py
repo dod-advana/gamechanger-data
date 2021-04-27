@@ -63,7 +63,7 @@ class FarSubpartParser(Parser):
                 doc_num = doc_title.split()[0] + ' ' + doc_title.split()[1]
                 pdf_url = 'https://www.acquisition.gov' + row.find_all('td')[3].find('a')['src']
                 pdf_di = DownloadableItem(
-                    doc_type='xhtml',
+                    doc_type='html',
                     web_url=pdf_url
                 )
 

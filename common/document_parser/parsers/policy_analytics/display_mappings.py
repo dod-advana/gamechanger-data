@@ -1,6 +1,5 @@
 from collections import defaultdict
 
-
 DISPLAY_TYPE_LOOKUP = defaultdict(lambda: "Document", {
     "dod": 'Issuance',
     "dodm": 'Manual',
@@ -81,7 +80,8 @@ CRAWLER_TO_DISPLAY_ORG_LOOKUP = defaultdict(lambda: "Uncategorized", {
     "jumbo_DFAR": "DFAR",
     "jumbo_FAR": "FAR",
     "National_Guard": "National Guard",
-    "Coast_Guard": "Coast Guard"
+    "Coast_Guard": "Coast Guard",
+    "jumbo_DFARS": "DFARS"
 })
 
 CRAWLER_TO_DISPLAY_SOURCE_LOOKUP = defaultdict(lambda: None, {
