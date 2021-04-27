@@ -1,10 +1,16 @@
-FROM python:3.6.3
+FROM nvidia/cuda:10.2-base
+CMD nvidia-smi
+#set up environment
+RUN apt-get update && apt-get install --no-install-recommends --no-install-suggests -y curl
+RUN apt-get install unzip
+RUN apt-get -y install python3
+RUN apt-get -y install python3-pip
+
 ADD api/requirements.txt .
-RUN apt-get update
 #RUN apt install --yes gcc python3-dev libc-dev
-RUN pip install --upgrade pip wheel setuptools
-RUN pip install --no-deps --trusted-host files.pythonhosted.org -r requirements.txt
-RUN apt-get -y install awscli
+RUN pip3 install --upgrade pip wheel setuptools
+RUN pip3 install --no-deps --trusted-host files.pythonhosted.org -r requirements.txt
+RUN pip3 install awscli
 RUN mkdir gc
 # add API source code
 COPY api/ dataScience/api/
