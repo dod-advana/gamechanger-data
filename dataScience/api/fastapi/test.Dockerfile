@@ -21,5 +21,6 @@ COPY configs dataScience/configs
 COPY scripts dataScience/scripts
 # COPY transformer_cache transformer_cache
 
+RUN chmod +x dataScience/api/fastapi/startFast.sh
 #CMD gunicorn dataScience.api.fastapi.mlapp:app --bind 0.0.0.0:5000 --workers 1 -k uvicorn.workers.UvicornWorker --log-level debug --timeout 0 --graceful-timeout 0
-CMD ["/bin/bash",  "dataScience/api/fastapi/startFast.sh", "DEV"]
+ENTRYPOINT  ["/bin/bash",  "dataScience/api/fastapi/startFast.sh", "DEV"]
