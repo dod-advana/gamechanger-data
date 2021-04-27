@@ -14,7 +14,7 @@ from selenium import webdriver
 
 def get_pdf_downloadable_item(doc: Document) -> Optional[DownloadableItem]:
     """Get pdf downloadable item corresponding to doc"""
-    return next((i for i in doc.downloadable_items if i.doc_type.lower() == 'pdf'), None)
+    return next((i for i in doc.downloadable_items if i.doc_type.lower() == 'pdf' or i.doc_type.lower() == 'html'), None)
 
 
 def read_docs_from_file(file_path: Path) -> Iterable[Document]:
