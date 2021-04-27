@@ -5,7 +5,8 @@ import typing as t
 
 SUPPORTED_FILE_EXTENSIONS = [
     ".pdf",
-    ".zip"
+    ".zip",
+    ".html"
 ]
 
 
