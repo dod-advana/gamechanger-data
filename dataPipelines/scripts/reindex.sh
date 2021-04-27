@@ -10,7 +10,7 @@ set -o nounset
 # full-path-to-ingester-output-dir: local directory where the jsons/output of the parser will be pulled for reindexing
 
 BASE_JOB_IMAGE="10.194.9.80:5000/gamechanger/core/dev-env:latest"
-HOST_REPO_DIR="$HOME/gamechanger"
+HOST_REPO_DIR="$HOME/gamechanger-data"
 CONTAINER_PYTHON_CMD="/opt/gc-venv/bin/python"
 
 DEPLOYMENT_ENV="dev"
@@ -40,7 +40,7 @@ function reindex() {
     local base_container_name="${2:-reindex}"
     local ingest_host_job_dir="${3:?How about a job dir?}"
 
-    local ingest_container_name="${base_container_name}_ingester"
+    local ingest_container_name="${base_container_name}_reindexer"
 
     local ingest_container_image="${BASE_JOB_IMAGE:-10.194.9.80:5000/gamechanger/core/dev-env:latest}"
 
@@ -71,6 +71,7 @@ function reindex() {
                 --index-name="$es_index_name" \
                 --alias-name="$es_alias_name" \
                 --max-threads="$max_parser_threads" \
+                --max-threads-neo4j="$max_parser_threads" \
                 --max-ocr-threads="$max_ocr_threads" \
                 --job-dir="$ingest_container_job_dir"  \
                 --current-snapshot-prefix gamechanger/ \
