@@ -174,9 +174,10 @@ class Neo4jJobManager:
             print("Looping through documents creating REFERENCES connections to the documents they reference ... ", file=sys.stderr)
             session.run(
                 "MATCH (d:Document) "
-                "UNWIND d.ref_list as ref "
+                "WHERE d.type = 'document' "
+                "WITH d.ref_list as ref_list, d "
                 "MATCH (d2:Document) "
-                "WHERE d2.ref_name = ref AND NOT d = d2 "
+                "WHERE d2.ref_name IN ref_list AND NOT d = d2 "
                 "MERGE (d)-[:REFERENCES]->(d2);"
             )
 
