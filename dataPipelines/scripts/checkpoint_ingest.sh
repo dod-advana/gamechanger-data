@@ -39,12 +39,11 @@ function checkpoint_ingest() {
     local job_timestamp="$(sed 's/.\{5\}$//' <<< $(date --iso-8601=seconds))"
     local host_repo_dir="${HOST_REPO_DIR:?Make sure to set HOST_REPO_DIR env var}"
 
-    local base_container_name="${2:-crawl_and_ingest}"
+    local base_container_name="${2:-checkpoint_ingest}"
     local ingest_host_job_dir="${3:?How about a job dir?}"
 
     local initializer_container_name="${base_container_name}_initializer"
-    local crawler_container_name="${base_container_name}_crawler"
-    local ingest_container_name="${base_container_name}_ingester"
+    local ingest_container_name="${base_container_name}_checkpoint"
 
     local crawler_container_image="advana/gc-downloader:latest"
     local ingest_container_image="${BASE_JOB_IMAGE:-10.194.9.80:5000/gamechanger/core/dev-env:latest}"
@@ -98,6 +97,7 @@ function checkpoint_ingest() {
                 --index-name='"$es_index_name"' \
                 --alias-name='"$es_alias_name"' \
                 --max-threads='"$max_parser_threads"' \
+                --max-threads-neo4j='"$max_parser_threads"' \
                 --max-ocr-threads='"$max_ocr_threads"' \
                 --job-dir='"$ingest_container_job_dir"'  \
                 --current-snapshot-prefix gamechanger/ \
