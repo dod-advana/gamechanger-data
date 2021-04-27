@@ -1,4 +1,4 @@
-# Transfer Learning with Transformer-based Models
+# `classifier` 
 
 This is a framework of sorts for transfer learning using Hugging Face pre-trained models for sequence
 classification, *e.g.*, text classification.

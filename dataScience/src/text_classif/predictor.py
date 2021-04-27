@@ -167,7 +167,7 @@ class Predictor:
             "cls_emb": out.hidden_states[-1][:, 0],  # last layer, first token
         }
         detached_outputs = {
-            k: v.cpu().detach().numpy() for k, v in batched_outputs.items()
+            k: val.cpu().detach().numpy() for k, val in batched_outputs.items()
         }
         batch_output = self._post_process(detached_outputs, inputs)
         return batch_output

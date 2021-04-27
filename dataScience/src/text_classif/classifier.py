@@ -391,7 +391,7 @@ class Classifier(object):
             self.optimizer.step()
             self.scheduler.step()
 
-        b_log = self.batch_log_fmt.format(step, len_train, loss, elapse)
+        b_log = self.batch_log_fmt.format(step + 1, len_train, loss, elapse)
         logger.info(b_log)
         return sum_train_loss, avg_loss_items
 
