@@ -2,7 +2,8 @@
 usage: python predict_glob.py [-h] -m MODEL_PATH -d DATA_PATH [-b BATCH_SIZE]
                               [-l MAX_SEQ_LEN] -g GLOB
 
-Binary classification of each sentence in the files matching the 'glob'
+Binary classification of each sentence in the files matching the 'glob' in
+data_path
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -11,9 +12,9 @@ optional arguments:
   -d DATA_PATH, --data-path DATA_PATH
                         path holding the .json corpus files
   -b BATCH_SIZE, --batch-size BATCH_SIZE
-                        batch size for the data samples
+                        batch size for the data samples; default=8
   -l MAX_SEQ_LEN, --max-seq-len MAX_SEQ_LEN
-                        maximum sequence length, 128 to 512
+                        maximum sequence length, 128 to 512; default=128
   -g GLOB, --glob GLOB  file glob pattern
 """
 import logging
@@ -61,6 +62,7 @@ def predict_glob(
     glob,
     max_seq_len=128,
     batch_size=8,
+    nlp=None,
 ):
     """
     This performs classification on .json corpus docs using `raw_text`. The
@@ -82,8 +84,15 @@ def predict_glob(
 
         batch_size (int): batch size
 
+        nlp (spacy.lang.en.English): a spaCy model with the "sentencizer"
+            pipeline
+
     Yields:
         List[Dict]
+
+    Raises:
+        ValueError if the arguments are incorrect
+        FileNotFoundError if the checkpoint model path is incorrect
 
     """
     if not os.path.isdir(data_path):
@@ -96,14 +105,12 @@ def predict_glob(
         raise ValueError("invalid file glob; got '{}'".format(glob))
     if not os.path.isfile(os.path.join(model_path_name, "config.json")):
         raise FileNotFoundError("model_path_dir has no model")
-
-    initialize_logger(to_file=False, log_name="none")
-    logger.info("loading spaCY")
+    if nlp is None:
+        raise ValueError("spaCy model is not loaded")
+    if "sentencizer" not in nlp.pipe_names:
+        raise ValueError("no 'sentencizer' pipeline component in spaCy")
 
     predictor = Predictor(model_path_name, num_labels=2)
-
-    nlp = spacy_m.get_lg_vectors()
-    nlp.add_pipe(nlp.create_pipe("sentencizer"))
 
     for input_dicts, fname in cu.raw2dict(
         data_path, glob, nlp, key="raw_text"
@@ -119,7 +126,7 @@ if __name__ == "__main__":
     from argparse import ArgumentParser
 
     desc = "Binary classification of each sentence in the files "
-    desc += "matching the 'glob'"
+    desc += "matching the 'glob' in data_path"
     parser = ArgumentParser(prog="python predict_glob.py", description=desc)
     parser.add_argument(
         "-m",
@@ -143,7 +150,7 @@ if __name__ == "__main__":
         dest="batch_size",
         type=int,
         default=8,
-        help="batch size for the data samples",
+        help="batch size for the data samples; default=8",
     )
     parser.add_argument(
         "-l",
@@ -151,7 +158,7 @@ if __name__ == "__main__":
         dest="max_seq_len",
         type=int,
         default=128,
-        help="maximum sequence length, 128 to 512",
+        help="maximum sequence length, 128 to 512; default=128",
     )
     parser.add_argument(
         "-g",
@@ -161,12 +168,23 @@ if __name__ == "__main__":
         required=True,
         help="file glob pattern",
     )
+
+    initialize_logger(to_file=False, log_name="none")
+
     args = parser.parse_args()
+
+    logger.info("loading spaCy")
+    nlp_ = spacy_m.get_lg_vectors()
+
+    # must always add the pipeline component "sentencizer"
+    nlp_.add_pipe(nlp_.create_pipe("sentencizer"))
+
     for output_list, file_name in predict_glob(
         args.model_path,
         args.data_path,
         args.glob,
         args.max_seq_len,
         args.batch_size,
+        nlp=nlp_,
     ):
-        logger.info("processed : {:,}".format(len(output_list)))
+        logger.info("processed : {:,}  {}".format(len(output_list), file_name))
