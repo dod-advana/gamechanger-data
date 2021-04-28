@@ -141,7 +141,7 @@ async def initQA():
             LOCAL_TRANSFORMERS_DIR, "bert-base-cased-squad2"
         )
         logger.info("Starting QA pipeline")
-        qa_model = QAReader(qa_model_path)
+        qa_model = QAReader(qa_model_path, use_gpu=True)
         cache.set("latest_qa_model", qa_model_path)
         logger.info("Finished loading QA Reader")
     except OSError:
