@@ -76,7 +76,7 @@ def make_dict():
         re.compile(r"\b(((Director\s*of\s*Central\s*Intelligence\s*Directives)|(DCID))\s*\)?\s*[0-9]\/[0-9]{1,2}(P)?)",
         re.IGNORECASE)
     )
-    ref_dict["Executive Order"] =(
+    ref_dict["EO"] =(
         re.compile(r"[0-9]{5}", re.IGNORECASE),
         re.compile(r"\b(((Executive\s*Order)|(EO)|(E\.\s*O\.\s*))\s*\)?\s*[0-9]{5})", re.IGNORECASE)
     )
