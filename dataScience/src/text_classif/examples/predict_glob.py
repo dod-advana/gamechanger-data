@@ -18,6 +18,27 @@ optional arguments:
   -g GLOB, --glob GLOB  file glob pattern
 """
 
+
+def make_table(
+    model_path,
+    data_path,
+    glob,
+    max_seq_len,
+    batch_size,
+    nlp,
+):
+    for output_list, file_name in predict_glob(
+        model_path,
+        data_path,
+        glob,
+        max_seq_len,
+        batch_size,
+        nlp=nlp,
+    ):
+        # post processing code can go here
+        logger.info("processed : {:,}  {}".format(len(output_list), file_name))
+
+
 # CLI example
 if __name__ == "__main__":
     import logging
@@ -83,12 +104,11 @@ if __name__ == "__main__":
     # must always add the pipeline component "sentencizer"
     nlp_.add_pipe(nlp_.create_pipe("sentencizer"))
 
-    for output_list, file_name in predict_glob(
+    make_table(
         args.model_path,
         args.data_path,
         args.glob,
         args.max_seq_len,
         args.batch_size,
         nlp=nlp_,
-    ):
-        logger.info("processed : {:,}  {}".format(len(output_list), file_name))
+    )
