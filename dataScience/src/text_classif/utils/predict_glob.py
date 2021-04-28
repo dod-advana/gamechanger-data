@@ -31,7 +31,7 @@ def _predict_docs(input_dicts, predictor, max_seq_len=128, batch_size=8):
     elapsed = time.time() - start
     rate = elapsed / len(out_list)
     logger.info("total seconds : {:}".format(cu.format_time(elapsed)))
-    logger.info(" time / text : {:>6.3f} secs".format(rate))
+    logger.info("  time / text : {:>6.3f} secs".format(rate))
     return out_list
 
 
