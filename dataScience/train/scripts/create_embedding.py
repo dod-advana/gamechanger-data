@@ -93,8 +93,8 @@ def main():
         dest="version",
         required=False,
         default="v4",
-        type=bool,
-        help="Boolean check if file will be uploaded to S3",
+        type=str,
+        help="version string, must start with v, i.e. v1",
     )
     args = parser.parse_args()
 
