@@ -69,14 +69,13 @@ if GC_ML_HOST == "":
 ignore_files = ["._.DS_Store", ".DS_Store", "index"]
 
 model_path_dict = get_model_paths()
-LOCAL_TRANSFORMERS_DIR = model_path_dict['transformers']
-SENT_INDEX_PATH = model_path_dict['sentence']
-QEXP_MODEL_NAME = model_path_dict['qexp']
+LOCAL_TRANSFORMERS_DIR = model_path_dict["transformers"]
+SENT_INDEX_PATH = model_path_dict["sentence"]
+QEXP_MODEL_NAME = model_path_dict["qexp"]
 t_list = []
 try:
-    t_list = [
-        trans for trans in os.listdir(LOCAL_TRANSFORMERS_DIR) if "." not in trans
-    ]
+    t_list = [trans for trans in os.listdir(
+        LOCAL_TRANSFORMERS_DIR) if "." not in trans]
 except Exception as e:
     logger.warning("No transformers folder")
     logger.warning(e)
@@ -138,8 +137,7 @@ async def initQA():
     try:
         global qa_model
         qa_model_path = os.path.join(
-            LOCAL_TRANSFORMERS_DIR, "bert-base-cased-squad2"
-        )
+            LOCAL_TRANSFORMERS_DIR, "bert-base-cased-squad2")
         logger.info("Starting QA pipeline")
         qa_model = QAReader(qa_model_path)
         cache.set("latest_qa_model", qa_model_path)
@@ -200,7 +198,9 @@ async def initTrans():
 
 
 @app.on_event("startup")
-async def initSentence(index_path=SENT_INDEX_PATH, transformer_path=LOCAL_TRANSFORMERS_DIR):
+async def initSentence(
+    index_path=SENT_INDEX_PATH, transformer_path=LOCAL_TRANSFORMERS_DIR
+):
     """
     initQE - loads Sentence Transformers on start
     Args:
@@ -209,13 +209,11 @@ async def initSentence(index_path=SENT_INDEX_PATH, transformer_path=LOCAL_TRANSF
     global sentence_trans
     # load defaults
     encoder_model = os.path.join(
-        transformer_path, "msmarco-distilbert-base-v2"
-    )
+        transformer_path, "msmarco-distilbert-base-v2")
     logger.info(f"Using {encoder_model} for sentence transformer")
-    sim_model = os.path.join(
-        transformer_path, "distilbart-mnli-12-3")
+    sim_model = os.path.join(transformer_path, "distilbart-mnli-12-3")
     logger.info(f"Loading Sentence Transformer from {sim_model}")
-    logger.info(f"Loading Sentence Index from {SENT_INDEX_PATH}")
+    logger.info(f"Loading Sentence Index from {index_path}")
     latest_encoder_model = encoder_model
     latest_sim_model = sim_model
     try:
@@ -545,11 +543,14 @@ async def get_trans_model():
 async def reload_models(response: Response):
     model_path_dict = get_model_paths()
     logger.info("Attempting to load QE")
-    await initQE(model_path_dict['qexp'])
+    await initQE(model_path_dict["qexp"])
     logger.info("Attempting to load QA")
     await initQA()
     logger.info("Attempting to load Sentence Transformer")
-    await initSentence(index_path=model_path_dict['sentence'], transformer_path=model_path_dict['transformers'])
+    await initSentence(
+        index_path=model_path_dict["sentence"],
+        transformer_path=model_path_dict["transformers"],
+    )
 
     logger.info("Reload Complete")
     return

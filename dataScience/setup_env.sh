@@ -28,7 +28,9 @@ then
   export S3_SENT_INDEX_PATH
   S3_QEXP_PATH="${S3_QEXP_PATH:=s3://advana-raw-zone/gamechanger/models/qexp_model/v3/qexp_20201217.tar.gz}"
   export S3_QEXP_PATH
-  
+  S3_TOPICS_PATH="${S3_TOPICS_PATH:=s3://advana-raw-zone/gamechanger/models/topic_model/v1/20210208.tar.gz}"
+  export S3_TOPICS_PATH
+
   export DEV_ENV="PROD"
 fi
 
@@ -45,6 +47,10 @@ then
   export S3_SENT_INDEX_PATH
   S3_QEXP_PATH="${S3_QEXP_PATH:=s3://advana-raw-zone/gamechanger/models/qexp_model/v3/qexp_20201217.tar.gz}"
   export S3_QEXP_PATH
+
+  S3_TOPICS_PATH="${S3_TOPICS_PATH:=s3://advana-raw-zone/gamechanger/models/topic_model/v1/20210208.tar.gz}"
+  export S3_TOPICS_PATH
+
   if [ -z "$AWS_PROFILE" ]
   then
       echo "\$AWS_PROFILE is empty"
@@ -85,4 +91,5 @@ echo " * GC_ML_API_MODEL_NAME: $GC_ML_API_MODEL_NAME "
 echo " * S3_TRANS_MODEL_PATH: $S3_TRANS_MODEL_PATH"
 echo " * S3_SENT_INDEX_PATH: $S3_SENT_INDEX_PATH"
 echo " * S3_QEXP_PATH: $S3_QEXP_PATH"
+echo " * S3_TOPICS_PATH: $S3_TOPICS_PATH"
 
