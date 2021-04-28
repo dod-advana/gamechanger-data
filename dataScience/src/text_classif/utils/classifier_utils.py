@@ -194,11 +194,15 @@ def gc_data_tvt(data_file, topn=0, ident="", split=0.90):
         raise e
 
 
-def gen_gc_docs(doc_path_, glob, key="raw_text"):
-    file_list = [f for f in os.listdir(doc_path_) if fnmatch.fnmatch(f, glob)]
+def gen_gc_docs(doc_path, glob, key="raw_text"):
+    file_list = [f for f in os.listdir(doc_path) if fnmatch.fnmatch(f, glob)]
     logger.info("num files : {:>3,d}".format(len(file_list)))
+    if len(file_list) == 0:
+        logger.warning(
+            "no files in '{}' matching the glob '{}'".format(doc_path, glob)
+        )
     for input_f in sorted(file_list):
-        with open(os.path.join(doc_path_, input_f)) as fin:
+        with open(os.path.join(doc_path, input_f)) as fin:
             jdoc = json.load(fin)
             if key in jdoc:
                 yield jdoc[key], input_f
@@ -269,3 +273,22 @@ def unbatch_preds(preds):
     else:
         for i in range(_extract_batch_length(preds)):
             yield {key: value[i] for key, value in preds.items()}
+
+
+def new_df():
+    return pd.DataFrame(columns=["src", "label", "sentence"])
+
+
+def make_sentences(text, src, nlp):
+    sents = [scrubber(s.text) for s in nlp(text).sents]
+    sent_list = list()
+    for sent in sents:
+        sent_list.append({"src": src, "label": 0, "sentence": sent})
+    return sent_list
+
+
+def raw2dict(src_path, glob, nlp, key="raw_text"):
+    for raw_text, fname in gen_gc_docs(src_path, glob, key=key):
+        sent_list = make_sentences(raw_text, fname, nlp)
+        logger.info("{:>25s} : {:>5,d}".format(fname, len(sent_list)))
+        yield sent_list, fname
