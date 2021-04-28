@@ -16,7 +16,7 @@ aws s3 cp "$S3_QEXP_PATH" $PWD/dataScience/models/.
 
 echo "Downloading Topic Model"
 echo "S3 TOPIC MODEL: $S3_TOPICS_PATH"
-aws s3 cp "$S3_TOPICS_PATH" $PWD/dataScience/models/.
+aws s3 cp "$S3_TOPICS_PATH" $PWD/dataScience/models/topic_models/
 
 
 echo "Uncompressing all tar files in models"
