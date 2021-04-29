@@ -10,7 +10,7 @@ from dataScience.src.search.embed_reader import sparse
 from dataScience.src.search.query_expansion import qe
 from dataScience.src.search.sent_transformer.model import SentenceSearcher
 from dataScience.src.utilities import transformerUtil as t_util
-from dataScience.src.utilities.utils import *
+from dataScience.src.utilities import utils
 from dataScience.src.search.QA.QAReader import DocumentReader as QAReader
 from dataScience.api.fastapi.model_config import Config
 from dataScience.api.utils.pathselect import get_model_paths
@@ -214,8 +214,6 @@ async def initSentence(
     sim_model = os.path.join(transformer_path, "distilbart-mnli-12-3")
     logger.info(f"Loading Sentence Transformer from {sim_model}")
     logger.info(f"Loading Sentence Index from {index_path}")
-    latest_encoder_model = encoder_model
-    latest_sim_model = sim_model
     try:
         sentence_trans = SentenceSearcher(
             index_path=index_path,
@@ -280,20 +278,6 @@ async def check_health():
     logger.info(f"-- Sentence Transformer model name: {new_sent_model_name}")
     logger.info(f"-- QE model name: {QEXP_MODEL_NAME}")
     logger.info(f"-- QA model name: {new_qa_model_name}")
-
-    """
-    try:
-        r = requests.get(t_endpoint)
-        if r.ok:
-            logger.info("Communication Health (flask): GOOD")
-        else:
-            logger.warn(
-                f"Communication Health (flask): BAD - cannot reach {t_endpoint}"
-            )
-    except:
-        logger.warn(
-            f"Communication Health (flask): BAD - cannot reach {t_endpoint}")
-    """
 
 
 @app.get("/")
@@ -392,7 +376,8 @@ async def qa_infer(query: dict, response: Response) -> dict:
     """qa_infer - endpoint for sentence transformer inference
     Args:
         query: dict; format of query, text must be concatenated string
-            {"text": "i am text"}
+            {"query": "what is the navy",
+            "search_context":["pargraph 1", "xyz"]}
         Response: Response class; for status codes(apart of fastapi do not need to pass param)
     Returns:
         results: dict; results of inference
@@ -402,17 +387,12 @@ async def qa_infer(query: dict, response: Response) -> dict:
     try:
         query_text = query["query"]
         query_context = query["search_context"]
-        # testing but will move this to elasticsearch
-        """
-        res = es.search(index="simple-wiki",
-                        body={"query": {"query_string": {"query": query_text}}})
-        """
-        wiki_text = ""
+        context = ""
         # need 10 documents
         for page in query_context:
-            wiki_text = "\n\n".join([wiki_text, page])
+            context = "\n\n".join([context, page])
 
-        answers = qa_model.wiki_answer(query_text, wiki_text)
+        answers = qa_model.wiki_answer(query_text, context)
         answers_list = answers.split("/")
         answers_list = [x.strip() for x in answers_list if x.rstrip()]
         logger.info(answers_list)
@@ -573,3 +553,21 @@ async def download(response: Response):
         logger.warning(f"Could not get dependencies from S3")
         response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
     return
+
+
+@app.get("/s3", status_code=200)
+async def s3_func(function, response: Response):
+    """s3_func - s3 functionality for model managment
+    Args:
+        model: str
+    Returns:
+    """
+    try:
+        logger.info("Attempting to download dependencies from S3")
+        s3_path = "gamechanger/models/"
+        if function == "models":
+            models = utils.get_models_list(s3_path)
+    except:
+        logger.warning(f"Could not get dependencies from S3")
+        response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
+    return models
