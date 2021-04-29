@@ -18,9 +18,9 @@ optional arguments:
   -g GLOB, --glob GLOB  file glob pattern
 """
 
+import dataScience.src.utilities.spacy_model as spacy_m
 from dataScience.src.text_classif.utils.log_init import initialize_logger
 from dataScience.src.text_classif.utils.predict_glob import predict_glob
-import dataScience.src.utilities.spacy_model as spacy_m
 
 
 def _resolve_entity(output_list):
