@@ -23,6 +23,10 @@ from dataScience.src.text_classif.utils.predict_glob import predict_glob
 import dataScience.src.utilities.spacy_model as spacy_m
 
 
+def _resolve_entity(output_list):
+    return output_list
+
+
 def make_table(
     model_path,
     data_path,
@@ -31,6 +35,12 @@ def make_table(
     batch_size,
     nlp,
 ):
+    # a list entry looks like:
+    #
+    # {'top_class': 0, 'prob': 0.997, 'src': 'DoDD 5105.21.json', 'label': 0,
+    #  'sentence': 'Department of...'}
+    #
+    # `top_class` is the predicted label
     for output_list, file_name in predict_glob(
         model_path,
         data_path,
@@ -39,8 +49,8 @@ def make_table(
         batch_size,
         nlp=nlp,
     ):
-        # post processing code can go here
-        logger.info("processed : {:,}  {}".format(len(output_list), file_name))
+        output = _resolve_entity(output_list)
+        logger.info("processed : {:,}  {}".format(len(output), file_name))
 
 
 # CLI example
