@@ -44,5 +44,32 @@ for testing purposes and for email notifications:
   to send email notifications for crawler statuses when ingests are run.
   
 # How to get the scripts running
-Near the top of each script are four parameters that are often changed
-* The ElasticSearch 
+Near the top of each script are five parameters that are often changed, including;
+* HOST_REPO_DIR: the path to the local repository that you're running the script
+  from. 
+* DEPLOYMENT_ENV: whether to run in dev or prod environment
+* TEST_RUN: whether to perform a test run, which only crawls the first
+  two documents of `us_code`
+* INDEX_NAME: the name of the elasticsearch index to ingest 
+* ALIAS_NAME: the alias of the elasticsearch index to ingest
+
+Other parameters that aren't often adjusted, such as the image names/python
+command in the continer/number of threads to parse and OCR should be 
+adjusted dependent on the given situation.
+
+The input parameters needed to run each script are described in comments
+at the top of each respective file (e.g. neo4j_reingest.sh requires 3 inputs,
+the job.log path, container name, and job directory, while crawl_and_ingest requires
+4 inputs, including the above and the crawl_output directory)
+
+* format for running neo4j_reingest.sh: `bash crawl_and_ingest.sh {path_to_job_log} {container_name}
+  {path_to_job_directory}`
+  
+* example for running neo4j_reingest.sh: `bash crawl_and_ingest.sh /data/pub_update_jobs/2021-04-29-image-test/job.log full_pipeline /data/pub_update_jobs/2021-04-29-image-test/job_output/`
+
+
+* format for running crawl_and_ingest.sh: `bash crawl_and_ingest.sh {path_to_job_log} {container_name} {path_to_crawl_directory}
+  {path_to_job_directory}`
+
+* example for running crawl_and_ingest.sh: `bash crawl_and_ingest.sh /data/pub_update_jobs/2021-04-29-image-test/job.log full_pipeline /data/pub_update_jobs/2021-04-29-image-test/crawl_output/ /data/pub_update_jobs/2021-04-29-image-test/job_output/`
+
