@@ -60,7 +60,7 @@ def resolve_dynamic_parser(parser_path: str) -> typing.Callable:
         raise Exception(e)
 
 
-def single_process(data_inputs: typing.Tuple[typing.Callable, str, str, bool, int, str]) -> None:
+def single_process(data_inputs: typing.Tuple[typing.Callable, str, str, bool, int, str, bool]) -> None:
     """
     Args:
         data_inputs: named tuple of kind "parser_input", the necessary data inputs
@@ -72,7 +72,8 @@ def single_process(data_inputs: typing.Tuple[typing.Callable, str, str, bool, in
      meta_data,
      ocr_missing_doc,
      num_ocr_threads,
-     out_dir
+     out_dir,
+     generate_thumbnails
      ) = data_inputs
 
     # Logging is not safe in multiprocessing thread. Especially if its going to a file
@@ -92,7 +93,7 @@ def single_process(data_inputs: typing.Tuple[typing.Callable, str, str, bool, in
 
         if not meta_data:
             parse_func(f_name=f_name, meta_data=meta_data, ocr_missing_doc=ocr_missing_doc,
-                       num_ocr_threads=num_ocr_threads, out_dir=out_dir)
+                       num_ocr_threads=num_ocr_threads, out_dir=out_dir, generate_thumbnails=generate_thumbnails)
         else:
 
             loc_meta_path = Path(Path(meta_data) if Path(meta_data).is_dir() else Path(meta_data).parent,
@@ -100,11 +101,11 @@ def single_process(data_inputs: typing.Tuple[typing.Callable, str, str, bool, in
 
             if loc_meta_path.exists():
                 parse_func(f_name=f_name, meta_data=loc_meta_path, ocr_missing_doc=ocr_missing_doc,
-                           num_ocr_threads=num_ocr_threads, out_dir=out_dir)
+                           num_ocr_threads=num_ocr_threads, out_dir=out_dir, generate_thumbnails=generate_thumbnails)
 
             else:
                 parse_func(f_name=f_name, meta_data=meta_data, ocr_missing_doc=ocr_missing_doc,
-                           num_ocr_threads=num_ocr_threads, out_dir=out_dir)
+                           num_ocr_threads=num_ocr_threads, out_dir=out_dir, generate_thumbnails=generate_thumbnails)
 
     # TODO: catch this where failed files can be counted or increment shared counter (for mp)
     except (OCRError, UnparseableDocument) as e:
@@ -136,7 +137,8 @@ def process_dir(
         meta_data: str = None,
         multiprocess: int = False,
         ocr_missing_doc: bool = False,
-        num_ocr_threads: int = 2
+        num_ocr_threads: int = 2,
+        generate_thumbnails: bool = True
 ):
     """
     Processes a directory of pdf files, returns corresponding Json files
@@ -148,14 +150,16 @@ def process_dir(
         multiprocess: Multiprocessing. Will take integer for number of cores
         ocr_missing_doc: OCR non-ocr'ed docs in place
         num_ocr_threads: Number of threads used for OCR (per doc)
+        generate_thumbnails: Whether or not to generate png of first page of pdf
     """
 
     p = Path(dir_path).glob("**/*")
     files = [x for x in p if x.is_file() and filetype.guess(str(x)) is not None and (
-        filetype.guess(str(x)).mime == "pdf" or filetype.guess(str(x)).mime == "application/pdf")]
+        filetype.guess(str(x)).mime == "pdf" or filetype.guess(str(x)) != "application/pdf")]
+    # files.sort()
 
     data_inputs = [(parse_func, f_name, meta_data, ocr_missing_doc,
-                    num_ocr_threads, out_dir) for f_name in files]
+                    num_ocr_threads, out_dir, generate_thumbnails) for f_name in files]
 
     doc_logger = get_default_logger()
     doc_logger.info("Parsing Multiple Documents: %i", len(data_inputs))

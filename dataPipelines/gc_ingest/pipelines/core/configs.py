@@ -47,6 +47,7 @@ class CoreIngestConfig(IngestConfig):
     alias_name: t.Optional[StrippedString]
     max_threads: pyd.PositiveInt
     max_threads_neo4j: pyd.PositiveInt
+    generate_thumbnails: bool = False
     max_ocr_threads: pyd.PositiveInt
     skip_neo4j_update: bool = False
     skip_snapshot_backup: bool = False
@@ -106,6 +107,15 @@ class CoreIngestConfig(IngestConfig):
         self._db_backup_dir = Path(self.job_dir, 'db_backups')
         self._db_backup_dir.mkdir(exist_ok=False)
         return self._db_backup_dir
+
+    @property
+    def thumbnail_doc_base_dir(self) -> Path:
+        if hasattr(self, '_thumbnail_doc_base_dir'):
+            return self._thumbnail_doc_base_dir
+
+        self._thumbnail_doc_base_dir = Path(self.job_dir, 'thumbnails')
+        self._thumbnail_doc_base_dir.mkdir(exist_ok=False)
+        return self._thumbnail_doc_base_dir
 
     @property
     def load_manager(self) -> LoadManager:
@@ -238,6 +248,14 @@ class CoreIngestConfig(IngestConfig):
             default=mp.cpu_count(),
             show_default=True,
             help="Number of threads PER JOB to use for parsing/updating-neo4j"
+        )
+        @click.option(
+            '--generate-thumbnails',
+            type=bool,
+            required=False,
+            default=False,
+            show_default=True,
+            help="Whether or not to generate png of first page of pdf"
         )
         @click.option(
             '--max-ocr-threads',

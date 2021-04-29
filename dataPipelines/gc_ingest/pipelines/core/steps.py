@@ -20,7 +20,8 @@ class CoreIngestSteps(PipelineSteps):
             metadata=str(c.raw_doc_base_dir),
             ocr_missing_doc=True,
             multiprocess=c.max_threads,
-            num_ocr_threads=c.max_ocr_threads
+            num_ocr_threads=c.max_ocr_threads,
+            generate_thumbnails=c.generate_thumbnails
         )
 
     @staticmethod
@@ -48,6 +49,7 @@ class CoreIngestSteps(PipelineSteps):
             raw_dir=c.raw_doc_base_dir,
             metadata_dir=c.raw_doc_base_dir,
             parsed_dir=c.parsed_doc_base_dir,
+            thumbnail_dir=c.thumbnail_doc_base_dir,
             ingest_ts=c.batch_timestamp,
             update_s3=True,
             update_db=not c.skip_db_update

@@ -13,14 +13,15 @@ from common.document_parser.lib import (
     read_meta,
     pdf_reader,
     write_doc_dict_to_json,
-    ocr
+    ocr,
+    generate_png
 )
 from . import post_process, init_doc
 
 
 
 
-def parse(f_name, meta_data=None, ocr_missing_doc=False, num_ocr_threads=2, out_dir="./"):
+def parse(f_name, meta_data=None, ocr_missing_doc=False, num_ocr_threads=2, out_dir="./", generate_thumbnails=False):
     raise Exception('THIS IS ONLY A STUB')
     meta_dict = read_meta.read_metadata(meta_data)
     doc_dict = init_doc.create_doc_dict_with_meta(meta_dict)
@@ -64,3 +65,6 @@ def parse(f_name, meta_data=None, ocr_missing_doc=False, num_ocr_threads=2, out_
     doc_dict = post_process.process(doc_dict)
 
     write_doc_dict_to_json.write(out_dir=out_dir, ex_dict=doc_dict)
+
+    if generate_thumbnails:
+        generate_png(f_name=f_name, out_dir=out_dir)

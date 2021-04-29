@@ -269,6 +269,9 @@ class S3Utils:
                     self.format_as_prefix(relative_parent_dir_path)
                 )
 
+                if locpath.name[-3:] == "png":
+                    final_prefix = final_prefix + "thumbnails/"
+
                 print(f"Uploading {locpath.name} to prefix {final_prefix}")
                 self.upload_file(file=locpath, object_prefix=final_prefix, bucket=(bucket or self.bucket))
 
