@@ -270,7 +270,7 @@ class S3Utils:
                 )
 
                 if locpath.name[-3:] == "png":
-                    final_prefix = final_prefix + "thumbnails/"
+                    final_prefix = '/'.join(str(final_prefix).split('/')[:-2]) + "/thumbnails/"
 
                 print(f"Uploading {locpath.name} to prefix {final_prefix}")
                 self.upload_file(file=locpath, object_prefix=final_prefix, bucket=(bucket or self.bucket))
