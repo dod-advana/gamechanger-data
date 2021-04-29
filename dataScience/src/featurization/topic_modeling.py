@@ -1,3 +1,4 @@
+from dataScience.src.text_handling.custom_stopwords import custom_stopwords
 from gensim.models.tfidfmodel import TfidfModel
 from gensim import corpora
 import os
@@ -117,6 +118,7 @@ class Topics(object):
         word = []
         doc = doc_tfidf[0]
         for id, value in doc:
-            word.append((value, self.dictionary.get(id)))
+            if(self.dictionary.get(id) not in custom_stopwords):
+                word.append((value, self.dictionary.get(id)))
         word.sort(reverse=True)
         return word[:topn]
