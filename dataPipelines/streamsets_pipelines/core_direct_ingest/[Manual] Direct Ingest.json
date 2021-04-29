@@ -237,7 +237,7 @@
           "value" : "prod"
         }, {
           "key" : "REPO_TGZ_FILENAME",
-          "value" : "gamechanger-repo.dev.20210219.tgz"
+          "value" : "gamechanger-repo.devtools.20210219.tgz"
         }, {
           "key" : "REPO_TGZ_BASE_PREFIX",
           "value" : "gamechanger/data-pipelines/orchestration/repo/"

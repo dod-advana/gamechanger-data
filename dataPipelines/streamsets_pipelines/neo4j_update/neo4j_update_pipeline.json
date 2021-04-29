@@ -237,7 +237,7 @@
           "value" : "prod"
         }, {
           "key" : "REPO_TGZ_NAME",
-          "value" : "gamechanger-repo.dev.20210114.tgz"
+          "value" : "gamechanger-repo.devtools.20210114.tgz"
         }, {
           "key" : "REPO_TGZ_BASE_PATH",
           "value" : "advana-raw-zone/gamechanger/data-pipelines/orchestration/repo"

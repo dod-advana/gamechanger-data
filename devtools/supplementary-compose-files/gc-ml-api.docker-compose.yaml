@@ -5,7 +5,7 @@ services:
     container_name: "${COMPOSE_PROJECT_NAME:-gc-dev}-gc-ml-api"
     build:
       context: "../"
-      dockerfile: "dev/docker/gc_ml_api/Dockerfile"
+      dockerfile: "devtools/docker/gc_ml_api/Dockerfile"
     environment:
       WORKER_COUNT: "${GC_ML_API_WORKER_COUNT:?}"
       FLASK_APP: "${GC_ML_API_FLASK_APP:?}"

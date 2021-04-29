@@ -22,7 +22,7 @@ services:
     image: "gc_common_baseline:latest"
     build:
       context: "../"
-      dockerfile: "dev/docker/gc_common_baseline/Dockerfile"
+      dockerfile: "devtools/docker/gc_common_baseline/Dockerfile"
     entrypoint:
       "echo [OK] gc_common_baseline:latest image is present"
 
