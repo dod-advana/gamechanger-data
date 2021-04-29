@@ -17,6 +17,19 @@ from . import OUTPUT_FOLDER_NAME
 from dataPipelines.gc_crawler.utils import dict_to_sha256_hex_digest, get_fqdn_from_web_url
 
 
+class DeduplicaterPipeline():
+    def __init__(self):
+        self.ids_seen = set()
+
+    def process_item(self, item, spider):
+        if item['doc_name'] in self.ids_seen:
+            raise DropItem("Duplicate doc_name found")
+        else:
+            self.ids_seen.add(item['doc_name'])
+
+        return item
+
+
 class AdditionalFieldsPipeline:
     def process_item(self, item, spider):
 
