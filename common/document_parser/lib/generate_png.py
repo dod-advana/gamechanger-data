@@ -7,7 +7,7 @@ def generate_png(f_name, out_dir="./"):
     if not p.exists():
         p.mkdir()
 
-    filename = f_name.split("/")[-1]
+    filename = str(f_name).split("/")[-1]
     doc = fitz.open(f_name)
     page = doc.loadPage(0)  # number of page
     pix = page.getPixmap()
