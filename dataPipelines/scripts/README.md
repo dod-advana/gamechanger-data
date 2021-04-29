@@ -19,7 +19,7 @@ The scripts include:
   the ingests in neo4j, ElasticSearch, postgres, and s3.
   
 
-* **neo4j_reingest**: This script pulls down documents from s3's `json` directory
+* **neo4j_reingest.sh**: This script pulls down documents from s3's `json` directory
   (jsons resulting from the corpus parse) and reingests them into 
   the neo4j database, all in a docker container.  
   
