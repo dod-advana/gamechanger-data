@@ -21,7 +21,7 @@ from . import post_process, init_doc
 
 
 
-def parse(f_name, meta_data=None, ocr_missing_doc=False, num_ocr_threads=2, out_dir="./", generate_thumbnails=False):
+def parse(f_name, meta_data=None, ocr_missing_doc=False, num_ocr_threads=2, out_dir="./", generate_thumbnails=True):
     raise Exception('THIS IS ONLY A STUB')
     meta_dict = read_meta.read_metadata(meta_data)
     doc_dict = init_doc.create_doc_dict_with_meta(meta_dict)

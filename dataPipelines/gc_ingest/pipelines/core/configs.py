@@ -47,7 +47,7 @@ class CoreIngestConfig(IngestConfig):
     alias_name: t.Optional[StrippedString]
     max_threads: pyd.PositiveInt
     max_threads_neo4j: pyd.PositiveInt
-    generate_thumbnails: bool = False
+    generate_thumbnails: bool = True
     max_ocr_threads: pyd.PositiveInt
     skip_neo4j_update: bool = False
     skip_snapshot_backup: bool = False
