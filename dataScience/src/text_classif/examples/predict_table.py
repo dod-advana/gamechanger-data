@@ -1,5 +1,5 @@
 """
-usage: python predict_glob.py [-h] -m MODEL_PATH -d DATA_PATH [-b BATCH_SIZE]
+usage: python predict_table.py [-h] -m MODEL_PATH -d DATA_PATH [-b BATCH_SIZE]
                               [-l MAX_SEQ_LEN] -g GLOB
 
 Binary classification of each sentence in the files matching the 'glob' in
@@ -62,7 +62,7 @@ if __name__ == "__main__":
 
     desc = "Binary classification of each sentence in the files "
     desc += "matching the 'glob' in data_path"
-    parser = ArgumentParser(prog="python predict_glob.py", description=desc)
+    parser = ArgumentParser(prog="python predict_table.py", description=desc)
     parser.add_argument(
         "-m",
         "--model-path",
