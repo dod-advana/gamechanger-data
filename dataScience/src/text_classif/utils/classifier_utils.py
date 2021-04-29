@@ -2,13 +2,14 @@
 # Subject to the terms and conditions contained in LICENSE
 import datetime
 import fnmatch
-import logging
 import json
+import logging
 import os
 import re
 
 import numpy as np
 import pandas as pd
+from nltk.tokenize import sent_tokenize
 from tqdm import tqdm
 
 logger = logging.getLogger(__name__)
@@ -262,10 +263,11 @@ def unbatch_preds(preds):
     Unbatch predictions, as in estimator.predict().
 
     Args:
-      preds: Dict[str, np.ndarray], where all arrays have the same first
+      preds: Dict[str, np.array], where all arrays have the same first
         dimension.
+
     Yields:
-      sequence of Dict[str, np.ndarray], with the same keys as preds.
+      sequence of Dict[str, np.array], with the same keys as preds.
     """
     if not isinstance(preds, dict):
         for pred in preds:
@@ -279,16 +281,18 @@ def new_df():
     return pd.DataFrame(columns=["src", "label", "sentence"])
 
 
-def make_sentences(text, src, nlp):
-    sents = [scrubber(s.text) for s in nlp(text).sents]
+def make_sentences(text, src):
+    sents = [scrubber(sent) for sent in sent_tokenize(text)]
     sent_list = list()
     for sent in sents:
+        if not sent:
+            continue
         sent_list.append({"src": src, "label": 0, "sentence": sent})
     return sent_list
 
 
-def raw2dict(src_path, glob, nlp, key="raw_text"):
+def raw2dict(src_path, glob, key="raw_text"):
     for raw_text, fname in gen_gc_docs(src_path, glob, key=key):
-        sent_list = make_sentences(raw_text, fname, nlp)
+        sent_list = make_sentences(raw_text, fname)
         logger.info("{:>25s} : {:>5,d}".format(fname, len(sent_list)))
         yield sent_list, fname

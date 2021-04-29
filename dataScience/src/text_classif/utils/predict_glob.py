@@ -98,9 +98,7 @@ def predict_glob(
 
     predictor = Predictor(model_path_name, num_labels=2)
 
-    for input_dicts, fname in cu.raw2dict(
-        data_path, glob, nlp, key="raw_text"
-    ):
+    for input_dicts, fname in cu.raw2dict(data_path, glob, key="raw_text"):
         out_list = _predict_docs(
             input_dicts, predictor, max_seq_len, batch_size
         )

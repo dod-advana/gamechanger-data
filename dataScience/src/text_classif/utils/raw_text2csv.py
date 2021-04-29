@@ -40,9 +40,9 @@ def make_sentences(text, src, nlp):
     return df
 
 
-def raw2df(src_path, glob, nlp, key="raw_text"):
+def raw2df(src_path, glob, key="raw_text"):
     for raw_text, fname in cu.gen_gc_docs(src_path, glob, key=key):
-        sent_df = make_sentences(raw_text, fname, nlp)
+        sent_df = cu.make_sentences(raw_text, fname)
         logger.info("{:>25s} : {:>5,d}".format(fname, len(sent_df)))
         yield sent_df, fname
 
@@ -72,7 +72,7 @@ def main(src_path, glob, output_path):
     fname = None
     output_df = new_df()
     try:
-        for sent_df, fname in raw2df(src_path, glob, nlp):
+        for sent_df, fname in raw2df(src_path, glob):
             output_df = output_df.append(sent_df, ignore_index=True)
             base, ext = os.path.splitext(os.path.basename(fname))
             output_csv = base.replace(" ", "_") + "_sentences" + ".csv"
