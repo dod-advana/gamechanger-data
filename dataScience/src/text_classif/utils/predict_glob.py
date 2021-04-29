@@ -10,7 +10,7 @@ from dataScience.src.text_classif.predictor import Predictor
 logger = logging.getLogger(__name__)
 
 
-def _predict_docs(input_dicts, predictor, max_seq_len=128, batch_size=8):
+def _predict_docs(input_dicts, predictor, max_seq_len, batch_size):
     adder = 0
     if len(input_dicts) % batch_size != 0:
         adder = 1
@@ -30,8 +30,8 @@ def _predict_docs(input_dicts, predictor, max_seq_len=128, batch_size=8):
 
     elapsed = time.time() - start
     rate = elapsed / len(out_list)
-    logger.info("total seconds : {:}".format(cu.format_time(elapsed)))
-    logger.info("  time / text : {:>6.3f} secs".format(rate))
+    logger.info("       time : {:}".format(cu.format_time(elapsed)))
+    logger.info("time / text : {:>6.3f} secs".format(rate))
     return out_list
 
 
@@ -44,13 +44,20 @@ def predict_glob(
     nlp=None,
 ):
     """
-    This performs classification on .json corpus docs using `raw_text`. The
-    text is passed through the spaCy "sentencizer" to create a list of
+    This generator performs classification on `.json` corpus docs using
+    the `raw_text` key in a `.json` document.
+
+    The text is passed through the spaCy "sentencizer" to create a list of
     dictionaries, one for each extracted sentence.
 
     Batches(`batch_size`) of these dictionaries are sent forward through the
     model(`model_name_path`) with the predicted class and p(class) assembled
-    in a dictionary and yielded.
+    in a dictionary and returned on iteration.
+
+    This assumes the model directory is laid out per Hugging Face, i.e.,
+        - `config.json`
+        - `pytorch_model.bin`
+        - etc.
 
     Args:
         model_path_name (str): path of the checkpointed model
@@ -83,7 +90,7 @@ def predict_glob(
     if not glob.strip():
         raise ValueError("invalid file glob; got '{}'".format(glob))
     if not os.path.isfile(os.path.join(model_path_name, "config.json")):
-        raise FileNotFoundError("model_path_dir has no model")
+        raise FileNotFoundError("model_path_dir has no 'config.json'")
     if nlp is None:
         raise ValueError("spaCy model is not loaded")
     if "sentencizer" not in nlp.pipe_names:

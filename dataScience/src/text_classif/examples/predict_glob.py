@@ -18,6 +18,10 @@ optional arguments:
   -g GLOB, --glob GLOB  file glob pattern
 """
 
+from dataScience.src.text_classif.utils.log_init import initialize_logger
+from dataScience.src.text_classif.utils.predict_glob import predict_glob
+import dataScience.src.utilities.spacy_model as spacy_m
+
 
 def make_table(
     model_path,
@@ -43,10 +47,6 @@ def make_table(
 if __name__ == "__main__":
     import logging
     from argparse import ArgumentParser
-
-    from dataScience.src.text_classif.utils.log_init import initialize_logger
-    from dataScience.src.text_classif.utils.predict_glob import predict_glob
-    import dataScience.src.utilities.spacy_model as spacy_m
 
     logger = logging.getLogger(__name__)
 
