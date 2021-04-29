@@ -44,16 +44,20 @@ def _log_metadata(model_path, curr_version):
             )
             logger.warning(msg)
 
-    ts_ = datetime.datetime.fromtimestamp(ts)
+    ts = datetime.datetime.fromtimestamp(ts)
     val_loss = chkpt_stats["avg_val_loss"]
     logger.info(
-        "checkpoint time : {}".format(ts_.strftime("%Y-%m-%d %H:%M:%S"))
+        "      checkpoint time : {}".format(ts.strftime("%Y-%m-%d %H:%M:%S"))
     )
-    logger.info("current version : {}".format(curr_version))
-    logger.info("   created with : {}".format(c_version))
-    logger.info("          epoch : {}".format(chkpt_stats["epoch"]))
-    logger.info("   avg val loss : {:0.3f}".format(val_loss))
-    logger.info("            mcc : {:0.3f}".format(chkpt_stats["mcc"]))
+    class_name = chkpt_stats["config"]["class"]
+    base_model = chkpt_stats["config"]["model name"]
+    logger.info("      current version : {}".format(curr_version))
+    logger.info(" created with version : {}".format(c_version))
+    logger.info("       training class : {}".format(class_name))
+    logger.info("           base model : {}".format(base_model))
+    logger.info("                epoch : {}".format(chkpt_stats["epoch"]))
+    logger.info("         avg val loss : {:0.3f}".format(val_loss))
+    logger.info("                  mcc : {:0.3f}".format(chkpt_stats["mcc"]))
 
 
 class Predictor:
