@@ -102,6 +102,7 @@ function setup_local_repo_copy() {
   tar -xvzf "$LOCAL_GC_REPO_TGZ_PATH" -C "$LOCAL_GC_REPO_BASE_DIR"
 }
 
+
 function setup_app_config_copy() {
   echo "FETCHING APP CONFIG"
   S3_APP_CONFIG_PATH="${S3_BUCKET_NAME}/${APP_CONFIG_BASE_PREFIX}${APP_CONFIG_FILENAME}"
@@ -153,7 +154,7 @@ function configure_repo() {
 ## ## MAIN COMMANDS
 #####
 
-function run_core_ingest() {
+function run_core_reparse() {
 
   local job_dir="$LOCAL_JOB_DIR"
   local job_ts="$JOB_TS"
@@ -195,16 +196,8 @@ function run_core_ingest() {
     --index-name="$es_index_name" \
     --alias-name="$es_alias_name" \
     --max-threads="$max_parser_threads" \
-    --max-threads-neo4j="$max_neo4j_threads"
     --max-ocr-threads="$max_ocr_threads" \
-    --crawler-output="$crawler_output" \
-    --skip-revocation-update="$skip_revocation_update" \
-    checkpoint \
-    --checkpoint-limit=1 \
-    --checkpoint-file-path="gamechanger/external-uploads/crawler-downloader/checkpoint.txt" \
-    --checkpointed-dir-path="gamechanger/external-uploads/crawler-downloader/" \
-    --checkpoint-ready-marker="manifest.json" \
-    --advance-checkpoint="yes"
+    reparse
 
 }
 
@@ -227,6 +220,7 @@ setup_local_vars_and_dirs
 # LOCAL_JOB_LOG_PATH var is now set
 setup_local_repo_copy 2>&1 | tee -a "$LOCAL_JOB_LOG_PATH"
 setup_app_config_copy 2>&1 | tee -a "$LOCAL_JOB_LOG_PATH"
+setup_topic_models_copy 2>&1 | tee -a "$LOCAL_JOB_LOG_PATH"
 configure_repo 2>&1 | tee -a "$LOCAL_JOB_LOG_PATH"
 
 SECONDS=0
@@ -238,7 +232,7 @@ cat <<EOF 2>&1 | tee -a "$LOCAL_JOB_LOG_PATH"
 EOF
 
 # main
-run_core_ingest 2>&1 | tee -a "$LOCAL_JOB_LOG_PATH"
+run_core_reparse 2>&1 | tee -a "$LOCAL_JOB_LOG_PATH"
 
 
 cat <<EOF 2>&1 | tee -a "$LOCAL_JOB_LOG_PATH"
