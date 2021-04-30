@@ -1,11 +1,14 @@
 from transformers import AutoTokenizer, AutoModelForQuestionAnswering
 import torch
 from collections import OrderedDict
-#import wikipedia as wiki
+
+# import wikipedia as wiki
 
 
 class DocumentReader:
-    def __init__(self, pretrained_model_name_or_path='bert-large-uncased', use_gpu = False):
+    def __init__(
+        self, pretrained_model_name_or_path="bert-large-uncased", use_gpu=False
+    ):
         self.READER_PATH = pretrained_model_name_or_path
         self.tokenizer = AutoTokenizer.from_pretrained(self.READER_PATH)
         self.model = AutoModelForQuestionAnswering.from_pretrained(
@@ -23,7 +26,8 @@ class DocumentReader:
 
     def tokenize(self, question, text):
         self.inputs = self.tokenizer.encode_plus(
-            question, text, add_special_tokens=True, return_tensors="pt")
+            question, text, add_special_tokens=True, return_tensors="pt"
+        )
         self.input_ids = self.inputs["input_ids"].tolist()[0]
         if len(self.input_ids) > self.max_len:
             self.inputs = self.chunkify()
@@ -40,8 +44,8 @@ class DocumentReader:
 
         # create question mask based on token_type_ids
         # value is 0 for question tokens, 1 for context tokens
-        qmask = self.inputs['token_type_ids'].lt(1)
-        qt = torch.masked_select(self.inputs['input_ids'], qmask)
+        qmask = self.inputs["token_type_ids"].lt(1)
+        qt = torch.masked_select(self.inputs["input_ids"], qmask)
         chunk_size = self.max_len - qt.size()[0] - 1  # the "-1" accounts for
         # having to add an ending [SEP] token to the end
 
@@ -57,8 +61,8 @@ class DocumentReader:
                     chunked_input[i] = {}
 
                 thing = torch.cat((q, chunk))
-                if i != len(chunks)-1:
-                    if k == 'input_ids':
+                if i != len(chunks) - 1:
+                    if k == "input_ids":
                         thing = torch.cat((thing, torch.tensor([102])))
                     else:
                         thing = torch.cat((thing, torch.tensor([1])))
@@ -66,61 +70,49 @@ class DocumentReader:
                 chunked_input[i][k] = torch.unsqueeze(thing, dim=0)
         return chunked_input
 
-    def get_answer(self):
+    def _get_answer(self):
         if self.chunked:
-            answer = ''
+            answer = ""
             for k, chunk in self.inputs.items():
                 if self.use_gpu:
                     chunk = {key: value.cuda() for key, value in chunk.items()}
                 answer_start_scores, answer_end_scores = self.model(**chunk)
 
-                if self.use_gpu:
-                    answer_start_scores = answer_start_scores.detach().cpu()
-                    answer_end_scores = answer_end_scores.detach().cpu()
-                    chunk = {key: value.detach().cpu() for key, value in chunk.items()}
-
-                # Wouldn't the answer start and end scores above be the ones here?
-                # This looks like running the same input to the model 3 times
-
-                # answer_start = torch.argmax(answer_start_scores)
-                # answer_end = torch.argmax(answer_end_scores) + 1
-
                 answer_start = torch.argmax(
-                    self.model(**chunk)['start_logits'])
+                    self.model(**chunk)["start_logits"])
                 answer_end = torch.argmax(
-                    self.model(**chunk)['end_logits']) + 1
+                    self.model(**chunk)["end_logits"]) + 1
 
                 ans = self.convert_ids_to_string(
-                    chunk['input_ids'][0][answer_start:answer_end])
-                if ans != '[CLS]':
+                    chunk["input_ids"][0][answer_start:answer_end]
+                )
+                if ans != "[CLS]":
                     answer += ans + " / "
             return answer
         else:
             if self.use_gpu:
                 self.inputs = {key: value.cuda() for key, value in inputs}
             answer_start_scores, answer_end_scores = self.model(**self.inputs)
-            
-            if self.use_gpu:
-                answer_start_scores = answer_start_scores.detach().cpu()
-                answer_end_scores = answer_end_scores.detach().cpu()
-                self.inputs = {key: value.detach().cpu() for key, value in inputs}
 
             # get the most likely beginning of answer with the argmax of the score
             answer_start = torch.argmax(answer_start_scores)
             # get the most likely end of answer with the argmax of the score
             answer_end = torch.argmax(answer_end_scores) + 1
 
-            return self.convert_ids_to_string(self.inputs['input_ids'][0][
-                                              answer_start:answer_end])
+            return self.convert_ids_to_string(
+                self.inputs["input_ids"][0][answer_start:answer_end]
+            )
 
     def convert_ids_to_string(self, input_ids):
-        return self.tokenizer.convert_tokens_to_string(self.tokenizer.convert_ids_to_tokens(input_ids))
+        return self.tokenizer.convert_tokens_to_string(
+            self.tokenizer.convert_ids_to_tokens(input_ids)
+        )
 
-    def wiki_answer(self, question: str, wiki_results):
+    def answer(self, question: str, wiki_results):
         print(f"Question: {question}")
-        #wiki_results = wiki.search(question)
-        #page = wiki.page(wiki_results[0])
-        #print(f"Top wiki result: {page}")
+        # wiki_results = wiki.search(question)
+        # page = wiki.page(wiki_results[0])
+        # print(f"Top wiki result: {page}")
         self.tokenize(question, wiki_results)
-        answer = self.get_answer()
+        answer = self._get_answer()
         return answer
