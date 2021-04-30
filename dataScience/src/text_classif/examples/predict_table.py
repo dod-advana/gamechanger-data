@@ -21,11 +21,12 @@ optional arguments:
 """
 import logging
 import re
+
 from tqdm import tqdm
 
+import dataScience.src.utilities.spacy_model as spacy_m
 from dataScience.src.text_classif.utils.log_init import initialize_logger
 from dataScience.src.text_classif.utils.predict_glob import predict_glob
-import dataScience.src.utilities.spacy_model as spacy_m
 
 logger = logging.getLogger(__name__)
 
