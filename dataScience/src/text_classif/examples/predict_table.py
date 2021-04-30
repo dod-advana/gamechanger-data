@@ -33,7 +33,7 @@ logger = logging.getLogger(__name__)
 RESP = "RESPONSIBILITIES"
 SENTENCE = "sentence"
 KW = "shall"
-KW_RE = "\\b" + KW + ":?\\b"
+KW_RE = re.compile("\\b" + KW + "[:,]?\\b")
 NA = "NA"
 TC = "top_class"
 ENT = "entity"
@@ -62,8 +62,8 @@ def _attach_entity(output_list, entity_list, nlp):
         sentence = entry[SENTENCE]
         new_entry = new_edict()
         new_entry.update(entry)
-        if KW in sentence:
-            curr_entity = re.split(KW_RE, sentence)[0].strip()
+        if entry[TC] == 0 and KW in sentence:
+            curr_entity = re.split(KW_RE, sentence, maxsplit=1)[0].strip()
             # sanity check on the extracted entity
             entities = contains_entity(curr_entity, nlp)
             if not entities:
