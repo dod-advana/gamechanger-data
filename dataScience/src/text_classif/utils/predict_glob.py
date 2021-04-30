@@ -36,12 +36,7 @@ def _predict_docs(input_dicts, predictor, max_seq_len, batch_size):
 
 
 def predict_glob(
-    model_path_name,
-    data_path,
-    glob,
-    max_seq_len=128,
-    batch_size=8,
-    nlp=None,
+    model_path_name, data_path, glob, max_seq_len=128, batch_size=8
 ):
     """
     This generator performs classification on `.json` corpus docs using
@@ -70,8 +65,6 @@ def predict_glob(
 
         batch_size (int): batch size
 
-        nlp (spacy.lang.en.English): a spaCy model with the "sentencizer"
-            pipeline
 
     Yields:
         List[Dict]
@@ -91,8 +84,6 @@ def predict_glob(
         raise ValueError("invalid file glob; got '{}'".format(glob))
     if not os.path.isfile(os.path.join(model_path_name, "config.json")):
         raise FileNotFoundError("model_path_dir has no 'config.json'")
-    if "sentencizer" not in nlp.pipe_names:
-        raise ValueError("no 'sentencizer' pipeline component in spaCy")
 
     predictor = Predictor(model_path_name, num_labels=2)
 
