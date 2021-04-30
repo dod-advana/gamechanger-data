@@ -14,7 +14,6 @@ from tqdm import tqdm
 
 logger = logging.getLogger(__name__)
 here = os.path.dirname(os.path.realpath(__file__))
-nlp_ = None
 
 
 def next_pow_two(max_sent_tokens):

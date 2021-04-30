@@ -20,7 +20,6 @@ import os
 import pandas as pd
 
 import dataScience.src.text_classif.utils.classifier_utils as cu
-import dataScience.src.utilities.spacy_model as spacy_m
 
 logger = logging.getLogger(__name__)
 here = os.path.dirname(os.path.realpath(__file__))
@@ -28,16 +27,6 @@ here = os.path.dirname(os.path.realpath(__file__))
 
 def new_df():
     return pd.DataFrame(columns=["src", "label", "sentence"])
-
-
-def make_sentences(text, src, nlp):
-    sents = [cu.scrubber(s.text) for s in nlp(text).sents]
-    df = new_df()
-    for sent in sents:
-        df = df.append(
-            {"src": src, "label": 0, "sentence": sent}, ignore_index=True
-        )
-    return df
 
 
 def raw2df(src_path, glob, key="raw_text"):
@@ -63,12 +52,6 @@ def main(src_path, glob, output_path):
     Returns:
         None
     """
-    # TODO   spaCy will fail when the text is very large. Iterate through
-    # TODO   the raw_text of each paragraph as a remedy. Use
-    logger.info("loading spaCy")
-    nlp = spacy_m.get_lg_vectors()
-    nlp.add_pipe(nlp.create_pipe("sentencizer"))
-
     fname = None
     output_df = new_df()
     try:
