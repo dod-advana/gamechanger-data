@@ -20,7 +20,7 @@ def extract_topics(doc_dict):
 
     tokens = doc_dict['raw_text'].split()
 
-    if(len(tokens) <= MIN_TOKEN_LEN):
+    if(len(tokens) > MIN_TOKEN_LEN):
         topics = tfidf_model.get_topics(
             topic_processing(doc_dict['text'], bigrams), topn=5)
         for score, topic in topics:
