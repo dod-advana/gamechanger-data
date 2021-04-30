@@ -17,7 +17,7 @@ class ArchiveType(Enum):
     RAW = 'raw'
     PARSED = 'parsed'
     METADATA = 'metadata'
-    THUMBNAIL = 'thumbnail'
+    THUMBNAIL = 'thumbnails'
 
 
 class GenericIngestableDoc(BaseModel):

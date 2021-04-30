@@ -19,7 +19,7 @@ from common.document_parser.lib import (
 from . import post_process, init_doc
 
 
-def parse(f_name, meta_data=None, ocr_missing_doc=False, num_ocr_threads=2, out_dir="./", generate_thumbnails=True):
+def parse(f_name, meta_data=None, ocr_missing_doc=False, num_ocr_threads=2, out_dir="./", thumbnail_dir="./", generate_thumbnails=True):
     if str(f_name)[-3:] != 'png':
         print('running policy_analyics.parse on', f_name)
         meta_dict = read_meta.read_metadata(meta_data)
@@ -66,4 +66,4 @@ def parse(f_name, meta_data=None, ocr_missing_doc=False, num_ocr_threads=2, out_
         write_doc_dict_to_json.write(out_dir=out_dir, ex_dict=doc_dict)
 
         if generate_thumbnails:
-            generate_png.generate_png(f_name=f_name, out_dir=out_dir)
+            generate_png.generate_png(f_name=f_name, out_dir=thumbnail_dir)

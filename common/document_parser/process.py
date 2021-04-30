@@ -60,7 +60,7 @@ def resolve_dynamic_parser(parser_path: str) -> typing.Callable:
         raise Exception(e)
 
 
-def single_process(data_inputs: typing.Tuple[typing.Callable, str, str, bool, int, str, bool]) -> None:
+def single_process(data_inputs: typing.Tuple[typing.Callable, str, str, bool, int, str, str, bool]) -> None:
     """
     Args:
         data_inputs: named tuple of kind "parser_input", the necessary data inputs
@@ -73,6 +73,7 @@ def single_process(data_inputs: typing.Tuple[typing.Callable, str, str, bool, in
      ocr_missing_doc,
      num_ocr_threads,
      out_dir,
+     thumbnail_dir,
      generate_thumbnails
      ) = data_inputs
 
@@ -93,7 +94,8 @@ def single_process(data_inputs: typing.Tuple[typing.Callable, str, str, bool, in
 
         if not meta_data:
             parse_func(f_name=f_name, meta_data=meta_data, ocr_missing_doc=ocr_missing_doc,
-                       num_ocr_threads=num_ocr_threads, out_dir=out_dir, generate_thumbnails=generate_thumbnails)
+                       num_ocr_threads=num_ocr_threads, out_dir=out_dir, thumbnail_dir=thumbnail_dir,
+                       generate_thumbnails=generate_thumbnails)
         else:
 
             loc_meta_path = Path(Path(meta_data) if Path(meta_data).is_dir() else Path(meta_data).parent,
@@ -101,11 +103,13 @@ def single_process(data_inputs: typing.Tuple[typing.Callable, str, str, bool, in
 
             if loc_meta_path.exists():
                 parse_func(f_name=f_name, meta_data=loc_meta_path, ocr_missing_doc=ocr_missing_doc,
-                           num_ocr_threads=num_ocr_threads, out_dir=out_dir, generate_thumbnails=generate_thumbnails)
+                           num_ocr_threads=num_ocr_threads, out_dir=out_dir, thumbnail_dir=thumbnail_dir,
+                           generate_thumbnails=generate_thumbnails)
 
             else:
                 parse_func(f_name=f_name, meta_data=meta_data, ocr_missing_doc=ocr_missing_doc,
-                           num_ocr_threads=num_ocr_threads, out_dir=out_dir, generate_thumbnails=generate_thumbnails)
+                           num_ocr_threads=num_ocr_threads, out_dir=out_dir, thumbnail_dir=thumbnail_dir,
+                           generate_thumbnails=generate_thumbnails)
 
     # TODO: catch this where failed files can be counted or increment shared counter (for mp)
     except (OCRError, UnparseableDocument) as e:
@@ -134,6 +138,7 @@ def process_dir(
         parse_func: typing.Callable,
         dir_path: str,
         out_dir: str = "./",
+        thumbnail_dir: str = "thumbnails/",
         meta_data: str = None,
         multiprocess: int = False,
         ocr_missing_doc: bool = False,
@@ -146,6 +151,7 @@ def process_dir(
         parse_func: Parsing function called on the data
         dir_path: A source directory to be processed.
         out_dir: A destination directory to be processed
+        thumbnail_dir: Where to save the thumbnails
         meta_data: file path of metadata to be processed.
         multiprocess: Multiprocessing. Will take integer for number of cores
         ocr_missing_doc: OCR non-ocr'ed docs in place
@@ -159,7 +165,8 @@ def process_dir(
     # files.sort()
 
     data_inputs = [(parse_func, f_name, meta_data, ocr_missing_doc,
-                    num_ocr_threads, out_dir, generate_thumbnails) for f_name in files]
+                    num_ocr_threads, out_dir, thumbnail_dir,
+                    generate_thumbnails) for f_name in files]
 
     doc_logger = get_default_logger()
     doc_logger.info("Parsing Multiple Documents: %i", len(data_inputs))

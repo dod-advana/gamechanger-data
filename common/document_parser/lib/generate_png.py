@@ -11,6 +11,7 @@ def generate_png(f_name, out_dir="./"):
     doc = fitz.open(f_name)
     page = doc.loadPage(0)  # number of page
     pix = page.getPixmap()
+    out_dir = str(out_dir)
     if out_dir[-1] != '/':
         out_dir += '/'
     output = out_dir + filename[:-4] + ".png"

@@ -253,7 +253,7 @@ class CoreIngestConfig(IngestConfig):
             '--generate-thumbnails',
             type=bool,
             required=False,
-            default=False,
+            default=True,
             show_default=True,
             help="Whether or not to generate png of first page of pdf"
         )
