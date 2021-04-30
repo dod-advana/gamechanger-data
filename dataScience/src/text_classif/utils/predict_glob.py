@@ -91,8 +91,6 @@ def predict_glob(
         raise ValueError("invalid file glob; got '{}'".format(glob))
     if not os.path.isfile(os.path.join(model_path_name, "config.json")):
         raise FileNotFoundError("model_path_dir has no 'config.json'")
-    if nlp is None:
-        raise ValueError("spaCy model is not loaded")
     if "sentencizer" not in nlp.pipe_names:
         raise ValueError("no 'sentencizer' pipeline component in spaCy")
 
