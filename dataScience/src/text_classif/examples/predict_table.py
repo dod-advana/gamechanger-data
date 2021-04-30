@@ -37,7 +37,6 @@ KW_RE = "\\b" + KW + ":?\\b"
 NA = "NA"
 TC = "top_class"
 ENT = "entity"
-new_edict = {ENT: NA}
 
 
 def contains_entity(text, nlp):
@@ -52,15 +51,20 @@ def contains_entity(text, nlp):
         return False
 
 
+def new_edict(value=NA):
+    return {ENT: value}
+
+
 def _attach_entity(output_list, entity_list, nlp):
     curr_entity = NA
     for entry in tqdm(output_list, desc="entity"):
         logger.debug(entry)
         sentence = entry[SENTENCE]
-        new_entry = new_edict
+        new_entry = new_edict()
         new_entry.update(entry)
         if KW in sentence:
             curr_entity = re.split(KW_RE, sentence)[0].strip()
+            # sanity check on the extracted entity
             entities = contains_entity(curr_entity, nlp)
             if not entities:
                 curr_entity = NA
@@ -74,7 +78,7 @@ def _attach_entity(output_list, entity_list, nlp):
 def _populate_entity(output_list, nlp):
     entity_list = list()
     for idx, entry in enumerate(output_list):
-        e_dict = new_edict
+        e_dict = new_edict()
         e_dict.update(entry)
         if e_dict[TC] == 0 and RESP in entry[SENTENCE]:
             entity_list.append(e_dict)
