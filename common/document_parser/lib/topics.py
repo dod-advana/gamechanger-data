@@ -15,10 +15,12 @@ def extract_topics(doc_dict):
         doc_dict (dict): The output dict differs from the input
             only in that it now includes `topics_rs` as a key.
     """
-
+    MIN_TOKEN_LEN = 300 #tokens, this turns out to be roughly a half page
     doc_dict['topics_rs'] = {}
 
-    if(doc_dict['page_count'] > 1):
+    tokens = doc_dict['raw_text'].split()
+
+    if(len(tokens) <= MIN_TOKEN_LEN):
         topics = tfidf_model.get_topics(
             topic_processing(doc_dict['text'], bigrams), topn=5)
         for score, topic in topics:
