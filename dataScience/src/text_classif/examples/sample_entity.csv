@@ -1,297 +1,297 @@
 entity,top_class,prob,src,label,sentence
-NA,0,0.996938943862915,DoDD 1000.20.json,0,"Department of Defense DIRECTIVE NUMBER 1000.20 September 11, 1989 Certified Current as of November 21, 2003 ASD(FM&P) SUBJECT: Active Duty Service Determinations for Civilian or Contractual Groups References: (a) Department of Defense Directive 1000.20, ""Determinations of Active Military Service and Discharge: Civilian or Contractual Personnel,"" June 9, 1983 (hereby canceled) (b) Public Law 95-202, ""The G.I."
-NA,0,0.9949122071266174,DoDD 1000.20.json,0,"Bill Improvement Act of 1977,"" Section 401, November 23, 1977 (38 U.S.C."
-NA,0,0.9963717460632324,DoDD 1000.20.json,0,"106 Note) (c) Title 10, United States Code, Section 802(a) (d) Department of Defense Instruction 1336.1, ""Certificate of Release or Discharge from Active Duty (DD Form 214/5 Series),"" January 6, 1989 (e) through (g), see enclosure 1 1."
-NA,0,0.996298611164093,DoDD 1000.20.json,0,REISSUANCE AND PURPOSE This Directive: 1.1.
-NA,0,0.9953498840332031,DoDD 1000.20.json,0,Reissues reference (a).
-NA,0,0.9798420667648315,DoDD 1000.20.json,0,1.2.
-NA,0,0.9957756400108337,DoDD 1000.20.json,0,Implements reference (b).
-NA,0,0.9793596267700195,DoDD 1000.20.json,0,1.3.
-NA,0,0.9499489665031433,DoDD 1000.20.json,0,Directs the Secretary of the Air Force to determine if an established group of civilian employees or contract workers provided service to the U.S. Armed Forces in a manner considered active military service for Department of Veterans Affairs (Department of Veterans Affairs) benefits.
-NA,0,0.9837266206741333,DoDD 1000.20.json,0,1.4.
-NA,0,0.9874376654624939,DoDD 1000.20.json,0,Establishes the Department of Defense Civilian/Military Service Review Board and the Advisory Panel.
-NA,0,0.9855900406837463,DoDD 1000.20.json,0,1.5.
-NA,0,0.9919961094856262,DoDD 1000.20.json,0,"Establishes policy, assigns responsibilities, prescribes application procedures for groups and individuals, and clarifies the factors used to determine active duty (AD) service."
-NA,0,0.9968094229698181,DoDD 1000.20.json,0,"Department of DefenseD 1000.20, September 11, 1989 2."
-NA,0,0.9966360330581665,DoDD 1000.20.json,0,APPLICABILITY AND SCOPE This Directive: 2.1.
-NA,0,0.9966045618057251,DoDD 1000.20.json,0,"Applies to the Office of the Secretary of Defense (Office of the Secretary of Defense), the Military Departments, and by agreement with the Department of Transportation (Department of Transportation), the U.S. Coast Guard."
-NA,0,0.9852493405342102,DoDD 1000.20.json,0,2.2.
-NA,0,0.994835376739502,DoDD 1000.20.json,0,Applies to any group application considered under reference (b) after the effective date of this Directive and to any individual who applies for discharge documents as a member of a group recognized by the Secretary of the Air Force.
-NA,0,0.9589730501174927,DoDD 1000.20.json,0,3.
-NA,0,0.9967345595359802,DoDD 1000.20.json,0,DEFINITIONS The terms used in this Directive are defined in enclosure 2.
-NA,0,0.9703369736671448,DoDD 1000.20.json,0,4.
-NA,0,0.9934525489807129,DoDD 1000.20.json,0,POLICY 4.1.
-NA,0,0.989061713218689,DoDD 1000.20.json,0,Eligibility for Consideration.
-NA,0,0.9373384118080139,DoDD 1000.20.json,0,To be eligible to apply for consideration under P.L.
-NA,0,0.9967987537384033,DoDD 1000.20.json,0,"95-202 (reference (b)) and this Directive, a group must: 4.1.1."
-NA,0,0.9853246808052063,DoDD 1000.20.json,0,Have been similarly situated to the Women's Air Forces Service Pilots of World War II.
-NA,0,0.9881294965744019,DoDD 1000.20.json,0,4.1.2.
-NA,0,0.9757354259490967,DoDD 1000.20.json,0,"Have rendered service to the United States in what was considered civilian employment with the U.S. Armed Forces either through formal Civil Service hiring or less formal hiring if the engagement was created under the exigencies of war, or as the result of a contract with the U.S. Government to provide direct support to the U.S. Armed Forces."
-NA,0,0.9869120121002197,DoDD 1000.20.json,0,4.1.3.
-NA,0,0.976035475730896,DoDD 1000.20.json,0,Have rendered that service during a period of armed conflict.
-NA,0,0.9883412718772888,DoDD 1000.20.json,0,4.1.4.
-NA,0,0.9513784050941467,DoDD 1000.20.json,0,Consist of living persons to whom Department of Veterans Affairs benefits can accrue.
-NA,0,0.9886660575866699,DoDD 1000.20.json,0,4.1.5.
-NA,0,0.9662797451019287,DoDD 1000.20.json,0,Not have already received benefits from the Federal Government for the service in question.
-NA,0,0.9847108721733093,DoDD 1000.20.json,0,4.2.
-NA,0,0.9966257810592651,DoDD 1000.20.json,0,"A determination of AD service that is considered to be equivalent to active military service is made on the extent to which the group was under the control of the U.S. Armed Forces in support of a military operation or mission during an armed 2 Department of DefenseD 1000.20, September 11, 1989 conflict."
-NA,0,0.9961374402046204,DoDD 1000.20.json,0,"The extent of control exerted over the group must be similar to that exerted over military personnel and shall be determined by, but not necessarily limited to, the following: 4.2.1."
-NA,0,0.9951257109642029,DoDD 1000.20.json,0,Incidents Favoring Equivalency 4.2.1.1.
-NA,0,0.9933815002441406,DoDD 1000.20.json,0,Uniqueness of Service.
-NA,0,0.9957438111305237,DoDD 1000.20.json,0,Civilian service (civilian employment or contractual service) is a vital element of the war-fighting capability of the Armed Forces.
-NA,0,0.9964912533760071,DoDD 1000.20.json,0,"Civilian service during a period of armed conflict is not necessarily equivalent to active military service, even when performed in a combat zone."
-NA,0,0.9964267611503601,DoDD 1000.20.json,0,Service must be beyond that generally performed by civilian employees and must be occasioned by unique circumstances.
-NA,0,0.9964393973350525,DoDD 1000.20.json,0,"For civilian service to be recognized under this Directive, the following factors must be present: 4.2.1.1.1."
-NA,0,0.9949000477790833,DoDD 1000.20.json,0,"The group was created or organized by U.S. Government authorities to fill a wartime need or, if a group was not created specifically for a wartime need, but existed before that time, then its wartime mission was of a nature to substantially alter the organization's prewar character."
-NA,0,0.9898087978363037,DoDD 1000.20.json,0,4.2.1.1.2.
-NA,0,0.9958294034004211,DoDD 1000.20.json,0,"If the application is based on service in a combat zone, the mission of the group in a combat zone must have been substantially different from the mission of similar groups not in a combat zone."
-NA,0,0.9891332983970642,DoDD 1000.20.json,0,4.2.1.2.
-NA,0,0.9553341865539551,DoDD 1000.20.json,0,Organizational Authority Over the Group.
-NA,0,0.99666827917099,DoDD 1000.20.json,0,"The concept of military control is reinforced if the military command authority determines such things as the structure of the civilian organization, the location of the group, the mission and activities of the group, and the staffing requirements to include the length of employment and pay grades of the members of the group."
-NA,0,0.9884519577026367,DoDD 1000.20.json,0,4.2.1.3.
-NA,0,0.982591986656189,DoDD 1000.20.json,0,Integration into the Military Organization.
-NA,0,0.9966248273849487,DoDD 1000.20.json,0,"Integrated civilian groups are subject to the regulations, standards, and control of the military command authority."
-NA,0,0.9892492294311523,DoDD 1000.20.json,0,4.2.1.3.1.
-NA,0,0.9901391267776489,DoDD 1000.20.json,0,Examples include the following: 4.2.1.3.1.1.
-NA,0,0.975140392780304,DoDD 1000.20.json,0,Exchanging military courtesies.
-NA,0,0.9902768135070801,DoDD 1000.20.json,0,4.2.1.3.1.2.
-NA,0,0.9811119437217712,DoDD 1000.20.json,0,"Wearing military clothing, insignia, and devices."
-NA,0,0.9901219010353088,DoDD 1000.20.json,0,4.2.1.3.1.3.
-NA,0,0.7731238007545471,DoDD 1000.20.json,0,Assimilating the group into the military organizational structure.
-NA,0,0.9903050661087036,DoDD 1000.20.json,0,4.2.1.3.1.4.
-NA,0,0.9952465891838074,DoDD 1000.20.json,0,"Emoluments associated with military personnel; i.e., the use of commissaries and exchanges, and membership in military clubs."
-NA,0,0.9971598386764526,DoDD 1000.20.json,0,"3 Department of DefenseD 1000.20, September 11, 1989 4.2.1.3.2."
-NA,0,0.9958115816116333,DoDD 1000.20.json,0,"A group fully integrated into the military would give the impression that the members of the group were military, except that they were paid and accounted for as civilians."
-NA,0,0.9894262552261353,DoDD 1000.20.json,0,4.2.1.3.3.
-NA,0,0.9951086640357971,DoDD 1000.20.json,0,Integration into the military may lead to an expectation by members of the group that the service of the group imminently would be recognized as active military service.
-NA,0,0.9961845278739929,DoDD 1000.20.json,0,Such integration acts in favor of recognition.
-NA,0,0.9893344044685364,DoDD 1000.20.json,0,4.2.1.4.
-NA,0,0.9892110824584961,DoDD 1000.20.json,0,Subjection to Military Discipline.
-NA,0,0.9955961108207703,DoDD 1000.20.json,0,"During past armed conflicts, U.S. military commanders sometimes restricted the rights or liberties of civilian members as if they were military members."
-NA,0,0.9894997477531433,DoDD 1000.20.json,0,4.2.1.4.1.
-NA,0,0.9896268844604492,DoDD 1000.20.json,0,Examples include the following: 4.2.1.4.1.1.
-NA,0,0.7455033659934998,DoDD 1000.20.json,0,Placing members under a curfew.
-NA,0,0.9901875853538513,DoDD 1000.20.json,0,4.2.1.4.1.2.
-NA,0,0.9867532253265381,DoDD 1000.20.json,0,Requiring members to work extended hours or unusual shifts.
-NA,0,0.9900049567222595,DoDD 1000.20.json,0,4.2.1.4.1.3.
-NA,0,0.9780147075653076,DoDD 1000.20.json,0,Changing duty assignments and responsibilities.
-NA,0,0.9902843832969666,DoDD 1000.20.json,0,4.2.1.4.1.4.
-NA,0,0.98570317029953,DoDD 1000.20.json,0,Restricting proximity travel to and from the military installation.
-NA,0,0.990698516368866,DoDD 1000.20.json,0,4.2.1.4.1.5.
-NA,0,0.9654742479324341,DoDD 1000.20.json,0,Imposing dress and grooming standards.
-NA,0,0.9900728464126587,DoDD 1000.20.json,0,4.2.1.4.2.
-NA,0,0.9953215718269348,DoDD 1000.20.json,0,"Consequences for noncompliance might include a loss of some privilege, dismissal from the group, or trial under military law."
-NA,0,0.9956396818161011,DoDD 1000.20.json,0,Such military discipline acts in favor of recognition.
-NA,0,0.9897565245628357,DoDD 1000.20.json,0,4.2.1.5.
-NA,0,0.9933937191963196,DoDD 1000.20.json,0,Subjection to Military Justice.
-NA,0,0.9959164261817932,DoDD 1000.20.json,0,Military members are subject to the military criminal justice system.
-NA,0,0.9965119957923889,DoDD 1000.20.json,0,"During times of war, ""persons serving with or accompanying an Armed Force in the field"" are subject to the military criminal justice code (reference (c))."
-NA,0,0.996002733707428,DoDD 1000.20.json,0,Those who were SERVING WITH the U.S. Armed Forces may have been treated as if they were military and subjected to court-martial jurisdiction to maintain discipline.
-NA,0,0.9947839379310608,DoDD 1000.20.json,0,Such treatment is a factor in favor of recognition.
-NA,0,0.990036129951477,DoDD 1000.20.json,0,4.2.1.6.
-NA,0,0.9937825798988342,DoDD 1000.20.json,0,Prohibition Against Members of the Group Joining the Armed Forces.
-NA,0,0.9943978786468506,DoDD 1000.20.json,0,Some organizations may have been formed to serve in a military capacity to overcome the operation of existing laws or treaty or because of a governmentally established policy to retain individuals in the group as part of a civilian force.
-NA,0,0.9922767281532288,DoDD 1000.20.json,0,These factors act in favor of recognition.
-NA,0,0.9971563816070557,DoDD 1000.20.json,0,"4 Department of DefenseD 1000.20, September 11, 1989 4.2.1.7."
-NA,0,0.9911008477210999,DoDD 1000.20.json,0,Receipt of Military Training and/or Achievement of Military Capability.
-NA,0,0.9941756725311279,DoDD 1000.20.json,0,"If a group employed skills or resources that were enhanced as the result of military training or equipment designed or issued for that purpose, this acts toward recognition."
-NA,0,0.987881064414978,DoDD 1000.20.json,0,4.2.2.
-NA,0,0.9949175119400024,DoDD 1000.20.json,0,Incidents Not Favoring Equivalency 4.2.2.1.
-NA,0,0.98945552110672,DoDD 1000.20.json,0,Submission to the U.S. Armed Forces for Protection.
-NA,0,0.996492326259613,DoDD 1000.20.json,0,"A group that seeks protection and assistance from the U.S. Armed Forces and submits to military control for its own well-being is not deemed to have provided service to the Armed Forces equivalent to AD military service, even though the group may have been as follows: 4.2.2.1.1."
-NA,0,0.9929457306861877,DoDD 1000.20.json,0,Armed by the U.S. military for defensive purposes.
-NA,0,0.9898825287818909,DoDD 1000.20.json,0,4.2.2.1.2.
-NA,0,0.9850238561630249,DoDD 1000.20.json,0,Routed by the U.S. military to avoid the enemy.
-NA,0,0.9892501831054688,DoDD 1000.20.json,0,4.2.2.1.3.
-NA,0,0.9721521735191345,DoDD 1000.20.json,0,"Instructed by the U.S. military for the defense of the group when attacked by, or in danger of attack by, the enemy."
-NA,0,0.989747166633606,DoDD 1000.20.json,0,4.2.2.1.4.
-NA,0,0.9868513941764832,DoDD 1000.20.json,0,Otherwise submitted themselves to the U.S. military for sustenance and protection.
-NA,0,0.9889496564865112,DoDD 1000.20.json,0,4.2.2.2.
-NA,0,0.9836629629135132,DoDD 1000.20.json,0,Permitted to Resign.
-NA,0,0.9925770163536072,DoDD 1000.20.json,0,The ability of members to resign at will and without penalty acts against military control.
-NA,0,0.9949268102645874,DoDD 1000.20.json,0,"Penalty may be direct and severe, such as confinement, or indirect and moderate, such as difficult and costly transportation from an overseas location."
-NA,0,0.9878084659576416,DoDD 1000.20.json,0,4.2.2.3.
-NA,0,0.9922019243240356,DoDD 1000.20.json,0,Prior Recognition of Group Service.
-NA,0,0.9967643022537231,DoDD 1000.20.json,0,Recognition of a group's service by agencies of State or local government does not provide support in favor of recognition under this Directive.
-NA,0,0.9864728450775146,DoDD 1000.20.json,0,4.2.3.
-NA,0,0.9909495711326599,DoDD 1000.20.json,0,Status of Group in International Law.
-NA,0,0.9965052604675293,DoDD 1000.20.json,0,"In addition to other factors, consideration will be given to whether members of the group were regarded and treated as civilians, or assimilated to the Armed Forces as reflected in treaties, customary international law, judicial decisions, and U.S. diplomatic practice."
-NA,0,0.981440544128418,DoDD 1000.20.json,0,4.3.
-NA,0,0.9582132697105408,DoDD 1000.20.json,0,Reconsideration.
-NA,0,0.9965875148773193,DoDD 1000.20.json,0,"Applications by groups previously denied a favorable determination by the Secretary of the Air Force shall be reconsidered under this Directive if the group submits evidence that is new, relevant, and substantive."
-NA,0,0.991260826587677,DoDD 1000.20.json,0,Any request that the Department of Defense Civilian/Military Service Review Board established hereunder (see paragraph 5.2.)
-NA,0,0.9940359592437744,DoDD 1000.20.json,0,"determines does not provide new, relevant, and substantive evidence shall be returned to the applicant with the reasons for non-acceptance."
-NA,0,0.9971383810043335,DoDD 1000.20.json,0,"5 Department of DefenseD 1000.20, September 11, 1989 4.4."
-NA,0,0.9655826091766357,DoDD 1000.20.json,0,Counsel Representation.
-NA,0,0.9967261552810669,DoDD 1000.20.json,0,Neither the Department of Defense nor Department of Transportation shall provide representation by counsel or defray the cost of such representation with respect to any matter covered by this Directive.
-NA,0,0.9718114137649536,DoDD 1000.20.json,0,5.
-NA,0,0.9924132227897644,DoDD 1000.20.json,0,RESPONSIBILITIES 5.1.
-NA,0,0.9966832995414734,DoDD 1000.20.json,0,The Assistant Secretary of Defense (Force Management and Personnel) (ASD(FM&P)) shall: 5.1.1.
-The Assistant Secretary of Defense (Force Management and Personnel) (ASD(FM&P)),1,0.988888680934906,DoDD 1000.20.json,0,Appoint a primary and an alternate member in the grade of O-6 or GM- 15 or higher to the Department of Defense Civilian/Military Service Review Board.
-NA,0,0.9886054396629333,DoDD 1000.20.json,0,5.1.2.
-The Assistant Secretary of Defense (Force Management and Personnel) (ASD(FM&P)),1,0.9847529530525208,DoDD 1000.20.json,0,Exercise oversight over the Military Departments and the U.S. Coast Guard for compliance with this Directive and in the issuance of discharge documents and casualty reports to members of recognized groups.
-NA,0,0.9854381084442139,DoDD 1000.20.json,0,5.2.
-NA,0,0.995196521282196,DoDD 1000.20.json,0,"The Secretary of the Air Force, as the designated Executive Agent of the Secretary of Defense for the administration of P. L. 95-202 (reference (b)), shall: 5.2.1."
-"The Secretary of the Air Force, as the designated Executive Agent of the Secretary of Defense for the administration of P. L. 95-202 (reference (b)),",1,0.9881477952003479,DoDD 1000.20.json,0,Establish the Department of Defense Civilian/Military Service Review Board and the Advisory Panel.
-NA,0,0.9886409044265747,DoDD 1000.20.json,0,5.2.2.
-"The Secretary of the Air Force, as the designated Executive Agent of the Secretary of Defense for the administration of P. L. 95-202 (reference (b)),",1,0.9906153678894043,DoDD 1000.20.json,0,Appoint as board president a member or employee of the Air Force in grade O-6 or GM-15 or higher.
-NA,0,0.9874936938285828,DoDD 1000.20.json,0,5.2.3.
-"The Secretary of the Air Force, as the designated Executive Agent of the Secretary of Defense for the administration of P. L. 95-202 (reference (b)),",1,0.9866901636123657,DoDD 1000.20.json,0,Request the Secretary of Transportation to appoint an additional voting member from the U.S. Coast Guard when the board is considering the application of a group claiming active Coast Guard service.
-NA,0,0.987027645111084,DoDD 1000.20.json,0,5.2.4.
-"The Secretary of the Air Force, as the designated Executive Agent of the Secretary of Defense for the administration of P. L. 95-202 (reference (b)),",1,0.9923914074897766,DoDD 1000.20.json,0,Provide a recorder and an assistant to maintain the records of the board and administer the functions of this Directive.
-NA,0,0.9886487126350403,DoDD 1000.20.json,0,5.2.5.
-"The Secretary of the Air Force, as the designated Executive Agent of the Secretary of Defense for the administration of P. L. 95-202 (reference (b)),",1,0.9870137572288513,DoDD 1000.20.json,0,Provide nonvoting legal advisors and historians.
-NA,0,0.9882674813270569,DoDD 1000.20.json,0,5.2.6.
-"The Secretary of the Air Force, as the designated Executive Agent of the Secretary of Defense for the administration of P. L. 95-202 (reference (b)),",1,0.9842994213104248,DoDD 1000.20.json,0,Publish notices of group applications and other P.L.
-NA,0,0.9964214563369751,DoDD 1000.20.json,0,"95-202 (reference (b)) announcements in the ""Federal Register."""
-NA,0,0.9879878759384155,DoDD 1000.20.json,0,5.2.7.
-"The Secretary of the Air Force, as the designated Executive Agent of the Secretary of Defense for the administration of P. L. 95-202 (reference (b)),",1,0.9916348457336426,DoDD 1000.20.json,0,Consider the rationale and recommendations of the Department of Defense Civilians Military Service Review Board.
-NA,0,0.9874570965766907,DoDD 1000.20.json,0,5.2.8.
-NA,1,0.9914230704307556,DoDD 1000.20.json,0,Determine whether the service rendered by a civilian or contractual group shall be considered AD service to the U.S. Armed Forces for all laws administered by the Department of Veterans Affairs.
-NA,0,0.9962283372879028,DoDD 1000.20.json,0,The decision of the Secretary of the Air Force is final.
-NA,0,0.9892154335975647,DoDD 1000.20.json,0,There is no appeal.
-NA,0,0.9971358776092529,DoDD 1000.20.json,0,"6 Department of DefenseD 1000.20, September 11, 1989 5.2.9."
-"Notify the following persons in writing when a group determination is made (if the Secretary of the Air Force disagrees with the rationale or recommendations of the board, the Secretary of the Air Force",1,0.9902260899543762,DoDD 1000.20.json,0,"Notify the following persons in writing when a group determination is made (if the Secretary of the Air Force disagrees with the rationale or recommendations of the board, the Secretary of the Air Force shall provide the decision and reasons for it in writing to these persons): 5.2.9.1."
-NA,0,0.9701128005981445,DoDD 1000.20.json,0,The applicant(s) for the group.
-NA,0,0.9895899891853333,DoDD 1000.20.json,0,5.2.9.2.
-"Notify the following persons in writing when a group determination is made (if the Secretary of the Air Force disagrees with the rationale or recommendations of the board, the Secretary of the Air Force",1,0.8093456625938416,DoDD 1000.20.json,0,The Secretary of the Department of Veterans Affairs.
-NA,0,0.9890055060386658,DoDD 1000.20.json,0,5.2.9.3.
-"Notify the following persons in writing when a group determination is made (if the Secretary of the Air Force disagrees with the rationale or recommendations of the board, the Secretary of the Air Force",1,0.7888671159744263,DoDD 1000.20.json,0,The Secretary of the Army.
-NA,0,0.9888436794281006,DoDD 1000.20.json,0,5.2.9.4.
-NA,0,0.6370372176170349,DoDD 1000.20.json,0,The Secretary of the Navy.
-NA,0,0.9892682433128357,DoDD 1000.20.json,0,5.2.9.5.
-NA,0,0.9903181791305542,DoDD 1000.20.json,0,The ASD(FM&P).
-NA,0,0.988927960395813,DoDD 1000.20.json,0,5.2.9.6.
-NA,0,0.9678234457969666,DoDD 1000.20.json,0,The Secretary of Transportation (when a group claims active Coast Guard service).
-NA,0,0.9832000732421875,DoDD 1000.20.json,0,5.3.
-NA,0,0.9959243535995483,DoDD 1000.20.json,0,"The Secretary of the Army, Secretary of the Navy, Secretary of the Air Force, and Commandant of the Coast Guard shall: 5.3.1."
-"The Secretary of the Army, Secretary of the Navy, Secretary of the Air Force, and Commandant of the Coast Guard",1,0.9895752668380737,DoDD 1000.20.json,0,Appoint to the board a primary and an alternate member in the grades of O-6 or GM-15 or higher from their respective Military Services.
-NA,0,0.9881699085235596,DoDD 1000.20.json,0,5.3.2.
-"The Secretary of the Army, Secretary of the Navy, Secretary of the Air Force, and Commandant of the Coast Guard",1,0.9879376292228699,DoDD 1000.20.json,0,"Process applications for discharge documents from individuals claiming membership in a recognized group in accordance with applicable laws, Directives, the Secretary of the Air Force rationale and instrument effecting a group determination, and any other instructions of the board."
-NA,0,0.9870548248291016,DoDD 1000.20.json,0,5.3.3.
-"The Secretary of the Army, Secretary of the Navy, Secretary of the Air Force, and Commandant of the Coast Guard",1,0.9910765886306763,DoDD 1000.20.json,0,Determine whether the applicant was a member of a recognized group after considering the individual's evidence of membership and verifying the service against available Government records.
-NA,0,0.9860556125640869,DoDD 1000.20.json,0,5.3.4.
-"The Secretary of the Army, Secretary of the Navy, Secretary of the Air Force, and Commandant of the Coast Guard",1,0.9646276235580444,DoDD 1000.20.json,0,"Issue a DD Form 214, ""Certificate of Release or Discharge from Active Duty,"" and a DD Form 256, ""Honorable Discharge Certificate,"" or a DD Form 257, ""General Discharge Certificate,"" as appropriate, consistent with Department of Defense Instruction 1336.1 and Department of Defense Directive 1332.14 (references (d) and (e)) and the implementing documents of the appropriate statutes of the Military Department concerned or the Department of Transportation and the instructions of the Department of Defense Civilian/Military Service Review Board."
-NA,0,0.9874927997589111,DoDD 1000.20.json,0,5.3.5.
-"The Secretary of the Army, Secretary of the Navy, Secretary of the Air Force, and Commandant of the Coast Guard",1,0.9814815521240234,DoDD 1000.20.json,0,"Issue a DD Form 1300, ""Report of Casualty,"" in accordance with Department of Defense Instruction 1300.9 (reference (f)) if a verified member was killed during the period of AD service."
-NA,0,0.9970967769622803,DoDD 1000.20.json,0,"7 Department of DefenseD 1000.20, September 11, 1989 5.3.6."
-"The Secretary of the Army, Secretary of the Navy, Secretary of the Air Force, and Commandant of the Coast Guard",1,0.9922078251838684,DoDD 1000.20.json,0,"Ensure that each DD Form 214, ""Certificate of Release or Discharge from Active Duty,"" and each DD Form 1300, ""Report of Casualty,"" have the following statement entered in the ""Remarks"" section: ""This document, issued under P. L. 95-202 (38 U.S.C."
-NA,0,0.9963777661323547,DoDD 1000.20.json,0,"106 Note), administratively establishes active duty service for the purposes of Department of Veterans Affairs benefits."""
-NA,0,0.9869532585144043,DoDD 1000.20.json,0,5.3.7.
-"The Secretary of the Army, Secretary of the Navy, Secretary of the Air Force, and Commandant of the Coast Guard",1,0.9900200366973877,DoDD 1000.20.json,0,"Determine the equivalent military pay grade, when required by the Department of Veterans Affairs."
-NA,0,0.9967151880264282,DoDD 1000.20.json,0,"For Department of Veterans Affairs benefits, a pay grade is needed only in cases when an individual was killed or received service-connected injuries or disease during the recognized period of AD service."
-NA,0,0.9969344139099121,DoDD 1000.20.json,0,A DD Form 1300 shall be issued with the equivalent pay grade annotated for a member who died during the recognized period of service.
-NA,0,0.9971528053283691,DoDD 1000.20.json,0,"A DD Form 214 shall not include pay grade, unless the Department of Veterans Affairs requests that a grade determination be given."
-NA,0,0.9964727759361267,DoDD 1000.20.json,0,Determinations of equivalent grade shall be based on the following criteria in order of importance: 5.3.7.1.
-NA,0,0.995648205280304,DoDD 1000.20.json,0,Officially recognized organizational grade or equivalent rank.
-NA,0,0.9889461398124695,DoDD 1000.20.json,0,5.3.7.2.
-NA,0,0.9950417876243591,DoDD 1000.20.json,0,The corresponding rank for civilian pay grade.
-NA,0,0.9880955219268799,DoDD 1000.20.json,0,5.3.7.3.
-NA,0,0.995979905128479,DoDD 1000.20.json,0,"If neither of the criteria in subparagraphs 5.3.7.1. and 5.3.7.2., above, applies, only one of three grades may be issued; i.e., O-1, E-4, or E-1."
-NA,0,0.9946808218955994,DoDD 1000.20.json,0,"Selection depends on the nature of the job performed, the level of supervision exercised, and the military privileges to which the individual was entitled."
-NA,0,0.9865798354148865,DoDD 1000.20.json,0,5.3.8.
-NA,1,0.9838896989822388,DoDD 1000.20.json,0,"Adjudicate applicant challenges to the period of AD service, characterization of service, or other administrative aspects of the discharge documents issued."
-NA,0,0.9638631343841553,DoDD 1000.20.json,0,6.
-NA,0,0.9927359819412231,DoDD 1000.20.json,0,PROCEDURES 6.1.
-NA,1,0.9487864375114441,DoDD 1000.20.json,0,Submitting Group Applications.
-NA,0,0.9969918727874756,DoDD 1000.20.json,0,Applications on behalf of a civilian or contractual group shall be submitted to the Secretary of the Air Force using the instructions in enclosure 3.
-NA,0,0.9855523705482483,DoDD 1000.20.json,0,6.2.
-NA,0,0.986060619354248,DoDD 1000.20.json,0,Processing Group Applications 6.2.1.
-NA,0,0.9960647225379944,DoDD 1000.20.json,0,"When received, the recorder shall review the application for sufficiency and either return it for more information or accept it for consideration and announce acceptance in the ""Federal Register."""
-NA,0,0.9889885783195496,DoDD 1000.20.json,0,6.2.2.
-NA,0,0.9940348267555237,DoDD 1000.20.json,0,The recorder shall send the application to the appropriate advisory panel for historical review and analysis.
-NA,0,0.997154951095581,DoDD 1000.20.json,0,"8 Department of DefenseD 1000.20, September 11, 1989 6.2.3."
-NA,0,0.9954278469085693,DoDD 1000.20.json,0,"When received, the recorder shall send the advisory panel's report to the applicant for comment."
-NA,0,0.9961203336715698,DoDD 1000.20.json,0,The applicant's comments shall be referred to the advisory panel if significant disagreement requires resolution.
-NA,0,0.9961284399032593,DoDD 1000.20.json,0,Additional comments from the historians also shall be referred to the applicant for comment.
-NA,0,0.9880428314208984,DoDD 1000.20.json,0,6.2.4.
-NA,0,0.9972889423370361,DoDD 1000.20.json,0,"The Department of Defense Civilian/Military Service Board shall consider the group application, as established, in paragraph 6.1. and subparagraphs 6.2.1. through 6.2.3., above."
-NA,0,0.9888450503349304,DoDD 1000.20.json,0,6.2.5.
-NA,0,0.9953108429908752,DoDD 1000.20.json,0,"After the Secretary of the Air Force makes a decision, the recorder shall notify the applicant of the decision and announce it in the ""Federal Register."""
-NA,0,0.9830390214920044,DoDD 1000.20.json,0,6.3.
-"After the Secretary of the Air Force makes a decision, the recorder",1,0.9456441402435303,DoDD 1000.20.json,0,Submitting Individual Applications.
-NA,0,0.9960218071937561,DoDD 1000.20.json,0,"When a group is recognized, individual members may apply to the appropriate Military Department or to the Coast Guard for discharge documents."
-"After the Secretary of the Air Force makes a decision, the recorder",1,0.9887033104896545,DoDD 1000.20.json,0,"Submit applications on DD Form 2168, ""Application for Discharge of Member or Survivor of Member of Group Certified to Have Performed Active Duty with the Armed Forces of the United States."""
-NA,0,0.9955819249153137,DoDD 1000.20.json,0,An application on behalf of a deceased or incompetent member submitted by the next of kin must be accompanied by proof of death or incompetence.
-NA,0,0.9640476107597351,DoDD 1000.20.json,0,7.
-NA,0,0.9961436986923218,DoDD 1000.20.json,0,EFFECTIVE DATE AND IMPLEMENTATION This Directive is effective immediately.
-"After the Secretary of the Air Force makes a decision, the recorder",1,0.991507887840271,DoDD 1000.20.json,0,Forward one copy of implementing documents to the Assistant Secretary of Defense (Force Management and Personnel) within 120 days.
-NA,0,0.98490971326828,DoDD 1000.20.json,0,Enclosures - 4 E1.
-NA,0,0.9954195022583008,DoDD 1000.20.json,0,"References, continued E2."
-NA,0,0.9947124719619751,DoDD 1000.20.json,0,Definitions E3.
-NA,0,0.8444837927818298,DoDD 1000.20.json,0,Instructions for Submitting Group Applications Under P.L.
-NA,0,0.9958957433700562,DoDD 1000.20.json,0,95-202 (reference (b)) E4.
-NA,0,0.994746208190918,DoDD 1000.20.json,0,"The Department of Defense Civilian/Military Service Review Board and the Advisory Panel 9 Department of DefenseD 1000.20, September 11, 1989 E1."
-NA,0,0.9969890713691711,DoDD 1000.20.json,0,"ENCLOSURE 1 REFERENCES, continued (e) Department of Defense Directive 1332.14, ""Enlisted Administrative Separations,"" January 28, 1982 (f) Department of Defense Instruction 1300.9, ""Military Personnel Casualties Notification and Assistance to Next of Kin,"" March 23, 1973 (g) Title 38, United States Code, Section 101 ENCLOSURE 1 10 Department of DefenseD 1000.20, September 11, 1989 E2."
-NA,0,0.9962461590766907,DoDD 1000.20.json,0,ENCLOSURE 2 DEFINITIONS E2.1.1.
-NA,0,0.9887373447418213,DoDD 1000.20.json,0,Armed Conflict.
-NA,0,0.9930577278137207,DoDD 1000.20.json,0,A prolonged period of sustained combat involving members of the U.S. Armed Forces against a foreign belligerent.
-NA,0,0.9962515234947205,DoDD 1000.20.json,0,"The term connotes more than a military engagement of limited duration or for limited objectives, and involves a significant use of military and civilian forces."
-NA,0,0.9877234697341919,DoDD 1000.20.json,0,E2.1.1.1.
-NA,0,0.9866448044776917,DoDD 1000.20.json,0,"Examples of armed conflict are World Wars I and II, and the Korean and Vietnam Conflicts."
-NA,0,0.9900752902030945,DoDD 1000.20.json,0,E2.1.1.2.
-NA,0,0.9955332279205322,DoDD 1000.20.json,0,Examples of military actions that are not armed conflicts are as follows: E2.1.1.2.1.
-NA,0,0.981768012046814,DoDD 1000.20.json,0,"The incursion into Lebanon in 1958, and the peacekeeping force there in 1983 and 1984."
-NA,0,0.991034209728241,DoDD 1000.20.json,0,E2.1.1.2.2.
-NA,0,0.9850667715072632,DoDD 1000.20.json,0,The incursions into the Dominican Republic in 1965 and into Libya in 1986.
-NA,0,0.991179883480072,DoDD 1000.20.json,0,E2.1.1.2.3.
-NA,0,0.9828414916992188,DoDD 1000.20.json,0,The intervention into Grenada in 1983.
-NA,0,0.9894253015518188,DoDD 1000.20.json,0,E2.1.2.
-NA,0,0.9909407496452332,DoDD 1000.20.json,0,Civilian or Contractual Group.
-NA,0,0.9958121180534363,DoDD 1000.20.json,0,An organization similarly situated to the Women's Air Forces Service Pilots (a group of Federal civilian employees attached to the U.S. Army Air Force in World War II).
-NA,0,0.995556652545929,DoDD 1000.20.json,0,"Those organization members rendered service to the U.S. Armed Forces during a period of armed conflict in a capacity that was then considered civilian employment with the Armed Forces, or the result of a contract with the U.S. Government, to provide direct support to the Armed Forces."
-NA,0,0.9893298745155334,DoDD 1000.20.json,0,E2.1.3.
-NA,0,0.9846916794776917,DoDD 1000.20.json,0,Recognized Group.
-NA,0,0.9897757768630981,DoDD 1000.20.json,0,"A group whose service the Secretary of the Air Force administratively has determined to have been ""active duty for the purposes of all laws administered by the Department of Veterans Affairs;"" i.e., Department of Veterans Affairs benefits under 38 U.S.C."
-NA,0,0.9954099059104919,DoDD 1000.20.json,0,101 (reference (g)).
-NA,0,0.9902352690696716,DoDD 1000.20.json,0,E2.1.4.
-NA,0,0.9794650673866272,DoDD 1000.20.json,0,Similarly Situated.
-NA,0,0.9964830875396729,DoDD 1000.20.json,0,A civilian or contractual group is similarly situated to the Women's Air Forces Service Pilots when it existed as an identifiable group at the time the service was being rendered to the U.S. Armed Forces during a period of armed conflict.
-NA,0,0.9957244396209717,DoDD 1000.20.json,0,"Persons who individually provided support through civilian employment or contract, but who were not members of an identifiable group at the time the services were rendered, are not ""similarly situated"" to the Women's Air Forces Service Pilots of World War II."
-NA,0,0.9969186782836914,DoDD 1000.20.json,0,"ENCLOSURE 2 11 Department of DefenseD 1000.20, September 11, 1989 E3."
-NA,0,0.9929150342941284,DoDD 1000.20.json,0,ENCLOSURE 3 INSTRUCTIONS FOR SUBMITTING GROUP APPLICATIONS UNDER P. L. 95-202 E3.1.
-"After the Secretary of the Air Force makes a decision, the recorder",1,0.9135745763778687,DoDD 1000.20.json,0,IN SUBMITTING A GROUP APPLICATION: E3.1.1.
-NA,0,0.6750950813293457,DoDD 1000.20.json,0,Define the group to include the time period that your group provided service to the U.S. Armed Forces.
-NA,0,0.9888206720352173,DoDD 1000.20.json,0,E3.1.2.
-NA,0,0.9472649693489075,DoDD 1000.20.json,0,"Show the relationship that the group had with the U.S. Armed Forces, the manner in which members of the group were employed, and the services the members of the group provided to the Armed Forces."
-NA,0,0.9884040355682373,DoDD 1000.20.json,0,E3.1.3.
-"After the Secretary of the Air Force makes a decision, the recorder",1,0.9780604243278503,DoDD 1000.20.json,0,"Address each of the factors in section 4., above."
-NA,0,0.9892950654029846,DoDD 1000.20.json,0,E3.1.4.
-"After the Secretary of the Air Force makes a decision, the recorder",1,0.9789276123046875,DoDD 1000.20.json,0,Substantiate and document the application.
-NA,0,0.9958005547523499,DoDD 1000.20.json,0,(The burden of proof rests with the applicant.)
-NA,0,0.9844195246696472,DoDD 1000.20.json,0,E3.2.
-"After the Secretary of the Air Force makes a decision, the recorder",1,0.9881671071052551,DoDD 1000.20.json,0,"SEND COMPLETED GROUP APPLICATIONS TO: Secretary of the Air Force (SAF/MRC) Department of Defense Civilian/Military Service Review Board Washington, DC 20330-1000 ENCLOSURE 3 12 Department of DefenseD 1000.20, September 11, 1989 E4."
-NA,0,0.9915800094604492,DoDD 1000.20.json,0,ENCLOSURE 4 THE Department of Defense CIVILIAN/MILITARY SERVICE REVIEW BOARD AND THE ADVISORY PANEL E4.1.
-NA,0,0.9935517311096191,DoDD 1000.20.json,0,ORGANIZATION AND MANAGEMENT E4.1.1.
-NA,0,0.9959164261817932,DoDD 1000.20.json,0,"The board shall consist of a president selected from the Department of the Air Force and one representative each from the Office of the Secretary of Defense, the Department of the Army, the Department of the Navy, the Department of the Air Force, and the U.S. Coast Guard (when the group claims active Coast Guard service)."
-NA,0,0.9947267174720764,DoDD 1000.20.json,0,Each member shall have one vote except that the president shall vote only to break a tie.
-NA,0,0.990372896194458,DoDD 1000.20.json,0,The Board's decision is determined by majority vote.
-NA,0,0.9958962202072144,DoDD 1000.20.json,0,The president and two voting members shall constitute a quorum.
-NA,0,0.9826037287712097,DoDD 1000.20.json,0,E4.1.2.
-NA,0,0.994768500328064,DoDD 1000.20.json,0,The advisory panel shall act as a nonvoting adjunct to the board.
-NA,0,0.9967382550239563,DoDD 1000.20.json,0,"It shall consist of historians selected by the Secretaries of the Military Departments and, if required, by the Secretary of Transportation."
-NA,0,0.9953131675720215,DoDD 1000.20.json,0,The respective Military Departments and the Department of Transportation shall ensure that the advisory panel is provided with administrative and legal support.
-NA,0,0.9743385910987854,DoDD 1000.20.json,0,E4.2.
-NA,0,0.9900248050689697,DoDD 1000.20.json,0,FUNCTIONS E4.2.1.
-NA,0,0.9950615763664246,DoDD 1000.20.json,0,"The board shall meet in executive session at the call of the president, and shall limit its reviews to the following: E4.2.1.1."
-NA,0,0.977000892162323,DoDD 1000.20.json,0,Written submissions by an applicant on behalf of a civilian or contractual group.
-NA,0,0.9939354062080383,DoDD 1000.20.json,0,Presentations to the board are not allowed.
-NA,0,0.984051525592804,DoDD 1000.20.json,0,E4.2.1.2.
-NA,0,0.6305513381958008,DoDD 1000.20.json,0,Written report(s) prepared by the advisory panel.
-NA,0,0.9848014712333679,DoDD 1000.20.json,0,E4.2.1.3.
-NA,0,0.9885574579238892,DoDD 1000.20.json,0,Any other relevant written information available.
-NA,0,0.9861685633659363,DoDD 1000.20.json,0,E4.2.1.4.
-NA,0,0.9895582795143127,DoDD 1000.20.json,0,Factors established in this Directive for determining AD service.
-NA,0,0.9767591953277588,DoDD 1000.20.json,0,E4.2.2.
-NA,0,0.9944441914558411,DoDD 1000.20.json,0,The board shall return to the applicant any application that does not meet the eligibility criteria established in paragraph 4.1. of this Directive.
-NA,0,0.9956117868423462,DoDD 1000.20.json,0,The board only needs to state the reasons why the group is ineligible for consideration under this Directive.
-NA,0,0.9966350197792053,DoDD 1000.20.json,0,"ENCLOSURE 4 13 Department of DefenseD 1000.20, September 11, 1989 E4.2.3."
-NA,0,0.9615576863288879,DoDD 1000.20.json,0,"If the board determines that an application is eligible for consideration under paragraph 4.1. of this Directive, the board shall provide, to the Secretary of the Air Force, a recommendation on the AD service determination for the group and the rationale for that recommendation that shall include, but not be limited to, a discussion of the factors listed in section 4. of this Directive."
-NA,0,0.9852141737937927,DoDD 1000.20.json,0,E4.2.3.1.
-NA,0,0.9962299466133118,DoDD 1000.20.json,0,No factors shall be established that require automatic recognition.
-NA,0,0.9965826869010925,DoDD 1000.20.json,0,Neither the board nor the Secretary of the Air Force shall be bound by any method in reaching a decision.
-NA,0,0.9810629487037659,DoDD 1000.20.json,0,E4.2.3.2.
-NA,0,0.9840578436851501,DoDD 1000.20.json,0,Prior group determinations made under P.L.
-NA,0,0.9966860413551331,DoDD 1000.20.json,0,95-202 (reference (b)) do not bind the board or the Secretary of the Air Force.
-NA,0,0.9956066012382507,DoDD 1000.20.json,0,The board and the Secretary of the Air Force fully and impartially shall consider each group on its own merit in relation to the factors listed in section 4. of this Directive.
-NA,0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14
+"After the Secretary of the Air Force makes a decision, the recorder",0,0.9644575715065002,DoDD 1000.20.json,0,ENCLOSURE 4 14

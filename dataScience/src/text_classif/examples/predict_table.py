@@ -1,6 +1,6 @@
 """
 usage: python predict_glob.py [-h] -m MODEL_PATH -d DATA_PATH [-b BATCH_SIZE]
-                              [-l MAX_SEQ_LEN] -g GLOB
+                              [-l MAX_SEQ_LEN] -g GLOB [-o OUTPUT_CSV]
 
 Binary classification of each sentence in the files matching the 'glob' in
 data_path
@@ -16,9 +16,12 @@ optional arguments:
   -l MAX_SEQ_LEN, --max-seq-len MAX_SEQ_LEN
                         maximum sequence length, 128 to 512; default=128
   -g GLOB, --glob GLOB  file glob pattern
+  -o OUTPUT_CSV, --output-csv OUTPUT_CSV
+                        the .csv for output
 """
 import logging
 import re
+from tqdm import tqdm
 
 from dataScience.src.text_classif.utils.log_init import initialize_logger
 from dataScience.src.text_classif.utils.predict_glob import predict_glob
@@ -33,6 +36,7 @@ KW_RE = "\\b" + KW + ":?\\b"
 NA = "NA"
 TC = "top_class"
 ENT = "entity"
+new_edict = {ENT: NA}
 
 
 def contains_entity(text, nlp):
@@ -40,30 +44,26 @@ def contains_entity(text, nlp):
         ent.text for ent in nlp(text).ents if ent.label_ in ["PERSON", "ORG"]
     ]
     if entities:
-        logger.info("\ttext : {}".format(text))
-        logger.info("\textracted entity : {}".format(list(set(entities))))
+        logger.debug("\ttext : {}".format(text))
+        logger.debug("\textracted entity : {}".format(list(set(entities))))
         return list(set(entities))
     else:
         return False
 
 
-def new_edict(value=NA):
-    return {ENT: value}
-
-
 def _attach_entity(output_list, entity_list, nlp):
     curr_entity = NA
-    for entry in output_list:
+    for entry in tqdm(output_list, desc="entity"):
         logger.debug(entry)
         sentence = entry[SENTENCE]
-        new_entry = new_edict()
+        new_entry = new_edict
         new_entry.update(entry)
         if KW in sentence:
             curr_entity = re.split(KW_RE, sentence)[0].strip()
             entities = contains_entity(curr_entity, nlp)
             if not entities:
                 curr_entity = NA
-            logger.info("current entity : {}".format(curr_entity))
+            logger.debug("current entity : {}".format(curr_entity))
 
         if entry[TC] == 1:
             new_entry[ENT] = curr_entity
@@ -73,7 +73,7 @@ def _attach_entity(output_list, entity_list, nlp):
 def _populate_entity(output_list, nlp):
     entity_list = list()
     for idx, entry in enumerate(output_list):
-        e_dict = new_edict()
+        e_dict = new_edict
         e_dict.update(entry)
         if e_dict[TC] == 0 and RESP in entry[SENTENCE]:
             entity_list.append(e_dict)
@@ -109,8 +109,11 @@ def make_table(
 # CLI example
 if __name__ == "__main__":
     import logging
+    import time
     from argparse import ArgumentParser
     import pandas as pd
+
+    import dataScience.src.text_classif.utils.classifier_utils as cu
 
     desc = "Binary classification of each sentence in the files "
     desc += "matching the 'glob' in data_path"
@@ -155,6 +158,14 @@ if __name__ == "__main__":
         required=True,
         help="file glob pattern",
     )
+    parser.add_argument(
+        "-o",
+        "--output-csv",
+        dest="output_csv",
+        type=str,
+        default="sample_entity.csv",
+        help="the .csv for output",
+    )
 
     initialize_logger(to_file=False, log_name="none")
 
@@ -163,9 +174,7 @@ if __name__ == "__main__":
     logger.info("loading spaCy")
     nlp_ = spacy_m.get_lg_nlp()
 
-    # must always add the pipeline component "sentencizer"
-    nlp_.add_pipe(nlp_.create_pipe("sentencizer"))
-
+    start = time.time()
     out_list = make_table(
         args.model_path,
         args.data_path,
@@ -174,5 +183,8 @@ if __name__ == "__main__":
         args.batch_size,
         nlp=nlp_,
     )
+    elapsed = time.time() - start
+    logger.info(" total time : {:}".format(cu.format_time(elapsed)))
+
     df = pd.DataFrame(out_list)
-    df.to_csv("sample_entity.csv", index=False)
+    df.to_csv(args.output_csv, index=False)
