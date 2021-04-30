@@ -1,4 +1,4 @@
-from dataScience.models.topic_models.tfidf import tfidf_model
+from dataScience.models.topic_models.tfidf import bigrams, tfidf_model
 from dataScience.src.text_handling.process import topic_processing
 
 
