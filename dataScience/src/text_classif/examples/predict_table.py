@@ -20,113 +20,17 @@ optional arguments:
                         the .csv for output
 """
 import logging
-import re
+import time
+from argparse import ArgumentParser
 
-from tqdm import tqdm
-
-import dataScience.src.utilities.spacy_model as spacy_m
+import dataScience.src.text_classif.utils.classifier_utils as cu
+from dataScience.src.text_classif.utils.entity_coref import EntityCoref
 from dataScience.src.text_classif.utils.log_init import initialize_logger
-from dataScience.src.text_classif.utils.predict_glob import predict_glob
 
 logger = logging.getLogger(__name__)
 
-RESP = "RESPONSIBILITIES"
-SENTENCE = "sentence"
-KW = "shall"
-KW_RE = re.compile("\\b" + KW + "\\b[:,]?")
-NA = "NA"
-TC = "top_class"
-ENT = "entity"
-PERSON = "PERSON"
-ORG = "ORG"
 
-
-def _contains_entity(text, nlp):
-    text += " " + KW
-    entities = [
-        ent.text for ent in nlp(text).ents if ent.label_ in [PERSON, ORG]
-    ]
-    if entities:
-        logger.debug("\ttext : {}".format(text))
-        logger.debug("\textracted entity : {}".format(list(set(entities))))
-        return list(set(entities))
-    else:
-        return False
-
-
-def new_edict(value=NA):
-    return {ENT: value}
-
-
-def _attach_entity(output_list, entity_list, nlp):
-    curr_entity = NA
-    last_entity = NA
-    for entry in tqdm(output_list, desc="entity"):
-        logger.debug(entry)
-        sentence = entry[SENTENCE]
-        new_entry = new_edict()
-        new_entry.update(entry)
-        if entry[TC] == 0 and KW in sentence:
-            curr_entity = re.split(KW_RE, sentence, maxsplit=1)[0].strip()
-            # sanity check on the extracted entity
-            entities = _contains_entity(curr_entity, nlp)
-            if not entities:
-                curr_entity = NA
-            else:
-                last_entity = curr_entity
-            logger.debug("current entity : {}".format(curr_entity))
-
-        if entry[TC] == 1:
-            if curr_entity == NA:
-                curr_entity = last_entity
-            new_entry[ENT] = curr_entity
-        entity_list.append(new_entry)
-
-
-def _populate_entity(output_list, nlp):
-    entity_list = list()
-    for idx, entry in enumerate(output_list):
-        e_dict = new_edict()
-        e_dict.update(entry)
-        if e_dict[TC] == 0 and RESP in entry[SENTENCE]:
-            entity_list.append(e_dict)
-            _attach_entity(output_list[idx + 1:], entity_list, nlp)
-            return entity_list
-        else:
-            entity_list.append(e_dict)
-    return entity_list
-
-
-def make_table(
-    model_path,
-    data_path,
-    glob,
-    max_seq_len,
-    batch_size,
-    nlp,
-):
-    # a list entry looks like:
-    # {'top_class': 0, 'prob': 0.997, 'src': 'DoDD 5105.21.json', 'label': 0,
-    #  'sentence': 'Department of...'}
-    # --> `top_class` is the predicted label
-    pop_ent = list()
-    for output_list, file_name in predict_glob(
-        model_path, data_path, glob, max_seq_len, batch_size
-    ):
-        logger.info("num input : {:,}".format(len(output_list)))
-        pop_ent = _populate_entity(output_list, nlp)
-        logger.info("processed : {:,}  {}".format(len(pop_ent), file_name))
-    return pop_ent
-
-
-# CLI example
 if __name__ == "__main__":
-    import logging
-    import time
-    from argparse import ArgumentParser
-    import pandas as pd
-
-    import dataScience.src.text_classif.utils.classifier_utils as cu
 
     desc = "Binary classification of each sentence in the files "
     desc += "matching the 'glob' in data_path"
@@ -176,7 +80,7 @@ if __name__ == "__main__":
         "--output-csv",
         dest="output_csv",
         type=str,
-        default="sample_entity.csv",
+        default=None,
         help="the .csv for output",
     )
 
@@ -184,20 +88,16 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    logger.info("loading spaCy")
-    nlp_ = spacy_m.get_lg_nlp()
-
     start = time.time()
-    out_list = make_table(
+    entity_coref = EntityCoref()
+    _ = entity_coref.make_table(
         args.model_path,
         args.data_path,
         args.glob,
         args.max_seq_len,
         args.batch_size,
-        nlp=nlp_,
+        args.output_csv,
     )
     elapsed = time.time() - start
-    logger.info(" total time : {:}".format(cu.format_time(elapsed)))
 
-    df = pd.DataFrame(out_list)
-    df.to_csv(args.output_csv, index=False)
+    logger.info("total time : {:}".format(cu.format_time(elapsed)))

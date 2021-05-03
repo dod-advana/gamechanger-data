@@ -1,0 +1,165 @@
+Defense Advanced Research Projects Agency (DARPA)
+Defense Commissary Agency (DeCA)
+Defense Contract Audit Agency (DCAA)
+Defense Contract Management Agency (DCMA)
+Defense Counterintelligence and Security Agency (DCSA)
+Defense Finance and Accounting Service (DFAS)
+Defense Health Agency (DHA)
+Defense Human Resources Activity (DHRA)
+Defense Information Systems Agency (DISA)
+Defense Intelligence Agency (DIA)
+Defense Legal Services Agency (DLSA)
+Defense Logistics Agency (DLA)
+Defense Media Activity (DMA)
+Defense POW/MIA Accounting Agency (DPAA)
+Defense Security Cooperation Agency (DSCA)
+Defense Technical Information Center (DTIC)
+Defense Technology Security Administration (DTSA)
+Defense Threat Reduction Agency (DTRA)
+Department of Defense Education Activity (DOD EA)
+Department of Defense Test Resource Management Center (DOD TRMC)
+Missile Defense Agency (MDA)
+National Geospatial-Intelligence Agency (NGA)
+National Reconnaissance Office (NRO)
+National Security Agency (NSA)
+Central Security Service (CSS)
+Office of Economic Adjustment (OEA)
+Pentagon Force Protection Agency (PFPA)
+Space Development Agency (SDA)
+Washington Headquarters Services (WHS)
+Armed Services Board of Contract Appeals
+Army and Air Force Exchange Service
+Defense Acquisition University (DAU)
+Defense Criminal Investigative Service (DCIS)
+Joint Personnel Recovery Agency
+Military Postal Service Agency
+National Assessment Group (NAG)
+National Defense University (NDU)
+National Guard Bureau (NGB)
+Army National Guard (ARNG)
+Air National Guard (ANG)
+National Intelligence University (NIU)
+Organization of the Joint Chiefs of Staff
+Uniformed Services University of the Health Sciences (USUHS)
+United States Court of Appeals for the Armed Forces
+United States Military Entrance Processing Command (USMEPCOM)
+Electromagnetic Spectrum Operations Cross Functional Team (EMSO CFT)
+Close Combat Lethality Task Force (CCLTF)
+Protecting Critical Technology Task Force (PCTTF)
+Department of the Army
+U.S. Army Criminal Investigation Command (CIC)
+U.S. Army Corps of Engineers
+Missouri River Regional Headquarters (CENWD-MR)
+North Pacific Regional Headquarters (CENWD-NP)
+Army Digitization Office (ADO)
+Army Medical Department (AMEDD)
+Army Research Laboratory (ARL)
+Army Review Boards Agency (ARBA)
+U.S. Army Financial Management
+White Sands Missile Range (WSMR)
+Great Lakes and Ohio River Division (CELRD)
+Mississippi Valley Division (CEMVD)
+North Atlantic Division (CENAD)
+Northwestern Division (CENWD)
+Pacific Ocean Division (CEPOD)
+South Atlantic Division (CESAD)
+South Pacific Division (CESPD)
+Southwestern Division (CESWD)
+Army Corps of Engineers
+Cold Regions Research and Engineering Laboratory (CECRL)
+Construction Engineering Research Laboratory (CECER)
+Waterways Experiment Station (CEWES)
+Topographic Engineering Center (CETEC)
+Department of the Navy (Navy)
+Naval Criminal Investigative Service (NCIS)
+United States Marine Corps Criminal Investigation Division (USMC CID)
+Department of the Army (USA)
+Department of the Air Force (USAF)
+Office of Naval Research (ONR)
+Naval Research Laboratory (NRL)
+Office of Naval Intelligence (ONI)
+United States Naval Academy (USNA)
+Marine Corps (USMC)
+Marine Expeditionary Units
+Commandant of the Marine Corps
+Assistant Commandant of the Marine Corps
+Sergeant Major of the Marine Corps
+Department of the Air Force
+Air Force Research Laboratory (AFRL)
+Air Force Reserve Officer Training Corps (AFROTC)
+Air Force Office of Special Investigations (AFOSI)
+Major Commands (MAJCOMs)
+Major Commands (MAJCOMS)
+Air Combat Command (ACC)
+Pacific Air Forces (PACAF)
+United States Air Forces in Europe (USAFE)
+Air Force Special Operations Command (AFSOC)
+Air Education and Training Command (AETC)
+Air Mobility Command (AMC)
+Air Force Global Strike Command (AFGSC)
+Air Force Materiel Command (AFMC)
+Air Force Reserve Command (AFRC)
+Air Force Space Command (AFSPC)
+Combatant Commands
+Combatant Commanders
+Component Heads
+U.S. Africa Command (USAFRICOM)
+U.S. Central Command (USCENTCOM)
+U.S. European Command (USEUCOM)
+U.S. Indo-Pacific Command (USINDOPACOM)
+U.S. Northern Command (USNORTHCOM)
+U.S. Southern Command (USSOUTHCOM)
+U.S. Cyber Command (USCYBERCOM)
+U.S. Special Operations Command (USSOCOM)
+U.S. Strategic Command (USSTRATCOM)
+U.S. Transportation Command (USTRANSCOM)
+Chairman, Joint Chiefs of Staff
+Vice Chairman, Joint Chiefs of Staff
+Director, Joint Staff
+Vice Director, Joint Staff
+J1 - Director, Manpower and Personnel (J1)
+J2 - Director, Intelligence (J2)
+J3 - Director, Operations (J3)
+J4 - Director, Logistics (J4)
+J5 - Director, Strategy, Plans, and Policy (J5)
+J6 - Director, Command, Control, Communications, and Computers / Chief Information Officer (J6)
+J7 - Director, Joint Force Development (J7)
+J8 - Director, Force Structure, Resources, and Assessment (J8)
+Director of Management
+Joint History Office
+Assistant to the Chairman
+Defense HUMINT Manager (DHM)
+Secretary of Defense (SecDef)
+Deputy Secretary of Defense (DepSecDef)
+Executive Secretary of the Department of Defense (ExecSec)
+General Counsel of the Department of Defense
+Assistant to the Secretary of Defense for Intelligence Oversight (ATSD(IO))
+Assistant to the Secretary of Defense for Public Affairs (ATSD(PA))
+Chief Information Officer (DoD CIO)
+Assistant Secretary of Defense for Legislative Affairs (LA)
+Under Secretary of Defense (Comptroller)/Chief Financial Officer (C/CFO)
+Under Secretary of Defense for Acquisition and Sustainment (A&S)
+Deputy Under Secretary of Defense for Installations and Environment (I&E)
+Assistant Secretary of Defense for Logistics and Materiel Readiness (L&MR)
+Assistant Secretary of Defense for Nuclear, Chemical & Biological Defense Programs (NCB)
+Under Secretary of Defense for Intelligence (I)
+Under Secretary of Defense for Personnel and Readiness (P&R)
+Assistant Secretary of Defense for Health Affairs (HA)
+Assistant Secretary of Defense for Reserve Affairs (RA)
+Under Secretary of Defense for Policy
+Assistant Secretary of Defense for Indo-Pacific Security Affairs (IPSA)
+Assistant Secretary of Defense for Global Strategic Affairs (GSA)
+Assistant Secretary of Defense for Homeland Defense and Americas' Security Affairs (HD&ASA)
+Assistant Secretary of Defense for International Security Affairs (ISA)
+Assistant Secretary of Defense for Special Operations/Low Intensity Conflict & Interdependent Capabilities (SO/LIC&IC)
+Under Secretary of Defense for Research and Engineering
+Director of Administration and Management (DA&M)
+Director of Cost Assessment and Program Evaluation (CAPE)
+Director of Family Policy
+Director of Force Transformation
+Director of Net Assessment
+Director of the Office of Corrosion Policy and Oversight
+Director, Operational Test and Evaluation (DOT&E)
+Director of Small Business Programs
+Defense Prisoner of War/Missing Personnel Office (DPMO)
+DoD Components

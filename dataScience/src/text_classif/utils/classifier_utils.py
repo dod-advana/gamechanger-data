@@ -15,8 +15,30 @@ from tqdm import tqdm
 logger = logging.getLogger(__name__)
 here = os.path.dirname(os.path.realpath(__file__))
 
+# sentence parsers have a hard time with abbreviations like U.S.C. and P.L.
+# due to the multiple letter-period sequence, and so it breaks the line. This
+# gets around the problem in `make_sentences()`.
+USC_DOT = "U.S.C."
+USC = "USC"
+# P.L. is expressed both ways, so we go with "P. L.".
+PL = "P.L."
+PL_SPACE = "P. L."
+USC_RE = "\\b" + USC + "\\b"
+
+# TODO consolidate these into something better
+
 
 def next_pow_two(max_sent_tokens):
+    """
+    Next power of two for a given input, with a minimum of 16 and a
+    maximum of 512
+
+    Args:
+        max_sent_tokens (int): the integer
+
+    Returns:
+        int: the appropriate power of two
+    """
     pow_two = [16, 32, 64, 128, 256, 512]
     if max_sent_tokens <= pow_two[0]:
         return pow_two[0]
@@ -211,6 +233,19 @@ def gen_gc_docs(doc_path, glob, key="raw_text"):
 
 
 def load_data(data_file, n_samples, shuffle=False):
+    """
+    Loads the `data_file` (`.csv`) of sentence, labels and tacks on the
+    source of the data. `n_samples` > 0 are returned as a list of
+    dictionaries with keys 'src', 'label', 'sentence'.
+
+    Args:
+        data_file (str):
+        n_samples (int):
+        shuffle (bool):
+
+    Returns:
+        List[Dict]
+    """
     df = pd.read_csv(data_file)
     if "sentence" not in df.keys():
         raise AttributeError("no column labeled 'sentence' in data_file")
@@ -251,8 +286,8 @@ def _extract_batch_length(preds):
         batch_length = batch_length or value.shape[0]
         if value.shape[0] != batch_length:
             raise ValueError(
-                "Batch length of predictions should be same. %s has "
-                "different batch length than others." % key
+                "Batch length of predictions should be same. () has "
+                "different batch length than others.".format(key)
             )
     return batch_length
 
@@ -281,6 +316,23 @@ def new_df():
 
 
 def make_sentences(text, src):
+    """
+    Builds a list of dictionaries, one for each sentence resulting from
+    the sentence parser. The dictionary schema is
+
+        {"src": src, "label": 0, "sentence": sent}
+
+    Substitutions are made for the identified tokens.
+
+    Args:
+        text (str): text to process
+        src (str): identifier (file name) to include in the output
+
+    Returns:
+        List[Dict]
+    """
+    text = text.replace(USC_DOT, USC)
+    text = text.replace(PL, PL_SPACE)
     sents = [scrubber(sent) for sent in sent_tokenize(text)]
     sent_list = list()
     for sent in sents:
@@ -291,6 +343,19 @@ def make_sentences(text, src):
 
 
 def raw2dict(src_path, glob, key="raw_text"):
+    """
+    Generator to step through `glob` and extract each file's sentences;
+    Wrapper for `make_sentence()`.
+
+    Args:
+        src_path (str): location of the .json documents
+        glob (str): file pattern to match
+        key (str): text key in the .json
+
+    Yields:
+        List[Dict]: per the schema in `make_sentences()`
+        str: name of the file
+    """
     for raw_text, fname in gen_gc_docs(src_path, glob, key=key):
         sent_list = make_sentences(raw_text, fname)
         logger.info("{:>25s} : {:>5,d}".format(fname, len(sent_list)))
