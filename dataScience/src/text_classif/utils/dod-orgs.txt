@@ -100,9 +100,6 @@ Air Force Global Strike Command (AFGSC)
 Air Force Materiel Command (AFMC)
 Air Force Reserve Command (AFRC)
 Air Force Space Command (AFSPC)
-Combatant Commands
-Combatant Commanders
-Component Heads
 U.S. Africa Command (USAFRICOM)
 U.S. Central Command (USCENTCOM)
 U.S. European Command (USEUCOM)
@@ -162,4 +159,6 @@ Director of the Office of Corrosion Policy and Oversight
 Director, Operational Test and Evaluation (DOT&E)
 Director of Small Business Programs
 Defense Prisoner of War/Missing Personnel Office (DPMO)
-DoD Components
+Combatant Commands
+Combatant Commanders
+Heads of the DoD Components
