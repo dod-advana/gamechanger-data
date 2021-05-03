@@ -27,9 +27,17 @@ class EntityCoref(object):
         self.NA = "NA"
         self.TC = "top_class"
         self.ENT = "entity"
+
         self.USC_DOT = "U.S.C."
         self.USC = "USC"
         self.USC_RE = "\\b" + self.USC + "\\b"
+        self.PL = "P.L."
+        self.PL_DOT = "P. L."
+        self.PL_RE = "\\b" + self.PL_DOT + "\\b"
+
+        self.dotted = [self.USC_DOT, self.PL]
+        self.subs = [self.USC, self.PL]
+        self.unsub_re = [self.USC_RE, self.PL_RE]
 
         self.abrv_lu, self.ent_lu = el.build_entity_lookup()
         self.pop_entities = None
@@ -38,6 +46,16 @@ class EntityCoref(object):
         value = self.NA or value
         return {self.ENT: value}
 
+    def _re_sub(self, sentence):
+        for regex, sub in zip(self.dotted, self.subs):
+            sentence = re.sub(regex, sub, sentence)
+        return sentence
+
+    def _unsub_df(self, df, regex, sub):
+        df[self.SENTENCE] = [
+            re.sub(regex, sub, str(x)) for x in df[self.SENTENCE]
+        ]
+
     def _attach_entity(self, output_list, entity_list):
         curr_entity = self.NA
         last_entity = self.NA
@@ -45,6 +63,7 @@ class EntityCoref(object):
         for entry in output_list:
             logger.debug(entry)
             sentence = entry[self.SENTENCE]
+            sentence = self._re_sub(sentence)
             new_entry = self._new_edict()
             new_entry.update(entry)
 
@@ -121,10 +140,8 @@ class EntityCoref(object):
 
     def to_df(self):
         df = pd.DataFrame(self.pop_entities)
-        df[self.SENTENCE] = [
-            re.sub(self.USC_RE, self.USC_DOT, str(x))
-            for x in df[self.SENTENCE]
-        ]
+        for regex, sub in zip(self.unsub_re, self.subs):
+            self._unsub_df(df, regex, sub)
         return df
 
     def to_csv(self, output_csv):
