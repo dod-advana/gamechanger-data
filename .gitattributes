@@ -1,0 +1,11 @@
+img linguist-vendored
+dataScience/data linguist-vendored
+dataPipelines/docs linguist-vendored
+common/data linguist-vendored
+*.json linguist-vendored
+*.json5 linguist-vendored
+*.html linguist-vendored
+*.xhtml linguist-vendored
+*.pickle linguist-vendored
+*.csv linguist-vendored
+Dockerfile* linguist-language=Dockerfile

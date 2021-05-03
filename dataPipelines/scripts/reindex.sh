@@ -71,6 +71,7 @@ function reindex() {
                 --index-name="$es_index_name" \
                 --alias-name="$es_alias_name" \
                 --max-threads="$max_parser_threads" \
+                --max-threads-neo4j="$max_parser_threads" \
                 --max-ocr-threads="$max_ocr_threads" \
                 --job-dir="$ingest_container_job_dir"  \
                 --current-snapshot-prefix gamechanger/ \

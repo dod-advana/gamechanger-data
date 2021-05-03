@@ -139,7 +139,7 @@ async def initQA():
         qa_model_path = os.path.join(
             LOCAL_TRANSFORMERS_DIR, "bert-base-cased-squad2")
         logger.info("Starting QA pipeline")
-        qa_model = QAReader(qa_model_path)
+        qa_model = QAReader(qa_model_path, use_gpu=True)
         cache.set("latest_qa_model", qa_model_path)
         logger.info("Finished loading QA Reader")
     except OSError:
@@ -392,7 +392,8 @@ async def qa_infer(query: dict, response: Response) -> dict:
         for page in query_context:
             context = "\n\n".join([context, page])
 
-        answers = qa_model.wiki_answer(query_text, context)
+
+        answers = qa_model.answer(query_text, wiki_text)
         answers_list = answers.split("/")
         answers_list = [x.strip() for x in answers_list if x.rstrip()]
         logger.info(answers_list)

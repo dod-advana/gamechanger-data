@@ -50,8 +50,16 @@ function run_crawler() {
 
   set +o pipefail
 
-  echo -e "\nRUNNING AIR FORCE LIBRARY CRAWLER - SCRAPY\n"
-  ( scrapy runspider dataPipelines/gc_scrapy/gc_scrapy/spiders/air_force_spider.py -o $LOCAL_CRAWLER_OUTPUT_FILE_PATH ) \
+  echo -e "\nRUNNING Chief National Guard Bureau CRAWLER - SCRAPY\n"
+  ( scrapy runspider dataPipelines/gc_scrapy/gc_scrapy/spiders/chief_national_guard_bureau_spider.py -o $LOCAL_CRAWLER_OUTPUT_FILE_PATH ) \
+    || echo "^^^ CRAWLER ERROR ^^^"
+
+  echo -e "\nRUNNING Coast Guard CRAWLER - SCRAPY\n"
+  ( scrapy runspider dataPipelines/gc_scrapy/gc_scrapy/spiders/coast_guard_spider.py -o $LOCAL_CRAWLER_OUTPUT_FILE_PATH ) \
+    || echo "^^^ CRAWLER ERROR ^^^"
+
+  echo -e "\nRUNNING AIR FORCE LIBRARY CRAWLER\n"
+  ( "$PYTHON_CMD" -m dataPipelines.gc_crawler.air_force_pubs run | tee -a "$LOCAL_CRAWLER_OUTPUT_FILE_PATH" ) \
     || echo "^^^ CRAWLER ERROR ^^^"
 
   echo -e "\nRUNNING ARMY CRAWLER\n"
@@ -66,8 +74,8 @@ function run_crawler() {
 #  ( "$PYTHON_CMD" -m dataPipelines.gc_crawler.bupers_pubs run | tee -a "$LOCAL_CRAWLER_OUTPUT_FILE_PATH" ) \
 #    || echo "^^^ CRAWLER ERROR ^^^"
 
-  echo -e "\nRUNNING DHA CRAWLER - SCRAPY\n"
-  ( scrapy runspider dataPipelines/gc_scrapy/gc_scrapy/spiders/dha_spider.py -o $LOCAL_CRAWLER_OUTPUT_FILE_PATH ) \
+  echo -e "\nRUNNING DHA CRAWLER\n"
+  ( "$PYTHON_CMD" -m dataPipelines.gc_crawler.dha_pubs run | tee -a "$LOCAL_CRAWLER_OUTPUT_FILE_PATH" ) \
     || echo "^^^ CRAWLER ERROR ^^^"
 
   echo -e "\nRUNNING DoD ISSUANCES CRAWLER\n"

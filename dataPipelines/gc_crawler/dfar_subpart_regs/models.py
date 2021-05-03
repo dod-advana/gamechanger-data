@@ -66,7 +66,7 @@ class DFarSubpartParser(Parser):
                 doc_num = doc_title.split()[0] + ' ' + doc_title.split()[1]
                 pdf_url = 'https://www.acquisition.gov' + row.find_all('td')[3].find('a')['src']
                 pdf_di = DownloadableItem(
-                    doc_type='xhtml',
+                    doc_type='html',
                     web_url=pdf_url
                 )
 
@@ -74,7 +74,7 @@ class DFarSubpartParser(Parser):
                     "item_currency": pdf_url.split('/')[-1],  # version metadata found on pdf links
                     "pub_date": get_date().strip()
                 }
-                doc_type = 'DFAR'
+                doc_type = 'DFARS'
                 doc = Document(
                     doc_name=doc_type + " " + doc_num,
                     doc_title=doc_title,

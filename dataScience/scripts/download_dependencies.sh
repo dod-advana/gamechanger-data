@@ -18,9 +18,7 @@ echo "Downloading Topic Model"
 echo "S3 TOPIC MODEL: $S3_TOPICS_PATH"
 aws s3 cp "$S3_TOPICS_PATH" $PWD/dataScience/models/topic_models/
 
-
 echo "Uncompressing all tar files in models"
 for f in ./dataScience/models/*.tar.gz; do
   tar kxvfz "$f" --exclude '*/.git/*' --exclude '*/.DS_Store/*' -C ./dataScience/models/;
 done
-
