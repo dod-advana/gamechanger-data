@@ -79,7 +79,9 @@ class EntityCoref(object):
                 entity_list.append(e_dict)
         return entity_list
 
-    def make_table(self, model_path, data_path, glob, max_seq_len, batch_size, output_csv):
+    def make_table(
+        self, model_path, data_path, glob, max_seq_len, batch_size, output_csv
+    ):
         """
         Loop through the documents, predict each piece of text and attach
         an entity.
@@ -107,7 +109,9 @@ class EntityCoref(object):
             logger.debug("num input : {:,}".format(len(output_list)))
             self.pop_entities = self._populate_entity(output_list)
             logger.debug(
-                "processed : {:,}  {}".format(len(self.pop_entities), file_name)
+                "processed : {:,}  {}".format(
+                    len(self.pop_entities), file_name
+                )
             )
         try:
             if output_csv is not None:
