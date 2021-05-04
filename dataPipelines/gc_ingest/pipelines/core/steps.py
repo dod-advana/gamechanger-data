@@ -100,7 +100,7 @@ class CoreIngestSteps(PipelineSteps):
             c.neo4j_job_manager.run_update(
                 source=c.parsed_doc_base_dir,
                 clear=False,
-                max_threads=c.max_threads,
+                max_threads=c.max_threads_neo4j,
                 scrape_wiki=False,
                 without_web_scraping=True,
                 infobox_dir=c.infobox_dir

@@ -13,7 +13,7 @@ custom_stopwords = [
     "subsec",
     "paragraph",
     "emphasis",
-    # "title",
+    "title",
     "date",
     "shall",
     "stat",

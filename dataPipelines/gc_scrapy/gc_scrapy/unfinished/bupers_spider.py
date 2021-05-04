@@ -23,12 +23,6 @@ class BupersSpider(GCSpider):
     def filter_empty(text_list):
         return list(filter(lambda a: a, text_list))
 
-    @staticmethod
-    def get_file_type(url):
-        file_url, _, _ = url.partition('?ver=')
-        _, _, extension = file_url.rpartition('.')
-        return extension.lower()
-
     def parse(self, response):
         # first 3 rows are what should be header content but are just regular rows, so nth-child used
         rows = response.css("div.livehtml > table > tbody tr:nth-child(n + 4)")
@@ -77,7 +71,7 @@ class BupersSpider(GCSpider):
                 for i in range(len(doc_nums_cleaned)):
                     doc_num = doc_nums_cleaned[i]
                     href = links_cleaned[i]
-                    file_type = self.get_file_type(href)
+                    file_type = self.get_href_file_extension(href)
 
                     web_url = urljoin(
                         self.start_urls[0], href).replace(' ', '%20')
@@ -112,7 +106,7 @@ class BupersSpider(GCSpider):
                 doc_num = " ".join(doc_nums_cleaned)
 
                 href = links_cleaned[0]
-                file_type = self.get_file_type(href)
+                file_type = self.get_href_file_extension(href)
 
                 web_url = urljoin(self.start_urls[0], href).replace(' ', '%20')
                 downloadable_items = [
@@ -145,7 +139,7 @@ class BupersSpider(GCSpider):
                 downloadable_items = []
 
                 for href in links_cleaned:
-                    file_type = self.get_file_type(href)
+                    file_type = self.get_href_file_extension(href)
                     web_url = urljoin(
                         self.start_urls[0], href).replace(' ', '%20')
                     downloadable_items.append(
