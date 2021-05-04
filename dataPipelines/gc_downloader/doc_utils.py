@@ -9,11 +9,12 @@ from .download_utils import download_file, download_file_with_driver
 import json
 from .manifest_utils import get_downloaded_version_hashes
 from .exceptions import CouldNotDownload
+from .config import SUPPORTED_FILE_EXTENSIONS
 from selenium import webdriver
 
 def get_supported_downloadable_item(doc: Document) -> Optional[DownloadableItem]:
     """Get supported downloadable item corresponding to doc"""
-    return next((i for i in doc.downloadable_items if i.doc_type.lower() == 'pdf' or i.doc_type.lower() == 'html'), None)
+    return next((i for i in doc.downloadable_items if i.doc_type.lower() in SUPPORTED_FILE_EXTENSIONS), None)
 
 
 def read_docs_from_file(file_path: Path) -> Iterable[Document]:
@@ -42,7 +43,7 @@ def filter_out_cac_pubs(docs: Iterable[Document]) -> Iterable[Document]:
 def filter_out_non_pdf_docs(docs: Iterable[Document]) -> Iterable[Document]:
     """Filters out non-pdf docs"""
     for doc in docs:
-        if not get_pdf_downloadable_item(doc):
+        if not get_supported_downloadable_item(doc):
             continue
         yield doc
 
@@ -98,7 +99,7 @@ def download_doc(doc: Document, output_dir: Union[Path, str]) -> DownloadedDocum
 
 def download_doc_with_driver(doc: Document, output_dir: Union[Path, str], driver: webdriver.Chrome) -> DownloadedDocument:
     """Download doc to given base_dir"""
-    item = get_pdf_downloadable_item(doc)
+    item = get_supported_downloadable_item(doc)
     if not item:
         print(f"Couldn't find a suitable downloadable item for doc {doc.doc_name}")
         return None
