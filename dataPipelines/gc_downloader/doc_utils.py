@@ -11,9 +11,8 @@ from .manifest_utils import get_downloaded_version_hashes
 from .exceptions import CouldNotDownload
 from selenium import webdriver
 
-
-def get_pdf_downloadable_item(doc: Document) -> Optional[DownloadableItem]:
-    """Get pdf downloadable item corresponding to doc"""
+def get_supported_downloadable_item(doc: Document) -> Optional[DownloadableItem]:
+    """Get supported downloadable item corresponding to doc"""
     return next((i for i in doc.downloadable_items if i.doc_type.lower() == 'pdf' or i.doc_type.lower() == 'html'), None)
 
 
@@ -74,7 +73,7 @@ def filter_out_already_downloaded_docs(
 
 def download_doc(doc: Document, output_dir: Union[Path, str]) -> DownloadedDocument:
     """Download doc to given base_dir"""
-    item = get_pdf_downloadable_item(doc)
+    item = get_supported_downloadable_item(doc)
     if not item:
         print(f"Couldn't find a suitable downloadable item for doc {doc.doc_name}")
         return None
