@@ -35,36 +35,6 @@ def write_checkpoint(output_dir, model, tokenizer, loss, stats):
         f.write(stats_enc)
 
 
-def load_checkpoint(chkpt_path, model_class, tokenizer_class, device, version):
-    """
-    Load a saved checkpoint of the model
-
-    Args:
-        version:
-        chkpt_path (str): path / name of the checkpoint file
-
-        model_class (Classifier): the model
-
-        tokenizer_class (Classifier): the tokenizer
-
-        device (str): either "cpu" or "gpu"
-
-        version (str): version string of the calling class; can be None
-
-    Returns:
-
-    """
-    try:
-        checkpoint_meta(chkpt_path, version)
-        model = model_class.from_pretrained(chkpt_path)
-        tokenizer = tokenizer_class.from_pretrained(chkpt_path)
-        model.to(device)
-        logger.info("checkpoint device : {}".format(str(device)))
-        return model, tokenizer
-    except (FileNotFoundError, RuntimeError) as e:
-        raise e
-
-
 def checkpoint_meta(chkpt_path, version_in):
     stats_path = os.path.join(chkpt_path, "run_stats.json")
     if not os.path.isfile(stats_path):
@@ -86,7 +56,7 @@ def checkpoint_meta(chkpt_path, version_in):
                     "Checkpoint was created with v{}, you're using v{}".format(
                         c_version, version_in
                     )
-                )  # noqa
+                )
                 msg1 = "...your mileage may vary."
                 logger.warning(msg)
                 logger.warning(msg1)
