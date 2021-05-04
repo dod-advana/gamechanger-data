@@ -17,6 +17,7 @@ import logging
 import re
 
 import pandas as pd
+from nltk.tokenize import sent_tokenize
 
 import dataScience.src.utilities.spacy_model as spacy_m
 from dataScience.src.featurization.table import Table
@@ -30,16 +31,15 @@ class ExtractRespText(Table):
             input_dir, output, spacy_model, agency_file, glob, True
         )
         logger.info("input dir : {}".format(input_dir))
-        self.spacy_model.add_pipe(self.spacy_model.create_pipe("sentencizer"))
+        if spacy_model is not None:
+            self.spacy_model = spacy_model
+            self.spacy_model.add_pipe(self.spacy_model.create_pipe("sentencizer"))
         self.train_df = pd.DataFrame(columns=["source", "label", "text"])
 
-    def _list_dir(self):
-        pass
-
-    def scrubber(self, txt):
+    @staticmethod
+    def scrubber(txt):
         txt = re.sub("[\\n\\t\\r]+", " ", txt)
         txt = re.sub("\\s{2,}", " ", txt)
-        txt = re.sub(r"^\d\.(.*?) ", "", txt)
         return txt.strip()
 
     def extract_positive(self):
@@ -56,9 +56,11 @@ class ExtractRespText(Table):
         if "RESPONSIBILITIES" in raw_text:
             prev_text = raw_text.split("RESPONSIBILITIES")[0]
             if prev_text is not None:
-                sents = [s.text for s in
-                         self.spacy_model(self.scrubber(prev_text)).sents if
-                         len(s.text) >= min_len]
+                sents = [
+                    self.scrubber(sent)
+                    for sent in sent_tokenize(prev_text)
+                    if len(sent) > min_len
+                ]
                 negs += len(sents)
                 neg_sentences.extend(sents)
                 logger.info("\tnegative samples : {:>3,d}".format(negs))
@@ -69,7 +71,9 @@ class ExtractRespText(Table):
             if not txt:
                 continue
             new_row = {
-                "source": source, "label": label, "text": self.scrubber(txt)
+                "source": source,
+                "label": label,
+                "text": self.scrubber(txt),
             }
             self.train_df = self.train_df.append(new_row, ignore_index=True)
 
@@ -96,49 +100,62 @@ if __name__ == "__main__":
     from argparse import ArgumentParser
 
     log_fmt = (
-            "[%(asctime)s %(levelname)-8s], [%(filename)s:%(lineno)s - "
-            + "%(funcName)s()], %(message)s"
+        "[%(asctime)s %(levelname)-8s], [%(filename)s:%(lineno)s - "
+        + "%(funcName)s()], %(message)s"
     )
     logging.basicConfig(level=logging.INFO, format=log_fmt)
 
     desc = "Extracts responsibility statements from policy documents"
     parser = ArgumentParser(prog="python table.py", description=desc)
 
-    parser.add_argument("-i",
-                        "--input-dir",
-                        dest="input_dir",
-                        type=str,
-                        required=True,
-                        help="corpus directory")
-    parser.add_argument("-a",
-                        "--agencies-file",
-                        dest="agencies_file",
-                        type=str,
-                        required=True,
-                        help="the magic agencies file")
-    parser.add_argument("-o",
-                        "--output",
-                        dest="output",
-                        type=str,
-                        required=True,
-                        help="name of the output file (.csv)")
-    parser.add_argument("-g",
-                        "--glob",
-                        dest="glob",
-                        type=str,
-                        default="DoDD*.json",
-                        help="file glob to use in extracting from input_dir")
+    parser.add_argument(
+        "-i",
+        "--input-dir",
+        dest="input_dir",
+        type=str,
+        required=True,
+        help="corpus directory",
+    )
+    parser.add_argument(
+        "-a",
+        "--agencies-file",
+        dest="agencies_file",
+        type=str,
+        required=True,
+        help="the magic agencies file",
+    )
+    parser.add_argument(
+        "-o",
+        "--output",
+        dest="output",
+        type=str,
+        required=True,
+        help="name of the output file (.csv)",
+    )
+    parser.add_argument(
+        "-g",
+        "--glob",
+        dest="glob",
+        type=str,
+        default="DoDD*.json",
+        help="file glob to use in extracting from input_dir",
+    )
 
     args = parser.parse_args()
 
     logger.info("loading spaCy")
     spacy_model_ = spacy_m.get_lg_vectors()
-    logger.info('spaCy loaded...')
+    logger.info("spaCy loaded...")
 
-    extract_obj = ExtractRespText(args.input_dir, args.output, spacy_model_,
-                                  args.agencies_file, args.glob)
+    extract_obj = ExtractRespText(
+        args.input_dir,
+        args.output,
+        spacy_model_,
+        args.agencies_file,
+        args.glob,
+    )
 
-    extract_obj.extract_pos_neg(min_len=32, neg_only=False)
+    extract_obj.extract_pos_neg(min_len=16, neg_only=False)
     logger.info(extract_obj.train_df.head())
     extract_obj.train_df.to_csv(
         args.output, index=False, header=False, doublequote=True

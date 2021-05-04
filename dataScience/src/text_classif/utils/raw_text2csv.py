@@ -31,9 +31,9 @@ def new_df():
 
 def raw2df(src_path, glob, key="raw_text"):
     for raw_text, fname in cu.gen_gc_docs(src_path, glob, key=key):
-        sent_df = cu.make_sentences(raw_text, fname)
-        logger.info("{:>25s} : {:>5,d}".format(fname, len(sent_df)))
-        yield sent_df, fname
+        sent_dicts = cu.make_sentences(raw_text, fname)
+        logger.info("{:>25s} : {:>5,d}".format(fname, len(sent_dicts)))
+        yield sent_dicts, fname
 
 
 def main(src_path, glob, output_path):
