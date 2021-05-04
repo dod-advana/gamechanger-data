@@ -41,10 +41,6 @@ if [ "$ENV_TYPE" = "PROD" ]
       echo "$GC_ML_API_MODEL_NAME - if this is blank it will default"
       echo "Attempting to download transformer cache and sentence index from s3"
       source ./dataScience/scripts/download_dependencies.sh
-      echo "Uncompressing model tar files"
-      for f in ./dataScience/models/*.tar.gz; do
-        tar kxvfz "$f" --exclude '*/.git/*' --exclude '*/.DS_Store/*' -C ./dataScience/models/;
-      done
     fi
     echo "Starting gunicorn workers for API"
     gunicorn dataScience.api.fastapi.mlapp:app --bind 0.0.0.0:5000 --workers 1 --graceful-timeout 900 --timeout 1200 -k uvicorn.workers.UvicornWorker --log-level debug
@@ -58,10 +54,6 @@ then
       echo "$GC_ML_API_MODEL_NAME - if this is blank it will default"
       echo "Attempting to download transformer cache and sentence index from s3"
       source ./dataScience/scripts/download_dependencies.sh
-      echo "Uncompressing model tar files"
-      for f in ./dataScience/models/*.tar.gz; do
-        tar kxvfz "$f" --exclude '*/.git/*' --exclude '*/.DS_Store/*' -C ./dataScience/models/;
-      done
     fi
     gunicorn dataScience.api.fastapi.mlapp:app --bind 0.0.0.0:5000 --workers 1 --graceful-timeout 1000 --timeout 1200 --keep-alive 30 -k uvicorn.workers.UvicornWorker --log-level debug
     #uvicorn dataScience.api.fastapi.mlapp:app --host 0.0.0.0 --port 5000 --workers 1 --log-level debug --timeout-keep-alive 240
