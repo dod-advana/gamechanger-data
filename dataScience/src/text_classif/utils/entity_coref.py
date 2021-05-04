@@ -37,6 +37,7 @@ class EntityCoref(object):
 
         self.dotted = [self.USC_DOT, self.PL]
         self.subs = [self.USC, self.PL]
+        self.sub_back = [self.USC_DOT, self.PL_DOT]
         self.unsub_re = [self.USC_RE, self.PL_RE]
 
         self.abrv_lu, self.ent_lu = el.build_entity_lookup()
@@ -140,7 +141,7 @@ class EntityCoref(object):
 
     def to_df(self):
         df = pd.DataFrame(self.pop_entities)
-        for regex, sub in zip(self.unsub_re, self.subs):
+        for regex, sub in zip(self.unsub_re, self.sub_back):
             self._unsub_df(df, regex, sub)
         return df
 
