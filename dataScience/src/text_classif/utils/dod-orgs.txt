@@ -140,7 +140,7 @@ Under Secretary of Defense for Acquisition and Sustainment (A&S)
 Deputy Under Secretary of Defense for Installations and Environment (I&E)
 Assistant Secretary of Defense for Logistics and Materiel Readiness (L&MR)
 Assistant Secretary of Defense for Nuclear, Chemical & Biological Defense Programs (NCB)
-Under Secretary of Defense for Intelligence (I)
+Under Secretary of Defense for Intelligence
 Under Secretary of Defense for Personnel and Readiness (P&R)
 Assistant Secretary of Defense for Health Affairs (HA)
 Assistant Secretary of Defense for Reserve Affairs (RA)
@@ -160,5 +160,5 @@ Director of the Office of Corrosion Policy and Oversight
 Director, Operational Test and Evaluation (DOT&E)
 Director of Small Business Programs
 Defense Prisoner of War/Missing Personnel Office (DPMO)
-Combatant Commands
+Combatant Commanders
 Heads of the DoD Components

@@ -33,7 +33,9 @@ class ExtractRespText(Table):
         logger.info("input dir : {}".format(input_dir))
         if spacy_model is not None:
             self.spacy_model = spacy_model
-            self.spacy_model.add_pipe(self.spacy_model.create_pipe("sentencizer"))
+            self.spacy_model.add_pipe(
+                self.spacy_model.create_pipe("sentencizer")
+            )
         self.train_df = pd.DataFrame(columns=["source", "label", "text"])
 
     @staticmethod
