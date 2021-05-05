@@ -17,21 +17,35 @@ from . import OUTPUT_FOLDER_NAME
 from dataPipelines.gc_crawler.utils import dict_to_sha256_hex_digest, get_fqdn_from_web_url
 
 
+class DeduplicaterPipeline():
+    def __init__(self):
+        self.ids_seen = set()
+
+    def process_item(self, item, spider):
+        if item['doc_name'] in self.ids_seen:
+            raise DropItem("Duplicate doc_name found")
+        else:
+            self.ids_seen.add(item['doc_name'])
+
+        return item
+
+
 class AdditionalFieldsPipeline:
     def process_item(self, item, spider):
 
         item['crawler_used'] = spider.name
 
-        if item.get('source_page_url') is None:
+        source_page_url = item.get('source_page_url')
+        if source_page_url is None:
             source_page_url = spider.start_urls[0]
             item['source_page_url'] = source_page_url
+
+        if item.get('source_fqdn') is None:
+            item['source_fqdn'] = get_fqdn_from_web_url(source_page_url)
 
         if item.get('version_hash') is None:
             item['version_hash'] = dict_to_sha256_hex_digest(
                 item.get('version_hash_raw_data'))
-
-        if item.get('source_fqdn') is None:
-            item['source_fqdn'] = get_fqdn_from_web_url(source_page_url)
 
         if item.get('access_timestamp') is None:
             item['access_timestamp'] = datetime.now().strftime(

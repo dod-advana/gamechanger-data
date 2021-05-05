@@ -17,8 +17,8 @@ services:
     deploy:
       resources:
         reservations:
-          cpus: '8'
-          memory: 30G
+          devices:
+          - capabilities: [gpu]
     ports:
       - "5000:5000"
     environment:
@@ -39,6 +39,7 @@ services:
       - DOWNLOAD_DEP=${DOWNLOAD_DEP}
       - DOCKER_BUILDKIT=1
       - DOCKER=true
+      - LD_LIBRARY_PATH=/usr/local/cuda/lib64/
     volumes:
       - ../../dataScience/api/logs:/dataScience/api/logs
       - ../../dataScience/models:/dataScience/models
