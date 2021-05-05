@@ -38,10 +38,15 @@ class ExtractRespText(Table):
             )
         self.train_df = pd.DataFrame(columns=["source", "label", "text"])
 
-    @staticmethod
-    def scrubber(txt):
+        # matches 1.2.3., etc. at the start of the text
+        self.dd_re = re.compile("(^\\d\\..*?\\d+\\. )")
+
+    def scrubber(self, txt):
         txt = re.sub("[\\n\\t\\r]+", " ", txt)
-        txt = re.sub("\\s{2,}", " ", txt)
+        txt = re.sub("\\s{2,}", " ", txt).strip()
+        mobj = self.dd_re.search(txt)
+        if mobj:
+            txt = txt.replace(mobj.group(1), "")
         return txt.strip()
 
     def extract_positive(self):

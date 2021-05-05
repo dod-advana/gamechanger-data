@@ -10,7 +10,6 @@ import re
 import numpy as np
 import pandas as pd
 from nltk.tokenize import sent_tokenize
-from tqdm import tqdm
 
 logger = logging.getLogger(__name__)
 here = os.path.dirname(os.path.realpath(__file__))
@@ -24,6 +23,8 @@ USC = "USC"
 PL = "P.L."
 PL_SPACE = "P. L."
 USC_RE = "\\b" + USC + "\\b"
+
+dd_re = re.compile("(^\\d\\..*?\\d+\\. )")
 
 # TODO consolidate these into something better
 
@@ -78,7 +79,7 @@ def cola_data(data_file):
         raise e
 
 
-def _read_gc_df(data_file):
+def read_gc_df(data_file):
     df = pd.read_csv(
         data_file,
         delimiter=",",
@@ -88,60 +89,9 @@ def _read_gc_df(data_file):
     return df
 
 
-def gc_data_item_labels(data_file, cp=0.50, cm=0.50, shuffle=True, topn=0):
-    out_df = pd.DataFrame(columns=["src", "label", "sentence"])
-    alpha = list("abcdefghijklmnopqrstuvwxyz0123456789")
-    try:
-        df = _read_gc_df(data_file)
-        if shuffle:
-            df = df.sample(frac=1)
-        if topn > 0:
-            df = df.head(topn)
-
-        pos_samples = np.sum(df.label.values)
-        logger.info("positive samples : {:>5,d}".format(pos_samples))
-        neg_samples = len(df.label.values) - pos_samples
-        logger.info("negative samples : {:>5,d}".format(neg_samples))
-
-        # for positive samples that satisfy r'(^\w\. )', remove the item label
-        for _, row in tqdm(df.iterrows()):
-            src = row.src
-            label = row.label
-            sent = row.sentence
-            if row.label == 1:
-                mobj = re.search(r"(^\w\. |\(?\d+\) )", sent)
-                if np.random.uniform() > 1.0 - cp:
-                    if mobj is not None:
-                        sent = re.sub(re.escape(mobj.group(1)), "", sent)
-            else:  # randomly add an item label
-                mobj = re.search(r"(^\w\. )", sent)
-                if np.random.uniform() > 1.0 - cm:
-                    if mobj is None:
-                        idx = np.random.randint(0, len(alpha))
-                        sent = alpha[idx] + ". " + sent
-
-            out_df = out_df.append(
-                {"src": src, "label": label, "sentence": sent},
-                ignore_index=True,
-            )
-        logger.info("writing file...")
-        out_df.to_csv(
-            "dodi_dodd_train_lbl_flipped.csv", index=False, header=False
-        )
-
-        sents = out_df.sentence.values
-        labels = out_df.label.values
-        src = out_df.src.values
-        return sents, labels, src
-    except FileNotFoundError as e:
-        logger.fatal("{} : {}".format(type(e), str(e)))
-        logger.fatal("\n\n\tThat was a fatal error my friend")
-        raise e
-
-
 def gc_data(data_file, neg_data_file, shuffle=True, topn=0):
     try:
-        df = _read_gc_df(data_file)
+        df = read_gc_df(data_file)
         pos_samples = np.sum(df.label.values)
         logger.info("positive samples : {:>5,d}".format(pos_samples))
         neg_samples = len(df.label.values) - pos_samples
@@ -149,7 +99,7 @@ def gc_data(data_file, neg_data_file, shuffle=True, topn=0):
 
         # balance positive / negative samples
         if neg_data_file is not None and pos_samples > neg_samples:
-            df_neg = _read_gc_df(neg_data_file)
+            df_neg = read_gc_df(neg_data_file)
             df_neg = df_neg.sample(frac=1)
             logger.info("negative samples read : {:>5,d}".format(len(df_neg)))
             neg_to_get = pos_samples - neg_samples
@@ -165,51 +115,6 @@ def gc_data(data_file, neg_data_file, shuffle=True, topn=0):
         labels = df.label.values
         src = df.src.values
         return sents, labels, src
-    except FileNotFoundError as e:
-        logger.fatal("\n{} : {}".format(type(e), str(e)))
-        logger.fatal("\n\n\tThat was a fatal error my friend")
-        raise e
-
-
-def gc_data_tvt(data_file, topn=0, ident="", split=0.90):
-    try:
-        df = _read_gc_df(data_file)
-        if topn > 0:
-            df = df.head(topn)
-        pos_lbl = 0
-        pos = 0
-        for _, row in df.iterrows():
-            if row.label == 1:
-                pos += 1
-                if re.search(r"^\w\. ", row.sentence) is not None:
-                    pos_lbl += 1
-        logger.info("item label positives {:,} / {:,}".format(pos_lbl, pos))
-        # 80, 10, 10 split
-        train, validate, test = np.split(
-            df.sample(frac=1), [int(0.8 * len(df)), int(0.9 * len(df))]
-        )
-        logger.info("train : {:>5,d}".format(len(train)))
-        logger.info("  val : {:>5,d}".format(len(validate)))
-        logger.info(" test : {:>5,d}".format(len(test)))
-        train.to_csv(
-            os.path.join(here, "train_" + ident + ".csv"),
-            sep=",",
-            index=False,
-            header=False,
-        )
-        validate.to_csv(
-            os.path.join(here, "validate_" + ident + ".csv"),
-            sep=",",
-            index=False,
-            header=False,
-        )
-        test.to_csv(
-            os.path.join(here, "test_" + ident + ".csv"),
-            sep=",",
-            index=False,
-            header=False,
-        )
-        return train, validate, test
     except FileNotFoundError as e:
         logger.fatal("\n{} : {}".format(type(e), str(e)))
         logger.fatal("\n\n\tThat was a fatal error my friend")
@@ -271,10 +176,14 @@ def load_data(data_file, n_samples, shuffle=False):
     return examples
 
 
-def scrubber(txt):
+def scrubber(txt, no_sec=False):
     txt = re.sub("[\\n\\t\\r]+", " ", txt)
-    txt = re.sub("\\s{2,}", " ", txt)
-    return txt.strip()
+    txt = re.sub("\\s{2,}", " ", txt).strip()
+    if no_sec:
+        mobj = dd_re.search(txt)
+        if mobj:
+            txt = txt.replace(mobj.group(1), "").strip()
+    return txt
 
 
 def _extract_batch_length(preds):
@@ -331,9 +240,10 @@ def make_sentences(text, src):
     Returns:
         List[Dict]
     """
+    no_sec = True
     text = text.replace(USC_DOT, USC)
     text = text.replace(PL, PL_SPACE)
-    sents = [scrubber(sent) for sent in sent_tokenize(text)]
+    sents = [scrubber(sent, no_sec=no_sec) for sent in sent_tokenize(text)]
     sent_list = list()
     for sent in sents:
         if not sent:

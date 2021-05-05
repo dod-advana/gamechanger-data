@@ -145,5 +145,6 @@ if __name__ == "__main__":
             args.data_file,
             args.model_type,
             args.num_samples,
+            args.checkpoint_path,
         )
     )
