@@ -23,7 +23,7 @@ def is_downloadable(url: str) -> bool:
         if 'text' in content_type.lower():
             return False
         if 'html' in content_type.lower():
-            return False
+            return False 
     return True
 
 
