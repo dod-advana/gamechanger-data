@@ -195,7 +195,7 @@ function run_core_ingest() {
     --index-name="$es_index_name" \
     --alias-name="$es_alias_name" \
     --max-threads="$max_parser_threads" \
-    --max-threads-neo4j="$max_neo4j_threads"
+    --max-threads-neo4j="$max_neo4j_threads" \
     --max-ocr-threads="$max_ocr_threads" \
     --crawler-output="$crawler_output" \
     --skip-revocation-update="$skip_revocation_update" \
