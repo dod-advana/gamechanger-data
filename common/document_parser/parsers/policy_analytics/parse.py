@@ -1,3 +1,4 @@
+import os
 from common.document_parser.lib import (
     pages,
     paragraphs,
@@ -26,9 +27,10 @@ def parse(f_name, meta_data=None, ocr_missing_doc=False, num_ocr_threads=2, out_
 
     init_doc.assign_f_name_fields(f_name, doc_dict)
     init_doc.assign_other_fields(doc_dict)
-        
+    should_delete = False        
     if str(f_name).endswith("html"):
         f_name = html_utils.get_html_filename(f_name)
+        should_delete = True
     if ocr_missing_doc:
         f_name = ocr.get_ocr_filename(f_name, num_ocr_threads)
 
@@ -65,3 +67,6 @@ def parse(f_name, meta_data=None, ocr_missing_doc=False, num_ocr_threads=2, out_
     doc_dict = post_process.process(doc_dict)
 
     write_doc_dict_to_json.write(out_dir=out_dir, ex_dict=doc_dict)
+    if should_delete:
+        os.remove(f_name)
+
