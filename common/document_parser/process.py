@@ -151,7 +151,7 @@ def process_dir(
     """
 
     p = Path(dir_path).glob("**/*")
-    files = [x for x in p if x.is_file() and not (str(x).endswith("metadata") or str(x).endswith("json") or str(x).endswith("png"))]
+    files = [x for x in p if x.is_file() and (str(x).endswith("pdf") or str(x).endswith("html"))]
     #files = [x for x in p if x.is_file() and filetype.guess(str(x)) is not None and (filetype.guess(str(x)).mime == "pdf" or filetype.guess(str(x)).mime == "application/pdf" or filetype.guess(str(x)).mime == "text/html")]
     # files.sort()
     data_inputs = [(parse_func, f_name, meta_data, ocr_missing_doc,
