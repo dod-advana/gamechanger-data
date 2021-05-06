@@ -392,8 +392,7 @@ async def qa_infer(query: dict, response: Response) -> dict:
         for page in query_context:
             context = "\n\n".join([context, page])
 
-
-        answers = qa_model.answer(query_text, wiki_text)
+        answers = qa_model.answer(query_text, context)
         answers_list = answers.split("/")
         answers_list = [x.strip() for x in answers_list if x.rstrip()]
         logger.info(answers_list)
