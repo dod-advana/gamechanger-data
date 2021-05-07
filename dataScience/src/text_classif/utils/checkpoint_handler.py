@@ -26,7 +26,7 @@ def write_checkpoint(output_dir, model, tokenizer, loss, stats):
         stats (dict): performance metrics for this checkpoint
 
     """
-    logger.info("saving model with loss : {:0.3f}".format(loss))
+    logger.info("saving model with  val loss : {:0.3f}".format(loss))
     model_to_save = model.module if hasattr(model, "module") else model
     model_to_save.save_pretrained(output_dir)
     tokenizer.save_pretrained(output_dir)

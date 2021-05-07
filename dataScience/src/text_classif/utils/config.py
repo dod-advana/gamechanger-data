@@ -141,11 +141,6 @@ def _is_verified(cfg_data):
         if not os.path.isdir(cfg_data["tensorboard_path"]):
             verified = False
             logger.error("dir does not exist for 'tensorboard_path'")
-    if cfg_data["checkpoint_path"] is not None:
-        c_path, _ = os.path.split(cfg_data["checkpoint_path"])
-        if not os.path.isdir(c_path):
-            verified = False
-            logger.error("dir does not exist for `checkpoint_path`")
     if not 0.80 < cfg_data["split"] <= 1.0:
         verified = False
         logger.error(
