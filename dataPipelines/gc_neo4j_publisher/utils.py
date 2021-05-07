@@ -108,26 +108,28 @@ class Neo4jJobManager:
             if clear:
                 print("Deleting all entities and relationships ... ", file=sys.stderr)
                 session.run("match (n) detach delete n;")
+                print("Recreating constraints ... ", file=sys.stderr)
 
-            print("Recreating constraints ... ", file=sys.stderr)
-            # first drop constraints
-            session.run("DROP CONSTRAINT unique_docs IF EXISTS")
-            session.run("DROP CONSTRAINT unique_ents IF EXISTS")
-            session.run("DROP CONSTRAINT unique_resps IF EXISTS")
-            session.run("DROP CONSTRAINT unique_topics IF EXISTS")
+                # first drop constraints
+                session.run("DROP CONSTRAINT unique_docs IF EXISTS")
+                session.run("DROP CONSTRAINT unique_ents IF EXISTS")
+                session.run("DROP CONSTRAINT unique_resps IF EXISTS")
+                session.run("DROP CONSTRAINT unique_topics IF EXISTS")
 
-            # next set up a few things to make sure that entities/documents/pubs aren't being inserted more than once.
-            session.run("CREATE CONSTRAINT unique_docs IF NOT EXISTS ON (d:Document) ASSERT d.doc_id IS UNIQUE")
-            session.run("CREATE CONSTRAINT unique_ents IF NOT EXISTS ON (e:Entity) ASSERT e.name IS UNIQUE")
-            session.run("CREATE CONSTRAINT unique_resps IF NOT EXISTS ON (r:Responsibility) ASSERT r.name IS UNIQUE")
-            session.run("CREATE CONSTRAINT unique_topics IF NOT EXISTS ON (t:Topic) ASSERT t.name IS UNIQUE")
+                # next set up a few things to make sure that entities/documents/pubs aren't being inserted more than once.
+                session.run("CREATE CONSTRAINT unique_docs IF NOT EXISTS ON (d:Document) ASSERT d.doc_id IS UNIQUE")
+                session.run("CREATE CONSTRAINT unique_ents IF NOT EXISTS ON (e:Entity) ASSERT e.name IS UNIQUE")
+                session.run(
+                    "CREATE CONSTRAINT unique_resps IF NOT EXISTS ON (r:Responsibility) ASSERT r.name IS UNIQUE")
+                session.run("CREATE CONSTRAINT unique_topics IF NOT EXISTS ON (t:Topic) ASSERT t.name IS UNIQUE")
 
-            # Create indicies
-            session.run("CREATE INDEX document_index IF NOT EXISTS FOR (d:Document) ON (d.doc_id, d.ref_name)")
-            session.run("CREATE INDEX ukn_document_index IF NOT EXISTS FOR (d:UKN_Document) ON (d.doc_id, d.ref_name)")
-            session.run("CREATE INDEX entity_index IF NOT EXISTS FOR (e:Entity) ON (e.name)")
-            session.run("CREATE INDEX topic_index IF NOT EXISTS FOR (t:Topic) ON (t.name)")
-            session.run("CREATE INDEX responsibility_index IF NOT EXISTS FOR (r:Responsibility) ON (r.name)")
+                # Create indicies
+                session.run("CREATE INDEX document_index IF NOT EXISTS FOR (d:Document) ON (d.doc_id, d.ref_name)")
+                session.run(
+                    "CREATE INDEX ukn_document_index IF NOT EXISTS FOR (d:UKN_Document) ON (d.doc_id, d.ref_name)")
+                session.run("CREATE INDEX entity_index IF NOT EXISTS FOR (e:Entity) ON (e.name)")
+                session.run("CREATE INDEX topic_index IF NOT EXISTS FOR (t:Topic) ON (t.name)")
+                session.run("CREATE INDEX responsibility_index IF NOT EXISTS FOR (r:Responsibility) ON (r.name)")
 
         publisher = Neo4jPublisher()
         publisher.populate_verified_ents()
@@ -150,7 +152,7 @@ class Neo4jJobManager:
         with Config.connection_helper.neo4j_session_scope() as session:
             # Create UKN Documents and create REFERENCES and REFERENCES_UKN links
             print("Creating UKN Documents, REFERENCES, and REFERENCES_UKN links...", file=sys.stderr)
-            session.run("CALL policy.createUKNDocumentNodesAndAllReferences();")
+            session.run("CALL policy.origin/lyons-neo4j-publisher();")
 
             # Create Sub Graph
             session.run(
