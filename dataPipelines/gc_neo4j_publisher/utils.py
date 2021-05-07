@@ -152,7 +152,7 @@ class Neo4jJobManager:
         with Config.connection_helper.neo4j_session_scope() as session:
             # Create UKN Documents and create REFERENCES and REFERENCES_UKN links
             print("Creating UKN Documents, REFERENCES, and REFERENCES_UKN links...", file=sys.stderr)
-            session.run("CALL policy.origin/lyons-neo4j-publisher();")
+            session.run("CALL policy.createUKNDocumentNodesAndAllReferences();")
 
             # Create Sub Graph
             session.run(
