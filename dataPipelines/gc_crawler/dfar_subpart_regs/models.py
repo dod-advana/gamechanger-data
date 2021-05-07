@@ -58,36 +58,38 @@ class DFarSubpartParser(Parser):
             pdf_url = ''
             pdf_di = None
             doc_type = ''
-            if count > 0:
-                doc_title = row.find_all('td')[0].text.strip().replace('\u2014',' ').replace('\u2013 ', ' ')
+            doc_title = row.find_all('td')[0].text.strip().replace('\u2014',' ').replace('\u2013 ', ' ')
+            
+            if doc_title[0:8].lower() == 'appendix':
+                break
+            if count > 0 and doc_title == 'Defense Federal Acquisition Regulation':
+                continue
 
-                if doc_title[0:8].lower() == 'appendix':
-                    break
-                doc_num = doc_title.split()[0] + ' ' + doc_title.split()[1]
-                pdf_url = 'https://www.acquisition.gov' + row.find_all('td')[3].find('a')['src']
-                pdf_di = DownloadableItem(
-                    doc_type='xhtml',
-                    web_url=pdf_url
-                )
+            doc_num = doc_title.split()[0] + ' ' + doc_title.split()[1]
+            pdf_url = 'https://www.acquisition.gov' + row.find_all('td')[3].find('a')['src']
+            pdf_di = DownloadableItem(
+                doc_type='xhtml',
+                web_url=pdf_url
+            )
 
-                version_hash_fields = {
-                    "item_currency": pdf_url.split('/')[-1],  # version metadata found on pdf links
-                    "pub_date": get_date().strip()
-                }
-                doc_type = 'DFAR'
-                doc = Document(
-                    doc_name=doc_type + " " + doc_num,
-                    doc_title=doc_title,
-                    doc_num=doc_num,
-                    doc_type=doc_type,
-                    publication_date=get_date(),
-                    cac_login_required=cac_login_required,
-                    crawler_used="dfar_subpart_regs",
-                    source_page_url=page_url.strip(),
-                    version_hash_raw_data=version_hash_fields,
-                    downloadable_items=[pdf_di]
-                )
-                parsed_docs.append(doc)
+            version_hash_fields = {
+                "item_currency": pdf_url.split('/')[-1],  # version metadata found on pdf links
+                "pub_date": get_date().strip()
+            }
+            doc_type = 'DFAR'
+            doc = Document(
+                doc_name=doc_type + " " + doc_num,
+                doc_title=doc_title,
+                doc_num=doc_num,
+                doc_type=doc_type,
+                publication_date=get_date(),
+                cac_login_required=cac_login_required,
+                crawler_used="dfar_subpart_regs",
+                source_page_url=page_url.strip(),
+                version_hash_raw_data=version_hash_fields,
+                downloadable_items=[pdf_di]
+            )
+            parsed_docs.append(doc)
             count+=1
         return parsed_docs
 
