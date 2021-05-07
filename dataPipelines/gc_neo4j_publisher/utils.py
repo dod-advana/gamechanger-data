@@ -124,6 +124,7 @@ class Neo4jJobManager:
 
             # Create indicies
             session.run("CREATE INDEX document_index IF NOT EXISTS FOR (d:Document) ON (d.doc_id, d.ref_name)")
+            session.run("CREATE INDEX ukn_document_index IF NOT EXISTS FOR (d:UKN_Document) ON (d.doc_id, d.ref_name)")
             session.run("CREATE INDEX entity_index IF NOT EXISTS FOR (e:Entity) ON (e.name)")
             session.run("CREATE INDEX topic_index IF NOT EXISTS FOR (t:Topic) ON (t.name)")
             session.run("CREATE INDEX responsibility_index IF NOT EXISTS FOR (r:Responsibility) ON (r.name)")
@@ -147,50 +148,9 @@ class Neo4jJobManager:
             publisher.process_crowdsourced_ents(without_web_scraping, infobox_dir)
 
         with Config.connection_helper.neo4j_session_scope() as session:
-            # Make Docs not in Corpus from Refs
-            print("Finding any REFERENCES to documents we do not currently have and creating a document node for them ... ", file=sys.stderr)
-            session.run(
-                "MATCH (d:Document) "
-                "UNWIND d.ref_list as ref "
-                "WITH COLLECT(distinct(ref)) as full_refs_list, COLLECT(distinct(d.ref_name)) as have_refs_list "
-                "WITH [n IN full_refs_list WHERE NOT n IN have_refs_list] as needed_refs_list "
-                "UNWIND needed_refs_list as ref "
-                "MERGE (d:UKN_Document {ref_name: ref}) "
-                "ON CREATE "
-                "  SET d.type = 'UKN_document', "
-                "  d.doc_id = 'Unkown' + ref, "
-                "  d.keyw_5 = [], "
-                "  d.topics = [], "
-                "  d.filename = 'Unknown', "
-                "  d.title = ref, "
-                "  d.display_title_s = ref, "
-                "  d.display_org_s = 'Unknown', "
-                "  d.display_doc_type_s = 'Unknown', "
-                "  d.name = ref, "
-                "  d.ref_list = [] "
-            )
-
-            # Make ref connections
-            print("Looping through documents creating REFERENCES connections to the documents they reference ... ", file=sys.stderr)
-            session.run(
-                "MATCH (d:Document) "
-                "WHERE d.type = 'document' "
-                "WITH d.ref_list as ref_list, d "
-                "MATCH (d2:Document) "
-                "WHERE d2.type = 'document' AND d2.ref_name IN ref_list AND NOT d = d2 "
-                "MERGE (d)-[:REFERENCES]->(d2);"
-            )
-
-            print("Looping through documents creating REFERENCES_UNKNOWN connections to the documents they reference ... ",
-                  file=sys.stderr)
-            session.run(
-                "MATCH (d:Document) "
-                "WHERE d.type = 'document' "
-                "WITH d.ref_list as ref_list, d "
-                "MATCH (d2:UKN_Document) "
-                "WHERE d2.ref_name IN ref_list "
-                "MERGE (d)-[:REFERENCES_UNKNOWN]->(d2);"
-            )
+            # Create UKN Documents and create REFERENCES and REFERENCES_UKN links
+            print("Creating UKN Documents, REFERENCES, and REFERENCES_UKN links...", file=sys.stderr)
+            session.run("CALL policy.createUKNDocumentNodesAndAllReferences();")
 
             # Create Sub Graph
             session.run(

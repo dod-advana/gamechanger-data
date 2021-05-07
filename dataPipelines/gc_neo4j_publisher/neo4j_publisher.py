@@ -59,7 +59,7 @@ def process_query(query: str) -> None:
         try_count = 0
         while try_count <= 10:
             try:
-                session.run(query)
+                result = session.run(query)
                 return
             except exceptions.TransientError:
                 try_count += 1
@@ -72,140 +72,60 @@ def process_query(query: str) -> None:
 
 class Neo4jPublisher:
     def __init__(self):
-        self.docInsertStmt = []
-        self.relationsInsertStmt = []
-        self.pubInsertStmt = []
-        self.belongsToInsertStmt = []
-        self.entInsertStmt = []
-        self.pubEntRefStmt = []
         self.entEntRelationsStmt = []
-        self.respInsertStmt = []
-        self.entRespRelationStmt = []
         self.verifiedEnts = pd.DataFrame()
         self.crowdsourcedEnts = set()
 
     def process_json(self, filepath: str, q: mp.Queue) -> str:
         with open(filepath) as f:
             j = json.load(f)
-            id = j["id"]
-            # publication variables
-            docNum = j["doc_num"]
-            docType = j["doc_type"]
-            displayTitle = j.get("display_title_s","").replace('"', "\'").encode('ascii', 'ignore').decode('utf-8')
-            displayOrg = j.get("display_org_s", "")
-            displayType = j.get("display_doc_type_s","")
-            pubName = '{0} {1}'.format(docType, docNum) if (docNum != '' and docType != '') \
-                else j["id"].split(",")[0].replace('.pdf_0', '')
-            ref_list = [s.replace("'", '\"') for s in j["ref_list"]]
-            accessTimestamp = j.get("access_timestamp_dt","")
-            publicationDate = (j.get("publication_date_dt", "") or "")
-            crawlerUsed = j.get("crawler_used_s","")
-            sourceFqdn = j.get("source_fqdn_s","")
-            sourcePageUrl = j.get("source_page_url_s","")
-            downloadUrl = j.get("download_url_s", '')
-            cacLoginRequired = str(j.get('cac_login_required_b',""))
-            # doc variables
-            title = j["title"].replace('"', "\'")
-            doc_id = j["id"]
-            # TODO: implement json decoder that strips non-ascii codes
-            keyw_5 = [s.encode('ascii', 'ignore').decode('utf-8') for s in j["keyw_5"]]
-            filename = j["filename"]
-            docName = filename.split('.pdf')[0]
+            o = {}
 
-            # TODO: implement json decoder that strips non-ascii codes
-            summary_30 = j["summary_30"]
-            summary_30_str = str(summary_30).replace('"', "\'").encode('ascii', 'ignore').decode('utf-8')
-            summary_30_str = str(summary_30_str).replace("\\", "/").encode('ascii', 'ignore').decode('utf-8')
-            type = j["type"]
-            pageCount = j["page_count"]
+            o["id"] = j.get("id", "")
+            o["doc_num"] = j.get("doc_num", "")
+            o["doc_type"] = j.get("doc_type", "")
+            o["display_title_s"] = j.get("display_title_s", "")
+            o["display_org_s"] = j.get("display_org_s", "")
+            o["display_doc_type_s"] = j.get("display_doc_type_s", "")
+            o["ref_list"] = [s.replace("'", '\"') for s in j.get("ref_list", [])]
+            o["access_timestamp_dt"] = j.get("access_timestamp_dt", "")
+            o["publication_date_dt"] = (j.get("publication_date_dt", "") or "")
+            o["crawler_used_s"] = j.get("crawler_used_s", "")
+            o["source_fqdn_s"] = j.get("source_fqdn_s", "")
+            o["source_page_url_s"] = j.get("source_page_url_s", "")
+            o["download_url_s"] = j.get("download_url_s", '')
+            o["cac_login_required_b"] = j.get("cac_login_required_b", False)
+            o["title"] = j.get("title", "").replace('"', "\'")
+            o["keyw_5"] = [s.encode('ascii', 'ignore').decode('utf-8') for s in j.get("keyw_5", [])]
+            o["filename"] = j.get("filename", "")
+            o["summary_30"] = j.get("summary_30", "")
+            o["type"] = j.get("type", "")
+            o["page_count"] = j.get("page_count", 0)
+            o["topics_rs"] = j.get("topics_rs", [])
+            o["init_date"] = j.get("init_date", "")
+            o["change_date"] = j.get("change_date", "")
+            o["author"] = j.get("author", "")
+            o["signature"] = j.get("signature", "")
+            o["subject"] = j.get("subject", "")
+            o["classification"] = j.get("classification", "")
+            o["group_s"] = j.get("group_s", "")
+            o["pagerank_r"] = j.get("pagerank_r", 0)
+            o["kw_doc_score_r"] = j.get("kw_doc_score_r", 0)
+            o["version_hash_s"] = j.get("version_hash_s", "")
+            o["is_revoked_b"] = j.get("is_revoked_b", False)
+            o["entities"] = self.process_entity_list(j, j.get("id", ""))
 
-            tmp_topics = []
-            topics = {}
+            process_query('CALL policy.createDocumentNodesFromJson(' + json.dumps(json.dumps(o)) + ')')
 
-            try:
-                topics = j["topics_rs"]
+            # # TODO responsibilities
+            # text = j["text"]
+            # self.process_responsibilities(text)
 
-                keys = list(topics.keys())
-                tmp_topics = []
-                for key in keys:
-                    key_arr = key.split(' ')
-                    new_key = ' '.join([x.capitalize() for x in key_arr])
-                    tmp_topics.append(new_key)
-            except Exception as e:
-                print(title)
-
-            # Create document and publication and belongs_to relationships
-            query = (
-                'MERGE (a:Document {doc_id: \"' + doc_id + '\"}) '
-                + 'SET a.keyw_5 = ' + str(keyw_5)
-                + ', a.topics = ' + str(tmp_topics)
-                + ', a.filename = \"' + filename
-                + '\", a.title= \"' + title
-                + '\", a.display_title_s = \"' + displayTitle
-                + '\", a.display_org_s = \"' + displayOrg
-                + '\", a.display_doc_type_s = \"' + displayType
-                + '\", a.access_timestamp_dt = \"' + accessTimestamp
-                + '\", a.publication_date_dt = \"' + publicationDate
-                + '\", a.crawler_used_s = \"' + crawlerUsed
-                + '\", a.source_fqdn_s = \"' + sourceFqdn
-                + '\", a.source_page_url_s = \"' + sourcePageUrl
-                + '\", a.download_url_s = \"' + downloadUrl
-                + '\", a.cac_login_required_b = \"' + cacLoginRequired
-                + '\", a.doc_num = \"' + docNum
-                + '\", a.summary_30 = \"' + summary_30_str
-                + '\", a.doc_type = \"' + docType
-                + '\", a.type = \"' + type
-                + '\", a.name = \"' + docName
-                + '\", a.ref_name = \"' + pubName
-                + '\", a.ref_list = ' + str(ref_list)
-                + ', a.page_count = ' + str(pageCount)
-                + ', a.init_date = \"' + j.get('init_date', '')
-                + '\", a.change_date = \"' + j.get('change_date', '')
-                + '\", a.author = \"' + j.get('author', '')
-                + '\", a.signature = \"' + j.get('signature', '')
-                + '\", a.subject = \"' + j.get('subject', '')
-                + '\", a.classification = \"' + j.get('classification', '')
-                + '\", a.group_s = \"' + j.get('group_s' '')
-                + '\", a.pagerank_r = ' + str((j.get('pagerank_r', 0) or 0))
-                + ', a.kw_doc_score_r = ' + str((j.get('kw_doc_score_r', 0) or 0))
-                + ', a.version_hash_s = \"' + (j.get('version_hash_s' '') or "")
-                + '\", a.is_revoked_b = ' + str((j.get('is_revoked_b', False) or False))
-                + ';'
-            )
-
-            process_query(query)
-
-            # relationships
-            self.process_entity_list(j, doc_id)
-            self.process_topics(topics, doc_id)
-
-            # responsibilities
-            text = j["text"]
-            self.process_responsibilities(text)
-
-            # paragraphs
-            #self.process_paragraphs(j, doc_id)
+            # TODO paragraphs
+            # self.process_paragraphs(j, doc_id)
 
         q.put(1)
         return id
-
-    def process_topics(self, topics: t.Dict[str, t.Any], doc_id: str) -> None:
-        topic_query = 'MERGE (a:Document {doc_id: \"' + doc_id + '\"}) '
-
-        for idx, topic_key in enumerate(topics.keys()):
-            char_code = idx
-            ref_var = ''
-            key_arr = topic_key.split(' ')
-            new_key = ' '.join([x.capitalize() for x in key_arr])
-            for i in range(int(char_code / 24) + 2):
-                ref_var += chr(char_code % 24 + 98)
-            topic_query += (
-                    'MERGE (' + ref_var + ':Topic {name: \"' + new_key + '\"}) '
-                    + 'MERGE (a)-[:CONTAINS {relevancy: ' + str(topics[topic_key]) + '}]->(' + ref_var + ') '
-                    + 'MERGE (' + ref_var + ')-[:IS_IN {relevancy: ' + str(topics[topic_key]) + '}]->(a) '
-            )
-
-        process_query(topic_query)
 
     def process_responsibilities(self, text: str) -> None:
         resp = get_responsibilities(text, agencies=get_agency_names())
@@ -259,9 +179,9 @@ class Neo4jPublisher:
             )
         return
 
-    def process_entity_list(self, j: t.Dict[str, t.Any], doc_id: str) -> None:
-        entityDict: t.Dict[str, t.Any] = {}
-        entityCount: t.Dict[str, int] = {}
+    def process_entity_list(self, j: t.Dict[str, t.Any], doc_id: str) -> t.Dict[str, t.Any]:
+        entity_dict: t.Dict[str, t.Any] = {}
+        entity_count: t.Dict[str, int] = {}
         for p in j["paragraphs"]:
             entities = p["entities"]
             types = list(entities.keys())
@@ -270,35 +190,14 @@ class Neo4jPublisher:
                 for ent in (self._normalize_string(e) for e in entity_list):
                     ans = self.filter_ents(ent)
                     if len(ans) > 0:
-                        if ans not in entityDict:
-                            entityDict[ans] = []
-                            entityCount[ans] = 0
+                        if ans not in entity_dict:
+                            entity_dict[ans] = []
+                            entity_count[ans] = 0
 
-                        entityDict[ans].append(p["par_inc_count"])
-                        entityCount[ans] += 1
+                        entity_dict[ans].append(p["par_inc_count"])
+                        entity_count[ans] += 1
 
-        self.process_entity_refs(entityDict, entityCount, doc_id)
-        return
-
-    def process_entity_refs(self, entityDict: t.Dict[str, t.Any], entityCount: t.Dict[str, int], doc_id: str) -> None:
-        query = 'MERGE (a: Document {doc_id: \"' \
-                + doc_id \
-                + '\"})'
-        create_query = ''
-        for idx, ent in enumerate(list(entityDict.keys())):
-            char_code = idx
-            ref_var = ''
-            for i in range(int(char_code / 24) + 1):
-                ref_var += chr(char_code % 24 + 98)
-            query += ' MERGE (' + ref_var + ': Entity {name: \"' + ent + '\"})'
-            create_query += ' CREATE (a)-[:MENTIONS {count: ' \
-                            + str(entityCount[ent]) \
-                            + ', pars: ' \
-                            + str(entityDict[ent]) \
-                            + '}]->(' + ref_var + ')'
-
-        process_query(query + create_query + ';')
-        return
+        return {"entityPars": entity_dict, "entityCounts": entity_count}
 
     def populate_verified_ents(self, csv: str = Config.agencies_csv_path) -> None:
         csv_untrimmed = pd.read_csv(csv, na_filter=False)
@@ -328,41 +227,8 @@ class Neo4jPublisher:
     def process_entity_relationships(self) -> None:
         total_ents = len(self.verifiedEnts)
         print('Inserting {0} entities ...'.format(total_ents))
-        for _, row in tqdm(self.verifiedEnts.iterrows(), total=total_ents):
-            process_query(
-                'MERGE (e:Entity {name: \"'
-                + row.Agency_Name
-                + '\"}) SET e.aliases = \"'
-                + row.Agency_Aliases
-                + '\" SET e.website = \"'
-                + row.Website
-                + '\" SET e.image = \"'
-                + row.Agency_Image
-                + '\" SET e.address = \"'
-                + row.Address
-                + '\" SET e.phone = \"'
-                + row.Phone
-                + '\" SET e.tty = \"'
-                + row.TTY
-                + '\" SET e.tollfree = \"'
-                + row.TollFree
-                + '\" SET e.branch = \"'
-                + row.Government_Branch
-                + '\" SET e.type = \"'
-                + 'organization'
-                + '\" '
-                + 'MERGE (p:Entity {name: \"'
-                + row.Parent_Agency
-                + '\"}) '
-                + 'MERGE (e)-[:CHILD_OF]->(p) '
-                + 'WITH e '
-                + 'UNWIND split( \"'
-                + row.Related_Agency
-                + '\", \';\') AS re '
-                + 'MERGE (a:Entity {name: trim(re)}) '
-                + 'MERGE(e)-[:RELATED_TO]->(a) '
-                + 'MERGE(a)-[:RELATED_TO]->(e) '
-            )
+        entity_json = self.verifiedEnts.to_json(orient="records")
+        process_query('CALL policy.createEntityNodesFromJson(' + json.dumps(entity_json) + ')')
         return
 
     def process_dir(self, files: t.List[str], file_dir: str, q: mp.Queue) -> None:
@@ -380,7 +246,7 @@ class Neo4jPublisher:
         new_ent = process_ent(ent)
         name_df = self.verifiedEnts[
             self.verifiedEnts["Agency_Name"].str.upper() == new_ent.upper()
-        ]
+            ]
         if len(name_df):
             return name_df.iloc[0, 1]
         else:
@@ -483,4 +349,3 @@ class Neo4jPublisher:
 
         for r in self.entEntRelationsStmt:
             process_query(r)
-
