@@ -36,7 +36,8 @@ class GCSpider(scrapy.Spider):
             encodes to ascii, retaining non-breaking spaces and strips spaces from ends
             applys text.replace('\u00a0', ' ').encode('ascii', 'ignore').decode('ascii').strip()
         """
-        return text.replace('\u00a0', ' ').encode('ascii', 'ignore').decode('ascii').strip()
+
+        return text.replace('\u00a0', ' ').replace('\u2019', "'").encode('ascii', 'ignore').decode('ascii').strip()
 
     @staticmethod
     def ensure_full_href_url(href_raw: str, url_base: str) -> str:
@@ -49,3 +50,7 @@ class GCSpider(scrapy.Spider):
             web_url = href_raw
 
         return web_url
+
+    @staticmethod
+    def url_encode_spaces(href_raw):
+        return href_raw.replace(' ', '%20')
