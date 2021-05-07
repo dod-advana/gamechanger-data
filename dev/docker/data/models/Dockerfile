@@ -38,11 +38,11 @@ RUN \
 #####
 
 ## MODEL SETTINGS (prefixes always end with /)
-ARG TOPIC_MODEL_S3_PREFIX_URL="s3://advana-raw-zone/gamechanger/models/topic_models/"
-ARG TRANSFORMER_MODEL_BUNDLE_S3_URL="s3://advana-raw-zone/gamechanger/models/transformers_v4/transformers.tar.gz"
-ARG SENTENCE_INDEX_BUNDLE_S3_URL="s3://advana-raw-zone/gamechanger/models/sent_index/sent_index_20210223.tar.gz"
-ARG QEXP_MODEL_S3_PREFIX_URL="s3://advana-raw-zone/gamechanger/models/v3/20201217/"
-ARG QEXP_MODEL_NAME="20201217"
+ARG TOPIC_MODEL_S3_PREFIX_URL="s3://advana-raw-zone/gamechanger/models/topic_model/v1/"
+ARG TRANSFORMER_MODEL_BUNDLE_S3_URL="s3://advana-raw-zone/gamechanger/models/transformers/v4/20210224.tar.gz"
+ARG SENTENCE_INDEX_BUNDLE_S3_URL="s3://advana-raw-zone/gamechanger/models/sentence_index/v4/sent_index_20210422.tar.gz"
+ARG QEXP_MODEL_S3_PREFIX_URL="s3://advana-raw-zone/gamechanger/models/qexp_model/v3/"
+ARG QEXP_MODEL_NAME="qexp_20201217"
 
 ## ENV VARS (has to match expected paths for <ds>/models/ to avoid extra configuration of ml-api)
 ENV ML_MODELS_DIR="/data/models/"
