@@ -1,9 +1,18 @@
 # -*- coding: utf-8 -*-
 import scrapy
+import re
+import typing
 from urllib.parse import urljoin, urlparse
 from os.path import splitext
 
 from dataPipelines.gc_scrapy.gc_scrapy.runspider_settings import general_settings
+
+url_re = re.compile("((http|https)://)(www.)?" +
+                    "[a-zA-Z0-9@:%._\\+~#?&//=]" +
+                    "{2,256}\\.[a-z]" +
+                    "{2,6}\\b([-a-zA-Z0-9@:%" +
+                    "._\\+~#?&//=]*)"
+                    )
 
 
 class GCSpider(scrapy.Spider):
@@ -14,7 +23,9 @@ class GCSpider(scrapy.Spider):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    custom_settings = general_settings
+    custom_settings: dict = general_settings
+    rotate_user_agent: bool = False
+    randomly_delay_request: typing.Union[bool, range, typing.List[int]] = False
 
     @staticmethod
     def get_href_file_extension(url: str) -> str:
@@ -52,5 +63,15 @@ class GCSpider(scrapy.Spider):
         return web_url
 
     @staticmethod
-    def url_encode_spaces(href_raw):
+    def url_encode_spaces(href_raw: str) -> str:
+        """
+            encodes spaces as %20
+        """
         return href_raw.replace(' ', '%20')
+
+    @staticmethod
+    def is_valid_url(url: str) -> bool:
+        """
+            checks if url is valid
+        """
+        return url_re.match(url)
