@@ -1,7 +1,8 @@
 general_settings = {
     'ITEM_PIPELINES': {
-        # 'dataPipelines.gc_scrapy.gc_scrapy.pipelines.AdditionalFieldsPipeline': 1,
-        # 'dataPipelines.gc_scrapy.gc_scrapy.pipelines.ValidateJsonPipeline': 1000,
+        'dataPipelines.gc_scrapy.gc_scrapy.pipelines.DeduplicaterPipeline': 1,
+        'dataPipelines.gc_scrapy.gc_scrapy.pipelines.AdditionalFieldsPipeline': 2,
+        'dataPipelines.gc_scrapy.gc_scrapy.pipelines.ValidateJsonPipeline': 1000,
     },
     'FEED_EXPORTERS': {
         'json': 'dataPipelines.gc_scrapy.gc_scrapy.exporters.JsonLinesAsJsonItemExporter',
