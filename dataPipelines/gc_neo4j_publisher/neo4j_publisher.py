@@ -113,7 +113,7 @@ class Neo4jPublisher:
             o["kw_doc_score_r"] = j.get("kw_doc_score_r", 0)
             o["version_hash_s"] = j.get("version_hash_s", "")
             o["is_revoked_b"] = j.get("is_revoked_b", False)
-            o["entities"] = self.process_entity_list(j, j.get("id", ""))
+            o["entities"] = self.process_entity_list(j)
 
             process_query('CALL policy.createDocumentNodesFromJson(' + json.dumps(json.dumps(o)) + ')')
 
@@ -179,23 +179,26 @@ class Neo4jPublisher:
             )
         return
 
-    def process_entity_list(self, j: t.Dict[str, t.Any], doc_id: str) -> t.Dict[str, t.Any]:
+    def process_entity_list(self, j: t.Dict[str, t.Any]) -> t.Dict[str, t.Any]:
         entity_dict: t.Dict[str, t.Any] = {}
         entity_count: t.Dict[str, int] = {}
-        for p in j["paragraphs"]:
-            entities = p["entities"]
-            types = list(entities.keys())
-            for type in types:
-                entity_list = entities[type]
-                for ent in (self._normalize_string(e) for e in entity_list):
-                    ans = self.filter_ents(ent)
-                    if len(ans) > 0:
-                        if ans not in entity_dict:
-                            entity_dict[ans] = []
-                            entity_count[ans] = 0
+        try:
+            for p in j["paragraphs"]:
+                entities = p["entities"]
+                types = list(entities.keys())
+                for type in types:
+                    entity_list = entities[type]
+                    for ent in (self._normalize_string(e) for e in entity_list):
+                        ans = self.filter_ents(ent)
+                        if len(ans) > 0:
+                            if ans not in entity_dict:
+                                entity_dict[ans] = []
+                                entity_count[ans] = 0
 
-                        entity_dict[ans].append(p["par_inc_count"])
-                        entity_count[ans] += 1
+                            entity_dict[ans].append(p["par_inc_count"])
+                            entity_count[ans] += 1
+        except:
+            print('Error creatign entities for: ' + j["id"], file=sys.stderr)
 
         return {"entityPars": entity_dict, "entityCounts": entity_count}
 
