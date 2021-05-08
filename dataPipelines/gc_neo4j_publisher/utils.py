@@ -116,6 +116,12 @@ class Neo4jJobManager:
                 session.run("DROP CONSTRAINT unique_resps IF EXISTS")
                 session.run("DROP CONSTRAINT unique_topics IF EXISTS")
 
+                session.run("DROP INDEX document_index IF EXISTS")
+                session.run("DROP INDEX ukn_document_index IF EXISTS")
+                session.run("DROP INDEX entity_index IF EXISTS")
+                session.run("DROP INDEX topic_index IF EXISTS")
+                session.run("DROP INDEX responsibility_index IF EXISTS")
+
                 # next set up a few things to make sure that entities/documents/pubs aren't being inserted more than once.
                 session.run("CREATE CONSTRAINT unique_docs IF NOT EXISTS ON (d:Document) ASSERT d.doc_id IS UNIQUE")
                 session.run("CREATE CONSTRAINT unique_ents IF NOT EXISTS ON (e:Entity) ASSERT e.name IS UNIQUE")
