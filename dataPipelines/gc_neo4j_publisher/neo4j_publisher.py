@@ -238,8 +238,12 @@ class Neo4jPublisher:
         with ThreadPoolExecutor(max_workers=len(files)) as ex:
             futures = []
             for filename in files:
-                if filename.endswith('.json'):
-                    futures.append(ex.submit(self.process_json(os.path.join(file_dir, filename), q)))
+                try:
+                    if filename.endswith('.json'):
+                        futures.append(ex.submit(self.process_json(os.path.join(file_dir, filename), q)))
+                except RuntimeError as ex:
+                    print('RuntimeError in: ' + filename + ' Error: ' + str(ex), file=sys.stderr)
+                    q.put(1)
         return
 
     def filter_ents(self, ent: str) -> str:
