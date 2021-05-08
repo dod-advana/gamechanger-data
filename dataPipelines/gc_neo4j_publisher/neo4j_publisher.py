@@ -244,8 +244,8 @@ class Neo4jPublisher:
                 try:
                     if filename.endswith('.json'):
                         futures.append(ex.submit(self.process_json(os.path.join(file_dir, filename), q)))
-                except RuntimeError as ex:
-                    print('RuntimeError in: ' + filename + ' Error: ' + str(ex), file=sys.stderr)
+                except Exception as err:
+                    print('RuntimeError in: ' + filename + ' Error: ' + str(err), file=sys.stderr)
                     q.put(1)
         return
 
