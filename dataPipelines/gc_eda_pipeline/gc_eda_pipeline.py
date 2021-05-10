@@ -1,7 +1,7 @@
 import time
 
-import ocrmypdf
 from dataPipelines.gc_eda_pipeline.conf import Conf
+# from dataPipelines.gc_elasticsearch_publisher.gc_elasticsearch_publisher import ConfiguredElasticsearchPublisher
 from dataPipelines.gc_eda_pipeline.indexer.eda_indexer import EDSConfiguredElasticsearchPublisher
 # from dataPipelines.gc_eda_pipeline.metadata import metadata_extraction
 # from dataPipelines.gc_eda_pipeline.metadata_simple_view import metadata_extraction
@@ -154,9 +154,6 @@ def run(staging_folder: str, aws_s3_input_pdf_prefix: str,
                             number_file_failed = number_file_failed + 1
                         except RuntimeError as re:
                             print(f"EDA **** Failed to process '{re}'  ****  EDA")
-                            traceback.print_exc()
-                        except ocrmypdf.exceptions.InputFileError as o_exec:
-                            print(f"EDA **** Failed to process '{o_exec}'  ****  EDA")
                             traceback.print_exc()
                     else:
                         print("EDA ****  File is not a PDF **** EDA")
@@ -522,20 +519,15 @@ def pdf_ocr(file: str, staging_folder: str, multiprocess: int) -> (bool, bool):
                         ignore_init_errors=True,
                         num_threads=multiprocess
                     )
-                is_ocr = ocr.convert()
-            except SubprocessOutputError as e:
-                print(e)
+                    try:
+                        is_ocr = ocr.convert()
+                    except SubprocessOutputError as e:
+                        print(e)
+                        is_ocr = False
+            except Exception as ex:
+                print(ex)
                 is_ocr = False
-            except ValueError as e:
-                print(e)
-                is_ocr = False
-            except IndexError as i_e:
-                print(i_e)
-                is_ocr = False
-            except Exception as exc:
-                print(exc)
-                is_ocr = False
-        return is_pdf_file, is_ocr
+            return is_pdf_file, is_ocr
     except RuntimeError as e:
         print(f"File does not look like a pdf file {saved_file}")
         traceback.print_exc()
@@ -551,20 +543,9 @@ def docparser(metadata_file_path: str, saved_file: Union[str, Path], staging_fol
     """
     OCR will be done outside of the docparser.
     """
-    skip_optional_ds = True
-    ocr_missing_doc = False
-    num_ocr_threads = 1
-    ultra_simple = True
-    clean = True
-    meta_data = metadata_file_path
     m_file = saved_file
-
     out_dir = staging_folder + "/json/" + path + "/"
-    # data_inputs = (m_file, out_dir, clean, meta_data, skip_optional_ds, ocr_missing_doc, num_ocr_threads, ultra_simple)
-
-    # def parse(f_name, meta_data=None, ocr_missing_doc=False, num_ocr_threads=2, out_dir="./"):
     parse(f_name=m_file, meta_data=metadata_file_path, ocr_missing_doc=False, num_ocr_threads=1, out_dir=out_dir)
-    # Document.single_process(data_inputs)
     return True
 
 
@@ -574,9 +555,9 @@ def audit_record_new(audit_id: str, publisher: EDSConfiguredElasticsearchPublish
 
 def cleanup_record(delete_files: list):
     pass
-    # for delete_file in delete_files:
-    #     if os.path.exists(delete_file):
-    #         os.remove(delete_file)
+    for delete_file in delete_files:
+        if os.path.exists(delete_file):
+            os.remove(delete_file)
 
 
 def audit_complete(audit_id: str, publisher: EDSConfiguredElasticsearchPublisher, directory: str, number_of_files: int,

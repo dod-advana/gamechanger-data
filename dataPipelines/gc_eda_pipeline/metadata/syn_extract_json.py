@@ -75,6 +75,8 @@ def populate_modification(data: dict):
 
 # To populate Award ID, ReferencedIDV
 def populate_award_id_referenced_idv(data: dict) -> (str, str):
+    award_id = None
+    referenced_idv = None
     order_number = None
     contract_number = None
     if "syn_contract_eda_ext_n" in data:
@@ -83,12 +85,12 @@ def populate_award_id_referenced_idv(data: dict) -> (str, str):
                 order_number = syn_contract.get("delivery_order_number_eda_ext")
             if syn_contract.get("contract_number_eda_ext"):
                 contract_number = syn_contract.get("contract_number_eda_ext")
-            if order_number:
+            if order_number and contract_number:
                 referenced_idv = syn_contract.get("contract_number_eda_ext")
                 award_id = syn_contract.get("delivery_order_number_eda_ext")
-            elif order_number:
+            elif order_number and contract_number is None:
                 award_id = syn_contract.get("delivery_order_number_eda_ext")
-            elif order_number:
+            elif order_number is None and contract_number:
                 award_id = syn_contract.get("contract_number_eda_ext")
     return award_id, referenced_idv
 
@@ -158,6 +160,7 @@ def contract_effective_and_signed_date(data: dict) -> (str, str):
                 signature_date = contract.get("contract_signed_date_eda_ext_dt")
             return effective_date, signature_date
     return effective_date, signature_date
+
 
 # To populate Total Obligated Amount
 def populate_total_obligated_amount(data: dict, is_award: bool):
