@@ -64,7 +64,7 @@ def extract_pds(data_conf_filter: dict, data: dict, extensions_metadata: dict):
     if naics:
         extracted_data_eda_n["naics_eda_ext"] = naics
 
-    return {"extracted_data_pds_eda_n": extracted_data_eda_n}
+    return {"extracted_data_eda_n": extracted_data_eda_n}
 
 
 # To populate Modifications
@@ -179,7 +179,7 @@ def populate_contract_issue_office_name_and_contract_issue_office_dodaa(data: di
 
                 if contract_issue_office_dodaac and contract_issue_office_dodaac.startswith("W"):
                     dodaac_org_type = "army"
-                if contract_issue_office_dodaac and contract_issue_office_dodaac.startswith("N"):
+                elif contract_issue_office_dodaac and contract_issue_office_dodaac.startswith("N"):
                     dodaac_org_type = "navy"
                 elif contract_issue_office_dodaac and contract_issue_office_dodaac.startswith("F"):
                     dodaac_org_type = "airforce"

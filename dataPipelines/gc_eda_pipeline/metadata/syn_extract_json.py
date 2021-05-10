@@ -34,11 +34,13 @@ def extract_syn(data_conf_filter: dict, data: dict):
     if vendor_cage:
         extracted_data_eda_n["vendor_cage_eda_ext"] = vendor_cage
 
-    contracting_agency_name, contract_issuing_office_dodaac = contract_agency_name_and_issuing_office_dodaac(data)
+    contracting_agency_name, contract_issuing_office_dodaac, dodaac_org_type = contract_agency_name_and_issuing_office_dodaac(data)
     if contracting_agency_name:
         extracted_data_eda_n["contracting_agency_name_eda_ext"] = contracting_agency_name
     if contract_issuing_office_dodaac:
         extracted_data_eda_n["contract_issuing_office_dodaac_eda_ext"] = contract_issuing_office_dodaac
+    if dodaac_org_type:
+        extracted_data_eda_n["dodaac_org_type_eda_ext"] = dodaac_org_type
 
     effective_date, signature_date = contract_effective_and_signed_date(data)
     if effective_date:
@@ -58,7 +60,7 @@ def extract_syn(data_conf_filter: dict, data: dict):
     if total_obligated_amount:
         extracted_data_eda_n["total_obligated_amount_eda_ext_f"] = total_obligated_amount
 
-    return {"extracted_data_syn_eda_n": extracted_data_eda_n}
+    return {"extracted_data_eda_n": extracted_data_eda_n}
 
 
 # To populate Modifications
@@ -144,7 +146,20 @@ def contract_agency_name_and_issuing_office_dodaac(data: dict) -> (str, str):
             if contract.get("buyer_name_eda_ext"):
                 contracting_agency_name = contract.get("buyer_name_eda_ext")
 
-            return contracting_agency_name,contract_issuing_office_dodaac
+            if contract_issuing_office_dodaac and contract_issuing_office_dodaac.startswith("W"):
+                dodaac_org_type = "army"
+            elif contract_issuing_office_dodaac and contract_issuing_office_dodaac.startswith("N"):
+                dodaac_org_type = "navy"
+            elif contract_issuing_office_dodaac and contract_issuing_office_dodaac.startswith("F"):
+                dodaac_org_type = "airforce"
+            elif contract_issuing_office_dodaac and contract_issuing_office_dodaac.startswith("SP"):
+                dodaac_org_type = "dla"
+            elif contract_issuing_office_dodaac and contract_issuing_office_dodaac.startswith("M"):
+                dodaac_org_type = "marinecorps"
+            else:
+                dodaac_org_type = "estate"
+
+            return contracting_agency_name,contract_issuing_office_dodaac, dodaac_org_type
     return contracting_agency_name, contract_issuing_office_dodaac
 
 
