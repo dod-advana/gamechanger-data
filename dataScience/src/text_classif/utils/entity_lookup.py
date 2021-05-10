@@ -55,3 +55,20 @@ def build_entity_lookup():
         "(D(?:e(?:fense (?:C(?:o(?:unterintelligence|mmissary|ntract)|riminal)|T(?:echn(?:ology|ical)|hreat)|In(?:telligence|formation)|A(?:cquisition|dvanced)|H(?:UMINT|ealth|uman)|P(?:risoner|OW/MIA)|L(?:ogistics|egal)|Security|Finance|Media)|p(?:uty (?:Secretary|Under)|artment of))|irector(?:, (?:Operational|Joint)| of)|oD Components)|N(?:a(?:tional (?:(?:(?:Reconnaissa|Intellige)nc|Defens)e|G(?:eospatial-Intelligence|uard)|Assessment|Security)|val (?:Criminal|Research))|orth(?: (?:Atlant|Pacif)ic|western Division))|A(?:rm(?:y (?:(?:Nation|Medic)al|Re(?:search|view)|Digitization|Corps|and)|ed Services)|ir (?:Education|Mobility|National|Combat|Force)|ssistant (?:Commandant|Secretary|to))|U(?:.S. (?:(?:Transportatio|Europea|Norther)n|S(?:trategic|outhern|pecial)|C(?:entral|yber)|A(?:frica|rmy)|Indo-Pacific)|n(?:i(?:formed Servic|ted Stat)es|der Secretary))|C(?:o(?:m(?:(?:batant Command(?:er)?|ponent Head)s|mandant of)|nstruction Engineering|ld Regions)|h(?:ief Information|airman, Joint)|entral Security|lose Combat)|M(?:i(?:ss(?:i(?:ssippi Valley|le Defense)|ouri River)|litary Postal)|a(?:rine (?:Expeditionary|Corps)|jor Commands))|S(?:outh(?: (?:Atlant|Pacif)ic|western Division)|e(?:rgeant Major|cretary of)|pace Development)|W(?:a(?:shington Headquarters|terways Experiment)|hite Sands)|P(?:acific (?:Ocean|Air)|rotecting Critical|entagon Force)|E(?:lectromagnetic Spectrum|xecutive Secretary)|J(?:oint (?:Personnel|History)|[12345678] -)|G(?:eneral Counsel|reat Lakes)|Vice (?:Chairman|Director),|O(?:rganization|ffice) of|Topographic Engineering)"
     )
     return abbrvs, orgs
+
+def update_dod_org_list(agencies_file_path, dodorg_file_path):
+    agencies = pd.read_csv(agencies_file_path)
+    dodorgs = pd.read_csv(dodorg_file_path, sep=":", names=['org'])
+    update_list = []
+
+    for i in range(len(agencies)):
+        temp = agencies['Agency_Aliases'][i].split(';')
+        for j in temp:
+            if str.isupper(j):
+                update_list.append(agencies['Agency_Name'][i] + ' (' + j + ')')
+    
+    new = {'org': update_list}
+    updated_orgs = dodorgs.append(pd.DataFrame(new))
+    new_orgs = updated_orgs['org'].unique()
+
+    return new_orgs

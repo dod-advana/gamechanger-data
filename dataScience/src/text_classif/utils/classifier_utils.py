@@ -315,6 +315,7 @@ def new_df():
     return pd.DataFrame(columns=["src", "label", "sentence"])
 
 
+
 def make_sentences(text, src):
     """
     Builds a list of dictionaries, one for each sentence resulting from
@@ -342,6 +343,12 @@ def make_sentences(text, src):
     return sent_list
 
 
+def get_document_title(doc_directory):
+    with open(doc_directory) as json_data:
+        data = json.load(json_data)
+    return data['title']
+
+
 def raw2dict(src_path, glob, key="raw_text"):
     """
     Generator to step through `glob` and extract each file's sentences;
@@ -357,6 +364,9 @@ def raw2dict(src_path, glob, key="raw_text"):
         str: name of the file
     """
     for raw_text, fname in gen_gc_docs(src_path, glob, key=key):
+        title = get_document_title(src_path + '/' + fname)
         sent_list = make_sentences(raw_text, fname)
+        for sent in sent_list:
+            sent.update({'title':title})
         logger.info("{:>25s} : {:>5,d}".format(fname, len(sent_list)))
         yield sent_list, fname
