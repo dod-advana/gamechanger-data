@@ -160,25 +160,34 @@ class Neo4jJobManager:
             print("Creating UKN Documents, REFERENCES, and REFERENCES_UKN links...", file=sys.stderr)
             session.run("CALL policy.createUKNDocumentNodesAndAllReferences();")
 
-            # Create Sub Graph
-            session.run(
-                "call gds.graph.create('sim-graph', ['Document', 'Entity', 'Topic'], ['REFERENCES', 'MENTIONS', 'CONTAINS']);"
-            )
-
             # Create Similarity Links
-            print("Creating SIMILARITY connections ... ", file=sys.stderr)
+            print("Creating node2vec properties ... ", file=sys.stderr)
             session.run(
-                "CALL gds.nodeSimilarity.stream('sim-graph') " +
-                "YIELD node1, node2, similarity " +
-                "WITH gds.util.asNode(node1) AS NODE1, gds.util.asNode(node2) AS NODE2, similarity " +
-                "MATCH (NODE1) WHERE 'Document' in labels(NODE1) AND NOT NODE1 = NODE2 AND similarity > 0.5 " +
-                "MATCH (NODE2) WHERE 'Document' in labels(NODE2) AND NOT NODE2 = NODE1 AND similarity > 0.5 " +
-                "MERGE (NODE1)-[:SIMILAR_TO {similarity: similarity}]->(NODE2);"
+                "CALL gds.alpha.node2vec.write( " +
+                "   { " +
+                "       nodeProjection: ['Document', 'Entity', 'Topic', 'UKN_Document'], " +
+                "       relationshipProjection: ['REFERENCES', 'REFERENCES_UKN', 'CHILD_OF', 'RELATED_TO', 'CONTAINS', 'MENTIONS', 'IS_IN'], " +
+                "       relationshipProperties: ['count', 'relevancy'], " +
+                "       embeddingDimension: 64, " +
+                "       walkLength: 10, " +
+                "       iterations: 3, " +
+                "       writeProperty: 'nodeVec' " +
+                "   } " +
+                ");"
             )
 
-            # Drop Sub Graph
+            print("Creating similarity relationships ... ", file=sys.stderr)
             session.run(
-                "call gds.graph.drop('sim-graph');"
+                "MATCH (d:Document) " +
+                "WITH {item:id(d), weights: d.nodeVec} AS userData " +
+                "WITH collect(userData) AS data " +
+                "CALL gds.alpha.similarity.cosine.stream({ " +
+                "  data: data, " +
+                "  similarityCutoff: 0.5 " +
+                "}) " +
+                "YIELD item1, item2, similarity " +
+                "WITH gds.util.asNode(item1) AS NODE1, gds.util.asNode(item2) AS NODE2, similarity " +
+                "MERGE (NODE1)-[:SIMILAR_TO {similarity: similarity}]->(NODE2);"
             )
 
             # delete any entity nodes without a name
