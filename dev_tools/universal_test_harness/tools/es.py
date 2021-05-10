@@ -1,5 +1,5 @@
 import click
-from dev.universal_test_harness.config import Config
+from dev_tools.universal_test_harness.config import Config
 from functools import reduce
 from enum import Enum
 

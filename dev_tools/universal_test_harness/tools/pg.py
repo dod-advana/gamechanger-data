@@ -1,6 +1,6 @@
 import click
 from enum import Enum
-from dev.universal_test_harness.config import Config
+from dev_tools.universal_test_harness.config import Config
 import sqlalchemy
 from pathlib import Path
 import typing as t

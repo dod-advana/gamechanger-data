@@ -5,7 +5,7 @@ services:
     container_name: "${COMPOSE_PROJECT_NAME:-gc-dev}-notebook"
     build:
       context: "../"
-      dockerfile: "dev/docker/devtools/notebook/Dockerfile"
+      dockerfile: "dev_tools/docker/devtools/notebook/Dockerfile"
     image: "gamechanger/devtools/notebook:latest"
     ports:
       - "8888:8888"
