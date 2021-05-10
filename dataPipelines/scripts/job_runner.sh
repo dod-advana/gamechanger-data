@@ -3,6 +3,24 @@ set -o nounset
 set -o errexit
 set -o pipefail
 
+#####
+## ## JOB RUNNER
+#####  - wrapper for running ad-hoc jobs, sending notifications, uploading logs
+#
+## USAGE:
+##    job_runner.sh <location-of-the-job-conf-file>
+#
+## EXAMPLE: job.conf file - params affect how notifications/logs are handled and which job script is launched
+#
+# JOB_NAME="Dummy Job"
+# JOB_SCRIPT="/gamechanger-data/tmp/dummy_job.sh"
+# SEND_NOTIFICATIONS="yes"
+# UPLOAD_LOGS="no"
+# SLACK_HOOK_CHANNEL="#gc-alerts-dev"
+# SLACK_HOOK_URL="https://hooks.slack.com/services/12312123/3534153245"
+# S3_BASE_LOG_PATH_URL="s3://somebucket/someplace"
+# AWS_DEFAULT_REGION="us-east-1"
+
 function send_notification() {
   if [[ "${SEND_NOTIFICATIONS}" == "yes" ]] ; then
     >&2 echo "[INFO] Sending notifications ..."
