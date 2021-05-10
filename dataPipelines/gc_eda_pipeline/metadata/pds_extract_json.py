@@ -34,11 +34,13 @@ def extract_pds(data_conf_filter: dict, data: dict, extensions_metadata: dict):
     if vendor_cage:
         extracted_data_eda_n["vendor_cage_eda_ext"] = vendor_cage
 
-    contract_issue_office_name, contract_issus_office_dodaac = populate_contract_issue_office_name_and_contract_issue_office_dodaa(data)
+    contract_issue_office_name, contract_issue_office_dodaac, dodaac_org_type = populate_contract_issue_office_name_and_contract_issue_office_dodaa(data)
     if contract_issue_office_name:
         extracted_data_eda_n["contract_issue_office_name_eda_ext"] = contract_issue_office_name
-    if contract_issus_office_dodaac:
-        extracted_data_eda_n["contract_issus_office_dodaac_eda_ext"] = contract_issus_office_dodaac
+    if contract_issue_office_dodaac:
+        extracted_data_eda_n["contract_issue_office_dodaac_eda_ext"] = contract_issue_office_dodaac
+    if dodaac_org_type:
+        extracted_data_eda_n["dodaac_org_type_eda_ext"] = dodaac_org_type
 
     sub_vendor_name, sub_vendor_duns, sub_vendor_cage = populate_vendor_sub(data)
     if sub_vendor_name:
@@ -58,9 +60,9 @@ def extract_pds(data_conf_filter: dict, data: dict, extensions_metadata: dict):
     if total_obligated_amount:
         extracted_data_eda_n["total_obligated_amount_eda_ext_f"] = total_obligated_amount
 
-    nasics = populate_naics(data)
-    if nasics:
-        extracted_data_eda_n["nasics_eda_ext"] = nasics
+    naics = populate_naics(data)
+    if naics:
+        extracted_data_eda_n["naics_eda_ext"] = naics
 
     return {"extracted_data_pds_eda_n": extracted_data_eda_n}
 
@@ -173,9 +175,23 @@ def populate_contract_issue_office_name_and_contract_issue_office_dodaa(data: di
         for address in data["address_eda_ext_n"]:
             if address.get("fk_address_details_eda_ext") == row_id:
                 contract_issue_office_name = address.get("org_name_eda_ext")
-                contract_issus_office_dodaac = address.get("orgid_dodaac_eda_ext")
-                return contract_issue_office_name,contract_issus_office_dodaac
-    return None, None, None
+                contract_issue_office_dodaac = address.get("orgid_dodaac_eda_ext")
+
+                if contract_issue_office_dodaac and contract_issue_office_dodaac.startswith("W"):
+                    dodaac_org_type = "army"
+                if contract_issue_office_dodaac and contract_issue_office_dodaac.startswith("N"):
+                    dodaac_org_type = "navy"
+                elif contract_issue_office_dodaac and contract_issue_office_dodaac.startswith("F"):
+                    dodaac_org_type = "airforce"
+                elif contract_issue_office_dodaac and contract_issue_office_dodaac.startswith("SP"):
+                    dodaac_org_type = "dla"
+                elif contract_issue_office_dodaac and contract_issue_office_dodaac.startswith("M"):
+                    dodaac_org_type = "marinecorps"
+                else:
+                    dodaac_org_type = "estate"
+
+                return contract_issue_office_name,contract_issue_office_dodaac, dodaac_org_type
+    return None, None, None, None
 
 
 # To populate Signature Dates
