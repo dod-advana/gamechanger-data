@@ -154,6 +154,7 @@ def process_dir(
     files = [x for x in p if x.is_file() and (str(x).endswith("pdf") or str(x).endswith("html"))]
     
     # files.sort()
+
     data_inputs = [(parse_func, f_name, meta_data, ocr_missing_doc,
                     num_ocr_threads, out_dir) for f_name in files]
 
