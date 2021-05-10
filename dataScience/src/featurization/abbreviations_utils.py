@@ -54,7 +54,10 @@ def get_agencies(file_dataframe, doc_dups, duplicates, agencies_dict):
     Returns:
         Vector of all extracted agencies for every row of the input dataframe.
     """
-    doc_dups = doc_dups
+    # if doc_dups is None:
+    #     doc_dups = []
+    # else:
+    #     doc_dups = doc_dups
     aliases = agencies_dict
     duplicates = duplicates
     all_agencies = []
@@ -67,8 +70,9 @@ def get_agencies(file_dataframe, doc_dups, duplicates, agencies_dict):
             if " "+x in row['text']:
                 if x not in duplicates:
                     agencies.append(aliases[x])
-                if doc_dups[i] is not None:
-                        agencies.append(doc_dups[i])
+                if doc_dups is not None:
+                    if doc_dups[i] is not None:
+                            agencies.append(doc_dups[i])
         flat_a = [item for sublist in agencies for item in sublist]
         flat_a = [''.join(x) for x in flat_a]
         flat_a = set(flat_a)
@@ -77,7 +81,7 @@ def get_agencies(file_dataframe, doc_dups, duplicates, agencies_dict):
     return all_agencies
 
 
-def get_references(file_dataframe):
+def get_references(file_dataframe, doc_title_col='doc'):
     """
     Get all the refs for a list of documents.
 
@@ -101,7 +105,7 @@ def get_references(file_dataframe):
         refs = []
         for j in list(df.columns):
             if type(row[j]) == str:
-                if j != "doc":
+                if j != doc_title_col:
                     refs.append(list(collect_ref_list(row[j]).keys()))
         flat_r = [item for sublist in refs for item in sublist]
         flat_r = list(set(flat_r))
@@ -123,6 +127,7 @@ def check_duplicates(text, duplicates, agencies_dict):
     Returns:
         list of agency names (or acrynoyms) where agency alias was ambiguous
     """
+
     duplicates = duplicates
     agencies_dict = agencies_dict
     best_agencies = []

@@ -349,6 +349,11 @@ def get_document_title(doc_directory):
     return data['title']
 
 
+def get_source_pdf(doc_directory):
+    with open(doc_directory) as json_data:
+        data = json.load(json_data)
+    return data['filename']
+
 def raw2dict(src_path, glob, key="raw_text"):
     """
     Generator to step through `glob` and extract each file's sentences;
@@ -365,8 +370,9 @@ def raw2dict(src_path, glob, key="raw_text"):
     """
     for raw_text, fname in gen_gc_docs(src_path, glob, key=key):
         title = get_document_title(src_path + '/' + fname)
+        source = get_source_pdf(src_path + '/' + fname)
         sent_list = make_sentences(raw_text, fname)
         for sent in sent_list:
-            sent.update({'title':title})
+            sent.update({'title':title, 'source': source})
         logger.info("{:>25s} : {:>5,d}".format(fname, len(sent_list)))
         yield sent_list, fname

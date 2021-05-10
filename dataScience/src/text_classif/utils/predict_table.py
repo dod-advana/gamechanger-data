@@ -21,14 +21,15 @@ optional arguments:
 """
 import logging
 import time
+import spacy
+import pandas as pd
 from argparse import ArgumentParser
 
 import dataScience.src.text_classif.utils.classifier_utils as cu
 from dataScience.src.text_classif.utils.entity_coref import EntityCoref
 from dataScience.src.text_classif.utils.log_init import initialize_logger
-
 from dataScience.src.text_classif.examples.output_utils import get_agency
-# from dataScience.src.featurization.abbreviations_utils import get_references, check_duplicates, get_agencies_dict, get_agencies
+from dataScience.src.featurization.abbreviations_utils import get_references, check_duplicates, get_agencies_dict, get_agencies
 # from dataScience.src.featurization.extract_improvement.extract_utils import \
 #     extract_entities, create_list_from_dict, remove_articles, match_parenthesis
 
@@ -91,7 +92,7 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "-a",
-        "--agencies_path",
+        "--agencies-path",
         dest="agencies_path",
         type=str,
         default=None,
@@ -103,6 +104,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     df = pd.DataFrame(columns=['entity', 'top_class', 'prob', 'src', 'label', 'sentence'])
+    duplicates, aliases = get_agencies_dict(args.agencies_path)
 
     start = time.time()
     entity_coref = EntityCoref()
@@ -116,7 +118,6 @@ if __name__ == "__main__":
         output_csv=None
     )
 
-    duplicates, aliases = get_agencies_dict(args.agencies_path)
     df = df.append(entity_coref.to_df())
     df = df[df.top_class == 1].reset_index()
 
@@ -124,23 +125,27 @@ if __name__ == "__main__":
              doc_dups=None, 
              duplicates=duplicates, 
              agencies_dict=aliases)
-    df['agencies'] = get_agency(df, spacy_model_)
+    df = get_agency(df, spacy_model_)
     df['refs'] = get_references(df, doc_title_col='src')
 
     rename_dict = {
-    'entity': 'Organization / Personnel',
-    'sentence': 'Responsibility Text',
-    'agencies': 'Other Organization(s) / Personnel Mentioned',
-    'refs': 'Documents Referenced'
+        'entity': 'Organization / Personnel',
+        'sentence': 'Responsibility Text',
+        'agencies': 'Other Organization(s) / Personnel Mentioned',
+        'refs': 'Documents Referenced',
+        'title': 'Document Title',
+        'source': 'Source Document'
     }
     renamed_df = df.rename(columns=rename_dict)
-    final_df = renamed_df[['Document Title', 
+    final_df = renamed_df[['Source Document',
+                        'Document Title', 
                         'Organization / Personnel', 
                         'Responsibility Text', 
                         'Other Organization(s) / Personnel Mentioned', 
                         'Documents Referenced']]
     
-    final_df.to_csv(output_csv)
+    final_df.to_csv(args.output_csv, index=False)
+    # df.to_csv(args.output_csv, index=False)
 
     elapsed = time.time() - start
 

@@ -1,4 +1,6 @@
 import json
+import numpy as np
+import pandas as pd
 
 from dataScience.src.featurization.abbreviations_utils import get_references, check_duplicates, get_agencies_dict, get_agencies
 from dataScience.src.featurization.extract_improvement.extract_utils import \
