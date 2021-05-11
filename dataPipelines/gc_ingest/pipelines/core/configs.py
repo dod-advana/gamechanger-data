@@ -46,6 +46,7 @@ class CoreIngestConfig(IngestConfig):
     index_name: NonBlankString
     alias_name: t.Optional[StrippedString]
     max_threads: pyd.PositiveInt
+    max_threads_neo4j: pyd.PositiveInt
     max_ocr_threads: pyd.PositiveInt
     skip_neo4j_update: bool = False
     skip_snapshot_backup: bool = False
@@ -224,6 +225,14 @@ class CoreIngestConfig(IngestConfig):
         )
         @click.option(
             '--max-threads',
+            type=int,
+            required=False,
+            default=mp.cpu_count(),
+            show_default=True,
+            help="Number of threads PER JOB to use for parsing/updating-neo4j"
+        )
+        @click.option(
+            '--max-threads-neo4j',
             type=int,
             required=False,
             default=mp.cpu_count(),

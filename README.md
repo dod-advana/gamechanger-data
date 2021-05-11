@@ -38,7 +38,7 @@ See LICENSE.md (including licensing intent - INTENT.md) and CONTRIBUTING.md
     - `conda activate gc`
     - `pip install --upgrade pip setuptools wheel`
     - `pip install -e '.[dev]'`  (quoting around .[dev] is <span style="color:red">important</span>)
-- That's it
+- That's it.
 
 ### Windows
 
