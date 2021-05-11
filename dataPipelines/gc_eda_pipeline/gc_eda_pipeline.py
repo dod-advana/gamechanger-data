@@ -31,6 +31,7 @@ class EDAJobType(Enum):
     """
     NORMAL = 'normal'
     UPDATE_METADATA = 'update_metadata'
+    UPDATE_METADATA_SKIP_NEW = 'update_metadata_skip_new'
     REPROCESS = 'reprocess'
     RE_INDEX = 're_index'
 
@@ -86,7 +87,7 @@ class EDAJobType(Enum):
 @click.option(
     '--skip-metadata',
     help="""Skip the step to Generate the metadata file and create generic metadata file, that includes will ony work 
-                with EDAJobType(NORMAL, REPROCESS, UPDATE_METADATA) not RE_INDEX """,
+                with EDAJobType(NORMAL, REPROCESS, UPDATE_METADATA, UPDATE_METADATA_SKIP_NEW) not RE_INDEX """,
     required=False,
     type=bool,
     default=False,
@@ -135,7 +136,8 @@ def run(staging_folder: str, aws_s3_input_pdf_prefix: str,
                             if fut.result() is not None:
                                 status = fut.result().get('status')
                                 if "already_processed" == status:
-                                    print(f"Following file {fut.result().get('filename')} was already processed")
+                                    print(f"Following file {fut.result().get('filename')} was already processed, extra info: "
+                                          f"{fut.result().get('info')}")
                                     number_file_processed = number_file_processed + 1
                                 elif "completed" == status:
                                     print(f"Following file {fut.result().get('filename')} was processed, extra info: "
@@ -144,6 +146,9 @@ def run(staging_folder: str, aws_s3_input_pdf_prefix: str,
                                 elif "failed" == status:
                                     print(f"Following file {fut.result().get('filename')} failed")
                                     number_file_failed = number_file_failed + 1
+                                elif "skip" == status:
+                                    print(f"Following file {fut.result().get('filename')} was skipped, extra info: "
+                                          f"{fut.result().get('info')}")
                         except Exception as exc:
                             value = str(exc)
                             if value == "not a PDF":
@@ -206,7 +211,7 @@ def process_doc(file: str, staging_folder: Union[str, Path], data_conf_filter: d
             process_file = True
     elif process_type == EDAJobType.NORMAL and not is_process_already:
         process_file = True
-    elif (process_type == EDAJobType.UPDATE_METADATA or process_type == EDAJobType.RE_INDEX) and is_process_already:
+    elif (process_type == EDAJobType.UPDATE_METADATA or process_type == EDAJobType.RE_INDEX or process_type == EDAJobType.UPDATE_METADATA_SKIP_NEW) and is_process_already:
         audit_rec_old = publish_audit.get_by_id(audit_id)
 
         # if last time the record fail it would never have gotten to index phase,
@@ -230,7 +235,7 @@ def process_doc(file: str, staging_folder: Union[str, Path], data_conf_filter: d
                 del audit_rec_old['is_docparser_b']
                 del audit_rec_old['docparser_time_f']
 
-            if process_type == EDAJobType.UPDATE_METADATA:
+            if process_type == EDAJobType.UPDATE_METADATA or process_type == EDAJobType.UPDATE_METADATA_SKIP_NEW:
                 update_metadata = True
             elif process_type == EDAJobType.RE_INDEX:
                 re_index_only = True
@@ -290,6 +295,12 @@ def process_doc(file: str, staging_folder: Union[str, Path], data_conf_filter: d
 
         return {'filename': filename, "status": "completed", "info": "update-metadata"}
 
+    elif process_file and process_type == EDAJobType.UPDATE_METADATA_SKIP_NEW:
+        if is_process_already:
+            return {'filename': filename, "status": "already_processed", "info": "File might be incorrect type or corrupted"}
+        else:
+            return {'filename': filename, "status": "skip", "info": "File was skip"}
+
     elif process_file:
         files_delete = []
         # Generate metadata file
@@ -334,7 +345,7 @@ def process_doc(file: str, staging_folder: Union[str, Path], data_conf_filter: d
                 cleanup_record(files_delete)
                 return {'filename': filename, "status": "failed", "info": "Not a PDF file"}
 
-    return {'filename': filename, "status": "failed", "info": "failed"}
+    return {'filename': filename, "status": "failed", "info": "failed -- Didn't match any processing type"}
 
 
 def generate_metadata_file(staging_folder: str, data_conf_filter: dict, file: str, filename: str,
