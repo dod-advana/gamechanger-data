@@ -154,7 +154,7 @@ def process_dir(
     files = [x for x in p if x.is_file() and filetype.guess(str(x)) is not None and (
         filetype.guess(str(x)).mime == "pdf" or filetype.guess(str(x)).mime == "application/pdf")]
 
-    data_inputs = [(parse_func, f_name, meta_data, ocr_missing_doc,
+    data_inputs = [(parse_func, f_name, str(f_name)+'.metadata', ocr_missing_doc,
                     num_ocr_threads, out_dir) for f_name in files]
 
     doc_logger = get_default_logger()
