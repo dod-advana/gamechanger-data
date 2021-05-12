@@ -73,6 +73,14 @@ def get_display_title(meta_data):
     doc_title = meta_data["doc_title"].strip()
     return doc_type + " " + doc_num + " " + doc_title
 
+def get_file_extension(meta_data):
+    """
+    get file extension for cards on webapp
+    :return: string
+    """
+    file_ext = meta_data["downloadable_items"][0]["doc_type"]
+    return file_ext
+    
 
 def rename_and_format(doc_dict):
     doc_dict["raw_text"] = utf8_pass(doc_dict["text"])
@@ -81,6 +89,7 @@ def rename_and_format(doc_dict):
     doc_dict["publication_date_dt"] = get_publication_date(doc_dict)
 
     if doc_dict["meta_data"]:
+        doc_dict["file_ext_s"] = get_file_extension(doc_dict["meta_data"])
         doc_dict["display_doc_type_s"] = get_display_doc_type(
             doc_dict, doc_dict["meta_data"])
         doc_dict["display_title_s"] = get_display_title(doc_dict["meta_data"])

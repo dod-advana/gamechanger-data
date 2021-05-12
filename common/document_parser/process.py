@@ -99,7 +99,7 @@ def single_process(data_inputs: typing.Tuple[typing.Callable, str, str, bool, in
                                  Path(f_name).name + '.metadata')
 
             if loc_meta_path.exists():
-                parse_func(f_name=f_name, meta_data=loc_meta_path, ocr_missing_doc=ocr_missing_doc,
+                parse_func(f_name=f_name, meta_data=loc_meta_path, ocr_missing_doc=ocr_missing_doc, 
                            num_ocr_threads=num_ocr_threads, out_dir=out_dir)
 
             else:
@@ -151,9 +151,8 @@ def process_dir(
     """
 
     p = Path(dir_path).glob("**/*")
-    files = [x for x in p if x.is_file() and filetype.guess(str(x)) is not None and (
-        filetype.guess(str(x)).mime == "pdf" or filetype.guess(str(x)).mime == "application/pdf")]
-
+    files = [x for x in p if x.is_file() and (str(x).endswith("pdf") or str(x).endswith("html"))]
+    # files.sort()
     data_inputs = [(parse_func, f_name, meta_data, ocr_missing_doc,
                     num_ocr_threads, out_dir) for f_name in files]
 
