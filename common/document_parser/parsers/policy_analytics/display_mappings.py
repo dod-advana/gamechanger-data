@@ -86,7 +86,8 @@ CRAWLER_TO_DISPLAY_ORG_LOOKUP = defaultdict(lambda: "Uncategorized", {
     "far_subpart_regs": "FAR"
 })
 
-CRAWLER_TO_DISPLAY_SOURCE_LOOKUP = defaultdict(lambda: None, {
+CRAWLER_TO_DISPLAY_SOURCE_LOOKUP = defaultdict(lambda: "Unlisted Source", {
+    "dod_issuances":"WHS DoD Directives Division",
     "army_pubs": "Army Publishing Directorate",
     "jcs_pubs": "Joint Chiefs of Staff Library",
     "jcs_manual_uploads": "Joint Chiefs of Staff",
