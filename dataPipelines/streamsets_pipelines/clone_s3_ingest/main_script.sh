@@ -91,6 +91,15 @@ function setup_local_repo_copy() {
   tar -xvzf "$LOCAL_GC_REPO_TGZ_PATH" -C "$LOCAL_GC_REPO_BASE_DIR"
 }
 
+function setup_app_config_copy() {
+  echo "FETCHING APP CONFIG"
+  S3_APP_CONFIG_PATH="${S3_BUCKET_NAME}/${APP_CONFIG_BASE_PREFIX}${APP_CONFIG_FILENAME}"
+  LOCAL_APP_CONFIG_PATH="${LOCAL_GC_REPO_BASE_DIR}/configuration/app-config/${APP_CONFIG_NAME:-$SCRIPT_ENV}.json"
+
+  $AWS_CMD s3 cp "s3://${S3_APP_CONFIG_PATH}" "$LOCAL_APP_CONFIG_PATH"
+}
+
+
 function setup_local_vars_and_dirs() {
 
   LOCAL_JOB_DIR="$LOCAL_TMP_DIR/job"
@@ -145,9 +154,9 @@ function run_core_ingest() {
   local max_parser_threads="${MAX_PARSER_THREADS:-16}"
 
   local current_snapshot_prefix="gamechanger/project/haistack/"
-  local backup_snapshot_prefix="gamechanger/backup/"
-  local load_archive_base_prefix="gamechanger/load-archive/"
-  local db_backup_base_prefix="gamechanger/backup/db/"
+  local backup_snapshot_prefix="gamechanger/project/haistack/backup/"
+  local load_archive_base_prefix="gamechanger/project/haistack/load-archive/"
+  local db_backup_base_prefix="gamechanger/project/haistack/backup/db/"
 
   python -m dataPipelines.gc_ingest pipelines clone ingest \
     --skip-neo4j-update="$skip_neo4j_update" \
@@ -168,7 +177,7 @@ function run_core_ingest() {
     s3 \
     --s3-raw-ingest-prefix="$s3_raw_ingest_prefix" \
     --s3-parsed-ingest-prefix="$s3_parsed_ingest_prefix"\
-	--metadata-creation-group="Memo"
+	--metadata-creation-group="pdf"
 }
 
 #####
@@ -189,6 +198,7 @@ echo_tmp_dir_locaton
 setup_local_vars_and_dirs
 # LOCAL_JOB_LOG_PATH var is now set
 setup_local_repo_copy 2>&1 | tee -a "$LOCAL_JOB_LOG_PATH"
+setup_app_config_copy 2>&1 | tee -a "$LOCAL_JOB_LOG_PATH"
 configure_repo 2>&1 | tee -a "$LOCAL_JOB_LOG_PATH"
 
 SECONDS=0

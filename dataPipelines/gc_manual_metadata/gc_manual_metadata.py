@@ -2,7 +2,7 @@ from pathlib import Path
 from dataPipelines.gc_crawler.data_model import Document, DownloadableItem
 import filetype
 
-Accepted_document_groups = ["Memo"]
+Accepted_document_groups = ["Memo", "pdf"]
 
 
 class ManualMetadata:
