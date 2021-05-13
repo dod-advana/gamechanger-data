@@ -143,8 +143,8 @@ class SnapshotManager:
         local_dir = Path(local_dir).resolve()
         prefix = self.get_current_prefix(snapshot_type)
         print("dir"+str(local_dir))
-        self.shellu.make_archive(str(local_dir)+'/json_files'+date.today().strftime('%Y%m%d'), 'zip', '.')
-        self.s3u.upload_file(file=str(local_dir)+'/json_files'+date.today().strftime('%Y%m%d')+'.zip', object_prefix=prefix)
+        self.shellu.make_archive(str(local_dir)+'/json_files', 'zip', '.')
+        self.s3u.upload_file(file=str(local_dir)+'/json_files'+'.zip', object_prefix=prefix)
 
     # TODO: avoid deleting all files first to avoid app downtime
     def update_current_snapshot_from_disk(self, local_dir: t.Union[Path, str],
