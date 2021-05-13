@@ -93,6 +93,8 @@ function setup_local_repo_copy() {
 
 function setup_app_config_copy() {
   echo "FETCHING APP CONFIG"
+  local APP_CONFIG_BASE_PREFIX="${APP_CONFIG_BASE_PREFIX:-gamechanger/configuration/app-config/}"
+  local APP_CONFIG_FILENAME="${APP_CONFIG_FILENAME:-prod.20210416.json}"
   S3_APP_CONFIG_PATH="${S3_BUCKET_NAME}/${APP_CONFIG_BASE_PREFIX}${APP_CONFIG_FILENAME}"
   LOCAL_APP_CONFIG_PATH="${LOCAL_GC_REPO_BASE_DIR}/configuration/app-config/${APP_CONFIG_NAME:-$SCRIPT_ENV}.json"
 
