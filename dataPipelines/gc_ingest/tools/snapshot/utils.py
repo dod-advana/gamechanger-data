@@ -5,7 +5,8 @@ from common.utils.s3 import S3Utils
 from common.utils.parsers import parse_timestamp
 import typing as t
 import datetime as dt
-
+import shutil
+from datetime import date
 from dataPipelines.gc_ingest.config import Config
 from dataPipelines.gc_db_utils.orch.models import SnapshotViewEntry
 from dataPipelines.gc_db_utils.web.models import SnapshotEntry
@@ -35,7 +36,8 @@ class SnapshotManager:
         self.current_doc_snapshot_prefix = self.s3u.format_as_prefix(current_doc_snapshot_prefix)
         self.backup_doc_snapshot_prefix = self.s3u.format_as_prefix(backup_doc_snapshot_prefix)
         Config.connection_helper.init_dbs()
-
+        self.shellu = shutil
+        
     def get_current_prefix(self, snapshot_type: t.Union[SnapshotType, str]) -> str:
         """Get current prefix for the snapshot"""
         snapshot_type = SnapshotType(snapshot_type)
@@ -129,6 +131,20 @@ class SnapshotManager:
                 prefix_path=current_prefix,
                 max_threads=max_threads
             )
+
+    def zip_folder_and_upload_to_s3(self,local_dir: t.Union[Path, str],
+                                    snapshot_type: t.Union[SnapshotType, str],
+                                    max_threads)->None:
+        """zip json files and upload to s3
+        :param local_dir: path to local flat directory with the files
+        :param snapshot_type: type of snapshot raw/parsed
+        :param max_threads: maximum number of threads for multiprocessing
+        """
+        local_dir = Path(local_dir).resolve()
+        prefix = self.get_current_prefix(snapshot_type)
+        print("dir"+str(local_dir))
+        self.shellu.make_archive(str(local_dir)+'/json_files', 'zip', '.')
+        self.s3u.upload_file(file=str(local_dir)+'/json_files'+'.zip', object_prefix=prefix)
 
     # TODO: avoid deleting all files first to avoid app downtime
     def update_current_snapshot_from_disk(self, local_dir: t.Union[Path, str],
