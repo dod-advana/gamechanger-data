@@ -211,9 +211,6 @@ class S3Utils:
         # makes it so that everything's in one place when I run executor.map() if multithreading
         def dl_inner_func(obpath):
             path, filename = os.path.split(obpath)
-            if "." not in filename:
-                filename=str(filename)+".pdf"
-                print(filename)
             if not obpath.endswith("/"):
                 tmp = path + "/"
                 if tmp.replace(prefix_path, "", 1) is None:
@@ -223,7 +220,6 @@ class S3Utils:
                     base_path = Path(local_dir, sub_path)
                     base_path.mkdir(exist_ok=True)
                     file_path = Path(base_path, filename)
-                    print(str(file_path))
                     self.download_file(bucket=bucket_name, object_path=obpath, file=str(file_path))
 
         tasks_to_do = self.iter_object_paths_at_prefix(prefix=prefix_path)
