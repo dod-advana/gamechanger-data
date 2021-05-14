@@ -37,7 +37,7 @@ class SnapshotManager:
         self.backup_doc_snapshot_prefix = self.s3u.format_as_prefix(backup_doc_snapshot_prefix)
         Config.connection_helper.init_dbs()
         self.shellu = shutil
-        
+
     def get_current_prefix(self, snapshot_type: t.Union[SnapshotType, str]) -> str:
         """Get current prefix for the snapshot"""
         snapshot_type = SnapshotType(snapshot_type)
@@ -76,6 +76,7 @@ class SnapshotManager:
 
     def recreate_web_db_snapshot(self) -> None:
         """Recreate snapshot table in web db using snapshot view from orch db"""
+
         def truncate_web_db_snapshot() -> None:
             """Trims the snapshot table"""
             ch = Config.connection_helper
@@ -85,7 +86,8 @@ class SnapshotManager:
 
         with Config.connection_helper.web_db_session_scope('rw') as session:
             web_db_entries = [
-                SnapshotEntry(**{k: getattr(orch_entry, k) for k, _ in SnapshotEntrySchema.__dict__.items() if not k.startswith('_')})
+                SnapshotEntry(**{k: getattr(orch_entry, k) for k, _ in SnapshotEntrySchema.__dict__.items() if
+                                 not k.startswith('_')})
                 for orch_entry in self.get_orch_db_snapshot_entries()
             ]
 
@@ -116,7 +118,8 @@ class SnapshotManager:
         print(f"Downloading snapshot to local dir: {local_dir!s}", file=sys.stderr)
         if using_db and snapshot_type == SnapshotType.RAW:
             for snapshot_entry in self.get_orch_db_snapshot_entries():
-                print(f"Downloading f{snapshot_entry.doc_s3_location} to local dir & writing metadata ... ", file=sys.stderr)
+                print(f"Downloading f{snapshot_entry.doc_s3_location} to local dir & writing metadata ... ",
+                      file=sys.stderr)
                 self.s3u.download_file(
                     object_path=snapshot_entry.doc_s3_location,
                     file=Path(local_dir, Path(snapshot_entry.doc_s3_location).name)
@@ -125,16 +128,17 @@ class SnapshotManager:
                     f.write(snapshot_entry.json_metadata)
 
         else:
-            print(f"Downloading all files from snapshot at {current_prefix} to local dir {local_dir!s} ...", file=sys.stderr)
+            print(f"Downloading all files from snapshot at {current_prefix} to local dir {local_dir!s} ...",
+                  file=sys.stderr)
             self.s3u.download_dir(
                 local_dir=local_dir,
                 prefix_path=current_prefix,
                 max_threads=max_threads
             )
 
-    def zip_folder_and_upload_to_s3(self,local_dir: t.Union[Path, str],
+    def zip_folder_and_upload_to_s3(self, local_dir: t.Union[Path, str],
                                     snapshot_type: t.Union[SnapshotType, str],
-                                    max_threads)->None:
+                                    max_threads) -> None:
         """zip json files and upload to s3
         :param local_dir: path to local flat directory with the files
         :param snapshot_type: type of snapshot raw/parsed
@@ -142,9 +146,9 @@ class SnapshotManager:
         """
         local_dir = Path(local_dir).resolve()
         prefix = self.get_current_prefix(snapshot_type)
-        print("dir"+str(local_dir))
-        self.shellu.make_archive(str(local_dir)+'/json_files', 'zip', '.')
-        self.s3u.upload_file(file=str(local_dir)+'/json_files'+'.zip', object_prefix=prefix)
+        print("dir" + str(local_dir))
+        self.shellu.make_archive('./json_files', 'zip', local_dir)
+        self.s3u.upload_file(file='./json_files' + '.zip', object_prefix=prefix)
 
     # TODO: avoid deleting all files first to avoid app downtime
     def update_current_snapshot_from_disk(self, local_dir: t.Union[Path, str],
@@ -165,7 +169,8 @@ class SnapshotManager:
             print(f"Deleting current snapshot files before processing update ...", file=sys.stderr)
             self.s3u.delete_prefix(prefix=prefix, max_threads=max_threads)
 
-        print(f"Updating current snapshot at {prefix} prefix with contents of local dir {local_dir!s} ... ", file=sys.stderr)
+        print(f"Updating current snapshot at {prefix} prefix with contents of local dir {local_dir!s} ... ",
+              file=sys.stderr)
         self.s3u.upload_dir(local_dir=local_dir, prefix_path=prefix, max_threads=max_threads)
 
     def backup_current_snapshot(self,
@@ -182,9 +187,10 @@ class SnapshotManager:
         backup_prefix = self.get_backup_prefix_for_ts(snapshot_type=snapshot_type, ts=snapshot_ts)
 
         if self.s3u.prefix_exists(backup_prefix):
-            raise ValueError(f"Cannot backup current snapshot because corresponding prefix already exists: {backup_prefix}")
+            raise ValueError(
+                f"Cannot backup current snapshot because corresponding prefix already exists: {backup_prefix}")
         if not self.s3u.prefix_exists(current_prefix):
-            print(f"Cannot backup current snapshot because there's nothing there: {current_prefix}",file=sys.stderr)
+            print(f"Cannot backup current snapshot because there's nothing there: {current_prefix}", file=sys.stderr)
             return None
 
         print(f"Backing up current prefix {current_prefix} to archive {backup_prefix} ...", file=sys.stderr)
