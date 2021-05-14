@@ -33,6 +33,22 @@ class ManualMetadata:
                 version_hash_raw_data=version_hash_fields,
                 downloadable_items=[pdi]
             )
+        elif self.document_group == "pdf":
+            pdi = DownloadableItem(doc_type="pdf", web_url="manual.ingest")
+            version_hash_fields = {"filename": Path(file).name}
+            doc = Document(
+                doc_name=Path(file).stem,
+                doc_title=Path(file).stem,
+                doc_num="",
+                doc_type="pdf",
+                publication_date="N/A",
+                cac_login_required=True,
+                crawler_used="pdf",
+                source_page_url="manual.ingest",
+                version_hash_raw_data=version_hash_fields,
+                downloadable_items=[pdi]
+            )
+
         return doc
 
     def create_metadata(self):
