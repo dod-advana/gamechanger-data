@@ -211,9 +211,6 @@ class S3Utils:
         # makes it so that everything's in one place when I run executor.map() if multithreading
         def dl_inner_func(obpath):
             path, filename = os.path.split(obpath)
-            if "." not in filename:
-                filename=str(filename)+".pdf"
-                print(filename)
             if not obpath.endswith("/"):
                 tmp = path + "/"
                 if tmp.replace(prefix_path, "", 1) is None:
