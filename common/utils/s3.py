@@ -221,9 +221,8 @@ class S3Utils:
                 else:
                     sub_path = tmp.replace(prefix_path, "", 1)
                     base_path = Path(local_dir, sub_path)
-                    base_path.mkdir(exist_ok=True)
+                    base_path.mkdir(exist_ok=True,parents=True)
                     file_path = Path(base_path, filename)
-                    print(str(file_path))
                     self.download_file(bucket=bucket_name, object_path=obpath, file=str(file_path))
 
         tasks_to_do = self.iter_object_paths_at_prefix(prefix=prefix_path)
