@@ -1,5 +1,3 @@
-from enum import Enum
-
 class EDAJobType(Enum):
     """
     :param NORMAL: Process New All Documents. If document as already been processed it will skip
