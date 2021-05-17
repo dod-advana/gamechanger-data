@@ -139,6 +139,7 @@ def populate_vendor(data: dict) -> (str, str, str):
 def contract_agency_name_and_issuing_office_dodaac(data: dict) -> (str, str):
     contracting_agency_name = None
     contract_issuing_office_dodaac = None
+    dodaac_org_type = None
     if "syn_contract_eda_ext_n" in data:
         for contract in data.get("syn_contract_eda_ext_n"):
             if contract.get("buyer_dodaac_eda_ext"):
@@ -159,8 +160,8 @@ def contract_agency_name_and_issuing_office_dodaac(data: dict) -> (str, str):
             else:
                 dodaac_org_type = "estate"
 
-            return contracting_agency_name,contract_issuing_office_dodaac, dodaac_org_type
-    return contracting_agency_name, contract_issuing_office_dodaac
+            return contracting_agency_name, contract_issuing_office_dodaac, dodaac_org_type
+    return contracting_agency_name, contract_issuing_office_dodaac, dodaac_org_type
 
 
 # To populate date fields
