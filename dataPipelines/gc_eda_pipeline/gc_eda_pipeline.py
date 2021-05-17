@@ -7,6 +7,8 @@ from dataPipelines.gc_eda_pipeline.indexer.eda_indexer import EDSConfiguredElast
 # from dataPipelines.gc_eda_pipeline.metadata_simple_view import metadata_extraction
 # from dataPipelines.gc_eda_pipeline.metadata.metadata_json import metadata_extraction
 from dataPipelines.gc_eda_pipeline.metadata.metadata_json_simple import metadata_extraction
+from dataPipelines.gc_eda_pipeline.audit.audit import create_index, get_es_publisher, audit_record_new, audit_complete
+from dataPipelines.gc_eda_pipeline.utils.eda_utils import read_extension_conf
 from common.document_parser.parsers.eda_contract_search.parse import parse
 from dataPipelines.gc_ocr.utils import PDFOCR, OCRJobType
 from common.utils.file_utils import is_pdf, is_ocr_pdf, is_encrypted_pdf
@@ -95,6 +97,9 @@ class EDAJobType(Enum):
 def run(staging_folder: str, aws_s3_input_pdf_prefix: str,
         max_workers: int, workers_ocr: int, eda_job_type: str, loop_number: int, skip_metadata: bool):
     print("Starting Gamechanger EDA Symphony Pipeline")
+    os.environ["AWS_METADATA_SERVICE_TIMEOUT"] = "10"
+    os.environ["AWS_METADATA_SERVICE_NUM_ATTEMPTS"] = "10"
+
     start_app = time.time()
     # Load Extensions configuration files.
     data_conf_filter = read_extension_conf()
@@ -178,6 +183,8 @@ def run(staging_folder: str, aws_s3_input_pdf_prefix: str,
 def process_doc(file: str, staging_folder: Union[str, Path], data_conf_filter: dict, multiprocess: int,
                 aws_s3_output_pdf_prefix: str, aws_s3_json_prefix: str,
                 process_type: EDAJobType, skip_metadata: bool):
+    os.environ["AWS_METADATA_SERVICE_TIMEOUT"] = "20"
+    os.environ["AWS_METADATA_SERVICE_NUM_ATTEMPTS"] = "40"
 
     # Get connections to the Elasticsearch for the audit and eda indexes
     publish_audit = get_es_publisher(staging_folder=staging_folder, index_name=data_conf_filter['eda']['audit_index'],
@@ -457,20 +464,6 @@ def index(publish_es: EDSConfiguredElasticsearchPublisher, staging_folder: str, 
     return index_output_file_path
 
 
-def create_index(index_name: str, alias: str):
-    publisher = EDSConfiguredElasticsearchPublisher(index_name=index_name, ingest_dir="",  alias=alias)
-    publisher.create_index()
-    if alias:
-        publisher.update_alias()
-    return publisher
-
-
-def get_es_publisher(staging_folder: str, index_name: str, alias: str) -> EDSConfiguredElasticsearchPublisher:
-    publisher = EDSConfiguredElasticsearchPublisher(index_name=index_name, ingest_dir=staging_folder,
-                                                 alias=alias)
-    return publisher
-
-
 def generate_list_pdf_download(metadata_dir: Union[str, Path]) -> list:
     metadata_dir_path = Path(metadata_dir).resolve()
     file_list = []
@@ -483,13 +476,6 @@ def generate_list_pdf_download(metadata_dir: Union[str, Path]) -> list:
                     if 'pdf_filename_eda_ext' in extensions:
                         file_list.append(extensions['pdf_filename_eda_ext'])
     return file_list
-
-
-def read_extension_conf() -> dict:
-    ext_app_config_name = os.environ.get("GC_APP_CONFIG_EXT_NAME")
-    with open(ext_app_config_name) as json_file:
-        data = json.load(json_file)
-    return data
 
 
 def list_of_to_process(staging_folder: Union[str, Path], aws_s3_input_pdf_prefix: str) -> list:
@@ -560,29 +546,11 @@ def docparser(metadata_file_path: str, saved_file: Union[str, Path], staging_fol
     return True
 
 
-def audit_record_new(audit_id: str, publisher: EDSConfiguredElasticsearchPublisher, audit_record: dict):
-    publisher.insert_record(id_record=audit_id, json_record=audit_record)
-
-
 def cleanup_record(delete_files: list):
     pass
     for delete_file in delete_files:
         if os.path.exists(delete_file):
             os.remove(delete_file)
-
-
-def audit_complete(audit_id: str, publisher: EDSConfiguredElasticsearchPublisher, directory: str, number_of_files: int,
-                   number_file_failed: int, modified_date: int, duration: int):
-    ar = {
-        "completed": "completed",
-        "directory_s": directory,
-        "number_of_files_l": number_of_files,
-        "number_file_failed_l": number_file_failed,
-        "modified_date_dt": modified_date,
-        "duration_l": duration
-    }
-    publisher.insert_record(id_record=audit_id, json_record=ar)
-
 
 if __name__ == '__main__':
     run()

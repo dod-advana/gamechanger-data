@@ -1,7 +1,8 @@
 import click
 import json
 import os
-from dataPipelines.gc_elasticsearch_publisher.gc_elasticsearch_publisher import ConfiguredElasticsearchPublisher
+from dataPipelines.gc_eda_pipeline.indexer.eda_indexer import EDSConfiguredElasticsearchPublisher
+from dataPipelines.gc_eda_pipeline.utils.eda_utils import read_extension_conf
 import csv
 from csv import writer
 
@@ -23,7 +24,6 @@ from csv import writer
     required=True,
     type=str
 )
-
 def run(staging_folder: str, input_list_file: str, output_file: str):
     print("Starting Gamechanger EDA Metrics Pipeline")
     # Load Extensions configuration files.
@@ -44,6 +44,7 @@ def run(staging_folder: str, input_list_file: str, output_file: str):
                                   alias=data_conf_filter['eda']['eda_index_alias'])
 
     for directory in directories:
+        print("\n")
         print(f"-- {directory}")
         # Items in ES
         directory = directory.rstrip()
@@ -113,15 +114,45 @@ def run(staging_folder: str, input_list_file: str, output_file: str):
         append_list_as_row(file_name=output_file, list_of_elem=row_contents)
 
 
-def read_extension_conf() -> dict:
-    ext_app_config_name = os.environ.get("GC_APP_CONFIG_EXT_NAME")
-    with open(ext_app_config_name) as json_file:
-        data = json.load(json_file)
-    return data
+    # Metadata Average Time/Number for OCR
+    query_average_time_ocr = {'track_total_hits':'true','size':'0','query':{'bool':{'must_not':[{'term':{'completed':{'value':'completed'}}}],'must':[{'term':{'is_ocr_b':{'value':'true'}}}]}},'aggs':{'number_of_files_ocred':{'value_count':{'field':'is_ocr_b'}},'avg_ocr_time':{'avg':{'field':'ocr_time_f'}}}}
+    response_ocr_aggs = publish_audit.search(index=data_conf_filter['eda']['audit_index'], body=query_average_time_ocr)
+    print("\n")
+    print("Number of files OCR: " + str(response_ocr_aggs['aggregations']['number_of_files_ocred']['value']))
+    print("Average Time for OCR: " + str(response_ocr_aggs['aggregations']['avg_ocr_time']['value']))
+
+    # Metadata Average Time/Number for Indexing
+    query_average_time_indexer = {'track_total_hits': 'true', 'size': '0', 'query': {'bool': {'must_not': [{'term': {'completed': {'value': 'completed'}}}],'must': [{'term': {'is_index_b': {'value': 'true'}}}]}}, 'aggs': {'number_of_files_index': {'value_count': {'field': 'is_ocr_b'}}, 'avg_index_time': {'avg': {'field': 'ocr_time_f'}}}}
+    response_index_aggs = publish_audit.search(index=data_conf_filter['eda']['audit_index'], body=query_average_time_indexer)
+    print("\n")
+    print("Number of files Index: " + str(response_index_aggs['aggregations']['number_of_files_index']['value']))
+    print("Average Time for Indexing: " + str(response_index_aggs['aggregations']['avg_index_time']['value']))
+
+    # Metadata Average Time/Number for Supplementary PDS
+    query_average_time_supplementary_pds = {'track_total_hits':'true','size':'0','query':{'bool':{'must_not':[{'term':{'completed':{'value':'completed'}}}],'must':[{'term':{'is_index_b':{'value':'true'}}},{'term':{'is_metadata_suc_b':{'value':'true'}}},{'term':{'is_supplementary_file_missing':{'value':'false'}}},{'term':{'metadata_type_s':{'value':'pds'}}}]}},'aggs':{'number_of_files_metadata_pds':{'value_count':{'field':'metadata_type_s'}},'avg_metadata_time':{'avg':{'field':'metadata_time_f'}}}}
+    response_supplementary_pds_aggs = publish_audit.search(index=data_conf_filter['eda']['audit_index'], body=query_average_time_supplementary_pds)
+    print("\n")
+    print("Number of PDS Files: " + str(response_supplementary_pds_aggs['aggregations']['number_of_files_metadata_pds']['value']))
+    print("Average Time for PDS Files: " + str(response_supplementary_pds_aggs['aggregations']['avg_metadata_time']['value']))
 
 
-def get_es_publisher(staging_folder: str, index_name: str, alias: str) -> ConfiguredElasticsearchPublisher:
-    publisher = ConfiguredElasticsearchPublisher(index_name=index_name, ingest_dir=staging_folder,
+    # Metadata Average Time/Number for Supplementary SYN
+    query_average_time_supplementary_syn = {'track_total_hits':'true','size':'0','query':{'bool':{'must_not':[{'term':{'completed':{'value':'completed'}}}],'must':[{'term':{'is_index_b':{'value':'true'}}},{'term':{'is_metadata_suc_b':{'value':'true'}}},{'term':{'is_supplementary_file_missing':{'value':'false'}}},{'term':{'metadata_type_s':{'value':'syn'}}}]}},'aggs':{'number_of_files_metadata_syn':{'value_count':{'field':'metadata_type_s'}},'avg_metadata_time':{'avg':{'field':'metadata_time_f'}}}}
+    response_supplementary_syn_aggs = publish_audit.search(index=data_conf_filter['eda']['audit_index'], body=query_average_time_supplementary_syn)
+    print("\n")
+    print("Number of PDS Files: " + str(response_supplementary_syn_aggs['aggregations']['number_of_files_metadata_syn']['value']))
+    print("Average Time for PDS Files: " + str(response_supplementary_syn_aggs['aggregations']['avg_metadata_time']['value']))
+
+
+# def read_extension_conf() -> dict:
+#     ext_app_config_name = os.environ.get("GC_APP_CONFIG_EXT_NAME")
+#     with open(ext_app_config_name) as json_file:
+#         data = json.load(json_file)
+#     return data
+
+
+def get_es_publisher(staging_folder: str, index_name: str, alias: str) -> EDSConfiguredElasticsearchPublisher:
+    publisher = EDSConfiguredElasticsearchPublisher(index_name=index_name, ingest_dir=staging_folder,
                                                  alias=alias)
     return publisher
 
