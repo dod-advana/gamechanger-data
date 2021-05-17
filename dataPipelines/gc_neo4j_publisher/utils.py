@@ -179,8 +179,8 @@ class Neo4jJobManager:
             print("Creating similarity relationships ... ", file=sys.stderr)
             session.run(
                 "MATCH (d:Document) " +
-                "WITH {item:id(d), weights: d.nodeVec} AS userData " +
-                "WITH collect(userData) AS data " +
+                "WITH {item:id(d), weights: d.nodeVec} AS docData " +
+                "WITH collect(docData) AS data " +
                 "CALL gds.alpha.similarity.cosine.stream({ " +
                 "  data: data, " +
                 "  similarityCutoff: 0.5 " +
