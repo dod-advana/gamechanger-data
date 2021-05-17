@@ -124,7 +124,7 @@ class S3Utils:
         :return: Uploaded object name
         """
         file_path = Path(file).resolve()
-
+        file_name = os.path.basename(file_path)
         object_path = self.path_join(
             self.format_as_prefix(object_prefix),
             object_name or file_path.name
@@ -268,8 +268,8 @@ class S3Utils:
                     self.format_as_prefix(relative_parent_dir_path)
                 )
 
-                print(f"Uploading {locpath.name} to prefix {final_prefix}")
-                self.upload_file(file=locpath, object_prefix=final_prefix, bucket=(bucket or self.bucket))
+                print(f"Uploading {locpath.name} to prefix {prefix_path}")
+                self.upload_file(file=locpath, object_prefix=prefix_path, bucket=(bucket or self.bucket))
 
                 return os.path.join(final_prefix, locpath.name)
 
