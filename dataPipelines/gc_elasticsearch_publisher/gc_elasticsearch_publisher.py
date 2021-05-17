@@ -246,7 +246,7 @@ class ConfiguredEntityPublisher(ConfiguredElasticsearchPublisher):
     def read_agencies(self):
 
         agencies = pd.read_csv(self.entity_csv_path)
-        agencies = agencies[agencies["in_corpus"] == True]
+        # agencies = agencies[agencies["in_corpus"] == True]
         agencies.fillna("", inplace=True)
 
         keep_cols = [
