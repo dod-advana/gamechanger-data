@@ -9,6 +9,7 @@ from collections import namedtuple
 from . import get_default_logger
 
 from dataPipelines.gc_ocr.utils import OCRError
+from .lib.pdf_reader import PageCountParse
 
 import time
 import importlib
@@ -18,6 +19,9 @@ class UnparseableDocument(Exception):
     """Document was unsuitable for parsing, for some reason"""
     pass
 
+class PageCountCheck(Exception):
+    """Could not parse the doc, failed page count check"""
+    pass
 
 def resolve_dynamic_func(func_path: str) -> typing.Callable[[dict], dict]:
     if '::' not in func_path:
@@ -107,7 +111,7 @@ def single_process(data_inputs: typing.Tuple[typing.Callable, str, str, bool, in
                            num_ocr_threads=num_ocr_threads, out_dir=out_dir)
 
     # TODO: catch this where failed files can be counted or increment shared counter (for mp)
-    except (OCRError, UnparseableDocument) as e:
+    except (OCRError, UnparseableDocument, PageCountParse) as e:
         print(e)
         print(
             "%s - [ERROR] - Failed Processing: %s - Filename: %s"
