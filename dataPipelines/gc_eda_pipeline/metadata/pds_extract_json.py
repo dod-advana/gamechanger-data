@@ -93,9 +93,9 @@ def populate_award_id_referenced_idv(data: dict, extensions_metadata: dict) -> (
         if order_number and contract_number:
             referenced_idv = extensions_metadata.get("pds_contract_eda_ext")
             award_id = extensions_metadata.get("pds_ordernum_eda_ext")
-        elif order_number and contract_number:
+        elif order_number and contract_number is None:
             award_id = extensions_metadata.get("pds_ordernum_eda_ext")
-        elif order_number and contract_number:
+        elif order_number is None and contract_number:
             award_id = extensions_metadata.get("pds_contract_eda_ext")
     return award_id, referenced_idv
 

@@ -34,11 +34,11 @@ def extract_syn(data_conf_filter: dict, data: dict):
     if vendor_cage:
         extracted_data_eda_n["vendor_cage_eda_ext"] = vendor_cage
 
-    contracting_agency_name, contract_issuing_office_dodaac, dodaac_org_type = contract_agency_name_and_issuing_office_dodaac(data)
-    if contracting_agency_name:
-        extracted_data_eda_n["contracting_agency_name_eda_ext"] = contracting_agency_name
-    if contract_issuing_office_dodaac:
-        extracted_data_eda_n["contract_issuing_office_dodaac_eda_ext"] = contract_issuing_office_dodaac
+    contract_issue_office_name, contract_issue_office_dodaac, dodaac_org_type = contract_agency_name_and_issuing_office_dodaac(data)
+    if contract_issue_office_name:
+        extracted_data_eda_n["contract_issue_office_name_eda_ext"] = contract_issue_office_name
+    if contract_issue_office_dodaac:
+        extracted_data_eda_n["contract_issue_office_dodaac_eda_ext"] = contract_issue_office_dodaac
     if dodaac_org_type:
         extracted_data_eda_n["dodaac_org_type_eda_ext"] = dodaac_org_type
 
