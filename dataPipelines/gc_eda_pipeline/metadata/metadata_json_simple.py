@@ -33,11 +33,15 @@ def metadata_extraction(staging_folder: Union[str, Path], filename_input: str, d
         is_md_successful = False
         return is_md_successful, is_supplementary_file_missing, metadata_type, data
 
+    aws_s3_syn_json = data_conf_filter['eda']['aws_s3_syn_json']
+    aws_s3_pds_json = data_conf_filter['eda']['aws_s3_pds_json']
+
     sql_check_if_syn_metadata_exist = data_conf_filter['eda']['sql_check_if_syn_metadata_exist']
     sql_check_if_pds_metadata_exist = data_conf_filter['eda']['sql_check_if_pds_metadata_exist']
 
     global date_fields_l
     date_fields_l = data_conf_filter['eda']['sql_filter_fields']['date']
+    supplementary_s3_post_filter_l = data_conf_filter['eda']['supplementary_s3_post_filter']
     operating_environment = data_conf_filter['eda']['operating_environment']
 
     metadata_type = "none"
@@ -57,9 +61,13 @@ def metadata_extraction(staging_folder: Union[str, Path], filename_input: str, d
         is_syn_data = False
         metadata_type = "none"
         s3_supplementary_data = ""
-        metadata_filename = ""
         local_supplementary_data = ""
-        s3_location = ""
+        metadata_filename = ""
+        ordernum_metadata = ""
+        contract_contact_metadata = ""
+        contact_metadata = ""
+        local_supplementary_data = ""
+        category_metadata = ""
 
         # Check if file has metadata from PDS
         cursor.execute(sql_check_if_pds_metadata_exist, (filename,))
@@ -80,7 +88,13 @@ def metadata_extraction(staging_folder: Union[str, Path], filename_input: str, d
                 is_syn_data = False
                 metadata_type = "pds"
                 metadata_filename = is_pds_metadata['pds_json_filename']
+                contact_metadata = is_pds_metadata['pds_contract']
+                ordernum_metadata = is_pds_metadata['pds_ordernum']
+                category_metadata = is_pds_metadata['pds_category']
+                grouping_metadata = is_pds_metadata['pdf_grouping']
                 s3_location = is_pds_metadata['s3_loc']
+                for post_remove in supplementary_s3_post_filter_l:
+                    grouping_metadata = grouping_metadata.replace(post_remove, '')
 
         if not is_pds_data:
             # Check if file has metadata from SYN
@@ -101,7 +115,13 @@ def metadata_extraction(staging_folder: Union[str, Path], filename_input: str, d
                     is_syn_data = True
                     metadata_type = "syn"
                     metadata_filename = is_syn_metadata['syn_json_filename']
-                    s3_location = is_syn_metadata['s3_loc']
+                    contact_metadata = is_syn_metadata['syn_contract']
+                    ordernum_metadata = is_syn_metadata['syn_ordernum']
+                    category_metadata = is_syn_metadata['syn_category']
+                    grouping_metadata = is_syn_metadata['pdf_grouping']
+                    s3_location = is_pds_metadata['s3_loc']
+                    for post_remove in supplementary_s3_post_filter_l:
+                        grouping_metadata = grouping_metadata.replace(post_remove, '')
             else:
                 is_pds_data = False
                 is_syn_data = False
@@ -112,30 +132,33 @@ def metadata_extraction(staging_folder: Union[str, Path], filename_input: str, d
         extensions_metadata['file_location_eda_ext'] = aws_s3_output_pdf_prefix + "/" + filename_input
         data['doc_title'] = title(filename_without_ext)
 
+        if is_syn_data or is_pds_data:
+            category_metadata = category_metadata.replace("'", "")
+            if ordernum_metadata is not None and ordernum_metadata != "empty" and ordernum_metadata != "":
+                contract_contact_metadata = contact_metadata + ordernum_metadata
+            else:
+                contract_contact_metadata = contact_metadata
+
         if is_pds_data:
             # Download File from S3
             local_supplementary_data = staging_folder + "/supplementary_data/" + metadata_filename
-            s3_location = s3_location.strip()
             if operating_environment == "dev":
-                s3_supplementary_data = s3_location.replace("s3://advana-raw-zone/", "")
+                s3_supplementary_data = aws_s3_pds_json + contract_contact_metadata + "/" + metadata_filename
             else:
-                s3_supplementary_data = s3_location.replace("s3://advana-eda-wawf-restricted/", "")
+                s3_supplementary_data = s3_location.lstrip("s3://advana-eda-wawf-restricted/")
+                # s3_supplementary_data = aws_s3_pds_json + category_metadata + "/" + grouping_metadata + "/" + contract_contact_metadata + "/" + metadata_filename
 
         if is_syn_data:
             # Download File from S3
             local_supplementary_data = staging_folder + "/supplementary_data/" + metadata_filename
-            s3_location = s3_location.strip()
             if operating_environment == "dev":
-                s3_supplementary_data = s3_location.replace("s3://advana-raw-zone/", "")
+                s3_supplementary_data = aws_s3_syn_json + contract_contact_metadata + "/" + metadata_filename
             else:
-                s3_supplementary_data = s3_location.replace("s3://advana-eda-wawf-restricted/", "")
+                s3_supplementary_data = s3_location.lstrip("s3://advana-eda-wawf-restricted/")
+                # s3_supplementary_data = aws_s3_syn_json + category_metadata + "/" + grouping_metadata + "/" + contract_contact_metadata + "/" + metadata_filename
 
-        if (is_pds_data or is_syn_data) and metadata_filename is not None and metadata_filename != "":
+        if is_pds_data or is_syn_data:
             if Conf.s3_utils.object_exists(object_path=s3_supplementary_data):
-                # try:
-                #     raw_supplementary_data = json.loads(Conf.s3_utils.object_content(object_path=s3_supplementary_data))
-                # except Exception as e:
-                #     traceback.print_exc()
                 Conf.s3_utils.download_file(file=local_supplementary_data, object_path=s3_supplementary_data)
 
                 with open(local_supplementary_data) as json_file:
@@ -156,7 +179,7 @@ def metadata_extraction(staging_folder: Union[str, Path], filename_input: str, d
                 is_supplementary_data_successful = False
                 is_supplementary_file_missing = True
         else:
-            extensions_metadata['is_supplementary_data_included_eda_ext_b'] = False
+            extensions_metadata['is_supplementary_data_included_eda_ext_b'] = True
             is_supplementary_data_successful = True
             is_supplementary_file_missing = False
 
@@ -173,7 +196,11 @@ def metadata_extraction(staging_folder: Union[str, Path], filename_input: str, d
                 cursor.close()
             conn.close()
 
-    # if os.path.exists(local_supplementary_data):
-    #     os.remove(local_supplementary_data)
+    if os.path.exists(local_supplementary_data):
+        os.remove(local_supplementary_data)
 
     return is_supplementary_data_successful, is_supplementary_file_missing, metadata_type, data
+
+
+
+
