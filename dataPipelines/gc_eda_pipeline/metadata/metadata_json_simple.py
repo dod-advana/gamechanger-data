@@ -83,15 +83,16 @@ def metadata_extraction(staging_folder: Union[str, Path], filename_input: str, d
                     else:
                         extensions_metadata[col_name + postfix_es] = val
 
-            if is_pds_metadata['pds_filename'] is not None and is_pds_metadata['pds_filename'] is not '':
+            if is_pds_metadata['pds_json_filename'] is not None and is_pds_metadata['pds_json_filename'] is not '':
                 is_pds_data = True
                 is_syn_data = False
                 metadata_type = "pds"
-                metadata_filename = is_pds_metadata['pds_filename']
+                metadata_filename = is_pds_metadata['pds_json_filename']
                 contact_metadata = is_pds_metadata['pds_contract']
                 ordernum_metadata = is_pds_metadata['pds_ordernum']
                 category_metadata = is_pds_metadata['pds_category']
-                grouping_metadata = is_pds_metadata['pds_grouping']
+                grouping_metadata = is_pds_metadata['pdf_grouping']
+                s3_location = is_pds_metadata['s3_loc']
                 for post_remove in supplementary_s3_post_filter_l:
                     grouping_metadata = grouping_metadata.replace(post_remove, '')
 
@@ -109,15 +110,16 @@ def metadata_extraction(staging_folder: Union[str, Path], filename_input: str, d
                         else:
                             extensions_metadata[col_name + postfix_es] = val
 
-                if is_syn_metadata['syn_filename'] is not None:
+                if is_syn_metadata['syn_json_filename'] is not None and is_syn_metadata['syn_json_filename'] is not '':
                     is_pds_data = False
                     is_syn_data = True
                     metadata_type = "syn"
-                    metadata_filename = is_syn_metadata['syn_filename']
+                    metadata_filename = is_syn_metadata['syn_json_filename']
                     contact_metadata = is_syn_metadata['syn_contract']
                     ordernum_metadata = is_syn_metadata['syn_ordernum']
                     category_metadata = is_syn_metadata['syn_category']
-                    grouping_metadata = is_syn_metadata['syn_grouping']
+                    grouping_metadata = is_syn_metadata['pdf_grouping']
+                    s3_location = is_pds_metadata['s3_loc']
                     for post_remove in supplementary_s3_post_filter_l:
                         grouping_metadata = grouping_metadata.replace(post_remove, '')
             else:
@@ -143,7 +145,8 @@ def metadata_extraction(staging_folder: Union[str, Path], filename_input: str, d
             if operating_environment == "dev":
                 s3_supplementary_data = aws_s3_pds_json + contract_contact_metadata + "/" + metadata_filename
             else:
-                s3_supplementary_data = aws_s3_pds_json + category_metadata + "/" + grouping_metadata + "/" + contract_contact_metadata + "/" + metadata_filename
+                s3_supplementary_data = s3_location.lstrip("s3://advana-eda-wawf-restricted/")
+                # s3_supplementary_data = aws_s3_pds_json + category_metadata + "/" + grouping_metadata + "/" + contract_contact_metadata + "/" + metadata_filename
 
         if is_syn_data:
             # Download File from S3
@@ -151,7 +154,8 @@ def metadata_extraction(staging_folder: Union[str, Path], filename_input: str, d
             if operating_environment == "dev":
                 s3_supplementary_data = aws_s3_syn_json + contract_contact_metadata + "/" + metadata_filename
             else:
-                s3_supplementary_data = aws_s3_syn_json + category_metadata + "/" + grouping_metadata + "/" + contract_contact_metadata + "/" + metadata_filename
+                s3_supplementary_data = s3_location.lstrip("s3://advana-eda-wawf-restricted/")
+                # s3_supplementary_data = aws_s3_syn_json + category_metadata + "/" + grouping_metadata + "/" + contract_contact_metadata + "/" + metadata_filename
 
         if is_pds_data or is_syn_data:
             if Conf.s3_utils.object_exists(object_path=s3_supplementary_data):
