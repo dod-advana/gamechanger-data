@@ -102,13 +102,21 @@ function setup_local_repo_copy() {
   tar -xvzf "$LOCAL_GC_REPO_TGZ_PATH" -C "$LOCAL_GC_REPO_BASE_DIR"
 }
 
-
 function setup_app_config_copy() {
   echo "FETCHING APP CONFIG"
   S3_APP_CONFIG_PATH="${S3_BUCKET_NAME}/${APP_CONFIG_BASE_PREFIX}${APP_CONFIG_FILENAME}"
   LOCAL_APP_CONFIG_PATH="${LOCAL_GC_REPO_BASE_DIR}/configuration/app-config/${APP_CONFIG_NAME:-$SCRIPT_ENV}.json"
 
   $AWS_CMD s3 cp "s3://${S3_APP_CONFIG_PATH}" "$LOCAL_APP_CONFIG_PATH"
+}
+
+function setup_topic_models_copy() {
+  echo "FETCHING TOPIC MODEL"
+  S3_TOPIC_MODEL_PATH="${S3_BUCKET_NAME}/${TOPIC_MODEL_DIR}"
+  LOCAL_TOPIC_MODEL_PATH="${LOCAL_GC_REPO_BASE_DIR}/dataScience/models/topic_models/models/"
+
+  mkdir "${LOCAL_TOPIC_MODEL_PATH}"
+  $AWS_CMD s3 cp --recursive "s3://${S3_TOPIC_MODEL_PATH}" "${LOCAL_TOPIC_MODEL_PATH}"
 }
 
 function setup_local_vars_and_dirs() {
@@ -187,7 +195,7 @@ function run_core_ingest() {
     --index-name="$es_index_name" \
     --alias-name="$es_alias_name" \
     --max-threads="$max_parser_threads" \
-    --max-threads-neo4j="$max_neo4j_threads"
+    --max-threads-neo4j="$max_neo4j_threads" \
     --max-ocr-threads="$max_ocr_threads" \
     --crawler-output="$crawler_output" \
     --skip-revocation-update="$skip_revocation_update" \

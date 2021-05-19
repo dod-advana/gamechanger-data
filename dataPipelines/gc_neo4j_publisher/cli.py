@@ -55,23 +55,18 @@ def scrape(csv_file_path: str, infobox_dir: str) -> None:
     is_flag=True
 )
 @click.option(
-    '--scrape_wiki',
-    help='Designates weather to scrape wiki or not',
-    is_flag=True
-)
-@click.option(
     '--infobox-dir',
     help='Directory path of where to write the infobox.json files',
     type=click.Path(resolve_path=True, exists=True, dir_okay=True, file_okay=False),
     required=False
 )
 @pass_njm
-def run(njm: Neo4jJobManager, source: str, clear: bool, max_threads: int, without_web_scraping: bool, infobox_dir: str, scrape_wiki: bool) -> None:
+def run(njm: Neo4jJobManager, source: str, clear: bool, max_threads: int, without_web_scraping: bool, infobox_dir: str) -> None:
     njm.run_update(
         source=source,
         clear=clear,
         max_threads=max_threads,
         without_web_scraping=without_web_scraping,
-        infobox_dir=infobox_dir,
-        scrape_wiki=scrape_wiki
+        scrape_wiki=(without_web_scraping == False),
+        infobox_dir=infobox_dir
     )

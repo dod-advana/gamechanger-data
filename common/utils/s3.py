@@ -124,7 +124,7 @@ class S3Utils:
         :return: Uploaded object name
         """
         file_path = Path(file).resolve()
-
+        file_name = os.path.basename(file_path)
         object_path = self.path_join(
             self.format_as_prefix(object_prefix),
             object_name or file_path.name
@@ -200,7 +200,7 @@ class S3Utils:
         local_dir_path = Path(local_dir).resolve()
         s3_client = self.ch.s3_client
         s3_resource = self.ch.s3_resource
-
+        print(local_dir_path)
         # Handle missing / at end of prefix
         if not prefix_path.endswith('/'):
             prefix_path += '/'
@@ -212,14 +212,13 @@ class S3Utils:
         def dl_inner_func(obpath):
             path, filename = os.path.split(obpath)
             if not obpath.endswith("/"):
-
                 tmp = path + "/"
                 if tmp.replace(prefix_path, "", 1) is None:
                     self.download_file(bucket=bucket_name, object_path=obpath, file=local_dir + "/" + filename)
                 else:
                     sub_path = tmp.replace(prefix_path, "", 1)
                     base_path = Path(local_dir, sub_path)
-                    base_path.mkdir(exist_ok=True)
+                    base_path.mkdir(exist_ok=True,parents=True)
                     file_path = Path(base_path, filename)
                     self.download_file(bucket=bucket_name, object_path=obpath, file=str(file_path))
 
@@ -269,8 +268,8 @@ class S3Utils:
                     self.format_as_prefix(relative_parent_dir_path)
                 )
 
-                print(f"Uploading {locpath.name} to prefix {final_prefix}")
-                self.upload_file(file=locpath, object_prefix=final_prefix, bucket=(bucket or self.bucket))
+                print(f"Uploading {locpath.name} to prefix {prefix_path}")
+                self.upload_file(file=locpath, object_prefix=prefix_path, bucket=(bucket or self.bucket))
 
                 return os.path.join(final_prefix, locpath.name)
 

@@ -84,9 +84,12 @@ CRAWLER_TO_DISPLAY_ORG_LOOKUP = defaultdict(lambda: "Uncategorized", {
     "Coast_Guard": "Coast Guard",
     "jumbo_DFARS": "DFARS",
     "DOD_Coronavirus_Guidance": "Dept. of Defense",
+    "dfar_subpart_regs": "DFAR",
+    "far_subpart_regs": "FAR"
 })
 
-CRAWLER_TO_DISPLAY_SOURCE_LOOKUP = defaultdict(lambda: None, {
+CRAWLER_TO_DISPLAY_SOURCE_LOOKUP = defaultdict(lambda: "Unlisted Source", {
+    "dod_issuances":"WHS DoD Directives Division",
     "army_pubs": "Army Publishing Directorate",
     "jcs_pubs": "Joint Chiefs of Staff Library",
     "jcs_manual_uploads": "Joint Chiefs of Staff",
@@ -107,7 +110,7 @@ CRAWLER_TO_DISPLAY_SOURCE_LOOKUP = defaultdict(lambda: None, {
     "fmr_pubs": "DoD Financial Management Regulation",
     "legislation_pubs": "Congressional Legislation",
     "Army_Reserve": "U.S. Army Reserve Publications",
-    "Memo": "OSD Executive Executive Secretary",
+    "Memo": "OSD Executive Secretary",
     "dha_pubs": "Military Health System",
     "jumbo_FAR": "Federal Acquisition Regulation",
     "jumbo_DFAR": "Defense Federal Acquisition Regulation",
@@ -115,4 +118,6 @@ CRAWLER_TO_DISPLAY_SOURCE_LOOKUP = defaultdict(lambda: None, {
     "National_Guard": "National Guard Bureau Publications Library",
     "Coast_Guard": "US Coast Guard Directives",
     "DOD_Coronavirus_Guidance": "Defense Publications",
+    "dfar_subpart_regs": "Defense Federal Acquisition Regulation",
+    "far_subpart_regs": "Federal Acquisition Regulation"
 })
