@@ -1,4 +1,4 @@
 [submodule "dataScience"]
 	path = dataScience
 	url = https://github.com/dod-advana/gamechanger-ml.git
-  branch = dev
+	branch = dev
