@@ -34,42 +34,42 @@ def run(staging_folder: str):
     conn.autocommit = True
     cursor = conn.cursor()
 
-    # cursor.execute(sql_syn_old)
-    # syn_rows = cursor.fetchall()
-    #
-    # for syn_row in syn_rows:
-    #     if syn_row['syn_filename']:
-    #         pdf_filename = syn_row['pdf_filename']
-    #         pdf_grouping = syn_row['pdf_grouping']
-    #         pdf_category = syn_row['pdf_category']
-    #         pdf_contract = syn_row['pdf_contract']
-    #         pdf_ordernum = syn_row['pdf_ordernum']
-    #         pdf_modification = syn_row['pdf_modification']
-    #
-    #         syn_json_filename = syn_row['syn_filename']
-    #         syn_category = syn_row['syn_category']
-    #         syn_contract = syn_row['syn_contract']
-    #         syn_ordernum = syn_row['syn_ordernum']
-    #         syn_modification = syn_row['syn_modification']
-    #
-    #         contact_metadata = syn_row['syn_contract']
-    #         ordernum_metadata = syn_row['syn_ordernum']
-    #
-    #         prefix = ""
-    #         if ordernum_metadata is not None and ordernum_metadata != "empty" and ordernum_metadata != "":
-    #             prefix = contact_metadata + ordernum_metadata
-    #         else:
-    #             prefix = contact_metadata
-    #
-    #         s3_loc = "s3://advana-raw-zone/eda/syn/" + prefix + "/" + syn_json_filename
-    #         print(s3_loc)
-    #         syn_xml_filename = None
-    #         syn_directory = None
-    #         syn_partition_path = None
-    #
-    #         record_to_insert = (pdf_filename, pdf_grouping, pdf_category, pdf_contract, pdf_ordernum, pdf_modification, syn_json_filename, syn_category, syn_contract, syn_ordernum, syn_modification, s3_loc, syn_xml_filename, syn_directory, syn_partition_path)
-    #
-    #         cursor.execute(sql_syn_insert_new, record_to_insert)
+    cursor.execute(sql_syn_old)
+    syn_rows = cursor.fetchall()
+
+    for syn_row in syn_rows:
+        if syn_row['syn_filename']:
+            pdf_filename = syn_row['pdf_filename']
+            pdf_grouping = syn_row['pdf_grouping']
+            pdf_category = syn_row['pdf_category']
+            pdf_contract = syn_row['pdf_contract']
+            pdf_ordernum = syn_row['pdf_ordernum']
+            pdf_modification = syn_row['pdf_modification']
+
+            syn_json_filename = syn_row['syn_filename']
+            syn_category = syn_row['syn_category']
+            syn_contract = syn_row['syn_contract']
+            syn_ordernum = syn_row['syn_ordernum']
+            syn_modification = syn_row['syn_modification']
+
+            contact_metadata = syn_row['syn_contract']
+            ordernum_metadata = syn_row['syn_ordernum']
+
+            prefix = ""
+            if ordernum_metadata is not None and ordernum_metadata != "empty" and ordernum_metadata != "":
+                prefix = contact_metadata + ordernum_metadata
+            else:
+                prefix = contact_metadata
+
+            s3_loc = "s3://advana-raw-zone/eda/syn/" + prefix + "/" + syn_json_filename
+            print(s3_loc)
+            syn_xml_filename = None
+            syn_directory = None
+            syn_partition_path = None
+
+            record_to_insert = (pdf_filename, pdf_grouping, pdf_category, pdf_contract, pdf_ordernum, pdf_modification, syn_json_filename, syn_category, syn_contract, syn_ordernum, syn_modification, s3_loc, syn_xml_filename, syn_directory, syn_partition_path)
+
+            cursor.execute(sql_syn_insert_new, record_to_insert)
 
     print("---------------------------")
 

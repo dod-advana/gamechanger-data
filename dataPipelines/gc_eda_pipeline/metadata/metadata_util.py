@@ -29,6 +29,7 @@ def format_supplementary_data(json_info, date_fields_l):
         for item in json_info:
             format_supplementary_data(item, date_fields_l)
 
+
 def title(filename: str) -> str:
     parsed = filename.split('-')
 
