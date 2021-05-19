@@ -18,7 +18,7 @@ def extract_topics(doc_dict):
     MIN_TOKEN_LEN = 300 #tokens, this turns out to be roughly a half page
     doc_dict['topics_rs'] = {}
 
-    tokens = doc_dict['raw_text'].split()
+    tokens = doc_dict['text'].split()
 
     if(len(tokens) > MIN_TOKEN_LEN):
         topics = tfidf_model.get_topics(

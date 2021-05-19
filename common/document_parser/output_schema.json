@@ -186,6 +186,12 @@
       "text":{
          "type":"string"
       },
+      "display_source_s":{
+          "type":"string"
+      },
+      "file_ext_s":{
+          "type":"string"
+      },
       "raw_text":{
          "type":"string"
       },

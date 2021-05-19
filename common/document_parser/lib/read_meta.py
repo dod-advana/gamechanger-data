@@ -13,9 +13,11 @@ def read_metadata(meta_data) -> dict:
         meta_fname = Path(meta_data)
     else:
         meta_fname = meta_data
-
-    with open(meta_fname) as f_in:
-        data = json.load(f_in)
+    try:
+        with open(meta_fname) as f_in:
+            data = json.load(f_in)
+    except:
+        return {}
 
     return data
 
