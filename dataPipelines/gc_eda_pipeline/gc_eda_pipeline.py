@@ -1,27 +1,21 @@
 import time
-
-from dataPipelines.gc_eda_pipeline.conf import Conf
-# from dataPipelines.gc_elasticsearch_publisher.gc_elasticsearch_publisher import ConfiguredElasticsearchPublisher
-from dataPipelines.gc_eda_pipeline.indexer.eda_indexer import EDSConfiguredElasticsearchPublisher
-# from dataPipelines.gc_eda_pipeline.metadata import metadata_extraction
-# from dataPipelines.gc_eda_pipeline.metadata_simple_view import metadata_extraction
-# from dataPipelines.gc_eda_pipeline.metadata.metadata_json import metadata_extraction
-from dataPipelines.gc_eda_pipeline.metadata.metadata_json_simple import metadata_extraction
-from dataPipelines.gc_eda_pipeline.audit.audit import create_index, get_es_publisher, audit_record_new, audit_complete
-from dataPipelines.gc_eda_pipeline.utils.eda_utils import read_extension_conf
-from common.document_parser.parsers.eda_contract_search.parse import parse
-from dataPipelines.gc_ocr.utils import PDFOCR, OCRJobType
-from common.utils.file_utils import is_pdf, is_ocr_pdf, is_encrypted_pdf
 import click
 import json
 import os
-from typing import Union
-from pathlib import Path
 import concurrent.futures
 import hashlib
-from ocrmypdf import SubprocessOutputError
-from enum import Enum
 import traceback
+
+from enum import Enum
+from typing import Union
+from pathlib import Path
+
+from dataPipelines.gc_eda_pipeline.conf import Conf
+from dataPipelines.gc_eda_pipeline.audit.audit import create_index, get_es_publisher, audit_complete
+from dataPipelines.gc_eda_pipeline.metadata.generate_metadata_file import generate_metadata_file
+from dataPipelines.gc_eda_pipeline.doc_extractor.doc_extractor import ocr_process, extract_text
+from dataPipelines.gc_eda_pipeline.utils.eda_utils import read_extension_conf
+from dataPipelines.gc_eda_pipeline.indexer.indexer import index
 
 
 class EDAJobType(Enum):
@@ -355,115 +349,6 @@ def process_doc(file: str, staging_folder: Union[str, Path], data_conf_filter: d
     return {'filename': filename, "status": "failed", "info": "failed -- Didn't match any processing type"}
 
 
-def generate_metadata_file(staging_folder: str, data_conf_filter: dict, file: str, filename: str,
-                           aws_s3_output_pdf_prefix: str, audit_id: str, audit_rec: dict,
-                           publish_audit: EDSConfiguredElasticsearchPublisher, skip_metadata: bool):
-
-    md_file_local_path = staging_folder + "/pdf/" + file + ".metadata"
-    md_file_s3_path = aws_s3_output_pdf_prefix + "/" + file + ".metadata"
-
-    pds_start = time.time()
-
-    is_md_successful, is_supplementary_file_missing, md_type, data = metadata_extraction(staging_folder, file, data_conf_filter, aws_s3_output_pdf_prefix, skip_metadata)
-
-    with open(md_file_local_path, "w") as output_file:
-        json.dump(data, output_file)
-
-    Conf.s3_utils.upload_file(file=md_file_local_path, object_name=md_file_s3_path)
-    pds_end = time.time()
-    time_md = pds_end - pds_start
-
-    audit_rec.update({"filename_s": filename, "eda_path_s": file, "metadata_path_s": md_file_s3_path,
-                      "metadata_type_s": md_type, "is_metadata_suc_b": is_md_successful,
-                      "is_supplementary_file_missing": is_supplementary_file_missing,
-                      "metadata_time_f": round(time_md, 4), "modified_date_dt": int(time.time())})
-    audit_record_new(audit_id=audit_id, publisher=publish_audit, audit_record=audit_rec)
-
-    return md_file_s3_path, md_file_local_path
-
-
-def ocr_process(staging_folder: str, file: str, multiprocess: int, aws_s3_output_pdf_prefix: str, audit_id: str,
-                audit_rec: dict, publish_audit: EDSConfiguredElasticsearchPublisher):
-
-    # Download PDF file
-    ocr_time_start = time.time()
-    pdf_file_local_path = staging_folder + "/pdf/" + file
-    saved_file = Conf.s3_utils.download_file(file=pdf_file_local_path, object_path=file)
-
-    # OCR PDF if need
-    is_pdf_file, is_ocr = pdf_ocr(file=file, staging_folder=staging_folder, multiprocess=multiprocess)
-
-    # Copy PDF into S3
-    pdf_file_s3_path = aws_s3_output_pdf_prefix + "/" + file
-    Conf.s3_utils.upload_file(file=saved_file, object_name=pdf_file_s3_path)
-    ocr_time_end = time.time()
-    time_ocr = ocr_time_end - ocr_time_start
-
-    audit_rec.update({"gc_path_s": pdf_file_s3_path, "is_ocr_b": is_ocr, "ocr_time_f": round(time_ocr, 4),
-                      "modified_date_dt": int(time.time())})
-    audit_record_new(audit_id=audit_id, publisher=publish_audit, audit_record=audit_rec)
-
-    return is_pdf_file, pdf_file_local_path, pdf_file_s3_path
-
-
-def extract_text(staging_folder: str, pdf_file_local_path: str, path: str, filename_without_ext: str,
-                 aws_s3_json_prefix: str, audit_id: str, audit_rec: dict,
-                 publish_audit: EDSConfiguredElasticsearchPublisher):
-    is_extract_suc = False
-    doc_time_start = time.time()
-    ex_file_local_path = staging_folder + "/json/" + path + "/" + filename_without_ext + ".json"
-    ex_file_s3_path = aws_s3_json_prefix + "/" + path + "/" + filename_without_ext + ".json"
-
-    docparser(metadata_file_path=None, saved_file=pdf_file_local_path, staging_folder=staging_folder, path=path)
-    if os.path.exists(ex_file_local_path):
-        Conf.s3_utils.upload_file(file=ex_file_local_path,  object_name=ex_file_s3_path)
-        is_extract_suc = True
-    else:
-        is_extract_suc = False
-
-    doc_time_end = time.time()
-    time_dp = doc_time_end - doc_time_start
-
-    audit_rec.update({"json_path_s": ex_file_s3_path, "is_docparser_b": is_extract_suc,
-                      "docparser_time_f": round(time_dp, 4), "modified_date_dt": int(time.time())})
-    audit_record_new(audit_id=audit_id, publisher=publish_audit, audit_record=audit_rec)
-
-    return ex_file_local_path, ex_file_s3_path, is_extract_suc
-
-
-def index(publish_es: EDSConfiguredElasticsearchPublisher, staging_folder: str, md_file_local_path: str,
-          ex_file_local_path: str, path: str, filename_without_ext: str, ex_file_s3_path: str, audit_id: str,
-          audit_rec: dict, publish_audit: EDSConfiguredElasticsearchPublisher):
-
-    index_start = time.time()
-
-    with open(md_file_local_path) as metadata_file:
-        metadata_file_data = json.load(metadata_file)
-
-    with open(ex_file_local_path) as parsed_pdf_file:
-        parsed_pdf_file_data = json.load(parsed_pdf_file)
-
-    if 'extensions' in metadata_file_data.keys():
-        extensions_json = metadata_file_data["extensions"]
-        parsed_pdf_file_data = {**parsed_pdf_file_data, **extensions_json}
-        del metadata_file_data['extensions']
-
-    index_json_data = {**parsed_pdf_file_data, **metadata_file_data}
-
-    index_output_file_path = staging_folder + "/index/" + path + "/" + filename_without_ext + ".index.json"
-    with open(index_output_file_path, "w") as output_file:
-        json.dump(index_json_data, output_file)
-
-    is_index = publish_es.index_json(index_output_file_path, ex_file_s3_path)
-    index_end = time.time()
-    time_index = index_end - index_start
-
-    audit_rec.update({"is_index_b": is_index, "index_time_f": round(time_index, 4),
-                      "modified_date_dt": int(time.time())})
-    audit_record_new(audit_id=audit_id, publisher=publish_audit, audit_record=audit_rec)
-    return index_output_file_path
-
-
 def generate_list_pdf_download(metadata_dir: Union[str, Path]) -> list:
     metadata_dir_path = Path(metadata_dir).resolve()
     file_list = []
@@ -495,62 +380,12 @@ def list_of_to_process(staging_folder: Union[str, Path], aws_s3_input_pdf_prefix
     return files
 
 
-def pdf_ocr(file: str, staging_folder: str, multiprocess: int) -> (bool, bool):
-    try:
-        path, filename = os.path.split(file)
-        is_ocr = False
-        is_pdf_file = False
-        if filename != "" and Conf.s3_utils.object_exists(object_path=file):
-            saved_file = Conf.s3_utils.download_file(file=staging_folder + "/pdf/" + file, object_path=file)
-            if not is_pdf(str(saved_file)):
-                return is_pdf_file, is_ocr
-            else:
-                is_pdf_file = True
-            try:
-                if is_pdf(str(saved_file)) and not is_ocr_pdf(str(saved_file)) and not is_encrypted_pdf(str(saved_file)):
-                    is_pdf_file = True
-                    ocr = PDFOCR(
-                        input_file=saved_file,
-                        output_file=saved_file,
-                        ocr_job_type=OCRJobType.SKIP_TEXT,
-                        ignore_init_errors=True,
-                        num_threads=multiprocess
-                    )
-                    try:
-                        is_ocr = ocr.convert()
-                    except SubprocessOutputError as e:
-                        print(e)
-                        is_ocr = False
-            except Exception as ex:
-                print(ex)
-                is_ocr = False
-            return is_pdf_file, is_ocr
-    except RuntimeError as e:
-        print(f"File does not look like a pdf file {saved_file}")
-        traceback.print_exc()
-        is_pdf_file = False
-        is_ocr = False
-        return is_pdf_file, is_ocr
-
-    return is_pdf_file, is_ocr
-
-
-def docparser(metadata_file_path: str, saved_file: Union[str, Path], staging_folder: Union[str, Path], path: str) \
-        -> bool:
-    """
-    OCR will be done outside of the docparser.
-    """
-    m_file = saved_file
-    out_dir = staging_folder + "/json/" + path + "/"
-    parse(f_name=m_file, meta_data=metadata_file_path, ocr_missing_doc=False, num_ocr_threads=1, out_dir=out_dir)
-    return True
-
-
 def cleanup_record(delete_files: list):
     pass
     for delete_file in delete_files:
         if os.path.exists(delete_file):
             os.remove(delete_file)
+
 
 if __name__ == '__main__':
     run()

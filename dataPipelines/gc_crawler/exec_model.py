@@ -50,7 +50,7 @@ class Parser(ABC):
 class Crawler:
     """Combines all other exec model classes to produce final crawler output
     :param pager: web page text iterator
-    :param parser: page to document object parser
+    :param parser: page to document object doc_extractor
     :param validator: crawler output validator"""
 
     def __init__(
@@ -64,7 +64,7 @@ class Crawler:
         if not isinstance(pager, Pager):
             raise TypeError("arg: pager must be of type Pager")
         if not isinstance(parser, Parser):
-            raise TypeError("arg: parser must be of type Parser")
+            raise TypeError("arg: doc_extractor must be of type Parser")
         if not isinstance(validator, SchemaValidator):
             raise TypeError("arg: validator must be of type SchemaValidator")
 
@@ -74,18 +74,18 @@ class Crawler:
         self._validator = validator
 
     def iter_output_docs(self) -> Iterable[Document]:
-        """iterates through docs returned by the parser"""
+        """iterates through docs returned by the doc_extractor"""
         for (page_link, page_text) in self._pager.iter_page_links_with_text():
             for doc in self._parser.parse_docs_from_page(page_link, page_text):
                 yield doc
 
     def iter_output_json(self) -> Iterable[str]:
-        """Iterates through json-serialized docs returned by the parser"""
+        """Iterates through json-serialized docs returned by the doc_extractor"""
         for doc in self.iter_output_docs():
             yield doc.to_json()
 
     def iter_validated_output_json(self) -> Iterable[str]:
-        """returned json-serialized docs from parser unless schema validation fails"""
+        """returned json-serialized docs from doc_extractor unless schema validation fails"""
         for json_doc in self.iter_output_json():
             self._validator.validate(json_doc)
             yield json_doc
