@@ -1,0 +1,342 @@
+{
+  "index": {
+    "settings": {
+      "index.mapping.total_fields.limit": 10000,
+      "index.mapping.nested_objects.limit": 100000,
+      "index": {
+        "number_of_shards": 40,
+        "number_of_replicas": 2,
+        "mapping.nested_fields.limit": 20000
+      },
+      "analysis": {
+        "normalizer": {
+          "lowercase_normalizer": {
+            "type": "custom",
+            "char_filter": [],
+            "filter": [
+              "lowercase"
+            ]
+          }
+        }
+      }
+    },
+    "mappings": {
+      "dynamic_templates": [
+        {
+          "string": {
+            "match": "*_s",
+            "match_mapping_type": "string",
+            "mapping": {
+              "type": "keyword",
+              "store": true
+            }
+          }
+        },
+        {
+          "text": {
+            "match": "*_t",
+            "match_mapping_type": "string",
+            "mapping": {
+              "type": "text",
+              "store": true
+            }
+          }
+        },
+        {
+        "string_text": {
+          "match": "*_ks",
+          "match_mapping_type": "string",
+          "mapping": {
+            "type": "keyword",
+            "store": true,
+            "fields": {
+              "search": {
+                "type": "keyword",
+                "normalizer": "lowercase_normalizer"
+              }
+            }
+          }
+        }
+      },
+      {
+          "integer": {
+            "match": "*_i",
+            "match_mapping_type": "long",
+            "mapping": {
+              "type": "integer",
+              "store": true
+            }
+          }
+        },
+        {
+          "long": {
+            "match": "*_l",
+            "match_mapping_type": "long",
+            "mapping": {
+              "type": "long",
+              "store": true
+            }
+          }
+        },
+        {
+          "boolean": {
+            "match": "*_b",
+            "match_mapping_type": "boolean",
+            "mapping": {
+              "type": "boolean",
+              "store": true
+            }
+          }
+        },
+        {
+          "double": {
+            "match": "*_d",
+            "match_mapping_type": "double",
+            "mapping": {
+              "type": "double",
+              "store": true
+            }
+          }
+        },
+        {
+          "float": {
+            "match": "*_f",
+            "match_mapping_type": "double",
+            "mapping": {
+              "type": "float",
+              "store": true
+            }
+          }
+        },
+        {
+          "date": {
+            "match": "*_dt",
+            "mapping": {
+              "type": "date",
+              "store": true,
+              "ignore_malformed": true
+            }
+          }
+        },
+        {
+          "rank_feature": {
+            "match": "*_r",
+            "mapping": {
+            "type": "rank_feature"
+            }
+          }
+        },
+        {
+          "rank_features": {
+            "match": "*_rs",
+            "mapping": {
+            "type": "rank_features"
+            }
+          }
+        },
+        {
+          "nested_object": {
+            "match": "*_n",
+            "mapping": {
+              "type": "nested"
+            }
+          }
+      },
+      {
+        "default_eda_ext_type": {
+          "path_match": "*_eda_ext",
+          "mapping": {
+            "type": "text",
+            "store": true,
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "store": true,
+                "ignore_above": 256,
+                "normalizer": "lowercase_normalizer"
+              }
+            }
+          }
+        }
+      }
+      ],
+      "properties": {
+        "pagerank": {
+          "type": "rank_feature"
+        },
+        "kw_doc_score": {
+          "type": "rank_feature"
+        },
+        "orgs": {
+          "type": "rank_features"
+        },
+        "id": {
+          "type": "keyword",
+          "store": true
+        },
+        "filename": {
+          "type": "keyword",
+          "store": true,
+          "fields": {
+            "search": {
+              "type": "keyword",
+              "normalizer": "lowercase_normalizer"
+            }
+          }
+        },
+        "type": {
+          "type": "keyword",
+          "store": true
+        },
+        "summary_30": {
+          "type": "text",
+          "store": true
+        },
+        "keyw_5": {
+          "type": "text",
+          "store": true
+        },
+        "page_count": {
+          "type": "integer",
+          "store": true
+        },
+        "doc_type": {
+          "type": "keyword",
+          "store": true,
+          "fields" : {
+            "search": {
+              "type": "keyword",
+              "normalizer": "lowercase_normalizer"
+            }
+          }
+        },
+        "doc_num": {
+          "type": "keyword",
+          "store": true
+        },
+        "ref_list": {
+          "type": "keyword",
+          "store": true
+        },
+        "init_date": {
+          "type": "keyword",
+          "store": true
+        },
+        "change_date": {
+          "type": "keyword",
+          "store": true
+        },
+        "entities": {
+          "type": "keyword",
+          "store": true
+        },
+        "author": {
+          "type": "keyword",
+          "store": true
+        },
+        "signature": {
+          "type": "keyword",
+          "store": true
+        },
+        "subject": {
+          "type": "keyword",
+          "store": true
+        },
+        "classification": {
+          "type": "keyword",
+          "store": true
+        },
+        "title": {
+          "type": "keyword",
+          "store": true,
+          "fields" : {
+            "search": {
+              "type": "keyword",
+              "normalizer": "lowercase_normalizer"
+            }
+          }
+        },
+        "word_count": {
+          "type": "long",
+          "store": true
+        },
+        "category_1": {
+          "type": "keyword",
+          "store": true
+        },
+        "category_2": {
+          "type": "keyword",
+          "store": true
+        },
+        "paragraphs": {
+          "dynamic": "true",
+          "type": "nested",
+          "properties": {
+            "id": {
+              "type": "keyword",
+              "store": true
+            },
+            "filename": {
+              "type": "keyword",
+              "store": true,
+              "fields": {
+                "search": {
+                  "type": "keyword",
+                  "normalizer": "lowercase_normalizer"
+                }
+              }
+            },
+            "type": {
+              "type": "keyword",
+              "store": true
+            },
+            "entities": {
+              "type": "nested",
+              "dynamic": "true"
+            },
+            "par_inc_count": {
+              "type": "long",
+              "store": true
+            }
+          }
+        },
+        "pages": {
+          "dynamic": "true",
+          "type": "nested",
+          "properties": {
+             "id": {
+              "type": "keyword",
+              "store": true
+            },
+            "filename": {
+              "type": "keyword",
+              "store": true,
+              "fields": {
+                "search": {
+                  "type": "keyword",
+                  "normalizer": "lowercase_normalizer"
+                }
+              }
+            },
+            "type": {
+              "type": "keyword",
+              "store": true
+            },
+            "entities": {
+              "type": "nested",
+              "dynamic": "true"
+            },
+            "p_page": {
+              "type": "long",
+              "store": true
+            },
+            "p_text": {
+              "type": "text",
+              "store": true
+            }
+          }
+        }
+      }
+    }
+  }
+}

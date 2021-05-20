@@ -47,7 +47,7 @@ class IngestableDocGroup(BaseModel):
 
 
 class LoadManager:
-    SUPPORTED_RAW_DOC_EXTENSIONS = frozenset({'.pdf'})
+    SUPPORTED_RAW_DOC_EXTENSIONS = frozenset({'.pdf', '.html'})
     METADATA_DOC_EXTENSION = '.metadata'
     PARSED_DOC_EXTENSION = '.json'
 
@@ -232,7 +232,6 @@ class LoadManager:
              update_db: bool) -> None:
         """Process all doc/pub updates for eligible files"""
         ingest_ts = parse_timestamp(ts=ingest_ts, raise_parse_error=True)
-
         print(f"Running load:\n\traw_dir={raw_dir}\n\tmetadata_dir={metadata_dir}\n\tparsed_dir={parsed_dir}"
               f"\n\t\tupdate_s3={update_s3}\n\t\tupdate_db={update_db}", file=sys.stderr)
 
