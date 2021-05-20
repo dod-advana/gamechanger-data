@@ -7,7 +7,7 @@ from common.document_parser.parsers.policy_analytics.display_mappings import (
 )
 
 from common.utils.parsers import parse_timestamp
-from dataScience.src.utilities.text_utils import utf8_pass, clean_text
+from gamechangerml.src.utilities.text_utils import utf8_pass, clean_text
 
 
 def get_access_timestamp(doc_dict):

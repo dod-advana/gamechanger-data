@@ -1,5 +1,5 @@
 img linguist-vendored
-dataScience/data linguist-vendored
+gamechangerml/data linguist-vendored
 dataPipelines/docs linguist-vendored
 common/data linguist-vendored
 *.json linguist-vendored

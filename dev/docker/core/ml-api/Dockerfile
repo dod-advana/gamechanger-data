@@ -54,4 +54,4 @@ RUN if [[ "$REINSTALL_REQUIREMENTS" -eq "yes" ]]; \
 
 EXPOSE 5000
 
-ENTRYPOINT ["/bin/bash", "${APP_REPO_DIR}/dataScience/api/fastapi/startFast.sh"]
+ENTRYPOINT ["/bin/bash", "${APP_REPO_DIR}/gamechangerml/api/fastapi/startFast.sh"]

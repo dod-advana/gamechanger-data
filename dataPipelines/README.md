@@ -45,9 +45,9 @@ With processed JSON's in hand. You can use `<repo>/dataPipelines/gc_elasticsearc
 With processed JSON's in hand, You can use `<repo>/dataPipelines/gc_neo4j_publisher/` CLI tool in order to create/update Neo4j graph.
 
 ### Training ML Models
-If it becomes necessary to train ML model on a new data, there would typically be a relevant script inside `<repo>/dataScience/` hierarchy to fill the need. Exactly which script that might be or how that works is in costant flux, so consult relevant docs in that part of the repo to find out.
+If it becomes necessary to train ML model on a new data, there would typically be a relevant script inside `<repo>/gamechangerml/` hierarchy to fill the need. Exactly which script that might be or how that works is in costant flux, so consult relevant docs in that part of the repo to find out.
 
-Current model training CLI script is `<repo>/dataScience/scripts/run_train_models.py`. And the models in use do not typically require training.
+Current model training CLI script is `<repo>/gamechangerml/scripts/run_train_models.py`. And the models in use do not typically require training.
 
 ### Nuances
 

@@ -1,5 +1,5 @@
-from dataScience.models.topic_models.tfidf import bigrams, tfidf_model
-from dataScience.src.text_handling.process import topic_processing
+from gamechangerml.models.topic_models.tfidf import bigrams, tfidf_model
+from gamechangerml.src.text_handling.process import topic_processing
 
 
 def extract_topics(doc_dict):
