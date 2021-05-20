@@ -30,7 +30,7 @@ def pdf_to_json(
     """
     Converts input pdf file to json
     Args:
-        parser_path: path to parser module or json config file that creates a parser
+        parser_path: path to doc_extractor module or json config file that creates a doc_extractor
         source: A source directory to be processed.
         destination: A destination directory to be processed
         verify: Boolean to determine if output jsons are to be verified vs a json schema
@@ -79,8 +79,8 @@ def pdf_to_json(
 
 @cli.command(name="pdf-to-json")
 @click.option(
-    '--parser-path',
-    help='A path to an existing parser function',
+    '--doc_extractor-path',
+    help='A path to an existing doc_extractor function',
     required=False,
     default="common.document_parser.parsers.policy_analytics.parse::parse"
 )
