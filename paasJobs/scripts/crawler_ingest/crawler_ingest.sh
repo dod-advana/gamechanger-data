@@ -62,7 +62,9 @@ function cleanup_hooks() {
   remove_tmp_dir
   # echo_tmp_dir_locaton
 }
-trap cleanup_hooks EXIT
+if [[ "${CLEANUP:-yes}" == "no" ]]; then
+  trap cleanup_hooks EXIT
+fi
 
 #####
 ## ## SETUP COMMANDS
