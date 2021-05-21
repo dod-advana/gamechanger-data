@@ -138,6 +138,14 @@ function run_crawler() {
   ( "$PYTHON_CMD" -m dataPipelines.gc_crawler.jumbo_dfar_far run | tee -a "$LOCAL_CRAWLER_OUTPUT_FILE_PATH" ) \
     || echo "^^^ CRAWLER ERROR ^^^"
 
+#    echo -e "\nRUNNING FAR HTML CRAWLER\n"
+#  ( "$PYTHON_CMD" -m dataPipelines.gc_crawler.far_subpart_regs run | tee -a "$LOCAL_CRAWLER_OUTPUT_FILE_PATH" ) \
+#    || echo "^^^ CRAWLER ERROR ^^^"
+
+#    echo -e "\nRUNNING DFAR HTML CRAWLER\n"
+#  ( "$PYTHON_CMD" -m dataPipelines.gc_crawler.dfar_subpart_regs run | tee -a "$LOCAL_CRAWLER_OUTPUT_FILE_PATH" ) \
+#    || echo "^^^ CRAWLER ERROR ^^^"
+
   set -o pipefail
 }
 
