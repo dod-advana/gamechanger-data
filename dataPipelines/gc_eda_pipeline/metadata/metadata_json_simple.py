@@ -33,9 +33,6 @@ def metadata_extraction(staging_folder: Union[str, Path], filename_input: str, d
         is_md_successful = False
         return is_md_successful, is_supplementary_file_missing, metadata_type, data
 
-    aws_s3_syn_json = data_conf_filter['eda']['aws_s3_syn_json']
-    aws_s3_pds_json = data_conf_filter['eda']['aws_s3_pds_json']
-
     sql_check_if_syn_metadata_exist = data_conf_filter['eda']['sql_check_if_syn_metadata_exist']
     sql_check_if_pds_metadata_exist = data_conf_filter['eda']['sql_check_if_pds_metadata_exist']
 
@@ -134,7 +131,7 @@ def metadata_extraction(staging_folder: Union[str, Path], filename_input: str, d
             else:
                 s3_supplementary_data = s3_location.replace("s3://advana-eda-wawf-restricted/", "")
 
-        if (is_pds_data or is_syn_data) and metadata_filename is not None and metadata_filename != "" :
+        if (is_pds_data or is_syn_data) and metadata_filename is not None and metadata_filename != "":
             if Conf.s3_utils.object_exists(object_path=s3_supplementary_data):
                 Conf.s3_utils.download_file(file=local_supplementary_data, object_path=s3_supplementary_data)
 

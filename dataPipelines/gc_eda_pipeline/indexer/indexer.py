@@ -4,6 +4,20 @@ import time
 import json
 
 
+def create_index(index_name: str, alias: str, ingest_dir="" ):
+    publisher = EDSConfiguredElasticsearchPublisher(index_name=index_name, ingest_dir=ingest_dir,  alias=alias)
+    publisher.create_index()
+    if alias:
+        publisher.update_alias()
+    return publisher
+
+
+def get_es_publisher(staging_folder: str, index_name: str, alias: str) -> EDSConfiguredElasticsearchPublisher:
+    publisher = EDSConfiguredElasticsearchPublisher(index_name=index_name, ingest_dir=staging_folder,
+                                                 alias=alias)
+    return publisher
+
+
 def index(publish_es: EDSConfiguredElasticsearchPublisher, staging_folder: str, md_file_local_path: str,
           ex_file_local_path: str, path: str, filename_without_ext: str, ex_file_s3_path: str, audit_id: str,
           audit_rec: dict, publish_audit: EDSConfiguredElasticsearchPublisher):
@@ -35,3 +49,24 @@ def index(publish_es: EDSConfiguredElasticsearchPublisher, staging_folder: str, 
                       "modified_date_dt": int(time.time())})
     audit_record_new(audit_id=audit_id, publisher=publish_audit, audit_record=audit_rec)
     return index_output_file_path
+
+
+def combine_metadata_docparser(staging_folder: str, md_file_local_path: str, doc_file_local_path, index_file_local_path: str, record_id: str):
+    with open(md_file_local_path) as metadata_file:
+        metadata_file_data = json.load(metadata_file)
+
+    with open(doc_file_local_path) as parsed_pdf_file:
+        parsed_pdf_file_data = json.load(parsed_pdf_file)
+
+    if 'extensions' in metadata_file_data.keys():
+        extensions_json = metadata_file_data["extensions"]
+        parsed_pdf_file_data = {**parsed_pdf_file_data, **extensions_json}
+        parsed_pdf_file_data["_id"] = record_id
+
+        del metadata_file_data['extensions']
+
+    index_json_data = {**parsed_pdf_file_data, **metadata_file_data}
+    index_json_data["_id"] = str(record_id)
+
+    with open(staging_folder + "/index/" + index_file_local_path, "w") as output_file:
+        json.dump(index_json_data, output_file)

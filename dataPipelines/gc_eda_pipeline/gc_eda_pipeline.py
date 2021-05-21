@@ -6,31 +6,16 @@ import concurrent.futures
 import hashlib
 import traceback
 
-from enum import Enum
 from typing import Union
 from pathlib import Path
 
 from dataPipelines.gc_eda_pipeline.conf import Conf
-from dataPipelines.gc_eda_pipeline.audit.audit import create_index, get_es_publisher, audit_complete
+from dataPipelines.gc_eda_pipeline.audit.audit import audit_complete
 from dataPipelines.gc_eda_pipeline.metadata.generate_metadata_file import generate_metadata_file
 from dataPipelines.gc_eda_pipeline.doc_extractor.doc_extractor import ocr_process, extract_text
 from dataPipelines.gc_eda_pipeline.utils.eda_utils import read_extension_conf
-from dataPipelines.gc_eda_pipeline.indexer.indexer import index
-
-
-class EDAJobType(Enum):
-    """
-    :param NORMAL: Process New All Documents. If document as already been processed it will skip
-    :param UPDATE_METADATA: Generate the metadata and pull down the docparsed json, combines them
-            and insert into Elasticsearch, if record has not been index will do the entire process
-    :parm REPROCESS: Reprocess, reprocess all stages
-    """
-    NORMAL = 'normal'
-    UPDATE_METADATA = 'update_metadata'
-    UPDATE_METADATA_SKIP_NEW = 'update_metadata_skip_new'
-    REPROCESS = 'reprocess'
-    RE_INDEX = 're_index'
-
+from dataPipelines.gc_eda_pipeline.indexer.indexer import index, create_index, get_es_publisher
+from dataPipelines.gc_eda_pipeline.utils.eda_job_type import EDAJobType
 
 @click.command()
 @click.option(
@@ -381,7 +366,6 @@ def list_of_to_process(staging_folder: Union[str, Path], aws_s3_input_pdf_prefix
 
 
 def cleanup_record(delete_files: list):
-    pass
     for delete_file in delete_files:
         if os.path.exists(delete_file):
             os.remove(delete_file)
