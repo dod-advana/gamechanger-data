@@ -1,11 +1,13 @@
 from dataPipelines.gc_elasticsearch_publisher.gc_elasticsearch_publisher import ConfiguredElasticsearchPublisher
 from pathlib import Path
 import typing as t
-from elasticsearch import ElasticsearchException, TransportError
+from elasticsearch import ElasticsearchException, TransportError, helpers
 import time
 import traceback
 import hashlib
 import json
+import re
+import os
 
 
 class EDSConfiguredElasticsearchPublisher(ConfiguredElasticsearchPublisher):
@@ -15,8 +17,49 @@ class EDSConfiguredElasticsearchPublisher(ConfiguredElasticsearchPublisher):
 
         super().__init__(ingest_dir=ingest_dir, index_name=index_name, mapping_file=mapping_file, alias=alias)
 
-    def index_json(self, path_json: str, record_id: str) -> bool:
+    def get_jdicts(self):
+        for f in Path(self.ingest_dir).glob("*.json"):
+            filename = re.sub('\.json', '', os.path.basename(f))
+            print(f"ES inserting {filename}")
+            with open(f, 'r', encoding="utf-8") as file:
+                data = file.read()
+                json_data = json.loads(data)
+                if 'text' in json_data:
+                    del json_data['text']
+                if 'paragraphs' in json_data:
+                    del json_data['paragraphs']
+                if 'raw_text' in json_data:
+                    del json_data['raw_text']
+                if 'pages' in json_data:
+                    pages = json_data['pages']
+                    for page in pages:
+                        if 'p_text' in page:
+                            del page['p_text']
+                yield json_data
 
+    def index_jsons(self):
+        print("Starting to indexing json files")
+        count_success, error_count = 0, 0
+        try:
+            for success, info in helpers.parallel_bulk(
+                    client=self.es,
+                    actions=self.get_actions(self.get_jdicts()),
+                    thread_count=10,
+                    chunk_size=1,
+                    raise_on_exception=False,
+                    queue_size=1
+            ):
+                if not success:
+                    error_count += 1
+                    print('Doc failed', info)
+                else:
+                    count_success += 1
+        except UnicodeEncodeError as e:
+            print(e)
+            print("------------------  Failed to index files. --------------------------")
+
+    def index_json(self, path_json: str, record_id: str) -> bool:
+        # print(f"record_id :: {record_id}")
         record_id_encode = hashlib.sha256(record_id.encode())
         with open(path_json, 'r', encoding='utf-8') as f:
             json_data = json.load(f)
