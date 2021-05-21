@@ -227,6 +227,7 @@ setup_local_vars_and_dirs
 # LOCAL_JOB_LOG_PATH var is now set
 setup_local_repo_copy 2>&1 | tee -a "$LOCAL_JOB_LOG_PATH"
 setup_app_config_copy 2>&1 | tee -a "$LOCAL_JOB_LOG_PATH"
+setup_topic_models_copy 2>&1 | tee -a "$LOCAL_JOB_LOG_PATH"
 configure_repo 2>&1 | tee -a "$LOCAL_JOB_LOG_PATH"
 
 SECONDS=0
