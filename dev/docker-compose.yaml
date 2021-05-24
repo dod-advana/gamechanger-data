@@ -16,7 +16,7 @@ services:
 
   elasticsearch:
     container_name: "${COMPOSE_PROJECT_NAME:-gc-dev}-elasticsearch"
-    image: elasticsearch:7.4.2
+    image: elasticsearch:7.12.1
     ports:
       - 9200:9200
       - 9300:9300
@@ -29,7 +29,7 @@ services:
 
   kibana:
     container_name: "${COMPOSE_PROJECT_NAME:-gc-dev}-kibana"
-    image: kibana:7.4.2
+    image: kibana:7.12.1
     ports:
       - 5601:5601
     networks:
