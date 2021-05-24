@@ -50,7 +50,7 @@ See LICENSE.md (including licensing intent - INTENT.md) and CONTRIBUTING.md
         - `https://docs.conda.io/en/latest/miniconda.html`
     - Create gamechanger python3.6 environment, like so:
         - `conda create -n gc python=3.6`
-    - Clone the repo and change into that dir `git clone ...; cd gamechanger`
+    - Clone the repo and change into that dir `git clone ...; cd gamechanger-data`
     - Activate conda environment and install requirements:
         - :bangbang: <span style="color:red"> reeeealy important - make sure you change into repo directory</span>
         - `conda activate gc`

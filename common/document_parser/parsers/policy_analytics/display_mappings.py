@@ -49,7 +49,8 @@ DISPLAY_TYPE_LOOKUP = defaultdict(lambda: "Document", {
     "ci": "Instruction",
     "cn": "Notice",
     "ccn": "Notice",
-    "dcmsi": "Instruction"
+    "dcmsi": "Instruction",
+    "dod coronavirus guidance": "Guidance",
 })
 
 
@@ -82,6 +83,7 @@ CRAWLER_TO_DISPLAY_ORG_LOOKUP = defaultdict(lambda: "Uncategorized", {
     "National_Guard": "National Guard",
     "Coast_Guard": "Coast Guard",
     "jumbo_DFARS": "DFARS",
+    "DOD_Coronavirus_Guidance": "Dept. of Defense",
     "dfar_subpart_regs": "DFAR",
     "far_subpart_regs": "FAR"
 })
@@ -115,6 +117,7 @@ CRAWLER_TO_DISPLAY_SOURCE_LOOKUP = defaultdict(lambda: "Unlisted Source", {
     "jumbo_far_dfar_crawler": "Acquisition Regulation",
     "National_Guard": "National Guard Bureau Publications Library",
     "Coast_Guard": "US Coast Guard Directives",
+    "DOD_Coronavirus_Guidance": "Defense Publications",
     "dfar_subpart_regs": "Defense Federal Acquisition Regulation",
     "far_subpart_regs": "Federal Acquisition Regulation"
 })
