@@ -57,7 +57,6 @@ def metadata_extraction(staging_folder: Union[str, Path], filename_input: str, d
         is_syn_data = False
         metadata_type = "none"
         s3_supplementary_data = ""
-        local_supplementary_data = ""
         metadata_filename = ""
         local_supplementary_data = ""
         s3_location = ""
@@ -133,6 +132,10 @@ def metadata_extraction(staging_folder: Union[str, Path], filename_input: str, d
 
         if (is_pds_data or is_syn_data) and metadata_filename is not None and metadata_filename != "":
             if Conf.s3_utils.object_exists(object_path=s3_supplementary_data):
+                # try:
+                #     raw_supplementary_data = json.loads(Conf.s3_utils.object_content(object_path=s3_supplementary_data))
+                # except Exception as e:
+                #     traceback.print_exc()
                 Conf.s3_utils.download_file(file=local_supplementary_data, object_path=s3_supplementary_data)
 
                 with open(local_supplementary_data) as json_file:
@@ -170,7 +173,7 @@ def metadata_extraction(staging_folder: Union[str, Path], filename_input: str, d
                 cursor.close()
             conn.close()
 
-    if os.path.exists(local_supplementary_data):
-        os.remove(local_supplementary_data)
+    # if os.path.exists(local_supplementary_data):
+    #     os.remove(local_supplementary_data)
 
     return is_supplementary_data_successful, is_supplementary_file_missing, metadata_type, data
