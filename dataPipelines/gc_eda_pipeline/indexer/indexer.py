@@ -4,7 +4,7 @@ import time
 import json
 
 
-def create_index(index_name: str, alias: str, ingest_dir="" ):
+def create_index(index_name: str, alias: str, ingest_dir=""):
     publisher = EDSConfiguredElasticsearchPublisher(index_name=index_name, ingest_dir=ingest_dir,  alias=alias)
     publisher.create_index()
     if alias:
@@ -51,10 +51,13 @@ def index(publish_es: EDSConfiguredElasticsearchPublisher, staging_folder: str, 
     return index_output_file_path
 
 
-def combine_metadata_docparser(staging_folder: str, md_file_local_path: str, doc_file_local_path, index_file_local_path: str, record_id: str):
+
+
+def combine_metadata_docparser(staging_folder: str, md_file_local_path: str, doc_file_local_path, index_file_local_path: str, record_id: str, md_data:dict):
     with open(md_file_local_path) as metadata_file:
         metadata_file_data = json.load(metadata_file)
 
+    # metadata_file_data = md_data
     with open(doc_file_local_path) as parsed_pdf_file:
         parsed_pdf_file_data = json.load(parsed_pdf_file)
 
@@ -70,3 +73,28 @@ def combine_metadata_docparser(staging_folder: str, md_file_local_path: str, doc
 
     with open(staging_folder + "/index/" + index_file_local_path, "w") as output_file:
         json.dump(index_json_data, output_file)
+
+
+def combine_metadata_docparser_data(publish_es: EDSConfiguredElasticsearchPublisher, staging_folder: str, md_file_local_path: str, doc_file_local_path, index_file_local_path: str, record_id: str, md_data:dict):
+    # with open(md_file_local_path) as metadata_file:
+    #     metadata_file_data = json.load(metadata_file)
+
+    metadata_file_data = md_data
+    parsed_pdf_file_data = doc_file_local_path
+    with open(doc_file_local_path) as parsed_pdf_file:
+        parsed_pdf_file_data = json.load(parsed_pdf_file)
+
+    if 'extensions' in metadata_file_data.keys():
+        extensions_json = metadata_file_data["extensions"]
+        parsed_pdf_file_data = {**parsed_pdf_file_data, **extensions_json}
+        # parsed_pdf_file_data["_id"] = record_id
+
+        del metadata_file_data['extensions']
+
+    index_json_data = {**parsed_pdf_file_data, **metadata_file_data}
+    index_json_data["_id"] = str(record_id)
+
+    # publish_es.index_data(index_json_data, record_id)
+    with open(staging_folder + "/index/" + index_file_local_path, "w") as output_file:
+        json.dump(index_json_data, output_file)
+
