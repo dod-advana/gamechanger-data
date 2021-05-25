@@ -74,7 +74,7 @@ def run(staging_folder: str, s3_covd_dataset: str,
 
 
     #  Pull down the skip_files_doc_parser.txt file
-    print("Download Skip files doc doc_extractor file")
+    print("Download Skip files doc parser file")
     Conf.s3_utils.download_file(file=staging_folder + "/modification/skip_file_doc_parser.txt",
                                 bucket="advana-raw-zone",
                                 object_path="gamechanger/projects/" + gc_project + "/data-pipelines/orchestration/repo/skip_file_doc_parser.txt")

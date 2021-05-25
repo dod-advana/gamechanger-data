@@ -36,14 +36,14 @@ def resolve_dynamic_func(func_path: str) -> typing.Callable[[dict], dict]:
 def resolve_dynamic_parser(parser_path: str) -> typing.Callable:
     """
     Args:
-        parser_path: string of path::func or path to a doc_extractor module to load or to a config file that can be constructed into a doc_extractor
+        parser_path: string of path::func or path to a parser module to load or to a config file that can be constructed into a parser
 
     Returns:
         callable function to run on parser_input
     """
-    # entry point for future doc_extractor pipeline config file resolver
-    # some like if doc_extractor is Path or str -> json read -> construct parsing pipeline and return it
-    # if doc_extractor is dict -> construct parsing pipeline and return it
+    # entry point for future parser pipeline config file resolver
+    # some like if parser is Path or str -> json read -> construct parsing pipeline and return it
+    # if parser is dict -> construct parsing pipeline and return it
 
     if 'common.document_parser.parsers' not in parser_path:
         raise Exception(

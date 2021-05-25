@@ -99,7 +99,7 @@ def get_infobox_from_link(link):
     try:
         response = requests.get(url=link, verify=False)
 
-        soup = BeautifulSoup(response.content, 'html.doc_extractor')
+        soup = BeautifulSoup(response.content, 'html.parser')
         name = soup.find('h1', class_='firstHeading').text
         table = soup.find('table', class_='infobox')
         if table:
