@@ -86,16 +86,18 @@ def run(staging_folder: str, aws_s3_input_pdf_prefix: str,
     aws_s3_output_pdf_prefix = data_conf_filter['eda']['aws_s3_output_pdf_prefix']
     aws_s3_json_prefix = data_conf_filter['eda']['aws_s3_json_prefix']
 
+    # Create the Audit and EDA indexes
+    eda_audit_publisher = create_index(index_name=data_conf_filter['eda']['audit_index'],
+                                       alias=data_conf_filter['eda']['audit_index_alias'])
+    eda_publisher = create_index(index_name=data_conf_filter['eda']['eda_index'],
+                                 alias=data_conf_filter['eda']['eda_index_alias'])
+
+
     for input_loc in aws_s3_input_pdf_prefix.split(","):
         print(f"Processing Directory {input_loc}")
         start = time.time()
         process_type = EDAJobType(eda_job_type)
 
-        # Create the Audit and EDA indexes
-        eda_audit_publisher = create_index(index_name=data_conf_filter['eda']['audit_index'],
-                                           alias=data_conf_filter['eda']['audit_index_alias'])
-        eda_publisher = create_index(index_name=data_conf_filter['eda']['eda_index'],
-                                     alias=data_conf_filter['eda']['eda_index_alias'])
 
         # Get list of files from S3
         file_list = list_of_to_process(staging_folder, input_loc)
@@ -146,6 +148,9 @@ def run(staging_folder: str, aws_s3_input_pdf_prefix: str,
                             traceback.print_exc()
                     else:
                         print("EDA ****  File is not a PDF **** EDA")
+
+        print(f"Number files Processed {number_file_processed}")
+        print(f"Number files Failed {number_file_failed}")
 
         end = time.time()
         audit_id = hashlib.sha256(aws_s3_output_pdf_prefix.encode()).hexdigest()
