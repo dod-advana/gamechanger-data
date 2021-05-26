@@ -78,7 +78,7 @@ from typing import Union
 )
 def run(staging_folder: str, aws_s3_input_pdf_prefix: str,
         max_workers: int, workers_ocr: int, eda_job_type: str, loop_number: int, skip_metadata: bool):
-    print("Starting Gamechanger EDA Symphony Pipeline - Reprocessing")
+    print("Starting Gamechanger EDA Symphony Pipeline - Reprocessing ---- 4.25.2021")
     os.environ["AWS_METADATA_SERVICE_TIMEOUT"] = "10"
     os.environ["AWS_METADATA_SERVICE_NUM_ATTEMPTS"] = "40"
 
@@ -175,7 +175,7 @@ def run(staging_folder: str, aws_s3_input_pdf_prefix: str,
         eda_publisher.index_jsons()
         end_bulk_index = time.time()
 
-        print(f"Time to index into Elasticsearch: {float(end_bulk_index - start_bulk_index)}")
+
 
         delete_dir = []
         delete_dir.append(staging_folder + "/pdf/" + input_loc)
@@ -189,9 +189,12 @@ def run(staging_folder: str, aws_s3_input_pdf_prefix: str,
         audit_complete(audit_id=audit_id + "_" + str(time.time()), publisher=eda_audit_publisher,
                        number_of_files=number_file_processed, number_file_failed=number_file_failed,
                        directory=input_loc, modified_date=int(time.time()), duration=int(end - start), bulk_index=float(end_bulk_index - start_bulk_index))
+        print(f"Time to index into Elasticsearch: {float(end_bulk_index - start_bulk_index)}")
+
         print(f'Total time -- It took {end - start} seconds!')
     print("DONE!!!!!!")
     end_app = time.time()
+
     print(f'Total APP time -- It took {end_app - start_app} seconds!')
 
 
@@ -234,22 +237,26 @@ def process_doc(file: str, staging_folder: Union[str, Path], data_conf_filter: d
             # Docparsered json
             ex_file_local_path = staging_folder + "/json/" + path + "/" + filename_without_ext + ".json"
             ex_file_s3_path = aws_s3_json_prefix + "/" + path + "/" + filename_without_ext + ".json"
-            Conf.s3_utils.download_file(file=ex_file_local_path, object_path=ex_file_s3_path)
-            # raw_supplementary_data = json.loads(Conf.s3_utils.object_content(object_path=ex_file_s3_path))
+            if Conf.s3_utils.object_exists(object_path=ex_file_s3_path):
+                Conf.s3_utils.download_file(file=ex_file_local_path, object_path=ex_file_s3_path)
+                # raw_supplementary_data = json.loads(Conf.s3_utils.object_content(object_path=ex_file_s3_path))
 
-            record_id_encode = hashlib.sha256(json_path_s.encode()).hexdigest()
-            # record_id_encode = json_path_s;
-            md_file_s3_path, md_file_local_path, md_data = generate_metadata_data(staging_folder=staging_folder,
-                                                                         data_conf_filter=data_conf_filter, file=pdf_name,
-                                                                         filename=filename,
-                                                                         aws_s3_output_pdf_prefix=aws_s3_output_pdf_prefix,
-                                                                         audit_id=audit_id, audit_rec=audit_rec,
-                                                                         publish_audit=publish_audit,
-                                                                         skip_metadata=skip_metadata)
+                record_id_encode = hashlib.sha256(json_path_s.encode()).hexdigest()
+                # record_id_encode = json_path_s;
+                md_file_s3_path, md_file_local_path, md_data = generate_metadata_data(staging_folder=staging_folder,
+                                                                             data_conf_filter=data_conf_filter, file=pdf_name,
+                                                                             filename=filename,
+                                                                             aws_s3_output_pdf_prefix=aws_s3_output_pdf_prefix,
+                                                                             audit_id=audit_id, audit_rec=audit_rec,
+                                                                             publish_audit=publish_audit,
+                                                                             skip_metadata=skip_metadata)
 
-            combine_metadata_docparser_data(publish_es=publish_es, staging_folder=staging_folder, md_file_local_path=md_file_local_path,
-                                                        doc_file_local_path=ex_file_local_path, index_file_local_path=index_name, record_id=record_id_encode, md_data=md_data)
-        except ProtocolError as e:
+                combine_metadata_docparser_data(publish_es=publish_es, staging_folder=staging_folder, md_file_local_path=md_file_local_path,
+                                                            doc_file_local_path=ex_file_local_path, index_file_local_path=index_name, record_id=record_id_encode, md_data=md_data)
+            else:
+                return {'filename': filename, "status": "failed", "info": "unable to file docfile " +ex_file_s3_path + " file"}
+            
+        except (ProtocolError, ConnectionError) as e:
             error_count += 1
             time.sleep(1)
         else:

@@ -12,6 +12,9 @@ import os
 from .text_utils import size_fmt
 import datetime as dt
 import typing as t
+import boto3
+from io import BytesIO
+
 
 
 class TimestampedPrefix:
@@ -159,6 +162,22 @@ class S3Utils:
         s3_client.download_file(self.bucket, object_path, str(file_path))
 
         return file_path
+
+    def object_content(self, object_path: str,  bucket: Optional[str] = None) -> str:
+        """Return the content of file from s3 bucket
+
+        :param object_path: full name of object to download (prefix & all)
+        :param bucket: Bucket name
+        :return: Content of the file
+        """
+
+        bucket_name = bucket or self.bucket
+
+        s3_client = self.ch.s3_client
+        data = BytesIO()
+        s3_client.download_fileobj(bucket_name, object_path, data)
+
+        return data.getvalue()
 
     def object_exists(self, object_path: str, bucket: Optional[str] = None) -> bool:
         """Check if s3 object exists at given path
