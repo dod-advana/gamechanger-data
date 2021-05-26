@@ -62,7 +62,9 @@ function cleanup_hooks() {
   remove_tmp_dir
   # echo_tmp_dir_locaton
 }
-trap cleanup_hooks EXIT
+if [[ "${CLEANUP:-yes}" == "no" ]]; then
+  trap cleanup_hooks EXIT
+fi
 
 #####
 ## ## SETUP COMMANDS
@@ -94,14 +96,6 @@ function setup_venv_and_other_commands() {
 
 }
 
-function setup_local_repo_copy() {
-  echo "FETCHING REPO"
-  S3_REPO_TGZ_PATH="${S3_BUCKET_NAME}/${REPO_TGZ_BASE_PREFIX}${REPO_TGZ_FILENAME}"
-
-  $AWS_CMD s3 cp "s3://${S3_REPO_TGZ_PATH}" "$LOCAL_GC_REPO_TGZ_PATH"
-  tar -xvzf "$LOCAL_GC_REPO_TGZ_PATH" -C "$LOCAL_GC_REPO_BASE_DIR"
-}
-
 function setup_app_config_copy() {
   echo "FETCHING APP CONFIG"
   S3_APP_CONFIG_PATH="${S3_BUCKET_NAME}/${APP_CONFIG_BASE_PREFIX}${APP_CONFIG_FILENAME}"
@@ -122,8 +116,7 @@ function setup_topic_models_copy() {
 function setup_local_vars_and_dirs() {
 
   LOCAL_JOB_DIR="$LOCAL_TMP_DIR/job"
-  LOCAL_GC_REPO_BASE_DIR="$LOCAL_TMP_DIR/app-repo"
-  LOCAL_GC_REPO_TGZ_PATH="$LOCAL_GC_REPO_BASE_DIR/repo.tgz"
+  LOCAL_GC_REPO_BASE_DIR="$LOCAL_GC_REPO_BASE_DIR"
 
   mkdir -p "$LOCAL_JOB_DIR"
   mkdir -p "$LOCAL_GC_REPO_BASE_DIR"
@@ -225,8 +218,8 @@ setup_venv_and_other_commands
 echo_tmp_dir_locaton
 setup_local_vars_and_dirs
 # LOCAL_JOB_LOG_PATH var is now set
-setup_local_repo_copy 2>&1 | tee -a "$LOCAL_JOB_LOG_PATH"
 setup_app_config_copy 2>&1 | tee -a "$LOCAL_JOB_LOG_PATH"
+setup_topic_models_copy 2>&1 | tee -a "$LOCAL_JOB_LOG_PATH"
 configure_repo 2>&1 | tee -a "$LOCAL_JOB_LOG_PATH"
 
 SECONDS=0
