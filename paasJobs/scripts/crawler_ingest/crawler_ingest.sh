@@ -109,7 +109,7 @@ function setup_topic_models_copy() {
   S3_TOPIC_MODEL_PATH="${S3_BUCKET_NAME}/${TOPIC_MODEL_DIR}"
   LOCAL_TOPIC_MODEL_PATH="${LOCAL_GC_REPO_BASE_DIR}/dataScience/models/topic_models/models/"
 
-  mkdir "${LOCAL_TOPIC_MODEL_PATH}"
+  mkdir -p "${LOCAL_TOPIC_MODEL_PATH}"
   $AWS_CMD s3 cp --recursive "s3://${S3_TOPIC_MODEL_PATH}" "${LOCAL_TOPIC_MODEL_PATH}"
 }
 
