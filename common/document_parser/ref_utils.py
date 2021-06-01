@@ -76,7 +76,7 @@ def make_dict():
         re.compile(r"\b(((Director\s*of\s*Central\s*Intelligence\s*Directives)|(DCID))\s*\)?\s*[0-9]\/[0-9]{1,2}(P)?)",
         re.IGNORECASE)
     )
-    ref_dict["Executive Order"] =(
+    ref_dict["EO"] =(
         re.compile(r"[0-9]{5}", re.IGNORECASE),
         re.compile(r"\b(((Executive\s*Order)|(EO)|(E\.\s*O\.\s*))\s*\)?\s*[0-9]{5})", re.IGNORECASE)
     )
@@ -105,7 +105,7 @@ def make_dict():
         re.compile(r"\b(((ATP)|(Army\s*Techniques\s*Publications?))\s*\)?\s*[0-9]\s*-\s*[0-9]{1,2}(\.[0-9]{1,2}(\s*-\s*[0-9]{1,2})?)?)",
         re.IGNORECASE)
     )
-    ref_dict["ARMY DIR"] =(
+    ref_dict["ARMY"] =(
         re.compile(r"20[0-9]{2}\s*-\s*[0-9]{2}(\s*-\s*[0-9]{1,2})?", re.IGNORECASE),
         re.compile(r"\b(((ARMY\s*DIR)|(ARMY\s*Directives?))\s*\)?\s*20[0-9]{2}\s*-\s*[0-9]{2}(\s*-\s*[0-9]{1,2})?)",
         re.IGNORECASE)
@@ -125,7 +125,7 @@ def make_dict():
         re.compile(r"\b(((TB)|(Technical\s*Bulletins?))\s*\)?\s*((ENG\s*[0-9]{2,3})|([0-9]{3}\s*-\s*[0-9]{1,2})|(MED\s*[0-9]{1,3}(\s*-\s*[0-9]{1,2})?)|([0-9]{1,2}\s*-\s*[0-9]{3,4}(\s*-\s*([0-9]{3}\s*-\s*[0-9]{2})|([A-Z]{3}))?)))",
         re.IGNORECASE)
     )
-    ref_dict["DA MEMO"] =(
+    ref_dict["DA"] =(
         re.compile(r"[0-9]{1,3}\s*-\s*[0-9]{1,3}(\s*-\s*[0-9]{2})?", re.IGNORECASE),
         re.compile(r"\b(((DA\s*MEMO)|(DA\s*MEMORANDUMS?))\s*\)?\s*[0-9]{1,3}\s*-\s*[0-9]{1,3}(\s*-\s*[0-9]{2})?)",
         re.IGNORECASE)
@@ -140,7 +140,7 @@ def make_dict():
         re.compile(r"\b(((GTA)|(Graphic\s*Training\s*Aid))\s*\)?\s*[0-9]{2}\s*-\s*[0-9]{2}(\s*-\s*[0-9]{3})?[A-Z]?)",
         re.IGNORECASE)
     )
-    ref_dict["HQDA POLICY NOTICE"] =(
+    ref_dict["HQDA"] =(
         re.compile(r"[0-9]{1,3}\s*-\s*[0-9]{1}", re.IGNORECASE),
         re.compile(r"\b((HQDA\s*POLICY\s*NOTICE)\s*[0-9]{1,3}\s*-\s*[0-9]{1})",
         re.IGNORECASE)
