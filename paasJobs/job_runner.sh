@@ -23,11 +23,12 @@ set -o pipefail
 # CLEANUP="yes"
 # TMPDIR="/tmp"
 # VENV_ACTIVATE_SCRIPT="/opt/gc-venv-current/bin/activate"
-# PYTHONPATH=/gamechanger-data/
+# PYTHONPATH=/gamechanger-data
+# REPO_DIR=/gamechanger-data
 
 readonly SCRIPT_PARENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-readonly REPO_DIR="$( cd "$SCRIPT_PARENT_DIR/../"  >/dev/null 2>&1 && pwd )"
 
+export REPO_DIR="$( cd "$SCRIPT_PARENT_DIR/../"  >/dev/null 2>&1 && pwd )"
 export JOB_TS="$(date +%FT%T)"
 export JOB_TS_SIMPLE="$(date --date="$JOB_TS" +%Y%m%d_%H%M%S)"
 
@@ -138,6 +139,7 @@ S3_LOG_FILE_PATH="$S3_BASE_LOG_PATH_URL/${JOB_NAME}.${JOB_TS_SIMPLE}.log"
 setup_tmp_log_and_dir && run_pre_checks && send_notification "[STARTED] JOB - ${JOB_NAME}\n\tLOG: \`$S3_LOG_FILE_PATH\`"
 set_path_vars
 activate_venv
+cd "$REPO_DIR"
 
 ###
 #### RUN JOB
