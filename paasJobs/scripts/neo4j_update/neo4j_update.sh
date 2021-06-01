@@ -173,7 +173,6 @@ function run_core_ingest() {
   local load_archive_base_prefix="gamechanger/load-archive/"
   local db_backup_base_prefix="gamechanger/backup/db/"
 
-
   python -m dataPipelines.gc_ingest pipelines core ingest \
     --skip-neo4j-update="$skip_neo4j_update" \
     --skip-snapshot-backup="$skip_snapshot_backup" \
@@ -191,7 +190,7 @@ function run_core_ingest() {
     --max-threads="$max_parser_threads" \
     --max-ocr-threads="$max_ocr_threads" \
     --skip-revocation-update="$skip_revocation_update" \
-    reparse
+    update-neo4j
 
 }
 
