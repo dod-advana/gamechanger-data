@@ -26,9 +26,9 @@ set -o pipefail
 # PYTHONPATH=/gamechanger-data
 # REPO_DIR=/gamechanger-data
 
-readonly SCRIPT_PARENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+readonly RUNNER_PARENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
-export REPO_DIR="$( cd "$SCRIPT_PARENT_DIR/../"  >/dev/null 2>&1 && pwd )"
+export RUNNER_REPO_DIR="$( cd "$RUNNER_PARENT_DIR/../"  >/dev/null 2>&1 && pwd )"
 export JOB_TS="$(date +%FT%T)"
 export JOB_TS_SIMPLE="$(date --date="$JOB_TS" +%Y%m%d_%H%M%S)"
 
@@ -41,7 +41,7 @@ function setup_tmp_log_and_dir() {
 
 function set_path_vars() {
   export PATH="$PATH:/usr/local/bin"
-  export PYTHONPATH="${PYTHONPATH:-$REPO_DIR}"
+  export PYTHONPATH="${PYTHONPATH:-$RUNNER_REPO_DIR}"
 }
 
 function activate_venv() {

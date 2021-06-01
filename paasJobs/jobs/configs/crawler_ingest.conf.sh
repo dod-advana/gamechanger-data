@@ -14,18 +14,22 @@
 #
 
 readonly SCRIPT_PARENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-readonly REPO_DIR="$( cd "$SCRIPT_PARENT_DIR/../../"  >/dev/null 2>&1 && pwd )"
+readonly REPO_DIR="$( cd "$SCRIPT_PARENT_DIR/../../../"  >/dev/null 2>&1 && pwd )"
 
 ## BASE JOB_CONF
 
 JOB_NAME="${JOB_NAME:-Crawler_Ingest}"
-JOB_SCRIPT="${REPO_DIR}/paasJobs/scripts/crawler_ingest/crawler_ingest.sh"
+JOB_SCRIPT="${REPO_DIR}/paasJobs/jobs/crawler_ingest.sh"
 SEND_NOTIFICATIONS="${SEND_NOTIFICATIONS:-yes}"
 UPLOAD_LOGS="${UPLOAD_LOGS:-yes}"
 SLACK_HOOK_CHANNEL="${SLACK_HOOK_CHANNEL}"
 SLACK_HOOK_URL="${SLACK_HOOK_URL}"
 S3_BASE_LOG_PATH_URL="${S3_BASE_LOG_PATH_URL:-s3://advana-raw-zone/gamechanger/data-pipelines/orchestration/logs/core-crawler-ingest}"
 AWS_DEFAULT_REGION="${AWS_DEFAULT_REGION:-us-gov-west-1}"
+CLEANUP="${CLEANUP:-yes}"
+TMPDIR="${TMPDIR:-/data/tmp}"
+VENV_ACTIVATE_SCRIPT="${VENV_ACTIVATE_SCRIPT:-/opt/gc-venv-current/bin/activate}"
+# PYTHONPATH="${PYTHONPATH:-$REPO_DIR}"
 
 ## JOB SPECIFIC CONF
 
@@ -44,6 +48,5 @@ export SKIP_DB_BACKUP="${SKIP_DB_BACKUP:-no}"
 export SKIP_DB_UPDATE="${SKIP_DB_UPDATE:-no}"
 export SKIP_REVOCATION_UPDATE="${SKIP_REVOCATION_UPDATE-no}"
 
-export JOB_NAME="${JOB_NAME-core-crawler-ingest}"
 export RELATIVE_CRAWLER_OUTPUT_LOCATION="${RELATIVE_CRAWLER_OUTPUT_LOCATION-raw_docs/crawler_output.json}"
 
