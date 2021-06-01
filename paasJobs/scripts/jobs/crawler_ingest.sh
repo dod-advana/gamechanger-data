@@ -4,72 +4,12 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-# always set in stage params
-
-readonly SCRIPT_PARENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-
-#####
-## ## SETUP TMP DIR
-#####
-
-function setup_tmp_dir() {
-  LOCAL_TMP_DIR=$(mktemp -d)
-}
-setup_tmp_dir # CALLING RIGHT AWAY (to avoid issues with unbound var later)
-
-function echo_tmp_dir_locaton() {
-  echo "TEMP DIR IS AT $LOCAL_TMP_DIR"
-}
-
-function remove_tmp_dir() {
-  if [[ -d "$LOCAL_TMP_DIR" ]]; then
-    rm -r "$LOCAL_TMP_DIR"
-  fi
-}
-
-#####
-## ## REGISTER CLEANUP HOOKS
-#####
-
-function cleanup_hooks() {
-  remove_tmp_dir
-  # echo_tmp_dir_locaton
-}
-if [[ "${CLEANUP:-yes}" == "no" ]]; then
-  trap cleanup_hooks EXIT
-fi
-
-#####
-## ## SETUP COMMANDS
-#####
-
-function setup_venv() {
-
-  source "/opt/gc-venv-current/bin/activate"
-  export PATH="$PATH:/usr/local/bin"
-
-}
-
-function setup_local_vars_and_dirs() {
-
-  LOCAL_JOB_DIR="$LOCAL_TMP_DIR/job"
-  LOCAL_GC_REPO_BASE_DIR="$LOCAL_GC_REPO_BASE_DIR"
-
-  mkdir -p "$LOCAL_JOB_DIR"
-  mkdir -p "$LOCAL_GC_REPO_BASE_DIR"
-
-  # setup pythonpath & cwd
-  export PYTHONPATH="$LOCAL_GC_REPO_BASE_DIR"
-  cd "$LOCAL_GC_REPO_BASE_DIR"
-}
-
 #####
 ## ## MAIN COMMANDS
 #####
 
 function run_core_ingest() {
-
-  local job_dir="$LOCAL_JOB_DIR"
+  local job_dir="$LOCAL_TMP_DIR"
   local job_ts="$(sed 's/.\{5\}$//' <<< $(date --iso-8601=seconds))"
 
   local crawler_output="$job_dir/$RELATIVE_CRAWLER_OUTPUT_LOCATION"
@@ -126,11 +66,6 @@ function run_core_ingest() {
 ## ## ## ## ## ## ACTUAL EXEC FLOW
 ##### ##### #####
 
-# setup
-setup_venv
-echo_tmp_dir_locaton
-setup_local_vars_and_dirs
-# LOCAL_JOB_LOG_PATH var is now set
 SECONDS=0
 cat <<EOF
 
@@ -142,7 +77,6 @@ EOF
 # main
 run_core_ingest
 
-
 cat <<EOF
 
   SUCCESSFULLY FINISHED PIPELINE RUN
@@ -152,5 +86,5 @@ EOF
 
 # how long?
 duration=$SECONDS
-echo -e "\n $(($duration / 60)) minutes and $(($duration % 60)) seconds elapsed."
+echo -e "\n $(($SECONDS / 3600))h $(($SECONDS % 3600))m $(($SECONDS % 60))s elapsed."
 
