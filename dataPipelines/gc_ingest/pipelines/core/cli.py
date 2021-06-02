@@ -213,4 +213,4 @@ def core_update_neo4j(core_ingest_config: CoreIngestConfig, **kwargs):
 
     announce('Updating neo4j ...')
     CoreIngestSteps.update_neo4j(core_ingest_config)
-    CoreIngestSteps.update_revocations(core_ingest_config)
+
