@@ -33,7 +33,7 @@ export JOB_TS="$(date +%FT%T)"
 export JOB_TS_SIMPLE="$(date --date="$JOB_TS" +%Y%m%d_%H%M%S)"
 
 function setup_tmp_log_and_dir() {
-  export LOCAL_TMP_DIR="$(mktemp -p "${TMPDIR:-/tmp}" --suffix ".${JOB_NAME}.${JOB_TS_SIMPLE}" -d)"
+  export LOCAL_TMP_DIR="$(mktemp -d -p "${TMPDIR:-/tmp}" "${JOB_NAME}.${JOB_TS_SIMPLE}.XXXXXXX")"
   mkdir -p "$LOCAL_TMP_DIR"
   export TMP_LOG_FILE="${LOCAL_TMP_DIR}/job.log"
   touch "$TMP_LOG_FILE"
