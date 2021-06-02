@@ -10,7 +10,7 @@ set -o pipefail
 
 function run_core_ingest() {
   local job_dir="$LOCAL_TMP_DIR"
-  local job_ts="$(sed 's/.\{5\}$//' <<< $(date --iso-8601=seconds))"
+  local job_ts="$JOB_TS"
 
   local crawler_output="$job_dir/$RELATIVE_CRAWLER_OUTPUT_LOCATION"
 
