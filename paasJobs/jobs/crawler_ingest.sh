@@ -86,5 +86,5 @@ EOF
 
 # how long?
 duration=$SECONDS
-echo -e "\n $(($SECONDS / 3600))h $(($SECONDS % 3600))m $(($SECONDS % 60))s elapsed."
+echo -e "\n $(( $SECONDS / 3600 ))h $(( ($SECONDS % 3600)/60 ))m $(($SECONDS % 60))s elapsed."
 

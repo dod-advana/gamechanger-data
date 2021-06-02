@@ -155,6 +155,6 @@ if [[ $rc -eq 0 ]]; then
 else
   NOTIFICATION_MSG="[FAILED] JOB - $JOB_NAME"
 fi
-send_notification "$NOTIFICATION_MSG \n\tLOG: \`$S3_LOG_FILE_PATH\`\n\tDuration: $(($SECONDS / 3600))h $(($SECONDS % 3600))m $(($SECONDS % 60))s"
+send_notification "$NOTIFICATION_MSG \n\tLOG: \`$S3_LOG_FILE_PATH\`\n\tDuration: $(( $SECONDS / 3600 ))h $(( ($SECONDS % 3600)/60 ))m $(($SECONDS % 60))s"
 upload_logs "$TMP_LOG_FILE" "$S3_LOG_FILE_PATH"
 cleanup_tmp_dir
