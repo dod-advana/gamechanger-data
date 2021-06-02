@@ -22,6 +22,7 @@ function run_core_neo4j_update() {
   local skip_db_backup="$SKIP_DB_BACKUP"
   local skip_db_update="$SKIP_DB_UPDATE"
   local skip_revocation_update="$SKIP_REVOCATION_UPDATE"
+  local skip_es_revocation="yes"
 
   local max_ocr_threads="${MAX_OCR_THREADS_PER_FILE:-4}"
   local max_parser_threads="${MAX_PARSER_THREADS:-16}"
@@ -49,6 +50,7 @@ function run_core_neo4j_update() {
     --max-threads="$max_parser_threads" \
     --max-ocr-threads="$max_ocr_threads" \
     --skip-revocation-update="$skip_revocation_update" \
+    --skip-es-revocation="$skip_es_revocation" \
     update-neo4j
 }
 
