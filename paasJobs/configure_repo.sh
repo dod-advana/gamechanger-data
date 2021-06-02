@@ -10,20 +10,32 @@ readonly REPO_DIR="$( cd "$SCRIPT_PARENT_DIR/../"  >/dev/null 2>&1 && pwd )"
 
 export PYTHONPATH="$REPO_DIR"
 
-AWS_DEFAULT_REGION="${AWS_DEFAULT_REGION:-us-gov-west-1}"
+SCRIPT_ENV="${SCRIPT_ENV:-prod}"
 AWS_CMD="${AWS_CMD:-aws}"
 PYTHON_CMD="${PYTHON_CMD:-/opt/gc-venv-current/bin/python}"
-SCRIPT_ENV="${SCRIPT_ENV:-prod}"
-
 S3_BUCKET_NAME="${S3_BUCKET_NAME:-advana-raw-zone}"
-APP_CONFIG_S3_PATH="${APP_CONFIG_S3_PATH:-s3://${S3_BUCKET_NAME}/gamechanger/configuration/app-config/prod.20210416.json}"
-
 APP_CONFIG_NAME="${APP_CONFIG_NAME:-$SCRIPT_ENV}"
 ES_CONFIG_NAME="${ES_CONFIG_NAME:-$SCRIPT_ENV}"
-
 APP_CONFIG_LOCAL_PATH="${REPO_DIR}/configuration/app-config/${APP_CONFIG_NAME}.json"
-TOPIC_MODEL_S3_PREFIX="${TOPIC_MODEL_S3_PATH:-s3://${S3_BUCKET_NAME}/gamechanger/configuration/topic_models/models_20210428/}"
 TOPIC_MODEL_LOCAL_DIR="${REPO_DIR}/dataScience/models/topic_models/models/"
+
+case $SCRIPT_ENV in
+  prod)
+    AWS_DEFAULT_REGION="${AWS_DEFAULT_REGION:-us-gov-west-1}"
+    APP_CONFIG_S3_PATH="${APP_CONFIG_S3_PATH:-s3://${S3_BUCKET_NAME}/gamechanger/configuration/app-config/prod.20210416.json}"
+    TOPIC_MODEL_S3_PATH="${TOPIC_MODEL_S3_PATH:-s3://${S3_BUCKET_NAME}/gamechanger/models/topic_model/v1/20210208.tar.gz}"
+    ;;
+  dev)
+    AWS_DEFAULT_REGION="${AWS_DEFAULT_REGION:-us-east-1}"
+    APP_CONFIG_S3_PATH="${APP_CONFIG_S3_PATH:-s3://${S3_BUCKET_NAME}/gamechanger/configuration/app-config/dev.20210416.json}"
+    TOPIC_MODEL_S3_PATH="${TOPIC_MODEL_S3_PATH:-s3://${S3_BUCKET_NAME}/gamechanger/models/topic_model/v1/20210208.tar.gz}"
+    ;;
+  *)
+    >&2 echo "[ERROR] Incorrect SCRIPT_ENV specified: $SCRIPT_ENV"
+    exit 1
+    ;;
+esac
+
 
 
 function install_app_config() {
@@ -45,7 +57,7 @@ function install_topic_models() {
   mkdir -p "$TOPIC_MODEL_LOCAL_DIR"
 
   >&2 echo "[INFO] Fetching new topic model"
-  $AWS_CMD s3 cp --recursive "$TOPIC_MODEL_S3_PREFIX" "$TOPIC_MODEL_LOCAL_DIR"
+  $AWS_CMD s3 cp "$TOPIC_MODEL_S3_PATH" - | tar -xzf - -C "$TOPIC_MODEL_LOCAL_DIR"
 }
 
 function configure_repo() {
