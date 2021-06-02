@@ -15,12 +15,13 @@ from common.document_parser.lib import (
     pdf_reader,
     write_doc_dict_to_json,
     ocr,
-    html_utils
+    html_utils,
+    generate_png
 )
 from . import post_process, init_doc
 
 
-def parse(f_name, meta_data=None, ocr_missing_doc=False, num_ocr_threads=2, out_dir="./"):
+def parse(f_name, meta_data=None, ocr_missing_doc=False, num_ocr_threads=2, out_dir="./", thumbnail_dir="./", generate_thumbnails=True):
     print('running policy_analyics.parse on', f_name)
     meta_dict = read_meta.read_metadata(meta_data)
     doc_dict = init_doc.create_doc_dict_with_meta(meta_dict)
@@ -67,6 +68,10 @@ def parse(f_name, meta_data=None, ocr_missing_doc=False, num_ocr_threads=2, out_
     doc_dict = post_process.process(doc_dict)
 
     write_doc_dict_to_json.write(out_dir=out_dir, ex_dict=doc_dict)
+
+    if generate_thumbnails:
+        generate_png.generate_png(f_name=f_name, out_dir=thumbnail_dir)
+
     if should_delete:
         os.remove(f_name)
 

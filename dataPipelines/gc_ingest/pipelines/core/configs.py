@@ -58,6 +58,7 @@ class CoreIngestConfig(IngestConfig):
     backup_snapshot_prefix: NonBlankString
     infobox_dir: t.Optional[StrippedString] = None
     es_mapping_file: t.Optional[StrippedString] = None
+    generate_thumbnails: bool = False
 
     @property
     def snapshot_manager(self) -> SnapshotManager:
@@ -117,6 +118,16 @@ class CoreIngestConfig(IngestConfig):
             bucket_name=self.bucket_name
         )
         return self._load_manager
+
+
+    @property
+    def thumbnail_doc_base_dir(self) -> Path:
+        if hasattr(self, '_thumbnail_doc_base_dir'):
+            return self._thumbnail_doc_base_dir
+
+        self._thumbnail_doc_base_dir = Path(self.job_dir, 'thumbnails')
+        self._thumbnail_doc_base_dir.mkdir(exist_ok=False)
+        return self._thumbnail_doc_base_dir
 
     @property
     def es_publisher(self) -> ConfiguredElasticsearchPublisher:
@@ -268,6 +279,14 @@ class CoreIngestConfig(IngestConfig):
             type=click.Path(exists=True, dir_okay=False, file_okay=True, resolve_path=True),
             required=False,
             help="Path to a non-default es mapping file"
+        )
+        @click.option(
+            '--generate-thumbnails',
+            type=bool,
+            required=False,
+            default=True,
+            show_default=True,
+            help="Whether or not to generate png of first page of pdf"
         )
         @pass_core_snapshot_cli_options
         @pass_core_db_cli_options

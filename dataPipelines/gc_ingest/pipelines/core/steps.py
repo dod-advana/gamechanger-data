@@ -17,10 +17,12 @@ class CoreIngestSteps(PipelineSteps):
             parser_path="common.document_parser.parsers.policy_analytics.parse::parse",
             source=str(c.raw_doc_base_dir),
             destination=str(c.parsed_doc_base_dir),
+            thumbnail_dir=c.thumbnail_doc_base_dir,
             metadata=str(c.raw_doc_base_dir),
             ocr_missing_doc=True,
             multiprocess=c.max_threads,
-            num_ocr_threads=c.max_ocr_threads
+            num_ocr_threads=c.max_ocr_threads,
+            generate_thumbnails=c.generate_thumbnails
         )
 
     @staticmethod
@@ -50,7 +52,8 @@ class CoreIngestSteps(PipelineSteps):
             parsed_dir=c.parsed_doc_base_dir,
             ingest_ts=c.batch_timestamp,
             update_s3=True,
-            update_db=not c.skip_db_update
+            update_db=not c.skip_db_update,
+            thumbnail_dir=c.thumbnail_doc_base_dir
         )
 
     @staticmethod
@@ -73,6 +76,12 @@ class CoreIngestSteps(PipelineSteps):
         c.snapshot_manager.update_current_snapshot_from_disk(
             local_dir=c.parsed_doc_base_dir,
             snapshot_type=SnapshotType.PARSED,
+            replace=False,
+            max_threads=c.max_threads
+        )
+        c.snapshot_manager.update_current_snapshot_from_disk(
+            local_dir=c.thumbnail_doc_base_dir,
+            snapshot_type=SnapshotType.THUMBNAIL,
             replace=False,
             max_threads=c.max_threads
         )
