@@ -117,7 +117,7 @@ class CoreIngestSteps(PipelineSteps):
         c.crawler_status_tracker.handle_revocations(index_name=c.index_name,
             update_db=not c.skip_db_update,
             update_es=not c.skip_es_revocation,
-            update_neo4j=not c.skip_neo4j_update)
+            update_neo4j=False)
 
     @staticmethod
     def update_crawler_status_downloaded(c: CoreIngestConfig) -> None:

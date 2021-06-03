@@ -20,6 +20,46 @@ set -o pipefail
 # SLACK_HOOK_URL="https://hooks.slack.com/services/12312123/3534153245"
 # S3_BASE_LOG_PATH_URL="s3://somebucket/someplace"
 # AWS_DEFAULT_REGION="us-east-1"
+# CLEANUP="yes"
+# TMPDIR="/tmp"
+# VENV_ACTIVATE_SCRIPT="/opt/gc-venv-current/bin/activate"
+# PYTHONPATH=/gamechanger-data
+# REPO_DIR=/gamechanger-data
+
+readonly RUNNER_PARENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
+export RUNNER_REPO_DIR="$( cd "$RUNNER_PARENT_DIR/../"  >/dev/null 2>&1 && pwd )"
+export JOB_TS="$(date +%FT%T)"
+export JOB_TS_SIMPLE="$(date --date="$JOB_TS" +%Y%m%d_%H%M%S)"
+
+function setup_tmp_log_and_dir() {
+  export LOCAL_TMP_DIR="$(mktemp -d -p "${TMPDIR:-/tmp}" "${JOB_NAME}.${JOB_TS_SIMPLE}.XXXXXXX")"
+  mkdir -p "$LOCAL_TMP_DIR"
+  export TMP_LOG_FILE="${LOCAL_TMP_DIR}/job.log"
+  touch "$TMP_LOG_FILE"
+}
+
+function set_path_vars() {
+  export PATH="$PATH:/usr/local/bin"
+  export PYTHONPATH="${PYTHONPATH:-$RUNNER_REPO_DIR}"
+}
+
+function activate_venv() {
+  if [[ -z "${VENV_ACTIVATE_SCRIPT:-}" ]]; then
+    >&2 echo "[INFO] No venv specified, proceeding ..."
+    return 0
+  fi
+
+  source "$VENV_ACTIVATE_SCRIPT"
+}
+
+function cleanup_tmp_dir() {
+  if [[ "${CLEANUP:-yes}" != "no" ]]; then
+    if [[ -d "$LOCAL_TMP_DIR" ]]; then
+      rm -rf "$LOCAL_TMP_DIR"
+    fi
+  fi
+}
 
 function send_notification() {
   if [[ "${SEND_NOTIFICATIONS}" == "yes" ]] ; then
@@ -78,26 +118,43 @@ EOF
 # runs in subshell, should not depend on anything in this wrapper
 function run_job() (
   >&2 printf "Running job %s :: through :: %s\n" "$JOB_NAME" "$JOB_SCRIPT"
+
   bash "$JOB_SCRIPT"
   return "$?"
 )
 
+# to track job duration
+SECONDS=0
+
+###
+#### SEND START NOTIFICATION AND PREPARE ENV
+###
+
+# init job-specific and job-runner config
 JOB_CONF="${1?Must provide job configuration file}"
 source "$JOB_CONF"
 
-TMP_LOG_FILE="$(mktemp)"
-START_TS=$(date +"%Y-%m-%dT%H:%M:%S")
-S3_LOG_FILE_PATH="$S3_BASE_LOG_PATH_URL/${JOB_NAME}.${START_TS}.log"
+# logs & rest
+S3_LOG_FILE_PATH="$S3_BASE_LOG_PATH_URL/${JOB_NAME}.${JOB_TS_SIMPLE}.log"
+setup_tmp_log_and_dir && run_pre_checks && send_notification "[STARTED] JOB - ${JOB_NAME}\n\tLOG: \`$S3_LOG_FILE_PATH\`"
+set_path_vars
+activate_venv
+cd "$REPO_DIR"
 
-SECONDS=0
-
-run_pre_checks && send_notification "[STARTED] JOB - ${JOB_NAME}\n\tLOG: \`$S3_LOG_FILE_PATH\`"
-
+###
+#### RUN JOB
+###
 run_job 2>&1 | tee -a "$TMP_LOG_FILE" && rc=$? || rc=$?
+
+
+###
+#### CLEANUP ENV, UPLOAD LOGS, AND SEND END NOTIFICAITON
+###
 if [[ $rc -eq 0 ]]; then
   NOTIFICATION_MSG="[SUCCESS] JOB - $JOB_NAME"
 else
   NOTIFICATION_MSG="[FAILED] JOB - $JOB_NAME"
 fi
-send_notification "$NOTIFICATION_MSG \n\tLOG: \`$S3_LOG_FILE_PATH\`\n\tDuration: $(($SECONDS / 60)) minutes and $(($SECONDS % 60)) seconds"
-upload_logs "$TMP_LOG_FILE" "$S3_LOG_FILE_PATH"  && rm -f "$TMP_LOG_FILE"
+send_notification "$NOTIFICATION_MSG \n\tLOG: \`$S3_LOG_FILE_PATH\`\n\tDuration: $(( $SECONDS / 3600 ))h $(( ($SECONDS % 3600)/60 ))m $(($SECONDS % 60))s"
+upload_logs "$TMP_LOG_FILE" "$S3_LOG_FILE_PATH"
+cleanup_tmp_dir

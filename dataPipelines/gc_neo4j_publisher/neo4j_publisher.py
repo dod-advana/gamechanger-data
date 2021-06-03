@@ -238,7 +238,8 @@ class Neo4jPublisher:
         if not files:
             return
 
-        with ThreadPoolExecutor(max_workers=len(files)) as ex:
+        # TODO: Make max worker param adjustable and constrained to something that doesn't break runtime thread limit
+        with ThreadPoolExecutor(max_workers=10) as ex:
             futures = []
             for filename in files:
                 try:
