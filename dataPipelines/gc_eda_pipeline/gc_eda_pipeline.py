@@ -54,7 +54,7 @@ from dataPipelines.gc_eda_pipeline.utils.eda_job_type import EDAJobType
     '--eda-job-type',
     type=click.Choice([e.value for e in EDAJobType]),
     help="""Determines how the data should be processed, 
-            
+
          """,
     default=EDAJobType.NORMAL.value
 )
@@ -98,11 +98,14 @@ def run(staging_folder: str, aws_s3_input_pdf_prefix: str,
         start = time.time()
         process_type = EDAJobType(eda_job_type)
 
-
         # Get list of files from S3
+        start_file_list = time.time()
         file_list = list_of_to_process(staging_folder, input_loc)
+        end_file_list = time.time()
+        total_num_files = len(file_list)
         number_file_processed = 0
         number_file_failed = 0
+        percentage_completed = 5
 
         # How many elements each list should have # work around with issue on queue being over filled
         n = loop_number
@@ -114,7 +117,7 @@ def run(staging_folder: str, aws_s3_input_pdf_prefix: str,
                 results = [executor.submit(process_doc, file, staging_folder, data_conf_filter, workers_ocr,
                                            aws_s3_output_pdf_prefix, aws_s3_json_prefix, process_type, skip_metadata)
                            for file in item_process]
-
+                count = 0
                 none_type = type(None)
                 for fut in concurrent.futures.as_completed(results):
                     if not isinstance(fut, none_type):
@@ -126,15 +129,21 @@ def run(staging_folder: str, aws_s3_input_pdf_prefix: str,
                                           f"{fut.result().get('info')}")
                                     number_file_processed = number_file_processed + 1
                                 elif "completed" == status:
-                                    print(f"Following file {fut.result().get('filename')} was processed, extra info: "
-                                          f"{fut.result().get('info')}")
+                                    # print(f"Following file {fut.result().get('filename')} was processed, extra info: "
+                                    #       f"{fut.result().get('info')}")
                                     number_file_processed = number_file_processed + 1
                                 elif "failed" == status:
-                                    print(f"Following file {fut.result().get('filename')} failed")
+                                    print(f"Following file {fut.result().get('filename')} failed, extra info: "
+                                          f"{fut.result().get('info')}")
                                     number_file_failed = number_file_failed + 1
                                 elif "skip" == status:
                                     print(f"Following file {fut.result().get('filename')} was skipped, extra info: "
                                           f"{fut.result().get('info')}")
+                                count = count + 1
+
+                            if (count/total_num_files * 100) > percentage_completed:
+                                percentage_completed = percentage_completed + 5
+                                print(f"Processed so far {round(count/total_num_files * 100, 2)}%")
                         except Exception as exc:
                             value = str(exc)
                             if value == "not a PDF":
@@ -149,16 +158,23 @@ def run(staging_folder: str, aws_s3_input_pdf_prefix: str,
                     else:
                         print("EDA ****  File is not a PDF **** EDA")
 
-        print(f"Number files Processed {number_file_processed}")
-        print(f"Number files Failed {number_file_failed}")
-
         end = time.time()
+
         audit_id = hashlib.sha256(aws_s3_output_pdf_prefix.encode()).hexdigest()
         audit_complete(audit_id=audit_id + "_" + str(time.time()), publisher=eda_audit_publisher,
                        number_of_files=number_file_processed, number_file_failed=number_file_failed,
                        directory=input_loc, modified_date=int(time.time()), duration=int(end - start))
 
+        print("-----------  Process Status -----------")
+        print(f"Number files Processed {number_file_processed}")
+        print(f"Number files Failed {number_file_failed}")
+        print(f"Time to generate file list from S3 {round(end_file_list-start_file_list, 2)} secs")
+        # print(f"Time to index into Elasticsearch: {round(float(end_bulk_index - start_bulk_index), 2)}")
+        # print(f"Index rate {round(number_file_processed/(end_bulk_index - start_bulk_index), 2)} files/sec")
+        print(f"Process file rate {round(number_file_processed/(end - start), 2)} files/sec)")
         print(f'Total time -- It took {end - start} seconds!')
+        print("--------------------------------------")
+
     print("DONE!!!!!!")
     end_app = time.time()
     print(f'Total APP time -- It took {end_app - start_app} seconds!')
@@ -211,21 +227,6 @@ def process_doc(file: str, staging_folder: Union[str, Path], data_conf_filter: d
         if not is_index_b:
             process_file = True
         else:
-            # Check if legacy audit data
-            check_if_legacy_audit_data = audit_rec_old['is_docparser_b'] if 'is_docparser_b' in audit_rec_old else None
-            if check_if_legacy_audit_data is not None:
-                if 'is_pds_data_b' in audit_rec_old:
-                    del audit_rec_old['is_pds_data_b']
-                if 'total_time_f' in audit_rec_old:
-                    del audit_rec_old['total_time_f']
-                if 'json_path_s' not in audit_rec_old:
-                    gc_p_s_path, gc_p_sfilename = os.path.split(audit_rec_old['gc_path_s'])
-                    gc_p_s_fn_without_ext, gc_path_s_file_extension = os.path.splitext(gc_p_sfilename)
-                    audit_rec_old['json_path_s'] = path.replace("/pdf/", "/json/", 1) + "/" + gc_p_s_fn_without_ext + ".json"
-                    audit_rec_old['metadata_path_s'] = path + "/" + gc_p_s_fn_without_ext + ".pdf.metadata"
-                del audit_rec_old['is_docparser_b']
-                del audit_rec_old['docparser_time_f']
-
             if process_type == EDAJobType.UPDATE_METADATA or process_type == EDAJobType.UPDATE_METADATA_SKIP_NEW:
                 update_metadata = True
             elif process_type == EDAJobType.RE_INDEX:

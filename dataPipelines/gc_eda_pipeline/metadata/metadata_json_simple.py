@@ -1,6 +1,7 @@
 import psycopg2
 from psycopg2.extras import RealDictCursor
 import os
+import time
 import json
 from datetime import datetime
 from dataPipelines.gc_eda_pipeline.conf import Conf
@@ -10,7 +11,7 @@ import traceback
 from dataPipelines.gc_eda_pipeline.metadata.pds_extract_json import extract_pds
 from dataPipelines.gc_eda_pipeline.metadata.syn_extract_json import extract_syn
 from dataPipelines.gc_eda_pipeline.metadata.metadata_util import title
-
+from urllib3.exceptions import ProtocolError
 
 def metadata_extraction(staging_folder: Union[str, Path], filename_input: str, data_conf_filter: dict,
                         aws_s3_output_pdf_prefix: str, skip_metadata: bool):
@@ -131,20 +132,28 @@ def metadata_extraction(staging_folder: Union[str, Path], filename_input: str, d
                 s3_supplementary_data = s3_location.replace("s3://advana-eda-wawf-restricted/", "")
 
         if (is_pds_data or is_syn_data) and metadata_filename is not None and metadata_filename != "":
-            if Conf.s3_utils.object_exists(object_path=s3_supplementary_data):
-                # try:
-                #     raw_supplementary_data = json.loads(Conf.s3_utils.object_content(object_path=s3_supplementary_data))
-                # except Exception as e:
-                #     traceback.print_exc()
-                Conf.s3_utils.download_file(file=local_supplementary_data, object_path=s3_supplementary_data)
+            if Conf.s3_utils.prefix_exists(prefix_path=s3_supplementary_data):
+                get_metadata_file = False
+                error_count = 0
+                while not get_metadata_file and error_count < 10:
+                    try:
+                        raw_supplementary_data = json.loads(Conf.s3_utils.object_content(object_path=s3_supplementary_data))
+                    except (ProtocolError, ConnectionError) as e:
+                        error_count += 1
+                        time.sleep(1)
+                    else:
+                        get_metadata_file = True
 
-                with open(local_supplementary_data) as json_file:
-                    raw_supplementary_data = json.load(json_file)
 
-                if is_pds_data:
+                # Conf.s3_utils.download_file(file=local_supplementary_data, object_path=s3_supplementary_data)
+
+                # with open(local_supplementary_data) as json_file:
+                #     raw_supplementary_data = json.load(json_file)
+
+                if is_pds_data and get_metadata_file:
                     extracted_data = extract_pds(data_conf_filter=data_conf_filter, data=raw_supplementary_data, extensions_metadata=extensions_metadata)
 
-                if is_syn_data:
+                if is_syn_data and get_metadata_file:
                     extracted_data = extract_syn(data_conf_filter=data_conf_filter, data=raw_supplementary_data)
 
                 extensions_metadata = {**extracted_data, **extensions_metadata}

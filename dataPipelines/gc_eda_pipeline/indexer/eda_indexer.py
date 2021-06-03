@@ -44,7 +44,7 @@ class EDSConfiguredElasticsearchPublisher(ConfiguredElasticsearchPublisher):
             for success, info in helpers.parallel_bulk(
                     client=self.es,
                     actions=self.get_actions(self.get_jdicts()),
-                    thread_count=64,
+                    thread_count=90,
                     chunk_size=1000,
                     raise_on_exception=False,
                     queue_size=100
@@ -60,7 +60,7 @@ class EDSConfiguredElasticsearchPublisher(ConfiguredElasticsearchPublisher):
 
 
     def index_data(self, data_json: dict, record_id: str):
-        record_id_encode = hashlib.sha256(record_id.encode())
+        # record_id_encode = hashlib.sha256(record_id.encode())
         # print("___-------------------------")
         # print(f"data_json  {type(data_json)}")
         # print("___-------------------------")
@@ -83,16 +83,16 @@ class EDSConfiguredElasticsearchPublisher(ConfiguredElasticsearchPublisher):
         while not is_suc and counter < 10:
             try:
                 error_message = None
-                response = self.es.index(index=self.index_name, id=record_id_encode.hexdigest(), body=json_data)
+                response = self.es.index(index=self.index_name, id=record_id, body=json_data)
                 return True
             except TransportError as te:
                 print(te)
-                error_message = f"\nFailed -- Unexpected Elasticsearch Transport Exception: {record_id} {record_id_encode.hexdigest()}\n"
-                time.sleep(2)
+                error_message = f"\nFailed -- Unexpected Elasticsearch Transport Exception: {record_id}\n"
+                time.sleep(1)
                 counter = counter + 1
             except ElasticsearchException as ee:
-                error_message = f"\nFailed -- Unexpected Elasticsearch Exception:  {record_id} {record_id_encode.hexdigest()}\n"
-                time.sleep(2)
+                error_message = f"\nFailed -- Unexpected Elasticsearch Exception:  {record_id} \n"
+                time.sleep(1)
                 print(ee)
                 counter = counter + 1
         if error_message is not None:
