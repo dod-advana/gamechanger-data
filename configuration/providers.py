@@ -14,7 +14,7 @@ class ConfigProvider(ABC):
     def get_config(self,
             conf_type: t.Union[ConfigurationType, str],
             conf_name: str,
-            validate: bool = False) -> t.Dict[str, t.Any]:
+            validate: bool = True) -> t.Dict[str, t.Any]:
         """Get config and validate it against appropriate schema
 
         :param conf_type: Name of the config type, e.g. "app-config"
