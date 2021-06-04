@@ -234,12 +234,11 @@ class Neo4jPublisher:
         process_query('CALL policy.createEntityNodesFromJson(' + json.dumps(entity_json) + ')')
         return
 
-    def process_dir(self, files: t.List[str], file_dir: str, q: mp.Queue) -> None:
+    def process_dir(self, files: t.List[str], file_dir: str, q: mp.Queue, max_threads: int) -> None:
         if not files:
             return
 
-        # TODO: Make max worker param adjustable and constrained to something that doesn't break runtime thread limit
-        with ThreadPoolExecutor(max_workers=10) as ex:
+        with ThreadPoolExecutor(max_workers=min(max_threads, 16)) as ex:
             futures = []
             for filename in files:
                 try:
