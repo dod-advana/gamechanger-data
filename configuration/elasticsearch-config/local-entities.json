@@ -6,12 +6,52 @@
                 "number_of_shards": 3,
                 "number_of_replicas": 1,
                 "mapping.nested_fields.limit": 20000
+            },
+            "analysis": {
+                "normalizer": {
+                    "lowercase_normalizer": {
+                        "type": "custom",
+                        "char_filter": [],
+                        "filter": ["lowercase"]
+                    }
+                },
+                "filter": {
+                    "gc_stop": {
+                        "type": "stop",
+                        "stopwords":  []
+                    },
+                    "english_stemmer": {
+                        "type":       "stemmer",
+                        "language":   "english"
+                    },
+                    "english_possessive_stemmer": {
+                        "type":       "stemmer",
+                        "language":   "possessive_english"
+                    }
+                },
+                "analyzer": {
+                    "gc_english": {
+                    "tokenizer":  "standard",
+                    "filter": [
+                        "english_possessive_stemmer",
+                        "lowercase",
+                        "gc_stop",
+                        "english_stemmer"
+                        ]
+                    }
+                }
             }
         },
         "mappings": {
             "properties": {
                 "name": {
-                    "type": "text"
+                    "type": "keyword",
+                    "fields": {
+                        "search": {
+                            "type": "keyword",
+                            "normalizer": "lowercase_normalizer"
+                        }
+                    }
                 },
                 "entity_type": {
                     "type": "keyword"
@@ -31,20 +71,32 @@
                 "related_agency": {
                     "type": "text"
                 },
+                "information": {
+                    "type": "text",
+                    "analyzer": "gc_english"
+                },
+                "information_source": {
+                    "type": "keyword"
+                },
+                "information_retrieved": {
+                    "type": "date",
+                    "format": "MM/dd/yyyy"
+                },
                 "aliases": {
                     "type": "nested",
                     "properties": {
                         "name": {
-                            "type": "text",
+                            "type": "keyword",
                             "fields": {
                                 "search": {
-                                    "type": "text"
-                                    }
+                                "type": "keyword",
+                                "normalizer": "lowercase_normalizer"
                                 }
+                            }
                         }
                     }
                 }
             }
         }
     }
-}
+  } 

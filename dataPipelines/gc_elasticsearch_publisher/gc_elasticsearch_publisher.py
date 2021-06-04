@@ -285,6 +285,8 @@ class ConfiguredEntityPublisher(ConfiguredElasticsearchPublisher):
             mydict["aliases"] = [
                 {"name": x} for x in self.agencies.loc[i, "Agency_Aliases"]
             ]
+            mydict["information_source"] = self.agencies.loc[i, "information_source"]
+            mydict["information_retrieved"] = self.agencies.loc[i, "information_retrieved"]
             header = {"_index": self.index_name, "_source": mydict}
             docs.append(header)
 
