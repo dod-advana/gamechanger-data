@@ -9,6 +9,7 @@ from .config import Config
 import typing as t
 from configuration import RENDERED_DIR
 import pandas as pd
+from datetime import datetime
 
 
 def clean_string(string):
@@ -264,6 +265,8 @@ class ConfiguredEntityPublisher(ConfiguredElasticsearchPublisher):
             lambda x: x.split(";")
         )
 
+        agencies["information_retrieved"] = agencies["information_retrieved"].apply(lambda x: datetime.strptime(x, "%Y-%m-%d"))
+
         return agencies
 
     def get_docs(self):
@@ -283,11 +286,14 @@ class ConfiguredEntityPublisher(ConfiguredElasticsearchPublisher):
             mydict["aliases"] = [
                 {"name": x} for x in self.agencies.loc[i, "Agency_Aliases"]
             ]
-            mydict["information"] = {
-                "text": self.agencies.loc[i, "information"],
-                "source": self.agencies.loc[i, "information_source"],
-                "date_retrieved": self.agencies.loc[i, "information_retrieved"]
-                }
+            mydict["information"] = self.agencies.loc[i, "information"]
+            mydict["information_source"] = self.agencies.loc[i, "information_source"]
+            mydict["information_retrieved"] = self.agencies.loc[i, "information_retrieved"]
+            #mydict["information"] = {
+            #    "text": self.agencies.loc[i, "information"],
+            #    "source": self.agencies.loc[i, "information_source"],
+            #    "date_retrieved": self.agencies.loc[i, "information_retrieved"]
+            #    }
             header = {"_index": self.index_name, "_source": mydict}
             docs.append(header)
 
