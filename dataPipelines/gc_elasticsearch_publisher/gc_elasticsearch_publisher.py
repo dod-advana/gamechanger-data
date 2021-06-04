@@ -277,15 +277,17 @@ class ConfiguredEntityPublisher(ConfiguredElasticsearchPublisher):
             mydict["government_branch"] = self.agencies.loc[i, "Government_Branch"]
             mydict["parent_agency"] = self.agencies.loc[i, "Parent_Agency"]
             mydict["related_agency"] = self.agencies.loc[i, "Related_Agency"]
-            mydict["information"] = self.agencies.loc[i, "information"]
             mydict["entity_type"] = self.agencies.loc[i, "entity_type"]
             mydict["crawlers"] = self.agencies.loc[i, "crawlers"]
             mydict["num_mentions"] = self.agencies.loc[i, "num_mentions"]
             mydict["aliases"] = [
                 {"name": x} for x in self.agencies.loc[i, "Agency_Aliases"]
             ]
-            mydict["information_source"] = self.agencies.loc[i, "information_source"]
-            mydict["information_retrieved"] = self.agencies.loc[i, "information_retrieved"]
+            mydict["information"] = {
+                "text": self.agencies.loc[i, "information"],
+                "source": self.agencies.loc[i, "information_source"],
+                "date_retrieved": self.agencies.loc[i, "information_retrieved"]
+                }
             header = {"_index": self.index_name, "_source": mydict}
             docs.append(header)
 

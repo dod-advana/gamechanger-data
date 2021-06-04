@@ -72,15 +72,20 @@
                   "type": "text"
               },
               "information": {
-                  "type": "text",
-                  "analyzer": "gc_english"
-              },
-              "information_source": {
-                  "type": "keyword"
-              },
-              "information_retrieved": {
-                  "type": "date",
-                  "format": "MM/dd/yyyy"
+                  "type": "nested",
+                  "properties": {
+                      "text": {
+                          "type": "text",
+                          "analyzer": "gc_english"
+                      },
+                      "source": {
+                          "type": "keyword"
+                      },
+                      "date_retrieved": {
+                          "type": "date",
+                          "format": "yyyy-MM-dd"
+                      }
+                  }
               },
               "aliases": {
                   "type": "nested",
