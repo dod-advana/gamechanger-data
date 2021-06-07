@@ -51,7 +51,17 @@
               "information": {
                   "type": "text",
                   "analyzer": "gc_english"
-              }
+              },
+              "aliases": {
+                  "dynamic": "true",
+                  "type": "nested",
+                  "properties": {
+                      "name": {
+                        "type": "text",
+                        "analyzer": "gc_english"
+                      }
+                    }
+                }
           }
       }
   }
