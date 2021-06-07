@@ -45,13 +45,8 @@
       "mappings": {
           "properties": {
               "name": {
-                  "type": "keyword",
-                  "fields": {
-                      "search": {
-                          "type": "keyword",
-                          "normalizer": "lowercase_normalizer"
-                      }
-                  }
+                  "type": "text",
+                  "analyzer": "gc_english"
               },
               "information": {
                   "type": "text",

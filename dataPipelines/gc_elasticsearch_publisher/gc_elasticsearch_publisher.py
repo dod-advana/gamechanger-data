@@ -15,7 +15,7 @@ from datetime import datetime
 def clean_string(string):
 
     return " ".join(
-        [i.lstrip("\n").strip().lstrip().replace("'", "")
+        [i.lstrip("\n").strip().lstrip().replace('"',"'").replace("'", "\'")
          for i in string.split(" ")]
     )
 
@@ -256,6 +256,7 @@ class ConfiguredEntityPublisher(ConfiguredElasticsearchPublisher):
             "Government_Branch",
             "Parent_Agency",
             "Related_Agency",
+            "information"
         ]
 
         for i in keep_cols:
@@ -264,8 +265,6 @@ class ConfiguredEntityPublisher(ConfiguredElasticsearchPublisher):
         agencies["Agency_Aliases"] = agencies["Agency_Aliases"].apply(
             lambda x: x.split(";")
         )
-
-        agencies["information_retrieved"] = agencies["information_retrieved"].apply(lambda x: datetime.strptime(x, "%Y-%m-%d"))
 
         return agencies
 
@@ -289,11 +288,6 @@ class ConfiguredEntityPublisher(ConfiguredElasticsearchPublisher):
             mydict["information"] = self.agencies.loc[i, "information"]
             mydict["information_source"] = self.agencies.loc[i, "information_source"]
             mydict["information_retrieved"] = self.agencies.loc[i, "information_retrieved"]
-            #mydict["information"] = {
-            #    "text": self.agencies.loc[i, "information"],
-            #    "source": self.agencies.loc[i, "information_source"],
-            #    "date_retrieved": self.agencies.loc[i, "information_retrieved"]
-            #    }
             header = {"_index": self.index_name, "_source": mydict}
             docs.append(header)
 
