@@ -53,50 +53,11 @@
                       }
                   }
               },
-              "entity_type": {
-                  "type": "keyword"
-              },
-              "website": {
-                  "type": "keyword"
-              },
-              "address": {
-                  "type": "text"
-              },
-              "government_branch": {
-                  "type": "text"
-              },
-              "parent_agency": {
-                  "type": "text"
-              },
-              "related_agency": {
-                  "type": "text"
-              },
               "information": {
                   "type": "text",
                   "analyzer": "gc_english"
-              },
-              "information_source": {
-                  "type": "keyword"
-              },
-              "information_retrieved_on": {
-                  "type": "date",
-                   "format": "yyyy-MM-dd"
-              },
-              "aliases": {
-                  "type": "nested",
-                  "properties": {
-                      "name": {
-                          "type": "keyword",
-                          "fields": {
-                              "search": {
-                              "type": "keyword",
-                              "normalizer": "lowercase_normalizer"
-                              }
-                          }
-                      }
-                  }
               }
           }
       }
   }
-} 
+}
