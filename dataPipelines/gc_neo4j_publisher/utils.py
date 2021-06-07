@@ -54,8 +54,8 @@ class Neo4jJobManager:
             pbar.update()
 
     @staticmethod
-    def process_files(files: t.List[str], file_dir: str, q: mp.Queue, publisher: Neo4jPublisher) -> None:
-        publisher.process_dir(files, file_dir, q)
+    def process_files(files: t.List[str], file_dir: str, q: mp.Queue, publisher: Neo4jPublisher, max_threads: int) -> None:
+        publisher.process_dir(files, file_dir, q, max_threads)
 
     @staticmethod
     def get_chunks(lst: t.List[t.Any], n: int) -> t.Iterable[t.List[t.Any]]:
@@ -144,7 +144,7 @@ class Neo4jJobManager:
         q = mp.Queue()
         proc = mp.Process(target=self.listener, args=(q, len(files)))
         proc.start()
-        workers = [mp.Process(target=self.process_files, args=(file_chunks[i], file_dir, q, publisher)) for i in range(n)]
+        workers = [mp.Process(target=self.process_files, args=(file_chunks[i], file_dir, q, publisher, max_threads)) for i in range(n)]
         for worker in workers:
             worker.start()
         for worker in workers:
