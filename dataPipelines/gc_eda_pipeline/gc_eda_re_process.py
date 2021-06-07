@@ -14,6 +14,7 @@ from dataPipelines.gc_eda_pipeline.metadata.generate_metadata_file import genera
 from dataPipelines.gc_eda_pipeline.indexer.indexer import combine_metadata_docparser_data, create_index, get_es_publisher
 from dataPipelines.gc_eda_pipeline.utils.eda_job_type import EDAJobType
 from dataPipelines.gc_eda_pipeline.audit.audit import audit_record_new
+from dataPipelines.gc_eda_pipeline.metadata.vendor_org_hierarchy import vendor_org_hierarchy
 
 
 from urllib3.exceptions import ProtocolError
@@ -87,6 +88,12 @@ def run(staging_folder: str, aws_s3_input_pdf_prefix: str,
     start_app = time.time()
     # Load Extensions configuration files.
     data_conf_filter = read_extension_conf()
+
+    # cage_code = '570D3'
+    # dodacc_list = ('2AB88V', 'W50J82')
+    #
+    # vendor_org_hierarchy(vendor_cage=cage_code, dodacc_list=dodacc_list, data_conf_filter=data_conf_filter)
+
 
     aws_s3_output_pdf_prefix = data_conf_filter['eda']['aws_s3_output_pdf_prefix']
     aws_s3_json_prefix = data_conf_filter['eda']['aws_s3_json_prefix']
@@ -190,8 +197,8 @@ def run(staging_folder: str, aws_s3_input_pdf_prefix: str,
         print("--------------------------------------")
 
 
-    end_app = time.time()
-    print(f'Total APP time -- It took {end_app - start_app} seconds!')
+    # end_app = time.time()
+    # print(f'Total APP time -- It took {end_app - start_app} seconds!')
 
 
 def process_doc(file: str, staging_folder: Union[str, Path], data_conf_filter: dict, multiprocess: int,
@@ -243,6 +250,10 @@ def process_doc(file: str, staging_folder: Union[str, Path], data_conf_filter: d
                                                                              audit_id=audit_id, audit_rec=audit_rec,
                                                                              publish_audit=publish_audit,
                                                                              skip_metadata=skip_metadata)
+
+
+
+
 
                 combine_metadata_docparser_data(publish_es=publish_es, staging_folder=staging_folder, md_file_local_path=md_file_local_path,
                                                              doc_file_local_path=raw_docparser_data, index_file_local_path=index_name, record_id=record_id_encode, md_data=md_data)

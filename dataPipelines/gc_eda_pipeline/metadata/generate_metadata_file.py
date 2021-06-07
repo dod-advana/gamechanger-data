@@ -32,6 +32,7 @@ def generate_metadata_data(staging_folder: str, data_conf_filter: dict, file: st
 
     return md_file_s3_path, md_file_local_path, md_data
 
+
 def generate_metadata_file(staging_folder: str, data_conf_filter: dict, file: str, filename: str,
                            aws_s3_output_pdf_prefix: str, audit_id: str, audit_rec: dict,
                            publish_audit: EDSConfiguredElasticsearchPublisher, skip_metadata: bool):

@@ -11,7 +11,9 @@ import traceback
 from dataPipelines.gc_eda_pipeline.metadata.pds_extract_json import extract_pds
 from dataPipelines.gc_eda_pipeline.metadata.syn_extract_json import extract_syn
 from dataPipelines.gc_eda_pipeline.metadata.metadata_util import title
+
 from urllib3.exceptions import ProtocolError
+
 
 def metadata_extraction(staging_folder: Union[str, Path], filename_input: str, data_conf_filter: dict,
                         aws_s3_output_pdf_prefix: str, skip_metadata: bool):
@@ -155,6 +157,7 @@ def metadata_extraction(staging_folder: Union[str, Path], filename_input: str, d
 
                 if is_syn_data and get_metadata_file:
                     extracted_data = extract_syn(data_conf_filter=data_conf_filter, data=raw_supplementary_data)
+
 
                 extensions_metadata = {**extracted_data, **extensions_metadata}
                 extensions_metadata['is_supplementary_data_included_eda_ext_b'] = True
