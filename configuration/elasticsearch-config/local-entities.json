@@ -3,7 +3,7 @@
         "settings": {
             "index.mapping.nested_objects.limit": 100000,
             "index": {
-                "number_of_shards": 3,
+                "number_of_shards": 5,
                 "number_of_replicas": 1,
                 "mapping.nested_fields.limit": 20000
             },
@@ -21,22 +21,22 @@
                         "stopwords":  []
                     },
                     "english_stemmer": {
-                        "type":       "stemmer",
-                        "language":   "english"
+                        "type": "stemmer",
+                        "language": "english"
                     },
                     "english_possessive_stemmer": {
-                        "type":       "stemmer",
-                        "language":   "possessive_english"
+                        "type": "stemmer",
+                        "language": "possessive_english"
                     }
                 },
                 "analyzer": {
                     "gc_english": {
-                    "tokenizer":  "standard",
-                    "filter": [
-                        "english_possessive_stemmer",
-                        "lowercase",
-                        "gc_stop",
-                        "english_stemmer"
+                        "tokenizer":  "standard",
+                        "filter": [
+                            "english_possessive_stemmer",
+                            "lowercase",
+                            "gc_stop",
+                            "english_stemmer"
                         ]
                     }
                 }
@@ -51,6 +51,88 @@
                 "information": {
                     "type": "text",
                     "analyzer": "gc_english"
+                },
+                "aliases": {
+                    "dynamic": "true",
+                    "type": "nested",
+                    "properties": {
+                        "name": {
+                            "type": "text",
+                            "analyzer": "gc_english"
+                        }
+                    }
+                },
+                "related_agency" : {
+                    "type" : "text",
+                    "fields" : {
+                        "keyword" : {
+                            "type" : "keyword",
+                            "ignore_above" : 256
+                        }
+                    }
+                },
+                "website" : {
+                    "type" : "text",
+                    "fields" : {
+                        "keyword" : {
+                            "type" : "keyword",
+                            "ignore_above" : 256
+                        }
+                    }
+                },
+                "address" : {
+                    "type" : "text",
+                    "fields" : {
+                        "keyword" : {
+                            "type" : "keyword",
+                            "ignore_above" : 256
+                        }
+                    }
+                },
+                "crawlers" : {
+                    "type" : "text",
+                    "fields" : {
+                        "keyword" : {
+                            "type" : "keyword",
+                            "ignore_above" : 256
+                        }
+                    }
+                },
+                "entity_type" : {
+                    "type" : "text",
+                    "fields" : {
+                        "keyword" : {
+                            "type" : "keyword",
+                            "ignore_above" : 256
+                        }
+                    }
+                },
+                "government_branch" : {
+                    "type" : "text",
+                    "fields" : {
+                        "keyword" : {
+                            "type" : "keyword",
+                            "ignore_above" : 256
+                        }
+                    }
+                },
+                "num_mentions" : {
+                    "type" : "text",
+                        "fields" : {
+                        "keyword" : {
+                            "type" : "keyword",
+                            "ignore_above" : 256
+                        }
+                    }
+                },
+                "parent_agency" : {
+                    "type" : "text",
+                    "fields" : {
+                        "keyword" : {
+                            "type" : "keyword",
+                            "ignore_above" : 256
+                        }
+                    }
                 }
             }
         }
