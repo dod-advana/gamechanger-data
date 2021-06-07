@@ -19,7 +19,7 @@ def extract_syn(data_conf_filter: dict, data: dict):
     if referenced_idv:
         extracted_data_eda_n["referenced_idv_eda_ext"] = referenced_idv
 
-    contract_admin_office_dodaac, contract_admin_agency_name, contract_payment_office_dodaac, contract_payment_office_name = populate_address(data)
+    contract_admin_agency_name, contract_admin_office_dodaac, contract_payment_office_name, contract_payment_office_dodaac = populate_address(data)
     if contract_admin_office_dodaac:
         extracted_data_eda_n["contract_admin_office_dodaac_eda_ext"] = contract_admin_office_dodaac
         dodaacs.append(contract_admin_office_dodaac)
