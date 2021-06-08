@@ -89,12 +89,6 @@ def run(staging_folder: str, aws_s3_input_pdf_prefix: str,
     # Load Extensions configuration files.
     data_conf_filter = read_extension_conf()
 
-    # cage_code = '570D3'
-    # dodacc_list = ('2AB88V', 'W50J82')
-    #
-    # vendor_org_hierarchy(vendor_cage=cage_code, dodacc_list=dodacc_list, data_conf_filter=data_conf_filter)
-
-
     aws_s3_output_pdf_prefix = data_conf_filter['eda']['aws_s3_output_pdf_prefix']
     aws_s3_json_prefix = data_conf_filter['eda']['aws_s3_json_prefix']
 
@@ -196,9 +190,8 @@ def run(staging_folder: str, aws_s3_input_pdf_prefix: str,
         print(f'Total time -- It took {end - start} seconds!')
         print("--------------------------------------")
 
-
-    # end_app = time.time()
-    # print(f'Total APP time -- It took {end_app - start_app} seconds!')
+    end_app = time.time()
+    print(f'Total APP time -- It took {end_app - start_app} seconds!')
 
 
 def process_doc(file: str, staging_folder: Union[str, Path], data_conf_filter: dict, multiprocess: int,
