@@ -3,8 +3,9 @@ import psycopg2
 from psycopg2.extras import RealDictCursor
 
 
-def vendor_org_hierarchy(vendor_cage:str, dodacc_list: tuple, data_conf_filter: dict) -> dict:
+def vendor_org_hierarchy(vendor_cage:str, dodacc_map: dict, data_conf_filter: dict) -> dict:
     vendor_org_hierarchy_extensions_metadata = {}
+    dodacc_list = tuple(dodacc_map.keys())
 
     sql_vendor_org_hierarchy = data_conf_filter['eda']['sql_vendor_org_hierarchy_1']
     sql_cage_code_name = data_conf_filter['eda']['sql_vendor_org_hierarchy_2']
@@ -43,9 +44,15 @@ def vendor_org_hierarchy(vendor_cage:str, dodacc_list: tuple, data_conf_filter: 
             items = {}
             col_names = [desc[0] for desc in cursor.description]
             for col in col_names:
-                val = row[col]
-                if val:
-                    items[col + postfix_es] = val
+
+                if col == "dodaac_ric":
+                    val = row[col]
+                    val = dodacc_map.get(val)
+                    items["dodaac" + postfix_es] = val
+                else:
+                    val = row[col]
+                    if val:
+                        items[col + postfix_es] = val
             vendor_org_hierarchy_nodes.append(items)
 
         vendor_org_hierarchy_extensions_metadata["vendor_org" + postfix_es + "_n"] = vendor_org_hierarchy_nodes

@@ -5,8 +5,7 @@ from dataPipelines.gc_eda_pipeline.metadata.vendor_org_hierarchy import vendor_o
 
 
 def extract_pds(data_conf_filter: dict, data: dict, extensions_metadata: dict):
-    dodaacs = []
-
+    dodaacs_data = {}
     date_fields_l = data_conf_filter['eda']['sql_filter_fields']['date']
     extracted_data_eda_n = {}
     format_supplementary_data(data, date_fields_l)
@@ -24,12 +23,12 @@ def extract_pds(data_conf_filter: dict, data: dict, extensions_metadata: dict):
     contract_admin_agency_name, contract_admin_office_dodaac, contract_payment_office_name, contract_payment_office_dodaac = populate_address(data)
     if contract_admin_office_dodaac:
         extracted_data_eda_n["contract_admin_office_dodaac_eda_ext"] = contract_admin_office_dodaac
-        dodaacs.append(contract_admin_office_dodaac)
+        dodaacs_data[contract_admin_office_dodaac] = contract_admin_agency_name
     if contract_admin_agency_name:
         extracted_data_eda_n["contract_admin_agency_name_eda_ext"] = contract_admin_agency_name
     if contract_payment_office_dodaac:
         extracted_data_eda_n["contract_payment_office_dodaac_eda_ext"] = contract_payment_office_dodaac
-        dodaacs.append(contract_payment_office_dodaac)
+        dodaacs_data[contract_payment_office_dodaac] = contract_payment_office_name
     if contract_payment_office_name:
         extracted_data_eda_n["contract_payment_office_name_eda_ext"] = contract_payment_office_name
 
@@ -46,7 +45,7 @@ def extract_pds(data_conf_filter: dict, data: dict, extensions_metadata: dict):
         extracted_data_eda_n["contract_issue_office_name_eda_ext"] = contract_issue_office_name
     if contract_issue_office_dodaac:
         extracted_data_eda_n["contract_issue_office_dodaac_eda_ext"] = contract_issue_office_dodaac
-        dodaacs.append(contract_issue_office_dodaac)
+        dodaacs_data[contract_issue_office_dodaac] = contract_issue_office_name
     if dodaac_org_type:
         extracted_data_eda_n["dodaac_org_type_eda_ext"] = dodaac_org_type
 
@@ -73,7 +72,7 @@ def extract_pds(data_conf_filter: dict, data: dict, extensions_metadata: dict):
         extracted_data_eda_n["naics_eda_ext"] = naics
 
 
-    vendor_org_hierarchy_extensions_metadata = vendor_org_hierarchy(vendor_cage=vendor_cage, dodacc_list=tuple(dodaacs), data_conf_filter=data_conf_filter)
+    vendor_org_hierarchy_extensions_metadata = vendor_org_hierarchy(vendor_cage=vendor_cage, dodacc_map=dodaacs_data, data_conf_filter=data_conf_filter)
 
     # print("----------------------------")
     # # print(vendor_org_hierarchy_extensions_metadata)

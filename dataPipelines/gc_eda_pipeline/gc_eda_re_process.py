@@ -14,7 +14,6 @@ from dataPipelines.gc_eda_pipeline.metadata.generate_metadata_file import genera
 from dataPipelines.gc_eda_pipeline.indexer.indexer import combine_metadata_docparser_data, create_index, get_es_publisher
 from dataPipelines.gc_eda_pipeline.utils.eda_job_type import EDAJobType
 from dataPipelines.gc_eda_pipeline.audit.audit import audit_record_new
-from dataPipelines.gc_eda_pipeline.metadata.vendor_org_hierarchy import vendor_org_hierarchy
 
 
 from urllib3.exceptions import ProtocolError
