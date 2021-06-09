@@ -16,7 +16,7 @@ from urllib3.exceptions import ProtocolError
 
 
 def metadata_extraction(staging_folder: Union[str, Path], filename_input: str, data_conf_filter: dict,
-                        aws_s3_output_pdf_prefix: str, skip_metadata: bool):
+                        aws_s3_output_pdf_prefix: str):
 
     postfix_es = data_conf_filter['eda']['postfix_es']
 
@@ -27,14 +27,14 @@ def metadata_extraction(staging_folder: Union[str, Path], filename_input: str, d
     extensions_metadata = {}
 
     is_supplementary_file_missing = False
-    if skip_metadata:
-        metadata_type = "skipped"
-        extensions_metadata["metadata_type" + postfix_es] = metadata_type
-        extensions_metadata['dir_location_eda_ext'] = path
-        extensions_metadata['file_location_eda_ext'] = aws_s3_output_pdf_prefix + "/" + filename_input
-        data['doc_title'] = title(filename_without_ext)
-        is_md_successful = False
-        return is_md_successful, is_supplementary_file_missing, metadata_type, data
+    # if skip_metadata:
+    #     metadata_type = "skipped"
+    #     extensions_metadata["metadata_type" + postfix_es] = metadata_type
+    #     extensions_metadata['dir_location_eda_ext'] = path
+    #     extensions_metadata['file_location_eda_ext'] = aws_s3_output_pdf_prefix + "/" + filename_input
+    #     data['doc_title'] = title(filename_without_ext)
+    #     is_md_successful = False
+    #     return is_md_successful, is_supplementary_file_missing, metadata_type, data
 
     sql_check_if_syn_metadata_exist = data_conf_filter['eda']['sql_check_if_syn_metadata_exist']
     sql_check_if_pds_metadata_exist = data_conf_filter['eda']['sql_check_if_pds_metadata_exist']
@@ -68,22 +68,22 @@ def metadata_extraction(staging_folder: Union[str, Path], filename_input: str, d
         cursor.execute(sql_check_if_pds_metadata_exist, (filename,))
         is_pds_metadata = cursor.fetchone()
 
-        # if is_pds_metadata is not None:
-        #     # Get General PDS Metadata
-        #     for col_name in [desc[0] for desc in cursor.description]:
-        #         if is_pds_metadata[col_name] is not None:
-        #             val = is_pds_metadata[col_name]
-        #             if col_name in date_fields_l and val is not None and val is not '':
-        #                 extensions_metadata[col_name + postfix_es + "_dt"] = val
-        #             else:
-        #                 extensions_metadata[col_name + postfix_es] = val
-        #
-        #     if is_pds_metadata['pds_json_filename'] is not None and is_pds_metadata['pds_json_filename'] is not '':
-        #         is_pds_data = True
-        #         is_syn_data = False
-        #         metadata_type = "pds"
-        #         metadata_filename = is_pds_metadata['pds_json_filename']
-        #         s3_location = is_pds_metadata['s3_loc']
+        if is_pds_metadata is not None:
+            # Get General PDS Metadata
+            for col_name in [desc[0] for desc in cursor.description]:
+                if is_pds_metadata[col_name] is not None:
+                    val = is_pds_metadata[col_name]
+                    if col_name in date_fields_l and val is not None and val is not '':
+                        extensions_metadata[col_name + postfix_es + "_dt"] = val
+                    else:
+                        extensions_metadata[col_name + postfix_es] = val
+
+            if is_pds_metadata['pds_json_filename'] is not None and is_pds_metadata['pds_json_filename'] is not '':
+                is_pds_data = True
+                is_syn_data = False
+                metadata_type = "pds"
+                metadata_filename = is_pds_metadata['pds_json_filename']
+                s3_location = is_pds_metadata['s3_loc']
 
         if not is_pds_data:
             # Check if file has metadata from SYN

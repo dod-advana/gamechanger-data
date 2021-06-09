@@ -23,6 +23,7 @@ def vendor_org_hierarchy(vendor_cage:str, dodacc_map: dict, data_conf_filter: di
 
         cursor.execute(sql_cage_code_name, (vendor_cage,))
 
+
         cage_code_names = []
         rows = cursor.fetchall()
         for row in rows:

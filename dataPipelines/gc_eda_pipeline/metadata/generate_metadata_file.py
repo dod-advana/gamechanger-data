@@ -8,7 +8,7 @@ import json
 
 def generate_metadata_data(staging_folder: str, data_conf_filter: dict, file: str, filename: str,
                            aws_s3_output_pdf_prefix: str, audit_id: str, audit_rec: dict,
-                           publish_audit: EDSConfiguredElasticsearchPublisher, skip_metadata: bool):
+                           publish_audit: EDSConfiguredElasticsearchPublisher):
 
     md_file_local_path = staging_folder + "/pdf/" + file + ".metadata"
     md_file_s3_path = aws_s3_output_pdf_prefix + "/" + file + ".metadata"
@@ -35,14 +35,14 @@ def generate_metadata_data(staging_folder: str, data_conf_filter: dict, file: st
 
 def generate_metadata_file(staging_folder: str, data_conf_filter: dict, file: str, filename: str,
                            aws_s3_output_pdf_prefix: str, audit_id: str, audit_rec: dict,
-                           publish_audit: EDSConfiguredElasticsearchPublisher, skip_metadata: bool):
+                           publish_audit: EDSConfiguredElasticsearchPublisher):
 
     md_file_local_path = staging_folder + "/pdf/" + file + ".metadata"
     md_file_s3_path = aws_s3_output_pdf_prefix + "/" + file + ".metadata"
 
     pds_start = time.time()
 
-    is_md_successful, is_supplementary_file_missing, md_type, data = metadata_extraction(staging_folder, file, data_conf_filter, aws_s3_output_pdf_prefix, skip_metadata)
+    is_md_successful, is_supplementary_file_missing, md_type, data = metadata_extraction(staging_folder, file, data_conf_filter, aws_s3_output_pdf_prefix)
 
     with open(md_file_local_path, "w") as output_file:
         json.dump(data, output_file)

@@ -70,16 +70,8 @@ from typing import Union
     type=int,
     default=50000
 )
-@click.option(
-    '--skip-metadata',
-    help="""Skip the step to Generate the metadata file and create generic metadata file, that includes will ony work 
-                with EDAJobType(NORMAL, REPROCESS, UPDATE_METADATA, UPDATE_METADATA_SKIP_NEW) not RE_INDEX """,
-    required=False,
-    type=bool,
-    default=False,
-)
 def run(staging_folder: str, aws_s3_input_pdf_prefix: str,
-        max_workers: int, workers_ocr: int, eda_job_type: str, loop_number: int, skip_metadata: bool):
+        max_workers: int, workers_ocr: int, eda_job_type: str, loop_number: int):
     print("Starting Gamechanger EDA Symphony Pipeline - Reprocessing ---- 4.27.2021")
     os.environ["AWS_METADATA_SERVICE_TIMEOUT"] = "10"
     os.environ["AWS_METADATA_SERVICE_NUM_ATTEMPTS"] = "10"
@@ -117,7 +109,7 @@ def run(staging_folder: str, aws_s3_input_pdf_prefix: str,
         for item_process in process_list:
             with concurrent.futures.ProcessPoolExecutor(max_workers=max_workers) as executor:
                 results = [executor.submit(process_doc, file_list, staging_folder, data_conf_filter, workers_ocr,
-                                           aws_s3_output_pdf_prefix, aws_s3_json_prefix, process_type, skip_metadata)
+                                           aws_s3_output_pdf_prefix, aws_s3_json_prefix, process_type)
                            for file_list in item_process]
                 count = 0
                 none_type = type(None)
@@ -195,7 +187,7 @@ def run(staging_folder: str, aws_s3_input_pdf_prefix: str,
 
 def process_doc(file: str, staging_folder: Union[str, Path], data_conf_filter: dict, multiprocess: int,
                 aws_s3_output_pdf_prefix: str, aws_s3_json_prefix: str,
-                process_type: EDAJobType, skip_metadata: bool):
+                process_type: EDAJobType):
     os.environ["AWS_METADATA_SERVICE_TIMEOUT"] = "20"
     os.environ["AWS_METADATA_SERVICE_NUM_ATTEMPTS"] = "40"
 
@@ -240,8 +232,7 @@ def process_doc(file: str, staging_folder: Union[str, Path], data_conf_filter: d
                                                                              filename=filename,
                                                                              aws_s3_output_pdf_prefix=aws_s3_output_pdf_prefix,
                                                                              audit_id=audit_id, audit_rec=audit_rec,
-                                                                             publish_audit=publish_audit,
-                                                                             skip_metadata=skip_metadata)
+                                                                             publish_audit=publish_audit)
 
 
 

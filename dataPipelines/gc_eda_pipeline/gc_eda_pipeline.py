@@ -65,16 +65,15 @@ from dataPipelines.gc_eda_pipeline.utils.eda_job_type import EDAJobType
     type=int,
     default=50000
 )
-@click.option(
-    '--skip-metadata',
-    help="""Skip the step to Generate the metadata file and create generic metadata file, that includes will ony work 
-                with EDAJobType(NORMAL, REPROCESS, UPDATE_METADATA, UPDATE_METADATA_SKIP_NEW) not RE_INDEX """,
-    required=False,
-    type=bool,
-    default=False,
-)
 def run(staging_folder: str, aws_s3_input_pdf_prefix: str,
-        max_workers: int, workers_ocr: int, eda_job_type: str, loop_number: int, skip_metadata: bool):
+        max_workers: int, workers_ocr: int, eda_job_type: str, loop_number: int):
+    ingestion(staging_folder=staging_folder, aws_s3_input_pdf_prefix=aws_s3_input_pdf_prefix, max_workers=max_workers,
+              eda_job_type=eda_job_type, workers_ocr=workers_ocr, loop_number=loop_number)
+
+
+def ingestion(staging_folder: str, aws_s3_input_pdf_prefix: str, max_workers: int, workers_ocr: int, eda_job_type: str, loop_number: int):
+    print(f"*&*&%^%$%^& {staging_folder}, {aws_s3_input_pdf_prefix}  {max_workers}  {workers_ocr}  {eda_job_type}")
+    # run(staging_folder=staging_folder, aws_s3_input_pdf_prefix=aws_s3_input_pdf_prefix, max_workers=max_workers, workers_ocr=workers_ocr, eda_job_type=eda_job_type)
     print("Starting Gamechanger EDA Symphony Pipeline")
     os.environ["AWS_METADATA_SERVICE_TIMEOUT"] = "10"
     os.environ["AWS_METADATA_SERVICE_NUM_ATTEMPTS"] = "10"
@@ -115,7 +114,7 @@ def run(staging_folder: str, aws_s3_input_pdf_prefix: str,
         for item_process in process_list:
             with concurrent.futures.ProcessPoolExecutor(max_workers=max_workers) as executor:
                 results = [executor.submit(process_doc, file, staging_folder, data_conf_filter, workers_ocr,
-                                           aws_s3_output_pdf_prefix, aws_s3_json_prefix, process_type, skip_metadata)
+                                           aws_s3_output_pdf_prefix, aws_s3_json_prefix, process_type)
                            for file in item_process]
                 count = 0
                 none_type = type(None)
@@ -182,7 +181,7 @@ def run(staging_folder: str, aws_s3_input_pdf_prefix: str,
 
 def process_doc(file: str, staging_folder: Union[str, Path], data_conf_filter: dict, multiprocess: int,
                 aws_s3_output_pdf_prefix: str, aws_s3_json_prefix: str,
-                process_type: EDAJobType, skip_metadata: bool):
+                process_type: EDAJobType):
     os.environ["AWS_METADATA_SERVICE_TIMEOUT"] = "20"
     os.environ["AWS_METADATA_SERVICE_NUM_ATTEMPTS"] = "40"
 
@@ -268,7 +267,7 @@ def process_doc(file: str, staging_folder: Union[str, Path], data_conf_filter: d
                                                                      filename=filename,
                                                                      aws_s3_output_pdf_prefix=aws_s3_output_pdf_prefix,
                                                                      audit_id=audit_id, audit_rec=audit_rec,
-                                                                     publish_audit=publish_audit, skip_metadata=skip_metadata)
+                                                                     publish_audit=publish_audit)
 
         # Docparsered json
         ex_file_local_path = staging_folder + "/json/" + path + "/" + filename_without_ext + ".json"
@@ -301,7 +300,7 @@ def process_doc(file: str, staging_folder: Union[str, Path], data_conf_filter: d
                                                                      filename=filename,
                                                                      aws_s3_output_pdf_prefix=aws_s3_output_pdf_prefix,
                                                                      audit_id=audit_id, audit_rec=audit_rec,
-                                                                     publish_audit=publish_audit, skip_metadata=skip_metadata)
+                                                                     publish_audit=publish_audit)
         files_delete.append(md_file_local_path)
 
         # Download PDF file/OCR PDF if need
