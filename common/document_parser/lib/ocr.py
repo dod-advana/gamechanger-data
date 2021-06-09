@@ -2,8 +2,10 @@ from dataPipelines.gc_ocr.utils import PDFOCR, OCRJobType, OCRError
 from common.utils.file_utils import is_pdf, is_ocr_pdf, is_encrypted_pdf
 
 
-def get_ocr_filename(f_name, num_ocr_threads=2) -> str:
-    if not is_ocr_pdf(str(f_name)) and not is_encrypted_pdf(str(f_name)):
+def get_ocr_filename(f_name, num_ocr_threads=2,force_ocr=False) -> str:
+    # if not is_ocr_pdf(str(f_name)) and not is_encrypted_pdf(str(f_name)):
+    encryted_file = is_encrypted_pdf(str(f_name))
+    if (force_ocr and not encryted_file) or (is_ocr_pdf(str(f_name)) and encryted_file):
         ocr = PDFOCR(
             input_file=f_name,
             output_file=f_name,
