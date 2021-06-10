@@ -17,7 +17,7 @@ function run_core_ingest() {
   local manifest_filename="${MANIFEST_FILENAME:-checksum_manifest.json}"
   local chunk_size="${CHUNK_SIZE:-1G}"
 
-  python dataPipelines/scripts/export_data_es.sh \
+  python dataPipelines/scripts/es_export.py \
     --pdf-s3-prefix "$pdf_s3_prefix" \
     --json-s3-prefix "$json_s3_prefix" \
     --s3-upload-prefix "$s3_upload_prefix" \
