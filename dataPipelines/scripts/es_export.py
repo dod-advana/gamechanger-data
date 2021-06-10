@@ -104,7 +104,7 @@ def zip_base_dir(export_base_dir: t.Union[str, Path], output_dir: t.Union[str, P
 
     output_dir.mkdir(exist_ok=True)
 
-    compressed_filename = "gc_data_export." + dt.now().strftime("%Y%m%d") + ".tgz"
+    compressed_filename = "gc_data_export.tgz"
     output_path = Path(output_dir, compressed_filename)
 
     sub.run([
