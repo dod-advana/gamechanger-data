@@ -1,9 +1,6 @@
 import subprocess as sub
-from concurrent.futures.process import ProcessPoolExecutor
 from pathlib import Path
 import typing as t
-import multiprocessing as mp
-import sys
 import argparse
 import os
 import shutil
@@ -17,27 +14,8 @@ PACKAGE_PATH: str = os.path.dirname(os.path.abspath(__file__))
 REPO_PATH: str = os.path.abspath(os.path.join(PACKAGE_PATH, '../../'))
 
 
-def parse_args():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--pdf-snapshot-prefix", help="s3 location of the pdf and metadata snapshot e.g. s3://....")
-    parser.add_argument("--json-snapshot-prefix", help="s3 location of the json snapshot e.g. s3://....")
-    parser.add_argument("--job-tmp-dir", help="temp job directory")
-    parser.add_argument("--s3-upload-prefix", help="s3 location of the desired upload e.g. s3://....")
-    parser.add_argument("--manifest-filename", help="desired filename of checksum manifest", default="manifest.json")
-    parser.add_argument("--chunk-size", help="number of parts the zip files will be split into", default="1G")
-
-    return parser.parse_args()
-
-#- function to copy pdf & json snapshots (gamechanger/{pdf,json}) to new directory on disk
-#     - inputs:
-#         - pdf snapshot s3 prefix url, e.g. s3://....
-#         - json snapshot s3 prefix url
-#     - how, use python & aws CLI
-#     - so the end result is...
-#         - `<some_local_base_dir>/json/<parsed json files here...>`
-#         - `<some_local_base_dir>/pdf/<pdf/metadata files here...>`
-
-def copy_snapshots_from_s3(pdf_snapshot_prefix:str, json_snapshot_prefix:str, export_base_dir:str) -> t.Dict[str,str]:
+def copy_snapshots_from_s3(pdf_snapshot_prefix: str, json_snapshot_prefix: str, export_base_dir: t.Union[str, Path]) -> t.Dict[
+    str, str]:
     export_base_dir = Path(export_base_dir)
     export_base_dir.mkdir(exist_ok=True)
     # functions to copy pdf & json snapshots (gamechanger/{pdf,json}) to new directory on disk
@@ -55,16 +33,17 @@ def copy_snapshots_from_s3(pdf_snapshot_prefix:str, json_snapshot_prefix:str, ex
         "json_dir": str(json_dir)
     }
 
-# - function to stage settings/mappings we intend to use
-#     - inputs:
-#         - nothing, just resolve relevant paths to these indices from the repo itself
-#     - so end result is...
-#         - `<some_local_base_dir>/mappings/gamechanger.json`
-#         - `<some_local_base_dir>/mappings/entities.json`
-#         - `<some_local_base_dir>/mappings/search_history.json`
 
-def export_es_mappings(export_base_dir: str) -> None:
-
+def export_es_mappings(export_base_dir: t.Union[str, Path]) -> None:
+    """
+     function to stage settings/mappings we intend to use
+      inputs:
+        - nothing, just resolve relevant paths to these indices from the repo itself
+      so end result is...
+        - `<some_local_base_dir>/mappings/gamechanger.json`
+        - `<some_local_base_dir>/mappings/entities.json`
+        - `<some_local_base_dir>/mappings/search_history.json`
+    """
     export_base_dir = Path(export_base_dir)
     export_base_dir.mkdir(exist_ok=True)
 
@@ -87,49 +66,41 @@ def export_es_mappings(export_base_dir: str) -> None:
     shutil.copy(str(search_history_mapping), str(local_search_history_mapping))
 
 
-# - function to pull down and save a json array of doc_name + revocation status
-#     - inputs:
-#       - some_local_base_dir - common dir for the export outputs
-#       - nothing else, just use the default connection helper to reach out to db and hardcoded table name to get the data
-#     - so end result is...
-#         - `<some_local_base_dir>/misc/revocation_map.json`
-#         - with a dictonary structured as `[ { "doc_name": "...", "is_revoked": False }, { "doc_name": "...", "is_revoked": True }, ... ]`
-def pull_revocations() -> t.Dict[str,bool]:
+def pull_revocations() -> t.Dict[str, bool]:
     print("*** PULLING REVOCATION FROM DB ***")
     from configuration.utils import get_connection_helper_from_env
 
     connection_helper = get_connection_helper_from_env()
     db = connection_helper.orch_db_engine
-    revocation_map = defaultdict(lambda:False)
+    revocation_map = defaultdict(lambda: False)
     with db.connect() as connection:
         result = connection.execute("SELECT name, is_revoked FROM publications")
         for row in result:
             revocation_map[row["name"]] = row["is_revoked"]
     return revocation_map
 
-# - function to correctly update revocation field in all of parsed json files
-#     - inputs:
-#         - parsed_json_dir
-#         - revocation_map
-#     - so end result is...
-#         - JSON's in parsed_json_dir are updated (on disk) so their revocation status reflects the one in the map file.
-def update_revocations(parsed_json_dir, revocation_map, pdf_dir) -> None:
+
+def update_revocations(parsed_json_dir: t.Union[str, Path], revocation_map: t.Dict[str, bool], pdf_dir: t.Union[str, Path]) -> None:
     print("*** UPDATING JSONS TO INCLUDE REVOCATIONS ***")
-    def get_matching_doc_name(parsed_json_path: Path) ->str:
+    parsed_json_dir = Path(parsed_json_dir).absolute()
+    pdf_dir = Path(pdf_dir).absolute()
+
+
+    def get_matching_doc_name(parsed_json_path: Path) -> str:
         metadata_path = Path(pdf_dir, parsed_json_path.stem + ".pdf.metadata")
         if not metadata_path.exists():
             return parsed_json_path.stem
-        return json.load(metadata_path.open()).get("doc_name",parsed_json_path.stem)
+        return json.load(metadata_path.open()).get("doc_name", parsed_json_path.stem)
 
-    for p in Path(parsed_json_dir).glob("*.json"):
+    for p in parsed_json_dir.glob("*.json"):
         jdict = json.load(p.open(mode='r'))
         jdict["is_revoked_b"] = revocation_map[get_matching_doc_name(p)]
-        json.dump(jdict, p.open('rw'))
+        json.dump(jdict, p.open("w"))
 
 
-def zip_base_dir(export_base_dir:str, output_dir: str) -> str:
-    output_dir = Path(output_dir)
-    export_base_dir = Path(export_base_dir)
+def zip_base_dir(export_base_dir: t.Union[str, Path], output_dir: t.Union[str, Path]) -> str:
+    output_dir = Path(output_dir).absolute()
+    export_base_dir = Path(export_base_dir).absolute()
 
     output_dir.mkdir(exist_ok=True)
 
@@ -143,26 +114,31 @@ def zip_base_dir(export_base_dir:str, output_dir: str) -> str:
         "-C", str(export_base_dir),
         "."
     ], check=True)
-    return str(output_path.absolute())
+    return str(output_path)
 
-def split_archive(output_dir:str, archive_path:str, chunk_size: str = "1G") -> t.List[str] :
+
+def split_archive(output_dir: t.Union[str, Path], archive_path: t.Union[str, Path], chunk_size: str = "1G") -> t.List[str]:
     print("***SPLITING ARCHIVE INTO CHUNKS***")
-    output_dir = Path(output_dir)
+    output_dir = Path(output_dir).absolute()
+    archive_path = Path(archive_path).absolute()
+
     output_dir.mkdir(exist_ok=True)
-    archive_path = Path(archive_path)
+
     part_name = archive_path.name + ".part_"
     sub.run([
         "split",
         "-b", chunk_size,
         "-d",
         str(archive_path),
-        os.path.join(str(output_dir), part_name)
+        str(Path(output_dir, part_name))
     ], check=True)
 
-    return [str(x.absolute()) for x in output_dir.glob(f"{part_name}*")]
+    return [str(x) for x in output_dir.glob(f"{part_name}*")]
 
-def calculate_md5(filepath:str)->str:
-    with open(filepath, "rb") as f:
+
+def calculate_md5(filepath: t.Union[str, Path]) -> str:
+    filepath = Path(filepath).absolute()
+    with filepath.open("rb") as f:
         file_hash = hashlib.md5()
         chunk = f.read(8192)
         while chunk:
@@ -171,30 +147,98 @@ def calculate_md5(filepath:str)->str:
 
         return file_hash.hexdigest()
 
-def create_manifest(file_list:t.List[str], manifest_path:str) -> str:
+
+def create_manifest(file_list: t.List[str], manifest_path: t.Union[str, Path]) -> str:
     print("***CREATING MANIFEST OF CHECKSUMS***")
-    manifest_path = Path(manifest_path)
+    manifest_path = Path(manifest_path).absolute()
     manifest_dict = {}
     for file in file_list:
         manifest_dict[Path(file).name] = calculate_md5(file)
 
-    json.dump(manifest_dict, manifest_path.open('rw'))
-    return str(manifest_path.absolute())
+    json.dump(manifest_dict, manifest_path.open('w'))
+    return str(manifest_path)
 
-def upload_to_s3(file_list:t.List[str], s3_upload_prefix:str) -> None:
+
+def upload_to_s3(file_list: t.List[str], s3_upload_prefix: str) -> None:
     print("***UPLOADING TO S3***")
     s3_upload_prefix = s3_upload_prefix if s3_upload_prefix.endswith("/") else s3_upload_prefix + '/'
     sub.run(["aws", "s3", "cp", *file_list, s3_upload_prefix], check=True)
 
-if __name__=="__main__":
+
+def arg_s3_prefix_url(s: str) -> str:
+    if not s.startswith('s3://'):
+        raise argparse.ArgumentTypeError("Not a valid S3_URL. Must start with s3://")
+
+    s = s if s.endswith("/") else s + "/"
+    return s
+
+
+def arg_job_tmp_dir(s: str) -> str:
+    sp = Path(s).absolute()
+    sp.mkdir(exist_ok=True)
+    return str(sp)
+
+
+def arg_chunk_size(s: str) -> str:
+    return s.upper()
+
+
+def parse_args():
+    parser = argparse.ArgumentParser(
+        description="CLI for exporting PDF/JSON GC data",
+        allow_abbrev=False
+    )
+    parser.add_argument(
+        "--pdf-s3-prefix",
+        help="s3 location of the pdf and metadata snapshot e.g. s3://....",
+        required=True,
+        type=arg_s3_prefix_url
+    )
+    parser.add_argument(
+        "--json-s3-prefix",
+        help="s3 location of the json snapshot e.g. s3://....",
+        required=True,
+        type=arg_s3_prefix_url
+    )
+    parser.add_argument(
+        "--s3-upload-prefix",
+        help="s3 location of the desired upload e.g. s3://....",
+        required=True,
+        type=arg_s3_prefix_url
+    )
+    parser.add_argument(
+        "--job-tmp-dir",
+        help="temp job directory",
+        required=False,
+        default="/tmp",
+        type=arg_job_tmp_dir
+    )
+    parser.add_argument(
+        "--manifest-filename",
+        help="desired filename of checksum manifest",
+        required=False,
+        default="checksum_manifest.json"
+    )
+    parser.add_argument(
+        "--chunk-size",
+        help="number of parts the zip files will be split into",
+        required=False,
+        default="1G",
+        type=arg_chunk_size
+    )
+
+    return parser.parse_args()
+
+
+if __name__ == "__main__":
 
     args = parse_args()
 
     pdf_snapshot_prefix = args.pdf_s3_prefix
     json_snapshot_prefix = args.json_s3_prefix
+    s3_upload_prefix = args.s3_upload_prefix
     job_tmp_dir = args.job_tmp_dir
     manifest_filename = args.manifest_filename
-    s3_upload_prefix = args.s3_upload_prefix
     chunk_size = args.chunk_size
 
     export_base_dir_tmp_dir = tempfile.TemporaryDirectory(dir=job_tmp_dir, prefix="export_base_dir_")
@@ -249,4 +293,3 @@ if __name__=="__main__":
     finally:
         export_base_dir_tmp_dir.cleanup()
         final_output_dir_tmp_dir.cleanup()
-
