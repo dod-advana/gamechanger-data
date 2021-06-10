@@ -17,10 +17,14 @@ PACKAGE_PATH: str = os.path.dirname(os.path.abspath(__file__))
 REPO_PATH: str = os.path.abspath(os.path.join(PACKAGE_PATH, '../../'))
 
 
-
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--pdf-prefix", help="s3 location of the pdf and metadata snapshot e.g. s3://....")
+    parser.add_argument("--pdf-snapshot-prefix", help="s3 location of the pdf and metadata snapshot e.g. s3://....")
+    parser.add_argument("--json-snapshot-prefix", help="s3 location of the json snapshot e.g. s3://....")
+    parser.add_argument("--job-tmp-dir", help="temp job directory")
+    parser.add_argument("--s3-upload-prefix", help="s3 location of the desired upload e.g. s3://....")
+    parser.add_argument("--manifest-filename", help="desired filename of checksum manifest", default="manifest.json")
+    parser.add_argument("--chunk-size", help="number of parts the zip files will be split into", default="1G")
 
     return parser.parse_args()
 
@@ -191,6 +195,7 @@ if __name__=="__main__":
     job_tmp_dir = args.job_tmp_dir
     manifest_filename = args.manifest_filename
     s3_upload_prefix = args.s3_upload_prefix
+    chunk_size = args.chunk_size
 
     export_base_dir_tmp_dir = tempfile.TemporaryDirectory(dir=job_tmp_dir, prefix="export_base_dir_")
     export_base_dir = export_base_dir_tmp_dir.name
@@ -205,7 +210,7 @@ if __name__=="__main__":
         snapshot_dict = copy_snapshots_from_s3(
             pdf_snapshot_prefix=pdf_snapshot_prefix,
             json_snapshot_prefix=pdf_snapshot_prefix,
-            export_base_dir= export_base_dir
+            export_base_dir=export_base_dir
         )
         parsed_json_dir = snapshot_dict["json_dir"]
         pdf_dir = snapshot_dict["pdf_dir"]
@@ -229,7 +234,7 @@ if __name__=="__main__":
         part_list = split_archive(
             output_dir=final_output_dir,
             archive_path=compressed_path,
-            chunk_size="1G"
+            chunk_size=chunk_size
         )
 
         manifest_path = create_manifest(
