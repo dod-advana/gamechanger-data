@@ -159,10 +159,11 @@ def create_manifest(file_list: t.List[str], manifest_path: t.Union[str, Path]) -
     return str(manifest_path)
 
 
-def upload_to_s3(file_list: t.List[str], s3_upload_prefix: str) -> None:
+def upload_to_s3(input_dir: t.Union[str, Path], s3_upload_prefix: str) -> None:
     print("***UPLOADING TO S3***")
+    input_dir = Path(input_dir).absolute()
     s3_upload_prefix = s3_upload_prefix if s3_upload_prefix.endswith("/") else s3_upload_prefix + '/'
-    sub.run(["aws", "s3", "cp", *file_list, s3_upload_prefix], check=True)
+    sub.run(["aws", "s3", "cp", "--recursive", str(input_dir), s3_upload_prefix], check=True)
 
 
 def arg_s3_prefix_url(s: str) -> str:
@@ -241,11 +242,14 @@ if __name__ == "__main__":
     manifest_filename = args.manifest_filename
     chunk_size = args.chunk_size
 
-    export_base_dir_tmp_dir = tempfile.TemporaryDirectory(dir=job_tmp_dir, prefix="export_base_dir_")
-    export_base_dir = export_base_dir_tmp_dir.name
+    export_base_tmp_dir = tempfile.TemporaryDirectory(dir=job_tmp_dir, prefix="export_base_dir_")
+    export_base_dir = export_base_tmp_dir.name
 
-    final_output_dir_tmp_dir = tempfile.TemporaryDirectory(dir=job_tmp_dir, prefix="final_output_dir_")
-    final_output_dir = final_output_dir_tmp_dir.name
+    partial_output_tmp_dir = tempfile.TemporaryDirectory(dir=job_tmp_dir, prefix="partial_output_dir_")
+    partial_output_dir = partial_output_tmp_dir.name
+
+    final_output_tmp_dir = tempfile.TemporaryDirectory(dir=job_tmp_dir, prefix="final_output_dir_")
+    final_output_dir = final_output_tmp_dir.name
 
     manifest_path = os.path.join(final_output_dir, manifest_filename)
 
@@ -271,7 +275,7 @@ if __name__ == "__main__":
         )
 
         compressed_path = zip_base_dir(
-            output_dir=final_output_dir,
+            output_dir=partial_output_dir,
             export_base_dir=export_base_dir
         )
 
@@ -287,9 +291,10 @@ if __name__ == "__main__":
         )
 
         upload_to_s3(
-            file_list=part_list + [manifest_path],
+            input_dir=final_output_dir,
             s3_upload_prefix=s3_upload_prefix
         )
     finally:
-        export_base_dir_tmp_dir.cleanup()
-        final_output_dir_tmp_dir.cleanup()
+        export_base_tmp_dir.cleanup()
+        final_output_tmp_dir.cleanup()
+        partial_output_tmp_dir.cleanup()
