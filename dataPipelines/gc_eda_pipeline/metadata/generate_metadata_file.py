@@ -15,7 +15,7 @@ def generate_metadata_data(staging_folder: str, data_conf_filter: dict, file: st
 
     pds_start = time.time()
 
-    is_md_successful, is_supplementary_file_missing, md_type, md_data = metadata_extraction(staging_folder, file, data_conf_filter, aws_s3_output_pdf_prefix, skip_metadata)
+    is_md_successful, is_supplementary_file_missing, md_type, md_data = metadata_extraction(staging_folder, file, data_conf_filter, aws_s3_output_pdf_prefix)
 
     # with open(md_file_local_path, "w") as output_file:
     #     json.dump(md_data, output_file)

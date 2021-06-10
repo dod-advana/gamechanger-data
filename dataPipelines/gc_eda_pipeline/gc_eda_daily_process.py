@@ -45,8 +45,6 @@ def run(staging_folder: str,  max_workers: int, workers_ocr: int, eda_job_type: 
     # Load Extensions configuration files.
     data_conf_filter = read_extension_conf()
 
-    # Check to see if there is already a currently processing data
-
     sql_daily_process = data_conf_filter['eda']['sql_daily_process']
     sql_is_in_process_state = data_conf_filter['eda']['sql_is_in_process_state']
     sql_set_status_to_processing = data_conf_filter['eda']['sql_set_status_to_processing']
@@ -92,7 +90,6 @@ def run(staging_folder: str,  max_workers: int, workers_ocr: int, eda_job_type: 
     finally:
         if conn is not None:
             conn.close()
-
 
 if __name__ == '__main__':
     run()

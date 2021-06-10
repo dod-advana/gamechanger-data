@@ -10,7 +10,7 @@ from pathlib import Path
 import traceback
 from dataPipelines.gc_eda_pipeline.metadata.pds_extract_json import extract_pds
 from dataPipelines.gc_eda_pipeline.metadata.syn_extract_json import extract_syn
-from dataPipelines.gc_eda_pipeline.metadata.metadata_util import title
+from dataPipelines.gc_eda_pipeline.metadata.metadata_util import title, mod_identifier
 
 from urllib3.exceptions import ProtocolError
 
@@ -23,18 +23,11 @@ def metadata_extraction(staging_folder: Union[str, Path], filename_input: str, d
     path, filename = os.path.split(filename_input)
     filename_without_ext, file_extension = os.path.splitext(filename)
     data = {"access_timestamp": str(datetime.now()), 'doc_name': filename_without_ext,
-            'doc_title': title(filename_without_ext), 'title': title(filename_without_ext)}
+            'doc_title': title(filename_without_ext), 'title': title(filename_without_ext),
+            "mod_identifier_eda_ext": mod_identifier(filename_without_ext)}
     extensions_metadata = {}
 
     is_supplementary_file_missing = False
-    # if skip_metadata:
-    #     metadata_type = "skipped"
-    #     extensions_metadata["metadata_type" + postfix_es] = metadata_type
-    #     extensions_metadata['dir_location_eda_ext'] = path
-    #     extensions_metadata['file_location_eda_ext'] = aws_s3_output_pdf_prefix + "/" + filename_input
-    #     data['doc_title'] = title(filename_without_ext)
-    #     is_md_successful = False
-    #     return is_md_successful, is_supplementary_file_missing, metadata_type, data
 
     sql_check_if_syn_metadata_exist = data_conf_filter['eda']['sql_check_if_syn_metadata_exist']
     sql_check_if_pds_metadata_exist = data_conf_filter['eda']['sql_check_if_pds_metadata_exist']
