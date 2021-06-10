@@ -20,8 +20,8 @@ def copy_snapshots_from_s3(pdf_snapshot_prefix: str, json_snapshot_prefix: str, 
     export_base_dir.mkdir(exist_ok=True)
     # functions to copy pdf & json snapshots (gamechanger/{pdf,json}) to new directory on disk
     print("*** COPYING PDF AND JSON SNAPSHOTS FROM S3 ***")
-    pdf_dir = Path(export_base_dir, "pdf")
-    json_dir = Path(export_base_dir, "json")
+    pdf_dir = Path(export_base_dir, "pdf").absolute()
+    json_dir = Path(export_base_dir, "json").absolute()
 
     pdf_dir.mkdir(exist_ok=True)
     json_dir.mkdir(exist_ok=True)
@@ -124,7 +124,7 @@ def split_archive(output_dir: t.Union[str, Path], archive_path: t.Union[str, Pat
 
     output_dir.mkdir(exist_ok=True)
 
-    part_name = archive_path.name + ".part_"
+    part_name = archive_path.name + ".part_" + ".tgz"
     sub.run([
         "split",
         "-b", chunk_size,
@@ -257,7 +257,7 @@ if __name__ == "__main__":
 
         snapshot_dict = copy_snapshots_from_s3(
             pdf_snapshot_prefix=pdf_snapshot_prefix,
-            json_snapshot_prefix=pdf_snapshot_prefix,
+            json_snapshot_prefix=json_snapshot_prefix,
             export_base_dir=export_base_dir
         )
         parsed_json_dir = snapshot_dict["json_dir"]
