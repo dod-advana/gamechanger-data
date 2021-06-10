@@ -35,7 +35,7 @@ VENV_ACTIVATE_SCRIPT="${VENV_ACTIVATE_SCRIPT:-/opt/gc-venv-current/bin/activate}
 
 export PDF_S3_PREFIX="${PDF_S3_PREFIX:-s3://advana-raw-zone/gamechanger/pdf}"
 export JSON_S3_PREFIX="${JSON_S3_PREFIX:-s3://advana-raw-zone/gamechanger/json}"
-export S3_UPLOAD_PREFIX="${S3_UPLOAD_PREFIX:-s3://advana-raw-zone/gamechanger/archive_20210610}"
+export S3_UPLOAD_PREFIX="${S3_UPLOAD_PREFIX:-s3://advana-raw-zone/gamechanger/exports/20210610}"
 
 export JOB_TMP_DIR="${JOB_TMP_DIR:-tmp/export_data}"
 export MANIFEST_FILENAME="${MANIFEST_FILENAME:-checksum_manifest.json}"
