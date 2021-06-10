@@ -104,7 +104,7 @@ def zip_base_dir(export_base_dir: t.Union[str, Path], output_dir: t.Union[str, P
 
     output_dir.mkdir(exist_ok=True)
 
-    compressed_filename = "gc_data_export." + dt.now().strftime("%Y%m%d")
+    compressed_filename = "gc_data_export." + dt.now().strftime("%Y%m%d") + ".tgz"
     output_path = Path(output_dir, compressed_filename)
 
     sub.run([
@@ -124,7 +124,7 @@ def split_archive(output_dir: t.Union[str, Path], archive_path: t.Union[str, Pat
 
     output_dir.mkdir(exist_ok=True)
 
-    part_name = archive_path.name + ".part_" + ".tgz"
+    part_name = archive_path.name + ".part_"
     sub.run([
         "split",
         "-b", chunk_size,
