@@ -457,6 +457,11 @@ def parse_args() -> argparse.Namespace:
                         default=dt.datetime.now().strftime('%Y%m%d'),
                         required=False,
                         help="Suffix to be attached to all created indices")
+    parser.add_argument("--skip-alias",
+                        action="store_true",
+                        required=False,
+                        help="Skip setting aliases"
+    )
     parser.add_argument('--manifest',
                         type=arg_existing_path,
                         required=True,
@@ -493,6 +498,7 @@ if __name__ == '__main__':
     manifest_path = args.manifest
     bundle_dir = args.bundle_dir
     entities_csv = args.entities_csv
+    skip_alias = args.skip_alias
 
     es_conf = EsConfig(
         host=es_host,
@@ -569,26 +575,20 @@ if __name__ == '__main__':
                     es_conf=es_conf,
                     max_threads=max_threads
                 )
+            if not skip_alias:
+                l.info(f"Setting alias %s -> %s ...", alias_name, index_name)
+                set_alias(
+                    index_name=index_name,
+                    alias_name=alias_name,
+                    es_conf=es_conf
+                )
 
-            l.info(f"Setting alias %s -> %s ...", alias_name, index_name)
-            set_alias(
-                index_name=index_name,
-                alias_name=alias_name,
-                es_conf=es_conf
-            )
-
-            l.info(f"Removing all references to alias %s , except %s ...", alias_name, index_name)
-            prune_alias(
-                keep_index_name=index_name,
-                alias_name=alias_name,
-                es_conf=es_conf
-            )
-
-        # TODO: DEBUG
-
-        l.info("IMPORT COMPLETED\n\tElapsed Time: %s",
-               str(dt.datetime.now() - start_ts)
-        )
+                l.info(f"Removing all references to alias %s , except %s ...", alias_name, index_name)
+                prune_alias(
+                    keep_index_name=index_name,
+                    alias_name=alias_name,
+                    es_conf=es_conf
+                )
 
         l.info(f"Uploading PDF's to S3 ...")
         upload_dir_to_s3(
@@ -601,6 +601,8 @@ if __name__ == '__main__':
             local_dir=json_dir_path,
             s3_prefix=json_s3_prefix
         )
+
+        l.info("IMPORT COMPLETED\n\tElapsed Time: %s", str(dt.datetime.now() - start_ts))
 
     finally:
         extract_tmp_dir.cleanup()
