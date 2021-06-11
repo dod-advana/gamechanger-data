@@ -38,6 +38,18 @@ l = get_logger()
 NON_VALIDATING_SSL_CTX = get_nonvalidating_ssl_context()
 
 
+def flexible_utf8_json_encoder(o: object) -> object:
+    """UTF8 JSON Serializer that doesn't break on invalid utf-8 characters"""
+    def fix_utf8_string(_s: t.Union[str, bytes]) -> str:
+        """Translates utf-8 byte sequence to one without invalid utf-8 characters"""
+        _str_bytes = _s if isinstance(_s, bytes) else _s.encode("utf-8")
+        return _str_bytes.decode('utf-8', errors='ignore')
+    if isinstance(o, (str, bytes)):
+        return fix_utf8_string(o)
+    else:
+        return json.JSONEncoder().default(o)
+
+
 def calculate_md5(filepath: str) -> str:
     with open(filepath, "rb") as f:
         file_hash = hashlib.md5()
@@ -148,7 +160,13 @@ def es_request(
         headers: t.Optional[t.Dict[str, str]] = None,
         validate_ssl: bool = False) -> HTTPResponse:
 
-    data = (data if isinstance(data, bytes) else json.dumps(data).encode("utf-8") or None)
+    data = (
+        data
+        if isinstance(data, bytes)
+        else json.dumps(data, default=flexible_utf8_json_encoder).encode("utf-8")
+        or None
+    )
+
     headers = headers or {}
     headers["Content-Type"] = "application/json"
     headers.update(es_conf.auth_header)
