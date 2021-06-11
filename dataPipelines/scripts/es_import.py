@@ -164,8 +164,7 @@ def es_request(
         data
         if isinstance(data, bytes)
         else json.dumps(data, default=flexible_utf8_json_encoder).encode("utf-8")
-        or None
-    )
+    ) if data else None
 
     headers = headers or {}
     headers["Content-Type"] = "application/json"
@@ -199,12 +198,13 @@ def index_exists(index_name: str, es_conf: EsConfig) -> bool:
 
 
 # create index w optional mapping/settings
-def create_index(index_name: str, mapping_file: t.Union[str, Path], es_conf: EsConfig) -> None:
-    mapping_file = Path(mapping_file).absolute()
-
-    mapping = json.load(mapping_file.open("r"))
-
-    data = mapping["index"]
+def create_index(index_name: str, es_conf: EsConfig, mapping_file: t.Optional[t.Union[str, Path]] = None) -> None:
+    if mapping_file:
+        mapping_file = Path(mapping_file).absolute()
+        mapping = json.load(mapping_file.open("r"))
+        data = mapping["index"]
+    else:
+        data = None
 
     resp = es_request(
         url=f"/{index_name}?pretty",
@@ -492,6 +492,12 @@ def parse_args() -> argparse.Namespace:
                         type=arg_existing_path,
                         required=True,
                         help="Path to entities.csv")
+    parser.add_argument('--ignore-mapping-for',
+                        dest='unmapped_aliases',
+                        action='append',
+                        default=[],
+                        required=False,
+                        help="Ignore mapping file for given alias/index-basename")
 
     return parser.parse_args()
 
@@ -517,6 +523,7 @@ if __name__ == '__main__':
     bundle_dir = args.bundle_dir
     entities_csv = args.entities_csv
     skip_alias = args.skip_alias
+    unmapped_aliases = args.unmapped_aliases
 
     es_conf = EsConfig(
         host=es_host,
@@ -564,7 +571,6 @@ if __name__ == '__main__':
             alias_name = mappings_and_settings_file.stem
             index_name = alias_name + "_" + index_suffix
 
-
             if index_exists(index_name, es_conf=es_conf):
                 l.info(f"Index '%s' exists, skipping index creation ...", index_name)
                 pass
@@ -572,8 +578,12 @@ if __name__ == '__main__':
                 l.info(f"Creating index: %s", index_name)
                 create_index(
                     index_name=index_name,
-                    mapping_file=mappings_and_settings_file,
-                    es_conf=es_conf
+                    es_conf=es_conf,
+                    **(
+                        dict(mapping_file=mappings_and_settings_file)
+                        if alias_name not in unmapped_aliases
+                        else {}
+                    )
                 )
 
             if alias_name == "entities":
