@@ -6,12 +6,23 @@ import os
 import shutil
 import json
 from collections import defaultdict
-from datetime import datetime as dt
+import datetime as dt
 import hashlib
 import tempfile
+import logging
 
 PACKAGE_PATH: str = os.path.dirname(os.path.abspath(__file__))
 REPO_PATH: str = os.path.abspath(os.path.join(PACKAGE_PATH, '../../'))
+
+
+def get_logger() -> logging.Logger:
+    logging.basicConfig(format='%(asctime)s.%(msecs)03d | %(levelname)s | %(message)s', datefmt='%Y-%m-%dT%H:%M:%S',
+                        level=logging.INFO)
+    logger = logging.getLogger(__name__)
+    return logger
+
+
+l = get_logger()
 
 
 def copy_snapshots_from_s3(pdf_snapshot_prefix: str, json_snapshot_prefix: str, export_base_dir: t.Union[str, Path]) -> t.Dict[
@@ -19,7 +30,7 @@ def copy_snapshots_from_s3(pdf_snapshot_prefix: str, json_snapshot_prefix: str, 
     export_base_dir = Path(export_base_dir)
     export_base_dir.mkdir(exist_ok=True)
     # functions to copy pdf & json snapshots (gamechanger/{pdf,json}) to new directory on disk
-    print("*** COPYING PDF AND JSON SNAPSHOTS FROM S3 ***")
+    l.info("*** COPYING PDF AND JSON SNAPSHOTS FROM S3 ***")
     pdf_dir = Path(export_base_dir, "pdf").absolute()
     json_dir = Path(export_base_dir, "json").absolute()
 
@@ -48,7 +59,7 @@ def export_es_mappings(export_base_dir: t.Union[str, Path]) -> None:
     export_base_dir.mkdir(exist_ok=True)
 
     # function to stage settings/mappings we intend to use
-    print("*** EXPORTING ES MAPPINGS ***")
+    l.info("*** EXPORTING ES MAPPINGS ***")
 
     gamechanger_mapping = Path(REPO_PATH, "configuration/elasticsearch-config/prod.json")
     entities_mapping = Path(REPO_PATH, "configuration/elasticsearch-config/prod-entities.json")
@@ -67,7 +78,7 @@ def export_es_mappings(export_base_dir: t.Union[str, Path]) -> None:
 
 
 def pull_revocations() -> t.Dict[str, bool]:
-    print("*** PULLING REVOCATION FROM DB ***")
+    l.info("*** PULLING REVOCATION FROM DB ***")
     from configuration.utils import get_connection_helper_from_env
 
     connection_helper = get_connection_helper_from_env()
@@ -81,7 +92,7 @@ def pull_revocations() -> t.Dict[str, bool]:
 
 
 def update_revocations(parsed_json_dir: t.Union[str, Path], revocation_map: t.Dict[str, bool], pdf_dir: t.Union[str, Path]) -> None:
-    print("*** UPDATING JSONS TO INCLUDE REVOCATIONS ***")
+    l.info("*** UPDATING JSONS TO INCLUDE REVOCATIONS ***")
     parsed_json_dir = Path(parsed_json_dir).absolute()
     pdf_dir = Path(pdf_dir).absolute()
 
@@ -118,7 +129,7 @@ def zip_base_dir(export_base_dir: t.Union[str, Path], output_dir: t.Union[str, P
 
 
 def split_archive(output_dir: t.Union[str, Path], archive_path: t.Union[str, Path], chunk_size: str = "1G") -> t.List[str]:
-    print("***SPLITING ARCHIVE INTO CHUNKS***")
+    l.info("***SPLITING ARCHIVE INTO CHUNKS***")
     output_dir = Path(output_dir).absolute()
     archive_path = Path(archive_path).absolute()
 
@@ -149,7 +160,7 @@ def calculate_md5(filepath: t.Union[str, Path]) -> str:
 
 
 def create_manifest(file_list: t.List[str], manifest_path: t.Union[str, Path]) -> str:
-    print("***CREATING MANIFEST OF CHECKSUMS***")
+    l.info("***CREATING MANIFEST OF CHECKSUMS***")
     manifest_path = Path(manifest_path).absolute()
     manifest_dict = {}
     for file in file_list:
@@ -160,7 +171,7 @@ def create_manifest(file_list: t.List[str], manifest_path: t.Union[str, Path]) -
 
 
 def upload_to_s3(input_dir: t.Union[str, Path], s3_upload_prefix: str) -> None:
-    print("***UPLOADING TO S3***")
+    l.info("***UPLOADING TO S3***")
     input_dir = Path(input_dir).absolute()
     s3_upload_prefix = s3_upload_prefix if s3_upload_prefix.endswith("/") else s3_upload_prefix + '/'
     sub.run(["aws", "s3", "cp", "--recursive", str(input_dir), s3_upload_prefix], check=True)
@@ -187,7 +198,8 @@ def arg_chunk_size(s: str) -> str:
 def parse_args():
     parser = argparse.ArgumentParser(
         description="CLI for exporting PDF/JSON GC data",
-        allow_abbrev=False
+        allow_abbrev=False,
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter
     )
     parser.add_argument(
         "--pdf-s3-prefix",
@@ -232,6 +244,7 @@ def parse_args():
 
 
 if __name__ == "__main__":
+    start_ts = dt.datetime.now()
 
     args = parse_args()
 
@@ -254,7 +267,6 @@ if __name__ == "__main__":
     manifest_path = os.path.join(final_output_dir, manifest_filename)
 
     try:
-
         snapshot_dict = copy_snapshots_from_s3(
             pdf_snapshot_prefix=pdf_snapshot_prefix,
             json_snapshot_prefix=json_snapshot_prefix,
@@ -294,6 +306,8 @@ if __name__ == "__main__":
             input_dir=final_output_dir,
             s3_upload_prefix=s3_upload_prefix
         )
+
+        l.info("EXPORT COMPLETED\n\tElapsed Time: %s", str(dt.datetime.now() - start_ts))
     finally:
         export_base_tmp_dir.cleanup()
         final_output_tmp_dir.cleanup()
