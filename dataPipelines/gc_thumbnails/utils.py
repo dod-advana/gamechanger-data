@@ -14,7 +14,7 @@ class ThumbnailsCreator:
     def generate_thumbnails(self):
         print('\nGenerating Thumbnails\n')
         self.output_directory.mkdir(exist_ok=True)
-        for file_path in [x for x in self.input_directory.glob('*.pdf')]:
+        for file_path in self.input_directory.glob('*.pdf'):
             doc = fitz.open(str(file_path))
             page = doc.loadPage(0)  # number of page
             pix = page.getPixmap()
