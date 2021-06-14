@@ -19,6 +19,7 @@ class CoreIngestSteps(PipelineSteps):
             destination=str(c.parsed_doc_base_dir),
             metadata=str(c.raw_doc_base_dir),
             ocr_missing_doc=True,
+            force_ocr=c.force_ocr,
             multiprocess=c.max_threads,
             num_ocr_threads=c.max_ocr_threads
         )
