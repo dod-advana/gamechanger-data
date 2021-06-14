@@ -222,7 +222,7 @@ def core_update_thumbnails(core_ingest_config: CoreIngestConfig, **kwargs):
     """Pipeline for pulling down pdfs/metadata from s3 and updating thumbnails"""
     announce('Pulling down parsed snapshot files for updating neo4j ...')
     core_ingest_config.snapshot_manager.pull_current_snapshot_to_disk(
-        local_dir=core_ingest_config.parsed_doc_base_dir,
+        local_dir=core_ingest_config.raw_doc_base_dir,
         snapshot_type='raw',
         using_db=False,
         max_threads=core_ingest_config.max_threads
