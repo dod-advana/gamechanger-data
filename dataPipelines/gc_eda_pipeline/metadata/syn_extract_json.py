@@ -1,5 +1,6 @@
 from dataPipelines.gc_eda_pipeline.metadata.metadata_util import format_supplementary_data
 from dataPipelines.gc_eda_pipeline.metadata.vendor_org_hierarchy import vendor_org_hierarchy
+from dataPipelines.gc_eda_pipeline.metadata.dodaac_org_type_metadata import dodaac_org_type_metadata
 
 
 def extract_syn(data_conf_filter: dict, data: dict):
@@ -44,8 +45,8 @@ def extract_syn(data_conf_filter: dict, data: dict):
     if contract_issue_office_dodaac:
         extracted_data_eda_n["contract_issue_office_dodaac_eda_ext"] = contract_issue_office_dodaac
         dodaacs_data[contract_issue_office_dodaac] = contract_issue_office_name
-    if dodaac_org_type:
-        extracted_data_eda_n["dodaac_org_type_eda_ext"] = dodaac_org_type
+    # if dodaac_org_type:
+    #     extracted_data_eda_n["dodaac_org_type_eda_ext"] = dodaac_org_type
 
     effective_date, signature_date = contract_effective_and_signed_date(data)
     if effective_date:
@@ -68,6 +69,11 @@ def extract_syn(data_conf_filter: dict, data: dict):
     vendor_org_hierarchy_extensions_metadata = vendor_org_hierarchy(vendor_cage=vendor_cage, dodacc_map=dodaacs_data, data_conf_filter=data_conf_filter)
 
     extracted_data_eda_n["vendor_org_hierarchy_eda_n"] = vendor_org_hierarchy_extensions_metadata
+
+    dodaac_org_type = dodaac_org_type_metadata(extracted_data_eda_n)
+    if dodaac_org_type:
+        extracted_data_eda_n["dodaac_org_type_eda_ext"] = dodaac_org_type
+
     return {"extracted_data_eda_n": extracted_data_eda_n}
 
 

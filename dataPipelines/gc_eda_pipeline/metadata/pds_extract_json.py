@@ -1,8 +1,7 @@
-from builtins import type
-
+import json
 from dataPipelines.gc_eda_pipeline.metadata.metadata_util import format_supplementary_data
 from dataPipelines.gc_eda_pipeline.metadata.vendor_org_hierarchy import vendor_org_hierarchy
-
+from dataPipelines.gc_eda_pipeline.metadata.dodaac_org_type_metadata import dodaac_org_type_metadata
 
 def extract_pds(data_conf_filter: dict, data: dict, extensions_metadata: dict):
     dodaacs_data = {}
@@ -46,8 +45,8 @@ def extract_pds(data_conf_filter: dict, data: dict, extensions_metadata: dict):
     if contract_issue_office_dodaac:
         extracted_data_eda_n["contract_issue_office_dodaac_eda_ext"] = contract_issue_office_dodaac
         dodaacs_data[contract_issue_office_dodaac] = contract_issue_office_name
-    if dodaac_org_type:
-        extracted_data_eda_n["dodaac_org_type_eda_ext"] = dodaac_org_type
+    # if dodaac_org_type:
+    #     extracted_data_eda_n["dodaac_org_type_eda_ext"] = dodaac_org_type
 
     sub_vendor_name, sub_vendor_duns, sub_vendor_cage = populate_vendor_sub(data)
     if sub_vendor_name:
@@ -71,13 +70,18 @@ def extract_pds(data_conf_filter: dict, data: dict, extensions_metadata: dict):
     if naics:
         extracted_data_eda_n["naics_eda_ext"] = naics
 
-
     vendor_org_hierarchy_extensions_metadata = vendor_org_hierarchy(vendor_cage=vendor_cage, dodacc_map=dodaacs_data, data_conf_filter=data_conf_filter)
 
-    # print("----------------------------")
-    # # print(vendor_org_hierarchy_extensions_metadata)
-    # print("----------------------------")
     extracted_data_eda_n["vendor_org_hierarchy_eda_n"] = vendor_org_hierarchy_extensions_metadata
+
+    dodaac_org_type = dodaac_org_type_metadata(extracted_data_eda_n)
+    if dodaac_org_type:
+        extracted_data_eda_n["dodaac_org_type_eda_ext"] = dodaac_org_type
+
+    # print("----------------------------")
+    # json_object = json.dumps(extracted_data_eda_n, indent=4)
+    # print(json_object)
+    # print("----------------------------")
     return {"extracted_data_eda_n": extracted_data_eda_n}
 
 
@@ -252,3 +256,8 @@ def populate_naics(data: dict) -> str:
                         return refnum.get("ref_value_eda_ext")
     return None
 
+
+
+# #To Populate LINE ITEM DETAILS
+# def popluate_line_item_details(data:dic) -> dict:
+#     if "line_item_

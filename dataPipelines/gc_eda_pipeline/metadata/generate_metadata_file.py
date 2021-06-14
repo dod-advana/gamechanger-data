@@ -8,17 +8,10 @@ def generate_metadata_data(staging_folder: str, data_conf_filter: dict, file: st
                            aws_s3_output_pdf_prefix: str, audit_id: str, audit_rec: dict,
                            publish_audit: EDSConfiguredElasticsearchPublisher):
 
-    # md_file_local_path = staging_folder + "/pdf/" + file + ".metadata"
-    # md_file_s3_path = aws_s3_output_pdf_prefix + "/" + file + ".metadata"
-
     pds_start = time.time()
 
     is_md_successful, is_supplementary_file_missing, md_type, md_data = metadata_extraction(staging_folder, file, data_conf_filter, aws_s3_output_pdf_prefix)
 
-    # with open(md_file_local_path, "w") as output_file:
-    #     json.dump(md_data, output_file)
-
-    # Conf.s3_utils.upload_file(file=md_file_local_path, object_name=md_file_s3_path)
     pds_end = time.time()
     time_md = pds_end - pds_start
 
