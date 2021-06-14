@@ -20,10 +20,7 @@ class ThumbnailsCreator:
             doc = fitz.open(str(file_path))
             page = doc.loadPage(0)  # number of page
             pix = page.getPixmap()
-            out_dir = str(self.output_directory)
-            if out_dir[-1] != '/':
-                out_dir += '/'
-            output = Path(out_dir, file_path.with_suffix('.png').name)
+            output = Path(self.output_directory, file_path.with_suffix('.png').name)
             pix.writePNG(str(output))
 
             print("wrote PNG: ", output)
