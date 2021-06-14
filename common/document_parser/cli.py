@@ -25,6 +25,7 @@ def pdf_to_json(
         metadata: str = None,
         multiprocess: int = -1,
         ocr_missing_doc: bool = False,
+        force_ocr: bool = False,
         num_ocr_threads: int = 2,
 ) -> None:
     """
@@ -44,7 +45,6 @@ def pdf_to_json(
     parser = resolve_dynamic_parser(parser_path)
 
     doc_logger = get_default_logger()
-
     if Path(source).is_file():
         doc_logger.info("Parsing Single Document")
 
@@ -54,8 +54,8 @@ def pdf_to_json(
             metadata,
             ocr_missing_doc,
             num_ocr_threads,
-            destination
-        )
+            force_ocr,
+            destination)
 
         single_process(parser_input)
 
@@ -67,6 +67,7 @@ def pdf_to_json(
             meta_data=metadata,
             multiprocess=multiprocess,
             ocr_missing_doc=ocr_missing_doc,
+            force_ocr=force_ocr,
             num_ocr_threads=num_ocr_threads
         )
     if verify:
@@ -133,6 +134,12 @@ def pdf_to_json(
     is_flag=True
 )
 @click.option(
+    '-f',
+    '--force-ocr',
+    help="Force OCR on every document. Default is to do nothing.",
+    is_flag=True
+)
+@click.option(
     '-z',
     '--memory_percentage',
     required=False,
@@ -155,6 +162,7 @@ def pdf_to_json_cmd_wrapper(
         verify: bool,
         memory_percentage: float,
         ocr_missing_doc: bool,
+        force_ocr: bool,
         num_ocr_threads: int,
 ) -> None:
     """Parse OCR'ed PDF files into JSON schema"""
@@ -169,6 +177,7 @@ def pdf_to_json_cmd_wrapper(
         metadata=metadata,
         multiprocess=multiprocess,
         ocr_missing_doc=ocr_missing_doc,
+        force_ocr=force_ocr,
         num_ocr_threads=num_ocr_threads
     )
 

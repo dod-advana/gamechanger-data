@@ -49,6 +49,7 @@ class CoreIngestConfig(IngestConfig):
     max_threads: pyd.PositiveInt
     max_threads_neo4j: pyd.PositiveInt
     max_ocr_threads: pyd.PositiveInt
+    force_ocr: bool = False
     skip_neo4j_update: bool = False
     skip_snapshot_backup: bool = False
     skip_db_backup: bool = False
@@ -232,8 +233,15 @@ class CoreIngestConfig(IngestConfig):
             type=bool,
             required=False,
             default=True,
-            show_default=True,
-            help="Whether or not to generate png of first page of pdf"
+            help="Whether or not to generate png of first page of pdf",
+            show_default=True
+        )
+        @click.option(
+            '--force-ocr',
+            type=bool,
+            default=False,
+            help="Require every document to be OCRed regaurdless of if a text layer already exists",
+            show_default=True
         )
         @click.option(
             '--batch-timestamp',
