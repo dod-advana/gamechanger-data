@@ -17,12 +17,10 @@ class CoreIngestSteps(PipelineSteps):
             parser_path="common.document_parser.parsers.policy_analytics.parse::parse",
             source=str(c.raw_doc_base_dir),
             destination=str(c.parsed_doc_base_dir),
-            thumbnail_dir=c.thumbnail_doc_base_dir,
             metadata=str(c.raw_doc_base_dir),
             ocr_missing_doc=True,
             multiprocess=c.max_threads,
-            num_ocr_threads=c.max_ocr_threads,
-            generate_thumbnails=c.generate_thumbnails
+            num_ocr_threads=c.max_ocr_threads
         )
 
     @staticmethod

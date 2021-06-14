@@ -21,13 +21,11 @@ def pdf_to_json(
         parser_path: str,
         source: str,
         destination: str,
-        thumbnail_dir: str,
         verify: bool = False,
         metadata: str = None,
         multiprocess: int = -1,
         ocr_missing_doc: bool = False,
         num_ocr_threads: int = 2,
-        generate_thumbnails: bool = True,
 ) -> None:
     """
     Converts input pdf file to json
@@ -35,13 +33,11 @@ def pdf_to_json(
         parser_path: path to parser module or json config file that creates a parser
         source: A source directory to be processed.
         destination: A destination directory to be processed
-        thumbnail_dir: directory to save thumbnails
         verify: Boolean to determine if output jsons are to be verified vs a json schema
         metadata: file path of metadata to be processed.
         multiprocess: Multiprocessing. Will take integer for number of cores,
         ocr_missing_doc: OCR non-OCR'ed files
         num_ocr_threads: Number of threads to use for OCR (per file)
-        generate_thumbnails: Whether or not to generate png from first page of pdf
     """
     from common.document_parser.process import process_dir, single_process, resolve_dynamic_parser
 
@@ -58,9 +54,7 @@ def pdf_to_json(
             metadata,
             ocr_missing_doc,
             num_ocr_threads,
-            destination,
-            thumbnail_dir,
-            generate_thumbnails
+            destination
         )
 
         single_process(parser_input)
@@ -70,12 +64,10 @@ def pdf_to_json(
             parser,
             dir_path=source,
             out_dir=destination,
-            thumbnail_dir=thumbnail_dir,
             meta_data=metadata,
             multiprocess=multiprocess,
             ocr_missing_doc=ocr_missing_doc,
-            num_ocr_threads=num_ocr_threads,
-            generate_thumbnails=generate_thumbnails
+            num_ocr_threads=num_ocr_threads
         )
     if verify:
         verified = validators.verify(destination)
@@ -158,14 +150,12 @@ def pdf_to_json_cmd_wrapper(
         parser_path: str,
         source: str,
         destination: str,
-        thumbnail_dir: str,
         metadata: str,
         multiprocess: int,
         verify: bool,
         memory_percentage: float,
         ocr_missing_doc: bool,
         num_ocr_threads: int,
-        generate_thumbnails: bool,
 ) -> None:
     """Parse OCR'ed PDF files into JSON schema"""
     if platform.system() == "Linux":
@@ -175,13 +165,11 @@ def pdf_to_json_cmd_wrapper(
         parser_path=parser_path,
         source=source,
         destination=destination,
-        thumbnail_dir=thumbnail_dir,
         verify=verify,
         metadata=metadata,
         multiprocess=multiprocess,
         ocr_missing_doc=ocr_missing_doc,
-        num_ocr_threads=num_ocr_threads,
-        generate_thumbnails=generate_thumbnails
+        num_ocr_threads=num_ocr_threads
     )
 
 

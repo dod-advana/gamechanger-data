@@ -215,6 +215,7 @@ def core_update_neo4j(core_ingest_config: CoreIngestConfig, **kwargs):
     CoreIngestSteps.update_neo4j(core_ingest_config)
     CoreIngestSteps.update_revocations(core_ingest_config)
 
+
 @core_ingest_cli.command('update-thumbnails')
 @pass_core_ingest_config
 def core_update_thumbnails(core_ingest_config: CoreIngestConfig, **kwargs):
@@ -231,5 +232,5 @@ def core_update_thumbnails(core_ingest_config: CoreIngestConfig, **kwargs):
         announce("[WARNING] No files were found for processing, exiting pipeline.")
         exit(1)
 
-    announce('Updating neo4j ...')
+    announce('Updating thumbnails ...')
     CoreIngestSteps.update_thumbnails(core_ingest_config)
