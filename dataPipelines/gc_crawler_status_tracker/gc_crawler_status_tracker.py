@@ -88,6 +88,7 @@ class CrawlerStatusTracker:
             db_non_revocations =list(set([name for (name,) in db_non_revoked]))
             return db_non_revocations
 
+# TODO fix "PDF" addition here. Add html
     def update_revocations_es(self, doc_name_list, index_name:str):
 
         for doc in doc_name_list:

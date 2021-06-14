@@ -51,6 +51,8 @@ DISPLAY_TYPE_LOOKUP = defaultdict(lambda: "Document", {
     "ccn": "Notice",
     "dcmsi": "Instruction",
     "dod coronavirus guidance": "Guidance",
+    "cfr index": "CFR Index",
+    "cfr title": "CFR Title",
 })
 
 
@@ -85,11 +87,12 @@ CRAWLER_TO_DISPLAY_ORG_LOOKUP = defaultdict(lambda: "Uncategorized", {
     "jumbo_DFARS": "DFARS",
     "DOD_Coronavirus_Guidance": "Dept. of Defense",
     "dfar_subpart_regs": "DFAR",
-    "far_subpart_regs": "FAR"
+    "far_subpart_regs": "FAR",
+    "code_of_federal_regulations": "Congress",
 })
 
 CRAWLER_TO_DISPLAY_SOURCE_LOOKUP = defaultdict(lambda: "Unlisted Source", {
-    "dod_issuances":"WHS DoD Directives Division",
+    "dod_issuances": "WHS DoD Directives Division",
     "army_pubs": "Army Publishing Directorate",
     "jcs_pubs": "Joint Chiefs of Staff Library",
     "jcs_manual_uploads": "Joint Chiefs of Staff",
@@ -119,5 +122,6 @@ CRAWLER_TO_DISPLAY_SOURCE_LOOKUP = defaultdict(lambda: "Unlisted Source", {
     "Coast_Guard": "US Coast Guard Directives",
     "DOD_Coronavirus_Guidance": "Defense Publications",
     "dfar_subpart_regs": "Defense Federal Acquisition Regulation",
-    "far_subpart_regs": "Federal Acquisition Regulation"
+    "far_subpart_regs": "Federal Acquisition Regulation",
+    "code_of_federal_regulations": "U.S. Publishing Office",
 })

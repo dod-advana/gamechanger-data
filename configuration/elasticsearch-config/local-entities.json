@@ -1,50 +1,118 @@
 {
-    "index": {
-        "settings": {
-            "index.mapping.nested_objects.limit": 100000,
-            "index": {
-                "number_of_shards": 3,
-                "number_of_replicas": 1,
-                "mapping.nested_fields.limit": 20000
+  "index" : {
+    "aliases" : { },
+    "mappings" : {
+      "properties" : {
+        "address" : {
+          "type" : "text",
+          "fields" : {
+            "keyword" : {
+              "type" : "keyword",
+              "ignore_above" : 256
             }
+          }
         },
-        "mappings": {
-            "properties": {
-                "name": {
-                    "type": "text"
-                },
-                "entity_type": {
-                    "type": "keyword"
-                },
-                "website": {
-                    "type": "keyword"
-                },
-                "address": {
-                    "type": "text"
-                },
-                "government_branch": {
-                    "type": "text"
-                },
-                "parent_agency": {
-                    "type": "text"
-                },
-                "related_agency": {
-                    "type": "text"
-                },
-                "aliases": {
-                    "type": "nested",
-                    "properties": {
-                        "name": {
-                            "type": "text",
-                            "fields": {
-                                "search": {
-                                    "type": "text"
-                                    }
-                                }
-                        }
-                    }
+        "aliases" : {
+          "properties" : {
+            "name" : {
+              "type" : "text",
+              "fields" : {
+                "keyword" : {
+                  "type" : "keyword",
+                  "ignore_above" : 256
                 }
+              }
             }
+          }
+        },
+        "crawlers" : {
+          "type" : "text",
+          "fields" : {
+            "keyword" : {
+              "type" : "keyword",
+              "ignore_above" : 256
+            }
+          }
+        },
+        "entity_type" : {
+          "type" : "text",
+          "fields" : {
+            "keyword" : {
+              "type" : "keyword",
+              "ignore_above" : 256
+            }
+          }
+        },
+        "government_branch" : {
+          "type" : "text",
+          "fields" : {
+            "keyword" : {
+              "type" : "keyword",
+              "ignore_above" : 256
+            }
+          }
+        },
+        "information" : {
+          "type" : "text",
+          "fields" : {
+            "keyword" : {
+              "type" : "keyword",
+              "ignore_above" : 256
+            }
+          }
+        },
+        "name" : {
+          "type" : "text",
+          "fields" : {
+            "keyword" : {
+              "type" : "keyword",
+              "ignore_above" : 256
+            }
+          }
+        },
+        "num_mentions" : {
+          "type" : "text",
+          "fields" : {
+            "keyword" : {
+              "type" : "keyword",
+              "ignore_above" : 256
+            }
+          }
+        },
+        "parent_agency" : {
+          "type" : "text",
+          "fields" : {
+            "keyword" : {
+              "type" : "keyword",
+              "ignore_above" : 256
+            }
+          }
+        },
+        "related_agency" : {
+          "type" : "text",
+          "fields" : {
+            "keyword" : {
+              "type" : "keyword",
+              "ignore_above" : 256
+            }
+          }
+        },
+        "website" : {
+          "type" : "text",
+          "fields" : {
+            "keyword" : {
+              "type" : "keyword",
+              "ignore_above" : 256
+            }
+          }
         }
+      }
+    },
+    "settings" : {
+      "index" : {
+        "number_of_shards" : "5",
+        "number_of_replicas" : "1"
+      }
     }
+  }
 }

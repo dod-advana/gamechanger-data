@@ -54,8 +54,8 @@ class Neo4jJobManager:
             pbar.update()
 
     @staticmethod
-    def process_files(files: t.List[str], file_dir: str, q: mp.Queue, publisher: Neo4jPublisher) -> None:
-        publisher.process_dir(files, file_dir, q)
+    def process_files(files: t.List[str], file_dir: str, q: mp.Queue, publisher: Neo4jPublisher, max_threads: int) -> None:
+        publisher.process_dir(files, file_dir, q, max_threads)
 
     @staticmethod
     def get_chunks(lst: t.List[t.Any], n: int) -> t.Iterable[t.List[t.Any]]:
@@ -144,7 +144,7 @@ class Neo4jJobManager:
         q = mp.Queue()
         proc = mp.Process(target=self.listener, args=(q, len(files)))
         proc.start()
-        workers = [mp.Process(target=self.process_files, args=(file_chunks[i], file_dir, q, publisher)) for i in range(n)]
+        workers = [mp.Process(target=self.process_files, args=(file_chunks[i], file_dir, q, publisher, max_threads)) for i in range(n)]
         for worker in workers:
             worker.start()
         for worker in workers:
@@ -157,40 +157,43 @@ class Neo4jJobManager:
 
         with Config.connection_helper.neo4j_session_scope() as session:
             # Create UKN Documents and create REFERENCES and REFERENCES_UKN links
-            print("Creating UKN Documents, REFERENCES, and REFERENCES_UKN links...", file=sys.stderr)
-            session.run("CALL policy.createUKNDocumentNodesAndAllReferences();")
+            try:
+                print("Creating UKN Documents, REFERENCES, and REFERENCES_UKN links...", file=sys.stderr)
+                session.run("CALL policy.createUKNDocumentNodesAndAllReferences();")
 
-            # Create Similarity Links
-            print("Creating node2vec properties ... ", file=sys.stderr)
-            session.run(
-                "CALL gds.alpha.node2vec.write( " +
-                "   { " +
-                "       nodeProjection: ['Document', 'Entity', 'Topic', 'UKN_Document'], " +
-                "       relationshipProjection: ['REFERENCES', 'REFERENCES_UKN', 'CHILD_OF', 'RELATED_TO', 'CONTAINS', 'MENTIONS', 'IS_IN'], " +
-                "       relationshipProperties: ['count', 'relevancy'], " +
-                "       embeddingDimension: 64, " +
-                "       walkLength: 10, " +
-                "       iterations: 3, " +
-                "       writeProperty: 'nodeVec' " +
-                "   } " +
-                ");"
-            )
+                # Create Similarity Links
+                print("Creating node2vec properties ... ", file=sys.stderr)
+                session.run(
+                    "CALL gds.alpha.node2vec.write( " +
+                    "   { " +
+                    "       nodeProjection: ['Document', 'Entity', 'Topic', 'UKN_Document'], " +
+                    "       relationshipProjection: ['REFERENCES', 'REFERENCES_UKN', 'CHILD_OF', 'RELATED_TO', 'CONTAINS', 'MENTIONS', 'IS_IN'], " +
+                    "       relationshipProperties: ['count', 'relevancy'], " +
+                    "       embeddingDimension: 64, " +
+                    "       walkLength: 10, " +
+                    "       iterations: 3, " +
+                    "       writeProperty: 'nodeVec' " +
+                    "   } " +
+                    ");"
+                )
 
-            print("Creating similarity relationships ... ", file=sys.stderr)
-            session.run(
-                "MATCH (d:Document) " +
-                "WITH {item:id(d), weights: d.nodeVec} AS docData " +
-                "WITH collect(docData) AS data " +
-                "CALL gds.alpha.similarity.cosine.stream({ " +
-                "  data: data, " +
-                "  similarityCutoff: 0.5 " +
-                "}) " +
-                "YIELD item1, item2, similarity " +
-                "WITH gds.util.asNode(item1) AS NODE1, gds.util.asNode(item2) AS NODE2, similarity " +
-                "MERGE (NODE1)-[:SIMILAR_TO {similarity: similarity}]->(NODE2);"
-            )
+                print("Creating similarity relationships ... ", file=sys.stderr)
+                session.run(
+                    "MATCH (d:Document) " +
+                    "WITH {item:id(d), weights: d.nodeVec} AS docData " +
+                    "WITH collect(docData) AS data " +
+                    "CALL gds.alpha.similarity.cosine.stream({ " +
+                    "  data: data, " +
+                    "  similarityCutoff: 0.5 " +
+                    "}) " +
+                    "YIELD item1, item2, similarity " +
+                    "WITH gds.util.asNode(item1) AS NODE1, gds.util.asNode(item2) AS NODE2, similarity " +
+                    "MERGE (NODE1)-[:SIMILAR_TO {similarity: similarity}]->(NODE2);"
+                )
 
-            # delete any entity nodes without a name
-            session.run("MATCH (e:Entity {name: ''}) detach delete (e);")
+                # delete any entity nodes without a name
+                session.run("MATCH (e:Entity {name: ''}) detach delete (e);")
+            except Exception as e:
+                print("Error: {0}".format(e))
 
             print('Done', file=sys.stderr)
