@@ -214,3 +214,22 @@ def core_update_neo4j(core_ingest_config: CoreIngestConfig, **kwargs):
     announce('Updating neo4j ...')
     CoreIngestSteps.update_neo4j(core_ingest_config)
     CoreIngestSteps.update_revocations(core_ingest_config)
+
+@core_ingest_cli.command('update-thumbnails')
+@pass_core_ingest_config
+def core_update_thumbnails(core_ingest_config: CoreIngestConfig, **kwargs):
+    """Pipeline for pulling down pdfs/metadata from s3 and updating thumbnails"""
+    announce('Pulling down parsed snapshot files for updating neo4j ...')
+    core_ingest_config.snapshot_manager.pull_current_snapshot_to_disk(
+        local_dir=core_ingest_config.parsed_doc_base_dir,
+        snapshot_type='raw',
+        using_db=False,
+        max_threads=core_ingest_config.max_threads
+    )
+
+    if not next((p for p in core_ingest_config.parsed_doc_base_dir.iterdir() if p.is_file()), None):
+        announce("[WARNING] No files were found for processing, exiting pipeline.")
+        exit(1)
+
+    announce('Updating neo4j ...')
+    CoreIngestSteps.update_thumbnails(core_ingest_config)

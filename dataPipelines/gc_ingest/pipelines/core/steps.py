@@ -163,3 +163,13 @@ class CoreIngestSteps(PipelineSteps):
         c.crawler_status_tracker.update_crawler_status(status="Ingest Complete",
                                                        timestamp=datetime.now(),
                                                        update_db=not c.skip_db_update)
+
+    @staticmethod
+    def update_thumbnails(c: CoreIngestConfig) -> None:
+
+        if c.skip_thumbnail_generation:
+            announce("Skipping Thumbnails update [flag set] ...")
+            return
+
+        announce("Updating thumbnails ...")
+        c.thumbnail_job_manager.generate_thumbnails()

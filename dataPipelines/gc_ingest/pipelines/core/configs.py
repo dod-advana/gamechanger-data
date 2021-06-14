@@ -12,6 +12,7 @@ from dataPipelines.gc_ingest.tools.db.cli import pass_core_db_cli_options
 from dataPipelines.gc_ingest.common_cli_options import pass_bucket_name_option
 from dataPipelines.gc_crawler_status_tracker.gc_crawler_status_tracker import CrawlerStatusTracker
 from dataPipelines.gc_manual_metadata.gc_manual_metadata import ManualMetadata
+from dataPipelines.gc_thumbnails.utils import ThumbnailsCreator
 from pathlib import Path
 import datetime as dt
 from enum import Enum
@@ -54,11 +55,11 @@ class CoreIngestConfig(IngestConfig):
     skip_db_update: bool = False
     skip_revocation_update: bool = False
     skip_es_revocation: bool = False
+    skip_thumbnail_generation: bool = True
     current_snapshot_prefix: NonBlankString
     backup_snapshot_prefix: NonBlankString
     infobox_dir: t.Optional[StrippedString] = None
     es_mapping_file: t.Optional[StrippedString] = None
-    generate_thumbnails: bool = False
 
     @property
     def snapshot_manager(self) -> SnapshotManager:
@@ -171,6 +172,17 @@ class CoreIngestConfig(IngestConfig):
         )
         return self._core_db_manager
 
+    @property
+    def thumbnail_job_manager(self) -> ThumbnailsCreator:
+        if hasattr(self, '_thumbnail_job_manager'):
+            return self._thumbnail_job_manager
+
+        self._thumbnail_job_manager = ThumbnailsCreator(
+            input_directory=self.raw_doc_base_dir,
+            output_directory=self.thumbnail_doc_base_dir
+        )
+        return self._thumbnail_job_manager
+
     @staticmethod
     def pass_options(f):
         @click.option(
@@ -214,6 +226,14 @@ class CoreIngestConfig(IngestConfig):
             default=False,
             help="Skip adding revocations updates to es, will still update db",
             show_default=True
+        )
+        @click.option(
+            '--skip-thumbnail-generation',
+            type=bool,
+            required=False,
+            default=True,
+            show_default=True,
+            help="Whether or not to generate png of first page of pdf"
         )
         @click.option(
             '--batch-timestamp',
@@ -279,14 +299,6 @@ class CoreIngestConfig(IngestConfig):
             type=click.Path(exists=True, dir_okay=False, file_okay=True, resolve_path=True),
             required=False,
             help="Path to a non-default es mapping file"
-        )
-        @click.option(
-            '--generate-thumbnails',
-            type=bool,
-            required=False,
-            default=True,
-            show_default=True,
-            help="Whether or not to generate png of first page of pdf"
         )
         @pass_core_snapshot_cli_options
         @pass_core_db_cli_options

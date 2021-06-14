@@ -4,13 +4,13 @@ import fitz
 class ThumbnailsCreator:
     def __init__(
         self,
-        file_name,
+        input_directory,
         output_directory
     ):
-        self.file_name = file_name
+        self.input_directory = input_directory
         self.output_directory = output_directory
 
-    def generate_png(self):
+    def generate_thumbnails(self):
         p = Path(self.output_directory)
         if not p.exists():
             p.mkdir()
