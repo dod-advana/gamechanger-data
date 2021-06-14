@@ -234,3 +234,10 @@ def core_update_thumbnails(core_ingest_config: CoreIngestConfig, **kwargs):
     announce('Updating thumbnails ...')
     CoreIngestSteps.update_thumbnails(core_ingest_config)
 
+    announce('Pushing up thumbnails to s3 snapshot location ...')
+    core_ingest_config.snapshot_manager.update_current_snapshot_from_disk(
+        local_dir=core_ingest_config.thumbnail_doc_base_dir,
+        snapshot_type='thumbnails',
+        max_threads=core_ingest_config.max_threads
+    )
+
