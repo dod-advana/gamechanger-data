@@ -12,10 +12,10 @@ from urllib3.exceptions import ProtocolError
 
 from dataPipelines.gc_eda_pipeline.conf import Conf
 from dataPipelines.gc_eda_pipeline.audit.audit import audit_complete
-from dataPipelines.gc_eda_pipeline.metadata.generate_metadata_file import generate_metadata_data, generate_metadata_file
+from dataPipelines.gc_eda_pipeline.metadata.generate_metadata_file import generate_metadata_data
 from dataPipelines.gc_eda_pipeline.doc_extractor.doc_extractor import ocr_process, extract_text
 from dataPipelines.gc_eda_pipeline.utils.eda_utils import read_extension_conf
-from dataPipelines.gc_eda_pipeline.indexer.indexer import index, index_data, create_index, get_es_publisher
+from dataPipelines.gc_eda_pipeline.indexer.indexer import index_data, create_index, get_es_publisher
 from dataPipelines.gc_eda_pipeline.utils.eda_job_type import EDAJobType
 from dataPipelines.gc_eda_pipeline.audit.audit import audit_record_new
 
@@ -167,8 +167,6 @@ def ingestion(staging_folder: str, aws_s3_input_pdf_prefix: str, max_workers: in
         print(f"Number files Processed {number_file_processed}")
         print(f"Number files Failed {number_file_failed}")
         print(f"Time to generate file list from S3 {round(end_file_list-start_file_list, 2)} secs")
-        # print(f"Time to index into Elasticsearch: {round(float(end_bulk_index - start_bulk_index), 2)}")
-        # print(f"Index rate {round(number_file_processed/(end_bulk_index - start_bulk_index), 2)} files/sec")
         print(f"Process file rate {round(number_file_processed/(end - start), 2)} files/sec)")
         print(f'Total time -- It took {end - start} seconds!')
         print("--------------------------------------")
@@ -253,15 +251,6 @@ def process_doc(file: str, staging_folder: Union[str, Path], data_conf_filter: d
                     index_data(publish_es=publish_es, publish_audit=publish_audit, audit_rec=audit_rec,
                                audit_id=audit_id, parsed_pdf_file_data=raw_docparser_data, metadata_file_data=md_data, ex_file_s3_path=ex_file_s3_path)
 
-                    # combine_metadata_docparser_data(publish_es=publish_es, staging_folder=staging_folder,
-                    #                                 md_file_local_path=md_file_local_path,
-                    #                                 doc_file_local_path=raw_docparser_data,
-                    #                                 index_file_local_path="", record_id=record_id_encode,
-                    #                                 md_data=md_data)
-
-                    # index_data(publish_es: EDSConfiguredElasticsearchPublisher, metadata_file_data: str,
-                    #                parsed_pdf_file_data: str, ex_file_s3_path: str, audit_id: str,
-                    #                audit_rec: dict, publish_audit: EDSConfiguredElasticsearchPublisher):
                 else:
                     audit_rec.update({"filename_s": filename, "eda_path_s": file,
                                       "metadata_type_s": "none", "is_metadata_suc_b": "false",
@@ -282,31 +271,6 @@ def process_doc(file: str, staging_folder: Union[str, Path], data_conf_filter: d
 
         return {'filename': filename, "status": "completed", "info": "update-metadata"}
 
-        # # Generate metadata file
-        # md_file_s3_path, md_file_local_path = generate_metadata_file(staging_folder=staging_folder,
-        #                                                              data_conf_filter=data_conf_filter, file=file,
-        #                                                              filename=filename,
-        #                                                              aws_s3_output_pdf_prefix=aws_s3_output_pdf_prefix,
-        #                                                              audit_id=audit_id, audit_rec=audit_rec,
-        #                                                              publish_audit=publish_audit)
-        #
-        # # Docparsered json
-        # ex_file_local_path = staging_folder + "/json/" + path + "/" + filename_without_ext + ".json"
-        # ex_file_s3_path = aws_s3_json_prefix + "/" + path + "/" + filename_without_ext + ".json"
-        # Conf.s3_utils.download_file(file=ex_file_local_path, object_path=ex_file_s3_path)
-        #
-        # # Index into Elasticsearch
-        # index_output_file_path = index_data(staging_folder=staging_folder, publish_es=publish_es, path=path,
-        #                                filename_without_ext=filename_without_ext, md_file_local_path=md_file_local_path,
-        #                                ex_file_local_path=ex_file_local_path, ex_file_s3_path=ex_file_s3_path,
-        #                                audit_id=audit_id, audit_rec=audit_rec, publish_audit=publish_audit)
-        #
-        # # Delete for local file system to free up space.
-        # files_delete = [md_file_local_path, ex_file_local_path, index_output_file_path]
-        # cleanup_record(files_delete)
-        #
-        # return {'filename': filename, "status": "completed", "info": "update-metadata"}
-
     elif process_file and process_type == EDAJobType.UPDATE_METADATA_SKIP_NEW:
         if is_process_already:
             return {'filename': filename, "status": "already_processed", "info": "File might be incorrect type or corrupted"}
@@ -322,14 +286,6 @@ def process_doc(file: str, staging_folder: Union[str, Path], data_conf_filter: d
                                          aws_s3_output_pdf_prefix=aws_s3_output_pdf_prefix,
                                          audit_id=audit_id, audit_rec=audit_rec,
                                          publish_audit=publish_audit)
-
-        # md_file_s3_path, md_file_local_path = generate_metadata_file(staging_folder=staging_folder,
-        #                                                              data_conf_filter=data_conf_filter, file=file,
-        #                                                              filename=filename,
-        #                                                              aws_s3_output_pdf_prefix=aws_s3_output_pdf_prefix,
-        #                                                              audit_id=audit_id, audit_rec=audit_rec,
-        #                                                              publish_audit=publish_audit)
-        # files_delete.append(md_file_local_path)
 
         # Download PDF file/OCR PDF if need
         is_pdf_file, pdf_file_local_path, pdf_file_s3_path = ocr_process(staging_folder=staging_folder, file=file,
@@ -352,21 +308,10 @@ def process_doc(file: str, staging_folder: Union[str, Path], data_conf_filter: d
                 # Index into Elasticsearch
                 with open(ex_file_local_path) as docparser_file:
                     raw_docparser_data = json.load(docparser_file)
-                print("**********************")
-                print(ex_file_s3_path)
-                print("**********************")
+
                 index_data(publish_es=publish_es, publish_audit=publish_audit, audit_rec=audit_rec,
                            audit_id=audit_id, parsed_pdf_file_data=raw_docparser_data, metadata_file_data=md_data, ex_file_s3_path=ex_file_s3_path)
 
-
-                # index_output_file_path = index(staging_folder=staging_folder, publish_es=publish_es, path=path,
-                #                                filename_without_ext=filename_without_ext,
-                #                                md_file_local_path=md_file_local_path, ex_file_local_path=ex_file_local_path,
-                #                                ex_file_s3_path=ex_file_s3_path, audit_id=audit_id, audit_rec=audit_rec,
-                #                                publish_audit=publish_audit)
-                #
-
-                # files_delete.append(index_output_file_path)
                 # Delete for local file system to free up space.
                 cleanup_record(files_delete)
                 return {'filename': filename, "status": "completed", "info": "new record"}

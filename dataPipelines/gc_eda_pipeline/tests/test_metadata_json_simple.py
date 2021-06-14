@@ -1,7 +1,7 @@
 import os
 import json
 import click
-from dataPipelines.gc_eda_pipeline.metadata.metadata_json_simple import metadata_extraction
+from dataPipelines.gc_eda_pipeline.metadata.metadata_json import metadata_extraction
 
 
 @click.command()

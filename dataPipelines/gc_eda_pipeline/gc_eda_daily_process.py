@@ -91,6 +91,7 @@ def run(staging_folder: str,  max_workers: int, workers_ocr: int, eda_job_type: 
         if conn is not None:
             conn.close()
 
+
 if __name__ == '__main__':
     run()
 

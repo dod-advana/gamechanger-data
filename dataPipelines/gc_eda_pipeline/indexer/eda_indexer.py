@@ -58,7 +58,6 @@ class EDSConfiguredElasticsearchPublisher(ConfiguredElasticsearchPublisher):
             print(e)
             print("------------------  Failed to index files. --------------------------")
 
-
     def index_data(self, data_json: dict, record_id: str):
         record_id_encode = hashlib.sha256(record_id.encode()).hexdigest()
         # print("___-------------------------")
@@ -100,45 +99,6 @@ class EDSConfiguredElasticsearchPublisher(ConfiguredElasticsearchPublisher):
             print(error_message)
 
         return is_suc
-
-    def index_json(self, path_json: str, record_id: str) -> bool:
-        # print(f"record_id :: {record_id}")
-        record_id_encode = hashlib.sha256(record_id.encode())
-        with open(path_json, 'r', encoding='utf-8') as f:
-            json_data = json.load(f)
-            if 'text' in json_data:
-                del json_data['text']
-            if 'paragraphs' in json_data:
-                del json_data['paragraphs']
-            if 'raw_text' in json_data:
-                del json_data['raw_text']
-            if 'pages' in json_data:
-                pages = json_data['pages']
-                for page in pages:
-                    if 'p_text' in page:
-                        del page['p_text']
-
-            is_suc = False
-            counter = 0
-            error_message = None
-            while not is_suc and counter < 10:
-                try:
-                    error_message = None
-                    response = self.es.index(index=self.index_name, id=record_id_encode.hexdigest(), body=json_data)
-                    return True
-                except TransportError as te:
-                    error_message = f"\nFailed -- Unexpected Elasticsearch Transport Exception: {path_json} {record_id} {record_id_encode.hexdigest()}\n"
-                    time.sleep(2)
-                    counter = counter + 1
-                except ElasticsearchException as ee:
-                    error_message = f"\nFailed -- Unexpected Elasticsearch Exception: {path_json} {record_id} {record_id_encode.hexdigest()}\n"
-                    time.sleep(2)
-                    print(ee)
-                    counter = counter + 1
-            if error_message is not None:
-                print(error_message)
-
-            return is_suc
 
     def insert_record(self, json_record: dict, id_record: str):
         is_suc = False
