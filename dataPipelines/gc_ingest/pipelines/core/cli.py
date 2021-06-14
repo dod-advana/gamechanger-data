@@ -228,7 +228,7 @@ def core_update_thumbnails(core_ingest_config: CoreIngestConfig, **kwargs):
         max_threads=core_ingest_config.max_threads
     )
 
-    if not next((p for p in core_ingest_config.parsed_doc_base_dir.iterdir() if p.is_file()), None):
+    if not next((p for p in core_ingest_config.raw_doc_base_dir.iterdir() if p.is_file()), None):
         announce("[WARNING] No files were found for processing, exiting pipeline.")
         exit(1)
 
