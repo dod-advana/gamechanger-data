@@ -12,19 +12,18 @@ class ThumbnailsCreator:
         self.output_directory = Path(output_directory).absolute()
 
     def generate_thumbnails(self):
-        print('Generating thumbnails')
+        print('\nGenerating Thumbnails\n')
         p = self.input_directory
         self.output_directory.mkdir(exist_ok=True)
         pdf_files = [x for x in p.glob('*.pdf')]
         for file_path in pdf_files:
-            file_title = file_path.name
             doc = fitz.open(str(file_path))
             page = doc.loadPage(0)  # number of page
             pix = page.getPixmap()
             out_dir = str(self.output_directory)
             if out_dir[-1] != '/':
                 out_dir += '/'
-            output = out_dir + file_title[:-4] + ".png"
+            output = Path(out_dir, file_path.with_suffix('.png').name)
             pix.writePNG(str(output))
 
             print("wrote PNG: ", output)
