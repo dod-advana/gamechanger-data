@@ -47,9 +47,10 @@ def vendor_org_hierarchy(vendor_cage:str, dodacc_map: dict, data_conf_filter: di
             for col in col_names:
 
                 if col == "dodaac_ric":
-                    val = row[col]
-                    val = dodacc_map.get(val)
-                    items["dodaac" + postfix_es] = val
+                    key_value = row[col]
+                    val = dodacc_map.get(key_value)
+                    items["dodaac_name" + postfix_es] = val
+                    items["dodaac" + postfix_es] = key_value
                 else:
                     val = row[col]
                     if val:

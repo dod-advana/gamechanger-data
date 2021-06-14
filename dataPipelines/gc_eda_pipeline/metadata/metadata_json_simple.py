@@ -18,6 +18,8 @@ from urllib3.exceptions import ProtocolError
 def metadata_extraction(staging_folder: Union[str, Path], filename_input: str, data_conf_filter: dict,
                         aws_s3_output_pdf_prefix: str):
 
+
+    print(f"%%%%%%%%%%%%%%%  {filename_input}")
     postfix_es = data_conf_filter['eda']['postfix_es']
 
     path, filename = os.path.split(filename_input)

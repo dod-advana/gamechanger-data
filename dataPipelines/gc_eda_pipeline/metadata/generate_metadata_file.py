@@ -10,8 +10,8 @@ def generate_metadata_data(staging_folder: str, data_conf_filter: dict, file: st
                            aws_s3_output_pdf_prefix: str, audit_id: str, audit_rec: dict,
                            publish_audit: EDSConfiguredElasticsearchPublisher):
 
-    md_file_local_path = staging_folder + "/pdf/" + file + ".metadata"
-    md_file_s3_path = aws_s3_output_pdf_prefix + "/" + file + ".metadata"
+    # md_file_local_path = staging_folder + "/pdf/" + file + ".metadata"
+    # md_file_s3_path = aws_s3_output_pdf_prefix + "/" + file + ".metadata"
 
     pds_start = time.time()
 
@@ -24,13 +24,13 @@ def generate_metadata_data(staging_folder: str, data_conf_filter: dict, file: st
     pds_end = time.time()
     time_md = pds_end - pds_start
 
-    audit_rec.update({"filename_s": filename, "eda_path_s": file, "metadata_path_s": md_file_s3_path,
+    audit_rec.update({"filename_s": filename, "eda_path_s": file,
                       "metadata_type_s": md_type, "is_metadata_suc_b": is_md_successful,
                       "is_supplementary_file_missing": is_supplementary_file_missing,
                       "metadata_time_f": round(time_md, 4), "modified_date_dt": int(time.time())})
     audit_record_new(audit_id=audit_id, publisher=publish_audit, audit_record=audit_rec)
 
-    return md_file_s3_path, md_file_local_path, md_data
+    return md_data
 
 
 def generate_metadata_file(staging_folder: str, data_conf_filter: dict, file: str, filename: str,

@@ -61,6 +61,32 @@ def extract_text(staging_folder: str, pdf_file_local_path: str, path: str, filen
     return ex_file_local_path, ex_file_s3_path, is_extract_suc
 
 
+
+
+def extract_text(staging_folder: str, pdf_file_local_path: str, path: str, filename_without_ext: str,
+                 aws_s3_json_prefix: str, audit_id: str, audit_rec: dict,
+                 publish_audit: EDSConfiguredElasticsearchPublisher):
+    doc_time_start = time.time()
+    ex_file_local_path = staging_folder + "/json/" + path + "/" + filename_without_ext + ".json"
+    ex_file_s3_path = aws_s3_json_prefix + "/" + path + "/" + filename_without_ext + ".json"
+
+    docparser(metadata_file_path=None, saved_file=pdf_file_local_path, staging_folder=staging_folder, path=path)
+    if os.path.exists(ex_file_local_path):
+        Conf.s3_utils.upload_file(file=ex_file_local_path,  object_name=ex_file_s3_path)
+        is_extract_suc = True
+    else:
+        is_extract_suc = False
+
+    doc_time_end = time.time()
+    time_dp = doc_time_end - doc_time_start
+
+    audit_rec.update({"json_path_s": ex_file_s3_path, "is_docparser_b": is_extract_suc,
+                      "docparser_time_f": round(time_dp, 4), "modified_date_dt": int(time.time())})
+    audit_record_new(audit_id=audit_id, publisher=publish_audit, audit_record=audit_rec)
+
+    return ex_file_local_path, ex_file_s3_path, is_extract_suc
+
+
 def docparser(metadata_file_path: str, saved_file: Union[str, Path], staging_folder: Union[str, Path], path: str) \
         -> bool:
     """

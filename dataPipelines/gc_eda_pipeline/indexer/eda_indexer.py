@@ -60,10 +60,11 @@ class EDSConfiguredElasticsearchPublisher(ConfiguredElasticsearchPublisher):
 
 
     def index_data(self, data_json: dict, record_id: str):
-        # record_id_encode = hashlib.sha256(record_id.encode())
+        record_id_encode = hashlib.sha256(record_id.encode()).hexdigest()
         # print("___-------------------------")
         # print(f"data_json  {type(data_json)}")
         # print("___-------------------------")
+        # data_json["_id"] = record_id_encode
         json_data = data_json
         if 'text' in json_data:
             del json_data['text']
@@ -83,7 +84,7 @@ class EDSConfiguredElasticsearchPublisher(ConfiguredElasticsearchPublisher):
         while not is_suc and counter < 10:
             try:
                 error_message = None
-                response = self.es.index(index=self.index_name, id=record_id, body=json_data)
+                response = self.es.index(index=self.index_name, id=record_id_encode, body=json_data)
                 return True
             except TransportError as te:
                 print(te)

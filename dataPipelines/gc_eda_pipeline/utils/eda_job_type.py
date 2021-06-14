@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class EDAJobType(Enum):
     """
     :param NORMAL: Process New All Documents. If document as already been processed it will skip
@@ -11,4 +12,3 @@ class EDAJobType(Enum):
     UPDATE_METADATA = 'update_metadata'
     UPDATE_METADATA_SKIP_NEW = 'update_metadata_skip_new'
     REPROCESS = 'reprocess'
-    RE_INDEX = 're_index'
