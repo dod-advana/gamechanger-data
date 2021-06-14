@@ -18,7 +18,7 @@ boto==2.49.0
 boto3==1.13.2
 botocore==1.16.2
 cachetools==4.1.0
-catalogue==1.0.0
+catalogue==2.0.4
 certifi==2020.12.5
 cffi==1.14.0
 chardet==3.0.4
@@ -30,6 +30,7 @@ coloredlogs==14.0
 configobj==5.0.6
 configparser==5.0.0
 constantly==15.1.0
+contextvars==2.4
 corenlp==0.0.14
 corenlp-protobuf==3.8.0
 coverage==5.3
@@ -49,8 +50,9 @@ dotmap==1.3.0
 elastic-apm==5.9.0
 elasticsearch==7.9.1
 eli5==0.10.1
-en-core-web-lg @ https://github.com/explosion/spacy-models/releases/download/en_core_web_lg-2.2.5/en_core_web_lg-2.2.5.tar.gz
-en-core-web-md @ https://github.com/explosion/spacy-models/releases/download/en_core_web_md-2.2.5/en_core_web_md-2.2.5.tar.gz
+en-core-web-lg @ https://github.com/explosion/spacy-models/releases/download/en_core_web_lg-3.0.0/en_core_web_lg-3.0.0.tar.gz
+en-core-web-md @ https://github.com/explosion/spacy-models/releases/download/en_core_web_md-3.0.0/en_core_web_md-3.0.0.tar.gz
+en-core-web-sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.0.0/en_core_web_sm-3.0.0.tar.gz
 english==2020.7.0
 entrypoints==0.3
 etelemetry==0.2.1
@@ -91,6 +93,7 @@ hyperlink==19.0.0
 idna==2.9
 image==1.5.32
 img2pdf==0.4.0
+immutables==0.15
 importlib-metadata==1.6.0
 importlib-resources==3.3.0
 incremental==17.5.0
@@ -132,6 +135,7 @@ packaging==20.4
 pandas==1.0.4
 pansi==2020.7.3
 parsel==1.6.0
+pathy==0.5.2
 pdfminer.six==20201018
 pikepdf==2.0.0
 Pillow==8.0.1
@@ -152,7 +156,7 @@ pyasn1==0.4.8
 pyasn1-modules==0.2.8
 pybind11==2.6.2
 pycparser==2.20
-pydantic==1.7.2
+pydantic==1.7.4
 PyDispatcher==2.0.5
 pydot==1.4.1
 pydotplus==2.0.2
@@ -195,16 +199,17 @@ service-identity==18.1.0
 simplejson==3.17.0
 six==1.15.0
 sklearn==0.0
-smart-open==2.0.0
+smart-open==3.0.0
 smmap==3.0.4
 sortedcontainers==2.2.2
 soupsieve==2.0.1
-spacy==2.2.4
+spacy==3.0.6
+spacy-legacy==3.0.5
 spicy==0.16.0
 SQLAlchemy==1.3.13
 SQLAlchemy-Utils==0.36.8
 sqlparse==0.4.1
-srsly==1.0.2
+srsly==2.4.1
 starlette==0.13.6
 syntok==1.3.1
 tabulate==0.8.7
@@ -214,7 +219,7 @@ tensorflow==2.4.1
 tensorflow-estimator==2.4.0
 termcolor==1.1.0
 textblob==0.15.3
-thinc==7.4.0
+thinc==8.0.4
 threadpoolctl==2.1.0
 tika==1.24
 tokenizers==0.9.4
@@ -229,6 +234,7 @@ transformers==4.1.1
 Twisted==20.3.0
 txtai==2.0.0
 typed-ast==1.4.1
+typer==0.3.2
 typing-extensions==3.7.4.3
 tzlocal==2.1
 urllib3==1.24.3
@@ -236,7 +242,7 @@ uvicorn==0.13.3
 uvloop==0.14.0
 virtualenv==20.1.0
 w3lib==1.22.0
-wasabi==0.6.0
+wasabi==0.8.2
 wcwidth==0.2.3
 webencodings==0.5.1
 websocket-client==0.57.0
