@@ -1,7 +1,8 @@
 import click
-
+from pathlib import Path
 from .utils import ThumbnailsCreator
 import typing as t
+import os
 
 ####
 # CLI
@@ -14,10 +15,15 @@ def cli():
 
 @cli.command(name='process')
 @click.option(
-    '-f',
-    '--file-name',
-    help="Name of the file you're extracting the thumbnail from",
-    type=str,
+    '-i',
+    '--input-directory',
+    help="Input directory containing the PDFs you want to extract the thumbnails from",
+    type=click.Path(
+        dir_okay=True,
+        file_okay=False,
+        exists=True,
+        resolve_path=True
+    ),
     required=True,
 )
 @click.option(
@@ -25,16 +31,18 @@ def cli():
     '--output-directory',
     help="Path for the output directory",
     required=False,
-    type=str,
-    default="./"
+    type=click.Path(dir_okay=True, resolve_path=True),
+    default=os.path.abspath('.')
 )
 def process(
-        file_name: str,
-        output_directory: t.Optional[str]) -> None:
+        input_directory: str,
+        output_directory: str) -> None:
     """Run Thumbnail Retrieval"""
+    input_directory = Path(input_directory).resolve()
+    output_directory = Path(output_directory).resolve()
     png_generator = ThumbnailsCreator(
-        file_name=file_name,
+        input_directory=input_directory,
         output_directory=output_directory
     )
-    result = png_generator.generate_png()
+    result = png_generator.generate_thumbnails()
 
