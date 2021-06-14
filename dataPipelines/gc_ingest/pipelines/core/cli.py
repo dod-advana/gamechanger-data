@@ -132,6 +132,7 @@ def core_local_ingest(core_ingest_config: CoreIngestConfig, **kwargs):
     CoreIngestSteps.update_crawler_status_in_progress(lic)
     CoreIngestSteps.backup_db(lic)
     CoreIngestSteps.backup_snapshots(lic)
+    CoreIngestSteps.update_thumbnails(lic)
     CoreIngestSteps.parse_and_ocr(lic)
     CoreIngestSteps.load_files(lic)
     CoreIngestSteps.update_s3_snapshots(lic)
