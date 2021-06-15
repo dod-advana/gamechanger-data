@@ -176,6 +176,22 @@ def core_reparse(core_ingest_config: CoreIngestConfig, **kwargs):
         max_threads=core_ingest_config.max_threads
     )
 
+    announce('Pushing up raw files to s3 snapshot location ...')
+    if core_ingest_config.force_ocr:
+        core_ingest_config.snapshot_manager.update_current_snapshot_from_disk(
+            local_dir=core_ingest_config.raw_doc_base_dir,
+            snapshot_type='raw',
+            max_threads=core_ingest_config.max_threads
+        )
+
+    if not core_ingest_config.skip_thumbnail_generation:
+        announce('Pushing up thumbnails to s3 snapshot location ...')
+        core_ingest_config.snapshot_manager.update_current_snapshot_from_disk(
+            local_dir=core_ingest_config.thumbnail_doc_base_dir,
+            snapshot_type='thumbnails',
+            max_threads=core_ingest_config.max_threads
+        )
+
 
 @core_ingest_cli.command('reindex')
 @pass_core_ingest_config
