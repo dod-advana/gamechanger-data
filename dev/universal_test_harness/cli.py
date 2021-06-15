@@ -54,13 +54,16 @@ def setup(ctx: click.Context, test_dir: str, force: bool):
 
     raw_dir_p = Path(test_dir_p, 'raw')
     parsed_dir_p = Path(test_dir_p, 'parsed')
+    thumbnail_dir_p = Path(test_dir_p, 'thumbnails')
     job_dir_p = Path(test_dir_p, 'job')
 
     test_dir_p.mkdir(exist_ok=True)
     raw_dir_p.mkdir(exist_ok=True)
     parsed_dir_p.mkdir(exist_ok=True)
+    thumbnail_dir_p.mkdir(exist_ok=True)
     job_dir_p.mkdir(exist_ok=True)
 
     for d in [p for p in Path(Config.CRAWLER_OUTPUT_PATH).iterdir() if p.is_dir()]:
         shutil.copytree(str(d), str(Path(raw_dir_p, d.name)))
         Path(parsed_dir_p, d.name).mkdir(exist_ok=True)
+        Path(thumbnail_dir_p, d.name).mkdir(exist_ok=True)

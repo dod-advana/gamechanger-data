@@ -17,6 +17,7 @@ from enum import Enum
 class SnapshotType(Enum):
     RAW = 'raw'
     PARSED = 'parsed'
+    THUMBNAIL = 'thumbnails'
 
 
 class SnapshotManager:
@@ -43,7 +44,8 @@ class SnapshotManager:
         snapshot_type = SnapshotType(snapshot_type)
         return {
             SnapshotType.RAW: self.s3u.path_join(self.current_doc_snapshot_prefix, 'pdf/'),
-            SnapshotType.PARSED: self.s3u.path_join(self.current_doc_snapshot_prefix, 'json/')
+            SnapshotType.PARSED: self.s3u.path_join(self.current_doc_snapshot_prefix, 'json/'),
+            SnapshotType.THUMBNAIL: self.s3u.path_join(self.current_doc_snapshot_prefix, 'thumbnails/')
         }[snapshot_type]
 
     def get_backup_prefix(self, snapshot_type: t.Union[SnapshotType, str]) -> str:
@@ -51,7 +53,8 @@ class SnapshotManager:
         snapshot_type = SnapshotType(snapshot_type)
         return {
             SnapshotType.RAW: self.s3u.path_join(self.backup_doc_snapshot_prefix, 'pdf/'),
-            SnapshotType.PARSED: self.s3u.path_join(self.backup_doc_snapshot_prefix, 'json/')
+            SnapshotType.PARSED: self.s3u.path_join(self.backup_doc_snapshot_prefix, 'json/'),
+            SnapshotType.THUMBNAIL: self.s3u.path_join(self.backup_doc_snapshot_prefix, 'thumbnails/')
         }[snapshot_type]
 
     def get_backup_prefix_for_ts(self, snapshot_type: t.Union[SnapshotType, str], ts: t.Union[dt.datetime, str]) -> str:

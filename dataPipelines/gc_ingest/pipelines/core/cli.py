@@ -105,6 +105,7 @@ def core_checkpoint_ingest(core_ingest_config: CoreIngestConfig, **kwargs):
     CoreIngestSteps.update_crawler_status_in_progress(cig)
     CoreIngestSteps.backup_db(cig)
     CoreIngestSteps.backup_snapshots(cig)
+    CoreIngestSteps.update_thumbnails(cig)
     CoreIngestSteps.parse_and_ocr(cig)
     CoreIngestSteps.load_files(cig)
     CoreIngestSteps.update_s3_snapshots(cig)
@@ -132,6 +133,7 @@ def core_local_ingest(core_ingest_config: CoreIngestConfig, **kwargs):
     CoreIngestSteps.update_crawler_status_in_progress(lic)
     CoreIngestSteps.backup_db(lic)
     CoreIngestSteps.backup_snapshots(lic)
+    CoreIngestSteps.update_thumbnails(lic)
     CoreIngestSteps.parse_and_ocr(lic)
     CoreIngestSteps.load_files(lic)
     CoreIngestSteps.update_s3_snapshots(lic)
@@ -213,4 +215,31 @@ def core_update_neo4j(core_ingest_config: CoreIngestConfig, **kwargs):
 
     announce('Updating neo4j ...')
     CoreIngestSteps.update_neo4j(core_ingest_config)
+
+    
+@core_ingest_cli.command('update-thumbnails')
+@pass_core_ingest_config
+def core_update_thumbnails(core_ingest_config: CoreIngestConfig, **kwargs):
+    """Pipeline for pulling down pdfs/metadata from s3 and updating thumbnails"""
+    announce('Pulling down parsed snapshot files for updating neo4j ...')
+    core_ingest_config.snapshot_manager.pull_current_snapshot_to_disk(
+        local_dir=core_ingest_config.raw_doc_base_dir,
+        snapshot_type='raw',
+        using_db=False,
+        max_threads=core_ingest_config.max_threads
+    )
+
+    if not next((p for p in core_ingest_config.raw_doc_base_dir.iterdir() if p.is_file()), None):
+        announce("[WARNING] No files were found for processing, exiting pipeline.")
+        exit(1)
+
+    announce('Updating thumbnails ...')
+    CoreIngestSteps.update_thumbnails(core_ingest_config)
+
+    announce('Pushing up thumbnails to s3 snapshot location ...')
+    core_ingest_config.snapshot_manager.update_current_snapshot_from_disk(
+        local_dir=core_ingest_config.thumbnail_doc_base_dir,
+        snapshot_type='thumbnails',
+        max_threads=core_ingest_config.max_threads
+    )
 

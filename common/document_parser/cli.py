@@ -68,7 +68,7 @@ def pdf_to_json(
             multiprocess=multiprocess,
             ocr_missing_doc=ocr_missing_doc,
             force_ocr=force_ocr,
-            num_ocr_threads=num_ocr_threads,
+            num_ocr_threads=num_ocr_threads
         )
     if verify:
         verified = validators.verify(destination)
@@ -178,7 +178,7 @@ def pdf_to_json_cmd_wrapper(
         multiprocess=multiprocess,
         ocr_missing_doc=ocr_missing_doc,
         force_ocr=force_ocr,
-        num_ocr_threads=num_ocr_threads,
+        num_ocr_threads=num_ocr_threads
     )
 
 

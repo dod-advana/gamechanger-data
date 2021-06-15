@@ -51,7 +51,8 @@ class CoreIngestSteps(PipelineSteps):
             parsed_dir=c.parsed_doc_base_dir,
             ingest_ts=c.batch_timestamp,
             update_s3=True,
-            update_db=not c.skip_db_update
+            update_db=not c.skip_db_update,
+            thumbnail_dir=c.thumbnail_doc_base_dir
         )
 
     @staticmethod
@@ -74,6 +75,12 @@ class CoreIngestSteps(PipelineSteps):
         c.snapshot_manager.update_current_snapshot_from_disk(
             local_dir=c.parsed_doc_base_dir,
             snapshot_type=SnapshotType.PARSED,
+            replace=False,
+            max_threads=c.max_threads
+        )
+        c.snapshot_manager.update_current_snapshot_from_disk(
+            local_dir=c.thumbnail_doc_base_dir,
+            snapshot_type=SnapshotType.THUMBNAIL,
             replace=False,
             max_threads=c.max_threads
         )
@@ -155,3 +162,13 @@ class CoreIngestSteps(PipelineSteps):
         c.crawler_status_tracker.update_crawler_status(status="Ingest Complete",
                                                        timestamp=datetime.now(),
                                                        update_db=not c.skip_db_update)
+
+    @staticmethod
+    def update_thumbnails(c: CoreIngestConfig) -> None:
+
+        if c.skip_thumbnail_generation:
+            announce("Skipping Thumbnails update [flag set] ...")
+            return
+
+        announce("Updating thumbnails ...")
+        c.thumbnail_job_manager.generate_thumbnails()
