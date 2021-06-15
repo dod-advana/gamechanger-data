@@ -19,24 +19,14 @@
                     "gc_stop": {
                         "type": "stop",
                         "stopwords":  []
-                    },
-                    "english_stemmer": {
-                        "type": "stemmer",
-                        "language": "english"
-                    },
-                    "english_possessive_stemmer": {
-                        "type": "stemmer",
-                        "language": "possessive_english"
                     }
                 },
                 "analyzer": {
                     "gc_english": {
                         "tokenizer":  "standard",
                         "filter": [
-                            "english_possessive_stemmer",
                             "lowercase",
-                            "gc_stop",
-                            "english_stemmer"
+                            "gc_stop"
                         ]
                     }
                 }
