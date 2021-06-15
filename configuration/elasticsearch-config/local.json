@@ -237,7 +237,37 @@
         "doc_type": {
           "type": "keyword",
           "store": true,
-          "fields" : {
+          "fields": {
+            "search": {
+              "type": "keyword",
+              "normalizer": "lowercase_normalizer"
+            }
+          }
+        },
+        "display_org_s": {
+          "type": "keyword",
+          "store": true,
+          "fields": {
+            "search": {
+              "type": "keyword",
+              "normalizer": "lowercase_normalizer"
+            }
+          }
+        },
+        "display_doc_type_s": {
+          "type": "keyword",
+          "store": true,
+          "fields": {
+            "search": {
+              "type": "keyword",
+              "normalizer": "lowercase_normalizer"
+            }
+          }
+        },
+        "display_title_s": {
+          "type": "keyword",
+          "store": true,
+          "fields": {
             "search": {
               "type": "keyword",
               "normalizer": "lowercase_normalizer"
@@ -246,7 +276,13 @@
         },
         "doc_num": {
           "type": "keyword",
-          "store": true
+          "store": true,
+          "fields": {
+            "search": {
+              "type": "keyword",
+              "normalizer": "lowercase_normalizer"
+            }
+          }
         },
         "ref_list": {
           "type": "keyword",
@@ -331,6 +367,17 @@
             "par_inc_count": {
               "type": "long",
               "store": true
+            },
+            "par_raw_text_t": {
+              "type": "text",
+              "store": true,
+              "analyzer": "standard",
+              "fields": {
+                "gc_english": {
+                  "type": "text",
+                  "analyzer": "gc_english"
+                }
+              }
             }
           }
         }
