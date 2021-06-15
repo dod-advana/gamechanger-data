@@ -105,6 +105,7 @@ def core_checkpoint_ingest(core_ingest_config: CoreIngestConfig, **kwargs):
     CoreIngestSteps.update_crawler_status_in_progress(cig)
     CoreIngestSteps.backup_db(cig)
     CoreIngestSteps.backup_snapshots(cig)
+    CoreIngestSteps.update_thumbnails(cig)
     CoreIngestSteps.parse_and_ocr(cig)
     CoreIngestSteps.load_files(cig)
     CoreIngestSteps.update_s3_snapshots(cig)

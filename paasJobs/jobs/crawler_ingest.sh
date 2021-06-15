@@ -24,6 +24,7 @@ function run_core_ingest() {
   local skip_db_backup="$SKIP_DB_BACKUP"
   local skip_db_update="$SKIP_DB_UPDATE"
   local skip_revocation_update="$SKIP_REVOCATION_UPDATE"
+  local skip_thumbnail_generation="$SKIP_THUMBNAIL_GENERATION"
   local force_ocr="$FORCE_OCR"
 
   local max_ocr_threads="${MAX_OCR_THREADS_PER_FILE:-4}"
@@ -40,6 +41,7 @@ function run_core_ingest() {
     --skip-snapshot-backup="$skip_snapshot_backup" \
     --skip-db-backup="$skip_db_backup" \
     --skip-db-update="$skip_db_update" \
+    --skip-thumbnail-generation="$skip_thumbnail_generation" \
     --force-ocr="$force_ocr" \
     --current-snapshot-prefix="$current_snapshot_prefix" \
     --backup-snapshot-prefix="$backup_snapshot_prefix" \
