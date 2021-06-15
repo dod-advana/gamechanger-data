@@ -162,6 +162,7 @@ def core_reparse(core_ingest_config: CoreIngestConfig, **kwargs):
         announce("[WARNING] No files were found for processing, exiting pipeline.")
         exit(1)
     CoreIngestSteps.backup_snapshots(core_ingest_config)
+    CoreIngestSteps.update_thumbnails(core_ingest_config)
     CoreIngestSteps.parse_and_ocr(core_ingest_config)
 
     CoreIngestSteps.update_es(core_ingest_config)
