@@ -75,8 +75,8 @@ def run(staging_folder: str, aws_s3_input_pdf_prefix: str,
 
 def ingestion(staging_folder: str, aws_s3_input_pdf_prefix: str, max_workers: int, workers_ocr: int, eda_job_type: str, loop_number: int):
     print("Starting Gamechanger EDA Symphony Pipeline")
-    os.environ["AWS_METADATA_SERVICE_TIMEOUT"] = "10"
-    os.environ["AWS_METADATA_SERVICE_NUM_ATTEMPTS"] = "10"
+    os.environ["AWS_METADATA_SERVICE_TIMEOUT"] = "20"
+    os.environ["AWS_METADATA_SERVICE_NUM_ATTEMPTS"] = "40"
 
     start_app = time.time()
     # Load Extensions configuration files.

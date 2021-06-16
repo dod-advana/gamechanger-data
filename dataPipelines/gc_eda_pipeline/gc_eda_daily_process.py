@@ -40,7 +40,7 @@ from dataPipelines.gc_eda_pipeline.utils.eda_job_type import EDAJobType
     default=EDAJobType.NORMAL.value
 )
 def run(staging_folder: str,  max_workers: int, workers_ocr: int, eda_job_type: str):
-    print("Daily -- CronJob Process")
+    print("Daily -- CronJob Process ---")
 
     # Load Extensions configuration files.
     data_conf_filter = read_extension_conf()
@@ -49,6 +49,7 @@ def run(staging_folder: str,  max_workers: int, workers_ocr: int, eda_job_type: 
     sql_is_in_process_state = data_conf_filter['eda']['sql_is_in_process_state']
     sql_set_status_to_processing = data_conf_filter['eda']['sql_set_status_to_processing']
     sql_set_status_to_completed = data_conf_filter['eda']['sql_set_status_to_completed']
+    sql_insert_process_status = data_conf_filter['eda']['sql_insert_process_status']
 
     conn = None
     try:
@@ -83,7 +84,12 @@ def run(staging_folder: str,  max_workers: int, workers_ocr: int, eda_job_type: 
             ingestion(staging_folder=staging_folder, aws_s3_input_pdf_prefix=process_directory, max_workers=max_workers,
                       eda_job_type=eda_job_type, workers_ocr=workers_ocr, loop_number=50000)
 
+            # Update Daily EDA Table
             cursor.execute(sql_set_status_to_completed, (audit_moved_loc, output_path))
+            conn.commit()
+
+            # Update
+            cursor.execute(sql_insert_process_status, (process_directory, 'Completed'))
             conn.commit()
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)

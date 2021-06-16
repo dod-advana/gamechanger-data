@@ -1,7 +1,7 @@
-import json
 from dataPipelines.gc_eda_pipeline.metadata.metadata_util import format_supplementary_data
 from dataPipelines.gc_eda_pipeline.metadata.vendor_org_hierarchy import vendor_org_hierarchy
 from dataPipelines.gc_eda_pipeline.metadata.dodaac_org_type_metadata import dodaac_org_type_metadata
+
 
 def extract_pds(data_conf_filter: dict, data: dict, extensions_metadata: dict):
     dodaacs_data = {}
@@ -69,6 +69,10 @@ def extract_pds(data_conf_filter: dict, data: dict, extensions_metadata: dict):
     naics = populate_naics(data)
     if naics:
         extracted_data_eda_n["naics_eda_ext"] = naics
+
+    header_details_id = popluate_line_item_details(data)
+    if header_details_id:
+        extracted_data_eda_n["header_details_id_eda_ext"] = header_details_id
 
     vendor_org_hierarchy_extensions_metadata = vendor_org_hierarchy(vendor_cage=vendor_cage, dodacc_map=dodaacs_data, data_conf_filter=data_conf_filter)
 
@@ -257,7 +261,9 @@ def populate_naics(data: dict) -> str:
     return None
 
 
-
-# #To Populate LINE ITEM DETAILS
-# def popluate_line_item_details(data:dic) -> dict:
-#     if "line_item_
+# To Populate LINE ITEM DETAILS
+def popluate_line_item_details(data: dict) -> str:
+    if "proc_inst_header_details_eda_ext_n" in data:
+        for proc_inst_header_detail in data['proc_inst_header_details_eda_ext_n']:
+            if "row_id_eda_ext" in proc_inst_header_detail:
+                return proc_inst_header_detail.get("row_id_eda_ext")
