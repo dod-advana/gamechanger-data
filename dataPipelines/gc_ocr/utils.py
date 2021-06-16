@@ -132,7 +132,6 @@ class PDFOCR:
     def convert_in_subprocess(self, raise_error: bool = False) -> bool:
         """Run in a subprocess, supports non-daemonic MP pools"""
         print(f"[INFO] OCR'ing [In Subprocess] file {self.input_file!s}, writing output to {self.output_file!s}", file=sys.stderr)
-
         process = sub.run(
             [
                 'ocrmypdf',
