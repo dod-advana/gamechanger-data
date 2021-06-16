@@ -55,7 +55,8 @@ class PDFOCR:
                  overwrite_output: bool = True,
                  ignore_init_errors: bool = True,
                  show_progress_bar: bool = False,
-                 num_threads: t.Optional[int] = None
+                 num_threads: t.Optional[int] = None,
+                 force_ocr: bool = False
                  ):
         """PDF OCR Util
         :param input_file: Input pdf file path
@@ -99,7 +100,11 @@ class PDFOCR:
                 print(e)
             else:
                 raise e
-        elif is_ocr_pdf(self.input_file) and not self.job_type == OCRJobType.REDO_OCR and not self.job_type == OCRJobType.NORMAL:
+        elif is_ocr_pdf(self.input_file) and not force_ocr and not self.job_type == OCRJobType.NORMAL:
+            print("input filename: " + str(self.input_file) +
+                  ", is ocr: " + str(is_ocr_pdf(self.input_file)) +
+                  " , not force ocr: " + str(not force_ocr) +
+                  ", not self.job_type == OCRJobType.NORMAL:  " + str(not self.job_type == OCRJobType.NORMAL))
             e = PreviouslyOCRError(f"Given file is already OCR'ed: {self.input_file!s}")
             if not ignore_init_errors:
                 print(e)
