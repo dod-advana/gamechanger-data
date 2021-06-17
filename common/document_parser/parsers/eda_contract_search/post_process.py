@@ -32,6 +32,9 @@ def get_display_doc_type(doc_dict, meta_data):
     get display type for cards on web app
     :return: string
     """
+    if "display_doc_type" in meta_data:
+        return meta_data["display_doc_type"]
+
     if "doc_type" in meta_data:
         doc_type = meta_data["doc_type"].strip().lower()
 
@@ -46,6 +49,9 @@ def get_display_org(meta_data):
     get display org for cards on web app
     :return: string
     """
+    if 'display_org' in meta_data:
+        return meta_data['display_org']
+
     crawler_used = meta_data["crawler_used"]
     display_org = CRAWLER_TO_DISPLAY_ORG_LOOKUP[crawler_used]
 
@@ -57,6 +63,9 @@ def get_display_source(meta_data):
     get display source for cards on web app
     :return: string
     """
+    if 'display_source' in meta_data:
+        return meta_data['display_source']
+
     crawler_used = meta_data["crawler_used"]
     display_source = CRAWLER_TO_DISPLAY_SOURCE_LOOKUP[crawler_used]
 
