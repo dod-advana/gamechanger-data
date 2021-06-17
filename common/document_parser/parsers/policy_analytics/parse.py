@@ -27,12 +27,12 @@ def parse(f_name, meta_data=None, ocr_missing_doc=False, num_ocr_threads=2, forc
 
     init_doc.assign_f_name_fields(f_name, doc_dict)
     init_doc.assign_other_fields(doc_dict)
-    should_delete = False        
+    should_delete = False
+    if ocr_missing_doc or force_ocr:
+        f_name = ocr.get_ocr_filename(f_name, num_ocr_threads, force_ocr)
     if str(f_name).endswith("html"):
         f_name = html_utils.get_html_filename(f_name)
         should_delete = True
-    if ocr_missing_doc or force_ocr:
-        f_name = ocr.get_ocr_filename(f_name, num_ocr_threads, force_ocr)
 
     doc_obj = pdf_reader.get_fitz_doc_obj(f_name)
     pages.handle_pages(doc_obj, doc_dict)
