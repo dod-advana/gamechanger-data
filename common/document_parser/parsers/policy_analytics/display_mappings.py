@@ -1,6 +1,7 @@
 from collections import defaultdict
 
 DISPLAY_TYPE_LOOKUP = defaultdict(lambda: "Document", {
+    # This file should not be added too, use properties on the spider to assign these values
     "dod": 'Issuance',
     "dodm": 'Manual',
     "dodi": 'Instruction',
@@ -51,12 +52,14 @@ DISPLAY_TYPE_LOOKUP = defaultdict(lambda: "Document", {
     "ccn": "Notice",
     "dcmsi": "Instruction",
     "dod coronavirus guidance": "Guidance",
-    "cfr index": "CFR Index",
-    "cfr title": "CFR Title",
+    # "cfr index": "CFR Index",
+    # "cfr title": "CFR Title",
+    # This file should not be added too, use properties on the spider to assign these values
 })
 
 
 CRAWLER_TO_DISPLAY_ORG_LOOKUP = defaultdict(lambda: "Uncategorized", {
+    # This file should not be added too, use properties on the spider to assign these values
     "dod_issuances": "Dept. of Defense",
     "jcs_pubs": 'Joint Chiefs of Staff',
     "jcs_manual_uploads": 'Joint Chiefs of Staff',
@@ -88,10 +91,12 @@ CRAWLER_TO_DISPLAY_ORG_LOOKUP = defaultdict(lambda: "Uncategorized", {
     "DOD_Coronavirus_Guidance": "Dept. of Defense",
     "dfar_subpart_regs": "DFAR",
     "far_subpart_regs": "FAR",
-    "code_of_federal_regulations": "Congress",
+    # "code_of_federal_regulations": "Congress",
+    # This file should not be added too, use properties on the spider to assign these values
 })
 
 CRAWLER_TO_DISPLAY_SOURCE_LOOKUP = defaultdict(lambda: "Unlisted Source", {
+    # This file should not be added too, use properties on the spider to assign these values
     "dod_issuances": "WHS DoD Directives Division",
     "army_pubs": "Army Publishing Directorate",
     "jcs_pubs": "Joint Chiefs of Staff Library",
@@ -123,5 +128,6 @@ CRAWLER_TO_DISPLAY_SOURCE_LOOKUP = defaultdict(lambda: "Unlisted Source", {
     "DOD_Coronavirus_Guidance": "Defense Publications",
     "dfar_subpart_regs": "Defense Federal Acquisition Regulation",
     "far_subpart_regs": "Federal Acquisition Regulation",
-    "code_of_federal_regulations": "U.S. Publishing Office",
+    # "code_of_federal_regulations": "U.S. Publishing Office",
+    # This file should not be added too, use properties on the spider to assign these values
 })

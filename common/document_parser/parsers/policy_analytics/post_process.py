@@ -32,6 +32,9 @@ def get_display_doc_type(doc_dict, meta_data):
     get display type for cards on web app
     :return: string
     """
+    if "display_doc_type" in meta_data:
+        return meta_data["display_doc_type"]
+
     if "doc_type" in meta_data:
         doc_type = meta_data["doc_type"].strip().lower()
 
@@ -46,6 +49,9 @@ def get_display_org(meta_data):
     get display org for cards on web app
     :return: string
     """
+    if 'display_org' in meta_data:
+        return meta_data['display_org']
+
     crawler_used = meta_data["crawler_used"]
     display_org = CRAWLER_TO_DISPLAY_ORG_LOOKUP[crawler_used]
 
@@ -57,6 +63,9 @@ def get_display_source(meta_data):
     get display source for cards on web app
     :return: string
     """
+    if 'display_source' in meta_data:
+        return meta_data['display_source']
+
     crawler_used = meta_data["crawler_used"]
     display_source = CRAWLER_TO_DISPLAY_SOURCE_LOOKUP[crawler_used]
 
@@ -73,6 +82,7 @@ def get_display_title(meta_data):
     doc_title = meta_data["doc_title"].strip()
     return doc_type + " " + doc_num + " " + doc_title
 
+
 def get_file_extension(meta_data):
     """
     get file extension for cards on webapp
@@ -80,7 +90,7 @@ def get_file_extension(meta_data):
     """
     file_ext = meta_data["downloadable_items"][0]["doc_type"]
     return file_ext
-    
+
 
 def rename_and_format(doc_dict):
     doc_dict["raw_text"] = utf8_pass(doc_dict["text"])
