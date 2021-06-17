@@ -1,6 +1,7 @@
 from dataPipelines.gc_eda_pipeline.metadata.metadata_util import format_supplementary_data
 from dataPipelines.gc_eda_pipeline.metadata.vendor_org_hierarchy import vendor_org_hierarchy
-from dataPipelines.gc_eda_pipeline.metadata.dodaac_org_type_metadata import dodaac_org_type_metadata
+from dataPipelines.gc_eda_pipeline.metadata.dodaac_org_type_metadata import dodaac_org_type_metadata, \
+    contract_issue_office_majcom_metadata
 
 
 def extract_syn(data_conf_filter: dict, data: dict):
@@ -73,6 +74,10 @@ def extract_syn(data_conf_filter: dict, data: dict):
     dodaac_org_type = dodaac_org_type_metadata(extracted_data_eda_n)
     if dodaac_org_type:
         extracted_data_eda_n["dodaac_org_type_eda_ext"] = dodaac_org_type
+
+    contract_issue_office_majcom = contract_issue_office_majcom_metadata(extracted_data_eda_n)
+    if contract_issue_office_majcom:
+        extracted_data_eda_n["contract_issue_office_majcom_eda_ext"] = contract_issue_office_majcom
 
     return {"extracted_data_eda_n": extracted_data_eda_n}
 
