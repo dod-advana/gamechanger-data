@@ -31,6 +31,8 @@ def format_supplementary_data(json_info, date_fields_l):
 
 
 def mod_identifier(filename: str) -> str:
+    acomod = None
+    pcomod = None
     parsed = filename.split('-')
     if (len(parsed) - 1) == 9:
         contract = parsed[2]
