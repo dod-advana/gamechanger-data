@@ -10,31 +10,28 @@ class ThumbnailsCreator:
         self,
         input_directory: t.Union[str, Path],
         output_directory: t.Union[str, Path],
-        max_threads: int
+        max_workers: int
     ):
         self.input_directory = Path(input_directory).absolute()
         self.output_directory = Path(output_directory).absolute()
-        self.max_threads = max_threads
+
+        # if we use all available resources
+        # NOT recommended. This uses all computing power at once, will probably crash if big directory
+        if max_workers < 0:
+            self.max_workers = multiprocessing.cpu_count()
+
+        elif max_workers >= 1:
+            self.max_workers = max_workers
+
+        else:
+            raise ValueError(f"Invalid max_threads value given: ${max_workers}")
 
     def process_directory(self):
         print('\nGenerating Thumbnails\n')
         self.output_directory.mkdir(exist_ok=True)
         paths = self.input_directory.glob('*.pdf')
 
-        # if we use all available resources
-        # NOT recommended. This uses all computing power at once, will probably crash if big directory
-        if self.max_threads < 0:
-            max_workers = multiprocessing.cpu_count()
-
-        # if we don't use multithreading or if we do partitioned multithreading
-        elif self.max_threads >= 1:
-            max_workers = self.max_threads
-
-        # else, bad value inserted for max_threads
-        else:
-            raise ValueError(f"Invalid max_threads value given: ${self.max_threads}")
-
-        with ProcessPoolExecutor(max_workers=max_workers) as executor:
+        with ProcessPoolExecutor(max_workers=self.max_workers) as executor:
             executor.map(self.generate_thumbnails, (file_path for file_path in paths))
 
     def generate_thumbnails(self, file_path):

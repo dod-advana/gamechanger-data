@@ -36,8 +36,8 @@ def cli():
 )
 @click.option(
     '-m',
-    '--max-threads',
-    help="Number of threads for multiprocessing",
+    '--max-workers',
+    help="Number of workers for multiprocessing",
     required=False,
     type=int,
     default=1
@@ -45,14 +45,14 @@ def cli():
 def process(
         input_directory: str,
         output_directory: str,
-        max_threads: int) -> None:
+        max_workers: int) -> None:
     """Run Thumbnail Retrieval"""
     input_directory = Path(input_directory).resolve()
     output_directory = Path(output_directory).resolve()
     png_generator = ThumbnailsCreator(
         input_directory=input_directory,
         output_directory=output_directory,
-        max_threads=max_threads
+        max_workers=max_workers
     )
     result = png_generator.process_directory()
 
