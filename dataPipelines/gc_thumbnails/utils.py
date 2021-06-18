@@ -29,10 +29,9 @@ class ThumbnailsCreator:
     def process_directory(self):
         print('\nGenerating Thumbnails\n')
         self.output_directory.mkdir(exist_ok=True)
-        paths = self.input_directory.glob('*.pdf')
 
         with ProcessPoolExecutor(max_workers=self.max_workers) as executor:
-            executor.map(self.generate_thumbnails, (file_path for file_path in paths))
+            executor.map(self.generate_thumbnails, (file_path for file_path in self.input_directory.glob('*.pdf')))
 
     def generate_thumbnails(self, file_path):
         doc = fitz.open(str(file_path))
