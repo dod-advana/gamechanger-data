@@ -34,15 +34,25 @@ def cli():
     type=click.Path(dir_okay=True, resolve_path=True),
     default=os.path.abspath('.')
 )
+@click.option(
+    '-m',
+    '--max-threads',
+    help="Number of threads for multiprocessing",
+    required=False,
+    type=int,
+    default=1
+)
 def process(
         input_directory: str,
-        output_directory: str) -> None:
+        output_directory: str,
+        max_threads: int) -> None:
     """Run Thumbnail Retrieval"""
     input_directory = Path(input_directory).resolve()
     output_directory = Path(output_directory).resolve()
     png_generator = ThumbnailsCreator(
         input_directory=input_directory,
-        output_directory=output_directory
+        output_directory=output_directory,
+        max_threads=max_threads
     )
-    result = png_generator.generate_thumbnails()
+    result = png_generator.process_directory()
 
