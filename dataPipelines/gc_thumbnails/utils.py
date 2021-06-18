@@ -2,7 +2,8 @@ from pathlib import Path
 import fitz
 import typing as t
 import multiprocessing
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ProcessPoolExecutor
+
 
 class ThumbnailsCreator:
     def __init__(
@@ -33,7 +34,7 @@ class ThumbnailsCreator:
         else:
             raise ValueError(f"Invalid max_threads value given: ${self.max_threads}")
 
-        with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        with ProcessPoolExecutor(max_workers=max_workers) as executor:
             executor.map(self.generate_thumbnails, (file_path for file_path in paths))
 
     def generate_thumbnails(self, file_path):
