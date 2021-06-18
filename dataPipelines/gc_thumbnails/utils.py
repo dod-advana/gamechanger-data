@@ -32,7 +32,7 @@ class ThumbnailsCreator:
         # else, bad value inserted for max_threads
         else:
             raise ValueError(f"Invalid max_threads value given: ${self.max_threads}")
-        print(max_workers)
+
         with ThreadPoolExecutor(max_workers=max_workers) as executor:
             executor.map(self.generate_thumbnails, (file_path for file_path in paths))
 
