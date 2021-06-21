@@ -180,7 +180,8 @@ class CoreIngestConfig(IngestConfig):
 
         self._thumbnail_job_manager = ThumbnailsCreator(
             input_directory=self.raw_doc_base_dir,
-            output_directory=self.thumbnail_doc_base_dir
+            output_directory=self.thumbnail_doc_base_dir,
+            max_workers=self.max_threads
         )
         return self._thumbnail_job_manager
 

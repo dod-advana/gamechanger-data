@@ -171,4 +171,4 @@ class CoreIngestSteps(PipelineSteps):
             return
 
         announce("Updating thumbnails ...")
-        c.thumbnail_job_manager.generate_thumbnails()
+        c.thumbnail_job_manager.process_directory()
