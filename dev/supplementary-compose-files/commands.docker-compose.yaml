@@ -18,13 +18,13 @@ services:
     networks:
       - app-net
 
-  cmd-ensure-baseline-image:
-    image: "gc_common_baseline:latest"
-    build:
-      context: "../"
-      dockerfile: "dev/docker/gc_common_baseline/Dockerfile"
-    entrypoint:
-      "echo [OK] gc_common_baseline:latest image is present"
+#  cmd-ensure-baseline-image:
+#    image: "gc_common_baseline:latest"
+#    build:
+#      context: "../"
+#      dockerfile: "dev/docker/core/base-env/Dockerfile"
+#    entrypoint:
+#      "echo [OK] gc_common_baseline:latest image is present"
 
 networks:
   app-net:
