@@ -20,41 +20,41 @@ def vendor_org_hierarchy(vendor_cage:str, dodacc_map: dict, data_conf_filter: di
                                 cursor_factory=psycopg2.extras.DictCursor)
         cursor = conn.cursor()
 
-        cursor.execute(sql_cage_code_name, (vendor_cage,))
-
-
-        cage_code_names = []
-        rows = cursor.fetchall()
-        for row in rows:
-            items = {}
-            col_names = [desc[0] for desc in cursor.description]
-            for col in col_names:
-                val = row[col]
-                if val:
-                    items[col + postfix_es] = val
-            if len(items) > 0:
-                cage_code_names.append(items)
-        vendor_org_hierarchy_extensions_metadata["cage_code" + postfix_es + "_n"] = cage_code_names
-
-        cursor.execute(sql_vendor_org_hierarchy, (dodacc_list,))
-
-        rows = cursor.fetchall()
-        vendor_org_hierarchy_nodes = []
-        for row in rows:
-            items = {}
-            col_names = [desc[0] for desc in cursor.description]
-            for col in col_names:
-
-                if col == "dodaac_ric":
-                    key_value = row[col]
-                    val = dodacc_map.get(key_value)
-                    items["dodaac_name" + postfix_es] = val
-                    items["dodaac" + postfix_es] = key_value
-                else:
+        if len(vendor_cage) != 0:
+            cursor.execute(sql_cage_code_name, (vendor_cage,))
+            cage_code_names = []
+            rows = cursor.fetchall()
+            for row in rows:
+                items = {}
+                col_names = [desc[0] for desc in cursor.description]
+                for col in col_names:
                     val = row[col]
                     if val:
                         items[col + postfix_es] = val
-            vendor_org_hierarchy_nodes.append(items)
+                if len(items) > 0:
+                    cage_code_names.append(items)
+            vendor_org_hierarchy_extensions_metadata["cage_code" + postfix_es + "_n"] = cage_code_names
+
+        if len(dodacc_list) != 0:
+            cursor.execute(sql_vendor_org_hierarchy, (dodacc_list,))
+
+            rows = cursor.fetchall()
+            vendor_org_hierarchy_nodes = []
+            for row in rows:
+                items = {}
+                col_names = [desc[0] for desc in cursor.description]
+                for col in col_names:
+
+                    if col == "dodaac_ric":
+                        key_value = row[col]
+                        val = dodacc_map.get(key_value)
+                        items["dodaac_name" + postfix_es] = val
+                        items["dodaac" + postfix_es] = key_value
+                    else:
+                        val = row[col]
+                        if val:
+                            items[col + postfix_es] = val
+                vendor_org_hierarchy_nodes.append(items)
 
         vendor_org_hierarchy_extensions_metadata["vendor_org" + postfix_es + "_n"] = vendor_org_hierarchy_nodes
 
