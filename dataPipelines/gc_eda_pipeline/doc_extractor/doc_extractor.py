@@ -1,6 +1,4 @@
 from dataPipelines.gc_eda_pipeline.conf import Conf
-from dataPipelines.gc_eda_pipeline.indexer.eda_indexer import EDSConfiguredElasticsearchPublisher
-from dataPipelines.gc_eda_pipeline.audit.audit import audit_record_new
 from common.document_parser.parsers.eda_contract_search.parse import parse
 import time
 
@@ -13,8 +11,8 @@ from dataPipelines.gc_ocr.utils import PDFOCR, OCRJobType
 import traceback
 
 
-def ocr_process(staging_folder: str, file: str, multiprocess: int, aws_s3_output_pdf_prefix: str, audit_id: str,
-                audit_rec: dict, publish_audit: EDSConfiguredElasticsearchPublisher):
+def ocr_process(staging_folder: str, file: str, multiprocess: int, aws_s3_output_pdf_prefix: str,
+                audit_rec: dict):
 
     # Download PDF file
     ocr_time_start = time.time()
@@ -32,14 +30,12 @@ def ocr_process(staging_folder: str, file: str, multiprocess: int, aws_s3_output
 
     audit_rec.update({"gc_path_s": pdf_file_s3_path, "is_ocr_b": is_ocr, "ocr_time_f": round(time_ocr, 4),
                       "modified_date_dt": int(time.time())})
-    audit_record_new(audit_id=audit_id, publisher=publish_audit, audit_record=audit_rec)
 
     return is_pdf_file, pdf_file_local_path, pdf_file_s3_path
 
 
 def extract_text(staging_folder: str, pdf_file_local_path: str, path: str, filename_without_ext: str,
-                 aws_s3_json_prefix: str, audit_id: str, audit_rec: dict,
-                 publish_audit: EDSConfiguredElasticsearchPublisher):
+                 aws_s3_json_prefix: str, audit_rec: dict):
     doc_time_start = time.time()
     ex_file_local_path = staging_folder + "/json/" + path + "/" + filename_without_ext + ".json"
     ex_file_s3_path = aws_s3_json_prefix + "/" + path + "/" + filename_without_ext + ".json"
@@ -56,7 +52,6 @@ def extract_text(staging_folder: str, pdf_file_local_path: str, path: str, filen
 
     audit_rec.update({"json_path_s": ex_file_s3_path, "is_docparser_b": is_extract_suc,
                       "docparser_time_f": round(time_dp, 4), "modified_date_dt": int(time.time())})
-    audit_record_new(audit_id=audit_id, publisher=publish_audit, audit_record=audit_rec)
 
     return ex_file_local_path, ex_file_s3_path, is_extract_suc
 

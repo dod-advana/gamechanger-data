@@ -60,6 +60,9 @@ class ElasticsearchPublisher:
                     }
                 ],
                 use_ssl=True,
+                timeout=60,
+                max_retries=10,
+                retry_on_timeout=True
             )
         else:
             self.es = Elasticsearch(
@@ -73,6 +76,9 @@ class ElasticsearchPublisher:
                 ],
                 http_auth=(str(username), str(password)),
                 use_ssl=True,
+                timeout=60,
+                max_retries=10,
+                retry_on_timeout=True
             )
 
     def get_jdicts(self):

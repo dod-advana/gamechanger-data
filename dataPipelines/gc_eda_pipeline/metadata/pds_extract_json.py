@@ -1,7 +1,9 @@
 from dataPipelines.gc_eda_pipeline.metadata.metadata_util import format_supplementary_data
 from dataPipelines.gc_eda_pipeline.metadata.vendor_org_hierarchy import vendor_org_hierarchy
 from dataPipelines.gc_eda_pipeline.metadata.dodaac_org_type_metadata import dodaac_org_type_metadata, contract_issue_office_majcom_metadata
+from dataPipelines.gc_eda_pipeline.metadata.line_item_details import line_item_details
 
+import json
 
 def extract_pds(data_conf_filter: dict, data: dict, extensions_metadata: dict):
     dodaacs_data = {}
@@ -72,7 +74,10 @@ def extract_pds(data_conf_filter: dict, data: dict, extensions_metadata: dict):
 
     header_details_id = popluate_line_item_details(data)
     if header_details_id:
-        extracted_data_eda_n["header_details_id_eda_ext"] = header_details_id
+        # extracted_data_eda_n["header_details_id_eda_ext"] = header_details_id
+        line_item_details_nodes = line_item_details(data_conf_filter=data_conf_filter, header_details_id=header_details_id)
+        if line_item_details_nodes:
+            extracted_data_eda_n["line_item_details_eda_n"] = line_item_details_nodes
 
     vendor_org_hierarchy_extensions_metadata = vendor_org_hierarchy(vendor_cage=vendor_cage, dodacc_map=dodaacs_data, data_conf_filter=data_conf_filter)
 

@@ -40,7 +40,7 @@ from dataPipelines.gc_eda_pipeline.utils.eda_job_type import EDAJobType
     default=EDAJobType.NORMAL.value
 )
 def run(staging_folder: str,  max_workers: int, workers_ocr: int, eda_job_type: str):
-    print("------ Reprocess Data ------")
+    print("------ Re-Index Data ------")
 
     # Load Extensions configuration files.
     data_conf_filter = read_extension_conf()

@@ -1,5 +1,4 @@
 from dataPipelines.gc_eda_pipeline.indexer.eda_indexer import EDSConfiguredElasticsearchPublisher
-from dataPipelines.gc_eda_pipeline.audit.audit import audit_record_new
 import time
 
 
@@ -12,14 +11,12 @@ def create_index(index_name: str, alias: str, ingest_dir=""):
 
 
 def get_es_publisher(staging_folder: str, index_name: str, alias: str) -> EDSConfiguredElasticsearchPublisher:
-    publisher = EDSConfiguredElasticsearchPublisher(index_name=index_name, ingest_dir=staging_folder,
-                                                 alias=alias)
+    publisher = EDSConfiguredElasticsearchPublisher(index_name=index_name, ingest_dir=staging_folder, alias=alias)
     return publisher
 
 
-def index_data(publish_es: EDSConfiguredElasticsearchPublisher, metadata_file_data: str,
-          parsed_pdf_file_data: str, ex_file_s3_path: str, audit_id: str,
-          audit_rec: dict, publish_audit: EDSConfiguredElasticsearchPublisher):
+def index_data(publish_es: EDSConfiguredElasticsearchPublisher, metadata_file_data: str, parsed_pdf_file_data: str,
+               ex_file_s3_path: str, audit_rec: dict):
 
     index_start = time.time()
 
@@ -36,4 +33,3 @@ def index_data(publish_es: EDSConfiguredElasticsearchPublisher, metadata_file_da
 
     audit_rec.update({"is_index_b": is_index, "index_time_f": round(time_index, 4),
                       "modified_date_dt": int(time.time())})
-    audit_record_new(audit_id=audit_id, publisher=publish_audit, audit_record=audit_rec)
