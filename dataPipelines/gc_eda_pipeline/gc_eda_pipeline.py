@@ -1,3 +1,4 @@
+import sys
 import time
 import click
 import json
@@ -5,6 +6,7 @@ import os
 import concurrent.futures
 import hashlib
 import traceback
+import subprocess
 
 from typing import Union
 from pathlib import Path
@@ -159,19 +161,37 @@ def ingestion(staging_folder: str, aws_s3_input_pdf_prefix: str, max_workers: in
                     else:
                         print("EDA ****  File is not a PDF **** EDA")
 
+        start_bulk_index = time.time()
+        eda_publisher = create_index(index_name=data_conf_filter['eda']['eda_index'],
+                                     alias=data_conf_filter['eda']['eda_index_alias'],
+                                     ingest_dir=staging_folder + "/index/" + input_loc + "/")
+        eda_publisher.index_jsons()
+        end_bulk_index = time.time()
         end = time.time()
+
 
         audit_id = hashlib.sha256(aws_s3_output_pdf_prefix.encode()).hexdigest()
         audit_complete(audit_id=audit_id + "_" + str(time.time()), publisher=eda_audit_publisher,
                        number_of_files=number_file_processed, number_file_failed=number_file_failed,
-                       directory=input_loc, modified_date=int(time.time()), duration=int(end - start))
+                       directory=input_loc, modified_date=int(time.time()), duration=int(end - start),
+                       bulk_index=int(end_bulk_index - start_bulk_index))
+
+        delete_index_folder_content = staging_folder + "/index/" + input_loc + "/"
+        delete_pdf_folder_content = staging_folder + "/pdf/" + input_loc + "/"
+        delete_json_folder_content = staging_folder + "/json/" + input_loc + "/"
+        subprocess.call(f'rm -rf {delete_index_folder_content}', shell=True)
+        subprocess.call(f'rm -rf {delete_pdf_folder_content}', shell=True)
+        subprocess.call(f'rm -rf {delete_json_folder_content}', shell=True)
 
         print("-----------  Process Status -----------")
+        print(f"Dataset {input_loc}")
         print(f"Number files Processed {number_file_processed}")
         print(f"Number files Failed {number_file_failed}")
         print(f"Time to generate file list from S3 {round(end_file_list - start_file_list, 2)} secs")
+        print(f"Time to index into Elasticsearch: {round(float(end_bulk_index - start_bulk_index), 2)}")
+        print(f"Index rate {round(number_file_processed/(end_bulk_index - start_bulk_index), 2)} files/sec")
         print(f"Process file rate {round(number_file_processed / (end - start), 2)} files/sec)")
-        print(f'Total time -- It took {end - start} seconds!')
+        print(f'Total time -- It took {round(end - start, 2)} seconds!')
         print("--------------------------------------")
 
     print("DONE!!!!!!")
@@ -205,19 +225,21 @@ def process_doc(file: str, staging_folder: Union[str, Path], data_conf_filter: d
 
     update_metadata = False
     process_file = False
+
     if not is_process_already:
         process_file = True
-    elif process_type == EDAJobType.NORMAL and is_process_already:
+    elif EDAJobType(process_type) == EDAJobType.NORMAL and is_process_already:
         audit_rec_old = publish_audit.get_by_id(audit_id)
         successfully_process_last_time = audit_rec_old['is_index_b']
         if successfully_process_last_time:
             return {'filename': filename, "status": "already_processed"}
         else:
             process_file = True
-    elif process_type == EDAJobType.NORMAL and not is_process_already:
+    elif EDAJobType(process_type) == EDAJobType.NORMAL and not is_process_already:
         process_file = True
-    elif (
-            process_type == EDAJobType.UPDATE_METADATA or process_type == EDAJobType.UPDATE_METADATA_SKIP_NEW) and is_process_already:
+    elif (EDAJobType(process_type) == EDAJobType.UPDATE_METADATA or
+          EDAJobType(process_type) == EDAJobType.UPDATE_METADATA_SKIP_NEW) and is_process_already:
+
         audit_rec_old = publish_audit.get_by_id(audit_id)
 
         # if last time the record fail it would never have gotten to index phase,
@@ -226,10 +248,10 @@ def process_doc(file: str, staging_folder: Union[str, Path], data_conf_filter: d
         if not is_index_b:
             process_file = True
         else:
-            if process_type == EDAJobType.UPDATE_METADATA or process_type == EDAJobType.UPDATE_METADATA_SKIP_NEW:
+            if EDAJobType(process_type) == EDAJobType.UPDATE_METADATA or EDAJobType(process_type) == EDAJobType.UPDATE_METADATA_SKIP_NEW:
                 update_metadata = True
             audit_rec = audit_rec_old
-    elif process_type == EDAJobType.REPROCESS:
+    elif EDAJobType(process_type) == EDAJobType.REPROCESS:
         process_file = True
     else:
         process_file = False
@@ -243,6 +265,7 @@ def process_doc(file: str, staging_folder: Union[str, Path], data_conf_filter: d
             try:
                 # Get Doc Parsed json
                 ex_file_s3_path = aws_s3_json_prefix + "/" + path + "/" + filename_without_ext + ".json"
+                index_file_local_path = path + "/" + filename_without_ext + ".json"
                 if Conf.s3_utils.prefix_exists(prefix_path=ex_file_s3_path):
                     raw_docparser_data = json.loads(Conf.s3_utils.object_content(object_path=ex_file_s3_path))
 
@@ -251,8 +274,9 @@ def process_doc(file: str, staging_folder: Union[str, Path], data_conf_filter: d
                                                      aws_s3_output_pdf_prefix=aws_s3_output_pdf_prefix,
                                                      audit_rec=audit_rec)
 
-                    index_data(publish_es=publish_es, audit_rec=audit_rec, parsed_pdf_file_data=raw_docparser_data,
-                               metadata_file_data=md_data, ex_file_s3_path=ex_file_s3_path)
+                    index_data(staging_folder=staging_folder, metadata_file_data=md_data,
+                               parsed_pdf_file_data=raw_docparser_data, ex_file_s3_path=ex_file_s3_path,
+                               audit_rec=audit_rec, index_file_local_path=index_file_local_path)
 
                     audit_record_new(audit_id=audit_id, publisher=publish_audit, audit_record=audit_rec)
                     return {'filename': filename, "status": "completed", "info": "update-metadata"}
@@ -277,7 +301,7 @@ def process_doc(file: str, staging_folder: Union[str, Path], data_conf_filter: d
 
         return {'filename': filename, "status": "completed", "info": "update-metadata"}
 
-    elif process_file and process_type == EDAJobType.UPDATE_METADATA_SKIP_NEW:  # File was already process and we don't want to re-index
+    elif process_file and EDAJobType(process_type) == EDAJobType.UPDATE_METADATA_SKIP_NEW:  # File was already process and we don't want to re-index
         if is_process_already:
             return {'filename': filename, "status": "already_processed",
                     "info": "File might be incorrect type or corrupted"}
@@ -313,8 +337,11 @@ def process_doc(file: str, staging_folder: Union[str, Path], data_conf_filter: d
                 with open(ex_file_local_path) as docparser_file:
                     raw_docparser_data = json.load(docparser_file)
 
-                index_data(publish_es=publish_es, audit_rec=audit_rec, parsed_pdf_file_data=raw_docparser_data,
-                           metadata_file_data=md_data, ex_file_s3_path=ex_file_s3_path)
+                index_file_local_path = path + "/" + filename_without_ext + ".json"
+
+                index_data(staging_folder=staging_folder, metadata_file_data=md_data,
+                           parsed_pdf_file_data=raw_docparser_data, ex_file_s3_path=ex_file_s3_path,
+                           audit_rec=audit_rec, index_file_local_path=index_file_local_path)
 
                 audit_record_new(audit_id=audit_id, publisher=publish_audit, audit_record=audit_rec)
                 # Delete for local file system to free up space.
@@ -356,8 +383,8 @@ def list_of_to_process(staging_folder: Union[str, Path], aws_s3_input_pdf_prefix
                 os.makedirs(staging_folder + "/json/" + path + "/")
             if not os.path.exists(staging_folder + "/index/" + path + "/"):
                 os.makedirs(staging_folder + "/index/" + path + "/")
-            if not os.path.exists(staging_folder + "/supplementary_data/"):
-                os.makedirs(staging_folder + "/supplementary_data/")
+            # if not os.path.exists(staging_folder + "/supplementary_data/"):
+            #     os.makedirs(staging_folder + "/supplementary_data/")
     return files
 
 
