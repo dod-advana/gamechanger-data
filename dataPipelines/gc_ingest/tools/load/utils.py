@@ -213,16 +213,19 @@ class LoadManager:
 
                 metadata = idg.metadata_idoc.metadata
                 existing_doc = VersionedDoc.get_existing_from_doc(doc=metadata, session=session)
-
-                vdoc = existing_doc or VersionedDoc.create_from_document(
-                    doc=metadata,
-                    pub=Publication.get_existing_from_doc(doc=metadata, session=session),
-                    filename=idg.raw_idoc.local_path.name,
-                    doc_location=idg.raw_idoc.s3_path or "",
-                    batch_timestamp=ts
-                )
-
-                session.add(vdoc)
+                if existing_doc:
+                    session.add(existing_doc)
+                else:
+                    pub = Publication.get_or_create_from_document(doc=metadata, session=session)
+                    if pub:
+                        vdoc = VersionedDoc.create_from_document(
+                            doc=metadata,
+                            pub=pub,
+                            filename=idg.raw_idoc.local_path.name,
+                            doc_location=idg.raw_idoc.s3_path or "",
+                            batch_timestamp=ts
+                        )
+                        session.add(vdoc)
             session.commit()
 
     def upload_docs_to_s3(self,
