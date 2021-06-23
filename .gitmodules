@@ -1,0 +1,3 @@
+[submodule "gamechanger-ml"]
+	path = gamechangerml
+	url = git@github.com:dod-advana/gamechanger-ml.git
