@@ -20,19 +20,19 @@ from common.document_parser.lib import (
 from . import post_process, init_doc
 
 
-def parse(f_name, meta_data=None, ocr_missing_doc=False, num_ocr_threads=2, out_dir="./"):
+def parse(f_name, meta_data=None, ocr_missing_doc=False, num_ocr_threads=2, force_ocr=False, out_dir="./"):
     print('running policy_analyics.parse on', f_name)
     meta_dict = read_meta.read_metadata(meta_data)
     doc_dict = init_doc.create_doc_dict_with_meta(meta_dict)
 
     init_doc.assign_f_name_fields(f_name, doc_dict)
     init_doc.assign_other_fields(doc_dict)
-    should_delete = False        
+    should_delete = False
+    if ocr_missing_doc or force_ocr:
+        f_name = ocr.get_ocr_filename(f_name, num_ocr_threads, force_ocr)
     if str(f_name).endswith("html"):
         f_name = html_utils.get_html_filename(f_name)
         should_delete = True
-    if ocr_missing_doc:
-        f_name = ocr.get_ocr_filename(f_name, num_ocr_threads)
 
     doc_obj = pdf_reader.get_fitz_doc_obj(f_name)
     pages.handle_pages(doc_obj, doc_dict)
@@ -67,6 +67,7 @@ def parse(f_name, meta_data=None, ocr_missing_doc=False, num_ocr_threads=2, out_
     doc_dict = post_process.process(doc_dict)
 
     write_doc_dict_to_json.write(out_dir=out_dir, ex_dict=doc_dict)
+
     if should_delete:
         os.remove(f_name)
 
