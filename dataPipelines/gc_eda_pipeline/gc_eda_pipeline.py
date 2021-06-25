@@ -1,4 +1,3 @@
-import sys
 import time
 import click
 import json
@@ -127,9 +126,8 @@ def ingestion(staging_folder: str, aws_s3_input_pdf_prefix: str, max_workers: in
                             if fut.result() is not None:
                                 status = fut.result().get('status')
                                 if "already_processed" == status:
-                                    print(
-                                        f"Following file {fut.result().get('filename')} was already processed, extra info: "
-                                        f"{fut.result().get('info')}")
+                                    # print(f"Following file {fut.result().get('filename')} was already processed, extra info: "
+                                    #     f"{fut.result().get('info')}")
                                     number_file_processed = number_file_processed + 1
                                 elif "completed" == status:
                                     # print(f"Following file {fut.result().get('filename')} was processed, extra info: "
@@ -168,7 +166,6 @@ def ingestion(staging_folder: str, aws_s3_input_pdf_prefix: str, max_workers: in
         eda_publisher.index_jsons()
         end_bulk_index = time.time()
         end = time.time()
-
 
         audit_id = hashlib.sha256(aws_s3_output_pdf_prefix.encode()).hexdigest()
         audit_complete(audit_id=audit_id + "_" + str(time.time()), publisher=eda_audit_publisher,
@@ -383,8 +380,6 @@ def list_of_to_process(staging_folder: Union[str, Path], aws_s3_input_pdf_prefix
                 os.makedirs(staging_folder + "/json/" + path + "/")
             if not os.path.exists(staging_folder + "/index/" + path + "/"):
                 os.makedirs(staging_folder + "/index/" + path + "/")
-            # if not os.path.exists(staging_folder + "/supplementary_data/"):
-            #     os.makedirs(staging_folder + "/supplementary_data/")
     return files
 
 

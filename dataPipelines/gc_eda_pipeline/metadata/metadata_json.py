@@ -54,7 +54,6 @@ def metadata_extraction(staging_folder: Union[str, Path], filename_input: str, d
         metadata_type = "none"
         s3_supplementary_data = ""
         metadata_filename = ""
-        local_supplementary_data = ""
         s3_location = ""
 
         # Check if file has metadata from PDS
@@ -110,7 +109,6 @@ def metadata_extraction(staging_folder: Union[str, Path], filename_input: str, d
 
         if is_pds_data:
             # Download File from S3
-            local_supplementary_data = staging_folder + "/supplementary_data/" + metadata_filename
             s3_location = s3_location.strip()
             if operating_environment == "dev":
                 s3_supplementary_data = s3_location.replace("s3://advana-raw-zone/", "")
@@ -119,7 +117,6 @@ def metadata_extraction(staging_folder: Union[str, Path], filename_input: str, d
 
         if is_syn_data:
             # Download File from S3
-            local_supplementary_data = staging_folder + "/supplementary_data/" + metadata_filename
             s3_location = s3_location.strip()
             if operating_environment == "dev":
                 s3_supplementary_data = s3_location.replace("s3://advana-raw-zone/", "")
@@ -139,18 +136,12 @@ def metadata_extraction(staging_folder: Union[str, Path], filename_input: str, d
                     else:
                         get_metadata_file = True
 
-
-                # Conf.s3_utils.download_file(file=local_supplementary_data, object_path=s3_supplementary_data)
-
-                # with open(local_supplementary_data) as json_file:
-                #     raw_supplementary_data = json.load(json_file)
-
                 if is_pds_data and get_metadata_file:
-                    extracted_data = extract_pds(data_conf_filter=data_conf_filter, data=raw_supplementary_data, extensions_metadata=extensions_metadata)
+                    extracted_data = extract_pds(data_conf_filter=data_conf_filter, data=raw_supplementary_data,
+                                                 extensions_metadata=extensions_metadata)
 
                 if is_syn_data and get_metadata_file:
                     extracted_data = extract_syn(data_conf_filter=data_conf_filter, data=raw_supplementary_data)
-
 
                 extensions_metadata = {**extracted_data, **extensions_metadata}
                 extensions_metadata['is_supplementary_data_included_eda_ext_b'] = True
@@ -177,8 +168,5 @@ def metadata_extraction(staging_folder: Union[str, Path], filename_input: str, d
             if cursor:
                 cursor.close()
             conn.close()
-
-    # if os.path.exists(local_supplementary_data):
-    #     os.remove(local_supplementary_data)
 
     return is_supplementary_data_successful, is_supplementary_file_missing, metadata_type, data
