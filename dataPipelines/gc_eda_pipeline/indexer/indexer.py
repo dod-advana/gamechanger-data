@@ -17,7 +17,7 @@ def get_es_publisher(staging_folder: str, index_name: str, alias: str) -> EDSCon
     return publisher
 
 
-def index_data(staging_folder: str, index_file_local_path: str,  metadata_file_data: str, parsed_pdf_file_data: str,
+def index_data_file(staging_folder: str, index_file_local_path: str,  metadata_file_data: str, parsed_pdf_file_data: str,
                ex_file_s3_path: str, audit_rec: dict):
 
     index_start = time.time()

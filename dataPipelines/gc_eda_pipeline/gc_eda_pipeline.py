@@ -16,7 +16,7 @@ from dataPipelines.gc_eda_pipeline.audit.audit import audit_complete
 from dataPipelines.gc_eda_pipeline.metadata.generate_metadata import generate_metadata_data
 from dataPipelines.gc_eda_pipeline.doc_extractor.doc_extractor import ocr_process, extract_text
 from dataPipelines.gc_eda_pipeline.utils.eda_utils import read_extension_conf
-from dataPipelines.gc_eda_pipeline.indexer.indexer import index_data, create_index, get_es_publisher
+from dataPipelines.gc_eda_pipeline.indexer.indexer import index_data_file, create_index, get_es_publisher
 from dataPipelines.gc_eda_pipeline.utils.eda_job_type import EDAJobType
 from dataPipelines.gc_eda_pipeline.audit.audit import audit_record_new
 
@@ -159,6 +159,7 @@ def ingestion(staging_folder: str, aws_s3_input_pdf_prefix: str, max_workers: in
                     else:
                         print("EDA ****  File is not a PDF **** EDA")
 
+        # Index Files into Elasticsearch
         start_bulk_index = time.time()
         eda_publisher = create_index(index_name=data_conf_filter['eda']['eda_index'],
                                      alias=data_conf_filter['eda']['eda_index_alias'],
@@ -271,7 +272,7 @@ def process_doc(file: str, staging_folder: Union[str, Path], data_conf_filter: d
                                                      aws_s3_output_pdf_prefix=aws_s3_output_pdf_prefix,
                                                      audit_rec=audit_rec)
 
-                    index_data(staging_folder=staging_folder, metadata_file_data=md_data,
+                    index_data_file(staging_folder=staging_folder, metadata_file_data=md_data,
                                parsed_pdf_file_data=raw_docparser_data, ex_file_s3_path=ex_file_s3_path,
                                audit_rec=audit_rec, index_file_local_path=index_file_local_path)
 
@@ -336,7 +337,7 @@ def process_doc(file: str, staging_folder: Union[str, Path], data_conf_filter: d
 
                 index_file_local_path = path + "/" + filename_without_ext + ".json"
 
-                index_data(staging_folder=staging_folder, metadata_file_data=md_data,
+                index_data_file(staging_folder=staging_folder, metadata_file_data=md_data,
                            parsed_pdf_file_data=raw_docparser_data, ex_file_s3_path=ex_file_s3_path,
                            audit_rec=audit_rec, index_file_local_path=index_file_local_path)
 
