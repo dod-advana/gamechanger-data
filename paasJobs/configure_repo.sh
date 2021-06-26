@@ -18,7 +18,7 @@ APP_CONFIG_NAME="${APP_CONFIG_NAME:-$SCRIPT_ENV}"
 ES_CONFIG_NAME="${ES_CONFIG_NAME:-$SCRIPT_ENV}"
 APP_CONFIG_LOCAL_PATH="${REPO_DIR}/configuration/app-config/${APP_CONFIG_NAME}.json"
 GAMECHANGERML_PKG_DIR="${GAMECHANGERML_PKG_DIR:-${REPO_DIR}/var/gamechanger-ml}"
-TOPIC_MODEL_LOCAL_DIR="${GAMECHANGERML_PKG_DIR}/models/topic_models/models/"
+TOPIC_MODEL_LOCAL_DIR="${GAMECHANGERML_PKG_DIR}/gamechangerml/models/topic_models/models/"
 
 
 case $SCRIPT_ENV in
