@@ -1,27 +1,32 @@
-import typing as t
 import unittest as ut
 import os
 
+GPU_PRESENT = True if os.environ.get('GPU_PRESENT', '').lower() == 'yes' else False
 
-class Test_ML_API_Package_Functions(ut.TestCase):
+
+class TestPackageFunctions(ut.TestCase):
 
     def test_tensorflow_functions(self):
         os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2' # set log level to ERROR
         import tensorflow as tf
 
-        a = tf.constant([1.0, 2.0, 3.0, 4.0, 5.0, 6.0], shape=[2, 3], name='a')
-        b = tf.constant([1.0, 2.0, 3.0, 4.0, 5.0, 6.0], shape=[3, 2], name='b')
-        c = tf.matmul(a, b)
+        device = '/gpu:0' if GPU_PRESENT else '/cpu:0'
+        if GPU_PRESENT:
+            self.assertIsNotNone(tf.test.gpu_device_name() or None)
 
-        self.assertIsNotNone(c)
+        with tf.device(device):
+            a = tf.constant([1.0, 2.0, 3.0, 4.0, 5.0, 6.0], shape=[2, 3], name='a')
+            b = tf.constant([1.0, 2.0, 3.0, 4.0, 5.0, 6.0], shape=[3, 2], name='b')
+            c = tf.matmul(a, b)
+
+            self.assertIsNotNone(c)
 
     def test_torch_functions(self):
         import torch
         import math
 
         dtype = torch.float
-        device = torch.device("cpu")
-        # device = torch.device("cuda:0") # Uncomment this to run on GPU
+        device = torch.device("cuda:0") if GPU_PRESENT else torch.device("cpu")
 
         # Create random input and output data
         x = torch.linspace(-math.pi, math.pi, 2000, device=device, dtype=dtype)

@@ -12,7 +12,7 @@ def get_packages_to_import() -> t.List[str]:
         return [l.strip() for l in f.read().split("\n") if l.strip()]
 
 
-class Test_ML_API_Imports(ut.TestCase):
+class TestImports(ut.TestCase):
     for module_name in get_packages_to_import():
         exec(dedent(f"""\
             def test_import_{module_name}(self):
