@@ -41,6 +41,9 @@ mlruns/
 # ipynb checkpoints
 **/.ipynb_checkpoints
 
+# variable files (runtime artifacts, etc.)
+/var/**
+
 # Don't ignore .gitkeep files
 !**/.gitkeep
 
