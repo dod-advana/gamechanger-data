@@ -47,7 +47,7 @@ function ensure_gamechangerml_is_installed() {
 
   if $PYTHON_CMD -m pip freeze | grep -qv gamechangerml ; then
     >&2 echo "[INFO] Installing gamechangerml in the user packages ..."
-    $PYTHON_CMD -m pip install --no-deps --user -e "$GAMECHANGERML_PKG_DIR"
+    $PYTHON_CMD -m pip install --no-deps -e "$GAMECHANGERML_PKG_DIR"
   fi
 }
 
