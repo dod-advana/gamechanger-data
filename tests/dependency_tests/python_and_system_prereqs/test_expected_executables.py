@@ -13,7 +13,7 @@ def get_executables_to_expect() -> t.List[str]:
         return [l.strip() for l in f.read().split("\n") if l.strip() and not l.strip().startswith("#")]
 
 
-class TestPathExecutables(ut.TestCase):
+class TestExecutablesExpectedInPath(ut.TestCase):
     for executable_name in get_executables_to_expect():
         exec(dedent(f"""\
             def test_exists_in_path_{executable_name}(self):
