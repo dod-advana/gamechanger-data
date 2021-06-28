@@ -33,6 +33,7 @@ class TestPackageFunctions(ut.TestCase):
                         result = _run_test(f"/gpu:{device_number}")
                         if result:
                             self.assertIsNotNone(result)
+                            last_runtime_error = None
                             break
                     except RuntimeError as e:
                         last_runtime_error = e
@@ -97,6 +98,7 @@ class TestPackageFunctions(ut.TestCase):
                         result = _run_test(f"cuda:{device_number}")
                         if result:
                             self.assertIsNotNone(result)
+                            last_runtime_error = None
                             break
                     except RuntimeError as e:
                         last_runtime_error = e
