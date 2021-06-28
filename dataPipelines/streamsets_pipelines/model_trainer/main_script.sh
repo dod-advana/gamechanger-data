@@ -142,7 +142,7 @@ function copy_to_debug() {
 
 function run_model_trainer() {
   echo "RUNNING MODEL_TRAINER"
-  "$PYTHON_CMD" -m dataScience.scripts.run_model_trainer \
+  "$PYTHON_CMD" -m gamechangerml.scripts.run_model_trainer \
     -d "$LOCAL_BASE_MODEL_DIR_PATH" \
     -c "$LOCAL_CORPUS_DIR_PATH" \
     | tee "$LOCAL_JOB_LOG_PATH"

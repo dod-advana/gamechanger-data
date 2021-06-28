@@ -15,7 +15,7 @@ BASE_JOB_IMAGE="10.194.9.80:5000/gamechanger/core/dev-env:latest"
 HOST_REPO_DIR="$HOME/gamechanger-data"
 CONTAINER_PYTHON_CMD="/opt/gc-venv/bin/python"
 
-DEPLOYMENT_ENV="dev"
+export DEPLOYMENT_ENV="dev"
 TEST_RUN="yes"
 INDEX_NAME="gamechanger_20210315"
 ALIAS_NAME=""
@@ -71,11 +71,10 @@ function crawl_and_ingest() {
     ( docker container rm -f "$ingest_container_name" || true ) &> /dev/null
     ( docker container rm -f "$initializer_container_name" || true) &> /dev/null
 
-    echo Pulling topic models...
-    ( mkdir -p $HOST_REPO_DIR/dataScience/models/topic_models/models/ \
-      && \ 
-      aws s3 cp s3://advana-raw-zone/gamechanger/models/topic_model/v1/20210208.tar.gz - | tar -xzf - -C $HOST_REPO_DIR/dataScience/models/topic_models/models/
-      ) || echo Failed to pull topic models
+    echo Configuring repo and pulling topic models...
+    ( 
+      SCRIPT_ENV="$DEPLOYMENT_ENV" $HOST_REPO_DIR/paasJobs/configure_repo.sh 
+    ) || echo Failed to setup repo
 
     echo Running Job...
     (

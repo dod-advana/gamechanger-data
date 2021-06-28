@@ -1,5 +1,5 @@
-from dataScience.src.utilities.text_utils import simple_clean, utf8_pass
-import dataScience.src.utilities.spacy_model as spacy_
+from gamechangerml.src.utilities.text_utils import simple_clean, utf8_pass
+import gamechangerml.src.utilities.spacy_model as spacy_
 
 spacy_model = spacy_.get_lg_nlp()
 

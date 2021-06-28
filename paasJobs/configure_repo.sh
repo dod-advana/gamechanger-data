@@ -17,7 +17,9 @@ S3_BUCKET_NAME="${S3_BUCKET_NAME:-advana-raw-zone}"
 APP_CONFIG_NAME="${APP_CONFIG_NAME:-$SCRIPT_ENV}"
 ES_CONFIG_NAME="${ES_CONFIG_NAME:-$SCRIPT_ENV}"
 APP_CONFIG_LOCAL_PATH="${REPO_DIR}/configuration/app-config/${APP_CONFIG_NAME}.json"
-TOPIC_MODEL_LOCAL_DIR="${REPO_DIR}/dataScience/models/topic_models/models/"
+GAMECHANGERML_PKG_DIR="${GAMECHANGERML_PKG_DIR:-${REPO_DIR}/var/gamechanger-ml}"
+TOPIC_MODEL_LOCAL_DIR="${GAMECHANGERML_PKG_DIR}/gamechangerml/models/topic_models/models/"
+
 
 case $SCRIPT_ENV in
   prod)
@@ -36,6 +38,18 @@ case $SCRIPT_ENV in
     ;;
 esac
 
+
+function ensure_gamechangerml_is_installed() {
+  if [[ ! -d "$GAMECHANGERML_PKG_DIR" ]]; then
+    >&2 echo "[INFO] Downloading gamechangerml ..."
+    git clone https://github.com/dod-advana/gamechanger-ml.git "$GAMECHANGERML_PKG_DIR"
+  fi
+
+  if $PYTHON_CMD -m pip freeze | grep -qv gamechangerml ; then
+    >&2 echo "[INFO] Installing gamechangerml in the user packages ..."
+    $PYTHON_CMD -m pip install --no-deps -e "$GAMECHANGERML_PKG_DIR"
+  fi
+}
 
 
 function install_app_config() {
@@ -88,6 +102,7 @@ fi
 EOF
 
 install_app_config
+ensure_gamechangerml_is_installed
 install_topic_models
 configure_repo
 post_checks

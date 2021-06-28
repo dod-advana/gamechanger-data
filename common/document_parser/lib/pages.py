@@ -1,5 +1,5 @@
-from dataScience.src.utilities.text_utils import utf8_pass, clean_text
-from dataScience.src.featurization.keywords.extract_keywords import get_keywords
+from gamechangerml.src.utilities.text_utils import utf8_pass, clean_text
+from gamechangerml.src.featurization.keywords.extract_keywords import get_keywords
 
 
 def create_page_dict(page_num, page_text, doc_dict):

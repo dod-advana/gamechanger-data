@@ -10,8 +10,8 @@ from joblib._multiprocessing_helpers import mp
 from tqdm import tqdm
 from concurrent.futures import ThreadPoolExecutor
 
-from dataScience.src.featurization.abbreviation import expand_abbreviations_no_context
-from dataScience.src.featurization.responsibilities import get_responsibilities
+from gamechangerml.src.featurization.abbreviation import expand_abbreviations_no_context
+from gamechangerml.src.featurization.responsibilities import get_responsibilities
 from dataPipelines.gc_neo4j_publisher.config import Config
 from dataPipelines.gc_neo4j_publisher import wiki_utils as wu
 from neo4j import exceptions

@@ -2,7 +2,7 @@ import syntok.segmenter as segmenter
 
 import re
 import string
-from dataScience.src.utilities.text_utils import utf8_pass, clean_text
+from gamechangerml.src.utilities.text_utils import utf8_pass, clean_text
 
 
 def get_paragraph_text(segmented):

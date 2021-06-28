@@ -1,4 +1,4 @@
-from dataScience.src.search.ranking.features import get_txt_length
+from gamechangerml.src.search.ranking.features import get_txt_length
 
 
 def add_txt_length(doc_dict):

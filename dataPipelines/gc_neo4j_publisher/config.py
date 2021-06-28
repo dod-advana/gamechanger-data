@@ -1,13 +1,13 @@
 from configuration.utils import get_connection_helper_from_env
 from dataPipelines.gc_db_utils.utils import check_if_table_or_view_exists
-from . import REPO_PATH
+from gamechangerml import PACKAGE_PATH
 import os
 from functools import lru_cache
 
 class Config:
     connection_helper = get_connection_helper_from_env()
-    abbcount_json_path = os.path.join(REPO_PATH, "dataScience/src/featurization/data/abbcounts.json")
-    agencies_csv_path = os.path.join(REPO_PATH, "dataScience/data/agencies/agencies.csv")
+    abbcount_json_path = os.path.join(PACKAGE_PATH, "src/featurization/data/abbcounts.json")
+    agencies_csv_path = os.path.join(PACKAGE_PATH, "data/agencies/agencies.csv")
 
     @classmethod
     @lru_cache(maxsize=None)
