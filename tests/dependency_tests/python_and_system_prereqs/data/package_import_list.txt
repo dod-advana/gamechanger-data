@@ -1,4 +1,4 @@
-PyPDF2
+annoy
 boto3
 botocore
 click
@@ -6,8 +6,10 @@ elasticsearch
 en_core_web_lg
 en_core_web_md
 en_core_web_sm
+fastapi_utils
 filetype
 fitz
+gensim
 jinja2
 jsonschema
 mlflow
@@ -20,6 +22,7 @@ pandas
 pikepdf
 psycopg2
 pydantic
+PyPDF2
 redis
 requests
 sklearn
@@ -28,5 +31,7 @@ sqlalchemy
 syntok
 tensorflow
 torch
+tqdm
 transformers
+txtai
 yaml
