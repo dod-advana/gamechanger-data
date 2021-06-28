@@ -1,4 +1,0 @@
-gunicorn
-uvicorn
-zip
-unzip

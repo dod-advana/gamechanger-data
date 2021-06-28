@@ -1,0 +1,8 @@
+gunicorn
+uvicorn
+zip
+unzip
+ocrmypdf
+flask
+aws
+tar
