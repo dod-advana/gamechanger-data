@@ -9,12 +9,13 @@ from .config import Config
 import typing as t
 from configuration import RENDERED_DIR
 import pandas as pd
+from datetime import datetime
 
 
 def clean_string(string):
 
     return " ".join(
-        [i.lstrip("\n").strip().lstrip().replace("'", "")
+        [i.lstrip("\n").strip().lstrip().replace('"',"'").replace("'", "\'")
          for i in string.split(" ")]
     )
 
@@ -246,7 +247,6 @@ class ConfiguredEntityPublisher(ConfiguredElasticsearchPublisher):
     def read_agencies(self):
 
         agencies = pd.read_csv(self.entity_csv_path)
-        # agencies = agencies[agencies["in_corpus"] == True]
         agencies.fillna("", inplace=True)
 
         keep_cols = [
@@ -256,6 +256,7 @@ class ConfiguredEntityPublisher(ConfiguredElasticsearchPublisher):
             "Government_Branch",
             "Parent_Agency",
             "Related_Agency",
+            "information"
         ]
 
         for i in keep_cols:
@@ -278,13 +279,15 @@ class ConfiguredEntityPublisher(ConfiguredElasticsearchPublisher):
             mydict["government_branch"] = self.agencies.loc[i, "Government_Branch"]
             mydict["parent_agency"] = self.agencies.loc[i, "Parent_Agency"]
             mydict["related_agency"] = self.agencies.loc[i, "Related_Agency"]
-            mydict["information"] = self.agencies.loc[i, "information"]
             mydict["entity_type"] = self.agencies.loc[i, "entity_type"]
             mydict["crawlers"] = self.agencies.loc[i, "crawlers"]
             mydict["num_mentions"] = self.agencies.loc[i, "num_mentions"]
             mydict["aliases"] = [
                 {"name": x} for x in self.agencies.loc[i, "Agency_Aliases"]
             ]
+            mydict["information"] = self.agencies.loc[i, "information"]
+            mydict["information_source"] = self.agencies.loc[i, "information_source"]
+            mydict["information_retrieved"] = self.agencies.loc[i, "information_retrieved"]
             header = {"_index": self.index_name, "_source": mydict}
             docs.append(header)
 
