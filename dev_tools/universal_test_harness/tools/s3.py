@@ -1,5 +1,5 @@
 import click
-from dev.universal_test_harness.config import Config
+from dev_tools.universal_test_harness.config import Config
 from common.utils.s3 import S3Utils
 from botocore.client import ClientError
 from pathlib import Path

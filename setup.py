@@ -10,7 +10,7 @@ ROOT_PATH = Path(os.path.dirname(os.path.abspath(__file__))).resolve()
 REQUIREMENTS_PATH = Path(
     ROOT_PATH,
     os.path.join(
-        "dev",
+        "dev_tools",
         "requirements",
         "gc-venv-current.txt"
     )
@@ -19,7 +19,7 @@ REQUIREMENTS_PATH = Path(
 DEV_REQUIREMENTS_PATH = Path(
     ROOT_PATH,
     os.path.join(
-        "dev",
+        "dev_tools",
         "requirements",
         "dev-requirements.txt",
     )
@@ -28,7 +28,7 @@ DEV_REQUIREMENTS_PATH = Path(
 CI_REQUIREMENTS_PATH = Path(
     ROOT_PATH,
     os.path.join(
-        "dev",
+        "dev_tools",
         "requirements",
         "ci-requirements.txt",
     )
@@ -37,7 +37,7 @@ CI_REQUIREMENTS_PATH = Path(
 CDVID19_REQUIREMENTS_PATH = Path(
     ROOT_PATH,
     os.path.join(
-        "dev",
+        "dev_tools",
         "requirements",
         "covid-19-dev-requirements.txt",
     )

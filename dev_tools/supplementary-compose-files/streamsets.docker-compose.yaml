@@ -5,7 +5,7 @@ services:
     container_name: "${COMPOSE_PROJECT_NAME:-gc-dev}-streamsets"
     build:
       context: "../"
-      dockerfile: "dev/docker/devtools/streamsets/Dockerfile"
+      dockerfile: "dev_tools/docker/devtools/streamsets/Dockerfile"
     image: "gamechanger/devtools/streamsets:latest"
     ports:
       - "18630:18630"

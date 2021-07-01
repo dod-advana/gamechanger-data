@@ -1,4 +1,4 @@
-from dev import PACKAGE_PATH
+from dev_tools import PACKAGE_PATH
 from pathlib import Path
 from configuration.utils import get_default_app_config_renderer
 from configuration import RENDERED_DIR

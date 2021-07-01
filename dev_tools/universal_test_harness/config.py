@@ -1,7 +1,7 @@
 import os
 from configuration.utils import get_connection_helper_from_env
 from . import PACKAGE_PATH
-from dev import REPO_PATH
+from dev_tools import REPO_PATH
 
 
 class Config:

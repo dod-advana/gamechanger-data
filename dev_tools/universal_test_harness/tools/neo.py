@@ -1,5 +1,5 @@
 import click
-from dev.universal_test_harness.config import Config
+from dev_tools.universal_test_harness.config import Config
 
 @click.group('neo')
 def neo4j_cli():

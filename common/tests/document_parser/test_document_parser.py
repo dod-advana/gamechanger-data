@@ -7,17 +7,17 @@ from common.tests import PACKAGE_OCR_PDF_PATH
 import json
 import pytest
 import shutil
-from dev import REPO_PATH
+from dev_tools import REPO_PATH
 
 ORIGINAL_TEST_FILES = dict(
     ocr_pdf_file=os.path.join(REPO_PATH,
-                              "dev/universal_test_harness/data/crawler_output/2021-01-01T110000/Title 1.pdf"),
+                              "dev_tools/universal_test_harness/data/crawler_output/2021-01-01T110000/Title 1.pdf"),
     ocr_pdf_metadata_file=os.path.join(REPO_PATH,
-                                       "dev/universal_test_harness/data/crawler_output/2021-01-01T110000/Title 1.pdf.metadata"),
+                                       "dev_tools/universal_test_harness/data/crawler_output/2021-01-01T110000/Title 1.pdf.metadata"),
     non_ocr_pdf_file=os.path.join(REPO_PATH,
-                                  "dev/universal_test_harness/data/crawler_output/2021-01-01T110000/Title 2.pdf"),
+                                  "dev_tools/universal_test_harness/data/crawler_output/2021-01-01T110000/Title 2.pdf"),
     non_ocr_pdf_metadata_file=os.path.join(REPO_PATH,
-                                           "dev/universal_test_harness/data/crawler_output/2021-01-01T110000/Title 2.pdf.metadata")
+                                           "dev_tools/universal_test_harness/data/crawler_output/2021-01-01T110000/Title 2.pdf.metadata")
 )
 
 EXPECTED_OUTPUT_FILES = dict(
