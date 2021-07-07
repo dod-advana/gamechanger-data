@@ -7,8 +7,7 @@ def generate_metadata_data(staging_folder: str, data_conf_filter: dict, file: st
 
     pds_start = time.time()
 
-    is_md_successful, is_supplementary_file_missing, md_type, md_data = metadata_extraction(staging_folder,
-                                                                                            file, data_conf_filter,
+    is_md_successful, is_supplementary_file_missing, md_type, md_data = metadata_extraction(file, data_conf_filter,
                                                                                             aws_s3_output_pdf_prefix)
 
     pds_end = time.time()

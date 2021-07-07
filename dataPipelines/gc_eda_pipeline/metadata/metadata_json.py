@@ -15,7 +15,7 @@ from dataPipelines.gc_eda_pipeline.metadata.metadata_util import title, mod_iden
 from urllib3.exceptions import ProtocolError
 
 
-def metadata_extraction(staging_folder: Union[str, Path], filename_input: str, data_conf_filter: dict,
+def metadata_extraction(filename_input: str, data_conf_filter: dict,
                         aws_s3_output_pdf_prefix: str):
 
     postfix_es = data_conf_filter['eda']['postfix_es']

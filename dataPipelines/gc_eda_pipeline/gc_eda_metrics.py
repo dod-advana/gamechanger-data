@@ -1,6 +1,12 @@
+import sys
+
 import click
 import json
 import os
+import traceback
+import psycopg2
+from psycopg2.extras import RealDictCursor
+
 from dataPipelines.gc_eda_pipeline.indexer.eda_indexer import EDSConfiguredElasticsearchPublisher
 from dataPipelines.gc_eda_pipeline.utils.eda_utils import read_extension_conf
 import csv
@@ -28,6 +34,38 @@ def run(staging_folder: str, input_list_file: str, output_file: str):
     print("Starting Gamechanger EDA Metrics Pipeline")
     # Load Extensions configuration files.
     data_conf_filter = read_extension_conf()
+
+    metric_sql = data_conf_filter['eda']['metric_sql']
+
+    try:
+        conn = psycopg2.connect(host=data_conf_filter['eda']['database']['hostname'],
+                                port=data_conf_filter['eda']['database']['port'],
+                                user=data_conf_filter['eda']['database']['user'],
+                                password=data_conf_filter['eda']['database']['password'],
+                                dbname=data_conf_filter['eda']['database']['db'],
+                                cursor_factory=psycopg2.extras.DictCursor)
+        cursor = conn.cursor()
+        cursor.execute(metric_sql)
+
+        rows = cursor.fetchall()
+        s3_prefix = []
+        for row in rows:
+            s3_prefix.append(row[0])
+
+    except (Exception, psycopg2.Error) as error:
+        is_supplementary_data_successful = False
+        traceback.print_exc()
+        print("Error while fetching data for metadata", error)
+    finally:
+        # closing database connection.
+        if conn:
+            if cursor:
+                cursor.close()
+            conn.close()
+
+    if len(s3_prefix) == 0:
+        print("Something wrong with the query metric table")
+        sys.exit()
 
     directories = []
     with open(input_list_file, "r") as file:

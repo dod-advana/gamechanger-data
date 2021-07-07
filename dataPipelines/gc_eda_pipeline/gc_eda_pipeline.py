@@ -89,6 +89,8 @@ def ingestion(staging_folder: str, aws_s3_input_pdf_prefix: str, max_workers: in
     aws_s3_json_prefix = data_conf_filter['eda']['aws_s3_json_prefix']
 
     # Create the Audit and EDA indexes
+    print(f"EDA Index {data_conf_filter['eda']['eda_index']}")
+    print(f"EDA Audit Index {data_conf_filter['eda']['audit_index']}")
     eda_audit_publisher = create_index(index_name=data_conf_filter['eda']['audit_index'],
                                        alias=data_conf_filter['eda']['audit_index_alias'])
     eda_publisher = create_index(index_name=data_conf_filter['eda']['eda_index'],
@@ -219,6 +221,14 @@ def process_doc(file: str, staging_folder: Union[str, Path], data_conf_filter: d
 
     # Determine if we want to process this record
     audit_id = hashlib.sha256(file.encode()).hexdigest()
+
+    # Make sure the file is a PDF file.
+    if file_extension != ".pdf":
+        audit_rec.update({"filename_s": filename, "eda_path_s": file, "modified_date_dt": int(time.time())})
+        audit_record_new(audit_id=audit_id, publisher=publish_audit, audit_record=audit_rec)
+        return {'filename': filename, "status": "failed", "info": "File does not have a pdf extension"}
+
+    # Check to see if teh file as been processed before
     is_process_already = publish_audit.exists(audit_id)
 
     update_metadata = False

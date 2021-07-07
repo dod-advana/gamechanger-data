@@ -6,6 +6,7 @@ from psycopg2.extras import RealDictCursor
 from dataPipelines.gc_eda_pipeline.utils.eda_utils import read_extension_conf
 from dataPipelines.gc_eda_pipeline.gc_eda_pipeline import ingestion
 from dataPipelines.gc_eda_pipeline.utils.eda_job_type import EDAJobType
+from dataPipelines.gc_eda_pipeline.conf import Conf
 
 
 @click.command()
@@ -47,9 +48,9 @@ def run(staging_folder: str,  max_workers: int, workers_ocr: int, eda_job_type: 
 
     sql_daily_process = data_conf_filter['eda']['sql_daily_process']
     sql_is_in_process_state = data_conf_filter['eda']['sql_is_in_process_state']
-    sql_set_status_to_processing = data_conf_filter['eda']['sql_set_status_to_processing']
-    sql_set_status_to_completed = data_conf_filter['eda']['sql_set_status_to_completed']
+    sql_set_daily_status_on_log = data_conf_filter['eda']['sql_set_daily_status_on_log']
     sql_insert_process_status = data_conf_filter['eda']['sql_insert_process_status']
+    aws_s3_daily_pdf_prefix = data_conf_filter['eda']['aws_s3_daily_pdf_prefix']
 
     conn = None
     try:
@@ -62,35 +63,47 @@ def run(staging_folder: str,  max_workers: int, workers_ocr: int, eda_job_type: 
         cursor = conn.cursor()
         cursor.execute(sql_is_in_process_state)
         row = cursor.fetchone()
+
         if row is not None and row[0] == 'Processing':
             print("Currently there is already a dataset in process")
             sys.exit("Currently there is already dataset in process")
 
         cursor.execute(sql_daily_process)
-        row = cursor.fetchone()
-        if row is None:
-            print("There is no dataset that need to be process")
-            sys.exit("There is no dataset that need to be process")
-        else:
-            output_path = row['output_path']
-            audit_moved_loc = row['audit_moved_loc']
-            process_directory = ''.join([audit_moved_loc, output_path])
+        rows = cursor.fetchall()
+        for row in rows:
+            process_directory = ""
+            if row is None:
+                print("There is no dataset that need to be process")
+                sys.exit("There is no dataset that need to be process")
+            else:
+                output_path = row['output_path']
+                audit_moved_loc = row['audit_moved_loc']
+                process_directory = ''.join([aws_s3_daily_pdf_prefix, output_path])
 
-        if process_directory:
-            cursor.execute(sql_set_status_to_processing, (audit_moved_loc, output_path))
-            conn.commit()
+                print(process_directory)
+                if Conf.s3_utils.prefix_exists(prefix_path=process_directory):
+                    cursor.execute(sql_set_daily_status_on_log, ("Processing", audit_moved_loc, output_path))
+                    # print(f"Processing {cursor.query}")
+                    conn.commit()
 
-            print(process_directory)
-            ingestion(staging_folder=staging_folder, aws_s3_input_pdf_prefix=process_directory, max_workers=max_workers,
-                      eda_job_type=eda_job_type, workers_ocr=workers_ocr, loop_number=50000)
+                    ingestion(staging_folder=staging_folder, aws_s3_input_pdf_prefix=process_directory,
+                              max_workers=max_workers,eda_job_type=eda_job_type, workers_ocr=workers_ocr,
+                              loop_number=50000)
 
-            # Update Daily EDA Table
-            cursor.execute(sql_set_status_to_completed, (audit_moved_loc, output_path))
-            conn.commit()
+                    # Update Daily EDA Table
+                    cursor.execute(sql_set_daily_status_on_log, ("Completed", audit_moved_loc, output_path))
+                    # print(f"Completed {cursor.query}")
+                    conn.commit()
 
-            # Update
-            cursor.execute(sql_insert_process_status, (process_directory, 'Completed'))
-            conn.commit()
+                    # Update
+                    cursor.execute(sql_insert_process_status, (process_directory, 'Completed'))
+                    # print(f"GC -- Completed {cursor.query}")
+                    conn.commit()
+                else:
+                    cursor.execute(sql_set_daily_status_on_log, ("Missing", audit_moved_loc, output_path))
+                    # print(f"Missing {cursor.query}")
+                    conn.commit()
+                    print(f"The follow prefix was not found in S3 {process_directory}")
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
     finally:
