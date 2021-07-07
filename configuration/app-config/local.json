@@ -26,14 +26,14 @@
   "orch_db": {
     "username": "postgres",
     "password": "password",
-    "port": 5432,
+    "port": 5433,
     "host": "localhost",
-    "database": "postgres"
+    "database": "gc-orchestration"
   },
   "web_db": {
     "username": "postgres",
     "password": "password",
-    "port": 5432,
+    "port": 5433,
     "host": "localhost",
     "database": "postgres"
   },

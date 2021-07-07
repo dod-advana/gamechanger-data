@@ -105,6 +105,30 @@ class LoadManager:
             ts=ts
         )
 
+    def get_metadata_filename(self, raw_doc: Path):
+        """
+        Return metadata filename
+        :param raw_doc:
+        :return:
+        """
+        return raw_doc.name + self.METADATA_DOC_EXTENSION
+
+    def get_parsed_filename(self, raw_doc: Path):
+        """
+        Return parsed filename
+        :param raw_doc:
+        :return:
+        """
+        return raw_doc.stem + self.PARSED_DOC_EXTENSION
+
+    def get_thumbnail_filename(self, raw_doc: Path):
+        """
+        Return thumbnail filename
+        :param raw_doc:
+        :return:
+        """
+        return raw_doc.stem + self.THUMBNAIL_EXTENSION
+
 
     def get_ingestable_docs(self,
                             raw_dir: t.Union[Path, str],
@@ -128,7 +152,7 @@ class LoadManager:
             if not metadata_dir:
                 return None
 
-            local_path = Path(metadata_dir, raw_doc.name + self.METADATA_DOC_EXTENSION)
+            local_path = Path(metadata_dir, self.get_metadata_filename(raw_doc))
             if not local_path.is_file():
                 return None
 
@@ -141,7 +165,7 @@ class LoadManager:
             if not parsed_dir:
                 return None
 
-            local_path = Path(parsed_dir, raw_doc.stem + self.PARSED_DOC_EXTENSION)
+            local_path = Path(parsed_dir, self.get_parsed_filename(raw_doc))
             if not local_path.is_file():
                 return None
 
@@ -153,7 +177,7 @@ class LoadManager:
             if not thumbnail_dir:
                 return None
 
-            local_path = Path(thumbnail_dir, raw_doc.stem + self.THUMBNAIL_EXTENSION)
+            local_path = Path(thumbnail_dir, self.get_thumbnail_filename(raw_doc))
             if not local_path.is_file():
                 return None
 
@@ -236,7 +260,7 @@ class LoadManager:
             s3_location = Config.s3_utils.upload_file(
                 file=idoc.local_path,
                 object_prefix=self.get_timestamped_archive_prefix_for_idoc(idoc=idoc, ts=ts)
-            )
+            )z
             return s3_location
 
         for idg in idgs:
@@ -288,3 +312,57 @@ class LoadManager:
             self.process_db_doc_updates(idgs=uploaded_idgs or idgs, ts=ingest_ts)
         else:
             print("Skipping updates to 'versioned_docs' table ...", file=sys.stderr)
+
+
+    def remove_from_s3(self, input_json_path: t.Union[str,Path]):
+
+        with input_json_path.open(mode="r") as f:
+            for json_str in f.readlines():
+                if not json_str.strip():
+                    continue
+                else:
+                    try:
+                        j_dict = json.loads(json_str)
+                    except json.decoder.JSONDecodeError:
+                        print("Encountered JSON decode error while parsing crawler output.")
+                        continue
+                    # Delete raw file from s3
+                    raw_filename = Path(j_dict["filename"])
+                    raw_path = self.s3u.path_join(self.get_archive_prefix(ArchiveType.RAW),
+                                                  raw_filename.name)
+                    print(f"Deleting {raw_path!s} from S3 ... ", file=sys.stderr)
+                    self.s3u.delete_object(object_path=raw_path)
+
+                    # Delete metdata file from s3
+                    metadata_filename = Path(self.get_metadata_filename(raw_filename))
+                    metadata_path = self.s3u.path_join(self.get_archive_prefix(ArchiveType.METADATA),
+                                                       metadata_filename.name)
+                    print(f"Deleting {metadata_path!s} from S3 ... ", file=sys.stderr)
+                    self.s3u.delete_object(object_path=metadata_path)
+
+                    # Delete parsed file from s3
+                    parsed_filename = Path(self.get_parsed_filename(raw_filename))
+                    parsed_path = self.s3u.path_join(self.get_archive_prefix(ArchiveType.PARSED),
+                                                       parsed_filename.name)
+                    print(f"Deleting {parsed_path!s} from S3 ... ", file=sys.stderr)
+                    self.s3u.delete_object(object_path=parsed_path)
+
+                    # Delete thumbnail file from s3
+                    thumbnail_filename = Path(self.get_thumbnail_filename(raw_filename))
+                    thumbnail_path = self.s3u.path_join(self.get_archive_prefix(ArchiveType.THUMBNAIL),
+                                                     thumbnail_filename.name)
+                    print(f"Deleting {thumbnail_path!s} from S3 ... ", file=sys.stderr)
+                    self.s3u.delete_object(object_path=thumbnail_path)
+
+    def remove_from_db(self, input_json_path: t.Union[str,Path]):
+        with input_json_path.open(mode="r") as f:
+            for json_str in f.readlines():
+                if not json_str.strip():
+                    continue
+                else:
+                    try:
+                        j_dict = json.loads(json_str)
+                    except json.decoder.JSONDecodeError:
+                        print("Encountered JSON decode error while parsing crawler output.")
+                        continue
+                    j_dict
