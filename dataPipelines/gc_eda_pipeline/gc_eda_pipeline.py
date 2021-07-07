@@ -174,7 +174,7 @@ def ingestion(staging_folder: str, aws_s3_input_pdf_prefix: str, max_workers: in
         audit_complete(audit_id=audit_id + "_" + str(time.time()), publisher=eda_audit_publisher,
                        number_of_files=number_file_processed, number_file_failed=number_file_failed,
                        directory=input_loc, modified_date=int(time.time()), duration=int(end - start),
-                       bulk_index=int(end_bulk_index - start_bulk_index))
+                       bulk_index=end_bulk_index - start_bulk_index)
 
         delete_index_folder_content = staging_folder + "/index/" + input_loc + "/"
         delete_pdf_folder_content = staging_folder + "/pdf/" + input_loc + "/"

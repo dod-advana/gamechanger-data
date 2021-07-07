@@ -21,22 +21,19 @@ from csv import writer
     type=str,
 )
 @click.option(
-    '--input-list-file',
-    required=True,
-    type=str
-)
-@click.option(
     '--output-file',
     required=True,
     type=str
 )
-def run(staging_folder: str, input_list_file: str, output_file: str):
+def run(staging_folder: str, output_file: str):
     print("Starting Gamechanger EDA Metrics Pipeline")
     # Load Extensions configuration files.
     data_conf_filter = read_extension_conf()
 
-    metric_sql = data_conf_filter['eda']['metric_sql']
+    metric_sql = data_conf_filter['eda']['sql_metric']
+    aws_s3_output_pdf_prefix = data_conf_filter['eda']['aws_s3_output_pdf_prefix']
 
+    directories = []
     try:
         conn = psycopg2.connect(host=data_conf_filter['eda']['database']['hostname'],
                                 port=data_conf_filter['eda']['database']['port'],
@@ -48,12 +45,10 @@ def run(staging_folder: str, input_list_file: str, output_file: str):
         cursor.execute(metric_sql)
 
         rows = cursor.fetchall()
-        s3_prefix = []
         for row in rows:
-            s3_prefix.append(row[0])
+            directories.append(aws_s3_output_pdf_prefix + "/" + row[0])
 
     except (Exception, psycopg2.Error) as error:
-        is_supplementary_data_successful = False
         traceback.print_exc()
         print("Error while fetching data for metadata", error)
     finally:
@@ -63,17 +58,15 @@ def run(staging_folder: str, input_list_file: str, output_file: str):
                 cursor.close()
             conn.close()
 
-    if len(s3_prefix) == 0:
+    if len(directories) == 0:
         print("Something wrong with the query metric table")
         sys.exit()
 
-    directories = []
-    with open(input_list_file, "r") as file:
-        directories = file.readlines()
-
     with open(output_file, 'w+', newline='') as outcsv:
-        writer = csv.DictWriter(outcsv, fieldnames=["Directory", "Elasticsearch","Files Processed", "OCR", "PDS", "PDS Quarantine", "SYN", "SYN Quarantine", "Failed", "Failed (Text)", "Failed (PDF)"])
-        writer.writeheader()
+        writer_file = csv.DictWriter(outcsv, fieldnames=["Directory", "Elasticsearch", "Files Processed", "OCR", "PDS",
+                                                    "PDS Quarantine", "SYN", "SYN Quarantine", "Failed",
+                                                    "Failed (Text)", "Failed (PDF)"])
+        writer_file.writeheader()
 
     publish_audit = get_es_publisher(staging_folder=staging_folder, index_name=data_conf_filter['eda']['audit_index'],
                                      alias=data_conf_filter['eda']['audit_index_alias'])
@@ -87,6 +80,8 @@ def run(staging_folder: str, input_list_file: str, output_file: str):
         # Items in ES
         directory = directory.rstrip()
         query_es_count = {'query': {'bool': {'must': [{'wildcard': {'file_location_eda_ext.keyword': {'value': directory + '*'}}}]}}}
+        # json_object = json.dumps(query_es_count, indent=4)
+        # print(json_object)
         response_item_in_es = publish_es.count(index=data_conf_filter['eda']['eda_index'], body=query_es_count)
         print("ES Count: : " + str(response_item_in_es['count']))
         item_in_es_count = str(response_item_in_es['count'])
@@ -150,43 +145,38 @@ def run(staging_folder: str, input_list_file: str, output_file: str):
                         items_failed_count, items_failed_text_count, items_failed_pdf_count]
 
         append_list_as_row(file_name=output_file, list_of_elem=row_contents)
+    #
+    #
+    # # Metadata Average Time/Number for OCR
+    # query_average_time_ocr = {'track_total_hits':'true','size':'0','query':{'bool':{'must_not':[{'term':{'completed':{'value':'completed'}}}],'must':[{'term':{'is_ocr_b':{'value':'true'}}}]}},'aggs':{'number_of_files_ocred':{'value_count':{'field':'is_ocr_b'}},'avg_ocr_time':{'avg':{'field':'ocr_time_f'}}}}
+    # response_ocr_aggs = publish_audit.search(index=data_conf_filter['eda']['audit_index'], body=query_average_time_ocr)
+    # print("\n")
+    # print("Number of files OCR: " + str(response_ocr_aggs['aggregations']['number_of_files_ocred']['value']))
+    # print("Average Time for OCR: " + str(response_ocr_aggs['aggregations']['avg_ocr_time']['value']))
+    #
+    # # Metadata Average Time/Number for Indexing
+    # query_average_time_indexer = {'track_total_hits': 'true', 'size': '0', 'query': {'bool': {'must_not': [{'term': {'completed': {'value': 'completed'}}}],'must': [{'term': {'is_index_b': {'value': 'true'}}}]}}, 'aggs': {'number_of_files_index': {'value_count': {'field': 'is_ocr_b'}}, 'avg_index_time': {'avg': {'field': 'ocr_time_f'}}}}
+    # response_index_aggs = publish_audit.search(index=data_conf_filter['eda']['audit_index'], body=query_average_time_indexer)
+    # print("\n")
+    # print("Number of files Index: " + str(response_index_aggs['aggregations']['number_of_files_index']['value']))
+    # print("Average Time for Indexing: " + str(response_index_aggs['aggregations']['avg_index_time']['value']))
+    #
+    # # Metadata Average Time/Number for Supplementary PDS
+    # query_average_time_supplementary_pds = {'track_total_hits':'true','size':'0','query':{'bool':{'must_not':[{'term':{'completed':{'value':'completed'}}}],'must':[{'term':{'is_index_b':{'value':'true'}}},{'term':{'is_metadata_suc_b':{'value':'true'}}},{'term':{'is_supplementary_file_missing':{'value':'false'}}},{'term':{'metadata_type_s':{'value':'pds'}}}]}},'aggs':{'number_of_files_metadata_pds':{'value_count':{'field':'metadata_type_s'}},'avg_metadata_time':{'avg':{'field':'metadata_time_f'}}}}
+    # response_supplementary_pds_aggs = publish_audit.search(index=data_conf_filter['eda']['audit_index'], body=query_average_time_supplementary_pds)
+    # print("\n")
+    # print("Number of PDS Files: " + str(response_supplementary_pds_aggs['aggregations']['number_of_files_metadata_pds']['value']))
+    # print("Average Time for PDS Files: " + str(response_supplementary_pds_aggs['aggregations']['avg_metadata_time']['value']))
+    #
+    #
+    # # Metadata Average Time/Number for Supplementary SYN
+    # query_average_time_supplementary_syn = {'track_total_hits':'true','size':'0','query':{'bool':{'must_not':[{'term':{'completed':{'value':'completed'}}}],'must':[{'term':{'is_index_b':{'value':'true'}}},{'term':{'is_metadata_suc_b':{'value':'true'}}},{'term':{'is_supplementary_file_missing':{'value':'false'}}},{'term':{'metadata_type_s':{'value':'syn'}}}]}},'aggs':{'number_of_files_metadata_syn':{'value_count':{'field':'metadata_type_s'}},'avg_metadata_time':{'avg':{'field':'metadata_time_f'}}}}
+    # response_supplementary_syn_aggs = publish_audit.search(index=data_conf_filter['eda']['audit_index'], body=query_average_time_supplementary_syn)
+    # print("\n")
+    # print("Number of PDS Files: " + str(response_supplementary_syn_aggs['aggregations']['number_of_files_metadata_syn']['value']))
+    # print("Average Time for PDS Files: " + str(response_supplementary_syn_aggs['aggregations']['avg_metadata_time']['value']))
+    #
 
-
-    # Metadata Average Time/Number for OCR
-    query_average_time_ocr = {'track_total_hits':'true','size':'0','query':{'bool':{'must_not':[{'term':{'completed':{'value':'completed'}}}],'must':[{'term':{'is_ocr_b':{'value':'true'}}}]}},'aggs':{'number_of_files_ocred':{'value_count':{'field':'is_ocr_b'}},'avg_ocr_time':{'avg':{'field':'ocr_time_f'}}}}
-    response_ocr_aggs = publish_audit.search(index=data_conf_filter['eda']['audit_index'], body=query_average_time_ocr)
-    print("\n")
-    print("Number of files OCR: " + str(response_ocr_aggs['aggregations']['number_of_files_ocred']['value']))
-    print("Average Time for OCR: " + str(response_ocr_aggs['aggregations']['avg_ocr_time']['value']))
-
-    # Metadata Average Time/Number for Indexing
-    query_average_time_indexer = {'track_total_hits': 'true', 'size': '0', 'query': {'bool': {'must_not': [{'term': {'completed': {'value': 'completed'}}}],'must': [{'term': {'is_index_b': {'value': 'true'}}}]}}, 'aggs': {'number_of_files_index': {'value_count': {'field': 'is_ocr_b'}}, 'avg_index_time': {'avg': {'field': 'ocr_time_f'}}}}
-    response_index_aggs = publish_audit.search(index=data_conf_filter['eda']['audit_index'], body=query_average_time_indexer)
-    print("\n")
-    print("Number of files Index: " + str(response_index_aggs['aggregations']['number_of_files_index']['value']))
-    print("Average Time for Indexing: " + str(response_index_aggs['aggregations']['avg_index_time']['value']))
-
-    # Metadata Average Time/Number for Supplementary PDS
-    query_average_time_supplementary_pds = {'track_total_hits':'true','size':'0','query':{'bool':{'must_not':[{'term':{'completed':{'value':'completed'}}}],'must':[{'term':{'is_index_b':{'value':'true'}}},{'term':{'is_metadata_suc_b':{'value':'true'}}},{'term':{'is_supplementary_file_missing':{'value':'false'}}},{'term':{'metadata_type_s':{'value':'pds'}}}]}},'aggs':{'number_of_files_metadata_pds':{'value_count':{'field':'metadata_type_s'}},'avg_metadata_time':{'avg':{'field':'metadata_time_f'}}}}
-    response_supplementary_pds_aggs = publish_audit.search(index=data_conf_filter['eda']['audit_index'], body=query_average_time_supplementary_pds)
-    print("\n")
-    print("Number of PDS Files: " + str(response_supplementary_pds_aggs['aggregations']['number_of_files_metadata_pds']['value']))
-    print("Average Time for PDS Files: " + str(response_supplementary_pds_aggs['aggregations']['avg_metadata_time']['value']))
-
-
-    # Metadata Average Time/Number for Supplementary SYN
-    query_average_time_supplementary_syn = {'track_total_hits':'true','size':'0','query':{'bool':{'must_not':[{'term':{'completed':{'value':'completed'}}}],'must':[{'term':{'is_index_b':{'value':'true'}}},{'term':{'is_metadata_suc_b':{'value':'true'}}},{'term':{'is_supplementary_file_missing':{'value':'false'}}},{'term':{'metadata_type_s':{'value':'syn'}}}]}},'aggs':{'number_of_files_metadata_syn':{'value_count':{'field':'metadata_type_s'}},'avg_metadata_time':{'avg':{'field':'metadata_time_f'}}}}
-    response_supplementary_syn_aggs = publish_audit.search(index=data_conf_filter['eda']['audit_index'], body=query_average_time_supplementary_syn)
-    print("\n")
-    print("Number of PDS Files: " + str(response_supplementary_syn_aggs['aggregations']['number_of_files_metadata_syn']['value']))
-    print("Average Time for PDS Files: " + str(response_supplementary_syn_aggs['aggregations']['avg_metadata_time']['value']))
-
-
-# def read_extension_conf() -> dict:
-#     ext_app_config_name = os.environ.get("GC_APP_CONFIG_EXT_NAME")
-#     with open(ext_app_config_name) as json_file:
-#         data = json.load(json_file)
-#     return data
 
 
 def get_es_publisher(staging_folder: str, index_name: str, alias: str) -> EDSConfiguredElasticsearchPublisher:
