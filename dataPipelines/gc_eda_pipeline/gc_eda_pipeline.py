@@ -174,7 +174,7 @@ def ingestion(staging_folder: str, aws_s3_input_pdf_prefix: str, max_workers: in
         audit_complete(audit_id=audit_id + "_" + str(time.time()), publisher=eda_audit_publisher,
                        number_of_files=number_file_processed, number_file_failed=number_file_failed,
                        directory=input_loc, modified_date=int(time.time()), duration=int(end - start),
-                       bulk_index=end_bulk_index - start_bulk_index)
+                       bulk_index=int(end_bulk_index - start_bulk_index))
 
         delete_index_folder_content = staging_folder + "/index/" + input_loc + "/"
         delete_pdf_folder_content = staging_folder + "/pdf/" + input_loc + "/"
@@ -213,7 +213,7 @@ def process_doc(file: str, staging_folder: Union[str, Path], data_conf_filter: d
 
     audit_rec = {"filename_s": "", "eda_path_s": "", "gc_path_s": "", "json_path_s": "",
                  "metadata_type_s": "none", "is_metadata_suc_b": False, "is_ocr_b": False, "is_docparser_b": False,
-                 "is_index_b": False, "metadata_time_f": False, "ocr_time_f": 0.0, "docparser_time_f": 0.0,
+                 "is_index_b": False, "metadata_time_f": 0.0, "ocr_time_f": 0.0, "docparser_time_f": 0.0,
                  "index_time_f": 0.0, "modified_date_dt": 0}
 
     path, filename = os.path.split(file)
@@ -292,7 +292,7 @@ def process_doc(file: str, staging_folder: Union[str, Path], data_conf_filter: d
                     audit_rec.update({"filename_s": filename, "eda_path_s": file,
                                       "metadata_type_s": "none", "is_metadata_suc_b": "false",
                                       "is_supplementary_file_missing": "true",
-                                      "metadata_time_f": "0", "modified_date_dt": int(time.time())})
+                                      "metadata_time_f": 0.0, "modified_date_dt": int(time.time())})
                     audit_record_new(audit_id=audit_id, publisher=publish_audit, audit_record=audit_rec)
 
                     return {'filename': filename, "status": "failed", "info": "unable to file docfile " +

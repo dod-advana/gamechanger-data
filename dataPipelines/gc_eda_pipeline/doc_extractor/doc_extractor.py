@@ -9,6 +9,7 @@ from ocrmypdf import SubprocessOutputError
 from common.utils.file_utils import is_pdf, is_ocr_pdf, is_encrypted_pdf
 from dataPipelines.gc_ocr.utils import PDFOCR, OCRJobType
 import traceback
+from urllib3.exceptions import ProtocolError
 
 
 def ocr_process(staging_folder: str, file: str, multiprocess: int, aws_s3_output_pdf_prefix: str,
@@ -17,16 +18,26 @@ def ocr_process(staging_folder: str, file: str, multiprocess: int, aws_s3_output
     # Download PDF file
     ocr_time_start = time.time()
     pdf_file_local_path = staging_folder + "/pdf/" + file
-    saved_file = Conf.s3_utils.download_file(file=pdf_file_local_path, object_path=file)
 
-    # OCR PDF if need
-    is_pdf_file, is_ocr = pdf_ocr(file=file, staging_folder=staging_folder, multiprocess=multiprocess)
+    get_ocr_file = False
+    error_count = 0
+    while not get_ocr_file and error_count < 10:
+        try:
+            saved_file = Conf.s3_utils.download_file(file=pdf_file_local_path, object_path=file)
 
-    # Copy PDF into S3
-    pdf_file_s3_path = aws_s3_output_pdf_prefix + "/" + file
-    Conf.s3_utils.upload_file(file=saved_file, object_name=pdf_file_s3_path)
-    ocr_time_end = time.time()
-    time_ocr = ocr_time_end - ocr_time_start
+            # OCR PDF if need
+            is_pdf_file, is_ocr = pdf_ocr(file=file, staging_folder=staging_folder, multiprocess=multiprocess)
+
+            # Copy PDF into S3
+            pdf_file_s3_path = aws_s3_output_pdf_prefix + "/" + file
+            Conf.s3_utils.upload_file(file=saved_file, object_name=pdf_file_s3_path)
+            ocr_time_end = time.time()
+            time_ocr = ocr_time_end - ocr_time_start
+        except (ProtocolError, ConnectionError) as e:
+            error_count += 1
+            time.sleep(1)
+        else:
+            get_ocr_file = True
 
     audit_rec.update({"gc_path_s": pdf_file_s3_path, "is_ocr_b": is_ocr, "ocr_time_f": round(time_ocr, 4),
                       "modified_date_dt": int(time.time())})
