@@ -7,7 +7,7 @@ from dataPipelines.gc_eda_pipeline.utils.eda_utils import read_extension_conf
 from dataPipelines.gc_eda_pipeline.gc_eda_pipeline import ingestion
 from dataPipelines.gc_eda_pipeline.utils.eda_job_type import EDAJobType
 from dataPipelines.gc_eda_pipeline.conf import Conf
-
+from datetime import datetime
 
 @click.command()
 @click.option(
@@ -72,10 +72,16 @@ def run(staging_folder: str,  max_workers: int, workers_ocr: int, eda_job_type: 
         row = cursor.fetchone()
 
         if row is None:
+            cursor.execute(sql_daily_process)
             print("There is no dataset that need to be process")
             sys.exit("There is no dataset that need to be process")
         else:
             output_path = row['output_path']
+            today_date = datetime.today().strftime('%Y/%m/%d') + "/"
+            if today_date == output_path:
+                print("Skip Today's date")
+                sys.exit("There is no dataset that need to be process")
+
             audit_moved_loc = row['audit_moved_loc']
             process_directory = ''.join([aws_s3_daily_pdf_prefix, output_path])
 
@@ -86,7 +92,7 @@ def run(staging_folder: str,  max_workers: int, workers_ocr: int, eda_job_type: 
                 conn.commit()
 
                 ingestion(staging_folder=staging_folder, aws_s3_input_pdf_prefix=process_directory,
-                          max_workers=max_workers,eda_job_type=eda_job_type, workers_ocr=workers_ocr,
+                          max_workers=max_workers, eda_job_type=eda_job_type, workers_ocr=workers_ocr,
                           loop_number=50000)
 
                 # Update Daily EDA Table
