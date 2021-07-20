@@ -218,6 +218,7 @@ class LoadManager:
                 else:
                     pub = Publication.get_or_create_from_document(doc=metadata, session=session)
                     if pub:
+                        session.add(pub)
                         vdoc = VersionedDoc.create_from_document(
                             doc=metadata,
                             pub=pub,
