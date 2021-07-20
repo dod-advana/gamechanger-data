@@ -67,7 +67,8 @@ def parse(f_name, meta_data=None, ocr_missing_doc=False, num_ocr_threads=2, forc
         doc_dict = post_process.process(doc_dict)
 
         write_doc_dict_to_json.write(out_dir=out_dir, ex_dict=doc_dict)
+    except Exception as e:
+        print('ERROR in policy_analytics.parse:', e)
     finally:
         if should_delete:
             os.remove(f_name)
-
