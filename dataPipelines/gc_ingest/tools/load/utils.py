@@ -4,7 +4,6 @@ import typing as t
 import datetime as dt
 import sys
 
-from dataPipelines.gc_crawler.data_model import Document
 from dataPipelines.gc_ingest.config import Config
 from dataPipelines.gc_db_utils.orch.models import VersionedDoc, Publication
 from common.utils.s3 import S3Utils
@@ -34,7 +33,7 @@ class IngestableRawDoc(GenericIngestableDoc):
 
 
 class IngestableMetadataDoc(GenericIngestableDoc):
-    metadata: Document
+    metadata: t.Dict[str, t.Any]
 
 
 class IngestableThumbnailDoc(GenericIngestableDoc):
@@ -134,7 +133,7 @@ class LoadManager:
 
             return IngestableMetadataDoc(
                 local_path=local_path,
-                metadata=Document.from_dict(json.load(local_path.open("r")))
+                metadata=json.load(local_path.open("r"))
             )
 
         def _get_corresponding_parsed_idoc(raw_doc: Path, parsed_dir: t.Optional[Path]) -> t.Optional[IngestableParsedDoc]:
@@ -190,7 +189,7 @@ class LoadManager:
 
                 pub = (
                     existing_pub
-                    or pubs.get(idg.metadata_idoc.metadata.doc_name)
+                    or pubs.get(idg.metadata_idoc.metadata['doc_name'])
                     or Publication.create_from_document(doc=idg.metadata_idoc.metadata)
                 )
 
