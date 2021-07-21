@@ -38,7 +38,7 @@ local job_dir="$LOCAL_TMP_DIR"
   local load_archive_base_prefix="gamechanger/load-archive/"
   local db_backup_base_prefix="gamechanger/backup/db/"
 
-  python -m dataPipelines.gc_ingest pipelines clone ingest \
+  python -m dataPipelines.gc_ingest pipelines core ingest \
     --skip-neo4j-update="$skip_neo4j_update" \
     --skip-snapshot-backup="$skip_snapshot_backup" \
     --skip-db-backup="$skip_db_backup" \
