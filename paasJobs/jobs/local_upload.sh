@@ -10,10 +10,10 @@ set -o pipefail
 
 function run_core_ingest() {
 
-local job_dir="$LOCAL_TMP_DIR"
+  local job_dir="$LOCAL_TMP_DIR"
   local job_ts="$JOB_TS"
 
-  local crawler_output="$job_dir/$RELATIVE_CRAWLER_OUTPUT_LOCATION"
+  local crawler_output="$CRAWLER_OUTPUT_LOCATION"
 
   local bucket_name="$S3_BUCKET_NAME"
 
@@ -32,8 +32,8 @@ local job_dir="$LOCAL_TMP_DIR"
   local max_parser_threads="${MAX_PARSER_THREADS:-16}"
   local max_neo4j_threads="${MAX_PARSER_THREADS:-16}"
 
-  local local_raw_ingest_prefix="${LOCAL_RAW_INGEST_PREFIX}"
-  local local_parsed_ingest_prefix="${LOCAL_PARSED_INGEST_PREFIX}"
+  local local_raw_ingest_dir="${LOCAL_RAW_INGEST_DIR}"
+  local local_parsed_ingest_dir="${LOCAL_PARSED_INGEST_DIR}"
 
   local current_snapshot_prefix="gamechanger/"
   local backup_snapshot_prefix="gamechanger/backup/"
@@ -60,8 +60,8 @@ local job_dir="$LOCAL_TMP_DIR"
     --max-ocr-threads="$max_ocr_threads" \
     --crawler-output="$crawler_output" \
     local \
-    --local-raw-ingest-prefix="$local_raw_ingest_prefix" \
-    --local-parsed-ingest-prefix="$local_parsed_ingest_prefix"
+    --local-raw-ingest-dir="$local_raw_ingest_dir" \
+    --local-parsed-ingest-dir="$local_parsed_ingest_dir"
 
 }
 

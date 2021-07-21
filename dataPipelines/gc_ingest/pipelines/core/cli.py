@@ -133,7 +133,7 @@ def core_local_ingest(core_ingest_config: CoreIngestConfig, **kwargs):
     CoreIngestSteps.backup_db(lic)
     CoreIngestSteps.backup_snapshots(lic)
     CoreIngestSteps.update_thumbnails(lic)
-    if lic.local_parsed_ingest_dir:
+    if not lic.local_parsed_ingest_dir:
         announce("Parsed files passed, skipping parsing.")
         CoreIngestSteps.parse_and_ocr(lic)
     CoreIngestSteps.load_files(lic)
