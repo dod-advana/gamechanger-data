@@ -1,5 +1,4 @@
 from pathlib import Path
-from dataPipelines.gc_crawler.data_model import Document, DownloadableItem
 import filetype
 import typing as t
 import json
