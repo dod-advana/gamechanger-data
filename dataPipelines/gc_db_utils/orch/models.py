@@ -4,6 +4,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from typing import Optional, Dict, Any
 import datetime as dt
 from sqlalchemy.orm import Session
+import json
 from sqlalchemy.ext.declarative import DeferredReflection
 from dataPipelines.gc_db_utils.web.schemas import SnapshotEntrySchema
 from common.utils.mixins import AutoRepr
@@ -77,7 +78,7 @@ class VersionedDoc(AutoRepr, VersionedDocSchema, DeferredOrchReflectedBase):
             doc_location=doc_location,
             batch_timestamp=batch_timestamp,
             publication_date=parse_timestamp(doc['publication_date']),
-            json_metadata=doc.to_json(),  # type: ignore
+            json_metadata=json.dumps(doc),
             version_hash=doc['version_hash'],
             md5_hash="",
             is_ignored=False
