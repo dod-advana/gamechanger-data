@@ -1,6 +1,9 @@
 # Rendered Configuration Files
 configuration/rendered/
 
+# gamechangerml modules
+gamechangerml/
+
 # IDE files
 .vscode
 .idea/
