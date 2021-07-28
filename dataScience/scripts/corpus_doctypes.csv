@@ -1,0 +1,78 @@
+,doc_type,source,Description,group
+0,AFGM,Air Force,Air Force Guidance Memorandum,Air Force
+1,AFH,Air Force,Air Force Handbook,Air Force
+2,AFI,Air Force,Air Force Instruction ,Air Force
+3,AFJI,Air Force,Air Force Joint Instruction,Air Force
+4,AFJMAN,Air Force,,Air Force
+5,AFJQS,Air Force,Air Force Job Qualification Standard,Air Force
+6,AFM,Air Force,,Air Force
+7,AFMAN,Air Force,Air Force Manual,Air Force
+8,AFMD,Air Force,Mission Directive,Air Force
+9,AFPAM,Air Force,Pamphlet,Air Force
+10,AFPD,Air Force,Air Force Policy Directives,Air Force
+11,AFPM,Air Force,,Air Force
+12,AFTTP,Air Force,"Air Force Tactics, Techniques, Procedures",Air Force
+13,AFVA,Air Force,,Air Force
+14,CFETP,Air Force,Career Field Education and Training Publication,Air Force
+15,DAFI,Air Force,Department of the Air Force Instruction,Air Force
+16,DAFPD,Air Force,Department of the Air Force Policy Directive,Air Force
+17,HAFMD,Air Force,Headquarters Air Force Mission Directive,Air Force
+18,HOI,Air Force,Headquarters Operating Instruction,Air Force
+19,JTA,Air Force,Joint Table of Allowances,Air Force
+20,QTP,Air Force,Qualification Training Package,Air Force
+21,TM,Army,Technical Manual,Army
+22,ADP,Army,Army Doctrine Publication,Army
+23,AGO,Army,Army General Orders,Army
+24,AR,Army,Army Regulation,Army
+25,ARMY,Army,Army Directives,Army
+26,ATP,Army,Army Techniques Publication,Army
+27,ATTP,Army,"Army Tactics, Techniques and Procedures",Army
+28,CTA,Army,Common Table of Allowances,Army
+29,DA,Army,Department of the Army,Army
+30,DA FORM,Army,,Army
+31,DA PAM,Army,Department of the Army Pamphlet,Army
+32,FM,Army,Frequency Management,Army
+33,GTA,Army,,Army
+34,HQDA,Army,Headquarters Department of the Army,Army
+35,PAM,Army,Pamphlet,Army
+36,SCG Army,Army,,Army
+37,STP,Army,Soldier Training Publication,Army
+38,TB,Army,"Technical Bulletin, Medical",Army
+39,TC,Army,Training Circular,Army
+40,CJCS GDE,Chairman of the Joint Chiefs of Staff,Chairman of the Joint Chiefs of Staff Guide,Misc.
+41,CJCSI,Chairman of the Joint Chiefs of Staff,Chairman of the Joint Chiefs of Staff Instructions,Misc.
+42,CJCSM,Chairman of the Joint Chiefs of Staff,Chairman of the Joint Chiefs of Staff Manuals,Misc.
+43,CJCSN,Chairman of the Joint Chiefs of Staff,Chairman of the Joint Chiefs of Staff Notices,Misc.
+44,ICD,Director of National Intelligence,Intelligence Community Directive,Misc.
+45,ICPG,Director of National Intelligence,Intelligence Community Policy Guidance,Misc.
+46,ICPM,Director of National Intelligence,,Misc.
+47,AI,DoD,Administrative Instruction,DoD
+48,DTM,DoD,Directive-Type Memorandum,DoD
+49,DoDD,DoD,DoD Directives,DoD
+50,DoDI,DoD,DoD Issuances,DoD
+51,DoDI CPM,DoD,DoD Issuance - Civilian Personnel Manual,DoD
+52,DoDM,DoD,DoD Manuals,DoD
+53,DCG,Government Accountability Office (GAO),Decisions of the Comptroller General,Misc.
+54,MANUAL,Joint Service Committee on Military Justice,Manual for Court Martial,US Code and JSCMJ
+55,FMFM,Marine Corps,,Marine Corps & Navy
+56,FMFRP,Marine Corps,Case Studies,Marine Corps & Navy
+57,MC MISC,Marine Corps,Region Profiles/Historic Case Studies,Marine Corps & Navy
+58,MCBUL,Marine Corps,Marine Corps Bulletin,Marine Corps & Navy
+59,MCDP,Marine Corps,Marine Corps Doctrinal Publication,Marine Corps & Navy
+60,MCIP,Marine Corps,Marine Corps Interim Publication,Marine Corps & Navy
+61,MCO,Marine Corps,Marine Corps Orders,Marine Corps & Navy
+62,MCO P,Marine Corps,Marine Corps Order Publication,Marine Corps & Navy
+63,MCRP,Marine Corps,Marine Corps Reference Publication,Marine Corps & Navy
+64,MCTP,Marine Corps,,Marine Corps & Navy
+65,MCWP,Marine Corps,Marine Corps Warfighting Publication,Marine Corps & Navy
+66,NAVMC,Marine Corps,,Marine Corps & Navy
+67,NAVMC DIR,Marine Corps,,Marine Corps & Navy
+68,UM,Marine Corps,Publications Library Management System,Marine Corps & Navy
+69,IRM,Marine Corps,Information Resources Management,Marine Corps & Navy
+70,JAGINST,Navy,Judge Advocate General,Marine Corps & Navy
+71,NAVSUP,Navy,,Marine Corps & Navy
+72,SECNAV,Navy,Secretary of the Navy,Marine Corps & Navy
+73,SECNAVINST,Navy,Secretary of the Navy Instructions,Marine Corps & Navy
+74,Title,U.S. Code,Titles (Laws),US Code and JSCMJ
+75,EO,White House,Executive Orders,Misc.
+76,OMBM,White House,Office of Management and Budget (OMB) Memorandums,Misc.

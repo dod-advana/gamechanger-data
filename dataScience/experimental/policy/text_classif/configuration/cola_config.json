@@ -1,0 +1,11 @@
+{
+  "data_name": "COLA Test Data",
+  "clf_type": "statistical",
+  "print_report": "false",
+  "print_top10": "false",
+  "all_categories": "false",
+  "n_features":  "gros",
+  "sublinear": "false",
+  "max_df": 1.0,
+  "min_df": 1
+}

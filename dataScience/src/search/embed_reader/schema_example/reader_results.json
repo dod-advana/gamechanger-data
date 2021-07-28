@@ -1,0 +1,18 @@
+{
+  "query": "Telework Policy",
+  "answers": [
+    {
+      "answer": "telework is great",
+      "context": "telework is great and the policy is inten",
+      "id": "DoDI 1234 All about Telework",
+      "text" : "telework is great and policy is intent..."
+    },
+    {
+      "answer": "work from home",
+      "context": "if telework is approved , work from home is",
+      "id": "DoDD 8484 What's up with telework",
+      "text": "if telework is approved , work from home is allowed ..."
+
+    }
+  ]
+}
