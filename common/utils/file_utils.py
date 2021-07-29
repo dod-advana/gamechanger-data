@@ -29,25 +29,30 @@ def is_pdf(file: t.Union[Path, str]) -> bool:
 
     try:
         doc = fitz.open(file_path)
-        doc.close()
     except RuntimeError as e:
         if 'no objects found' in e.args:
             return False
+    except:
+        return False
+    finally:
+        doc.close()
+
     return True
 
 
 def is_ocr_pdf(file: t.Union[Path, str]) -> bool:
     """Check if given pdf file is OCR'ed"""
     file_path = Path(file).resolve()
-
-    doc = fitz.open(str(file_path))
-
-    for page_num in range(doc.pageCount):
-        if doc.getPageText(page_num).strip() is not '':
-            doc.close()
-            return True
-    doc.close()
-    return False
+    try:
+        with fitz.open(str(file_path)) as doc:
+            for page_num in range(doc.pageCount):
+                if doc.getPageText(page_num).strip() is not '':
+                    return True
+            return False
+    except Exception as e:
+        print(f"Unexpected error while trying to open {file_path}")
+        print(e)
+        return False
 
 
 def is_encrypted_pdf(file: t.Union[Path, str]) -> bool:
@@ -58,6 +63,10 @@ def is_encrypted_pdf(file: t.Union[Path, str]) -> bool:
         pdf_reader = PyPDF2.PdfFileReader(str(file_path))
         return pdf_reader.isEncrypted
     except PdfReadError as e:
+        print(f"PdfReadError error while trying to open {file_path.name}")
+        print(e)
+        return True  # err on a side of caution
+    except Exception as e:
         print(f"Unexpected error while trying to open {file_path.name}")
         print(e)
-        return True # err on a side of caution
+        return True  # err on a side of caution

@@ -128,13 +128,14 @@ def core_local_ingest(core_ingest_config: CoreIngestConfig, **kwargs):
     if not next((p for p in lic.raw_doc_base_dir.iterdir() if p.is_file()), None):
         announce("[WARNING] No files were found for processing, exiting pipeline.")
         exit(1)
-
     CoreIngestSteps.update_crawler_status_downloaded(lic)
     CoreIngestSteps.update_crawler_status_in_progress(lic)
     CoreIngestSteps.backup_db(lic)
     CoreIngestSteps.backup_snapshots(lic)
     CoreIngestSteps.update_thumbnails(lic)
-    CoreIngestSteps.parse_and_ocr(lic)
+    if not lic.skip_parse:
+        announce("Parsed files passed, skipping parsing.")
+        CoreIngestSteps.parse_and_ocr(lic)
     CoreIngestSteps.load_files(lic)
     CoreIngestSteps.update_s3_snapshots(lic)
     CoreIngestSteps.refresh_materialized_tables(lic)
