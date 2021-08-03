@@ -395,11 +395,11 @@ class S3IngestConfig(CoreIngestConfig):
     def metadata_creater(self) -> ManualMetadata:
         if hasattr(self, '_metadata_creater'):
             return self._metadata_creater
-
-        self._metadata_creater = ManualMetadata(
-            input_directory=self.raw_doc_base_dir,
-            document_group=self.metadata_creation_group
-        )
+        if self.metadata_creation_group:
+            self._metadata_creater = ManualMetadata(
+                input_directory=self.raw_doc_base_dir,
+                document_group=self.metadata_creation_group
+            )
         return self._metadata_creater
 
     @staticmethod
