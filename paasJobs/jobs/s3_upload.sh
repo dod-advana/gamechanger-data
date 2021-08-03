@@ -10,7 +10,7 @@ set -o pipefail
 
 function run_core_ingest() {
 
-local job_dir="$LOCAL_TMP_DIR"
+  local job_dir="$LOCAL_TMP_DIR"
   local job_ts="$JOB_TS"
 
   local bucket_name="$S3_BUCKET_NAME"
@@ -33,12 +33,14 @@ local job_dir="$LOCAL_TMP_DIR"
   local s3_raw_ingest_prefix="${S3_RAW_INGEST_PREFIX}"
   local s3_parsed_ingest_prefix="${S3_PARSED_INGEST_PREFIX}"
 
-  local current_snapshot_prefix="gamechanger/"
-  local backup_snapshot_prefix="gamechanger/backup/"
-  local load_archive_base_prefix="gamechanger/load-archive/"
-  local db_backup_base_prefix="gamechanger/backup/db/"
+  local current_snapshot_prefix="${CURRENT_SNAPSHOT_PREFIX:-gamechanger/}"
+  local backup_snapshot_prefix="${BACKUP_SNAPSHOT_PREFIX:-gamechanger/backup/}"
+  local load_archive_base_prefix="${LOAD_ARCHIVE_BASE_PREFIX:-gamechanger/load-archive/}"
+  local db_backup_base_prefix="${DB_BACKUP_BASE_PREFIX:-gamechanger/backup/db/}"
+  local metadata_creation_group="${METADATA_CREATION_GROUP:-}"
+  local clone_or_core="${CLONE_OR_CORE:-core}"
 
-  python -m dataPipelines.gc_ingest pipelines core ingest \
+  python -m dataPipelines.gc_ingest pipelines $clone_or_core ingest \
     --skip-neo4j-update="$skip_neo4j_update" \
     --skip-snapshot-backup="$skip_snapshot_backup" \
     --skip-db-backup="$skip_db_backup" \
@@ -59,7 +61,7 @@ local job_dir="$LOCAL_TMP_DIR"
     s3 \
     --s3-raw-ingest-prefix="$s3_raw_ingest_prefix" \
     --s3-parsed-ingest-prefix="$s3_parsed_ingest_prefix"
-
+    --metadata-creation-group="$metadata_creation_group" \
 }
 
 ##### ##### #####
