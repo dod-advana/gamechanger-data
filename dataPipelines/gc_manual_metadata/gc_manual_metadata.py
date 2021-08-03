@@ -33,21 +33,6 @@ class ManualMetadata:
                 version_hash_raw_data=version_hash_fields,
                 downloadable_items=[pdi]
             )
-        elif self.document_group == "NGA":
-            pdi = dict(doc_type="pdf", web_url="manual.ingest")
-            version_hash_fields = {"filename": Path(file).name}
-            doc = dict(
-                doc_name=Path(file).stem,
-                doc_title=Path(file).stem,
-                doc_num="",
-                doc_type="pdf",
-                publication_date="N/A",
-                cac_login_required=False,  # TODO check this
-                crawler_used="nga",
-                source_page_url="manual.ingest",
-                version_hash_raw_data=version_hash_fields,
-                downloadable_items=[pdi]
-            )
         elif self.document_group == "pdf":
             pdi = dict(doc_type="pdf", web_url="manual.ingest")
             version_hash_fields = {"filename": Path(file).name}
@@ -63,7 +48,7 @@ class ManualMetadata:
                 version_hash_raw_data=version_hash_fields,
                 downloadable_items=[pdi]
             )
-        elif self.document_group=="nga":
+        elif self.document_group == "nga":
             before, part, after = Path(file).stem.partition("(")
 
             doc_title = before.split("_")[5] if not after else before
@@ -73,24 +58,24 @@ class ManualMetadata:
             pdi = dict(doc_type=Path(file).suffix[1:],
                        web_url="manual.ingest")
             version_hash_fields = {"filename": Path(file).name,
-                                   "doc_title":doc_title,
-                                   "doc_num":doc_num,
-                                   "doc_type":doc_type}
+                                   "doc_title": doc_title,
+                                   "doc_num": doc_num,
+                                   "doc_type": doc_type}
 
             doc = dict(
-                doc_name = Path(file).stem,
-                doc_title = doc_title,
-                doc_num = doc_num,
-                doc_type = doc_type,
-                publication_date = "N/A",
-                cac_login_required = True,
-                crawler_used = "NGA",
-                source_page_url = "manual.ingest",
-                version_hash_raw_data = version_hash_fields,
-                downloadable_items = [pdi],
-                display_doc_type = "Document",
-                display_org = "NGA",
-                display_source ="NGA Publications"
+                doc_name=Path(file).stem,
+                doc_title=doc_title,
+                doc_num=doc_num,
+                doc_type=doc_type,
+                publication_date="N/A",
+                cac_login_required=True,
+                crawler_used="NGA",
+                source_page_url="manual.ingest",
+                version_hash_raw_data=version_hash_fields,
+                downloadable_items=[pdi],
+                display_doc_type="Document",
+                display_org="NGA",
+                display_source="NGA Publications"
             )
 
         else:
