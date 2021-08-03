@@ -382,7 +382,7 @@ class S3IngestConfig(CoreIngestConfig):
         @click.option(
             '--metadata-creation-group',
             type=str,
-            help="Document grouping to model metadata",
+            help="Document grouping to model metadata, if empty string or not assigned, no metadata will be created.",
             required=False
         )
 
