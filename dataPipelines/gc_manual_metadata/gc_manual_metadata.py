@@ -3,9 +3,6 @@ import filetype
 import typing as t
 import json
 
-Accepted_document_groups = ["Memo", "pdf"]
-
-
 class ManualMetadata:
 
     def __init__(self, input_directory, document_group):
@@ -50,11 +47,30 @@ class ManualMetadata:
                 version_hash_raw_data=version_hash_fields,
                 downloadable_items=[pdi]
             )
+        else:
+            pdi = dict(doc_type=Path(file).suffix[1:],
+                       web_url="manual.ingest")
+            version_hash_fields = {"filename": Path(file).name}
+            doc = dict(
+                doc_name = Path(file).stem,
+                doc_title = Path(file).stem,
+                doc_num = "",
+                doc_type = str.upper(self.document_group),
+                publication_date = "N/A",
+                cac_login_required = True,
+                crawler_used = str.upper(self.document_group),
+                source_page_url = "manual.ingest",
+                version_hash_raw_data = version_hash_fields,
+                downloadable_items = [pdi],
+                display_doc_type = "Document",
+                display_org = str.upper(self.document_group),
+                display_source = str.upper(self.document_group) + " Publications"
+            )
 
         return doc
 
     def create_metadata(self):
-        if self.document_group in Accepted_document_groups:
+        if self.document_group:
             for file in self.files:
                 print(self.metadata_files)
                 if Path(file).stem not in self.metadata_files:
