@@ -33,8 +33,8 @@ VENV_ACTIVATE_SCRIPT="${VENV_ACTIVATE_SCRIPT:-/opt/gc-venv-current/bin/activate}
 
 ## JOB SPECIFIC CONF
 
-export ES_INDEX_NAME="NGA_20210803"
-export ES_ALIAS_NAME="NGA"
+export ES_INDEX_NAME="nga_20210803"
+export ES_ALIAS_NAME="nga"
 
 export S3_RAW_INGEST_PREFIX="advana-raw-zone/gamechanger-test/pdf" #pdf and metadata path
 export S3_PARSED_INGEST_PREFIX=""
@@ -59,6 +59,3 @@ export LOAD_ARCHIVE_BASE_PREFIX="gamechanger/projects/nga/load-archive/"
 export DB_BACKUP_BASE_PREFIX="gamechanger/projects/nga/backup/db/"
 
 export CLONE_OR_CORE="clone"
-
-export RELATIVE_CRAWLER_OUTPUT_LOCATION="${RELATIVE_CRAWLER_OUTPUT_LOCATION:-raw_docs/crawler_output.json}"
-

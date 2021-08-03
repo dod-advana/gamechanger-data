@@ -45,7 +45,6 @@ function run_core_ingest() {
     --skip-snapshot-backup="$skip_snapshot_backup" \
     --skip-db-backup="$skip_db_backup" \
     --skip-db-update="$skip_db_update" \
-    --force-ocr="$force_ocr" \
     --current-snapshot-prefix="$current_snapshot_prefix" \
     --backup-snapshot-prefix="$backup_snapshot_prefix" \
     --db-backup-base-prefix="$db_backup_base_prefix" \
@@ -60,8 +59,8 @@ function run_core_ingest() {
     --max-ocr-threads="$max_ocr_threads" \
     s3 \
     --s3-raw-ingest-prefix="$s3_raw_ingest_prefix" \
-    --s3-parsed-ingest-prefix="$s3_parsed_ingest_prefix"
-    --metadata-creation-group="$metadata_creation_group" \
+    --s3-parsed-ingest-prefix="$s3_parsed_ingest_prefix" \
+    --metadata-creation-group="$metadata_creation_group"
 }
 
 ##### ##### #####
