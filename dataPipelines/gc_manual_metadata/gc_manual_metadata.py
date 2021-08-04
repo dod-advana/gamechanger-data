@@ -12,7 +12,7 @@ def str_to_sha256_hex_digest(_str: str) -> str:
 
     return sha256(_str.encode("utf-8")).hexdigest()
 
-def dict_to_sha256_hex_digest(_dict: t.Dict[Any, Any]) -> str:
+def dict_to_sha256_hex_digest(_dict: t.Dict[t.Any, t.Any]) -> str:
     """Converts dictionary to sha256 hex digest.
       Sensitive to changes in presence and string value of any k/v pairs.
     """
