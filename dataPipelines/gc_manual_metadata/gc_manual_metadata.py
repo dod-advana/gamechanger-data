@@ -2,7 +2,29 @@ from pathlib import Path
 import filetype
 import typing as t
 import json
+from datetime import datetime
+from hashlib import sha256
 
+def str_to_sha256_hex_digest(_str: str) -> str:
+    """Converts string to sha256 hex digest"""
+    if not _str and not isinstance(_str, str):
+        raise ValueError("Arg should be a non-empty string")
+
+    return sha256(_str.encode("utf-8")).hexdigest()
+
+def dict_to_sha256_hex_digest(_dict: t.Dict[Any, Any]) -> str:
+    """Converts dictionary to sha256 hex digest.
+      Sensitive to changes in presence and string value of any k/v pairs.
+    """
+    if not _dict and not isinstance(_dict, dict):
+        raise ValueError("Arg should be a non-empty dictionary")
+    # order dict k/v pairs & concat their values as strings
+    value_string = reduce(
+        lambda t1, t2: "".join(map(str, (t1, t2))),
+        sorted(_dict.items(), key=lambda t: str(t[0])),
+        "",
+    )
+    return str_to_sha256_hex_digest(value_string)
 
 class ManualMetadata:
 
@@ -27,11 +49,14 @@ class ManualMetadata:
                 doc_num="",
                 doc_type="Memo",
                 publication_date="N/A",
+                access_timestamp=datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f'),
                 cac_login_required=True,
                 crawler_used="Memo",
                 source_page_url="manual.ingest",
                 version_hash_raw_data=version_hash_fields,
-                downloadable_items=[pdi]
+                downloadable_items=[pdi],
+                source_fqdn="manual.ingest",
+                version_hash= dict_to_sha256_hex_digest(version_hash_fields)
             )
         elif self.document_group == "pdf":
             pdi = dict(doc_type="pdf", web_url="manual.ingest")
@@ -42,11 +67,14 @@ class ManualMetadata:
                 doc_num="",
                 doc_type="pdf",
                 publication_date="N/A",
+                access_timestamp=datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f'),
                 cac_login_required=True,
                 crawler_used="pdf",
                 source_page_url="manual.ingest",
                 version_hash_raw_data=version_hash_fields,
-                downloadable_items=[pdi]
+                downloadable_items=[pdi],
+                source_fqdn="manual.ingest",
+                version_hash=dict_to_sha256_hex_digest(version_hash_fields)
             )
         elif self.document_group == "nga":
             before, part, after = Path(file).stem.partition("(")
@@ -68,6 +96,7 @@ class ManualMetadata:
                 doc_num=doc_num,
                 doc_type=doc_type,
                 publication_date="N/A",
+                access_timestamp=datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f'),
                 cac_login_required=True,
                 crawler_used="NGA",
                 source_page_url="manual.ingest",
@@ -75,7 +104,9 @@ class ManualMetadata:
                 downloadable_items=[pdi],
                 display_doc_type="Document",
                 display_org="NGA",
-                display_source="NGA Publications"
+                display_source="NGA Publications",
+                source_fqdn="manual.ingest",
+                version_hash=dict_to_sha256_hex_digest(version_hash_fields)
             )
 
         else:
@@ -88,6 +119,7 @@ class ManualMetadata:
                 doc_num="",
                 doc_type=str.upper(self.document_group),
                 publication_date="N/A",
+                access_timestamp=datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f'),
                 cac_login_required=True,
                 crawler_used=str.upper(self.document_group),
                 source_page_url="manual.ingest",
@@ -95,7 +127,9 @@ class ManualMetadata:
                 downloadable_items=[pdi],
                 display_doc_type="Document",
                 display_org=str.upper(self.document_group),
-                display_source=str.upper(self.document_group) + " Publications"
+                display_source=str.upper(self.document_group) + " Publications",
+                source_fqdn="manual.ingest",
+                version_hash=dict_to_sha256_hex_digest(version_hash_fields)
             )
 
         return doc
