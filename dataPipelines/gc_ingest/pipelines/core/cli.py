@@ -63,6 +63,7 @@ def core_s3_ingest(core_ingest_config: CoreIngestConfig, **kwargs):
     else:
         CoreIngestSteps.parse_and_ocr(sig)
 
+    CoreIngestSteps.update_thumbnails(sig)
     CoreIngestSteps.load_files(sig)
     CoreIngestSteps.update_s3_snapshots(sig)
     CoreIngestSteps.refresh_materialized_tables(sig)
