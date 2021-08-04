@@ -24,11 +24,9 @@ function run_core_ingest() {
   local skip_db_update="$SKIP_DB_UPDATE"
   local skip_revocation_update="$SKIP_REVOCATION_UPDATE"
   local skip_thumbnail_generation="$SKIP_THUMBNAIL_GENERATION"
-  local force_ocr="$FORCE_OCR"
 
   local max_ocr_threads="${MAX_OCR_THREADS_PER_FILE:-4}"
   local max_parser_threads="${MAX_PARSER_THREADS:-16}"
-  local max_neo4j_threads="${MAX_PARSER_THREADS:-16}"
 
   local s3_raw_ingest_prefix="${S3_RAW_INGEST_PREFIX}"
   local s3_parsed_ingest_prefix="${S3_PARSED_INGEST_PREFIX}"
@@ -45,6 +43,7 @@ function run_core_ingest() {
     --skip-snapshot-backup="$skip_snapshot_backup" \
     --skip-db-backup="$skip_db_backup" \
     --skip-db-update="$skip_db_update" \
+    --skip-thumbnail-generation="$skip_thumbnail_generation" \
     --current-snapshot-prefix="$current_snapshot_prefix" \
     --backup-snapshot-prefix="$backup_snapshot_prefix" \
     --db-backup-base-prefix="$db_backup_base_prefix" \
@@ -55,7 +54,6 @@ function run_core_ingest() {
     --index-name="$es_index_name" \
     --alias-name="$es_alias_name" \
     --max-threads="$max_parser_threads" \
-    --max-threads-neo4j="$max_neo4j_threads" \
     --max-ocr-threads="$max_ocr_threads" \
     s3 \
     --s3-raw-ingest-prefix="$s3_raw_ingest_prefix" \

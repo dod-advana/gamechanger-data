@@ -50,7 +50,8 @@ class CloneIngestSteps(PipelineSteps):
             parsed_dir=c.parsed_doc_base_dir,
             ingest_ts=c.batch_timestamp,
             update_s3=True,
-            update_db=not c.skip_db_update
+            update_db=not c.skip_db_update,
+            thumbnail_dir=c.thumbnail_doc_base_dir
         )
 
     @staticmethod
@@ -70,9 +71,16 @@ class CloneIngestSteps(PipelineSteps):
             replace=False,
             max_threads=c.max_threads
         )
-        c.snapshot_manager.zip_folder_and_upload_to_s3(
+        c.snapshot_manager.update_current_snapshot_from_disk(
             local_dir=c.parsed_doc_base_dir,
             snapshot_type=SnapshotType.PARSED,
+            replace=False,
+            max_threads=c.max_threads
+        )
+        c.snapshot_manager.update_current_snapshot_from_disk(
+            local_dir=c.thumbnail_doc_base_dir,
+            snapshot_type=SnapshotType.THUMBNAIL,
+            replace=False,
             max_threads=c.max_threads
         )
 
@@ -88,6 +96,12 @@ class CloneIngestSteps(PipelineSteps):
         c.snapshot_manager.update_current_snapshot_from_disk(
             local_dir=c.parsed_doc_base_dir,
             snapshot_type=SnapshotType.PARSED,
+            replace=False,
+            max_threads=c.max_threads
+        )
+        c.snapshot_manager.update_current_snapshot_from_disk(
+            local_dir=c.thumbnail_doc_base_dir,
+            snapshot_type=SnapshotType.THUMBNAIL,
             replace=False,
             max_threads=c.max_threads
         )
@@ -169,3 +183,14 @@ class CloneIngestSteps(PipelineSteps):
         c.crawler_status_tracker.update_crawler_status(status="Ingest Complete",
                                                        timestamp=datetime.now(),
                                                        update_db=not c.skip_db_update)
+
+
+    @staticmethod
+    def update_thumbnails(c: CloneIngestConfig) -> None:
+
+        if c.skip_thumbnail_generation:
+            announce("Skipping Thumbnails update [flag set] ...")
+            return
+
+        announce("Updating thumbnails ...")
+        c.thumbnail_job_manager.process_directory()
