@@ -4,6 +4,7 @@ import typing as t
 import json
 from datetime import datetime
 from hashlib import sha256
+from functools import reduce
 
 def str_to_sha256_hex_digest(_str: str) -> str:
     """Converts string to sha256 hex digest"""
