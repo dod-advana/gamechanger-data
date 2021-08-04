@@ -81,8 +81,8 @@ class ManualMetadata:
             before, part, after = Path(file).stem.partition("(")
 
             doc_title = before.split("_")[5] if not after else before
-            doc_type = doc_title.split()[0]
-            doc_num = doc_title.split()[1]
+            doc_type = doc_title.split(" ", 1)[0]
+            doc_num = doc_title.split(" ", 1)[1]
 
             pdi = dict(doc_type=Path(file).suffix[1:],
                        web_url="manual.ingest")
