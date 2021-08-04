@@ -71,9 +71,10 @@ class CloneIngestSteps(PipelineSteps):
             replace=False,
             max_threads=c.max_threads
         )
-        c.snapshot_manager.zip_folder_and_upload_to_s3(
+        c.snapshot_manager.update_current_snapshot_from_disk(
             local_dir=c.parsed_doc_base_dir,
             snapshot_type=SnapshotType.PARSED,
+            replace=False,
             max_threads=c.max_threads
         )
         c.snapshot_manager.update_current_snapshot_from_disk(
