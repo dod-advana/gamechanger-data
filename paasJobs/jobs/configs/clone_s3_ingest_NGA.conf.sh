@@ -36,7 +36,7 @@ VENV_ACTIVATE_SCRIPT="${VENV_ACTIVATE_SCRIPT:-/opt/gc-venv-current/bin/activate}
 export ES_INDEX_NAME="${ES_INDEX_NAME:-nga_20210803}"
 export ES_ALIAS_NAME="${ES_ALIAS_NAME:-nga}"
 
-export S3_RAW_INGEST_PREFIX="${S3_RAW_INGEST_PREFIX:-advana-raw-zone/gamechanger-test/pdf}" #pdf and metadata path
+export S3_RAW_INGEST_PREFIX="${S3_RAW_INGEST_PREFIX:-gamechanger-test/pdf}" #pdf and metadata path
 export S3_PARSED_INGEST_PREFIX="${S3_PARSED_INGEST_PREFIX:-}"
 
 export METADATA_CREATION_GROUP="${METADATA_CREATION_GROUP:-nga}"

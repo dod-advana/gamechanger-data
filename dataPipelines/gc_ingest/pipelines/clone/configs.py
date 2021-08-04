@@ -14,6 +14,7 @@ from dataPipelines.gc_ingest.tools.db.cli import pass_core_db_cli_options as pas
 from dataPipelines.gc_ingest.common_cli_options import pass_bucket_name_option
 from dataPipelines.gc_crawler_status_tracker.gc_crawler_status_tracker import CrawlerStatusTracker
 from dataPipelines.gc_manual_metadata.gc_manual_metadata import ManualMetadata
+from dataPipelines.gc_thumbnails.utils import ThumbnailsCreator
 from pathlib import Path
 import datetime as dt
 from enum import Enum
@@ -57,6 +58,7 @@ class CloneIngestConfig(IngestConfig):
     skip_db_update: bool = False
     skip_revocation_update: bool = False
     skip_es_revocation: bool = False
+    skip_thumbnail_generation: bool = True
     current_snapshot_prefix: NonBlankString
     backup_snapshot_prefix: NonBlankString
     infobox_dir: t.Optional[StrippedString] = None
@@ -122,6 +124,15 @@ class CloneIngestConfig(IngestConfig):
         return self._load_manager
 
     @property
+    def thumbnail_doc_base_dir(self) -> Path:
+        if hasattr(self, '_thumbnail_doc_base_dir'):
+            return self._thumbnail_doc_base_dir
+
+        self._thumbnail_doc_base_dir = Path(self.job_dir, 'thumbnails')
+        self._thumbnail_doc_base_dir.mkdir(exist_ok=False)
+        return self._thumbnail_doc_base_dir
+
+    @property
     def es_publisher(self) -> ConfiguredElasticsearchPublisher:
         if hasattr(self, '_es_publisher'):
             return self._es_publisher
@@ -162,6 +173,18 @@ class CloneIngestConfig(IngestConfig):
             bucket_name=self.bucket_name
         )
         return self._clone_db_manager
+
+    @property
+    def thumbnail_job_manager(self) -> ThumbnailsCreator:
+        if hasattr(self, '_thumbnail_job_manager'):
+            return self._thumbnail_job_manager
+
+        self._thumbnail_job_manager = ThumbnailsCreator(
+            input_directory=self.raw_doc_base_dir,
+            output_directory=self.thumbnail_doc_base_dir,
+            max_workers=self.max_threads
+        )
+        return self._thumbnail_job_manager
 
     @staticmethod
     def pass_options(f):
