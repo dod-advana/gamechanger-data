@@ -382,7 +382,7 @@ class S3IngestConfig(CoreIngestConfig):
         @click.option(
             '--metadata-creation-group',
             type=str,
-            help="Document grouping to model metadata",
+            help="Document grouping to model metadata, if empty string or not assigned, no metadata will be created.",
             required=False
         )
 
@@ -395,11 +395,11 @@ class S3IngestConfig(CoreIngestConfig):
     def metadata_creater(self) -> ManualMetadata:
         if hasattr(self, '_metadata_creater'):
             return self._metadata_creater
-
-        self._metadata_creater = ManualMetadata(
-            input_directory=self.raw_doc_base_dir,
-            document_group=self.metadata_creation_group
-        )
+        if self.metadata_creation_group:
+            self._metadata_creater = ManualMetadata(
+                input_directory=self.raw_doc_base_dir,
+                document_group=self.metadata_creation_group
+            )
         return self._metadata_creater
 
     @staticmethod
