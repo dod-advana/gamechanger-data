@@ -231,6 +231,14 @@ class CloneIngestConfig(IngestConfig):
             show_default=True
         )
         @click.option(
+            '--skip-thumbnail-generation',
+            type=bool,
+            required=False,
+            default=True,
+            help="Whether or not to generate png of first page of pdf",
+            show_default=True
+        )
+        @click.option(
             '--batch-timestamp',
             type=click.DateTime(),
             required=True,
