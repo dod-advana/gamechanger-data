@@ -163,7 +163,7 @@ CRAWLER_TO_SOURCE_TITLE_LOOKUP = defaultdict(lambda: "Unlisted Source", {
     "National_Guard": "Chief National Guard Bureau Publications",
     "Coast_Guard": "Coast Guard Directives",
     "DOD_Coronavirus_Guidance": "DoD Coronavirus Guidance",
-    "dfar_subpart_regs": "Defense Federal Acquisition Regulation Supplemental",
+    "dfar_subpart_regs": "Defense Federal Acquisition Regulation Supplement",
     "far_subpart_regs": "Federal Acquisition Regulation",
     "code_of_federal_regulations": "Code of Federal Regulations",
     # This file should not be added too, use properties on the spider to assign these values
