@@ -3,6 +3,9 @@ import json
 import click
 from dataPipelines.gc_eda_pipeline.metadata.metadata_json import metadata_extraction
 from datetime import datetime
+import psycopg2
+from psycopg2.extras import RealDictCursor
+from dataPipelines.gc_eda_pipeline.utils.eda_utils import read_extension_conf
 
 
 @click.command()
@@ -14,12 +17,30 @@ from datetime import datetime
 )
 
 def run(file_input: str):
-    today_date = datetime.today().strftime('%Y/%m/%d')
-    test_date = '2021/07/08'
-    if today_date == test_date:
-        print("Date Match")
-    else:
-        print("Dates Don't Match")
+    data_conf_filter = read_extension_conf()
+    sql = "SELECT pdf_filename FROM pds_parsed_validation.all_outgoing_counts_pdf_syn_xwalk_only;"
+    conn = psycopg2.connect(host=data_conf_filter['eda']['database']['hostname'],
+                            port=data_conf_filter['eda']['database']['port'],
+                            user=data_conf_filter['eda']['database']['user'],
+                            password=data_conf_filter['eda']['database']['password'],
+                            dbname=data_conf_filter['eda']['database']['db'],
+                            cursor_factory=psycopg2.extras.DictCursor)
+
+    cursor = conn.cursor()
+    cursor.execute(sql)
+    rows = cursor.fetchall()
+    for row in rows:
+        filename = str(row[0])
+        parsed = filename.split('-')
+        if len(parsed) == 11:
+            print(len(parsed))
+
+    # today_date = datetime.today().strftime('%Y/%m/%d')
+    # test_date = '2021/07/08'
+    # if today_date == test_date:
+    #     print("Date Match")
+    # else:
+    #     print("Dates Don't Match")
     # Load Extensions configuration files.
     # data_conf_filter = read_extension_conf()
     #

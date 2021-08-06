@@ -72,13 +72,13 @@ def extract_pds(data_conf_filter: dict, data: dict, extensions_metadata: dict):
     if naics:
         extracted_data_eda_n["naics_eda_ext"] = naics
 
-    header_details_id = popluate_line_item_details(data)
-    if header_details_id:
-        # extracted_data_eda_n["header_details_id_eda_ext"] = header_details_id
-        line_item_details_nodes = line_item_details(data_conf_filter=data_conf_filter,
-                                                    header_details_id=header_details_id)
-        if line_item_details_nodes:
-            extracted_data_eda_n["line_item_details_eda_n"] = line_item_details_nodes
+    # header_details_id = popluate_line_item_details(data)
+    # if header_details_id:
+    #     # extracted_data_eda_n["header_details_id_eda_ext"] = header_details_id
+    #     line_item_details_nodes = line_item_details(data_conf_filter=data_conf_filter,
+    #                                                 header_details_id=header_details_id)
+    #     if line_item_details_nodes:
+    #         extracted_data_eda_n["line_item_details_eda_n_di"] = line_item_details_nodes
 
     vendor_org_hierarchy_extensions_metadata = vendor_org_hierarchy(vendor_cage=vendor_cage,
                                                                     dodacc_map=dodaacs_data,

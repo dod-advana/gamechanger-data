@@ -16,7 +16,6 @@ def ocr_process(staging_folder: str, file: str, multiprocess: int, aws_s3_output
                 audit_rec: dict):
 
     # Download PDF file
-    ocr_time_start = time.time()
     pdf_file_local_path = staging_folder + "/pdf/" + file
 
     get_ocr_file = False
@@ -31,16 +30,13 @@ def ocr_process(staging_folder: str, file: str, multiprocess: int, aws_s3_output
             # Copy PDF into S3
             pdf_file_s3_path = aws_s3_output_pdf_prefix + "/" + file
             Conf.s3_utils.upload_file(file=saved_file, object_name=pdf_file_s3_path)
-            ocr_time_end = time.time()
-            time_ocr = ocr_time_end - ocr_time_start
         except (ProtocolError, ConnectionError) as e:
             error_count += 1
             time.sleep(1)
         else:
             get_ocr_file = True
 
-    audit_rec.update({"gc_path_s": pdf_file_s3_path, "is_ocr_b": is_ocr, "ocr_time_f": round(time_ocr, 4),
-                      "modified_date_dt": int(time.time())})
+    audit_rec.update({"gc_path": pdf_file_s3_path, "is_ocr": is_ocr, "modified_date_dt": int(time.time())})
 
     return is_pdf_file, pdf_file_local_path, pdf_file_s3_path
 
@@ -61,8 +57,7 @@ def extract_text(staging_folder: str, pdf_file_local_path: str, path: str, filen
     doc_time_end = time.time()
     time_dp = doc_time_end - doc_time_start
 
-    audit_rec.update({"json_path_s": ex_file_s3_path, "is_docparser_b": is_extract_suc,
-                      "docparser_time_f": round(time_dp, 4), "modified_date_dt": int(time.time())})
+    audit_rec.update({"json_path": ex_file_s3_path,  "modified_date_dt": int(time.time())})
 
     return ex_file_local_path, ex_file_s3_path, is_extract_suc
 

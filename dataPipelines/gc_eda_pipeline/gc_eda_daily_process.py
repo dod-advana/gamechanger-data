@@ -88,7 +88,7 @@ def run(staging_folder: str,  max_workers: int, workers_ocr: int, eda_job_type: 
             print(process_directory)
             if Conf.s3_utils.prefix_exists(prefix_path=process_directory):
                 cursor.execute(sql_set_daily_status_on_log, ("Processing", audit_moved_loc, output_path))
-                # print(f"Processing {cursor.query}")
+                print(f"Processing {cursor.query}")
                 conn.commit()
 
                 ingestion(staging_folder=staging_folder, aws_s3_input_pdf_prefix=process_directory,
@@ -97,16 +97,16 @@ def run(staging_folder: str,  max_workers: int, workers_ocr: int, eda_job_type: 
 
                 # Update Daily EDA Table
                 cursor.execute(sql_set_daily_status_on_log, ("Completed", audit_moved_loc, output_path))
-                # print(f"Completed {cursor.query}")
+                print(f"Completed {cursor.query}")
                 conn.commit()
 
                 # Update
                 cursor.execute(sql_insert_process_status, (process_directory, 'Completed'))
-                # print(f"GC -- Completed {cursor.query}")
+                print(f"GC -- Completed {cursor.query}")
                 conn.commit()
             else:
                 cursor.execute(sql_set_daily_status_on_log, ("Missing", audit_moved_loc, output_path))
-                # print(f"Missing {cursor.query}")
+                print(f"Missing {cursor.query}")
                 conn.commit()
                 print(f"The follow prefix was not found in S3 {process_directory}")
     except (Exception, psycopg2.DatabaseError) as error:

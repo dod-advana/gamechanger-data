@@ -124,6 +124,9 @@ class EDSConfiguredElasticsearchPublisher(ConfiguredElasticsearchPublisher):
         response = self.es.search(index=index, body=body)
         return response
 
+    # def search_scroll(self, index: str, body: str):
+    #     response = self.es.search(index=index, body=body, scro)
+
     def count(self, index: str, body: str):
         response = self.es.count(index=index, body=body)
         return response
@@ -138,5 +141,10 @@ class EDSConfiguredElasticsearchPublisher(ConfiguredElasticsearchPublisher):
         a = self.es.indices.get_settings(index=self.index_name)
         print(a)
 
+    def client_info(self):
+        return self.es.info()
+
+    def es(self):
+        return self.es()
 
 

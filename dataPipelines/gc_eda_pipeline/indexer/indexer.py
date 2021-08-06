@@ -20,8 +20,6 @@ def get_es_publisher(staging_folder: str, index_name: str, alias: str) -> EDSCon
 def index_data_file(staging_folder: str, index_file_local_path: str,  metadata_file_data: str, parsed_pdf_file_data: str,
                ex_file_s3_path: str, audit_rec: dict):
 
-    index_start = time.time()
-
     if 'extensions' in metadata_file_data.keys():
         extensions_json = metadata_file_data["extensions"]
         parsed_pdf_file_data = {**parsed_pdf_file_data, **extensions_json}
@@ -35,8 +33,4 @@ def index_data_file(staging_folder: str, index_file_local_path: str,  metadata_f
     with open(staging_folder + "/index/" + index_file_local_path, "w") as output_file:
         json.dump(index_json_data, output_file)
 
-    index_end = time.time()
-    time_index = index_end - index_start
-
-    audit_rec.update({"is_index_b": True, "index_time_f": round(time_index, 4),
-                      "modified_date_dt": int(time.time())})
+    audit_rec.update({"modified_date_dt": int(time.time())})

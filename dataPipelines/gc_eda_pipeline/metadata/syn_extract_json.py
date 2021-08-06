@@ -67,6 +67,10 @@ def extract_syn(data_conf_filter: dict, data: dict):
     if total_obligated_amount:
         extracted_data_eda_n["total_obligated_amount_eda_ext_f"] = total_obligated_amount
 
+    currency_buying = populate_currency_buying(data)
+    # if currency_buying:
+    #     extracted_data_eda_n["currency_buying_eda_ext"] = currency_buying
+
     vendor_org_hierarchy_extensions_metadata = vendor_org_hierarchy(vendor_cage=vendor_cage, dodacc_map=dodaacs_data, data_conf_filter=data_conf_filter)
 
     extracted_data_eda_n["vendor_org_hierarchy_eda_n"] = vendor_org_hierarchy_extensions_metadata
@@ -213,6 +217,17 @@ def populate_total_obligated_amount(data: dict, is_award: bool):
                 except ValueError:
                     pass
     return total_obligated_amount
+
+
+# To populate Currency Buying
+def populate_currency_buying(data: dict) -> str:
+    currency_buying = None
+    if "syn_contract_eda_ext_n" in data:
+        for syn_contract in data.get("syn_contract_eda_ext_n"):
+            if syn_contract.get("currency_buying_eda_ext"):
+                currency_buying = syn_contract.get("currency_buying_eda_ext")
+                return currency_buying
+    return currency_buying
 
 
 # To populate header PSC

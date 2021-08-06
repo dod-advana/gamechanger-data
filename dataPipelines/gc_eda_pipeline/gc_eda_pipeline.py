@@ -3,7 +3,6 @@ import click
 import json
 import os
 import concurrent.futures
-import hashlib
 import traceback
 import subprocess
 
@@ -12,13 +11,13 @@ from pathlib import Path
 from urllib3.exceptions import ProtocolError
 
 from dataPipelines.gc_eda_pipeline.conf import Conf
-from dataPipelines.gc_eda_pipeline.audit.audit import audit_complete
 from dataPipelines.gc_eda_pipeline.metadata.generate_metadata import generate_metadata_data
 from dataPipelines.gc_eda_pipeline.doc_extractor.doc_extractor import ocr_process, extract_text
 from dataPipelines.gc_eda_pipeline.utils.eda_utils import read_extension_conf
-from dataPipelines.gc_eda_pipeline.indexer.indexer import index_data_file, create_index, get_es_publisher
+from dataPipelines.gc_eda_pipeline.indexer.indexer import index_data_file, create_index
 from dataPipelines.gc_eda_pipeline.utils.eda_job_type import EDAJobType
-from dataPipelines.gc_eda_pipeline.audit.audit import audit_record_new
+from dataPipelines.gc_eda_pipeline.database.database import audit_file_exist, audit_get_record, audit_failed_record
+from dataPipelines.gc_eda_pipeline.database.database import audit_success_record, audit_get_failed_record
 
 
 @click.command()
@@ -57,8 +56,7 @@ from dataPipelines.gc_eda_pipeline.audit.audit import audit_record_new
 @click.option(
     '--eda-job-type',
     type=click.Choice([e.value for e in EDAJobType]),
-    help="""Determines how the data should be processed, 
-
+    help="""Determines how the data should be processed,
          """,
     default=EDAJobType.NORMAL.value
 )
@@ -69,8 +67,10 @@ from dataPipelines.gc_eda_pipeline.audit.audit import audit_record_new
     type=int,
     default=50000
 )
-def run(staging_folder: str, aws_s3_input_pdf_prefix: str,
-        max_workers: int, workers_ocr: int, eda_job_type: str, loop_number: int):
+#TODO update the UUID for ES for doc
+def run(staging_folder: str, aws_s3_input_pdf_prefix: str, max_workers: int, workers_ocr: int, eda_job_type: str,
+        loop_number: int):
+
     ingestion(staging_folder=staging_folder, aws_s3_input_pdf_prefix=aws_s3_input_pdf_prefix, max_workers=max_workers,
               eda_job_type=eda_job_type, workers_ocr=workers_ocr, loop_number=loop_number)
 
@@ -90,11 +90,7 @@ def ingestion(staging_folder: str, aws_s3_input_pdf_prefix: str, max_workers: in
 
     # Create the Audit and EDA indexes
     print(f"EDA Index {data_conf_filter['eda']['eda_index']}")
-    print(f"EDA Audit Index {data_conf_filter['eda']['audit_index']}")
-    eda_audit_publisher = create_index(index_name=data_conf_filter['eda']['audit_index'],
-                                       alias=data_conf_filter['eda']['audit_index_alias'])
-    eda_publisher = create_index(index_name=data_conf_filter['eda']['eda_index'],
-                                 alias=data_conf_filter['eda']['eda_index_alias'])
+    create_index(index_name=data_conf_filter['eda']['eda_index'], alias=data_conf_filter['eda']['eda_index_alias'])
 
     for input_loc in aws_s3_input_pdf_prefix.split(","):
         print(f"Processing Directory {input_loc}")
@@ -155,9 +151,6 @@ def ingestion(staging_folder: str, aws_s3_input_pdf_prefix: str, max_workers: in
                                 print(f"EDA **** Failed to process '{exc}'  ****  EDA")
                                 traceback.print_exc()
                             number_file_failed = number_file_failed + 1
-                        except RuntimeError as re:
-                            print(f"EDA **** Failed to process '{re}'  ****  EDA")
-                            traceback.print_exc()
                     else:
                         print("EDA ****  File is not a PDF **** EDA")
 
@@ -169,12 +162,6 @@ def ingestion(staging_folder: str, aws_s3_input_pdf_prefix: str, max_workers: in
         eda_publisher.index_jsons()
         end_bulk_index = time.time()
         end = time.time()
-
-        audit_id = hashlib.sha256(aws_s3_output_pdf_prefix.encode()).hexdigest()
-        audit_complete(audit_id=audit_id + "_" + str(time.time()), publisher=eda_audit_publisher,
-                       number_of_files=number_file_processed, number_file_failed=number_file_failed,
-                       directory=input_loc, modified_date=int(time.time()), duration=int(end - start),
-                       bulk_index=int(end_bulk_index - start_bulk_index))
 
         delete_index_folder_content = staging_folder + "/index/" + input_loc + "/"
         delete_pdf_folder_content = staging_folder + "/pdf/" + input_loc + "/"
@@ -205,65 +192,91 @@ def process_doc(file: str, staging_folder: Union[str, Path], data_conf_filter: d
     os.environ["AWS_METADATA_SERVICE_TIMEOUT"] = "20"
     os.environ["AWS_METADATA_SERVICE_NUM_ATTEMPTS"] = "40"
 
-    # Get connections to the Elasticsearch for the audit and eda indexes
-    publish_audit = get_es_publisher(staging_folder=staging_folder, index_name=data_conf_filter['eda']['audit_index'],
-                                     alias=data_conf_filter['eda']['audit_index_alias'])
-    publish_es = get_es_publisher(staging_folder=staging_folder, index_name=data_conf_filter['eda']['eda_index'],
-                                  alias=data_conf_filter['eda']['eda_index_alias'])
-
-    audit_rec = {"filename_s": "", "eda_path_s": "", "gc_path_s": "", "json_path_s": "",
-                 "metadata_type_s": "none", "is_metadata_suc_b": False, "is_ocr_b": False, "is_docparser_b": False,
-                 "is_index_b": False, "metadata_time_f": 0.0, "ocr_time_f": 0.0, "docparser_time_f": 0.0,
-                 "index_time_f": 0.0, "modified_date_dt": 0}
-
     path, filename = os.path.split(file)
     filename_without_ext, file_extension = os.path.splitext(filename)
 
-    # Determine if we want to process this record
-    audit_id = hashlib.sha256(file.encode()).hexdigest()
+    # Get connections to the Elasticsearch for the audit and eda indexes
+    audit_rec = {"filename": filename, "eda_path": file, "base_path": path, "gc_path": "", "json_path": "",
+                 "metadata_type": "none", "is_metadata_suc": False, "is_ocr": False, "modified_date_dt": 0}
 
+    # Determine if we want to process this record
     # Make sure the file is a PDF file.
     if file_extension != ".pdf":
-        audit_rec.update({"filename_s": filename, "eda_path_s": file, "modified_date_dt": int(time.time())})
-        audit_record_new(audit_id=audit_id, publisher=publish_audit, audit_record=audit_rec)
+        failed_data = {"filename": filename, "base_path": path, "reason": "File is not pdf",
+                       "modified_date_dt": int(time.time())}
+        audit_list = [failed_data]
+        audit_failed_record(data=audit_list)
         return {'filename': filename, "status": "failed", "info": "File does not have a pdf extension"}
 
-    # Check to see if teh file as been processed before
-    is_process_already = publish_audit.exists(audit_id)
+    # Check to see if the file as been processed before
+    is_process_already = audit_file_exist(filename)
 
     update_metadata = False
     process_file = False
 
-    if not is_process_already:
-        process_file = True
-    elif EDAJobType(process_type) == EDAJobType.NORMAL and is_process_already:
-        audit_rec_old = publish_audit.get_by_id(audit_id)
-        successfully_process_last_time = audit_rec_old['is_index_b']
-        if successfully_process_last_time:
-            return {'filename': filename, "status": "already_processed"}
+    # Determine how/or if the file need to be processed
+    if EDAJobType(process_type) == EDAJobType.NORMAL:
+        if is_process_already:
+            record = audit_get_record(filename=filename)
+            successfully_filename = record.get('filename')
+            successfully_eda_path = record.get('eda_path')
+            if successfully_filename:
+                if filename == successfully_filename and file == successfully_eda_path:
+                    return {'filename': filename, "status": "already_processed"}
+                elif filename == successfully_filename and file != successfully_eda_path:
+                    failed_data = {"filename": filename, "base_path": path, "reason": "File is a dup",
+                                   "modified_date_dt": int(time.time())}
+                    audit_list = [failed_data]
+                    audit_failed_record(data=audit_list)
+                    return {'filename': filename, "status": "already_processed or a dup file"}
+            else:
+                process_file = True
         else:
-            process_file = True
-    elif EDAJobType(process_type) == EDAJobType.NORMAL and not is_process_already:
-        process_file = True
-    elif (EDAJobType(process_type) == EDAJobType.UPDATE_METADATA or
-          EDAJobType(process_type) == EDAJobType.UPDATE_METADATA_SKIP_NEW) and is_process_already:
-
-        audit_rec_old = publish_audit.get_by_id(audit_id)
-
-        # if last time the record fail it would never have gotten to index phase,
-        # so we should just re-process the record
-        is_index_b = audit_rec_old['is_index_b']
-        if not is_index_b:
-            process_file = True
-        else:
-            if EDAJobType(process_type) == EDAJobType.UPDATE_METADATA or EDAJobType(process_type) == EDAJobType.UPDATE_METADATA_SKIP_NEW:
+            failed_record = audit_get_failed_record(filename=filename, base_path=path)
+            if failed_record:
+                process_file = False
+            else:
+                process_file = True
+    elif EDAJobType(process_type) == EDAJobType.REINDEX:
+        record = audit_get_record(filename=filename)
+        if record is None:
+            return {'filename': filename, "status": "Was never index. skipping"}
+        if record is not None:
+            audit_filename = record.get('filename')
+            audit_base_path = record.get('base_path')
+            if audit_filename == filename and audit_base_path == path:
+                audit_rec.update({'json_path': record.get('json_path'), 'gc_path': record.get('gc_path')})
+                process_file = False
                 update_metadata = True
-            audit_rec = audit_rec_old
+            else:
+                return {'filename': filename, "status": "Was never index. skipping"}
+        else:
+            process_file = False
+            update_metadata = False
     elif EDAJobType(process_type) == EDAJobType.REPROCESS:
-        process_file = True
-    else:
-        process_file = False
+        if is_process_already:
+            record = audit_get_record(filename=filename)
+            successfully_filename = record.get('filename')
+            successfully_eda_path = record.get('eda_path')
+            if successfully_filename:
+                if filename == successfully_filename and file == successfully_eda_path:
+                    process_file = True
+                elif filename == successfully_filename and file != successfully_eda_path:
+                    failed_data = {"filename": filename, "base_path": path, "reason": "File is a dup",
+                                   "modified_date_dt": int(time.time())}
+                    audit_list = [failed_data]
+                    audit_failed_record(data=audit_list)
+                    return {'filename': filename, "status": "already_processed or a dup file"}
+            else:
+                process_file = True
+        else:
+            failed_record = audit_get_failed_record(filename=filename, base_path=path)
+            if failed_record:
+                process_file = False
+            else:
+                process_file = True
 
+    # Process the file
     if update_metadata:  # re-index
         error_count = 0
         index_json_created = False
@@ -277,50 +290,41 @@ def process_doc(file: str, staging_folder: Union[str, Path], data_conf_filter: d
                 if Conf.s3_utils.prefix_exists(prefix_path=ex_file_s3_path):
                     raw_docparser_data = json.loads(Conf.s3_utils.object_content(object_path=ex_file_s3_path))
 
-                    md_data = generate_metadata_data(staging_folder=staging_folder, data_conf_filter=data_conf_filter,
+                    md_data = generate_metadata_data(data_conf_filter=data_conf_filter,
                                                      file=file, filename=filename,
                                                      aws_s3_output_pdf_prefix=aws_s3_output_pdf_prefix,
                                                      audit_rec=audit_rec)
 
                     index_data_file(staging_folder=staging_folder, metadata_file_data=md_data,
-                               parsed_pdf_file_data=raw_docparser_data, ex_file_s3_path=ex_file_s3_path,
-                               audit_rec=audit_rec, index_file_local_path=index_file_local_path)
+                                    parsed_pdf_file_data=raw_docparser_data, ex_file_s3_path=ex_file_s3_path,
+                                    audit_rec=audit_rec, index_file_local_path=index_file_local_path)
 
-                    audit_record_new(audit_id=audit_id, publisher=publish_audit, audit_record=audit_rec)
+                    audit_list = [audit_rec]
+                    audit_success_record(data=audit_list)
+
                     return {'filename': filename, "status": "completed", "info": "update-metadata"}
                 else:
-                    audit_rec.update({"filename_s": filename, "eda_path_s": file,
-                                      "metadata_type_s": "none", "is_metadata_suc_b": "false",
-                                      "is_supplementary_file_missing": "true",
-                                      "metadata_time_f": 0.0, "modified_date_dt": int(time.time())})
-                    audit_record_new(audit_id=audit_id, publisher=publish_audit, audit_record=audit_rec)
+                    failed_data = {"filename": filename, "base_path": path, "reason": "File might be corrupted",
+                                   "modified_date_dt": int(time.time())}
+                    audit_list = [failed_data]
+                    audit_failed_record(data=audit_list)
 
                     return {'filename': filename, "status": "failed", "info": "unable to file docfile " +
                                                                               ex_file_s3_path + " file"}
             except (ProtocolError, ConnectionError) as e:
                 error_count += 1
                 time.sleep(1)
-            else:
-                index_json_created = True
             finally:
                 if error_count > 10:
                     print(f"Tried to get generate index json for file {filename}")
                     return {'filename': filename, "status": "failed", "info": "unable to create index file"}
 
         return {'filename': filename, "status": "completed", "info": "update-metadata"}
-
-    elif process_file and EDAJobType(process_type) == EDAJobType.UPDATE_METADATA_SKIP_NEW:  # File was already process and we don't want to re-index
-        if is_process_already:
-            return {'filename': filename, "status": "already_processed",
-                    "info": "File might be incorrect type or corrupted"}
-        else:
-            return {'filename': filename, "status": "skip", "info": "File was skip"}
-
     elif process_file:  # File has never been process or we want to re-process the file
         files_delete = []
 
         # Generate metadata file
-        md_data = generate_metadata_data(staging_folder=staging_folder, data_conf_filter=data_conf_filter,
+        md_data = generate_metadata_data(data_conf_filter=data_conf_filter,
                                          file=file, filename=filename,
                                          aws_s3_output_pdf_prefix=aws_s3_output_pdf_prefix,
                                          audit_rec=audit_rec)
@@ -348,21 +352,27 @@ def process_doc(file: str, staging_folder: Union[str, Path], data_conf_filter: d
                 index_file_local_path = path + "/" + filename_without_ext + ".json"
 
                 index_data_file(staging_folder=staging_folder, metadata_file_data=md_data,
-                           parsed_pdf_file_data=raw_docparser_data, ex_file_s3_path=ex_file_s3_path,
-                           audit_rec=audit_rec, index_file_local_path=index_file_local_path)
+                                parsed_pdf_file_data=raw_docparser_data, ex_file_s3_path=ex_file_s3_path,
+                                audit_rec=audit_rec, index_file_local_path=index_file_local_path)
 
-                audit_record_new(audit_id=audit_id, publisher=publish_audit, audit_record=audit_rec)
                 # Delete for local file system to free up space.
                 cleanup_record(files_delete)
+                audit_list = [audit_rec]
+                audit_success_record(data=audit_list)
                 return {'filename': filename, "status": "completed", "info": "new record"}
             else:
-                audit_record_new(audit_id=audit_id, publisher=publish_audit, audit_record=audit_rec)
                 # Delete for local file system to free up space.
                 cleanup_record(files_delete)
+                failed_data = {"filename": filename, "base_path": path, "reason": "File might be corrupted",
+                               "modified_date_dt": int(time.time())}
+                audit_list = [failed_data]
+                audit_failed_record(data=audit_list)
                 return {'filename': filename, "status": "failed", "info": "Not a PDF file"}
 
-        audit_record_new(audit_id=audit_id, publisher=publish_audit, audit_record=audit_rec)
-    return {'filename': filename, "status": "failed", "info": "failed -- Didn't match any processing type"}
+    failed_data = {"filename": filename, "base_path": path, "reason": "File might be corrupted", "modified_date_dt": int(time.time())}
+    audit_list = [failed_data]
+    audit_failed_record(data=audit_list)
+    return {'filename': filename, "status": "failed", "info": "File might be corrupted"}
 
 
 def generate_list_pdf_download(metadata_dir: Union[str, Path]) -> list:
