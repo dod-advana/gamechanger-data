@@ -134,7 +134,7 @@ CRAWLER_TO_DATA_SOURCE_LOOKUP = defaultdict(lambda: "Unlisted Source", {
 
 CRAWLER_TO_SOURCE_TITLE_LOOKUP = defaultdict(lambda: "Unlisted Source", {
     # This file should not be added too, use properties on the spider to assign these values
-    "dod_issuances": "WHS DoD Directives ",
+    "dod_issuances": "WHS DoD Directives",
     "army_pubs": "U.S Army Publications",
     "jcs_pubs": "Joint Chiefs of Staff Publications",
     "jcs_manual_uploads": "Joint Chiefs of Staff Additional Publications",
