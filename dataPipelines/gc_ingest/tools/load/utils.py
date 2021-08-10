@@ -110,7 +110,6 @@ class LoadManager:
             jsons = session.query(VersionedDoc.id, VersionedDoc.json_metadata).all()
             for (id, j_metadata) in jsons:
                 if isinstance(j_metadata, str):
-                    print(j_metadata)
                     doc = session.query(VersionedDoc).filter_by(id=id).one()
                     doc.json_metadata = json.loads(j_metadata)
             session.commit()
