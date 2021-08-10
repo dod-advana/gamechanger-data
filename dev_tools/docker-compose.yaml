@@ -5,12 +5,16 @@ services:
     container_name: "${COMPOSE_PROJECT_NAME:-gc-dev}-neo4j"
     environment:
       NEO4J_AUTH: "neo4j/password"
+      NEO4JLABS_PLUGINS: '["graph-data-science", "apoc"]'
+      NEO4J_dbms_security_procedures_unrestricted: gds.*,apoc.*,policy.*
+      NEO4J_dbms_security_procedures_whitelist: gds.*,apoc.*,policy.*
     image: "neo4j:4.2.3"
     ports:
       - "7687:7687"
       - "7474:7474"
     volumes:
-      - "neo4j-data:/neo4j/data"
+      - "neo4j-data:/data"
+      - ./neo4j-plugins:/plugins
     networks:
       - app-net
 
