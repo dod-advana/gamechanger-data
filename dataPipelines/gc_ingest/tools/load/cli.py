@@ -106,3 +106,8 @@ def local(lm: LoadManager,
         update_s3=not skip_s3_upload,
         update_db=not skip_db_update
     )
+
+@load_cli.command()
+@pass_lm
+def fix_json_metadata(lm: LoadManager):
+    lm.fix_json_metdata()
