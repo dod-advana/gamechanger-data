@@ -18,6 +18,26 @@ services:
     networks:
       - app-net
 
+  cmd-recreate-postgres-tables:
+    image: postgres:9.6.19-alpine
+    entrypoint: >
+      /bin/sh -c "
+      sleep 15s;
+      psql -f /gc_db_utils/orch/sql/drop_tables.sql postgresql://postgres:password@postgres;
+      psql -f /gc_db_utils/orch/sql/create_tables.sql postgresql://postgres:password@postgres;
+      psql -f /gc_db_utils/orch/sql/drop_views.sql postgresql://postgres:password@postgres;
+      psql -f /gc_db_utils/orch/sql/create_views.sql postgresql://postgres:password@postgres;
+      psql -f /gc_db_utils/web/sql/drop_tables.sql postgresql://postgres:password@postgres;
+      psql -f /gc_db_utils/web/sql/create_tables.sql postgresql://postgres:password@postgres;
+      psql -f /gc_db_utils/web/sql/drop_views.sql postgresql://postgres:password@postgres;
+      psql -f /gc_db_utils/web/sql/create_views.sql postgresql://postgres:password@postgres;
+      exit 0;
+      "
+    volumes:
+      - ../../dataPipelines/gc_db_utils:/gc_db_utils
+    networks:
+      - app-net
+
 #  cmd-ensure-baseline-image:
 #    image: "gc_common_baseline:latest"
 #    build:
