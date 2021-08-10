@@ -4,6 +4,9 @@ configuration/rendered/
 # gamechangerml modules
 gamechangerml/
 
+# neo4j plugins
+dev_tools/neo4j-plugins/
+
 # IDE files
 .vscode
 .idea/
