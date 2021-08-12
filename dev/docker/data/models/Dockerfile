@@ -39,7 +39,7 @@ RUN \
 
 ## MODEL SETTINGS (prefixes always end with /)
 ARG TOPIC_MODEL_S3_PREFIX_URL="s3://advana-raw-zone/gamechanger/models/topic_model/v1/"
-ARG TRANSFORMER_MODEL_BUNDLE_S3_URL="s3://advana-raw-zone/gamechanger/models/transformers/v4/20210224.tar.gz"
+ARG TRANSFORMER_MODEL_BUNDLE_S3_URL="s3://advana-raw-zone/gamechanger/models/transformers/v5/20210224.tar.gz"
 ARG SENTENCE_INDEX_BUNDLE_S3_URL="s3://advana-raw-zone/gamechanger/models/sentence_index/v4/sent_index_20210422.tar.gz"
 ARG QEXP_MODEL_S3_PREFIX_URL="s3://advana-raw-zone/gamechanger/models/qexp_model/v3/"
 ARG QEXP_MODEL_NAME="qexp_20201217"
