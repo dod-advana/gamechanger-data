@@ -25,7 +25,10 @@ def get_logger() -> logging.Logger:
 l = get_logger()
 
 
-def copy_snapshots_from_s3(pdf_snapshot_prefix: str, json_snapshot_prefix: str, export_base_dir: t.Union[str, Path]) -> t.Dict[
+def copy_snapshots_from_s3(pdf_snapshot_prefix: str,
+                           json_snapshot_prefix: str,
+                           thumbnail_snapshot_prefix: str,
+                           export_base_dir: t.Union[str, Path]) -> t.Dict[
     str, str]:
     export_base_dir = Path(export_base_dir)
     export_base_dir.mkdir(exist_ok=True)
@@ -37,8 +40,29 @@ def copy_snapshots_from_s3(pdf_snapshot_prefix: str, json_snapshot_prefix: str, 
     pdf_dir.mkdir(exist_ok=True)
     json_dir.mkdir(exist_ok=True)
 
-    sub.run(["aws", "s3", "cp", "--recursive", pdf_snapshot_prefix, str(pdf_dir)], check=True)
-    sub.run(["aws", "s3", "cp", "--recursive", json_snapshot_prefix, str(json_dir)], check=True)
+    sub.run(["aws",
+             "s3",
+             "cp",
+             "--recursive",
+             pdf_snapshot_prefix,
+             str(pdf_dir)], check=True)
+    sub.run(["aws",
+             "s3",
+             "cp",
+             "--recursive",
+             json_snapshot_prefix,
+             str(json_dir)], check=True)
+    thumbnail_dir = ""
+    if thumbnail_snapshot_prefix:
+        thumbnail_dir = Path(export_base_dir, "thumbnail").absolute()
+        thumbnail_dir.mkdir()
+        sub.run(["aws",
+                 "s3",
+                 "cp",
+                 "--recursive",
+                 thumbnail_snapshot_prefix,
+                 str(thumbnail_dir)], check=True)
+
     return {
         "pdf_dir": str(pdf_dir),
         "json_dir": str(json_dir)
@@ -174,7 +198,12 @@ def upload_to_s3(input_dir: t.Union[str, Path], s3_upload_prefix: str) -> None:
     l.info("***UPLOADING TO S3***")
     input_dir = Path(input_dir).absolute()
     s3_upload_prefix = s3_upload_prefix if s3_upload_prefix.endswith("/") else s3_upload_prefix + '/'
-    sub.run(["aws", "s3", "cp", "--recursive", str(input_dir), s3_upload_prefix], check=True)
+    sub.run(["aws",
+             "s3",
+             "cp",
+             "--recursive",
+             str(input_dir),
+             s3_upload_prefix], check=True)
 
 
 def arg_s3_prefix_url(s: str) -> str:
@@ -184,6 +213,14 @@ def arg_s3_prefix_url(s: str) -> str:
     s = s if s.endswith("/") else s + "/"
     return s
 
+def optional_arg_s3_prefix_url(s: str) -> str:
+    if s == "":
+        return s
+    if not s.startswith('s3://'):
+        raise argparse.ArgumentTypeError("Not a valid S3_URL. Must start with s3://")
+
+    s = s if s.endswith("/") else s + "/"
+    return s
 
 def arg_job_tmp_dir(s: str) -> str:
     sp = Path(s).absolute()
@@ -212,6 +249,13 @@ def parse_args():
         help="s3 location of the json snapshot e.g. s3://....",
         required=True,
         type=arg_s3_prefix_url
+    )
+    parser.add_argument(
+        "--thumbnail-s3-prefix",
+        help="s3 location of the thumbnail snapshot e.g. s3://....",
+        required=False,
+        type=optional_arg_s3_prefix_url,
+        default=""
     )
     parser.add_argument(
         "--s3-upload-prefix",
@@ -250,6 +294,7 @@ if __name__ == "__main__":
 
     pdf_snapshot_prefix = args.pdf_s3_prefix
     json_snapshot_prefix = args.json_s3_prefix
+    thumbnail_snapshot_prefix = args.thumbnail_s3_prefix
     s3_upload_prefix = args.s3_upload_prefix
     job_tmp_dir = args.job_tmp_dir
     manifest_filename = args.manifest_filename
@@ -270,6 +315,7 @@ if __name__ == "__main__":
         snapshot_dict = copy_snapshots_from_s3(
             pdf_snapshot_prefix=pdf_snapshot_prefix,
             json_snapshot_prefix=json_snapshot_prefix,
+            thumbnail_snapshot_prefix=thumbnail_snapshot_prefix,
             export_base_dir=export_base_dir
         )
         parsed_json_dir = snapshot_dict["json_dir"]
