@@ -1,4 +1,9 @@
-from gamechangerml.models.topic_models.tfidf import bigrams, tfidf_model
+try:
+    from gamechangerml.models.topic_models.tfidf import bigrams, tfidf_model
+except ImportError:
+    print("[IMPORT ERROR]: No Topic Models, skipping extract_topics")
+    tfidf_model = bigrams = None
+
 from gamechangerml.src.text_handling.process import topic_processing
 
 
@@ -15,8 +20,14 @@ def extract_topics(doc_dict):
         doc_dict (dict): The output dict differs from the input
             only in that it now includes `topics_rs` as a key.
     """
-    MIN_TOKEN_LEN = 300 #tokens, this turns out to be roughly a half page
+
     doc_dict['topics_rs'] = {}
+
+    # the topic model may be missing, returns empty topics_rs
+    if tfidf_model is None:
+        return doc_dict
+
+    MIN_TOKEN_LEN = 300 #tokens, this turns out to be roughly a half page
 
     tokens = doc_dict['text'].split()
 
