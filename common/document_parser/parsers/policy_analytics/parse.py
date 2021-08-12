@@ -15,13 +15,21 @@ from common.document_parser.lib import (
     pdf_reader,
     write_doc_dict_to_json,
     ocr,
-    html_utils
+    html_utils,
+    ml_features,
 )
 from . import post_process, init_doc
 
 
-def parse(f_name, meta_data=None, ocr_missing_doc=False, num_ocr_threads=2, force_ocr=False, out_dir="./"):
-    print('running policy_analyics.parse on', f_name)
+def parse(
+    f_name,
+    meta_data=None,
+    ocr_missing_doc=False,
+    num_ocr_threads=2,
+    force_ocr=False,
+    out_dir="./",
+):
+    print("running policy_analyics.parse on", f_name)
     meta_dict = read_meta.read_metadata(meta_data)
     doc_dict = init_doc.create_doc_dict_with_meta(meta_dict)
 
@@ -58,7 +66,10 @@ def parse(f_name, meta_data=None, ocr_missing_doc=False, num_ocr_threads=2, forc
         keywords.add_kw_doc_score_r(doc_dict)
 
         text_length.add_txt_length(doc_dict)
+
         text_length.add_word_count(doc_dict)
+
+        ml_features.pop_score(doc_dict)
 
         # TODO: ADD DATES ?
         # doc_dict = dates.process(doc_dict)
@@ -68,7 +79,7 @@ def parse(f_name, meta_data=None, ocr_missing_doc=False, num_ocr_threads=2, forc
 
         write_doc_dict_to_json.write(out_dir=out_dir, ex_dict=doc_dict)
     except Exception as e:
-        print('ERROR in policy_analytics.parse:', e)
+        print("ERROR in policy_analytics.parse:", e)
     finally:
         if should_delete:
             os.remove(f_name)
