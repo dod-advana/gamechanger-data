@@ -1,6 +1,5 @@
-# we first create an empty image so that the environment can optionally be built without the models
 ARG BASE_IMAGE='centos:7'
-FROM $BASE_IMAGE AS empty
+FROM $BASE_IMAGE
 
 #####
 ## ## CMD Prereqs
@@ -53,14 +52,11 @@ ENV QEXP_MODEL_DIR="${ML_MODELS_DIR}/${QEXP_MODEL_NAME}"
 ## Prepare dirs
 RUN mkdir -p "$ML_MODELS_DIR" "$TOPIC_MODEL_DIR" "$QEXP_MODEL_DIR"
 
-# Not meant to run normally, use as part of multi-stage build, to copy data from, or to prime a shared volume
-CMD ["/bin/true"]
-
-#####
-## ## Pull Models
-#####
-FROM empty
+## Pull models ...
 RUN aws s3 cp "$TOPIC_MODEL_S3_PREFIX_URL" "$TOPIC_MODEL_DIR/" --recursive
 RUN aws s3 cp "$QEXP_MODEL_S3_PREFIX_URL" "$QEXP_MODEL_DIR/" --recursive
 RUN aws s3 cp "$TRANSFORMER_MODEL_BUNDLE_S3_URL" - | tar -xzf - --exclude="*/.git/*" -C "$ML_MODELS_DIR"
 RUN aws s3 cp "$SENTENCE_INDEX_BUNDLE_S3_URL" - | tar -xzf - --exclude="*/.git/*" -C "$ML_MODELS_DIR"
+
+# Not meant to run normally, use as part of multi-stage build, to copy data from, or to prime a shared volume
+ENTRYPOINT "/bin/true"
