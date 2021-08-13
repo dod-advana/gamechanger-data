@@ -16,9 +16,10 @@ from common.document_parser.lib import (
     write_doc_dict_to_json,
     ocr,
     html_utils,
-    ml_features,
 )
 from . import post_process, init_doc
+from common.document_parser.lib.ml_features import (
+    add_pagerank_r, add_popscore_r, add_orgs_rs, add_kw_doc_score_r, add_txt_length)
 
 
 def parse(
@@ -41,6 +42,8 @@ def parse(
     if str(f_name).endswith("html"):
         f_name = html_utils.get_html_filename(f_name)
         should_delete = True
+    funcs = [ref_list.add_ref_list, entities.extract_entities, topics.extract_topics, keywords.add_keyw_5, abbreviations.add_abbreviations_n, summary.add_summary, add_pagerank_r, add_popscore_r, add_orgs_rs,
+             add_kw_doc_score_r, add_txt_length, text_length.add_word_count]
     try:
         doc_obj = pdf_reader.get_fitz_doc_obj(f_name)
         pages.handle_pages(doc_obj, doc_dict)
@@ -48,29 +51,13 @@ def parse(
 
         paragraphs.handle_paragraphs(doc_dict)
 
-        ref_list.add_ref_list(doc_dict)
-
-        entities.extract_entities(doc_dict)
-        topics.extract_topics(doc_dict)
-
-        keywords.add_keyw_5(doc_dict)
-
-        abbreviations.add_abbreviations_n(doc_dict)
-
-        summary.add_summary(doc_dict)
-
-        page_rank.add_pagerank_r(doc_dict)
-
-        organizations.add_orgs_rs(doc_dict)
-
-        keywords.add_kw_doc_score_r(doc_dict)
-
-        text_length.add_txt_length(doc_dict)
-
-        text_length.add_word_count(doc_dict)
-
-        ml_features.pop_score(doc_dict)
-
+        # ref_list.add_ref_list(doc_dict)
+        for func in funcs:
+            try:
+                func(doc_dict)
+            except Exception as e:
+                print(e)
+                print("Could not run %s on document dict" % func)
         # TODO: ADD DATES ?
         # doc_dict = dates.process(doc_dict)
 
