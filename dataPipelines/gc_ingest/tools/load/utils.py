@@ -104,6 +104,25 @@ class LoadManager:
             ts=ts
         )
 
+    def json_metadata_to_json(self) -> None:
+        """ Fix Json values that were perviously entered as strings """
+        with Config.connection_helper.orch_db_session_scope('rw') as session:
+            jsons = session.query(VersionedDoc.id, VersionedDoc.json_metadata).all()
+            for (id, j_metadata) in jsons:
+                if isinstance(j_metadata, str):
+                    doc = session.query(VersionedDoc).filter_by(id=id).one()
+                    doc.json_metadata = json.loads(j_metadata)
+            session.commit()
+
+    def json_metadata_to_string(self) -> None:
+        """ Fix Json values that were perviously entered as strings """
+        with Config.connection_helper.orch_db_session_scope('rw') as session:
+            jsons = session.query(VersionedDoc.id, VersionedDoc.json_metadata).all()
+            for (id, j_metadata) in jsons:
+                if isinstance(j_metadata, dict):
+                    doc = session.query(VersionedDoc).filter_by(id=id).one()
+                    doc.json_metadata = json.dumps(j_metadata)
+            session.commit()
 
     def get_ingestable_docs(self,
                             raw_dir: t.Union[Path, str],

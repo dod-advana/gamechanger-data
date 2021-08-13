@@ -78,7 +78,7 @@ class VersionedDoc(AutoRepr, VersionedDocSchema, DeferredOrchReflectedBase):
             doc_location=doc_location,
             batch_timestamp=batch_timestamp,
             publication_date=parse_timestamp(doc['publication_date']),
-            json_metadata=json.dumps(doc),
+            json_metadata=doc,
             version_hash=doc['version_hash'],
             md5_hash="",
             is_ignored=False

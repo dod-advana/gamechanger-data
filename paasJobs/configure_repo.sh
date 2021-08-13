@@ -32,6 +32,10 @@ case $SCRIPT_ENV in
     APP_CONFIG_S3_PATH="${APP_CONFIG_S3_PATH:-s3://${S3_BUCKET_NAME}/gamechanger/configuration/app-config/dev.20210416.json}"
     TOPIC_MODEL_S3_PATH="${TOPIC_MODEL_S3_PATH:-s3://${S3_BUCKET_NAME}/gamechanger/models/topic_model/v1/20210208.tar.gz}"
     ;;
+  local)
+    >&2 echo "[INFO] LOCAL SETUP: Skipping app config install and topic model install."
+    >&2 echo "[INFO] Please copy topic model over manually."
+    ;;
   *)
     >&2 echo "[ERROR] Incorrect SCRIPT_ENV specified: $SCRIPT_ENV"
     exit 1
@@ -53,29 +57,34 @@ function ensure_gamechangerml_is_installed() {
 
 
 function install_app_config() {
-  if [[ -f "$APP_CONFIG_LOCAL_PATH" ]]; then
-    >&2 echo "[INFO] Removing old App Config"
-    rm -f "$APP_CONFIG_LOCAL_PATH"
-  fi
+  if [[ "${SCRIPT_ENV}" != "local" ]]; then
+    if [[ -f "$APP_CONFIG_LOCAL_PATH" ]]; then
+        >&2 echo "[INFO] Removing old App Config"
+        rm -f "$APP_CONFIG_LOCAL_PATH"
+    fi
 
-  >&2 echo "[INFO] Fetching new App Config"
-  $AWS_CMD s3 cp "$APP_CONFIG_S3_PATH" "$APP_CONFIG_LOCAL_PATH"
+    >&2 echo "[INFO] Fetching new App Config"
+    $AWS_CMD s3 cp "$APP_CONFIG_S3_PATH" "$APP_CONFIG_LOCAL_PATH"
+  fi
 }
 
 function install_topic_models() {
-  if [ -d "$TOPIC_MODEL_LOCAL_DIR" ]; then
-    >&2 echo "[INFO] Removing old topic model directory and contents"
-    rm -rf "$TOPIC_MODEL_LOCAL_DIR"
-  fi
+   if [[ "${SCRIPT_ENV}" != "local" ]]; then
+      if [ -d "$TOPIC_MODEL_LOCAL_DIR" ]; then
+        >&2 echo "[INFO] Removing old topic model directory and contents"
+        rm -rf "$TOPIC_MODEL_LOCAL_DIR"
+      fi
 
-  mkdir -p "$TOPIC_MODEL_LOCAL_DIR"
+      mkdir -p "$TOPIC_MODEL_LOCAL_DIR"
 
-  >&2 echo "[INFO] Fetching new topic model"
-  $AWS_CMD s3 cp "$TOPIC_MODEL_S3_PATH" - | tar -xzf - -C "$TOPIC_MODEL_LOCAL_DIR"
+      >&2 echo "[INFO] Fetching new topic model"
+      $AWS_CMD s3 cp "$TOPIC_MODEL_S3_PATH" - | tar -xzf - -C "$TOPIC_MODEL_LOCAL_DIR"
+   fi
 }
 
 function configure_repo() {
   >&2 echo "[INFO] Initializing default config files"
+  >&2 echo "$PYTHON_CMD -m configuration init $SCRIPT_ENV --app-config $APP_CONFIG_NAME --elasticsearch-config $ES_CONFIG_NAME"
   $PYTHON_CMD -m configuration init "$SCRIPT_ENV" \
   	--app-config "$APP_CONFIG_NAME" \
   	--elasticsearch-config "$ES_CONFIG_NAME"

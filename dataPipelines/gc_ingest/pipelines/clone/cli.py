@@ -31,9 +31,11 @@ pass_clone_ingest_config = click.make_pass_decorator(CloneIngestConfig)
 @pass_clone_ingest_config
 def clone_s3_ingest(clone_ingest_config: CloneIngestConfig, **kwargs):
     """Pipeline for parsing docs directly from s3"""
-    sig = S3IngestConfig.from_clone_config(clone_config=clone_ingest_config, other_config_kwargs=kwargs)
+    sig = S3IngestConfig.from_clone_config(
+        clone_config=clone_ingest_config, other_config_kwargs=kwargs)
     announce("Aggregating files for processing ...")
-    announce(f"Downloading raw files from s3 prefix: {sig.s3_raw_ingest_prefix} ...")
+    announce(
+        f"Downloading raw files from s3 prefix: {sig.s3_raw_ingest_prefix} ...")
     Config.s3_utils.download_dir(
         local_dir=sig.raw_doc_base_dir,
         prefix_path=sig.s3_raw_ingest_prefix,
@@ -51,7 +53,6 @@ def clone_s3_ingest(clone_ingest_config: CloneIngestConfig, **kwargs):
     CloneIngestSteps.update_es(sig)
 
     announce("Pipeline Finished")
-
 
 
 @clone_ingest_cli.command('reparse')
@@ -73,8 +74,10 @@ def clone_reparse(clone_ingest_config: CloneIngestConfig, **kwargs):
     CloneIngestSteps.parse_and_ocr(clone_ingest_config)
 
     CloneIngestSteps.update_es(clone_ingest_config)
-    CloneIngestSteps.update_neo4j(clone_ingest_config)
-    CloneIngestSteps.update_revocations(clone_ingest_config)
+
+    # not available on clones yet
+    # CloneIngestSteps.update_neo4j(clone_ingest_config)
+    # CloneIngestSteps.update_revocations(clone_ingest_config)
 
     announce('Pushing up parsed files to s3 snapshot location ...')
     clone_ingest_config.snapshot_manager.update_current_snapshot_from_disk(
@@ -102,5 +105,6 @@ def clone_reindex(clone_ingest_config: CloneIngestConfig, **kwargs):
 
     announce('Reindexing in elasticsearch ...')
     CloneIngestSteps.update_es(clone_ingest_config)
-    CloneIngestSteps.update_revocations(clone_ingest_config)
 
+    # not available on clones yet
+    # CloneIngestSteps.update_revocations(clone_ingest_config)
