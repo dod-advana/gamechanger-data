@@ -69,10 +69,6 @@ RUN yum install -y \
         libtiff-devel \
         libjpeg-turbo-devel \
         libpng-devel \
-        cairo-devel \
-        cairomm-devel \
-        pango-devel \
-        pangomm-devel \
     && yum clean all \
     && rm -rf /var/cache/yum
 
@@ -81,43 +77,21 @@ RUN yum install -y \
 ## ## Other packages (for OCR)
 #####
 
-RUN echo /usr/local/lib > /etc/ld.so.conf.d/usr-local.conf
-RUN git clone --depth 1 --branch 1.79.0 --single-branch https://github.com/DanBloomberg/leptonica.git /tmp/leptonica \
-    && cd /tmp/leptonica \
-    && ./autogen.sh \
-    && ./configure \
-    && make -j$(nproc) \
-    && make install \
-    && ldconfig \
-    && cd - \
-    && rm -rf /tmp/leptonica
-RUN git clone --depth 1 --branch release-60-3 --single-branch https://github.com/unicode-org/icu.git /tmp/icu \
-    && cd /tmp/icu/icu4c/source \
-    && ./runConfigureICU Linux \
-    && make -j$(nproc) \
-    && make install \
-    && ldconfig \
-    && cd - \
-    && rm -rf /tmp/icu
-RUN git clone --depth 1 --branch 4.1.1 --single-branch https://github.com/tesseract-ocr/tesseract.git  /tmp/tesseract \
-    && cd /tmp/tesseract \
-    && ./autogen.sh \
-    && PKG_CONFIG_PATH=/usr/local/lib/pkgconfig/ ./configure \
-    && make -j$(nproc) \
-    && make install \
-    && make -j$(nproc) training \
-    && make training-install \
-    && ldconfig \
-    && cd - \
-    && rm -rf /tmp/tesseract \
-    && wget https://github.com/tesseract-ocr/tessdata_best/raw/4.1.0/eng.traineddata -P /usr/local/share/tessdata/ \
-    && wget https://github.com/tesseract-ocr/tessdata_best/raw/4.1.0/osd.traineddata -P /usr/local/share/tessdata/
+ARG LEPTONICA_RPM_S3_URL="s3://advana-raw-zone/gamechanger/package-approvals/ocr-20201106/leptonica-1.79.0-1.el7.x86_64.rpm"
+ARG TESSERACT_RPM_S3_URL="s3://advana-raw-zone/gamechanger/package-approvals/ocr-20201106/tesseract-4.1.1-1.el7.x86_64.rpm"
+RUN \
+    mkdir /tmp/rpm-staging \
+    && aws s3 cp "$LEPTONICA_RPM_S3_URL" /tmp/rpm-staging/leptonica.rpm \
+    && rpm -i /tmp/rpm-staging/leptonica.rpm \
+    && aws s3 cp "$TESSERACT_RPM_S3_URL" /tmp/rpm-staging/tesseract.rpm \
+    && rpm -i /tmp/rpm-staging/tesseract.rpm \
+    && rm -rf /tmp/rpm-staging
 
 #####
 ## ## Python Package Setup
 #####
 
-ARG BUILD_CTX_COMPREHENSIVE_REQS="./dev_tools/requirements/gc-venv-current.txt"
+ARG BUILD_CTX_COMPREHENSIVE_REQS="./dev/requirements/gc-venv-current.txt"
 ARG LOCAL_REQS="/tmp/gc-venv-reqs.txt"
 COPY "$BUILD_CTX_COMPREHENSIVE_REQS" "$LOCAL_REQS"
 

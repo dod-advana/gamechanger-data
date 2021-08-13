@@ -8,4 +8,3 @@ common/data linguist-vendored
 *.pickle linguist-vendored
 *.csv linguist-vendored
 Dockerfile* linguist-language=Dockerfile
-*.sh text eol=lf
