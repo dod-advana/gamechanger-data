@@ -7,7 +7,7 @@ def add_pagerank_r(doc_dict):
 
 
 def add_popscore_r(doc_dict):
-    doc_dict["pop_score"] = ft.get_pop_score(doc_dict["id"])
+    doc_dict["pop_score"] = ft.get_pop_score(doc_dict["filename"])
     return doc_dict
 
 
