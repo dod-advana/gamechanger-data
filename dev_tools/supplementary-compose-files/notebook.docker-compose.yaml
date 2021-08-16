@@ -1,0 +1,32 @@
+version: '3.5'
+
+services:
+  notebook:
+    container_name: "${COMPOSE_PROJECT_NAME:-gc-dev}-notebook"
+    build:
+      context: "../"
+      dockerfile: "dev_tools/docker/devtools/notebook/Dockerfile"
+    image: "gamechanger/devtools/notebook:latest"
+    ports:
+      - "8888:8888"
+    user: root
+    environment:
+      - "GRANT_SUDO=yes"
+      - "JUPYTER_ENABLE_LAB=yes"
+      - "GC_APP_CONFIG_NAME=${GC_APP_CONFIG_NAME:?}"
+      - "GC_ELASTICSEARCH_CONFIG_NAME=${GC_ELASTICSEARCH_CONFIG_NAME:?}"
+      # useful for interactive troubleshooting in notebooks
+      - "PYTHONPATH=/home/jovyan/work/gamechanger"
+    volumes:
+      - "../:/home/jovyan/work/gamechanger:ro,cached"
+    command:
+      - start-notebook.sh
+      # password is "password"
+      - "--NotebookApp.password=sha1:d98599398681:9fbd75a9bdaf6b75fa42c4235e066d26edfd0396"
+    networks:
+      - app-net
+
+
+networks:
+  app-net:
+    name: "${COMPOSE_PROJECT_NAME:-gc-dev}-network"

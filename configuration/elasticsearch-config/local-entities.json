@@ -3,44 +3,124 @@
         "settings": {
             "index.mapping.nested_objects.limit": 100000,
             "index": {
-                "number_of_shards": 3,
+                "number_of_shards": 5,
                 "number_of_replicas": 1,
                 "mapping.nested_fields.limit": 20000
+            },
+            "analysis": {
+                "normalizer": {
+                    "lowercase_normalizer": {
+                        "type": "custom",
+                        "char_filter": [],
+                        "filter": ["lowercase"]
+                    }
+                },
+                "filter": {
+                    "gc_stop": {
+                        "type": "stop",
+                        "stopwords":  []
+                    }
+                },
+                "analyzer": {
+                    "gc_english": {
+                        "tokenizer":  "standard",
+                        "filter": [
+                            "lowercase",
+                            "gc_stop"
+                        ]
+                    }
+                }
             }
         },
         "mappings": {
             "properties": {
                 "name": {
-                    "type": "text"
+                    "type": "text",
+                    "analyzer": "gc_english"
                 },
-                "entity_type": {
-                    "type": "keyword"
-                },
-                "website": {
-                    "type": "keyword"
-                },
-                "address": {
-                    "type": "text"
-                },
-                "government_branch": {
-                    "type": "text"
-                },
-                "parent_agency": {
-                    "type": "text"
-                },
-                "related_agency": {
-                    "type": "text"
+                "information": {
+                    "type": "text",
+                    "analyzer": "gc_english"
                 },
                 "aliases": {
+                    "dynamic": "true",
                     "type": "nested",
                     "properties": {
                         "name": {
                             "type": "text",
-                            "fields": {
-                                "search": {
-                                    "type": "text"
-                                    }
-                                }
+                            "analyzer": "gc_english"
+                        }
+                    }
+                },
+                "related_agency" : {
+                    "type" : "text",
+                    "fields" : {
+                        "keyword" : {
+                            "type" : "keyword",
+                            "ignore_above" : 256
+                        }
+                    }
+                },
+                "website" : {
+                    "type" : "text",
+                    "fields" : {
+                        "keyword" : {
+                            "type" : "keyword",
+                            "ignore_above" : 256
+                        }
+                    }
+                },
+                "address" : {
+                    "type" : "text",
+                    "fields" : {
+                        "keyword" : {
+                            "type" : "keyword",
+                            "ignore_above" : 256
+                        }
+                    }
+                },
+                "crawlers" : {
+                    "type" : "text",
+                    "fields" : {
+                        "keyword" : {
+                            "type" : "keyword",
+                            "ignore_above" : 256
+                        }
+                    }
+                },
+                "entity_type" : {
+                    "type" : "text",
+                    "fields" : {
+                        "keyword" : {
+                            "type" : "keyword",
+                            "ignore_above" : 256
+                        }
+                    }
+                },
+                "government_branch" : {
+                    "type" : "text",
+                    "fields" : {
+                        "keyword" : {
+                            "type" : "keyword",
+                            "ignore_above" : 256
+                        }
+                    }
+                },
+                "num_mentions" : {
+                    "type" : "text",
+                        "fields" : {
+                        "keyword" : {
+                            "type" : "keyword",
+                            "ignore_above" : 256
+                        }
+                    }
+                },
+                "parent_agency" : {
+                    "type" : "text",
+                    "fields" : {
+                        "keyword" : {
+                            "type" : "keyword",
+                            "ignore_above" : 256
                         }
                     }
                 }

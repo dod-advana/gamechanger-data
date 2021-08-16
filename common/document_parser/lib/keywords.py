@@ -1,5 +1,5 @@
 from collections import defaultdict
-from dataScience.src.search.ranking.features import get_kw_score
+from gamechangerml.src.search.ranking.features import get_kw_score
 
 
 def add_keyw_5(doc_dict):

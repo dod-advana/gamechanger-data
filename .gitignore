@@ -3,15 +3,10 @@ configuration/rendered/
 
 # IDE files
 .vscode
-
 .idea/
 .dev
 .idea
 
-# Logs
-gamechanger.log
-gc.log
-dataScience/api/logs/gc_ml_gpu_log.txt
 # Envs
 venv/*
 .env
@@ -32,12 +27,8 @@ build/
 # Mac OS junkfiles
 .DS_Store
 
-# DS directories
+# Generated resource directories
 common/data/processed/*
-dataScience/src/modelzoo/semantic/packaged_models/*
-!dataScience/src/modelzoo/semantic/packaged_models/.gitkeep
-
-worker-tracking.json
 
 # Misc tmp/ouput dirs
 out/
@@ -50,11 +41,10 @@ mlruns/
 # ipynb checkpoints
 **/.ipynb_checkpoints
 
-# Transformer models
-dataScience/models/transformers
+# variable files (runtime artifacts, etc.)
+/var/**
 
 # Don't ignore .gitkeep files
 !**/.gitkeep
 
-dataScience/models/topic_models/models
 

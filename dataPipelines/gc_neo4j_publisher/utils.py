@@ -54,8 +54,8 @@ class Neo4jJobManager:
             pbar.update()
 
     @staticmethod
-    def process_files(files: t.List[str], file_dir: str, q: mp.Queue, publisher: Neo4jPublisher) -> None:
-        publisher.process_dir(files, file_dir, q)
+    def process_files(files: t.List[str], file_dir: str, q: mp.Queue, publisher: Neo4jPublisher, max_threads: int) -> None:
+        publisher.process_dir(files, file_dir, q, max_threads)
 
     @staticmethod
     def get_chunks(lst: t.List[t.Any], n: int) -> t.Iterable[t.List[t.Any]]:
@@ -72,7 +72,7 @@ class Neo4jJobManager:
         for i in range(n):
             yield lst[chunk_start:chunk_end]
             chunk_start = chunk_end
-            chunk_end = chunk_start + (max_chunk_size if i == n-2 else min_chunk_size)
+            chunk_end = chunk_start + (max_chunk_size if i == n - 2 else min_chunk_size)
 
     def run_update(self, source: t.Union[str, Path],
                    clear: bool,
@@ -108,19 +108,34 @@ class Neo4jJobManager:
             if clear:
                 print("Deleting all entities and relationships ... ", file=sys.stderr)
                 session.run("match (n) detach delete n;")
+                print("Recreating constraints ... ", file=sys.stderr)
 
-            print("Recreating constraints ... ", file=sys.stderr)
-            # first drop constraints
-            session.run("DROP CONSTRAINT unique_pubs IF EXISTS")
-            session.run("DROP CONSTRAINT unique_docs IF EXISTS")
-            session.run("DROP CONSTRAINT unique_ents IF EXISTS")
-            session.run("DROP CONSTRAINT unique_resps IF EXISTS")
+                # first drop constraints
+                session.run("DROP CONSTRAINT unique_docs IF EXISTS")
+                session.run("DROP CONSTRAINT unique_ents IF EXISTS")
+                session.run("DROP CONSTRAINT unique_resps IF EXISTS")
+                session.run("DROP CONSTRAINT unique_topics IF EXISTS")
 
-            # next set up a few things to make sure that entities/documents/pubs aren't being inserted more than once.
-            session.run("CREATE CONSTRAINT unique_pubs IF NOT EXISTS ON (p:Publication) ASSERT p.name IS UNIQUE")
-            session.run("CREATE CONSTRAINT unique_docs IF NOT EXISTS ON (d:Document) ASSERT d.doc_id IS UNIQUE")
-            session.run("CREATE CONSTRAINT unique_ents IF NOT EXISTS ON (e:Entity) ASSERT e.name IS UNIQUE")
-            session.run("CREATE CONSTRAINT unique_resps IF NOT EXISTS ON (r:Responsibility) ASSERT r.name IS UNIQUE")
+                session.run("DROP INDEX document_index IF EXISTS")
+                session.run("DROP INDEX ukn_document_index IF EXISTS")
+                session.run("DROP INDEX entity_index IF EXISTS")
+                session.run("DROP INDEX topic_index IF EXISTS")
+                session.run("DROP INDEX responsibility_index IF EXISTS")
+
+                # next set up a few things to make sure that entities/documents/pubs aren't being inserted more than once.
+                session.run("CREATE CONSTRAINT unique_docs IF NOT EXISTS ON (d:Document) ASSERT d.doc_id IS UNIQUE")
+                session.run("CREATE CONSTRAINT unique_ents IF NOT EXISTS ON (e:Entity) ASSERT e.name IS UNIQUE")
+                session.run(
+                    "CREATE CONSTRAINT unique_resps IF NOT EXISTS ON (r:Responsibility) ASSERT r.name IS UNIQUE")
+                session.run("CREATE CONSTRAINT unique_topics IF NOT EXISTS ON (t:Topic) ASSERT t.name IS UNIQUE")
+
+                # Create indicies
+                session.run("CREATE INDEX document_index IF NOT EXISTS FOR (d:Document) ON (d.doc_id, d.ref_name)")
+                session.run(
+                    "CREATE INDEX ukn_document_index IF NOT EXISTS FOR (d:UKN_Document) ON (d.doc_id, d.ref_name)")
+                session.run("CREATE INDEX entity_index IF NOT EXISTS FOR (e:Entity) ON (e.name)")
+                session.run("CREATE INDEX topic_index IF NOT EXISTS FOR (t:Topic) ON (t.name)")
+                session.run("CREATE INDEX responsibility_index IF NOT EXISTS FOR (r:Responsibility) ON (r.name)")
 
         publisher = Neo4jPublisher()
         publisher.populate_verified_ents()
@@ -129,7 +144,7 @@ class Neo4jJobManager:
         q = mp.Queue()
         proc = mp.Process(target=self.listener, args=(q, len(files)))
         proc.start()
-        workers = [mp.Process(target=self.process_files, args=(file_chunks[i], file_dir, q, publisher)) for i in range(n)]
+        workers = [mp.Process(target=self.process_files, args=(file_chunks[i], file_dir, q, publisher, max_threads)) for i in range(n)]
         for worker in workers:
             worker.start()
         for worker in workers:
@@ -141,7 +156,44 @@ class Neo4jJobManager:
             publisher.process_crowdsourced_ents(without_web_scraping, infobox_dir)
 
         with Config.connection_helper.neo4j_session_scope() as session:
-            # delete any entity nodes without a name
-            session.run("MATCH (e:Entity {name: ''}) detach delete (e);")
+            # Create UKN Documents and create REFERENCES and REFERENCES_UKN links
+            try:
+                print("Creating UKN Documents, REFERENCES, and REFERENCES_UKN links...", file=sys.stderr)
+                session.run("CALL policy.createUKNDocumentNodesAndAllReferences();")
+
+                # Create Similarity Links
+                print("Creating node2vec properties ... ", file=sys.stderr)
+                session.run(
+                    "CALL gds.alpha.node2vec.write( " +
+                    "   { " +
+                    "       nodeProjection: ['Document', 'Entity', 'Topic', 'UKN_Document'], " +
+                    "       relationshipProjection: ['REFERENCES', 'REFERENCES_UKN', 'CHILD_OF', 'RELATED_TO', 'CONTAINS', 'MENTIONS', 'IS_IN'], " +
+                    "       relationshipProperties: ['count', 'relevancy'], " +
+                    "       embeddingDimension: 64, " +
+                    "       walkLength: 10, " +
+                    "       iterations: 3, " +
+                    "       writeProperty: 'nodeVec' " +
+                    "   } " +
+                    ");"
+                )
+
+                print("Creating similarity relationships ... ", file=sys.stderr)
+                session.run(
+                    "MATCH (d:Document) " +
+                    "WITH {item:id(d), weights: d.nodeVec} AS docData " +
+                    "WITH collect(docData) AS data " +
+                    "CALL gds.alpha.similarity.cosine.stream({ " +
+                    "  data: data, " +
+                    "  similarityCutoff: 0.5 " +
+                    "}) " +
+                    "YIELD item1, item2, similarity " +
+                    "WITH gds.util.asNode(item1) AS NODE1, gds.util.asNode(item2) AS NODE2, similarity " +
+                    "MERGE (NODE1)-[:SIMILAR_TO {similarity: similarity}]->(NODE2);"
+                )
+
+                # delete any entity nodes without a name
+                session.run("MATCH (e:Entity {name: ''}) detach delete (e);")
+            except Exception as e:
+                print("Error: {0}".format(e))
 
             print('Done', file=sys.stderr)

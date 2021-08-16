@@ -56,8 +56,17 @@ class CrawlerStatusTracker:
                 join(VersionedDoc, Publication.name == VersionedDoc.name). \
                 filter(Publication.is_revoked == False).all()
             # extract crawler_used from metadata and de-dup the list
-            db_revoked_list = list(set([(name, json.loads(j)["crawler_used"]) for (name, j) in db_revoked]))
-            db_current_list = list(set([(name, json.loads(j)["crawler_used"]) for (name, j) in db_current]))
+            db_revoked_list = list(
+                set(
+                    [(name, json.loads(j)["crawler_used"])
+                        if isinstance(j,str)
+                        else (name,j["crawler_used"])
+                        for (name, j) in db_revoked]))
+            db_current_list = list(
+                set(
+                    [(name, json.loads(j)["crawler_used"])
+                     if isinstance(j,str) else (name, j["crawler_used"])
+                     for (name, j) in db_current]))
             for (doc, crawler) in db_current_list:
                 if doc not in self.input_doc_names and crawler in self.crawlers_downloaded:
                     print("Publication " + doc + " is now revoked")
@@ -88,6 +97,7 @@ class CrawlerStatusTracker:
             db_non_revocations =list(set([name for (name,) in db_non_revoked]))
             return db_non_revocations
 
+# TODO fix "PDF" addition here. Add html
     def update_revocations_es(self, doc_name_list, index_name:str):
 
         for doc in doc_name_list:

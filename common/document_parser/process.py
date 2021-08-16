@@ -9,6 +9,7 @@ from collections import namedtuple
 from . import get_default_logger
 
 from dataPipelines.gc_ocr.utils import OCRError
+from .lib.pdf_reader import PageCountParse
 
 import time
 import importlib
@@ -18,6 +19,9 @@ class UnparseableDocument(Exception):
     """Document was unsuitable for parsing, for some reason"""
     pass
 
+class PageCountCheck(Exception):
+    """Could not parse the doc, failed page count check"""
+    pass
 
 def resolve_dynamic_func(func_path: str) -> typing.Callable[[dict], dict]:
     if '::' not in func_path:
@@ -60,7 +64,7 @@ def resolve_dynamic_parser(parser_path: str) -> typing.Callable:
         raise Exception(e)
 
 
-def single_process(data_inputs: typing.Tuple[typing.Callable, str, str, bool, int, str]) -> None:
+def single_process(data_inputs: typing.Tuple[typing.Callable, str, str, bool, int, bool, str]) -> None:
     """
     Args:
         data_inputs: named tuple of kind "parser_input", the necessary data inputs
@@ -72,6 +76,7 @@ def single_process(data_inputs: typing.Tuple[typing.Callable, str, str, bool, in
      meta_data,
      ocr_missing_doc,
      num_ocr_threads,
+     force_ocr,
      out_dir
      ) = data_inputs
 
@@ -92,22 +97,22 @@ def single_process(data_inputs: typing.Tuple[typing.Callable, str, str, bool, in
 
         if not meta_data:
             parse_func(f_name=f_name, meta_data=meta_data, ocr_missing_doc=ocr_missing_doc,
-                       num_ocr_threads=num_ocr_threads, out_dir=out_dir)
+                       num_ocr_threads=num_ocr_threads, force_ocr=force_ocr, out_dir=out_dir)
         else:
 
             loc_meta_path = Path(Path(meta_data) if Path(meta_data).is_dir() else Path(meta_data).parent,
                                  Path(f_name).name + '.metadata')
 
             if loc_meta_path.exists():
-                parse_func(f_name=f_name, meta_data=loc_meta_path, ocr_missing_doc=ocr_missing_doc,
-                           num_ocr_threads=num_ocr_threads, out_dir=out_dir)
+                parse_func(f_name=f_name, meta_data=loc_meta_path, ocr_missing_doc=ocr_missing_doc, 
+                           num_ocr_threads=num_ocr_threads, force_ocr=force_ocr, out_dir=out_dir)
 
             else:
                 parse_func(f_name=f_name, meta_data=meta_data, ocr_missing_doc=ocr_missing_doc,
-                           num_ocr_threads=num_ocr_threads, out_dir=out_dir)
+                           num_ocr_threads=num_ocr_threads, force_ocr=force_ocr, out_dir=out_dir)
 
     # TODO: catch this where failed files can be counted or increment shared counter (for mp)
-    except (OCRError, UnparseableDocument) as e:
+    except (OCRError, UnparseableDocument, PageCountParse) as e:
         print(e)
         print(
             "%s - [ERROR] - Failed Processing: %s - Filename: %s"
@@ -136,6 +141,7 @@ def process_dir(
         meta_data: str = None,
         multiprocess: int = False,
         ocr_missing_doc: bool = False,
+        force_ocr: bool = False,
         num_ocr_threads: int = 2
 ):
     """
@@ -151,11 +157,10 @@ def process_dir(
     """
 
     p = Path(dir_path).glob("**/*")
-    files = [x for x in p if x.is_file() and filetype.guess(str(x)) is not None and (
-        filetype.guess(str(x)).mime == "pdf" or filetype.guess(str(x)).mime == "application/pdf")]
-
-    data_inputs = [(parse_func, f_name, meta_data, ocr_missing_doc,
-                    num_ocr_threads, out_dir) for f_name in files]
+    files = [x for x in p if x.is_file() and (str(x).endswith("pdf") or str(x).endswith("html")
+        or (filetype.guess(str(x)) is not None and (filetype.guess(str(x)).mime == "pdf" or filetype.guess(str(x)).mime == "application/pdf")))]
+    data_inputs = [(parse_func, f_name, str(f_name)+'.metadata', ocr_missing_doc,
+                    num_ocr_threads, force_ocr, out_dir) for f_name in files]
 
     doc_logger = get_default_logger()
     doc_logger.info("Parsing Multiple Documents: %i", len(data_inputs))

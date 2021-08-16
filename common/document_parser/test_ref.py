@@ -100,7 +100,7 @@ def test_dcid():
 
 def test_eo():
     check_str= "reference Executive Order 12996 DoD Executive Order 4140.01 Executive   Order 13340 "
-    ref_type = "Executive Order"
+    ref_type = "EO"
     assert check(check_str, ref_type, 2)
 
 def test_ar():
@@ -130,7 +130,7 @@ def test_atp():
 
 def test_army_dir():
     check_str= "army DIR 2020-08 army directive 2019 - 27 army dir"
-    ref_type = "ARMY DIR"
+    ref_type = "ARMY"
     assert check(check_str, ref_type, 2)
 
 def test_tc():
@@ -150,7 +150,7 @@ def test_tb():
 
 def test_da_memo():
     check_str= "DA MEMO 600-8-22 DA MEMO 5-5, DA Memorandum 25-53 da memo"
-    ref_type = "DA MEMO"
+    ref_type = "DA"
     assert check(check_str, ref_type, 3)
 
 def test_fm():
@@ -165,7 +165,7 @@ def test_gta():
 
 def test_hqda_policy():
     check_str= "HQDA POLICY NOTICE 1-1 HQDA POLICY NOTICE 600-4 "
-    ref_type = "HQDA POLICY NOTICE"
+    ref_type = "HQDA"
     assert check(check_str, ref_type, 2)
 
 def test_cta():

@@ -1,0 +1,25 @@
+version: "3.5"
+
+services:
+  streamsets-server:
+    container_name: "${COMPOSE_PROJECT_NAME:-gc-dev}-streamsets"
+    build:
+      context: "../"
+      dockerfile: "dev_tools/docker/devtools/streamsets/Dockerfile"
+    image: "gamechanger/devtools/streamsets:latest"
+    ports:
+      - "18630:18630"
+    volumes:
+      - "sdc-data:/var/lib/sdc"
+      - "../../:/home/sdc/app-repo/:ro,cached"
+    environment:
+      - "APP_REPO_DIR=/home/sdc/app-repo"
+    networks:
+      - app-net
+
+volumes:
+  sdc-data:
+
+networks:
+  app-net:
+    name: "${COMPOSE_PROJECT_NAME:-gc-dev}-network"

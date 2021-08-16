@@ -1,10 +1,10 @@
 import sqlalchemy as sa
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
-from typing import Optional
-from dataPipelines.gc_crawler.data_model import Document
+from typing import Optional, Dict, Any
 import datetime as dt
 from sqlalchemy.orm import Session
+import json
 from sqlalchemy.ext.declarative import DeferredReflection
 from dataPipelines.gc_db_utils.web.schemas import SnapshotEntrySchema
 from common.utils.mixins import AutoRepr
@@ -30,25 +30,26 @@ class Publication(AutoRepr, PublicationSchema, DeferredOrchReflectedBase):
 
     # TODO: Need to use ProcessedDoc instead of Doc for md5 and other things
     @staticmethod
-    def create_from_document(doc: Document) -> 'Publication':
-        """Generate Publication from Document obj."""
+    def create_from_document(doc: Dict[str, Any]) -> 'Publication':
+        """Generate Publication from Document dict obj."""
         return Publication(
-            name=doc.doc_name,
-            title=doc.doc_title[:100],
-            type=doc.doc_type,
-            number=doc.doc_num,
+            name=doc['doc_name'],
+            title=doc['doc_title'][:100],
+            type=doc['doc_type'],
+            number=doc['doc_num'],
             is_ignored=False,
             is_revoked=False
         )
 
     @staticmethod
-    def get_existing_from_doc(doc: Document, session: Session) -> Optional['Publication']:
-        existing_pub = session.query(Publication).filter_by(name=doc.doc_name).one_or_none()
+    def get_existing_from_doc(doc: Dict[str, Any], session: Session) -> Optional['Publication']:
+        existing_pub = session.query(Publication).filter_by(name=doc['doc_name']).one_or_none()
         return existing_pub
 
+
     @staticmethod
-    def get_or_create_from_document(doc: Document, session: Session) -> 'Publication':
-        existing_pub = Publication.get_existing_from_doc(doc=doc,session=session)
+    def get_or_create_from_document(doc: Dict[str, Any], session: Session) -> 'Publication':
+        existing_pub = Publication.get_existing_from_doc(doc=doc, session=session)
         return existing_pub or Publication.create_from_document(doc)
 
 
@@ -60,7 +61,7 @@ class VersionedDoc(AutoRepr, VersionedDocSchema, DeferredOrchReflectedBase):
     # TODO: Need to use ProcessedDoc instead of Doc for md5 and other things
     @staticmethod
     def create_from_document(
-            doc: Document,
+            doc: Dict[str, Any],
             doc_location: str,
             filename: str,
             batch_timestamp: dt.datetime,
@@ -68,37 +69,38 @@ class VersionedDoc(AutoRepr, VersionedDocSchema, DeferredOrchReflectedBase):
         """Generate VersionedDoc from Document obj. and associated Publication"""
         return VersionedDoc(
             publication=pub,
-            name=doc.doc_name,
-            type=doc.doc_type,
-            number=doc.doc_num,
+            name=doc['doc_name'],
+            type=doc['doc_type'],
+            number=doc['doc_num'],
             # TODO: Pass actual filename using ProcessedDoc instead of Doc
             # TODO: Tweak for clones?
             filename=filename,
             doc_location=doc_location,
             batch_timestamp=batch_timestamp,
-            publication_date=parse_timestamp(doc.publication_date),
-            json_metadata=doc.to_json(),  # type: ignore
-            version_hash=doc.version_hash,
+            publication_date=parse_timestamp(doc['publication_date']),
+            json_metadata=doc,
+            version_hash=doc['version_hash'],
             md5_hash="",
             is_ignored=False
         )
 
     @staticmethod
-    def get_existing_from_doc(doc: Document, session: Session) -> Optional['VersionedDoc']:
+    def get_existing_from_doc(doc: Dict[str, Any], session: Session) -> Optional['VersionedDoc']:
         # return (
         #     session.query(VersionedDoc)
         #         .filter(and_(
-        #             VersionedDoc.name == doc.doc_name,
-        #             VersionedDoc.version_hash == doc.version_hash
+        #             VersionedDoc.name == doc['doc_name'],
+        #             VersionedDoc.version_hash == doc['version_hash']
         #         )).one_or_none()
         # )
         # TODO: see if there's better logic here since we can have multiple docs for same pub_name = doc_name
         #       mind the fake metadata created for manually created pubs, it may not make sense to use versioned_hash there
         return None
 
+
     @staticmethod
     def get_or_create_from_document(
-            doc: Document,
+            doc: Dict[str, Any],
             pub: Publication,
             filename: str,
             doc_location: str,
@@ -115,6 +117,7 @@ class VersionedDoc(AutoRepr, VersionedDocSchema, DeferredOrchReflectedBase):
                     batch_timestamp=batch_timestamp
                 )
         )
+
 
 class PipelineJob(AutoRepr, PipelineJobSchema, DeferredOrchReflectedBase):
     __tablename__ = 'pipeline_jobs'

@@ -6,7 +6,7 @@ from api.src.app import app
 
 # this file is here so its scoped to project root to make sure imports work
 # python runtime doesnt have access to files outside the directory the file is running in
-# so for api/wsgi.py, it wouldnt know about common, dataScience etc which breaks imports
+# so for api/wsgi.py, it wouldnt know about common, gamechangerml etc which breaks imports
 # google python runtime (sys.path / PYTHONPATH) issues for more info
 
 if __name__ == "__main__":

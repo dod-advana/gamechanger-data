@@ -1,28 +1,25 @@
 <img src="./img/tags/GAMECHANGER-NoPentagon_RGB@3x.png" align="right"
      alt="Mission Vision Icons" width="300" >
-# Introduction
 
-Over 15 thousand documents govern how the Department of Defense (DoD) operates. The documents exist in different repositories, often exist on different networks, are discoverable to different communities, are updated independently, and evolve rapidly. No single ability has ever existed that would enable navigation of the vast universe of governing requirements and guidance documents, leaving the Department unable to make evidence-based, data-driven decisions. Today GAMECHANGER offers a scalable solution with an authoritative corpus comprising a single trusted repository of all statutory and policy driven requirements based on Artificial-Intelligence (AI) enabled technologies.
+<h1>
+<img src="./img/icons/RPA.png" alt="Data Engineering" width="70" aling="left"  >
+     Data Engineering
+</h1> 
 
-#
-<img src="./img/original/Brand_Platform.png" align="right"
-     alt="Mission Vision Icons" width="320" >
+`gamechanger-data` focuses on the data engineering work of gamechanger. To see all repositories [gamechanger](https://github.com/dod-advana/gamechanger)
 
-### Vision
 
-Fundamentally changing the way in which the DoD navigates its universe of requirements and makes decisions
+## (Linux) Dev/Prod Deployment Instructions
 
-### Mission
-GAMECHANGER aspires to be the Department’s trusted solution for evidence-based, data-driven decision-making across the universe of DoD requirements by:
-
-- Building the DoD’s authoritative corpus of requirements and policy to drive search, discovery, understanding, and analytic capabilities
-- Operationalizing cutting-edge technologies, algorithms, models and interfaces to automate and scale the solution
-- Fusing best practices from industry, academia, and government to advance innovation and research
-- Engaging the open-source community to build generalizable and replicable technology
-
-## License & Contributions
-See LICENSE.md (including licensing intent - INTENT.md) and CONTRIBUTING.md
-
+- Clone fresh `gamechanger-data` repo
+- Setup python3.6 venv with packages in requirements.txt.
+  - Create python3.6 venv, e.g. `python3 -m venv /opt/gc-venv-20210613`
+  - Before installing packages, update pip/wheel/setuptools, e.g. `<venv>/bin/pip install --upgrade pip setuptools wheel`
+  - Install packages from `requirements.txt`, with no additional dependencies, e.g. `<venv>/bin/pip install --no-deps -r requirements.txt`
+- Set up symlink `/opt/gc-venv-current` to the freshly created venv, e.g. `ln -s /opt/gc-venv-20210613 /opt/gc-venv-current`
+- Pull in other dependencies and configure repo with `env SCRIPT_ENV=<prod|dev> <repo>/paasJobs/configure_repo.sh`
+    - Config script will let you know if everything was configured correctly and if all backends can be reached.
+    
 ## How to Setup Local Env for Development
 
 ### MacOS / Linux
@@ -50,7 +47,7 @@ See LICENSE.md (including licensing intent - INTENT.md) and CONTRIBUTING.md
         - `https://docs.conda.io/en/latest/miniconda.html`
     - Create gamechanger python3.6 environment, like so:
         - `conda create -n gc python=3.6`
-    - Clone the repo and change into that dir `git clone ...; cd gamechanger`
+    - Clone the repo and change into that dir `git clone ...; cd gamechanger-data`
     - Activate conda environment and install requirements:
         - :bangbang: <span style="color:red"> reeeealy important - make sure you change into repo directory</span>
         - `conda activate gc`
@@ -87,3 +84,6 @@ the syntax highlighting/autocompletion is going to work as it's supposed to.
 **My venv is broken somehow!**
 - Delete the old conda environment and create a new one,
 follow steps above to reinstall it.
+
+## License & Contributions
+See LICENSE.md (including licensing intent - INTENT.md) and CONTRIBUTING.md

@@ -4,7 +4,6 @@ import typing as t
 import datetime as dt
 import sys
 
-from dataPipelines.gc_crawler.data_model import Document
 from dataPipelines.gc_ingest.config import Config
 from dataPipelines.gc_db_utils.orch.models import VersionedDoc, Publication
 from common.utils.s3 import S3Utils
@@ -17,6 +16,7 @@ class ArchiveType(Enum):
     RAW = 'raw'
     PARSED = 'parsed'
     METADATA = 'metadata'
+    THUMBNAIL = 'thumbnails'
 
 
 class GenericIngestableDoc(BaseModel):
@@ -33,7 +33,11 @@ class IngestableRawDoc(GenericIngestableDoc):
 
 
 class IngestableMetadataDoc(GenericIngestableDoc):
-    metadata: Document
+    metadata: t.Dict[str, t.Any]
+
+
+class IngestableThumbnailDoc(GenericIngestableDoc):
+    pass
 
 
 class IngestableParsedDoc(GenericIngestableDoc):
@@ -44,12 +48,14 @@ class IngestableDocGroup(BaseModel):
     raw_idoc: IngestableRawDoc
     parsed_idoc: t.Optional[IngestableParsedDoc] = None
     metadata_idoc: t.Optional[IngestableMetadataDoc] = None
+    thumbnail_idoc: t.Optional[IngestableThumbnailDoc] = None
 
 
 class LoadManager:
-    SUPPORTED_RAW_DOC_EXTENSIONS = frozenset({'.pdf'})
+    SUPPORTED_RAW_DOC_EXTENSIONS = frozenset({'.pdf', '.html'})
     METADATA_DOC_EXTENSION = '.metadata'
     PARSED_DOC_EXTENSION = '.json'
+    THUMBNAIL_EXTENSION = '.png'
 
     def __init__(self,
                  load_archive_base_prefix: str,
@@ -69,7 +75,8 @@ class LoadManager:
         return {
             ArchiveType.RAW: self.s3u.path_join(self.load_archive_base_prefix, ArchiveType.RAW.value),
             ArchiveType.METADATA: self.s3u.path_join(self.load_archive_base_prefix, ArchiveType.METADATA.value),
-            ArchiveType.PARSED: self.s3u.path_join(self.load_archive_base_prefix, ArchiveType.PARSED.value)
+            ArchiveType.PARSED: self.s3u.path_join(self.load_archive_base_prefix, ArchiveType.PARSED.value),
+            ArchiveType.THUMBNAIL: self.s3u.path_join(self.load_archive_base_prefix, ArchiveType.THUMBNAIL.value)
         }[archive_type]
 
     def get_timestamped_archive_prefix(self, archive_type: t.Union[ArchiveType, str], ts: t.Union[dt.datetime, str]) -> str:
@@ -86,7 +93,8 @@ class LoadManager:
         return {
             IngestableRawDoc: ArchiveType.RAW,
             IngestableParsedDoc: ArchiveType.PARSED,
-            IngestableMetadataDoc: ArchiveType.METADATA
+            IngestableMetadataDoc: ArchiveType.METADATA,
+            IngestableThumbnailDoc: ArchiveType.THUMBNAIL
         }[idoc.__class__]
 
     def get_timestamped_archive_prefix_for_idoc(self, idoc: GenericIngestableDoc, ts: t.Union[dt.datetime, str]) -> str:
@@ -96,21 +104,33 @@ class LoadManager:
             ts=ts
         )
 
+    def fix_json_metdata(self) -> None:
+        """ Fix Json values that were perviously entered as strings """
+        with Config.connection_helper.orch_db_session_scope('rw') as session:
+            jsons = session.query(VersionedDoc.id, VersionedDoc.json_metadata).all()
+            for (id, j_metadata) in jsons:
+                if isinstance(j_metadata, str):
+                    doc = session.query(VersionedDoc).filter_by(id=id).one()
+                    doc.json_metadata = json.loads(j_metadata)
+            session.commit()
 
     def get_ingestable_docs(self,
                             raw_dir: t.Union[Path, str],
                             metadata_dir: t.Optional[t.Union[Path, str]],
-                            parsed_dir: t.Optional[t.Union[Path, str]]
+                            parsed_dir: t.Optional[t.Union[Path, str]],
+                            thumbnail_dir: t.Optional[t.Union[Path, str]]
                             ) -> t.Iterable[IngestableDocGroup]:
         """Iterate through ingestable document/metadata pairs at given path
         :param raw_dir: Directory with raw pubs
         :param metadata_dir: Directory with metadata
         :param parsed_dir: Directory with parsed docs
+        :param thumbnail_dir: Directory with thumbnails
         :return:
         """
         raw_dir = Path(raw_dir).resolve()
         metadata_dir = Path(metadata_dir).resolve() if metadata_dir else None
         parsed_dir = Path(parsed_dir).resolve() if parsed_dir else None
+        thumbnail_dir = Path(thumbnail_dir).resolve() if thumbnail_dir else None
 
         def _get_corresponding_metadata_idoc(raw_doc: Path, metadata_dir: t.Optional[Path]) -> t.Optional[IngestableMetadataDoc]:
             if not metadata_dir:
@@ -122,7 +142,7 @@ class LoadManager:
 
             return IngestableMetadataDoc(
                 local_path=local_path,
-                metadata=Document.from_dict(json.load(local_path.open("r")))
+                metadata=json.load(local_path.open("r"))
             )
 
         def _get_corresponding_parsed_idoc(raw_doc: Path, parsed_dir: t.Optional[Path]) -> t.Optional[IngestableParsedDoc]:
@@ -137,6 +157,18 @@ class LoadManager:
                 local_path=local_path
             )
 
+        def _get_corresponding_thumbnail_idoc(raw_doc: Path, thumbnail_dir: t.Optional[Path]) -> t.Optional[IngestableThumbnailDoc]:
+            if not thumbnail_dir:
+                return None
+
+            local_path = Path(thumbnail_dir, raw_doc.stem + self.THUMBNAIL_EXTENSION)
+            if not local_path.is_file():
+                return None
+
+            return IngestableThumbnailDoc(
+                local_path=local_path
+            )
+
         for raw_doc_path in (
                 p for p in raw_dir.iterdir()
                 if p.is_file() and p.suffix.lower() in self.SUPPORTED_RAW_DOC_EXTENSIONS):
@@ -144,7 +176,8 @@ class LoadManager:
             yield IngestableDocGroup(
                 raw_idoc=IngestableRawDoc(local_path=raw_doc_path),
                 metadata_idoc=_get_corresponding_metadata_idoc(raw_doc=raw_doc_path, metadata_dir=metadata_dir),
-                parsed_idoc=_get_corresponding_parsed_idoc(raw_doc=raw_doc_path, parsed_dir=parsed_dir)
+                parsed_idoc=_get_corresponding_parsed_idoc(raw_doc=raw_doc_path, parsed_dir=parsed_dir),
+                thumbnail_idoc=_get_corresponding_thumbnail_idoc(raw_doc=raw_doc_path, thumbnail_dir=thumbnail_dir)
             )
 
     def process_db_pub_updates(self, idgs: t.Iterable[IngestableDocGroup]) -> None:
@@ -156,7 +189,7 @@ class LoadManager:
         with Config.connection_helper.orch_db_session_scope('rw') as session:
             for idg in idgs:
                 # if there's no metadata, we can't update the db
-                if not idg.metadata_idoc:
+                if not idg.metadata_idoc or not idg.thumbnail_idoc:
                     continue
 
                 existing_pub = Publication.get_existing_from_doc(
@@ -165,7 +198,7 @@ class LoadManager:
 
                 pub = (
                     existing_pub
-                    or pubs.get(idg.metadata_idoc.metadata.doc_name)
+                    or pubs.get(idg.metadata_idoc.metadata['doc_name'])
                     or Publication.create_from_document(doc=idg.metadata_idoc.metadata)
                 )
 
@@ -188,16 +221,20 @@ class LoadManager:
 
                 metadata = idg.metadata_idoc.metadata
                 existing_doc = VersionedDoc.get_existing_from_doc(doc=metadata, session=session)
-
-                vdoc = existing_doc or VersionedDoc.create_from_document(
-                    doc=metadata,
-                    pub=Publication.get_existing_from_doc(doc=metadata, session=session),
-                    filename=idg.raw_idoc.local_path.name,
-                    doc_location=idg.raw_idoc.s3_path or "",
-                    batch_timestamp=ts
-                )
-
-                session.add(vdoc)
+                if existing_doc:
+                    session.add(existing_doc)
+                else:
+                    pub = Publication.get_or_create_from_document(doc=metadata, session=session)
+                    if pub:
+                        session.add(pub)
+                        vdoc = VersionedDoc.create_from_document(
+                            doc=metadata,
+                            pub=pub,
+                            filename=idg.raw_idoc.local_path.name,
+                            doc_location=idg.raw_idoc.s3_path or "",
+                            batch_timestamp=ts
+                        )
+                        session.add(vdoc)
             session.commit()
 
     def upload_docs_to_s3(self,
@@ -220,6 +257,8 @@ class LoadManager:
                 idg.parsed_idoc.s3_path = _upload_to_s3(idg.parsed_idoc, ts=ts)
             if idg.metadata_idoc:
                 idg.metadata_idoc.s3_path = _upload_to_s3(idg.metadata_idoc, ts=ts)
+            if idg.thumbnail_idoc:
+                idg.thumbnail_idoc.s3_path = _upload_to_s3(idg.thumbnail_idoc, ts=ts)
 
             yield idg
 
@@ -227,19 +266,20 @@ class LoadManager:
              raw_dir: t.Union[Path, str],
              metadata_dir: t.Optional[t.Union[Path, str]],
              parsed_dir: t.Optional[t.Union[Path, str]],
+             thumbnail_dir: t.Optional[t.Union[Path, str]],
              ingest_ts: t.Union[dt.datetime, str],
              update_s3: bool,
              update_db: bool) -> None:
         """Process all doc/pub updates for eligible files"""
         ingest_ts = parse_timestamp(ts=ingest_ts, raise_parse_error=True)
-
-        print(f"Running load:\n\traw_dir={raw_dir}\n\tmetadata_dir={metadata_dir}\n\tparsed_dir={parsed_dir}"
-              f"\n\t\tupdate_s3={update_s3}\n\t\tupdate_db={update_db}", file=sys.stderr)
+        print(f"Running load:\n\traw_dir={raw_dir}\n\tmetadata_dir={metadata_dir}\n\tparsed_dir={parsed_dir}\n\t"
+              f"thumbnail_dir={thumbnail_dir}")
 
         idgs = list(self.get_ingestable_docs(
             raw_dir=raw_dir,
             metadata_dir=metadata_dir,
-            parsed_dir=parsed_dir
+            parsed_dir=parsed_dir,
+            thumbnail_dir=thumbnail_dir
         ))
 
         if update_db:

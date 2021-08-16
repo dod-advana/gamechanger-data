@@ -12,6 +12,7 @@ from dataPipelines.gc_ingest.tools.db.cli import pass_core_db_cli_options
 from dataPipelines.gc_ingest.common_cli_options import pass_bucket_name_option
 from dataPipelines.gc_crawler_status_tracker.gc_crawler_status_tracker import CrawlerStatusTracker
 from dataPipelines.gc_manual_metadata.gc_manual_metadata import ManualMetadata
+from dataPipelines.gc_thumbnails.utils import ThumbnailsCreator
 from pathlib import Path
 import datetime as dt
 from enum import Enum
@@ -48,12 +49,14 @@ class CoreIngestConfig(IngestConfig):
     max_threads: pyd.PositiveInt
     max_threads_neo4j: pyd.PositiveInt
     max_ocr_threads: pyd.PositiveInt
+    force_ocr: bool = False
     skip_neo4j_update: bool = False
     skip_snapshot_backup: bool = False
     skip_db_backup: bool = False
     skip_db_update: bool = False
     skip_revocation_update: bool = False
     skip_es_revocation: bool = False
+    skip_thumbnail_generation: bool = True
     current_snapshot_prefix: NonBlankString
     backup_snapshot_prefix: NonBlankString
     infobox_dir: t.Optional[StrippedString] = None
@@ -118,6 +121,16 @@ class CoreIngestConfig(IngestConfig):
         )
         return self._load_manager
 
+
+    @property
+    def thumbnail_doc_base_dir(self) -> Path:
+        if hasattr(self, '_thumbnail_doc_base_dir'):
+            return self._thumbnail_doc_base_dir
+
+        self._thumbnail_doc_base_dir = Path(self.job_dir, 'thumbnails')
+        self._thumbnail_doc_base_dir.mkdir(exist_ok=False)
+        return self._thumbnail_doc_base_dir
+
     @property
     def es_publisher(self) -> ConfiguredElasticsearchPublisher:
         if hasattr(self, '_es_publisher'):
@@ -159,6 +172,18 @@ class CoreIngestConfig(IngestConfig):
             bucket_name=self.bucket_name
         )
         return self._core_db_manager
+
+    @property
+    def thumbnail_job_manager(self) -> ThumbnailsCreator:
+        if hasattr(self, '_thumbnail_job_manager'):
+            return self._thumbnail_job_manager
+
+        self._thumbnail_job_manager = ThumbnailsCreator(
+            input_directory=self.raw_doc_base_dir,
+            output_directory=self.thumbnail_doc_base_dir,
+            max_workers=self.max_threads
+        )
+        return self._thumbnail_job_manager
 
     @staticmethod
     def pass_options(f):
@@ -202,6 +227,21 @@ class CoreIngestConfig(IngestConfig):
             type=bool,
             default=False,
             help="Skip adding revocations updates to es, will still update db",
+            show_default=True
+        )
+        @click.option(
+            '--skip-thumbnail-generation',
+            type=bool,
+            required=False,
+            default=True,
+            help="Whether or not to generate png of first page of pdf",
+            show_default=True
+        )
+        @click.option(
+            '--force-ocr',
+            type=bool,
+            default=False,
+            help="Require every document to be OCRed regaurdless of if a text layer already exists",
             show_default=True
         )
         @click.option(
@@ -342,7 +382,7 @@ class S3IngestConfig(CoreIngestConfig):
         @click.option(
             '--metadata-creation-group',
             type=str,
-            help="Document grouping to model metadata",
+            help="Document grouping to model metadata, if empty string or not assigned, no metadata will be created.",
             required=False
         )
 
@@ -355,11 +395,11 @@ class S3IngestConfig(CoreIngestConfig):
     def metadata_creater(self) -> ManualMetadata:
         if hasattr(self, '_metadata_creater'):
             return self._metadata_creater
-
-        self._metadata_creater = ManualMetadata(
-            input_directory=self.raw_doc_base_dir,
-            document_group=self.metadata_creation_group
-        )
+        if self.metadata_creation_group:
+            self._metadata_creater = ManualMetadata(
+                input_directory=self.raw_doc_base_dir,
+                document_group=self.metadata_creation_group
+            )
         return self._metadata_creater
 
     @staticmethod
@@ -369,7 +409,7 @@ class S3IngestConfig(CoreIngestConfig):
 
 class LocalIngestConfig(CoreIngestConfig):
     local_raw_ingest_dir: pyd.DirectoryPath
-    local_parsed_ingest_dir: t.Optional[pyd.DirectoryPath]
+    local_parsed_ingest_dir: t.Optional[StrippedString]
 
     @staticmethod
     def pass_options(f):
@@ -382,7 +422,8 @@ class LocalIngestConfig(CoreIngestConfig):
         @click.option(
             '--local-parsed-ingest-dir',
             type=str,
-            help="Local path with parsed files to process (json)"
+            help="Local path with parsed files to process (json)",
+            required=False
         )
         @functools.wraps(f)
         def wf(*args, **kwargs):
@@ -401,10 +442,22 @@ class LocalIngestConfig(CoreIngestConfig):
     def parsed_doc_base_dir(self) -> Path:
         if hasattr(self, '_parsed_doc_base_dir'):
             return self._parsed_doc_base_dir
-
-        self._parsed_doc_base_dir = self.local_parsed_ingest_dir or Path(self.job_dir, 'parsed_docs')
-        self._parsed_doc_base_dir.mkdir(exist_ok=True)
+        if self.local_parsed_ingest_dir and Path(self.local_parsed_ingest_dir).resolve().exists():
+            self._parsed_doc_base_dir = Path(self.local_parsed_ingest_dir).resolve()
+        else:
+            self._parsed_doc_base_dir = Path(self.job_dir, 'parsed_docs')
+            self._parsed_doc_base_dir.mkdir(exist_ok=True)
         return self._parsed_doc_base_dir
+
+    @property
+    def skip_parse(self) -> bool:
+        if hasattr(self, '_skip_parse'):
+            return self._skip_parse
+        if self.local_parsed_ingest_dir and Path(self.local_parsed_ingest_dir).resolve().exists():
+            self._skip_parse = True
+        else:
+            self._skip_parse = False
+        return self._skip_parse
 
     @property
     def db_backup_dir(self) -> Path:
