@@ -51,7 +51,6 @@ def parse(
 
         paragraphs.handle_paragraphs(doc_dict)
 
-        # ref_list.add_ref_list(doc_dict)
         for func in funcs:
             try:
                 func(doc_dict)
