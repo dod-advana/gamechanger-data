@@ -21,7 +21,7 @@ function run_core_ingest() {
   python dataPipelines/scripts/es_export.py \
     --pdf-s3-prefix "$pdf_s3_prefix" \
     --json-s3-prefix "$json_s3_prefix" \
-    --thumbnail_s3_prefix "$thumbnail_s3_prefix" \
+    --thumbnail-s3-prefix "$thumbnail_s3_prefix" \
     --s3-upload-prefix "$s3_upload_prefix" \
     --job-tmp-dir "$job_tmp_dir" \
     --manifest-filename "$manifest_filename" \
