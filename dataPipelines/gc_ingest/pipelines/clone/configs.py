@@ -14,6 +14,7 @@ from dataPipelines.gc_ingest.tools.db.cli import pass_core_db_cli_options as pas
 from dataPipelines.gc_ingest.common_cli_options import pass_bucket_name_option
 from dataPipelines.gc_crawler_status_tracker.gc_crawler_status_tracker import CrawlerStatusTracker
 from dataPipelines.gc_manual_metadata.gc_manual_metadata import ManualMetadata
+from dataPipelines.gc_thumbnails.utils import ThumbnailsCreator
 from pathlib import Path
 import datetime as dt
 from enum import Enum
@@ -22,7 +23,8 @@ import typing as t
 import functools
 import multiprocessing as mp
 
-NonBlankString = t.NewType('NonBlankString', pyd.constr(strip_whitespace=True, min_length=1))
+NonBlankString = t.NewType('NonBlankString', pyd.constr(
+    strip_whitespace=True, min_length=1))
 StrippedString = t.NewType('StrippedString', pyd.constr(strip_whitespace=True))
 
 
@@ -56,6 +58,7 @@ class CloneIngestConfig(IngestConfig):
     skip_db_update: bool = False
     skip_revocation_update: bool = False
     skip_es_revocation: bool = False
+    skip_thumbnail_generation: bool = True
     current_snapshot_prefix: NonBlankString
     backup_snapshot_prefix: NonBlankString
     infobox_dir: t.Optional[StrippedString] = None
@@ -121,6 +124,15 @@ class CloneIngestConfig(IngestConfig):
         return self._load_manager
 
     @property
+    def thumbnail_doc_base_dir(self) -> Path:
+        if hasattr(self, '_thumbnail_doc_base_dir'):
+            return self._thumbnail_doc_base_dir
+
+        self._thumbnail_doc_base_dir = Path(self.job_dir, 'thumbnails')
+        self._thumbnail_doc_base_dir.mkdir(exist_ok=False)
+        return self._thumbnail_doc_base_dir
+
+    @property
     def es_publisher(self) -> ConfiguredElasticsearchPublisher:
         if hasattr(self, '_es_publisher'):
             return self._es_publisher
@@ -161,6 +173,18 @@ class CloneIngestConfig(IngestConfig):
             bucket_name=self.bucket_name
         )
         return self._clone_db_manager
+
+    @property
+    def thumbnail_job_manager(self) -> ThumbnailsCreator:
+        if hasattr(self, '_thumbnail_job_manager'):
+            return self._thumbnail_job_manager
+
+        self._thumbnail_job_manager = ThumbnailsCreator(
+            input_directory=self.raw_doc_base_dir,
+            output_directory=self.thumbnail_doc_base_dir,
+            max_workers=self.max_threads
+        )
+        return self._thumbnail_job_manager
 
     @staticmethod
     def pass_options(f):
@@ -204,6 +228,14 @@ class CloneIngestConfig(IngestConfig):
             type=bool,
             default=False,
             help="Skip adding revocations updates to es, will still update db",
+            show_default=True
+        )
+        @click.option(
+            '--skip-thumbnail-generation',
+            type=bool,
+            required=False,
+            default=True,
+            help="Whether or not to generate png of first page of pdf",
             show_default=True
         )
         @click.option(
@@ -251,23 +283,27 @@ class CloneIngestConfig(IngestConfig):
         )
         @click.option(
             '--crawler-output',
-            type=click.Path(exists=False, dir_okay=False, file_okay=True, resolve_path=True),
+            type=click.Path(exists=False, dir_okay=False,
+                            file_okay=True, resolve_path=True),
             help="Path to crawler output json file"
         )
         @click.option(
             '--job-dir',
-            type=click.Path(exists=True, dir_okay=True, file_okay=False, resolve_path=True),
+            type=click.Path(exists=True, dir_okay=True,
+                            file_okay=False, resolve_path=True),
             help="Path to job dir (should be empty, usually)"
         )
         @click.option(
             '--infobox-dir',
             help='Directory path of where to write the infobox.json files',
-            type=click.Path(resolve_path=True, exists=True, dir_okay=True, file_okay=False),
+            type=click.Path(resolve_path=True, exists=True,
+                            dir_okay=True, file_okay=False),
             required=False
         )
         @click.option(
             '--es-mapping-file',
-            type=click.Path(exists=True, dir_okay=False, file_okay=True, resolve_path=True),
+            type=click.Path(exists=True, dir_okay=False,
+                            file_okay=True, resolve_path=True),
             required=False,
             help="Path to a non-default es mapping file"
         )
@@ -344,10 +380,9 @@ class S3IngestConfig(CloneIngestConfig):
         @click.option(
             '--metadata-creation-group',
             type=str,
-            help="Document grouping to model metadata",
+            help="Document grouping to model metadata, if empty string or not assigned, no metadata will be created.",
             required=False
         )
-
         @functools.wraps(f)
         def wf(*args, **kwargs):
             return f(*args, **kwargs)
@@ -357,11 +392,11 @@ class S3IngestConfig(CloneIngestConfig):
     def metadata_creater(self) -> ManualMetadata:
         if hasattr(self, '_metadata_creater'):
             return self._metadata_creater
-
-        self._metadata_creater = ManualMetadata(
-            input_directory=self.raw_doc_base_dir,
-            document_group=self.metadata_creation_group
-        )
+        if self.metadata_creation_group:
+            self._metadata_creater = ManualMetadata(
+                input_directory=self.raw_doc_base_dir,
+                document_group=self.metadata_creation_group
+            )
         return self._metadata_creater
 
     @staticmethod
@@ -404,7 +439,8 @@ class LocalIngestConfig(CloneIngestConfig):
         if hasattr(self, '_parsed_doc_base_dir'):
             return self._parsed_doc_base_dir
 
-        self._parsed_doc_base_dir = self.local_parsed_ingest_dir or Path(self.job_dir, 'parsed_docs')
+        self._parsed_doc_base_dir = self.local_parsed_ingest_dir or Path(
+            self.job_dir, 'parsed_docs')
         self._parsed_doc_base_dir.mkdir(exist_ok=True)
         return self._parsed_doc_base_dir
 

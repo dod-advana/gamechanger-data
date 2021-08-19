@@ -9,6 +9,17 @@
 `gamechanger-data` focuses on the data engineering work of gamechanger. To see all repositories [gamechanger](https://github.com/dod-advana/gamechanger)
 
 
+## (Linux) Dev/Prod Deployment Instructions
+
+- Clone fresh `gamechanger-data` repo
+- Setup python3.6 venv with packages in requirements.txt.
+  - Create python3.6 venv, e.g. `python3 -m venv /opt/gc-venv-20210613`
+  - Before installing packages, update pip/wheel/setuptools, e.g. `<venv>/bin/pip install --upgrade pip setuptools wheel`
+  - Install packages from `requirements.txt`, with no additional dependencies, e.g. `<venv>/bin/pip install --no-deps -r requirements.txt`
+- Set up symlink `/opt/gc-venv-current` to the freshly created venv, e.g. `ln -s /opt/gc-venv-20210613 /opt/gc-venv-current`
+- Pull in other dependencies and configure repo with `env SCRIPT_ENV=<prod|dev> <repo>/paasJobs/configure_repo.sh`
+    - Config script will let you know if everything was configured correctly and if all backends can be reached.
+    
 ## How to Setup Local Env for Development
 
 ### MacOS / Linux

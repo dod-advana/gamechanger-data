@@ -3,11 +3,12 @@ from datetime import datetime
 from common.document_parser.parsers.policy_analytics.display_mappings import (
     DISPLAY_TYPE_LOOKUP,
     CRAWLER_TO_DISPLAY_ORG_LOOKUP,
-    CRAWLER_TO_DISPLAY_SOURCE_LOOKUP
+    CRAWLER_TO_DATA_SOURCE_LOOKUP,
+    CRAWLER_TO_SOURCE_TITLE_LOOKUP
 )
 
 from common.utils.parsers import parse_timestamp
-from dataScience.src.utilities.text_utils import utf8_pass, clean_text
+from gamechangerml.src.utilities.text_utils import utf8_pass, clean_text
 
 
 def get_access_timestamp(doc_dict):
@@ -57,20 +58,40 @@ def get_display_org(meta_data):
 
     return display_org
 
+def get_data_source(meta_data):
+    """
+    get data source for cards on web app
+    :return: string
+    """
+    if 'data_source' in meta_data:
+        return meta_data['data_source']
+
+    crawler_used = meta_data["crawler_used"]
+    display_source = CRAWLER_TO_DATA_SOURCE_LOOKUP[crawler_used]
+
+    return display_source
+
+def get_source_title(meta_data):
+    """
+    get source title for cards on web app
+    :return: string
+    """
+    if 'source_title' in meta_data:
+        return meta_data['source_title']
+
+    crawler_used = meta_data["crawler_used"]
+    display_source = CRAWLER_TO_SOURCE_TITLE_LOOKUP[crawler_used]
+
+    return display_source
 
 def get_display_source(meta_data):
     """
     get display source for cards on web app
     :return: string
     """
-    if 'display_source' in meta_data:
-        return meta_data['display_source']
-
-    crawler_used = meta_data["crawler_used"]
-    display_source = CRAWLER_TO_DISPLAY_SOURCE_LOOKUP[crawler_used]
-
-    return display_source
-
+    data_source = get_data_source(meta_data)
+    source_title =get_source_title(meta_data)
+    return data_source + " - " + source_title
 
 def get_display_title(meta_data):
     """
@@ -90,12 +111,12 @@ def rename_and_format(doc_dict):
     # doc_dict["publication_date_dt"] = get_publication_date(doc_dict)
 
     if doc_dict["meta_data"]:
-        doc_dict["display_doc_type_s"] = get_display_doc_type(
-            doc_dict, doc_dict["meta_data"])
+        doc_dict["display_doc_type_s"] = get_display_doc_type(doc_dict, doc_dict["meta_data"])
         doc_dict["display_title_s"] = get_display_title(doc_dict["meta_data"])
         doc_dict["display_org_s"] = get_display_org(doc_dict["meta_data"])
-        doc_dict["display_source_s"] = get_display_source(
-            doc_dict["meta_data"])
+        doc_dict["data_source_s"] = get_data_source(doc_dict["meta_data"])
+        doc_dict["source_title_s"] = get_source_title(doc_dict["meta_data"])
+        doc_dict["display_source_s"] = get_display_source(doc_dict["meta_data"])
 
     doc_dict["is_revoked_b"] = False
 

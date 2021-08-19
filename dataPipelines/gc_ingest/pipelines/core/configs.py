@@ -382,7 +382,7 @@ class S3IngestConfig(CoreIngestConfig):
         @click.option(
             '--metadata-creation-group',
             type=str,
-            help="Document grouping to model metadata",
+            help="Document grouping to model metadata, if empty string or not assigned, no metadata will be created.",
             required=False
         )
 
@@ -395,11 +395,11 @@ class S3IngestConfig(CoreIngestConfig):
     def metadata_creater(self) -> ManualMetadata:
         if hasattr(self, '_metadata_creater'):
             return self._metadata_creater
-
-        self._metadata_creater = ManualMetadata(
-            input_directory=self.raw_doc_base_dir,
-            document_group=self.metadata_creation_group
-        )
+        if self.metadata_creation_group:
+            self._metadata_creater = ManualMetadata(
+                input_directory=self.raw_doc_base_dir,
+                document_group=self.metadata_creation_group
+            )
         return self._metadata_creater
 
     @staticmethod
@@ -409,7 +409,7 @@ class S3IngestConfig(CoreIngestConfig):
 
 class LocalIngestConfig(CoreIngestConfig):
     local_raw_ingest_dir: pyd.DirectoryPath
-    local_parsed_ingest_dir: t.Optional[pyd.DirectoryPath]
+    local_parsed_ingest_dir: t.Optional[StrippedString]
 
     @staticmethod
     def pass_options(f):
@@ -422,7 +422,8 @@ class LocalIngestConfig(CoreIngestConfig):
         @click.option(
             '--local-parsed-ingest-dir',
             type=str,
-            help="Local path with parsed files to process (json)"
+            help="Local path with parsed files to process (json)",
+            required=False
         )
         @functools.wraps(f)
         def wf(*args, **kwargs):
@@ -441,10 +442,22 @@ class LocalIngestConfig(CoreIngestConfig):
     def parsed_doc_base_dir(self) -> Path:
         if hasattr(self, '_parsed_doc_base_dir'):
             return self._parsed_doc_base_dir
-
-        self._parsed_doc_base_dir = self.local_parsed_ingest_dir or Path(self.job_dir, 'parsed_docs')
-        self._parsed_doc_base_dir.mkdir(exist_ok=True)
+        if self.local_parsed_ingest_dir and Path(self.local_parsed_ingest_dir).resolve().exists():
+            self._parsed_doc_base_dir = Path(self.local_parsed_ingest_dir).resolve()
+        else:
+            self._parsed_doc_base_dir = Path(self.job_dir, 'parsed_docs')
+            self._parsed_doc_base_dir.mkdir(exist_ok=True)
         return self._parsed_doc_base_dir
+
+    @property
+    def skip_parse(self) -> bool:
+        if hasattr(self, '_skip_parse'):
+            return self._skip_parse
+        if self.local_parsed_ingest_dir and Path(self.local_parsed_ingest_dir).resolve().exists():
+            self._skip_parse = True
+        else:
+            self._skip_parse = False
+        return self._skip_parse
 
     @property
     def db_backup_dir(self) -> Path:

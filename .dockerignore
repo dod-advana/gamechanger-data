@@ -5,7 +5,7 @@
 # ... is issued, the `.git/` directory will be ignored and won't be exposed to `COPY` directives in Dockerfile
 
 # ignore git dir
-.git/
+**/.git/
 
 # ignore tmp dirs
 tmp/
@@ -16,7 +16,3 @@ img/
 
 # pytest cache dirs
 .pytest_cache/
-
-# transformer model cache
-transformer_cache/
-transformer_cache.zip

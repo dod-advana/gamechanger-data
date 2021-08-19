@@ -1,4 +1,4 @@
-from dataScience.src.featurization.abbreviation import expand_abbreviations
+from gamechangerml.src.featurization.abbreviation import expand_abbreviations
 
 
 def add_abbreviations_n(doc_dict):

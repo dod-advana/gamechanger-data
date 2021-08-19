@@ -34,7 +34,7 @@ class IngestableRawDoc(GenericIngestableDoc):
 
 
 class IngestableMetadataDoc(GenericIngestableDoc):
-    metadata: Document
+    metadata: t.Dict[str, t.Any]
 
 
 class IngestableThumbnailDoc(GenericIngestableDoc):
@@ -105,6 +105,16 @@ class LoadManager:
             ts=ts
         )
 
+    def fix_json_metdata(self) -> None:
+        """ Fix Json values that were perviously entered as strings """
+        with Config.connection_helper.orch_db_session_scope('rw') as session:
+            jsons = session.query(VersionedDoc.id, VersionedDoc.json_metadata).all()
+            for (id, j_metadata) in jsons:
+                if isinstance(j_metadata, str):
+                    doc = session.query(VersionedDoc).filter_by(id=id).one()
+                    doc.json_metadata = json.loads(j_metadata)
+            session.commit()
+
     def get_metadata_filename(self, raw_doc: Path):
         """
         Return metadata filename
@@ -158,7 +168,7 @@ class LoadManager:
 
             return IngestableMetadataDoc(
                 local_path=local_path,
-                metadata=Document.from_dict(json.load(local_path.open("r")))
+                metadata=json.load(local_path.open("r"))
             )
 
         def _get_corresponding_parsed_idoc(raw_doc: Path, parsed_dir: t.Optional[Path]) -> t.Optional[IngestableParsedDoc]:
@@ -214,7 +224,7 @@ class LoadManager:
 
                 pub = (
                     existing_pub
-                    or pubs.get(idg.metadata_idoc.metadata.doc_name)
+                    or pubs.get(idg.metadata_idoc.metadata['doc_name'])
                     or Publication.create_from_document(doc=idg.metadata_idoc.metadata)
                 )
 
@@ -237,16 +247,20 @@ class LoadManager:
 
                 metadata = idg.metadata_idoc.metadata
                 existing_doc = VersionedDoc.get_existing_from_doc(doc=metadata, session=session)
-
-                vdoc = existing_doc or VersionedDoc.create_from_document(
-                    doc=metadata,
-                    pub=Publication.get_existing_from_doc(doc=metadata, session=session),
-                    filename=idg.raw_idoc.local_path.name,
-                    doc_location=idg.raw_idoc.s3_path or "",
-                    batch_timestamp=ts
-                )
-
-                session.add(vdoc)
+                if existing_doc:
+                    session.add(existing_doc)
+                else:
+                    pub = Publication.get_or_create_from_document(doc=metadata, session=session)
+                    if pub:
+                        session.add(pub)
+                        vdoc = VersionedDoc.create_from_document(
+                            doc=metadata,
+                            pub=pub,
+                            filename=idg.raw_idoc.local_path.name,
+                            doc_location=idg.raw_idoc.s3_path or "",
+                            batch_timestamp=ts
+                        )
+                        session.add(vdoc)
             session.commit()
 
     def upload_docs_to_s3(self,
@@ -260,7 +274,7 @@ class LoadManager:
             s3_location = Config.s3_utils.upload_file(
                 file=idoc.local_path,
                 object_prefix=self.get_timestamped_archive_prefix_for_idoc(idoc=idoc, ts=ts)
-            )z
+            )
             return s3_location
 
         for idg in idgs:
