@@ -28,7 +28,7 @@
     "password": "password",
     "port": 5432,
     "host": "localhost",
-    "database": "gc-orchestration"
+    "database": "postgres"
   },
   "web_db": {
     "username": "postgres",
