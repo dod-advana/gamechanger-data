@@ -4,7 +4,6 @@ import typing as t
 import datetime as dt
 import sys
 
-from dataPipelines.gc_crawler.data_model import Document
 from dataPipelines.gc_ingest.config import Config
 from dataPipelines.gc_db_utils.orch.models import VersionedDoc, Publication
 from common.utils.s3 import S3Utils
@@ -327,47 +326,6 @@ class LoadManager:
         else:
             print("Skipping updates to 'versioned_docs' table ...", file=sys.stderr)
 
-
-    def remove_from_s3(self, input_json_path: t.Union[str,Path]):
-
-        with input_json_path.open(mode="r") as f:
-            for json_str in f.readlines():
-                if not json_str.strip():
-                    continue
-                else:
-                    try:
-                        j_dict = json.loads(json_str)
-                    except json.decoder.JSONDecodeError:
-                        print("Encountered JSON decode error while parsing crawler output.")
-                        continue
-                    # Delete raw file from s3
-                    raw_filename = Path(j_dict["filename"])
-                    raw_path = self.s3u.path_join(self.get_archive_prefix(ArchiveType.RAW),
-                                                  raw_filename.name)
-                    print(f"Deleting {raw_path!s} from S3 ... ", file=sys.stderr)
-                    self.s3u.delete_object(object_path=raw_path)
-
-                    # Delete metdata file from s3
-                    metadata_filename = Path(self.get_metadata_filename(raw_filename))
-                    metadata_path = self.s3u.path_join(self.get_archive_prefix(ArchiveType.METADATA),
-                                                       metadata_filename.name)
-                    print(f"Deleting {metadata_path!s} from S3 ... ", file=sys.stderr)
-                    self.s3u.delete_object(object_path=metadata_path)
-
-                    # Delete parsed file from s3
-                    parsed_filename = Path(self.get_parsed_filename(raw_filename))
-                    parsed_path = self.s3u.path_join(self.get_archive_prefix(ArchiveType.PARSED),
-                                                       parsed_filename.name)
-                    print(f"Deleting {parsed_path!s} from S3 ... ", file=sys.stderr)
-                    self.s3u.delete_object(object_path=parsed_path)
-
-                    # Delete thumbnail file from s3
-                    thumbnail_filename = Path(self.get_thumbnail_filename(raw_filename))
-                    thumbnail_path = self.s3u.path_join(self.get_archive_prefix(ArchiveType.THUMBNAIL),
-                                                     thumbnail_filename.name)
-                    print(f"Deleting {thumbnail_path!s} from S3 ... ", file=sys.stderr)
-                    self.s3u.delete_object(object_path=thumbnail_path)
-
     def remove_from_db(self, input_json_path: t.Union[str,Path]):
         with input_json_path.open(mode="r") as f:
             for json_str in f.readlines():
@@ -379,4 +337,18 @@ class LoadManager:
                     except json.decoder.JSONDecodeError:
                         print("Encountered JSON decode error while parsing crawler output.")
                         continue
-                    j_dict
+                    with Config.connection_helper.orch_db_session_scope('rw') as session:
+                        doc_name = j_dict["doc_name"]
+                        filename = j_dict.get("filename", "")
+                        if filename:
+                            vds = session.query(VersionedDoc).filter_by(filename=filename).all()
+                        else:
+                            vds = session.query(VersionedDoc).filter_by(name=doc_name).all()
+                        pub = session.query(Publication).filter_by(name=doc_name).one_or_none()
+                        if vds and pub:
+                            for vd in vds:
+                                print(f"Deleting {vd.name!s} from versioned_docs", file=sys.stderr)
+                                session.delete(vd)
+                            print(f"Deleting {pub.name!s} from versioned_docs", file=sys.stderr)
+                            session.delete(pub)
+                            session.commit()

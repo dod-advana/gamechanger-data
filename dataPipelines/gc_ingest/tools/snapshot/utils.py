@@ -14,6 +14,7 @@ from dataPipelines.gc_db_utils.web.schemas import SnapshotEntrySchema
 from enum import Enum
 
 
+
 class SnapshotType(Enum):
     RAW = 'raw'
     PARSED = 'parsed'
@@ -254,3 +255,45 @@ class SnapshotManager:
             )
             restored_current_prefixes.append(s3_path)
         return restored_current_prefixes
+
+    def delete_from_current_snapshot(self, input_json_path: t.Union[str, Path]):
+
+        with input_json_path.open(mode="r") as f:
+            for json_str in f.readlines():
+                if not json_str.strip():
+                    continue
+                else:
+                    try:
+                        j_dict = json.loads(json_str)
+                    except json.decoder.JSONDecodeError:
+                        print("Encountered JSON decode error while parsing crawler output.")
+                        continue
+                    # Delete raw file from s3
+                    raw_filename = Path(j_dict.get("filename",
+                                                   j_dict["doc_name"] + "." + j_dict["downloadable_items"].pop()["doc_type"]))
+
+                    raw_path = self.s3u.path_join(self.get_current_prefix( SnapshotType.RAW),
+                                                  raw_filename.name)
+                    print(f"Deleting {raw_path!s} from S3 bucket {self.bucket_name!s} ... ", file=sys.stderr)
+                    self.s3u.delete_object(object_path=raw_path, bucket=self.bucket_name)
+
+                    # Delete metdata file from s3
+                    metadata_filename = Path(raw_filename.name+".metadata")
+                    metadata_path = self.s3u.path_join(self.get_current_prefix(SnapshotType.RAW),
+                                                       metadata_filename.name)
+                    print(f"Deleting {metadata_path!s} from S3 bucket {self.bucket_name!s} ... ", file=sys.stderr)
+                    self.s3u.delete_object(object_path=metadata_path, bucket=self.bucket_name)
+
+                    # Delete parsed file from s3
+                    parsed_filename = Path(raw_filename.stem + ".json")
+                    parsed_path = self.s3u.path_join(self.get_current_prefix(SnapshotType.PARSED),
+                                                     parsed_filename.name)
+                    print(f"Deleting {parsed_path!s} from S3 bucket {self.bucket_name!s} ... ", file=sys.stderr)
+                    self.s3u.delete_object(object_path=parsed_path, bucket=self.bucket_name)
+
+                    # Delete thumbnail file from s3
+                    thumbnail_filename = Path(raw_filename.stem + ".png")
+                    thumbnail_path = self.s3u.path_join(self.get_current_prefix(SnapshotType.THUMBNAIL),
+                                                        thumbnail_filename.name)
+                    print(f"Deleting {thumbnail_path!s} from S3 bucket {self.bucket_name!s} ... ", file=sys.stderr)
+                    self.s3u.delete_object(object_path=thumbnail_path, bucket=self.bucket_name)

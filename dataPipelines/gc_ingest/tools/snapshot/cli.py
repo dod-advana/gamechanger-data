@@ -161,3 +161,23 @@ def recreate_web_snapshot(sm: SnapshotManager):
     print("Recreating web db snapshot ... ")
     sm.recreate_web_db_snapshot()
     print("[OK] Web db snapshot refreshed.")
+
+
+@snapshot_cli.command()
+@pass_sm
+@click.option(
+        '--input-json-path',
+        type=str,
+        help="Input JSON list path, this should resemble the metadata, at least having a 'doc_name' field " +
+             "and a 'downloadable_items'.'doc_type' field",
+        required=True
+    )
+def remove_docs_from_current_snapshot(sm: SnapshotManager, input_json_path: str ):
+
+    input_json = Path(input_json_path).resolve()
+    if not input_json.exists():
+        print("No valid input json")
+        return
+
+    print("REMOVING DOCS FROM S3")
+    sm.delete_from_current_snapshot(input_json)

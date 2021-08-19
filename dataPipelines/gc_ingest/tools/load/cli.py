@@ -5,6 +5,7 @@ from dataPipelines.gc_ingest.config import Config
 from dataPipelines.gc_ingest.common_cli_options import pass_bucket_name_option
 import datetime as dt
 import functools
+from pathlib import Path
 
 
 def pass_core_load_cli_options(f):
@@ -111,3 +112,25 @@ def local(lm: LoadManager,
 @pass_lm
 def fix_json_metadata(lm: LoadManager):
     lm.fix_json_metdata()
+
+@load_cli.command()
+@pass_lm
+@click.option(
+        '--input-json-path',
+        type=str,
+        help="Input JSON list path, this should resemble the metadata, at least having a 'doc_name' field " +
+             "and a 'downloadable_items'.'doc_type' field",
+        required=True
+    )
+
+def remove_docs_from_db(lm: LoadManager, input_json_path: str ):
+
+    input_json = Path(input_json_path).resolve()
+    if not input_json.exists():
+        print("No valid input json")
+        return
+
+    print("REMOVING DOCS FROM DB")
+    lm.remove_from_db(input_json)
+
+
