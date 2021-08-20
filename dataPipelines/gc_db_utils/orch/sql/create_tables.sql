@@ -57,6 +57,13 @@ CREATE TABLE IF NOT EXISTS crawler_info (
     PRIMARY KEY (id)
 );
 
+CREATE TABLE IF NOT EXISTS organization_images (
+    id SERIAL NOT NULL,
+    display_org character varying(512) NOT NULL,
+    image_link character varying(512)
+    PRIMARY KEY (id)
+);
+
 
 
 GRANT SELECT ON crawler_status TO PUBLIC;
