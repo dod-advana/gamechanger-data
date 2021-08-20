@@ -53,9 +53,9 @@ export SKIP_DB_UPDATE="${SKIP_DB_UPDATE:-no}"
 export SKIP_REVOCATION_UPDATE="${SKIP_REVOCATION_UPDATE:-no}"
 export SKIP_THUMBNAIL_GENERATION="${SKIP_THUMBNAIL_GENERATION:-no}"
 
-export CURRENT_SNAPSHOT_PREFIX="${CURRENT_SNAPSHOT_PREFIX:-gamechanger/}"
-export BACKUP_SNAPSHOT_PREFIX="${BACKUP_SNAPSHOT_PREFIX:-gamechanger/backup/}"
-export LOAD_ARCHIVE_BASE_PREFIX="${LOAD_ARCHIVE_BASE_PREFIX:-gamechanger/load-archive/}"
-export DB_BACKUP_BASE_PREFIX="${DB_BACKUP_BASE_PREFIX:-gamechanger/backup/db/}"
+export CURRENT_SNAPSHOT_PREFIX="${CURRENT_SNAPSHOT_PREFIX:-bronze/gamechanger/}"
+export BACKUP_SNAPSHOT_PREFIX="${BACKUP_SNAPSHOT_PREFIX:-bronze/gamechanger/backup/}"
+export LOAD_ARCHIVE_BASE_PREFIX="${LOAD_ARCHIVE_BASE_PREFIX:-bronze/gamechanger/load-archive/}"
+export DB_BACKUP_BASE_PREFIX="${DB_BACKUP_BASE_PREFIX:-bronze/gamechanger/backup/db/}"
 
 export CLONE_OR_CORE="${CLONE_OR_CORE:-"core"}"
