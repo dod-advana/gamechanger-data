@@ -46,4 +46,17 @@ CREATE TABLE IF NOT EXISTS crawler_status (
 	PRIMARY KEY (id)
 );
 
+CREATE TABLE IF NOT EXISTS crawler_info (
+    id SERIAL NOT NULL,
+    crawler character varying(512) NOT NULL,
+    data_source character varying(512) NOT NULL,
+    source_title character varying(512) NOT NULL,
+    display_org character varying(512) NOT NULL,
+    url_origin character varying(512),
+    image_link character varying(512)
+    PRIMARY KEY (id)
+);
+
+
+
 GRANT SELECT ON crawler_status TO PUBLIC;
