@@ -69,7 +69,7 @@ function setup_aws_solr_es_commands() {
 ## ## S3/HDFS ENV Vars
 #####
 function setup_s3_vars_and_dirs() {
-  S3_GAMECHANGER_PATH="advana-data-zone/gamechanger"
+  S3_GAMECHANGER_PATH="advana-data-zone/bronze/gamechanger"
   # pdf/json
   S3_GC_PDF_PATH="$S3_GAMECHANGER_PATH/pdf"
   
