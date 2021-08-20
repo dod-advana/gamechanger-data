@@ -13,7 +13,7 @@ export PYTHONPATH="$REPO_DIR"
 SCRIPT_ENV="${SCRIPT_ENV:-prod}"
 AWS_CMD="${AWS_CMD:-aws}"
 PYTHON_CMD="${PYTHON_CMD:-/opt/gc-venv-current/bin/python}"
-S3_BUCKET_NAME="${S3_BUCKET_NAME:-advana-raw-zone}"
+S3_BUCKET_NAME="${S3_BUCKET_NAME:-advana-data-zone}"
 APP_CONFIG_NAME="${APP_CONFIG_NAME:-$SCRIPT_ENV}"
 ES_CONFIG_NAME="${ES_CONFIG_NAME:-$SCRIPT_ENV}"
 APP_CONFIG_LOCAL_PATH="${REPO_DIR}/configuration/app-config/${APP_CONFIG_NAME}.json"
@@ -24,13 +24,13 @@ TOPIC_MODEL_LOCAL_DIR="${GAMECHANGERML_PKG_DIR}/gamechangerml/models/topic_model
 case $SCRIPT_ENV in
   prod)
     AWS_DEFAULT_REGION="${AWS_DEFAULT_REGION:-us-gov-west-1}"
-    APP_CONFIG_S3_PATH="${APP_CONFIG_S3_PATH:-s3://${S3_BUCKET_NAME}/gamechanger/configuration/app-config/prod.20210416.json}"
-    TOPIC_MODEL_S3_PATH="${TOPIC_MODEL_S3_PATH:-s3://${S3_BUCKET_NAME}/gamechanger/models/topic_model/v1/20210208.tar.gz}"
+    APP_CONFIG_S3_PATH="${APP_CONFIG_S3_PATH:-s3://${S3_BUCKET_NAME}/bronze/gamechanger/configuration/app-config/prod.20210416.json}"
+    TOPIC_MODEL_S3_PATH="${TOPIC_MODEL_S3_PATH:-s3://${S3_BUCKET_NAME}/bronze/gamechanger/models/topic_model/v1/20210208.tar.gz}"
     ;;
   dev)
     AWS_DEFAULT_REGION="${AWS_DEFAULT_REGION:-us-east-1}"
-    APP_CONFIG_S3_PATH="${APP_CONFIG_S3_PATH:-s3://${S3_BUCKET_NAME}/gamechanger/configuration/app-config/dev.20210416.json}"
-    TOPIC_MODEL_S3_PATH="${TOPIC_MODEL_S3_PATH:-s3://${S3_BUCKET_NAME}/gamechanger/models/topic_model/v1/20210208.tar.gz}"
+    APP_CONFIG_S3_PATH="${APP_CONFIG_S3_PATH:-s3://${S3_BUCKET_NAME}/bronze/gamechanger/configuration/app-config/dev.20210416.json}"
+    TOPIC_MODEL_S3_PATH="${TOPIC_MODEL_S3_PATH:-s3://${S3_BUCKET_NAME}/bronze/gamechanger/models/topic_model/v1/20210208.tar.gz}"
     ;;
   local)
     >&2 echo "[INFO] LOCAL SETUP: Skipping app config install and topic model install."

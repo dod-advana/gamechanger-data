@@ -255,7 +255,7 @@
           "value" : "16"
         }, {
           "key" : "S3_BUCKET_NAME",
-          "value" : "advana-raw-zone"
+          "value" : "advana-data-zone"
         }, {
           "key" : "SKIP_NEO4J_UPDATE",
           "value" : "no"

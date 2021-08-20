@@ -77,8 +77,8 @@ RUN yum install -y \
 ## ## Other packages (for OCR)
 #####
 
-ARG LEPTONICA_RPM_S3_URL="s3://advana-raw-zone/gamechanger/package-approvals/ocr-20201106/leptonica-1.79.0-1.el7.x86_64.rpm"
-ARG TESSERACT_RPM_S3_URL="s3://advana-raw-zone/gamechanger/package-approvals/ocr-20201106/tesseract-4.1.1-1.el7.x86_64.rpm"
+ARG LEPTONICA_RPM_S3_URL="s3://advana-data-zone/bronze/gamechanger/package-approvals/ocr-20201106/leptonica-1.79.0-1.el7.x86_64.rpm"
+ARG TESSERACT_RPM_S3_URL="s3://advana-data-zone/bronze/gamechanger/package-approvals/ocr-20201106/tesseract-4.1.1-1.el7.x86_64.rpm"
 RUN \
     mkdir /tmp/rpm-staging \
     && aws s3 cp "$LEPTONICA_RPM_S3_URL" /tmp/rpm-staging/leptonica.rpm \

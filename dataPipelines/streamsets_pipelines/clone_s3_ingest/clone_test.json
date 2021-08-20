@@ -255,7 +255,7 @@
           "value" : "16"
         }, {
           "key" : "S3_BUCKET_NAME",
-          "value" : "advana-raw-zone"
+          "value" : "advana-data-zone"
         }, {
           "key" : "S3_RAW_INGEST_PREFIX",
           "value" : "gamechanger/project/haistack/pdf/"

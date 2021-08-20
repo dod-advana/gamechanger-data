@@ -57,7 +57,7 @@ function setup_aws_and_python_exec_commands() {
 ## ## S3/HDFS ENV Vars
 #####
 function setup_s3_vars_and_dirs() {
-  S3_GAMECHANGER_PATH="advana-raw-zone/gamechanger"
+  S3_GAMECHANGER_PATH="advana-data-zone/gamechanger"
   S3_GC_JSON_PATH="$S3_GAMECHANGER_PATH/json_es"
   S3_GC_JSON_FAIL_SOLR_PATH="$S3_GAMECHANGER_PATH/json_fail_index_solr"
   echo "S3 GC Path JSON: $S3_GC_JSON_PATH"
@@ -74,7 +74,7 @@ function clone_to_s3() {
   replace='%20'
   input_file='/apps/webapp/ExternalDataLoadUploads/${filename}'
   input_file_fix=${input_file//' '/$replace}
-  s3_file='s3://advana-raw-zone/gamechanger/project/$projects/uploads/$timestamp/${filename}'
+  s3_file='s3://advana-data-zone/bronze/gamechanger/project/$projects/uploads/$timestamp/${filename}'
   s3_file_fix=${s3_file//' '/$replace}
   ssh -t -i /tmp/repo/gamechanger/api/ssl/uot.pem centos@"${DEV_HDFS_HOST}" "hdfs dfs -cat '${input_file_fix}' | /home/centos/.local/bin/aws s3 cp - '${s3_file_fix}'"
 }

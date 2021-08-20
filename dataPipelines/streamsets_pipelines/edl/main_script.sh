@@ -69,7 +69,7 @@ function setup_aws_solr_es_commands() {
 ## ## S3/HDFS ENV Vars
 #####
 function setup_s3_vars_and_dirs() {
-  S3_GAMECHANGER_PATH="advana-raw-zone/gamechanger"
+  S3_GAMECHANGER_PATH="advana-data-zone/gamechanger"
   # pdf/json
   S3_GC_PDF_PATH="$S3_GAMECHANGER_PATH/pdf"
   
@@ -95,7 +95,7 @@ function update_solr_index() {
     if [[ "$_test" == *"$RESPONSE_HEADER"* ]]; then
       echo "File $file add to Solr $INDEX_NAME"
     else
-      echo "Failed to index $file adding file to advana-raw-zone/gamechanger/json_failed_add_solr"
+      echo "Failed to index $file adding file to advana-data-zone/bronze/gamechanger/json_failed_add_solr"
       export AWS_DEFAULT_REGION=$AWS_REGION
       $AWS_CMD s3 cp "$file" "s3://$S3_GC_JSON_FAIL_SOLR_PATH/$_filename.json"
     fi
@@ -121,7 +121,7 @@ function update_es_index() {
     if [[ "$_test" == *"$RESPONSE_HEADER"* ]]; then
         echo "File $file add to Elasticsearch $INDEX_NAME"
     else
-        echo "Failed to index $file adding file to advana-raw-zone/gamechanger/json_failed_add_solr"
+        echo "Failed to index $file adding file to advana-data-zone/bronze/gamechanger/json_failed_add_solr"
         export AWS_DEFAULT_REGION=$AWS_REGION
         $AWS_CMD s3 cp "$file" "s3://$S3_GC_JSON_FAIL_SOLR_PATH/$_filename.json"
     fi

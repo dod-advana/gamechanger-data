@@ -124,7 +124,7 @@ function gamechanger_symphony() {
 echo "RUNNING Gamechanger Symphony"
 	#export PYTHONPATH=$LOCAL_TMP_DIR/app-repo/gamechanger
     #export GC_APP_CONFIG_NAME=$SCRIPT_ENV
-    $AWS_CMD s3 cp s3://advana-raw-zone/$AWS_S3_CSV_PREFIX$destination $LOCAL_TMP_DIR/test.csv
+    $AWS_CMD s3 cp s3://advana-data-zone/$AWS_S3_CSV_PREFIX$destination $LOCAL_TMP_DIR/test.csv
     "$PYTHON_CMD" -m configuration init "$SCRIPT_ENV"
     "$PYTHON_CMD" -m configuration check-connections
     "$PYTHON_CMD" -m dataPipelines.gc_hermes.gc_pipeline --alias "hermes" --staging-folder staging --es-index $ES_INDEX_NAME --es-host $ES_HOST --es-port $ES_PORT -d $LOCAL_TMP_DIR/test.csv
