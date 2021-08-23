@@ -35,6 +35,14 @@ def cli():
     default=os.path.abspath('.')
 )
 @click.option(
+    '-s',
+    '--shrink-factor',
+    help="Factor to reduce image sizes. Reduces by a factor of 2^s",
+    required=False,
+    type=int,
+    default=0
+)
+@click.option(
     '-m',
     '--max-workers',
     help="Number of workers for multiprocessing",
@@ -45,6 +53,7 @@ def cli():
 def process(
         input_directory: str,
         output_directory: str,
+        shrink_factor: int,
         max_workers: int) -> None:
     """Run Thumbnail Retrieval"""
     input_directory = Path(input_directory).resolve()
@@ -52,6 +61,7 @@ def process(
     png_generator = ThumbnailsCreator(
         input_directory=input_directory,
         output_directory=output_directory,
+        shrink_factor=shrink_factor,
         max_workers=max_workers
     )
     result = png_generator.process_directory()
