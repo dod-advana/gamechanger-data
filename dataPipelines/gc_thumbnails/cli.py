@@ -40,7 +40,7 @@ def cli():
     help="Factor to reduce image sizes. Reduces by a factor of 2^s",
     required=False,
     type=int,
-    default=0
+    default=1
 )
 @click.option(
     '-m',
