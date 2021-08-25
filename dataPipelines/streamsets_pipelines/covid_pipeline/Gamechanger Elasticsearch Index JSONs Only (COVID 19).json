@@ -243,13 +243,13 @@
           "value" : "covid19"
         }, {
           "key" : "S3_GC_JSON_PATH",
-          "value" : "advana-raw-zone/gamechanger/projects/covid19/json"
+          "value" : "advana-data-zone/bronze/gamechanger/projects/covid19/json"
         }, {
           "key" : "S3_GC_REPO_TGZ_PATH",
-          "value" : "advana-raw-zone/gamechanger/projects/covid19/data-pipelines/orchestration/repo/gamechanger-repo.tgz"
+          "value" : "advana-data-zone/bronze/gamechanger/projects/covid19/data-pipelines/orchestration/repo/gamechanger-repo.tgz"
         }, {
           "key" : "S3_GC_INDEX_PATH",
-          "value" : "advana-raw-zone/gamechanger/projects/covid19/data-pipelines/orchestration/repo/gamechanger-index.json"
+          "value" : "advana-data-zone/bronze/gamechanger/projects/covid19/data-pipelines/orchestration/repo/gamechanger-index.json"
         } ]
       }, {
         "name" : "config.timeout",

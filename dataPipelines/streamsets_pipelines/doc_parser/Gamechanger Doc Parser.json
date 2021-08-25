@@ -243,7 +243,7 @@
           "value" : "haistack-test"
         }, {
           "key" : "S3_GC_REPO_TGZ_PATH",
-          "value" : "advana-raw-zone/gamechanger/projects/covid19/data-pipelines/orchestration/repo/gamechanger-repo.tgz"
+          "value" : "advana-data-zone/bronze/gamechanger/projects/covid19/data-pipelines/orchestration/repo/gamechanger-repo.tgz"
         }, {
           "key" : "AWS_S3_JSON_PREFIX",
           "value" : "gamechanger/project/haistack/json/"
@@ -255,7 +255,7 @@
           "value" : "1"
         }, {
           "key" : "GC_APP_CONFIG_EXT_S3_PATH",
-          "value" : "advana-raw-zone/gamechanger/data-pipelines/orchestration/repo/app-conf.json"
+          "value" : "advana-data-zone/bronze/gamechanger/data-pipelines/orchestration/repo/app-conf.json"
         } ]
       }, {
         "name" : "config.timeout",

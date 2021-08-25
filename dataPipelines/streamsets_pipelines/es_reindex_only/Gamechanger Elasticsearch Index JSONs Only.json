@@ -243,13 +243,13 @@
           "value" : "gamechager"
         }, {
           "key" : "S3_GC_JSON_PATH",
-          "value" : "advana-raw-zone/gamechanger/json"
+          "value" : "advana-data-zone/bronze/gamechanger/json"
         }, {
           "key" : "S3_GC_REPO_TGZ_PATH",
-          "value" : "advana-raw-zone/gamechanger/data-pipelines/gamechanger-repo.tgz"
+          "value" : "advana-data-zone/bronze/gamechanger/data-pipelines/gamechanger-repo.tgz"
         }, {
           "key" : "GC_APP_CONFIG_EXT_S3_PATH",
-          "value" : "advana-raw-zone/gamechanger/data-pipelines/orchestration/repo/app-conf.json"
+          "value" : "advana-data-zone/bronze/gamechanger/data-pipelines/orchestration/repo/app-conf.json"
         } ]
       }, {
         "name" : "config.timeout",

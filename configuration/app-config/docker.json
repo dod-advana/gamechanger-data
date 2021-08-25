@@ -20,7 +20,7 @@
     "auth_type": "key",
     "secret_key": "dev-secret-key",
     "access_key": "dev-access-key",
-    "bucket_name": "advana-raw-zone",
+    "bucket_name": "advana-data-zone",
     "default_region": "us-east-1"
   },
   "orch_db": {

@@ -140,8 +140,8 @@ function run_model_trainer() {
 #####
 
 function setup_s3_vars_and_dirs() {
-  local S3_GAMECHANGER_PROD_PATH="advana-raw-zone/gamechanger"
-  local S3_GAMECHANGER_TEST_PATH="advana-raw-zone/gamechanger"
+  local S3_GAMECHANGER_PROD_PATH="advana-data-zone/bronze/gamechanger"
+  local S3_GAMECHANGER_TEST_PATH="advana-data-zone/bronze/gamechanger"
 
   # data pipeline base/prod/test paths
   local S3_DATA_PIPELINE_PROD_BASE_PATH="$S3_GAMECHANGER_PROD_PATH/data-pipelines"
@@ -194,20 +194,20 @@ function setup_s3_vars_and_dirs() {
 
 
 function download_corpus_from_s3() {
-  number_of_files=$($AWS_CMD s3 ls s3://advana-raw-zone/gamechanger/projects/$PROJECT/json | wc -l)
+  number_of_files=$($AWS_CMD s3 ls s3://advana-data-zone/bronze/gamechanger/projects/$PROJECT/json | wc -l)
   if [[ $number_of_files -eq 0 ]]; then
     echo "no files in directory."
 	exit 1
   else
-    $AWS_CMD s3 cp --recursive "s3://advana-raw-zone/gamechanger/projects/$PROJECT/json" "$LOCAL_CORPUS_DIR_PATH" --include "*.json"
+    $AWS_CMD s3 cp --recursive "s3://advana-data-zone/bronze/gamechanger/projects/$PROJECT/json" "$LOCAL_CORPUS_DIR_PATH" --include "*.json"
   fi
 }
 
 function sync_model_to_s3() {
   MODEL_PATH=$(find "$LOCAL_BASE_MODEL_DIR_PATH/"  -mindepth 1 -maxdepth 1 -type d)
   MODEL_NAME=$(basename $MODEL_PATH)
-  $AWS_CMD s3 rm --recursive "s3://advana-raw-zone/gamechanger/projects/$PROJECT/models/$MODEL_VERSION/$MODEL_NAME"
-  $AWS_CMD s3 cp --recursive "$LOCAL_BASE_MODEL_DIR_PATH/$MODEL_NAME" "s3://advana-raw-zone/gamechanger/projects/$PROJECT/models/$MODEL_VERSION/$MODEL_NAME"
+  $AWS_CMD s3 rm --recursive "s3://advana-data-zone/bronze/gamechanger/projects/$PROJECT/models/$MODEL_VERSION/$MODEL_NAME"
+  $AWS_CMD s3 cp --recursive "$LOCAL_BASE_MODEL_DIR_PATH/$MODEL_NAME" "s3://advana-data-zone/bronze/gamechanger/projects/$PROJECT/models/$MODEL_VERSION/$MODEL_NAME"
 }
 
 ##### ##### #####
