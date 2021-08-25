@@ -140,8 +140,8 @@ function run_model_trainer() {
 #####
 
 function setup_s3_vars_and_dirs() {
-  local S3_GAMECHANGER_PROD_PATH="advana-data-zone/gamechanger"
-  local S3_GAMECHANGER_TEST_PATH="advana-data-zone/gamechanger"
+  local S3_GAMECHANGER_PROD_PATH="advana-data-zone/bronze/gamechanger"
+  local S3_GAMECHANGER_TEST_PATH="advana-data-zone/bronze/gamechanger"
 
   # data pipeline base/prod/test paths
   local S3_DATA_PIPELINE_PROD_BASE_PATH="$S3_GAMECHANGER_PROD_PATH/data-pipelines"
