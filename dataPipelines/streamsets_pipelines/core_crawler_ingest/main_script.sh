@@ -102,7 +102,7 @@ function setup_local_vars_and_dirs() {
 
   # setup logs
   JOB_TS=$(sed 's/.\{5\}$//' <<< $(date --iso-8601=seconds))
-  S3_JOB_LOG_PREFIX="gamechanger/data-pipelines/orchestration/logs/${JOB_NAME}/${JOB_TS}/"
+  S3_JOB_LOG_PREFIX="bronze/gamechanger/data-pipelines/orchestration/logs/${JOB_NAME}/${JOB_TS}/"
   LOCAL_JOB_LOG_PATH="$LOCAL_TMP_DIR/job.log"
   touch "$LOCAL_JOB_LOG_PATH"
 
@@ -144,10 +144,10 @@ function run_core_ingest() {
   local max_ocr_threads="${MAX_OCR_THREADS_PER_FILE:-4}"
   local max_parser_threads="${MAX_PARSER_THREADS:-16}"
 
-  local current_snapshot_prefix="gamechanger/"
-  local backup_snapshot_prefix="gamechanger/backup/"
-  local load_archive_base_prefix="gamechanger/load-archive/"
-  local db_backup_base_prefix="gamechanger/backup/db/"
+  local current_snapshot_prefix="bronze/gamechanger/"
+  local backup_snapshot_prefix="bronze/gamechanger/backup/"
+  local load_archive_base_prefix="bronze/gamechanger/load-archive/"
+  local db_backup_base_prefix="bronze/gamechanger/backup/db/"
 
   python -m dataPipelines.gc_ingest pipelines core ingest \
     --skip-neo4j-update="$skip_neo4j_update" \
@@ -167,8 +167,8 @@ function run_core_ingest() {
     --max-ocr-threads="$max_ocr_threads" \
     checkpoint \
     --checkpoint-limit=1 \
-    --checkpoint-file-path="gamechanger/external-uploads/crawler-downloader/checkpoint.txt" \
-    --checkpointed-dir-path="gamechanger/external-uploads/crawler-downloader/" \
+    --checkpoint-file-path="bronze/gamechanger/external-uploads/crawler-downloader/checkpoint.txt" \
+    --checkpointed-dir-path="bronze/gamechanger/external-uploads/crawler-downloader/" \
     --checkpoint-ready-marker="manifest.json" \
     --advance-checkpoint="yes"
 

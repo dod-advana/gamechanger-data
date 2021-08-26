@@ -63,10 +63,10 @@ function clone_to_s3() {
   timestamp=$(sed 's/.\{5\}$//' <<< $(date --iso-8601=seconds))
   timestamp=$(sed 's/://g' <<< $timestamp)
   echo "input file path: ${INPUT_FILE_PATH}"
-  s3_dir="s3a://advana-raw-zone/gamechanger/projects/${PROJECT_NAME}/pdf/"
+  s3_dir="s3a://advana-data-zone/bronze/gamechanger/projects/${PROJECT_NAME}/pdf/"
   replace='%20'
   s3_dir_fixed=${s3_dir//' '/$replace}
-  s3_file="s3a://advana-raw-zone/gamechanger/projects/${PROJECT_NAME}/pdf/${FILENAME}"
+  s3_file="s3a://advana-data-zone/bronze/gamechanger/projects/${PROJECT_NAME}/pdf/${FILENAME}"
   s3_file_fixed=${s3_file//' '/$replace}
   INPUT_FILE_PATH_FIX=${INPUT_FILE_PATH//' '/$replace}
   hadoop fs -mkdir -p $s3_dir_fixed

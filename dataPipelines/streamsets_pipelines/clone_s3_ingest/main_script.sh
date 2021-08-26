@@ -113,7 +113,7 @@ function setup_local_vars_and_dirs() {
 
   # setup logs
   JOB_TS=$(sed 's/.\{5\}$//' <<< $(date --iso-8601=seconds))
-  S3_JOB_LOG_PREFIX="gamechanger/data-pipelines/orchestration/logs/${JOB_NAME}/${JOB_TS}/"
+  S3_JOB_LOG_PREFIX="bronze/gamechanger/data-pipelines/orchestration/logs/${JOB_NAME}/${JOB_TS}/"
   LOCAL_JOB_LOG_PATH="$LOCAL_TMP_DIR/job.log"
   touch "$LOCAL_JOB_LOG_PATH"
 
@@ -155,10 +155,10 @@ function run_core_ingest() {
   local max_ocr_threads="${MAX_OCR_THREADS_PER_FILE:-4}"
   local max_parser_threads="${MAX_PARSER_THREADS:-16}"
 
-  local current_snapshot_prefix="gamechanger/project/haistack/"
-  local backup_snapshot_prefix="gamechanger/project/haistack/backup/"
-  local load_archive_base_prefix="gamechanger/project/haistack/load-archive/"
-  local db_backup_base_prefix="gamechanger/project/haistack/backup/db/"
+  local current_snapshot_prefix="bronze/gamechanger/project/haistack/"
+  local backup_snapshot_prefix="bronze/gamechanger/project/haistack/backup/"
+  local load_archive_base_prefix="bronze/gamechanger/project/haistack/load-archive/"
+  local db_backup_base_prefix="bronze/gamechanger/project/haistack/backup/db/"
 
   python -m dataPipelines.gc_ingest pipelines clone ingest \
     --skip-neo4j-update="$skip_neo4j_update" \

@@ -28,10 +28,10 @@ function run_core_neo4j_update() {
   local max_parser_threads="${MAX_PARSER_THREADS:-16}"
   local max_neo4j_threads="${MAX_PARSER_THREADS:-16}"
 
-  local current_snapshot_prefix="gamechanger/"
-  local backup_snapshot_prefix="gamechanger/backup/"
-  local load_archive_base_prefix="gamechanger/load-archive/"
-  local db_backup_base_prefix="gamechanger/backup/db/"
+  local current_snapshot_prefix="bronze/gamechanger/"
+  local backup_snapshot_prefix="bronze/gamechanger/backup/"
+  local load_archive_base_prefix="bronze/gamechanger/load-archive/"
+  local db_backup_base_prefix="bronze/gamechanger/backup/db/"
 
   python -m dataPipelines.gc_ingest pipelines core ingest \
     --skip-neo4j-update="$skip_neo4j_update" \
