@@ -467,3 +467,27 @@ class LocalIngestConfig(CoreIngestConfig):
         self._db_backup_dir = Path(self.job_dir, 'db_backups')
         self._db_backup_dir.mkdir(exist_ok=False)
         return self._db_backup_dir
+
+class DeleteConfig(CoreIngestConfig):
+    input_json_path: str
+
+    @staticmethod
+    def pass_options(f):
+        @click.option(
+            '--input-json-path',
+            type=str,
+            help="Local path JSON list path of docs to be deleted. " +
+             "Should resemble the metadata, at least having a 'doc_name' field" +
+             "and a 'downloadable_items'.'doc_type' field or a 'filename' field",
+            required=True
+        )
+
+        @functools.wraps(f)
+        def wf(*args, **kwargs):
+            return f(*args, **kwargs)
+        return wf
+
+    @staticmethod
+    def from_core_config(core_config: CoreIngestConfig, other_config_kwargs=t.Dict[str, t.Any]) -> 'DeleteConfig':
+        return DeleteConfig(**core_config.dict(), **other_config_kwargs)
+

@@ -1,7 +1,8 @@
 import click
 from .utils import Neo4jJobManager
 from .utils import only_write_infobox
-
+from pathlib import Path
+import json
 
 @click.group()
 @click.pass_context
@@ -70,3 +71,39 @@ def run(njm: Neo4jJobManager, source: str, clear: bool, max_threads: int, withou
         scrape_wiki=(without_web_scraping == False),
         infobox_dir=infobox_dir
     )
+
+def remove_docs_from_neo4j(njm: Neo4jJobManager, input_json_path: str):
+    input_json = Path(input_json_path).resolve()
+    if not input_json.exists():
+        print("No valid input json")
+        return
+
+    print("REMOVING DOCS FROM NEO4J")
+    with input_json.open(mode="r") as f:
+        for json_str in f.readlines():
+            if not json_str.strip():
+                continue
+            else:
+                try:
+                    j_dict = json.loads(json_str)
+                except json.decoder.JSONDecodeError:
+                    print("Encountered JSON decode error while parsing crawler output.")
+                    continue
+            filename = Path(j_dict.get("filename",
+                                       j_dict["doc_name"] + "." + j_dict["downloadable_items"].pop()["doc_type"]))
+            njm.remove_from_graph(filename=filename)
+
+
+
+@cli.command()
+@click.option(
+        '--input-json-path',
+        type=str,
+        help="Input JSON list path of docs to be deleted, " +
+             "this should resemble the metadata, at least having a 'doc_name' field " +
+             "and a 'downloadable_items'.'doc_type' field",
+        required=True
+    )
+@pass_njm
+def remove_docs_from_graph(njm: Neo4jJobManager, input_json_path: str):
+    remove_docs_from_neo4j(njm=njm,input_json_path=input_json_path)

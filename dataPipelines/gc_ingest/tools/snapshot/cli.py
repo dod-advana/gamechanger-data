@@ -5,6 +5,7 @@ from dataPipelines.gc_ingest.config import Config
 from dataPipelines.gc_ingest.common_cli_options import pass_bucket_name_option
 import functools
 import datetime as dt
+import json
 
 
 def common_options(f):
@@ -162,6 +163,29 @@ def recreate_web_snapshot(sm: SnapshotManager):
     sm.recreate_web_db_snapshot()
     print("[OK] Web db snapshot refreshed.")
 
+def remove_docs_from_current_snapshot(sm: SnapshotManager, input_json_path: str ):
+
+    input_json = Path(input_json_path).resolve()
+    if not input_json.exists():
+        print("No valid input json")
+        return
+
+    print("REMOVING DOCS FROM S3")
+    with input_json.open(mode="r") as f:
+        for json_str in f.readlines():
+            if not json_str.strip():
+                continue
+            else:
+                try:
+                    j_dict = json.loads(json_str)
+                except json.decoder.JSONDecodeError:
+                    print("Encountered JSON decode error while parsing crawler output.")
+                    continue
+                filename = Path(j_dict.get("filename",
+                                           j_dict["doc_name"] +
+                                           "." +
+                                           j_dict["downloadable_items"].pop()["doc_type"]))
+                sm.delete_from_current_snapshot(filename=filename)
 
 @snapshot_cli.command()
 @pass_sm
@@ -172,12 +196,8 @@ def recreate_web_snapshot(sm: SnapshotManager):
              "and a 'downloadable_items'.'doc_type' field",
         required=True
     )
-def remove_docs_from_current_snapshot(sm: SnapshotManager, input_json_path: str ):
-
-    input_json = Path(input_json_path).resolve()
-    if not input_json.exists():
-        print("No valid input json")
-        return
-
-    print("REMOVING DOCS FROM S3")
-    sm.delete_from_current_snapshot(input_json)
+def remove_docs_from_s3(sm: SnapshotManager, input_json_path: str ):
+    remove_docs_from_current_snapshot(
+        sm=sm,
+        input_json_path=input_json_path
+    )

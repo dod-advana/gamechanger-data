@@ -4,7 +4,8 @@ from dataPipelines.gc_elasticsearch_publisher.gc_elasticsearch_publisher import 
 from configuration import RENDERED_DIR
 import os
 from . import DEFAULT_ENTITIY_CSV_PATH
-
+from pathlib import Path
+import json
 
 @click.group()
 def cli():
@@ -61,6 +62,59 @@ def run(index_name: str, alias: str, mapping_file: str, ingest_dir) -> None:
 
     end = time()
     print(f"Total Index time -- It took {end - start} seconds!")
+
+
+def remove_docs_from_index(index_name: str, input_json_path: str) -> None:
+    input_json = Path(input_json_path).resolve()
+    if not input_json.exists():
+        print("No valid input json")
+        return
+
+    print("REMOVING DOCS FROM ES")
+    publisher = ConfiguredElasticsearchPublisher(
+        index_name=index_name,
+        ingest_dir=""
+    )
+    records = []
+    with input_json.open(mode="r") as f:
+        for json_str in f.readlines():
+            if not json_str.strip():
+                continue
+            else:
+                try:
+                    j_dict = json.loads(json_str)
+                except json.decoder.JSONDecodeError:
+                    print("Encountered JSON decode error while parsing crawler output.")
+                    continue
+            filename = Path(j_dict.get("filename",
+                                       j_dict["doc_name"] + "." + j_dict["downloadable_items"].pop()["doc_type"]))
+            records.append(filename.stem)
+    publisher.delete_record(records)
+
+
+@cli.command()
+@click.option(
+    "-i",
+    "--index-name",
+    help="The Elasticsearch Schema that will be created/used",
+    default="elasticsearch",
+    type=str,
+    required=True,
+)
+@click.option(
+        '--input-json-path',
+        type=str,
+        help="Input JSON list path of docs to be deleted, " +
+             "this should resemble the metadata, at least having a 'doc_name' field " +
+             "and a 'downloadable_items'.'doc_type' field",
+        required=True
+    )
+def remove_docs_from_es(index_name: str, input_json_path: str) -> None:
+    remove_docs_from_index(
+        index_name=index_name,
+        input_json_path=input_json_path
+    )
+
 
 @cli.command(name="entity-insert")
 @click.option(

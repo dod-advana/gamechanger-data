@@ -326,29 +326,17 @@ class LoadManager:
         else:
             print("Skipping updates to 'versioned_docs' table ...", file=sys.stderr)
 
-    def remove_from_db(self, input_json_path: t.Union[str,Path]):
-        with input_json_path.open(mode="r") as f:
-            for json_str in f.readlines():
-                if not json_str.strip():
-                    continue
-                else:
-                    try:
-                        j_dict = json.loads(json_str)
-                    except json.decoder.JSONDecodeError:
-                        print("Encountered JSON decode error while parsing crawler output.")
-                        continue
-                    with Config.connection_helper.orch_db_session_scope('rw') as session:
-                        doc_name = j_dict["doc_name"]
-                        filename = j_dict.get("filename", "")
-                        if filename:
-                            vds = session.query(VersionedDoc).filter_by(filename=filename).all()
-                        else:
-                            vds = session.query(VersionedDoc).filter_by(name=doc_name).all()
-                        pub = session.query(Publication).filter_by(name=doc_name).one_or_none()
-                        if vds and pub:
-                            for vd in vds:
-                                print(f"Deleting {vd.name!s} from versioned_docs", file=sys.stderr)
-                                session.delete(vd)
-                            print(f"Deleting {pub.name!s} from versioned_docs", file=sys.stderr)
-                            session.delete(pub)
-                            session.commit()
+    def remove_from_db(self, filename: t.Union[str,Path], doc_name: str):
+        with Config.connection_helper.orch_db_session_scope('rw') as session:
+            if filename:
+                vds = session.query(VersionedDoc).filter_by(filename=filename).all()
+            else:
+                vds = session.query(VersionedDoc).filter_by(name=doc_name).all()
+            pub = session.query(Publication).filter_by(name=doc_name).one_or_none()
+            if vds and pub:
+                for vd in vds:
+                    print(f"Deleting {vd.name!s} from versioned_docs", file=sys.stderr)
+                    session.delete(vd)
+                print(f"Deleting {pub.name!s} from versioned_docs", file=sys.stderr)
+                session.delete(pub)
+                session.commit()

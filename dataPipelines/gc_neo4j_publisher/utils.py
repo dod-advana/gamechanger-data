@@ -197,3 +197,9 @@ class Neo4jJobManager:
                 print("Error: {0}".format(e))
 
             print('Done', file=sys.stderr)
+
+    def remove_from_graph(self, filename: str) -> None:
+        with Config.connection_helper.neo4j_session_scope() as session:
+            # if clear flag, clear all data
+                print(f"Deleting Document with filename {filename!s} from graph ... ", file=sys.stderr)
+                session.run("match (n: Document {filename:'" + str(filename) + "'}) detach delete (n);")
