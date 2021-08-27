@@ -134,11 +134,6 @@ def remove_docs_from_db(lm: LoadManager, input_json_path: str):
 
 @load_cli.command("remove-from-db")
 @pass_lm
-def fix_json_metadata(lm: LoadManager):
-    lm.fix_json_metdata()
-
-@load_cli.command()
-@pass_lm
 @click.option(
         '--input-json-path',
         type=str,
@@ -151,3 +146,14 @@ def remove_docs_from_db_wrapper(lm: LoadManager, input_json_path: str ):
         lm=lm,
         input_json_path=input_json_path
     )
+
+@load_cli.command()
+@pass_lm
+def json_metadata_to_json(lm: LoadManager):
+    lm.json_metadata_to_json()
+
+
+@load_cli.command()
+@pass_lm
+def json_metadata_to_string(lm: LoadManager):
+    lm.json_metadata_to_string()

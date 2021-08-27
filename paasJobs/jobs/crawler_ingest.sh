@@ -31,10 +31,10 @@ function run_core_ingest() {
   local max_parser_threads="${MAX_PARSER_THREADS:-16}"
   local max_neo4j_threads="${MAX_PARSER_THREADS:-16}"
 
-  local current_snapshot_prefix="gamechanger/"
-  local backup_snapshot_prefix="gamechanger/backup/"
-  local load_archive_base_prefix="gamechanger/load-archive/"
-  local db_backup_base_prefix="gamechanger/backup/db/"
+  local current_snapshot_prefix="bronze/gamechanger/"
+  local backup_snapshot_prefix="bronze/gamechanger/backup/"
+  local load_archive_base_prefix="bronze/gamechanger/load-archive/"
+  local db_backup_base_prefix="bronze/gamechanger/backup/db/"
 
   python -m dataPipelines.gc_ingest pipelines core ingest \
     --skip-neo4j-update="$skip_neo4j_update" \
@@ -59,8 +59,8 @@ function run_core_ingest() {
     --skip-revocation-update="$skip_revocation_update" \
     checkpoint \
     --checkpoint-limit=1 \
-    --checkpoint-file-path="gamechanger/external-uploads/crawler-downloader/checkpoint.txt" \
-    --checkpointed-dir-path="gamechanger/external-uploads/crawler-downloader/" \
+    --checkpoint-file-path="bronze/gamechanger/external-uploads/crawler-downloader/checkpoint.txt" \
+    --checkpointed-dir-path="bronze/gamechanger/external-uploads/crawler-downloader/" \
     --checkpoint-ready-marker="manifest.json" \
     --advance-checkpoint="yes"
 

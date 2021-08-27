@@ -118,11 +118,11 @@ function crawl_and_ingest() {
                 --max-threads-neo4j='"$max_parser_threads"' \
                 --max-ocr-threads='"$max_ocr_threads"' \
                 --job-dir='"$ingest_container_job_dir"'  \
-                --current-snapshot-prefix gamechanger/ \
-                --backup-snapshot-prefix gamechanger/backup/ \
-                --db-backup-base-prefix gamechanger/backup/db/ \
-                --load-archive-base-prefix gamechanger/load-archive/ \
-                --bucket-name advana-raw-zone \
+                --current-snapshot-prefix bronze/gamechanger/ \
+                --backup-snapshot-prefix bronze/gamechanger/backup/ \
+                --db-backup-base-prefix bronze/gamechanger/backup/db/ \
+                --load-archive-base-prefix bronze/gamechanger/load-archive/ \
+                --bucket-name advana-data-zone \
             local \
                 --local-raw-ingest-dir '"$ingest_container_raw_dir"''
 

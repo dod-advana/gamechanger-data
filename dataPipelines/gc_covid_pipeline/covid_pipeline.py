@@ -48,7 +48,7 @@ import click
     help="The raw version of the COVD19 dataset located in S3,",
     type=str,
     required=True,
-    default="gamechanger/projects/covid19/cord_dataset/cord-19.tar.gz"
+    default="bronze/gamechanger/projects/covid19/cord_dataset/cord-19.tar.gz"
 )
 
 @click.option(
@@ -76,25 +76,25 @@ def run(staging_folder: str, s3_covd_dataset: str,
     #  Pull down the skip_files_doc_parser.txt file
     print("Download Skip files doc parser file")
     Conf.s3_utils.download_file(file=staging_folder + "/modification/skip_file_doc_parser.txt",
-                                bucket="advana-raw-zone",
-                                object_path="gamechanger/projects/" + gc_project + "/data-pipelines/orchestration/repo/skip_file_doc_parser.txt")
+                                bucket="advana-data-zone",
+                                object_path="bronze/gamechanger/projects/" + gc_project + "/data-pipelines/orchestration/repo/skip_file_doc_parser.txt")
 
     # Download covid 19 dataset, currently being used
     print("Download Current covid 19 dataset")
-    if Conf.s3_utils.object_exists(bucket="advana-raw-zone",
-                                   object_path="gamechanger/projects/" + gc_project + "/raw_jsons/pdf_json.tar.gz"):
-        Conf.s3_utils.download_file(file=staging_folder + "/pdf_json.tar.gz", bucket="advana-raw-zone",
-                                    object_path="gamechanger/projects/" + gc_project + "/raw_jsons/pdf_json.tar.gz")
+    if Conf.s3_utils.object_exists(bucket="advana-data-zone",
+                                   object_path="bronze/gamechanger/projects/" + gc_project + "/raw_jsons/pdf_json.tar.gz"):
+        Conf.s3_utils.download_file(file=staging_folder + "/pdf_json.tar.gz", bucket="advana-data-zone",
+                                    object_path="bronze/gamechanger/projects/" + gc_project + "/raw_jsons/pdf_json.tar.gz")
         with tarfile.open(staging_folder + "/pdf_json.tar.gz", "r:gz") as pdf_json_archive:
             pdf_json_archive.extractall(staging_folder)
     else:
         if not os.path.exists(staging_folder + "/pdf_json/"):
             os.makedirs(staging_folder + "/pdf_json/")
 
-    if Conf.s3_utils.object_exists(bucket="advana-raw-zone",
-                                   object_path="gamechanger/projects/" + gc_project + "/raw_jsons/pmc_json.tar.gz"):
-        Conf.s3_utils.download_file(file=staging_folder + "/pmc_json.tar.gz", bucket="advana-raw-zone",
-                                    object_path="gamechanger/projects/" + gc_project + "/raw_jsons/pmc_json.tar.gz")
+    if Conf.s3_utils.object_exists(bucket="advana-data-zone",
+                                   object_path="bronze/gamechanger/projects/" + gc_project + "/raw_jsons/pmc_json.tar.gz"):
+        Conf.s3_utils.download_file(file=staging_folder + "/pmc_json.tar.gz", bucket="advana-data-zone",
+                                    object_path="bronze/gamechanger/projects/" + gc_project + "/raw_jsons/pmc_json.tar.gz")
         with tarfile.open(staging_folder + "/pmc_json.tar.gz", "r:gz") as pmc_json_archive:
             pmc_json_archive.extractall(staging_folder)
     else:
@@ -103,8 +103,8 @@ def run(staging_folder: str, s3_covd_dataset: str,
 
     # Download the latest covid 19 dataset
     print("Download new COVID 19 dataset")
-    print("gamechanger/projects/" + gc_project + "/cord_dataset/cord-19.tar.gz")
-    Conf.s3_utils.download_file(file=staging_folder + "/cord-19.tar.gz",  bucket="advana-raw-zone",
+    print("bronze/gamechanger/projects/" + gc_project + "/cord_dataset/cord-19.tar.gz")
+    Conf.s3_utils.download_file(file=staging_folder + "/cord-19.tar.gz",  bucket="advana-data-zone",
                                 object_path=s3_covd_dataset)
 
 
@@ -140,13 +140,13 @@ def run(staging_folder: str, s3_covd_dataset: str,
 
     # Upload new PDF to S3
     print("Upload new PDF files into S3")
-    Conf.s3_utils.upload_dir(local_dir=staging_folder + "/modification/pdf/", bucket="advana-raw-zone",
-                             prefix_path="gamechanger/projects/" + gc_project + "/pdf/")
+    Conf.s3_utils.upload_dir(local_dir=staging_folder + "/modification/pdf/", bucket="advana-data-zone",
+                             prefix_path="bronze/gamechanger/projects/" + gc_project + "/pdf/")
 
     # Upload new ES/DS JSONS to S3
     print("Upload Elasticsearch jsons into S3")
-    Conf.s3_utils.upload_dir(local_dir=staging_folder + "/modification/json/", bucket="advana-raw-zone",
-                             prefix_path="gamechanger/projects/" + gc_project + "/json/")
+    Conf.s3_utils.upload_dir(local_dir=staging_folder + "/modification/json/", bucket="advana-data-zone",
+                             prefix_path="bronze/gamechanger/projects/" + gc_project + "/json/")
 
     # Delete Generated file no longer in the COVID dataset - Generated JSONs
     print("Delete file no longer need in S3 (PDF/Generated JSONs")
@@ -164,10 +164,10 @@ def run(staging_folder: str, s3_covd_dataset: str,
 
     # Upload new RAW JSONs tar to S3
     print("Upload TAR Raw JSONs into S3")
-    Conf.s3_utils.upload_file(file=staging_folder + "/document_parses/pdf_json.tar.gz", bucket="advana-raw-zone",
-                              object_prefix="gamechanger/projects/" + gc_project + "/raw_jsons/")
-    Conf.s3_utils.upload_file(file=staging_folder + "/document_parses/pmc_json.tar.gz", bucket="advana-raw-zone",
-                              object_prefix="gamechanger/projects/" + gc_project + "/raw_jsons/")
+    Conf.s3_utils.upload_file(file=staging_folder + "/document_parses/pdf_json.tar.gz", bucket="advana-data-zone",
+                              object_prefix="bronze/gamechanger/projects/" + gc_project + "/raw_jsons/")
+    Conf.s3_utils.upload_file(file=staging_folder + "/document_parses/pmc_json.tar.gz", bucket="advana-data-zone",
+                              object_prefix="bronze/gamechanger/projects/" + gc_project + "/raw_jsons/")
 
 
     end = time()
@@ -298,14 +298,14 @@ def delete_file_no_longer_need_in_s3(files_to_remove: Union[str, Path], gc_proje
             while line:
                 filename = re.sub('.xml.json|.json', '', line)
 
-                Conf.s3_utils.delete_object(object_path="gamechanger/projects/" + gc_project + "/json/" + line.strip(),
-                                            bucket="advana-raw-zone")
+                Conf.s3_utils.delete_object(object_path="bronze/gamechanger/projects/" + gc_project + "/json/" + line.strip(),
+                                            bucket="advana-data-zone")
                 Conf.s3_utils.delete_object(
-                    object_path="gamechanger/projects/" + gc_project + "/pdf/" + filename.strip() + ".pdf",
-                    bucket="advana-raw-zone")
+                    object_path="bronze/gamechanger/projects/" + gc_project + "/pdf/" + filename.strip() + ".pdf",
+                    bucket="advana-data-zone")
                 Conf.s3_utils.delete_object(
-                    object_path="gamechanger/projects/" + gc_project + "/pdf/" + filename.strip() + ".pdf.metadata",
-                    bucket="advana-raw-zone")
+                    object_path="bronze/gamechanger/projects/" + gc_project + "/pdf/" + filename.strip() + ".pdf.metadata",
+                    bucket="advana-data-zone")
 
                 print("deleted {}: {}".format(cnt, filename.strip()))
                 line = remove_file.readline()

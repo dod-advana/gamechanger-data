@@ -9,9 +9,9 @@ services:
       /bin/sh -c "
       sleep 15s;
       mc config host add s3-server http://s3-server:9000 dev-access-key dev-secret-key;
-      mc rm -r --force s3-server/advana-raw-zone;
+      mc rm -r --force s3-server/advana-data-zone;
       mc rm -r --force s3-server/advana-trusted-zone;
-      mc mb s3-server/advana-raw-zone;
+      mc mb s3-server/advana-data-zone;
       mc mb s3-server/advana-trusted-zone;
       exit 0;
       "

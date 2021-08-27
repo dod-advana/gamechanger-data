@@ -125,8 +125,8 @@ function configure_repo() {
 #####
 
 function setup_s3_vars_and_dirs() {
-  local S3_GAMECHANGER_PROD_PATH="advana-raw-zone/gamechanger"
-  local S3_GAMECHANGER_TEST_PATH="advana-raw-zone/gamechanger"
+  local S3_GAMECHANGER_PROD_PATH="advana-data-zone/gamechanger"
+  local S3_GAMECHANGER_TEST_PATH="advana-data-zone/gamechanger"
 
   # data pipeline base/prod/test paths
   local S3_DATA_PIPELINE_PROD_BASE_PATH="$S3_GAMECHANGER_PROD_PATH/data-pipelines"

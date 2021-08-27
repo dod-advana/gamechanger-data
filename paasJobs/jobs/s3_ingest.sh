@@ -31,10 +31,10 @@ function run_core_ingest() {
   local s3_raw_ingest_prefix="${S3_RAW_INGEST_PREFIX}"
   local s3_parsed_ingest_prefix="${S3_PARSED_INGEST_PREFIX}"
 
-  local current_snapshot_prefix="${CURRENT_SNAPSHOT_PREFIX:-gamechanger/}"
-  local backup_snapshot_prefix="${BACKUP_SNAPSHOT_PREFIX:-gamechanger/backup/}"
-  local load_archive_base_prefix="${LOAD_ARCHIVE_BASE_PREFIX:-gamechanger/load-archive/}"
-  local db_backup_base_prefix="${DB_BACKUP_BASE_PREFIX:-gamechanger/backup/db/}"
+  local current_snapshot_prefix="${CURRENT_SNAPSHOT_PREFIX:-bronze/gamechanger/}"
+  local backup_snapshot_prefix="${BACKUP_SNAPSHOT_PREFIX:-bronze/gamechanger/backup/}"
+  local load_archive_base_prefix="${LOAD_ARCHIVE_BASE_PREFIX:-bronze/gamechanger/load-archive/}"
+  local db_backup_base_prefix="${DB_BACKUP_BASE_PREFIX:-bronze/gamechanger/backup/db/}"
   local metadata_creation_group="${METADATA_CREATION_GROUP:-}"
   local clone_or_core="${CLONE_OR_CORE:-core}"
 

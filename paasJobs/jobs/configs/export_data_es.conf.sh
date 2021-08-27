@@ -24,7 +24,7 @@ SEND_NOTIFICATIONS="${SEND_NOTIFICATIONS:-yes}"
 UPLOAD_LOGS="${UPLOAD_LOGS:-yes}"
 SLACK_HOOK_CHANNEL="${SLACK_HOOK_CHANNEL}"
 SLACK_HOOK_URL="${SLACK_HOOK_URL}"
-S3_BASE_LOG_PATH_URL="${S3_BASE_LOG_PATH_URL:-s3://advana-raw-zone/gamechanger/data-pipelines/orchestration/logs/core-crawler-ingest}"
+S3_BASE_LOG_PATH_URL="${S3_BASE_LOG_PATH_URL:-s3://advana-data-zone/bronze/gamechanger/data-pipelines/orchestration/logs/core-crawler-ingest}"
 AWS_DEFAULT_REGION="${AWS_DEFAULT_REGION:-us-gov-west-1}"
 CLEANUP="${CLEANUP:-yes}"
 TMPDIR="${TMPDIR:-/data/tmp}"
@@ -33,9 +33,9 @@ VENV_ACTIVATE_SCRIPT="${VENV_ACTIVATE_SCRIPT:-/opt/gc-venv-current/bin/activate}
 
 ## JOB SPECIFIC CONF
 
-export PDF_S3_PREFIX="${PDF_S3_PREFIX:-s3://advana-raw-zone/gamechanger/pdf}"
-export JSON_S3_PREFIX="${JSON_S3_PREFIX:-s3://advana-raw-zone/gamechanger/json}"
-export S3_UPLOAD_PREFIX="${S3_UPLOAD_PREFIX:-s3://advana-raw-zone/gamechanger/exports/20210610}"
+export PDF_S3_PREFIX="${PDF_S3_PREFIX:-s3://advana-data-zone/bronze/gamechanger/pdf}"
+export JSON_S3_PREFIX="${JSON_S3_PREFIX:-s3://advana-data-zone/bronze/gamechanger/json}"
+export S3_UPLOAD_PREFIX="${S3_UPLOAD_PREFIX:-s3://advana-data-zone/bronze/gamechanger/exports/20210610}"
 
 export JOB_TMP_DIR="${JOB_TMP_DIR:-tmp/export_data}"
 export MANIFEST_FILENAME="${MANIFEST_FILENAME:-checksum_manifest.json}"
