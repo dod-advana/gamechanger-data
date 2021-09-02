@@ -52,7 +52,6 @@ function run_core_reparse() {
     --index-name="$es_index_name" \
     --alias-name="$es_alias_name" \
     --max-threads="$max_parser_threads" \
-    --max-threads-s3="$max_s3_threads" \
     --max-ocr-threads="$max_ocr_threads" \
     --max-s3-threads="$max_s3_threads" \
     --skip-revocation-update="$skip_revocation_update" \
