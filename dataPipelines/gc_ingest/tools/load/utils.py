@@ -277,16 +277,16 @@ class LoadManager:
         else:
             raise ValueError(f"Invalid max_threads value given: ${max_threads}")
 
-        def dl_inner_func(idg, ts):
-            idg.raw_idoc.s3_path = _upload_to_s3(idg.raw_idoc, ts=ts)
-            if idg.parsed_idoc:
-                idg.parsed_idoc.s3_path = _upload_to_s3(idg.parsed_idoc, ts=ts)
-            if idg.metadata_idoc:
-                idg.metadata_idoc.s3_path = _upload_to_s3(idg.metadata_idoc, ts=ts)
-            if idg.thumbnail_idoc:
-                idg.thumbnail_idoc.s3_path = _upload_to_s3(idg.thumbnail_idoc, ts=ts)
+        def dl_inner_func(file, ts_set):
+            file.raw_idoc.s3_path = _upload_to_s3(file.raw_idoc, ts=ts_set)
+            if file.parsed_idoc:
+                file.parsed_idoc.s3_path = _upload_to_s3(file.parsed_idoc, ts=ts_set)
+            if file.metadata_idoc:
+                file.metadata_idoc.s3_path = _upload_to_s3(file.metadata_idoc, ts=ts_set)
+            if file.thumbnail_idoc:
+                file.thumbnail_idoc.s3_path = _upload_to_s3(file.thumbnail_idoc, ts=ts_set)
 
-            yield idg
+            yield file
 
         with ThreadPoolExecutor(max_workers=max_workers) as executor:
             executor.map(dl_inner_func, (idg for idg in idgs), (ts for _ in idgs))
