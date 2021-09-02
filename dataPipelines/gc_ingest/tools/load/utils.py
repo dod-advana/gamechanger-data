@@ -11,6 +11,7 @@ from common.utils.parsers import parse_timestamp
 from pydantic import BaseModel
 from enum import Enum
 import multiprocessing
+from typing import List
 from concurrent.futures import ThreadPoolExecutor
 
 
@@ -252,9 +253,10 @@ class LoadManager:
     def upload_docs_to_s3(self,
                           idgs: t.Iterable[IngestableDocGroup],
                           ts: t.Union[dt.datetime, str],
-                          max_threads: int) -> t.Iterable[IngestableDocGroup]:
+                          max_threads: int) -> List[str]:
         """Upload all raw/parsed/metadata docs in a group to s3"""
         ts = parse_timestamp(ts, raise_parse_error=True)
+        uploaded_files: List[str] = []
 
         def _upload_to_s3(idoc: GenericIngestableDoc, ts=dt.datetime) -> str:
             print(f"Uploading doc {idoc.local_path!s} to S3 ... ", file=sys.stderr)
@@ -289,7 +291,12 @@ class LoadManager:
             yield file
 
         with ThreadPoolExecutor(max_workers=max_workers) as executor:
-            executor.map(dl_inner_func, (idg for idg in idgs), (ts for _ in idgs))
+            r = executor.map(dl_inner_func, (idg for idg in idgs), (ts for _ in idgs))
+            for result in r:
+                if result:
+                    uploaded_files.append(next(result))
+
+        return uploaded_files
 
 
     def load(self,
