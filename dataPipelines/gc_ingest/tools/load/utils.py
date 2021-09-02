@@ -10,6 +10,8 @@ from common.utils.s3 import S3Utils
 from common.utils.parsers import parse_timestamp
 from pydantic import BaseModel
 from enum import Enum
+import multiprocessing
+from concurrent.futures import ThreadPoolExecutor
 
 
 class ArchiveType(Enum):
@@ -249,7 +251,8 @@ class LoadManager:
 
     def upload_docs_to_s3(self,
                           idgs: t.Iterable[IngestableDocGroup],
-                          ts: t.Union[dt.datetime, str]) -> t.Iterable[IngestableDocGroup]:
+                          ts: t.Union[dt.datetime, str],
+                          max_threads: int) -> t.Iterable[IngestableDocGroup]:
         """Upload all raw/parsed/metadata docs in a group to s3"""
         ts = parse_timestamp(ts, raise_parse_error=True)
 
@@ -261,7 +264,20 @@ class LoadManager:
             )
             return s3_location
 
-        for idg in idgs:
+        # if we use all available resources
+        # NOT recommended. This uses all computing power at once, will probably crash if big directory
+        if max_threads < 0:
+            max_workers = multiprocessing.cpu_count()
+
+        # if we don't use multithreading or if we do partitioned multithreading
+        elif max_threads >= 1:
+            max_workers = max_threads
+
+        # else, bad value inserted for max_threads
+        else:
+            raise ValueError(f"Invalid max_threads value given: ${max_threads}")
+
+        def dl_inner_func(idg, ts):
             idg.raw_idoc.s3_path = _upload_to_s3(idg.raw_idoc, ts=ts)
             if idg.parsed_idoc:
                 idg.parsed_idoc.s3_path = _upload_to_s3(idg.parsed_idoc, ts=ts)
@@ -272,12 +288,17 @@ class LoadManager:
 
             yield idg
 
+        with ThreadPoolExecutor(max_workers=max_workers) as executor:
+            executor.map(dl_inner_func, (idg for idg in idgs), (ts for _ in idgs))
+
+
     def load(self,
              raw_dir: t.Union[Path, str],
              metadata_dir: t.Optional[t.Union[Path, str]],
              parsed_dir: t.Optional[t.Union[Path, str]],
              thumbnail_dir: t.Optional[t.Union[Path, str]],
              ingest_ts: t.Union[dt.datetime, str],
+             max_threads: int,
              update_s3: bool,
              update_db: bool) -> None:
         """Process all doc/pub updates for eligible files"""
@@ -301,7 +322,7 @@ class LoadManager:
         uploaded_idgs = None
         if update_s3:
             print("Uploading docs to S3 ...", file=sys.stderr)
-            uploaded_idgs = list(self.upload_docs_to_s3(idgs=idgs, ts=ingest_ts))
+            uploaded_idgs = list(self.upload_docs_to_s3(idgs=idgs, ts=ingest_ts, max_threads=max_threads))
         else:
             print("Skipping s3 uploads of docs ...", file=sys.stderr)
 

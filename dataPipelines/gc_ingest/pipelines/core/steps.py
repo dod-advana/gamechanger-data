@@ -51,6 +51,7 @@ class CoreIngestSteps(PipelineSteps):
             parsed_dir=c.parsed_doc_base_dir,
             ingest_ts=c.batch_timestamp,
             update_s3=True,
+            max_threads=c.max_threads,
             update_db=not c.skip_db_update,
             thumbnail_dir=c.thumbnail_doc_base_dir
         )
