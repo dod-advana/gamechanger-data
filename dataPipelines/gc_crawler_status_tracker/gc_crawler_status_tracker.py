@@ -68,7 +68,7 @@ class CrawlerStatusTracker:
                      if isinstance(j,str) else (name, j["crawler_used"])
                      for (name, j) in db_current]))
             for (doc, crawler) in db_current_list:
-                if doc not in self.input_doc_names and crawler in self.crawlers_downloaded:
+                if doc not in self.input_doc_names and crawler in self.crawlers_downloaded and crawler != "legislation_pubs":
                     print("Publication " + doc + " is now revoked")
                     if update_db:
                         print("Updating DB to reflect " + doc + " is revoked")
