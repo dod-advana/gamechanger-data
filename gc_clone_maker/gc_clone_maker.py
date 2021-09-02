@@ -34,6 +34,7 @@ class CloneParams:
 class CloneMaker:
 
     def generate_clone(self):
+        print('Kamino is at your service')
         Config.connection_helper.init_web_db()
         with Config.connection_helper.web_db_session_scope('rw') as session:
             to_ingest = session.query(
@@ -45,22 +46,25 @@ class CloneMaker:
                 print('No clone_meta with needs_ingest set, returning')
                 return
 
+        print(clone_params.clone_name,
+              "will be created, writing a config for it...")
+
         clone_config_path = self.write_config_file(cp=clone_params)
 
-        # cmd = ['bash', 'paasJobs/job_runner.sh', clone_config_path]
-        # cmd = f"paasJobs/job_runner.sh {clone_config_path}"
-        # result = subprocess.check_output(
-        #     ["bash", 'paasJobs/job_runner.sh', clone_config_path])
-        # print(str(result))
-        # print()
+        cmd = ["bash", 'paasJobs/job_runner.sh', clone_config_path]
+        print("Starting", f"`{' '.join(cmd)}`")
 
-        # print(str(result.returncode))
-        # print()
+        result = subprocess.check_output(cmd)
+        print(str(result))
+        print()
 
-        # print(str(result.stdout))
-        # print()
+        print(str(result.returncode))
+        print()
 
-        # print(str(result.stderr))
+        print(str(result.stdout))
+        print()
+
+        print(str(result.stderr))
 
     @staticmethod
     def make_clone_params(to_ingest):
@@ -70,20 +74,19 @@ class CloneMaker:
             "metadata_creation_group",
             "clone_name",
             "source_s3_bucket",
-            "source_s3_prefix"
+            "source_s3_prefix",
+            "elasticsearch_index"
         ]
         params = {}
         for key, val in to_ingest.__dict__.items():
             if key in params_needed:
                 params[key] = val
-
         cp = CloneParams(**params)
         return cp
 
     @staticmethod
     def write_config_file(cp: CloneParams) -> str:
         date = dt.now().strftime('%Y%m%d')
-        print('params', cp)
         config_text = dedent(f"""
             #!/usr/bin/env bash
 
@@ -120,8 +123,8 @@ class CloneMaker:
 
             ## JOB SPECIFIC CONF
 
-            export ES_INDEX_NAME="{cp.clone_name.lower()}_{date}"
-            export ES_ALIAS_NAME="{cp.clone_name.lower()}"
+            export ES_INDEX_NAME="{cp.elasticsearch_index.lower()}_{date}"
+            export ES_ALIAS_NAME="{cp.elasticsearch_index.lower()}"
 
             export S3_RAW_INGEST_PREFIX="{cp.source_s3_prefix}" #pdf and metadata path
             export S3_PARSED_INGEST_PREFIX="${{S3_PARSED_INGEST_PREFIX:-}}"
@@ -148,11 +151,12 @@ class CloneMaker:
             export CLONE_OR_CORE="clone"
 
         """)
-
+        print('*********** Config Made ************')
         print(config_text)
+        print()
         filepath = Path(
             f'paasJobs/jobs/configs/clone_s3_generated_{cp.clone_name}.conf.sh')
         with open(filepath, 'w') as config_file:
             config_file.write(config_text)
-
+        print('written to', str(filepath))
         return str(filepath)
