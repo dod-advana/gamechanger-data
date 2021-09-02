@@ -110,12 +110,26 @@ def local(lm: LoadManager,
     )
 
 
-def remove_docs_from_db(lm: LoadManager, input_json_path: str):
+def remove_docs_from_db(lm: LoadManager, removal_list: list):
+    for (filename, doc_name) in removal_list:
+        lm.remove_from_db(filename=filename, doc_name=doc_name)
+
+
+@load_cli.command("remove-from-db")
+@pass_lm
+@click.option(
+        '--input-json-path',
+        type=str,
+        help="Input JSON list path, this should resemble the metadata, at least having a 'doc_name' field " +
+             "and a 'downloadable_items'.'doc_type' field",
+        required=True
+)
+def remove_docs_from_db_wrapper(lm: LoadManager, input_json_path: str ):
     input_json = Path(input_json_path).resolve()
     if not input_json.exists():
         print("No valid input json")
         return
-
+    removal_list=[]
     print("REMOVING DOCS FROM DB")
     with input_json.open(mode="r") as f:
         for json_str in f.readlines():
@@ -129,22 +143,10 @@ def remove_docs_from_db(lm: LoadManager, input_json_path: str):
                     continue
                 doc_name = j_dict["doc_name"]
                 filename = j_dict.get("filename", "")
-                lm.remove_from_db(filename=filename, doc_name=doc_name)
-
-
-@load_cli.command("remove-from-db")
-@pass_lm
-@click.option(
-        '--input-json-path',
-        type=str,
-        help="Input JSON list path, this should resemble the metadata, at least having a 'doc_name' field " +
-             "and a 'downloadable_items'.'doc_type' field",
-        required=True
-)
-def remove_docs_from_db_wrapper(lm: LoadManager, input_json_path: str ):
+                removal_list.append((filename,doc_name))
     remove_docs_from_db(
         lm=lm,
-        input_json_path=input_json_path
+        removal_list=removal_list
     )
 
 @load_cli.command()

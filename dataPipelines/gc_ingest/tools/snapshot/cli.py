@@ -163,12 +163,27 @@ def recreate_web_snapshot(sm: SnapshotManager):
     sm.recreate_web_db_snapshot()
     print("[OK] Web db snapshot refreshed.")
 
-def remove_docs_from_current_snapshot(sm: SnapshotManager, input_json_path: str ):
+def remove_docs_from_current_snapshot(sm: SnapshotManager, removal_list: list ):
 
+    for filename in removal_list:
+        sm.delete_from_current_snapshot(filename=filename)
+
+@snapshot_cli.command()
+@pass_sm
+@click.option(
+        '--input-json-path',
+        type=str,
+        help="Input JSON list path, this should resemble the metadata, at least having a 'doc_name' field " +
+             "and a 'downloadable_items'.'doc_type' field",
+        required=True
+    )
+def remove_docs_from_s3(sm: SnapshotManager, input_json_path: str ):
     input_json = Path(input_json_path).resolve()
     if not input_json.exists():
         print("No valid input json")
         return
+
+    removal_list = []
 
     print("REMOVING DOCS FROM S3")
     with input_json.open(mode="r") as f:
@@ -185,19 +200,9 @@ def remove_docs_from_current_snapshot(sm: SnapshotManager, input_json_path: str 
                                            j_dict["doc_name"] +
                                            "." +
                                            j_dict["downloadable_items"].pop()["doc_type"]))
-                sm.delete_from_current_snapshot(filename=filename)
+                removal_list.append(filename)
 
-@snapshot_cli.command()
-@pass_sm
-@click.option(
-        '--input-json-path',
-        type=str,
-        help="Input JSON list path, this should resemble the metadata, at least having a 'doc_name' field " +
-             "and a 'downloadable_items'.'doc_type' field",
-        required=True
-    )
-def remove_docs_from_s3(sm: SnapshotManager, input_json_path: str ):
     remove_docs_from_current_snapshot(
         sm=sm,
-        input_json_path=input_json_path
+        removal_list=removal_list
     )

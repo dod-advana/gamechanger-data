@@ -187,7 +187,7 @@ class CoreIngestSteps(PipelineSteps):
         announce("Removing docs from DB ...")
         remove_docs_from_db(
             lm=dc.load_manager,
-            input_json_path=dc.input_json_path
+            removal_list=dc.db_tuple_list
         )
 
     @staticmethod
@@ -196,7 +196,7 @@ class CoreIngestSteps(PipelineSteps):
         announce("Removing docs from S3 ...")
         remove_docs_from_current_snapshot(
             sm=dc.snapshot_manager,
-            input_json_path=dc.input_json_path
+            removal_list=dc.removal_list
         )
 
     @staticmethod
@@ -204,10 +204,11 @@ class CoreIngestSteps(PipelineSteps):
 
         announce("Removing docs from Elasticsearch ...")
 
-        remove_docs_from_index(index_name=dc.index_name, input_json_path=dc.input_json_path)
+        remove_docs_from_index(index_name=dc.index_name,
+                               removal_list=dc.removal_list)
 
     @staticmethod
-    def delete_from_neo4j(dc: DeleteConfig) -> None:
+    def delete_from_neo4j(dc:DeleteConfig) -> None:
 
         if dc.skip_neo4j_update:
             announce("Skip Neo4j removal ...")
@@ -215,7 +216,7 @@ class CoreIngestSteps(PipelineSteps):
         announce("Removing docs from Neo4j ...")
         remove_docs_from_neo4j(
             njm=dc.neo4j_job_manager,
-            input_json_path=dc.input_json_path
+            removal_list=dc.removal_list
         )
 
 

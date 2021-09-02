@@ -64,32 +64,13 @@ def run(index_name: str, alias: str, mapping_file: str, ingest_dir) -> None:
     print(f"Total Index time -- It took {end - start} seconds!")
 
 
-def remove_docs_from_index(index_name: str, input_json_path: str) -> None:
-    input_json = Path(input_json_path).resolve()
-    if not input_json.exists():
-        print("No valid input json")
-        return
-
-    print("REMOVING DOCS FROM ES")
+def remove_docs_from_index(index_name: str, removal_list: list) -> None:
     publisher = ConfiguredElasticsearchPublisher(
         index_name=index_name,
         ingest_dir=""
     )
-    records = []
-    with input_json.open(mode="r") as f:
-        for json_str in f.readlines():
-            if not json_str.strip():
-                continue
-            else:
-                try:
-                    j_dict = json.loads(json_str)
-                except json.decoder.JSONDecodeError:
-                    print("Encountered JSON decode error while parsing crawler output.")
-                    continue
-            filename = Path(j_dict.get("filename",
-                                       j_dict["doc_name"] + "." + j_dict["downloadable_items"].pop()["doc_type"]))
-            records.append(filename.stem)
-    publisher.delete_record(records)
+    records = [r.stem for r in removal_list]
+    publisher.delete_record(records=records)
 
 
 @cli.command()
@@ -110,9 +91,29 @@ def remove_docs_from_index(index_name: str, input_json_path: str) -> None:
         required=True
     )
 def remove_docs_from_es(index_name: str, input_json_path: str) -> None:
+    input_json = Path(input_json_path).resolve()
+    if not input_json.exists():
+        print("No valid input json")
+        return
+
+    print("REMOVING DOCS FROM ES")
+    records = []
+    with input_json.open(mode="r") as f:
+        for json_str in f.readlines():
+            if not json_str.strip():
+                continue
+            else:
+                try:
+                    j_dict = json.loads(json_str)
+                except json.decoder.JSONDecodeError:
+                    print("Encountered JSON decode error while parsing crawler output.")
+                    continue
+            filename = Path(j_dict.get("filename",
+                                       j_dict["doc_name"] + "." + j_dict["downloadable_items"].pop()["doc_type"]))
+            records.append(filename)
     remove_docs_from_index(
         index_name=index_name,
-        input_json_path=input_json_path
+        removal_list=records
     )
 
 

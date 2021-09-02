@@ -72,26 +72,9 @@ def run(njm: Neo4jJobManager, source: str, clear: bool, max_threads: int, withou
         infobox_dir=infobox_dir
     )
 
-def remove_docs_from_neo4j(njm: Neo4jJobManager, input_json_path: str):
-    input_json = Path(input_json_path).resolve()
-    if not input_json.exists():
-        print("No valid input json")
-        return
-
-    print("REMOVING DOCS FROM NEO4J")
-    with input_json.open(mode="r") as f:
-        for json_str in f.readlines():
-            if not json_str.strip():
-                continue
-            else:
-                try:
-                    j_dict = json.loads(json_str)
-                except json.decoder.JSONDecodeError:
-                    print("Encountered JSON decode error while parsing crawler output.")
-                    continue
-            filename = Path(j_dict.get("filename",
-                                       j_dict["doc_name"] + "." + j_dict["downloadable_items"].pop()["doc_type"]))
-            njm.remove_from_graph(filename=filename)
+def remove_docs_from_neo4j(njm: Neo4jJobManager, removal_list: list):
+    for filename in removal_list:
+        njm.remove_from_graph(filename=filename.name)
 
 
 
@@ -106,4 +89,23 @@ def remove_docs_from_neo4j(njm: Neo4jJobManager, input_json_path: str):
     )
 @pass_njm
 def remove_docs_from_graph(njm: Neo4jJobManager, input_json_path: str):
-    remove_docs_from_neo4j(njm=njm,input_json_path=input_json_path)
+    input_json = Path(input_json_path).resolve()
+    if not input_json.exists():
+        print("No valid input json")
+        return
+    removal_list = []
+    print("REMOVING DOCS FROM NEO4J")
+    with input_json.open(mode="r") as f:
+        for json_str in f.readlines():
+            if not json_str.strip():
+                continue
+            else:
+                try:
+                    j_dict = json.loads(json_str)
+                except json.decoder.JSONDecodeError:
+                    print("Encountered JSON decode error while parsing crawler output.")
+                    continue
+            filename = Path(j_dict.get("filename",
+                                       j_dict["doc_name"] + "." + j_dict["downloadable_items"].pop()["doc_type"]))
+            removal_list.append(filename)
+    remove_docs_from_neo4j(njm=njm, removal_list=removal_list)
