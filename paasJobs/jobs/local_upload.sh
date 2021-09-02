@@ -30,6 +30,7 @@ function run_core_ingest() {
   local max_ocr_threads="${MAX_OCR_THREADS_PER_FILE:-4}"
   local max_parser_threads="${MAX_PARSER_THREADS:-16}"
   local max_neo4j_threads="${MAX_PARSER_THREADS:-16}"
+  local max_s3_threads="${MAX_S3_THREADS:-50}"
 
   local local_raw_ingest_dir="${LOCAL_RAW_INGEST_DIR}"
   local local_parsed_ingest_dir="${LOCAL_PARSED_INGEST_DIR}"
@@ -56,6 +57,7 @@ function run_core_ingest() {
     --max-threads="$max_parser_threads" \
     --max-threads-neo4j="$max_neo4j_threads" \
     --max-ocr-threads="$max_ocr_threads" \
+    --max-s3-threads="$max_s3_threads" \
     --crawler-output="$crawler_output" \
     local \
     --local-raw-ingest-dir="$local_raw_ingest_dir" \

@@ -28,6 +28,7 @@ function run_core_thumbnail_update() {
   local max_ocr_threads="${MAX_OCR_THREADS_PER_FILE:-4}"
   local max_parser_threads="${MAX_PARSER_THREADS:-16}"
   local max_neo4j_threads="${MAX_PARSER_THREADS:-16}"
+  local max_s3_threads="${MAX_S3_THREADS:-50}"
 
   local current_snapshot_prefix="bronze/gamechanger/"
   local backup_snapshot_prefix="bronze/gamechanger/backup/"
@@ -51,6 +52,7 @@ function run_core_thumbnail_update() {
     --alias-name="$es_alias_name" \
     --max-threads="$max_parser_threads" \
     --max-ocr-threads="$max_ocr_threads" \
+    --max-s3-threads="$max_s3_threads" \
     --skip-revocation-update="$skip_revocation_update" \
     --skip-es-revocation="$skip_es_revocation" \
     update-thumbnails
