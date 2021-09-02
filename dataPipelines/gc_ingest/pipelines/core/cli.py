@@ -274,7 +274,11 @@ def core_delete(core_ingest_config: CoreIngestConfig, **kwargs):
     CoreIngestSteps.backup_snapshots(dc)
 
     CoreIngestSteps.delete_from_elasticsearch(dc)
+
     CoreIngestSteps.delete_from_neo4j(dc)
+
     CoreIngestSteps.delete_from_db(dc)
+    CoreIngestSteps.refresh_materialized_tables(dc)
+
     CoreIngestSteps.delete_from_s3(dc)
 
