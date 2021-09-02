@@ -1,5 +1,5 @@
 from sqlalchemy.ext.declarative import declarative_base
-from .schemas import SnapshotEntrySchema, DAFACharterMapFlattenedSchema, DAFACharterMapSchema
+from .schemas import SnapshotEntrySchema, DAFACharterMapFlattenedSchema, DAFACharterMapSchema, CloneMetaSchema
 from common.utils.mixins import AutoRepr
 from sqlalchemy.ext.declarative import DeferredReflection
 
@@ -21,3 +21,7 @@ class DAFACharterMap(AutoRepr, DAFACharterMapSchema, DeferredWebReflectedBase):
 
 class DAFACharterMapFlattened(AutoRepr, DAFACharterMapFlattenedSchema, DeferredWebReflectedBase):
     __tablename__ = 'dafa_charter_map_flattened_vw'
+
+
+class CloneMeta(AutoRepr, CloneMetaSchema, DeferredWebReflectedBase):
+    __tablename__ = 'clone_meta'
