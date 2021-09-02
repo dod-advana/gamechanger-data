@@ -30,7 +30,7 @@ function run_core_ingest() {
 
   local s3_raw_ingest_prefix="${S3_RAW_INGEST_PREFIX}"
   local s3_parsed_ingest_prefix="${S3_PARSED_INGEST_PREFIX}"
-  local max_s3_threads="${MAX_S3_THREADS:-50}"
+  local max_s3_threads="${MAX_S3_THREADS:-32}"
 
   local current_snapshot_prefix="${CURRENT_SNAPSHOT_PREFIX:-bronze/gamechanger/}"
   local backup_snapshot_prefix="${BACKUP_SNAPSHOT_PREFIX:-bronze/gamechanger/backup/}"

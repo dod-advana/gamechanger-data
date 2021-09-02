@@ -26,7 +26,7 @@ function run_core_reindex() {
   local max_ocr_threads="${MAX_OCR_THREADS_PER_FILE:-4}"
   local max_parser_threads="${MAX_PARSER_THREADS:-16}"
   local max_neo4j_threads="${MAX_PARSER_THREADS:-16}"
-  local max_s3_threads="${MAX_S3_THREADS:-50}"
+  local max_s3_threads="${MAX_S3_THREADS:-32}"
 
   local current_snapshot_prefix="bronze/gamechanger/"
   local backup_snapshot_prefix="bronze/gamechanger/backup/"
