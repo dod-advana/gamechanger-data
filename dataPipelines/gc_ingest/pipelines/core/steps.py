@@ -71,19 +71,19 @@ class CoreIngestSteps(PipelineSteps):
             local_dir=c.raw_doc_base_dir,
             snapshot_type=SnapshotType.RAW,
             replace=False,
-            max_threads=c.max_threads
+            max_threads=c.max_s3_threads
         )
         c.snapshot_manager.update_current_snapshot_from_disk(
             local_dir=c.parsed_doc_base_dir,
             snapshot_type=SnapshotType.PARSED,
             replace=False,
-            max_threads=c.max_threads
+            max_threads=c.max_s3_threads
         )
         c.snapshot_manager.update_current_snapshot_from_disk(
             local_dir=c.thumbnail_doc_base_dir,
             snapshot_type=SnapshotType.THUMBNAIL,
             replace=False,
-            max_threads=c.max_threads
+            max_threads=c.max_s3_threads
         )
 
     @staticmethod
