@@ -3,6 +3,7 @@ from pathlib import Path
 import typing as t
 import datetime as dt
 import sys
+from sqlalchemy.exc import IntegrityError
 
 from dataPipelines.gc_ingest.config import Config
 from dataPipelines.gc_db_utils.orch.models import VersionedDoc, Publication
@@ -347,6 +348,11 @@ class LoadManager:
                 for vd in vds:
                     print(f"Deleting {vd.name!s} from versioned_docs", file=sys.stderr)
                     session.delete(vd)
-                print(f"Deleting {pub.name!s} from versioned_docs", file=sys.stderr)
-                session.delete(pub)
-                session.commit()
+
+                try:
+                    print(f"Deleting {pub.name!s} from versioned_docs", file=sys.stderr)
+                    session.delete(pub)
+                    session.commit()
+                except IntegrityError:
+                    print("Ingerity Error while deleting publication. Publication: " + doc_name +
+                          " still has Versioned_Docs constrained to the pub_id.")
