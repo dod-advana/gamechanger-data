@@ -347,16 +347,16 @@ class LoadManager:
             pub = session.query(Publication).filter_by(name=doc_name).one_or_none()
             if vds and pub:
                 for vd in vds:
-                    print(f"Deleting {vd.name!s} from versioned_docs", file=sys.stderr)
+                    print(f"Deleting {vd.filename!s} from versioned_docs", file=sys.stderr)
                     session.delete(vd)
-
+                session.commit()
                 try:
                     print(f"Deleting {pub.name!s} from versioned_docs", file=sys.stderr)
                     session.delete(pub)
                     session.commit()
-                except IntegrityError:
-                    print("Ingerity Error while deleting publication. Publication: " + doc_name +
+                except:
+                    print("Integrity Error while deleting publication. Publication: " + doc_name +
                           " still has Versioned_Docs constrained to the pub_id.")
-                except InvalidRequestError:
-                    print("Invalid Request Error while deleting publication. Publication: " + doc_name +
-                          " still has Versioned_Docs constrained to the pub_id.")
+                    session.rollback()
+                finally:
+                    session.close()
