@@ -3,7 +3,7 @@ from pathlib import Path
 import typing as t
 import datetime as dt
 import sys
-from sqlalchemy.exc import IntegrityError
+from sqlalchemy.exc import IntegrityError, InvalidRequestError
 
 from dataPipelines.gc_ingest.config import Config
 from dataPipelines.gc_db_utils.orch.models import VersionedDoc, Publication
@@ -11,6 +11,7 @@ from common.utils.s3 import S3Utils
 from common.utils.parsers import parse_timestamp
 from pydantic import BaseModel
 from enum import Enum
+
 
 
 class ArchiveType(Enum):
@@ -355,4 +356,7 @@ class LoadManager:
                     session.commit()
                 except IntegrityError:
                     print("Ingerity Error while deleting publication. Publication: " + doc_name +
+                          " still has Versioned_Docs constrained to the pub_id.")
+                except InvalidRequestError:
+                    print("Invalid Request Error while deleting publication. Publication: " + doc_name +
                           " still has Versioned_Docs constrained to the pub_id.")
