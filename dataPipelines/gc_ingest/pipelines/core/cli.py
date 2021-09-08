@@ -3,7 +3,7 @@ from dataPipelines.gc_ingest.config import Config
 from dataPipelines.gc_ingest.pipelines.utils import announce
 from common.utils.s3 import TimestampedPrefix
 import typing as t
-from .configs import CoreIngestConfig, S3IngestConfig, LocalIngestConfig, CheckpointIngestConfig
+from .configs import CoreIngestConfig, S3IngestConfig, LocalIngestConfig, CheckpointIngestConfig, DeleteConfig
 from .steps import CoreIngestSteps
 from pathlib import Path
 import shutil
@@ -261,4 +261,24 @@ def core_update_thumbnails(core_ingest_config: CoreIngestConfig, **kwargs):
         snapshot_type='thumbnails',
         max_threads=core_ingest_config.max_threads
     )
+
+
+@core_ingest_cli.command('delete')
+@pass_core_ingest_config
+@DeleteConfig.pass_options
+def core_delete(core_ingest_config: CoreIngestConfig, **kwargs):
+    """Pipeline for ingesting docs from local directories"""
+    dc = DeleteConfig.from_core_config(core_config=core_ingest_config, other_config_kwargs=kwargs)
+
+    CoreIngestSteps.backup_db(dc)
+    CoreIngestSteps.backup_snapshots(dc)
+
+    CoreIngestSteps.delete_from_elasticsearch(dc)
+
+    CoreIngestSteps.delete_from_neo4j(dc)
+
+    CoreIngestSteps.delete_from_db(dc)
+    CoreIngestSteps.refresh_materialized_tables(dc)
+
+    CoreIngestSteps.delete_from_s3(dc)
 

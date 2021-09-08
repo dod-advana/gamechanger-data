@@ -20,6 +20,7 @@ import pydantic as pyd
 import typing as t
 import functools
 import multiprocessing as mp
+import json
 
 NonBlankString = t.NewType('NonBlankString', pyd.constr(strip_whitespace=True, min_length=1))
 StrippedString = t.NewType('StrippedString', pyd.constr(strip_whitespace=True))
@@ -477,3 +478,76 @@ class LocalIngestConfig(CoreIngestConfig):
         self._db_backup_dir = Path(self.job_dir, 'db_backups')
         self._db_backup_dir.mkdir(exist_ok=False)
         return self._db_backup_dir
+
+class DeleteConfig(CoreIngestConfig):
+    input_json_path: str
+
+    @staticmethod
+    def pass_options(f):
+        @click.option(
+            '--input-json-path',
+            type=str,
+            help="Local path JSON list path of docs to be deleted. " +
+             "Should resemble the metadata, at least having a 'doc_name' field" +
+             "and a 'downloadable_items'.'doc_type' field or a 'filename' field",
+            required=True
+        )
+
+        @functools.wraps(f)
+        def wf(*args, **kwargs):
+            return f(*args, **kwargs)
+        return wf
+
+    @staticmethod
+    def from_core_config(core_config: CoreIngestConfig, other_config_kwargs=t.Dict[str, t.Any]) -> 'DeleteConfig':
+        return DeleteConfig(**core_config.dict(), **other_config_kwargs)
+
+    @property
+    def db_tuple_list(self) -> list:
+        if hasattr(self, '_db_tuple_list'):
+            return self._db_tuple_list
+        input_json = Path(self.input_json_path).resolve()
+        self._db_tuple_list = []
+        if not input_json.exists():
+            return self._db_tuple_list
+        with input_json.open(mode="r") as f:
+            for json_str in f.readlines():
+                if not json_str.strip():
+                    continue
+                else:
+                    try:
+                        j_dict = json.loads(json_str)
+                    except json.decoder.JSONDecodeError:
+                        continue
+                    doc_name = j_dict["doc_name"]
+                    filename = j_dict.get("filename", "")
+                    self._db_tuple_list.append((filename, doc_name))
+        return self._db_tuple_list
+
+    @property
+    def removal_list(self) -> list:
+        if hasattr(self, '_removal_list'):
+            return self._removal_list
+        input_json = Path(self.input_json_path).resolve()
+        self._removal_list = []
+        if not input_json.exists():
+            return self._removal_list
+        with input_json.open(mode="r") as f:
+            for json_str in f.readlines():
+                if not json_str.strip():
+                    continue
+                else:
+                    try:
+                        j_dict = json.loads(json_str)
+                    except json.decoder.JSONDecodeError:
+                        continue
+                    filename = Path(j_dict.get("filename",
+                                          j_dict["doc_name"] +
+                                          "." +
+                                          j_dict["downloadable_items"].pop()["doc_type"]))
+                    self._removal_list.append(filename)
+        return self._removal_list
+
+
+
+
