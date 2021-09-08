@@ -1,0 +1,119 @@
+{
+  "ml_api": {
+    "flask_env": "jenkins",
+    "worker_count": 2,
+    "env_type": "jenkins",
+    "redis_host": "localhost",
+    "redis_port": 6379,
+    "flask_port": 5000,
+    "flask_host": "localhost",
+    "data_api_base_url": "http://localhost:9346/v2/data",
+    "ml_model_name": "20201011",
+    "ml_model_parent_dir": "/models"
+  },
+  "aws": {
+    "endpoint_type": "aws",
+    "endpoint_s3_signature_version": null,
+    "endpoint_url": null,
+    "endpoint_host": null,
+    "endpoint_port": null,
+    "auth_type": "role",
+    "secret_key": "",
+    "access_key": "",
+    "bucket_name": "advana-raw-zone",
+    "default_region": "us-east-1"
+  },
+  "orch_db": {
+    "username": "postgres",
+    "password": "password",
+    "port": 5432,
+    "host": "10.194.9.37",
+    "database": "uot"
+  },
+  "web_db": {
+    "username": "postgres",
+    "password": "password",
+    "port": 5432,
+    "host": "10.194.9.37",
+    "database": "game_changer"
+  },
+  "es": {
+    "ssl": true,
+    "basic_auth": false,
+    "username": null,
+    "password": null,
+    "host": "vpc-gamechanger-iquxkyq2dobz4antllp35g2vby.us-east-1.es.amazonaws.com",
+    "port": 443,
+    "default_mappings_file": "configuration/rendered/elasticsearch/mappings.json",
+    "default_settings_file": "configuration/rendered/elasticsearch/settings.json"
+  },
+  "data_api": {
+    "api_base_url": "http://localhost:9346/v2/data",
+    "host": "localhost",
+    "port": 9346
+  },
+  "neo4j": {
+    "host": "10.194.9.69",
+    "port": 7687,
+    "username": "neo4j",
+    "password": "admin",
+    "connection_protocol": "bolt"
+  },
+  "eda": {
+    "operating_environment": "dev",
+    "postfix_es": "_eda_ext",
+
+    "sql_check_if_syn_metadata_exist": "SELECT * FROM pds_parsed_validation.all_outgoing_counts_pdf_syn_xwalk_only_new WHERE pdf_filename = %s",
+
+    "sql_check_if_pds_metadata_exist": "SELECT * FROM pds_parsed_validation.all_outgoing_counts_pdf_pds_xwalk_only_new WHERE pdf_filename = %s",
+
+    "sql_vendor_org_hierarchy_1": "SELECT DISTINCT c_xwalk.cgac, c_xwalk.cgac_agency_name, c_xwalk.maj_command, c_xwalk.majcom_display_name, c_xwalk.dodaac_ric FROM pds_parsed.cage_xwalk as c_xwalk WHERE c_xwalk.dodaac_ric IN %s",
+    "sql_vendor_org_hierarchy_2": "SELECT DISTINCT c_xwalk.cage_code_name FROM pds_parsed.cage_xwalk as c_xwalk WHERE c_xwalk.cage_code = %s",
+
+    "sql_line_item_details": "SELECT elin_base_line_item_details, elin_extension_line_item_details, li_base_line_item_details, li_extension_line_item_details, li_type_line_item_details, obligated_amount_line_item_details, obligated_amount_prv_line_item_details, prod_or_svc_line_item_details, prod_or_svc_desc_line_item_details, prod_svc_uom_line_item_details FROM  pds_parsed.vw_pds_line_items_psc_no_file WHERE row_id = %s",
+
+    "sql_is_in_process_state": "SELECT gc_status FROM public.eda_piee_log WHERE gc_status = 'Processing' LIMIT 1;",
+    "sql_daily_process": "SELECT audit_from_loc, audit_moved_loc, output_path, gc_status FROM public.eda_piee_log WHERE gc_status IS NULL AND file_type = 'pdf' ORDER BY output_path;",
+    "sql_set_daily_status_on_log": "UPDATE public.eda_piee_log SET gc_status = %s WHERE  audit_moved_loc = %s AND output_path= %s AND file_type='pdf';",
+
+    "sql_insert_process_status": "INSERT INTO public.gc_process_status(s3_prefix, status, modified_date) VALUES (%s, %s, CURRENT_TIMESTAMP) ON CONFLICT (s3_prefix) DO NOTHING;",
+
+    "sql_reprocess_status" : "SELECT s3_prefix FROM public.gc_process_status WHERE status is NULL ORDER BY random() < 0.01 LIMIT 10;",
+    "sql_reprocess_set_status_process": "UPDATE public.gc_process_status SET status= %s, modified_date=CURRENT_TIMESTAMP  WHERE s3_prefix= %s ;",
+
+    "sql_metric": "SELECT s3_prefix FROM public.gc_process_status;",
+
+    "aws_s3_daily_pdf_prefix": "eda/piee/daily_piee_untarred/edapdf/",
+
+    "aws_s3_output_pdf_prefix": "gamechanger/projects/eda/pdf",
+    "aws_s3_json_prefix": "gamechanger/projects/eda/json",
+
+    "eda_index": "gc_eda_2021_test_vik",
+    "eda_index_alias": "gc_eda_test_vik",
+    "audit_index": "gc_eda_audit_2021_test_vik",
+    "audit_index_alias": "gc_eda_audit_test_vik",
+
+    "database": {
+      "user": "postgres",
+      "password": "eda_password",
+      "hostname": "gamechanger-eda-6.cjp8hdlal7xt.us-east-1.rds.amazonaws.com",
+      "port": "5432",
+      "db": "eda"
+    },
+    "sql_filter_fields": {
+      "date": [
+        "effectivedate",
+        "signaturedate",
+        "contract_effective_date",
+        "contract_signed_date",
+        "attachment_date",
+        "document_effective_date",
+        "signature_date",
+        "date_added_eda",
+        "contract_effective_date_syn_contract",
+        "ko_signature_date_proc_inst_header_details_eda_ext",
+        "date_val_syn_deliv_eda_ext"
+      ]
+    }
+  }
+}

@@ -88,7 +88,7 @@ def ingestion(staging_folder: str, aws_s3_input_pdf_prefix: str, max_workers: in
     aws_s3_output_pdf_prefix = data_conf_filter['eda']['aws_s3_output_pdf_prefix']
     aws_s3_json_prefix = data_conf_filter['eda']['aws_s3_json_prefix']
 
-    # Create the Audit and EDA indexes
+    # Create EDA indexe
     print(f"EDA Index {data_conf_filter['eda']['eda_index']}")
     create_index(index_name=data_conf_filter['eda']['eda_index'], alias=data_conf_filter['eda']['eda_index_alias'])
 

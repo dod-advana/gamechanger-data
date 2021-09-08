@@ -24,7 +24,8 @@ def run(staging_folder: str):
 
     db_data = []
     db_failed_data = []
-    l_filenames = []
+    # l_filenames = []
+    l_filenames_dic = {}
 
     start_time = time.time()
 
@@ -52,8 +53,8 @@ def run(staging_folder: str):
     # Init scroll by search
     data = es.search(
         index=index,
-        scroll='2m',
-        size=10000,
+        scroll='5m',
+        size=1000,
         body=body
     )
 
@@ -62,6 +63,7 @@ def run(staging_folder: str):
     scroll_size = len(data['hits']['hits'])
 
     counter = scroll_size
+    so_far_processed = 0
     while scroll_size > 0:
         "Scrolling..."
 
@@ -74,7 +76,9 @@ def run(staging_folder: str):
                 filename_without_ext, file_extension = os.path.splitext(filename)
 
                 if source.get("is_index_b"):
-                    if source.get('filename_s') in l_filenames:
+
+                    if find_filename_in_dict(l_filenames_dic, source.get('filename_s')):
+                    # if source.get('filename_s') in l_filenames:
                         data_value_failed = {'filename': source.get('filename_s'),
                                              'base_path': base_path,
                                              'reason': "File is a dup",
@@ -94,7 +98,8 @@ def run(staging_folder: str):
                                       'is_supplementary_file_missing': source.get("is_supplementary_file_missing"),
                                       'modified_date_dt': source.get("modified_date_dt")
                                       }
-                        l_filenames.append(source.get('filename_s'))
+                        # l_filenames.append(source.get('filename_s'))
+                        l_filenames_dic[source.get('filename_s')] = True
                         db_data.append(data_value)
                 else:
                     reason = "File might be corrupted"
@@ -108,7 +113,15 @@ def run(staging_folder: str):
                     }
                     db_failed_data.append(data_value_failed)
 
-        data = es.scroll(scroll_id=sid, scroll='2m')
+                if len(db_data) > 10000:
+                    so_far_processed = so_far_processed + len(db_data)
+                    print(f"So Far Processed : {so_far_processed}")
+                    migrate_audit_success_data(db_data)
+                    migrate_audit_failed_data(db_failed_data)
+                    db_data = []
+                    db_failed_data = []
+
+        data = es.scroll(scroll_id=sid, scroll='5m')
 
         # Update the scroll ID
         sid = data['_scroll_id']
@@ -116,12 +129,14 @@ def run(staging_folder: str):
         # Get the number of results that returned in the last scroll
         scroll_size = len(data['hits']['hits'])
         counter = counter + scroll_size
-        print(counter)
+        # print(counter)
 
     # print the elapsed time
-    print(f"data_value: {len(db_data)}")
-    print(f"db_file_data: {len(db_failed_data)}")
+    # print(f"data_value: {len(db_data)}")
+    # print(f"db_file_data: {len(db_failed_data)}")
 
+    so_far_processed = so_far_processed + len(db_data)
+    print(f"Processed : {so_far_processed}")
     migrate_audit_success_data(db_data)
     migrate_audit_failed_data(db_failed_data)
 
@@ -168,6 +183,12 @@ def migrate_audit_failed_data(data: list) -> None:
         cursor.execute(sql_audit_failed, (json.dumps(data),))
         conn.commit()
 
+
+def find_filename_in_dict(dct, filename):
+    if filename in dct.keys():
+        return True
+    else:
+        return False
 
 if __name__ == '__main__':
     run()
