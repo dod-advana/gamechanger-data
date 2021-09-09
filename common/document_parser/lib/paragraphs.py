@@ -27,7 +27,7 @@ def create_paragraph_dict(page_num, paragraph_num, paragraph_text, doc_dict):
     par["par_count_i"] = paragraph_num
     par["page_num_i"] = page_num
 
-    par["par_raw_text_t"] = utf8_pass(paragraph_text)
+    par["par_raw_text_t"] = utf8_pass(paragraph_text.replace('Do D', 'DoD'))
 
     par["entities"] = []
 
