@@ -3,6 +3,7 @@ from pathlib import Path
 import typing as t
 import datetime as dt
 import sys
+from sqlalchemy.exc import IntegrityError, InvalidRequestError
 
 from dataPipelines.gc_ingest.config import Config
 from dataPipelines.gc_db_utils.orch.models import VersionedDoc, Publication
@@ -13,6 +14,7 @@ from enum import Enum
 import multiprocessing
 from typing import List
 from concurrent.futures import ThreadPoolExecutor
+
 
 
 class ArchiveType(Enum):
@@ -127,6 +129,31 @@ class LoadManager:
                     doc.json_metadata = json.dumps(j_metadata)
             session.commit()
 
+    def get_metadata_filename(self, raw_doc: Path):
+        """
+        Return metadata filename
+        :param raw_doc:
+        :return:
+        """
+        return raw_doc.name + self.METADATA_DOC_EXTENSION
+
+    def get_parsed_filename(self, raw_doc: Path):
+        """
+        Return parsed filename
+        :param raw_doc:
+        :return:
+        """
+        return raw_doc.stem + self.PARSED_DOC_EXTENSION
+
+    def get_thumbnail_filename(self, raw_doc: Path):
+        """
+        Return thumbnail filename
+        :param raw_doc:
+        :return:
+        """
+        return raw_doc.stem + self.THUMBNAIL_EXTENSION
+
+
     def get_ingestable_docs(self,
                             raw_dir: t.Union[Path, str],
                             metadata_dir: t.Optional[t.Union[Path, str]],
@@ -149,7 +176,7 @@ class LoadManager:
             if not metadata_dir:
                 return None
 
-            local_path = Path(metadata_dir, raw_doc.name + self.METADATA_DOC_EXTENSION)
+            local_path = Path(metadata_dir, self.get_metadata_filename(raw_doc))
             if not local_path.is_file():
                 return None
 
@@ -162,7 +189,7 @@ class LoadManager:
             if not parsed_dir:
                 return None
 
-            local_path = Path(parsed_dir, raw_doc.stem + self.PARSED_DOC_EXTENSION)
+            local_path = Path(parsed_dir, self.get_parsed_filename(raw_doc))
             if not local_path.is_file():
                 return None
 
@@ -174,7 +201,7 @@ class LoadManager:
             if not thumbnail_dir:
                 return None
 
-            local_path = Path(thumbnail_dir, raw_doc.stem + self.THUMBNAIL_EXTENSION)
+            local_path = Path(thumbnail_dir, self.get_thumbnail_filename(raw_doc))
             if not local_path.is_file():
                 return None
 
@@ -338,3 +365,26 @@ class LoadManager:
             self.process_db_doc_updates(idgs=uploaded_idgs or idgs, ts=ingest_ts)
         else:
             print("Skipping updates to 'versioned_docs' table ...", file=sys.stderr)
+
+    def remove_from_db(self, filename: t.Union[str,Path], doc_name: str):
+        with Config.connection_helper.orch_db_session_scope('rw') as session:
+            if filename:
+                vds = session.query(VersionedDoc).filter_by(filename=filename).all()
+            else:
+                vds = session.query(VersionedDoc).filter_by(name=doc_name).all()
+            pub = session.query(Publication).filter_by(name=doc_name).one_or_none()
+            if vds and pub:
+                for vd in vds:
+                    print(f"Deleting {vd.filename!s} from versioned_docs", file=sys.stderr)
+                    session.delete(vd)
+                session.commit()
+                try:
+                    print(f"Deleting {pub.name!s} from versioned_docs", file=sys.stderr)
+                    session.delete(pub)
+                    session.commit()
+                except:
+                    print("Integrity Error while deleting publication. Publication: " + doc_name +
+                          " still has Versioned_Docs constrained to the pub_id.")
+                    session.rollback()
+                finally:
+                    session.close()
