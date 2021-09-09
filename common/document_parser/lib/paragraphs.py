@@ -26,14 +26,28 @@ def create_paragraph_dict(page_num, paragraph_num, paragraph_text, doc_dict):
     doc_dict["par_count_i"] += 1
     par["par_count_i"] = paragraph_num
     par["page_num_i"] = page_num
-
-    par["par_raw_text_t"] = utf8_pass(paragraph_text.replace('Do D', 'DoD'))
+    
+    paragraph_text = handle_DoD_text(paragraph_text)
+    
+    par["par_raw_text_t"] = utf8_pass(paragraph_text)
 
     par["entities"] = []
 
     return par
 
-
+def handle_DoD_text(text):
+    text = text.replace('Do D', 'DoD ') #splitting up things like 'Do Dapproved'
+    
+    text = text.replace('DoD M', 'DoDM') #recombining DoD doc types
+    text = text.replace('DoD I', 'DoDI')
+    text = text.replace('DoD D', 'DoDD')
+    
+    text = text.replace('DoD epth', 'Do Depth') #Catching remaining edge-cases that were found
+    text = text.replace('DoD uring', 'Do During') #there might be more that were not seen in testing
+    
+    return text
+    
+    
 def handle_page_paragraphs(page_num, page_text, doc_dict):
     for paragraph_num, paragraph in enumerate(segmenter.process(page_text)):
         paragraph_text = get_paragraph_text(paragraph)
