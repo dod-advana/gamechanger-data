@@ -1,7 +1,6 @@
 import uuid
 
 
-
 def process_rdte(data: dict) -> dict:
     data_value = {
         'id': str(uuid.uuid4()),
