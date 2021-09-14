@@ -11,7 +11,7 @@ def get_summary(text: str) -> str:
 
     try:
         return ""
-        # summaries aren't used currently, DS will revisit this shortly
+        # TODO 09/14/2021 - refine summary generation
         #return GensimSumm(text, long_doc=long_doc, word_count=30).make_summary()
     except Exception as e:
         print(e)
