@@ -61,8 +61,8 @@ class CloneMaker:
         cmd = ["bash", 'paasJobs/job_runner.sh', clone_config_path]
         print("Starting", f"`{' '.join(cmd)}`, with env:", os.environ)
 
-        result = subprocess.run(cmd, stdout=subprocess.PIPE, env=os.environ)
-        print(str(result, encoding='utf-8'))
+        completed_process = subprocess.run(
+            cmd, stdout=subprocess.PIPE, env=os.environ)
 
     @staticmethod
     def make_clone_params(to_ingest):
