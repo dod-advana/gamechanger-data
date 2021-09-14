@@ -1,4 +1,4 @@
-from os import path, stat, system
+import os
 from pathlib import Path
 import json
 from textwrap import dedent
@@ -34,7 +34,7 @@ class CloneParams:
 class CloneMaker:
 
     def generate_clone(self):
-        print('Kamino is at your service')
+
         Config.connection_helper.init_web_db()
         with Config.connection_helper.web_db_session_scope('rw') as session:
             to_ingest = session.query(
@@ -42,6 +42,11 @@ class CloneMaker:
 
             if to_ingest:
                 clone_params = self.make_clone_params(to_ingest=to_ingest)
+                print(f'{clone_params.clone_name} ingest starting')
+                print('Setting needs_ingest flag to False')
+                to_ingest.needs_ingest = False
+                session.commit()
+
             else:
                 print('No clone_meta with needs_ingest set, returning')
                 return
@@ -51,26 +56,19 @@ class CloneMaker:
 
         clone_config_path = self.write_config_file(cp=clone_params)
 
+        # env_dict.update({"LC_ALL": "C.UTF-8", "LANG": "C.UTF-8"})
+
         cmd = ["bash", 'paasJobs/job_runner.sh', clone_config_path]
-        print("Starting", f"`{' '.join(cmd)}`")
+        print("Starting", f"`{' '.join(cmd)}`, with env:", os.environ)
 
-        result = subprocess.check_output(cmd)
-        print(str(result))
-        print()
-
-        print(str(result.returncode))
-        print()
-
-        print(str(result.stdout))
-        print()
-
-        print(str(result.stderr))
+        result = subprocess.run(cmd, stdout=subprocess.PIPE, env=os.environ)
+        print(str(result, encoding='utf-8'))
 
     @staticmethod
     def make_clone_params(to_ingest):
         params_needed = [
-            "source_agency_name",
-            "data_source_name",
+            # "source_agency_name",
+            # "data_source_name",
             "metadata_creation_group",
             "clone_name",
             "source_s3_bucket",
@@ -78,11 +76,19 @@ class CloneMaker:
             "elasticsearch_index"
         ]
         params = {}
+        missing = []
         for key, val in to_ingest.__dict__.items():
             if key in params_needed:
-                params[key] = val
-        cp = CloneParams(**params)
-        return cp
+                if val is None:
+                    missing.append(key)
+                else:
+                    params[key] = val
+
+        if missing:
+            raise Exception(
+                f'Missing required parameters to make a clone: {missing}')
+        else:
+            return CloneParams(**params)
 
     @staticmethod
     def write_config_file(cp: CloneParams) -> str:
