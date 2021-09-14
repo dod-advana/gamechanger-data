@@ -21,6 +21,7 @@ import typing as t
 import functools
 import multiprocessing as mp
 import json
+import pandas as pd
 
 NonBlankString = t.NewType('NonBlankString', pyd.constr(strip_whitespace=True, min_length=1))
 StrippedString = t.NewType('StrippedString', pyd.constr(strip_whitespace=True))
@@ -187,6 +188,18 @@ class CoreIngestConfig(IngestConfig):
             max_workers=self.max_threads
         )
         return self._thumbnail_job_manager
+
+    @property
+    def db_tuple_list(self) -> list:
+        if hasattr(self, '_db_tuple_list'):
+            return self._db_tuple_list
+        return []
+
+    @property
+    def removal_list(self) -> list:
+        if hasattr(self, '_removal_list'):
+            return self._removal_list
+        return []
 
     @staticmethod
     def pass_options(f):
@@ -548,6 +561,77 @@ class DeleteConfig(CoreIngestConfig):
                     self._removal_list.append(filename)
         return self._removal_list
 
+class ManifestConfig(CoreIngestConfig):
+    input_manifest_filename: str
+    s3_raw_ingest_prefix: NonBlankString
 
+    @staticmethod
+    def pass_options(f):
+        @click.option(
+            '--input-manifest-filename',
+            type=str,
+            help="Filename of manifest csv that resides inside of the s3 prefix"
+                 " The manifest should have a list of documents for insert, delete and update.",
+            required=True
+        )
+        @click.option(
+            '--s3-raw-ingest-prefix',
+            type=str,
+            help="Ingest s3 prefix for ingest of documents with manifest.",
+            required=True
+        )
 
+        @functools.wraps(f)
+        def wf(*args, **kwargs):
+            return f(*args, **kwargs)
+        return wf
+
+    @staticmethod
+    def from_core_config(core_config: CoreIngestConfig, other_config_kwargs=t.Dict[str, t.Any]) -> 'ManifestConfig':
+        return ManifestConfig(**core_config.dict(), **other_config_kwargs)
+
+    @property
+    def manifest_df(self):
+        if hasattr(self, '_manifest_df'):
+            return self._manifest_df
+        columns = ["Process","Filename","Document Name","Document Title","NIPR okay?",
+                 "SIPR okay?","Unclassified Internet okay?","Source Name",
+                 "Publication Date","Document Type Denotation","Document Number Denotation",
+                 "Category of Document","Organization"]
+        input_man = Path(self.raw_doc_base_dir, self.input_manifest_filename).resolve()
+        if not input_man.exists():
+            self._manifest_df = pd.DataFrame(columns=columns)
+            return self._manifest_df
+        self._manifest_df = pd.read_csv(input_man, names=columns)
+        return self._manifest_df
+
+    @property
+    def insert_manifest(self) -> dict:
+        if hasattr(self, '_insert_manifest'):
+            return self._insert_manifest
+        self._insert_manifest = self.manifest_df[self.manifest_df['Process'] == "Insert"].to_dict()
+        return self._insert_manifest
+
+    @property
+    def db_tuple_list(self) -> list:
+        if hasattr(self, '_db_tuple_list'):
+            return self._db_tuple_list
+        self._db_tuple_list = []
+        del_df = self.manifest_df[self.manifest_df['Process'] == "Delete"].to_dict()
+        for i in del_df["Process"].keys():
+            doc_name = del_df["Document Name"][i]
+            filename = del_df["Filename"][i]
+            self._db_tuple_list.append((filename, doc_name))
+        return self._db_tuple_list
+
+    @property
+    def removal_list(self) -> list:
+        if hasattr(self, '_removal_list'):
+            return self._removal_list
+        self._removal_list = []
+        del_df = self.manifest_df[self.manifest_df['Process'] == "Delete"].to_dict()
+        for i in del_df["Process"].keys():
+            filename = Path(del_df["Filename"][i])
+            self._removal_list.append(filename)
+        return self._removal_list
 
