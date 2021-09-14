@@ -8,7 +8,7 @@ cat <<EOF
 EOF
 
 # main
-python -m clone_creator run
+python -m gc_clone_maker run
 
 cat <<EOF
 
