@@ -52,6 +52,7 @@ class CloneIngestConfig(IngestConfig):
     max_threads: pyd.PositiveInt
     max_threads_neo4j: pyd.PositiveInt
     max_ocr_threads: pyd.PositiveInt
+    max_s3_threads: pyd.PositiveInt
     skip_neo4j_update: bool = False
     skip_snapshot_backup: bool = False
     skip_db_backup: bool = False
@@ -275,6 +276,14 @@ class CloneIngestConfig(IngestConfig):
         )
         @click.option(
             '--max-ocr-threads',
+            type=int,
+            required=False,
+            default=mp.cpu_count(),
+            show_default=True,
+            help="Number of threads PER FILE to use for OCR"
+        )
+        @click.option(
+            '--max-s3-threads',
             type=int,
             required=False,
             default=mp.cpu_count(),
