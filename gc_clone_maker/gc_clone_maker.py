@@ -120,7 +120,7 @@ class CloneMaker:
             UPLOAD_LOGS="yes"
             SLACK_HOOK_CHANNEL="${{SLACK_HOOK_CHANNEL}}"
             SLACK_HOOK_URL="${{SLACK_HOOK_URL}}"
-            S3_BASE_LOG_PATH_URL="${{S3_BASE_LOG_PATH_URL:-s3://advana-raw-zone/gamechanger/data-pipelines/orchestration/logs/{cp.clone_name}-s3-ingest}}"
+            S3_BASE_LOG_PATH_URL="${{S3_BASE_LOG_PATH_URL:-s3://advana-data-zone/bronze/gamechanger/data-pipelines/orchestration/logs/{cp.clone_name}-s3-ingest}}"
             AWS_DEFAULT_REGION="${{AWS_DEFAULT_REGION:-us-gov-west-1}}"
             CLEANUP="${{CLEANUP:-yes}}"
             TMPDIR="${{TMPDIR:-/data/tmp}}"
@@ -149,10 +149,10 @@ class CloneMaker:
             export SKIP_REVOCATION_UPDATE="${{SKIP_REVOCATION_UPDATE:-yes}}"
             export SKIP_THUMBNAIL_GENERATION="${{SKIP_THUMBNAIL_GENERATION:-yes}}"
 
-            export CURRENT_SNAPSHOT_PREFIX="${{CURRENT_SNAPSHOT_PREFIX:-gamechanger/projects/{cp.clone_name}/}}"
-            export BACKUP_SNAPSHOT_PREFIX="${{BACKUP_SNAPSHOT_PREFIX:-gamechanger/projects/{cp.clone_name}/backup/}}"
-            export LOAD_ARCHIVE_BASE_PREFIX="${{LOAD_ARCHIVE_BASE_PREFIX:-gamechanger/projects/{cp.clone_name}/load-archive/}}"
-            export DB_BACKUP_BASE_PREFIX="${{DB_BACKUP_BASE_PREFIX:-gamechanger/projects/{cp.clone_name}/backup/db/}}"
+            export CURRENT_SNAPSHOT_PREFIX="${{CURRENT_SNAPSHOT_PREFIX:-bronze/gamechanger/projects/{cp.clone_name}/}}"
+            export BACKUP_SNAPSHOT_PREFIX="${{BACKUP_SNAPSHOT_PREFIX:-bronze/gamechanger/projects/{cp.clone_name}/backup/}}"
+            export LOAD_ARCHIVE_BASE_PREFIX="${{LOAD_ARCHIVE_BASE_PREFIX:-bronze/gamechanger/projects/{cp.clone_name}/load-archive/}}"
+            export DB_BACKUP_BASE_PREFIX="${{DB_BACKUP_BASE_PREFIX:-bronze/gamechanger/projects/{cp.clone_name}/backup/db/}}"
 
             export CLONE_OR_CORE="clone"
 
