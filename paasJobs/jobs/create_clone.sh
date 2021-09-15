@@ -8,6 +8,7 @@ cat <<EOF
 EOF
 
 # main
+export SEND_NOTIFICATIONS="yes"
 python -m gc_clone_maker run
 
 cat <<EOF
