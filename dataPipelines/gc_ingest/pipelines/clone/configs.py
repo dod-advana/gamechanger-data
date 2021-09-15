@@ -280,7 +280,7 @@ class CloneIngestConfig(IngestConfig):
             required=False,
             default=mp.cpu_count(),
             show_default=True,
-            help="Number of threads PER FILE to use for s3 uploads/downloads"
+            help="Number of threads PER FILE to use for OCR"
         )
         @click.option(
             '--max-s3-threads',
@@ -288,7 +288,7 @@ class CloneIngestConfig(IngestConfig):
             required=False,
             default=mp.cpu_count(),
             show_default=True,
-            help="Number of threads PER FILE to use for OCR"
+            help="Number of threads PER FILE to use for s3 uploads/downloads"
         )
         @click.option(
             '--crawler-output',
