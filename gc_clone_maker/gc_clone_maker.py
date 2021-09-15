@@ -139,6 +139,7 @@ class CloneMaker:
 
             export MAX_OCR_THREADS_PER_FILE="${{MAX_OCR_THREADS_PER_FILE:-2}}"
             export MAX_PARSER_THREADS="${{MAX_PARSER_THREADS:-16}}"
+            export MAX_S3_THREADS="${{MAX_S3_THREADS:-32}}"
 
             export S3_BUCKET_NAME="{cp.source_s3_bucket}"
 
