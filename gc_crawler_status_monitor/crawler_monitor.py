@@ -2,6 +2,7 @@ from .config import Config
 from dataPipelines.gc_db_utils.orch.models import CrawlerStatusEntry
 from textwrap import dedent
 import datetime
+from sqlalchemy.sql.expression import func
 
 from notification.slack import send_notification
 
@@ -10,18 +11,19 @@ class CrawlerMonitor:
     def check_for_stale_statuses(self):
 
         Config.connection_helper.init_orch_db()
-        with Config.connection_helper.web_db_session_scope('rw') as session:
+        with Config.connection_helper.orch_db_session_scope('rw') as session:
             current_time = datetime.datetime.utcnow()
 
             eight_days_ago = current_time - datetime.timedelta(days=8)
 
-            data = session.query(CrawlerStatusEntry).all()
-
-            print('data', data)
-
-            overdue = session.query(CrawlerStatusEntry).filter(
+            overdue = session.query(
+                CrawlerStatusEntry.crawler_name,
+                func.max(CrawlerStatusEntry.datetime).label('datetime')
+            ).filter(
                 (CrawlerStatusEntry.status == "Ingest Complete"),
                 (CrawlerStatusEntry.datetime < eight_days_ago)
+            ).group_by(
+                CrawlerStatusEntry.crawler_name
             ).all()
 
             if not overdue:
@@ -31,7 +33,7 @@ class CrawlerMonitor:
             warnings = "\n".join(
                 [
                     f"{crawler.crawler_name} was last run {crawler.datetime}"
-                    for crawler in data
+                    for crawler in overdue
                 ]
             )
             message = dedent(f"""
