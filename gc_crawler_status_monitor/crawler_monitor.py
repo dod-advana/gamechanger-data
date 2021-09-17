@@ -24,6 +24,9 @@ class CrawlerMonitor:
                 (CrawlerStatusEntry.datetime < eight_days_ago)
             ).all()
 
+            if not overdue:
+                return
+
             print('overdue', overdue)
             warnings = "\n".join(
                 [
