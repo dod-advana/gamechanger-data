@@ -20,8 +20,7 @@ class CrawlerMonitor:
                 CrawlerStatusEntry.crawler_name,
                 func.max(CrawlerStatusEntry.datetime).label('datetime')
             ).filter(
-                (CrawlerStatusEntry.status == "Ingest Complete"),
-                (CrawlerStatusEntry.datetime < eight_days_ago)
+                (CrawlerStatusEntry.status == "Ingest Complete")
             ).group_by(
                 CrawlerStatusEntry.crawler_name
             ).all()
@@ -33,7 +32,7 @@ class CrawlerMonitor:
             warnings = "\n".join(
                 [
                     f"{crawler.crawler_name} was last run {crawler.datetime}"
-                    for crawler in overdue
+                    for crawler in overdue if crawler.datetime < eight_days_ago
                 ]
             )
             message = dedent(f"""
