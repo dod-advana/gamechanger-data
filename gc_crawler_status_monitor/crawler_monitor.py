@@ -31,13 +31,12 @@ class CrawlerMonitor:
             print('overdue', overdue)
             warnings = "\n".join(
                 [
-                    f"{crawler.crawler_name} was last run {crawler.datetime.strftime('%b %d %Y')}"
+                    f"\`{crawler.crawler_name}\` was last run \`{crawler.datetime.strftime('%b %d %Y')}\`"
                     for crawler in overdue if crawler.datetime < eight_days_ago
                 ]
             )
             message = dedent(f"""
-            ![WARNING] - MONITORING: CRAWLERS OVERDUE
-            {warnings}
+            ![WARNING] - MONITORING: CRAWLERS OVERDUE\n{warnings}
             """)
 
             send_notification(message)
