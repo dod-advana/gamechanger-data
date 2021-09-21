@@ -10,7 +10,9 @@ def get_summary(text: str) -> str:
         long_doc = True
 
     try:
-        return GensimSumm(text, long_doc=long_doc, word_count=30).make_summary()
+        return ""
+        # TODO 09/14/2021 - refine summary generation
+        #return GensimSumm(text, long_doc=long_doc, word_count=30).make_summary()
     except Exception as e:
         print(e)
         return ""
