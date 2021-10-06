@@ -580,7 +580,7 @@ if __name__ == '__main__':
             if index_exists(index_name, es_conf=es_conf):
                 l.info(f"Index '%s' exists, skipping index creation ...", index_name)
                 pass
-            elif (alias_name in unindexed_aliases):
+            elif alias_name in unindexed_aliases:
                 l.info(f"Skipping index '%s' creation ...", index_name)
                 pass
             else:
@@ -612,7 +612,7 @@ if __name__ == '__main__':
                     es_conf=es_conf,
                     max_threads=max_threads
                 )
-            if not skip_alias and not ((alias_name in unindexed_aliases)):
+            if not skip_alias and alias_name not in unindexed_aliases:
                 l.info(f"Setting alias %s -> %s ...", alias_name, index_name)
                 set_alias(
                     index_name=index_name,
