@@ -478,8 +478,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--skip-alias",
                         action="store_true",
                         required=False,
-                        help="Skip setting aliases"
-    )
+                        help="Skip setting aliases")
     parser.add_argument('--manifest',
                         type=arg_existing_path,
                         required=True,
@@ -490,7 +489,8 @@ def parse_args() -> argparse.Namespace:
                         help="Path to directory containing files in the manifest.json")
     parser.add_argument('--entities-csv',
                         type=arg_existing_path,
-                        required=True,
+                        required=False,
+                        default="",
                         help="Path to entities.csv")
     parser.add_argument('--ignore-mapping-for',
                         dest='unmapped_aliases',
@@ -498,7 +498,12 @@ def parse_args() -> argparse.Namespace:
                         default=[],
                         required=False,
                         help="Ignore mapping file for given alias/index-basename")
-
+    parser.add_argument('--ignore-indexing-for',
+                        dest='unindexed_aliases',
+                        action='append',
+                        default=[],
+                        required=False,
+                        help="Ignore indexing for given alias/index-basename")
     return parser.parse_args()
 
 
@@ -524,6 +529,7 @@ if __name__ == '__main__':
     entities_csv = args.entities_csv
     skip_alias = args.skip_alias
     unmapped_aliases = args.unmapped_aliases
+    unindexed_aliases = args.unindexed_aliases
 
     es_conf = EsConfig(
         host=es_host,
@@ -574,6 +580,9 @@ if __name__ == '__main__':
             if index_exists(index_name, es_conf=es_conf):
                 l.info(f"Index '%s' exists, skipping index creation ...", index_name)
                 pass
+            elif alias_name in unindexed_aliases:
+                l.info(f"Skipping index '%s' creation ...", index_name)
+                pass
             else:
                 l.info(f"Creating index: %s", index_name)
                 create_index(
@@ -586,7 +595,7 @@ if __name__ == '__main__':
                     )
                 )
 
-            if alias_name == "entities":
+            if alias_name == "entities" and alias_name not in unindexed_aliases:
                 l.info(f"Indexing entities into %s ...", index_name)
                 index_entities_csv(
                     csv_file=entities_csv,
@@ -603,7 +612,7 @@ if __name__ == '__main__':
                     es_conf=es_conf,
                     max_threads=max_threads
                 )
-            if not skip_alias:
+            if not skip_alias and alias_name not in unindexed_aliases:
                 l.info(f"Setting alias %s -> %s ...", alias_name, index_name)
                 set_alias(
                     index_name=index_name,
