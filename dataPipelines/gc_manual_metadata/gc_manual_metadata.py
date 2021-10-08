@@ -60,7 +60,7 @@ class ManualMetadata:
 
     def get_doc_filepath(self, filepath: Path) -> str:
         filepath_str = str(filepath)
-        _, __, doc_filepath = filepath_str.partition(self.input_directory)
+        _, __, doc_filepath = filepath_str.partition(str(self.input_directory))
         return doc_filepath
 
     def create_document(self, full_filepath: Path) -> t.Optional[t.Dict[str, t.Any]]:
