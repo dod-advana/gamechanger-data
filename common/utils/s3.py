@@ -12,10 +12,12 @@ import os
 from .text_utils import size_fmt
 import datetime as dt
 import typing as t
+import filetype
 
 
 class TimestampedPrefix:
     """S3 prefix constructed with a particular timestamp"""
+
     def __init__(self, prefix_path: str, timestamp: datetime.datetime, timestamp_str: str):
         self.prefix_path = prefix_path
         self.timestamp = timestamp
@@ -29,6 +31,8 @@ class TimestampedPrefix:
 #   it might be desirable to have a mechanism for specifying rules for s3 operations
 #   to avoid scenarios like accidentally deleting/copying/clobbering files because of
 #   programming mistakes
+
+
 class S3Utils:
     """S3 utils for common operations"""
     TIMESTAMP_FORMAT = "%Y-%m-%dT%H:%M:%S"
@@ -68,15 +72,18 @@ class S3Utils:
     @staticmethod
     def path_join(*args: str) -> str:
         """Join parts of s3 url path together"""
-        str_joined = re.sub(pattern=r"""(/)+""", repl=r"\1", string="/".join(args))
-        str_sans_leading_slashes = str_joined[1:] if str_joined.startswith('/') else str_joined
+        str_joined = re.sub(pattern=r"""(/)+""",
+                            repl=r"\1", string="/".join(args))
+        str_sans_leading_slashes = str_joined[1:] if str_joined.startswith(
+            '/') else str_joined
         return str_sans_leading_slashes
 
     @staticmethod
     def format_as_prefix(prefix: str) -> str:
         """Format string as prefix"""
         prefix_with_tailing_slash = S3Utils.ensure_tailing_slash(prefix)
-        prefix_in_proper_path_format = S3Utils.path_join(prefix_with_tailing_slash)
+        prefix_in_proper_path_format = S3Utils.path_join(
+            prefix_with_tailing_slash)
         return prefix_in_proper_path_format
 
     @staticmethod
@@ -190,7 +197,8 @@ class S3Utils:
                      local_dir: Union[str, Path],
                      prefix_path: str = "",
                      bucket: Optional[str] = None,
-                     max_threads: int = 1) -> None:
+                     max_threads: int = 1
+                     ) -> None:
         """Downloads recursively the given S3 path to the target directory.
         :param local_dir: path to local dir
         :param prefix_path: the folder path in the s3 bucket
@@ -211,16 +219,31 @@ class S3Utils:
         # makes it so that everything's in one place when I run executor.map() if multithreading
         def dl_inner_func(obpath):
             path, filename = os.path.split(obpath)
+            ext = os.path.splitext(filename)
+
+            # handle case where file dump has no extensions but is known as pdf
+            if not ext:
+                probably = "pdf"
+                guess = None
+                try:
+                    guess = filetype.guess_extension(filename)
+                except:
+                    pass
+                extension = guess or probably
+                filename = f"{filename}.{extension}"
+
             if not obpath.endswith("/"):
                 tmp = path + "/"
                 if tmp.replace(prefix_path, "", 1) is None:
-                    self.download_file(bucket=bucket_name, object_path=obpath, file=local_dir + "/" + filename)
+                    self.download_file(
+                        bucket=bucket_name, object_path=obpath, file=local_dir + "/" + filename)
                 else:
                     sub_path = tmp.replace(prefix_path, "", 1)
                     base_path = Path(local_dir, sub_path)
-                    base_path.mkdir(exist_ok=True,parents=True)
+                    base_path.mkdir(exist_ok=True, parents=True)
                     file_path = Path(base_path, filename)
-                    self.download_file(bucket=bucket_name, object_path=obpath, file=str(file_path))
+                    self.download_file(bucket=bucket_name,
+                                       object_path=obpath, file=str(file_path))
 
         tasks_to_do = self.iter_object_paths_at_prefix(prefix=prefix_path)
 
@@ -235,7 +258,8 @@ class S3Utils:
 
         # else, bad value inserted for max_threads
         else:
-            raise ValueError(f"Invalid max_threads value given: ${max_threads}")
+            raise ValueError(
+                f"Invalid max_threads value given: ${max_threads}")
 
         with ThreadPoolExecutor(max_workers=max_workers) as executor:
             executor.map(dl_inner_func, (tasks for tasks in tasks_to_do))
@@ -259,9 +283,10 @@ class S3Utils:
         # makes it so that everything's in one place when I run executor.map() if multithreading
         def up_inner_func(locpath):
             if locpath.is_file():
-                relative_parent_dir_path = str(locpath.parent.relative_to(local_dir_path))
-                if relative_parent_dir_path in ['.','..','/']:
-                    relative_parent_dir_path=""
+                relative_parent_dir_path = str(
+                    locpath.parent.relative_to(local_dir_path))
+                if relative_parent_dir_path in ['.', '..', '/']:
+                    relative_parent_dir_path = ""
 
                 final_prefix = self.path_join(
                     self.format_as_prefix(prefix_path),
@@ -269,7 +294,8 @@ class S3Utils:
                 )
 
                 print(f"Uploading {locpath.name} to prefix {prefix_path}")
-                self.upload_file(file=locpath, object_prefix=prefix_path, bucket=(bucket or self.bucket))
+                self.upload_file(
+                    file=locpath, object_prefix=prefix_path, bucket=(bucket or self.bucket))
 
                 return os.path.join(final_prefix, locpath.name)
 
@@ -286,7 +312,8 @@ class S3Utils:
 
         # else, bad value inserted for max_threads
         else:
-            raise ValueError(f"Invalid max_threads value given: ${max_threads}")
+            raise ValueError(
+                f"Invalid max_threads value given: ${max_threads}")
 
         with ThreadPoolExecutor(max_workers=max_workers) as executor:
             r = executor.map(up_inner_func, (tasks for tasks in tasks_to_do))
@@ -307,10 +334,10 @@ class S3Utils:
         dst_obj_paths: List[str] = []
 
         bucket_name = bucket or self.bucket
-        for obj_path in self.iter_object_paths_at_prefix(prefix = src_prefix):
+        for obj_path in self.iter_object_paths_at_prefix(prefix=src_prefix):
             new_obj_path = (
-                    self.format_as_prefix(dst_prefix)
-                    + str(Path(obj_path).relative_to(src_prefix))
+                self.format_as_prefix(dst_prefix)
+                + str(Path(obj_path).relative_to(src_prefix))
             )
 
             print(f"Copying {obj_path} to {new_obj_path}")
@@ -349,7 +376,8 @@ class S3Utils:
 
         bucket_name = bucket or self.bucket
         deleted_object_paths: List[str] = []
-        tasks_to_do = self.iter_object_paths_at_prefix(prefix=prefix, bucket=bucket_name)
+        tasks_to_do = self.iter_object_paths_at_prefix(
+            prefix=prefix, bucket=bucket_name)
 
         # if we use all available resources
         # NOT recommended. This uses all computing power at once, will probably crash if big directory
@@ -362,7 +390,8 @@ class S3Utils:
 
         # else, bad value inserted for max_threads
         else:
-            raise ValueError(f"Invalid max_threads value given: ${max_threads}")
+            raise ValueError(
+                f"Invalid max_threads value given: ${max_threads}")
 
         with ThreadPoolExecutor(max_workers=max_workers) as executor:
             r = executor.map(self.delete_object,
@@ -386,7 +415,8 @@ class S3Utils:
         # TODO: if there are async operations going on to the same old_prefix path,
         #   it may be desirable to only delete objects that existed at beginning of copy operation
         #   to avoid deleting objects that were never copied to the new prefix
-        new_paths = self.copy_prefix(src_prefix=old_prefix, dst_prefix=new_prefix, bucket=bucket_name)
+        new_paths = self.copy_prefix(
+            src_prefix=old_prefix, dst_prefix=new_prefix, bucket=bucket_name)
         self.delete_prefix(prefix=old_prefix, bucket=bucket_name)
 
         return new_paths
@@ -451,7 +481,8 @@ class S3Utils:
         :return: datetime.datetime if there's a correct timestamp, else None
         """
         return (
-            self.TIMESTAMPED_PATH_REGEX.match(timestamped_prefix).groupdict()["timestamp"]
+            self.TIMESTAMPED_PATH_REGEX.match(
+                timestamped_prefix).groupdict()["timestamp"]
             if self.TIMESTAMPED_PATH_REGEX.match(timestamped_prefix)
             else None
         )
@@ -470,20 +501,22 @@ class S3Utils:
 
         _base_prefix = self.format_as_prefix(base_prefix)
         if not isinstance(after_timestamp, datetime.datetime):
-            after_timestamp = parse_formatted_timestamp(after_timestamp, self.TIMESTAMP_FORMAT)
+            after_timestamp = parse_formatted_timestamp(
+                after_timestamp, self.TIMESTAMP_FORMAT)
 
         bucket_name = bucket or self.bucket
         default_delimiter = "/"
-
 
         valid_timestamped_prefixes = [
             TimestampedPrefix(
                 prefix_path=p["Prefix"],
                 timestamp=datetime.datetime.strptime(
-                    self.TIMESTAMPED_PATH_REGEX.match(p["Prefix"]).groupdict()["timestamp"],
+                    self.TIMESTAMPED_PATH_REGEX.match(
+                        p["Prefix"]).groupdict()["timestamp"],
                     self.TIMESTAMP_FORMAT,
                 ),
-                timestamp_str=self.TIMESTAMPED_PATH_REGEX.match(p["Prefix"]).groupdict()["timestamp"]
+                timestamp_str=self.TIMESTAMPED_PATH_REGEX.match(
+                    p["Prefix"]).groupdict()["timestamp"]
             )
             for p in s3_client.list_objects(
                 Bucket=bucket_name, Delimiter=default_delimiter, Prefix=_base_prefix

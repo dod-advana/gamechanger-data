@@ -6,12 +6,14 @@ from datetime import datetime
 from hashlib import sha256
 from functools import reduce
 
+
 def str_to_sha256_hex_digest(_str: str) -> str:
     """Converts string to sha256 hex digest"""
     if not _str and not isinstance(_str, str):
         raise ValueError("Arg should be a non-empty string")
 
     return sha256(_str.encode("utf-8")).hexdigest()
+
 
 def dict_to_sha256_hex_digest(_dict: t.Dict[t.Any, t.Any]) -> str:
     """Converts dictionary to sha256 hex digest.
@@ -27,26 +29,49 @@ def dict_to_sha256_hex_digest(_dict: t.Dict[t.Any, t.Any]) -> str:
     )
     return str_to_sha256_hex_digest(value_string)
 
+
 class ManualMetadata:
 
     def __init__(self, input_directory, document_group):
         self.input_directory = input_directory
         self.document_group = document_group
-        p = Path(self.input_directory).glob("**/*")
-        self.files = [x for x in p if x.is_file() and (str(x).endswith("pdf") or str(x).endswith("html")
-                                                       or (filetype.guess(str(x)) is not None and (
-                                                           filetype.guess(str(x)).mime == "pdf" or filetype.guess(str(x)).mime == "application/pdf")))]
-        self.metadata_files = [Path(x).stem for x in p if x.is_file() and filetype.guess(str(x)) is not None and (
-            filetype.guess(str(x)).mime == "metadata")]
 
-    def create_document(self, file) -> t.Optional[t.Dict[str, t.Any]]:
+        p = Path(self.input_directory).glob("**/*")
+        self.files: t.List[Path] = [
+            x for x in p if x.is_file()
+            and (
+                str(x).endswith("pdf")
+                or str(x).endswith("html")
+                or (
+                    filetype.guess(str(x))
+                    is not None
+                    and (
+                        filetype.guess(str(x)).mime == "pdf"
+                        or filetype.guess(str(x)).mime == "application/pdf"
+                    )
+                )
+            )
+        ]
+
+        self.metadata_files: t.List[Path] = [
+            Path(x).stem for x in p if x.is_file()
+            and filetype.guess(str(x)) is not None and (filetype.guess(str(x)).mime == "metadata")
+        ]
+
+    def get_doc_filepath(self, filepath: Path) -> str:
+        filepath_str = str(filepath)
+        _, __, doc_filepath = filepath_str.partition(self.input_directory)
+        return doc_filepath
+
+    def create_document(self, full_filepath: Path) -> t.Optional[t.Dict[str, t.Any]]:
         doc = None
         if self.document_group == "Memo":
             pdi = dict(doc_type="pdf", web_url="manual.ingest")
-            version_hash_fields = {"filename": Path(file).name}
+            version_hash_fields = {
+                "filename": self.get_doc_filepath(full_filepath)}
             doc = dict(
-                doc_name=Path(file).stem,
-                doc_title=Path(file).stem,
+                doc_name=Path(full_filepath).stem,
+                doc_title=Path(full_filepath).stem,
                 doc_num="",
                 doc_type="Memo",
                 publication_date="N/A",
@@ -57,14 +82,15 @@ class ManualMetadata:
                 version_hash_raw_data=version_hash_fields,
                 downloadable_items=[pdi],
                 source_fqdn="manual.ingest",
-                version_hash= dict_to_sha256_hex_digest(version_hash_fields)
+                version_hash=dict_to_sha256_hex_digest(version_hash_fields)
             )
         elif self.document_group == "pdf":
             pdi = dict(doc_type="pdf", web_url="manual.ingest")
-            version_hash_fields = {"filename": Path(file).name}
+            version_hash_fields = {
+                "filename": self.get_doc_filepath(full_filepath)}
             doc = dict(
-                doc_name=Path(file).stem,
-                doc_title=Path(file).stem,
+                doc_name=Path(full_filepath).stem,
+                doc_title=Path(full_filepath).stem,
                 doc_num="",
                 doc_type="pdf",
                 publication_date="N/A",
@@ -78,21 +104,21 @@ class ManualMetadata:
                 version_hash=dict_to_sha256_hex_digest(version_hash_fields)
             )
         elif self.document_group == "nga":
-            before, part, after = Path(file).stem.partition("(")
+            before, part, after = Path(full_filepath).stem.partition("(")
 
             doc_title = before.split("_")[5] if not after else before
             doc_type = doc_title.split(" ", 1)[0]
             doc_num = doc_title.split(" ", 1)[1]
 
-            pdi = dict(doc_type=Path(file).suffix[1:],
+            pdi = dict(doc_type=Path(full_filepath).suffix[1:],
                        web_url="manual.ingest")
-            version_hash_fields = {"filename": Path(file).name,
+            version_hash_fields = {"filename": self.get_doc_filepath(full_filepath),
                                    "doc_title": doc_title,
                                    "doc_num": doc_num,
                                    "doc_type": doc_type}
 
             doc = dict(
-                doc_name=Path(file).stem,
+                doc_name=Path(full_filepath).stem,
                 doc_title=doc_title,
                 doc_num=doc_num,
                 doc_type=doc_type,
@@ -111,12 +137,13 @@ class ManualMetadata:
             )
 
         else:
-            pdi = dict(doc_type=Path(file).suffix[1:],
+            pdi = dict(doc_type=Path(full_filepath).suffix[1:],
                        web_url="manual.ingest")
-            version_hash_fields = {"filename": Path(file).name}
+            version_hash_fields = {
+                "filename": self.get_doc_filepath(full_filepath)}
             doc = dict(
-                doc_name=Path(file).stem,
-                doc_title=Path(file).stem,
+                doc_name=Path(full_filepath).stem,
+                doc_title=Path(full_filepath).stem,
                 doc_num="",
                 doc_type=str.upper(self.document_group),
                 publication_date="N/A",
@@ -128,7 +155,8 @@ class ManualMetadata:
                 downloadable_items=[pdi],
                 display_doc_type="Document",
                 display_org=str.upper(self.document_group),
-                display_source=str.upper(self.document_group) + " Publications",
+                display_source=str.upper(
+                    self.document_group) + " Publications",
                 source_fqdn="manual.ingest",
                 version_hash=dict_to_sha256_hex_digest(version_hash_fields)
             )
@@ -137,12 +165,12 @@ class ManualMetadata:
 
     def create_metadata(self):
         if self.document_group:
-            for file in self.files:
+            for full_filepath in self.files:
                 print(self.metadata_files)
-                if Path(file).stem not in self.metadata_files:
-                    doc = self.create_document(file)
+                if Path(full_filepath).stem not in self.metadata_files:
+                    doc = self.create_document(full_filepath)
 
-                    outname = str(file) + '.metadata'
+                    outname = str(full_filepath) + '.metadata'
                     print(outname)
                     if doc:
                         with open(outname, "w") as f:
