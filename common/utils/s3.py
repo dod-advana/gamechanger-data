@@ -229,14 +229,15 @@ class S3Utils:
         def dl_inner_func(obpath):
             announce(f"'obpath', {obpath}")
             path, filename = os.path.split(obpath)
-            ext = os.path.splitext(filename)
+            filename_root, ext = os.path.splitext(filename)
 
-            announce(f"'path', {path}, 'filename', {filename}, 'ext', {ext}")
+            announce('path', path, 'filename', filename,
+                     'root', filename_root, 'ext', ext)
 
             # handle case where file dump has no extensions but is known as pdf
             if not ext:
-                filename = f"{filename}.pdf"
-                announce('Not extension new filename', filename)
+                filename = f"{filename_root}.pdf"
+                announce('Not extension, new filename', filename)
 
             announce(f"'after ext check', {filename}")
             sleep(5)
@@ -246,6 +247,8 @@ class S3Utils:
                 tmp = path + "/"
                 if tmp.replace(prefix_path, "", 1) is None:
                     announce("tmp.replace(prefix_path, "", 1) is None")
+                    announce("download file params: ",
+                             f"bucket={bucket_name}, object_path={obpath}, file={local_dir}/{filename}")
                     self.download_file(
                         bucket=bucket_name, object_path=obpath, file=local_dir + "/" + filename)
                 else:
