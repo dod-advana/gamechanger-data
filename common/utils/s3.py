@@ -235,14 +235,8 @@ class S3Utils:
 
             # handle case where file dump has no extensions but is known as pdf
             if not ext:
-                probably = "pdf"
-                guess = None
-                try:
-                    guess = filetype.guess_extension(filename)
-                except:
-                    pass
-                extension = guess or probably
-                filename = f"{filename}.{extension}"
+                filename = f"{filename}.pdf"
+                announce('Not extension new filename', filename)
 
             announce(f"'after ext check', {filename}")
             sleep(5)
