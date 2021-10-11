@@ -6,6 +6,9 @@ from datetime import datetime
 from hashlib import sha256
 from functools import reduce
 
+from dataPipelines.gc_ingest.pipelines.utils import announce
+from time import sleep
+
 
 def str_to_sha256_hex_digest(_str: str) -> str:
     """Converts string to sha256 hex digest"""
@@ -64,6 +67,10 @@ class ManualMetadata:
         return doc_filepath
 
     def create_document(self, full_filepath: Path) -> t.Optional[t.Dict[str, t.Any]]:
+        doc_filepath = self.get_doc_filepath(full_filepath)
+        announce(
+            f"create_document full filepath, {full_filepath}, 'doc path' {doc_filepath}")
+        sleep(2)
         doc = None
         if self.document_group == "Memo":
             pdi = dict(doc_type="pdf", web_url="manual.ingest")
@@ -167,11 +174,15 @@ class ManualMetadata:
         if self.document_group:
             for full_filepath in self.files:
                 print(self.metadata_files)
+                announce(
+                    f'create_metadata metadata_files: {self.metadata_files}')
                 if Path(full_filepath).stem not in self.metadata_files:
                     doc = self.create_document(full_filepath)
 
                     outname = str(full_filepath) + '.metadata'
                     print(outname)
+                    announce(f'create_metadata outname: {outname}')
+
                     if doc:
                         with open(outname, "w") as f:
                             f.write(json.dumps(doc))

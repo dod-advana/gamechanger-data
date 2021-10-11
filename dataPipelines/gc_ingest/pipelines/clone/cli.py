@@ -8,6 +8,8 @@ from .steps import CloneIngestSteps
 from pathlib import Path
 import shutil
 
+from time import sleep
+
 
 @click.group(name='clone')
 def clone_cli():
@@ -36,6 +38,8 @@ def clone_s3_ingest(clone_ingest_config: CloneIngestConfig, **kwargs):
     announce("Aggregating files for processing ...")
     announce(
         f"Downloading raw files from s3 prefix: {sig.s3_raw_ingest_prefix} ...")
+    sleep(5)
+
     Config.s3_utils.download_dir(
         local_dir=sig.raw_doc_base_dir,
         prefix_path=sig.s3_raw_ingest_prefix,
@@ -45,8 +49,9 @@ def clone_s3_ingest(clone_ingest_config: CloneIngestConfig, **kwargs):
 #    if not next((p for p in sig.raw_doc_base_dir.iterdir() if p.is_file()), None):
 #        announce("[WARNING] No files were downloaded for processing, exiting pipeline.")
 #        exit(1)
+    announce("Create metadata")
     CloneIngestSteps.create_metadata(sig)
-
+    announce("Parse and OCR")
     CloneIngestSteps.parse_and_ocr(sig)
     CloneIngestSteps.load_files(sig)
     CloneIngestSteps.update_s3_cloning(sig)
