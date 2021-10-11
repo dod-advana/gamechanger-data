@@ -1,4 +1,5 @@
 import sys
 
-def announce(text: str):
-    print("#### PIPELINE INFO #### " + text, file=sys.stderr)
+
+def announce(text: str, *rest):
+    print(f"#### PIPELINE INFO #### {text}" + " ".join(rest), file=sys.stderr)
