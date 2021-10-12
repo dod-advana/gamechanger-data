@@ -3,11 +3,15 @@ from datetime import datetime
 
 
 def assign_f_name_fields(f_name, doc_dict):
-    filename = (
-        f_name.absolute().name
-        if isinstance(f_name, Path)
-        else Path(str(f_name)).name
-    )
+    if doc_dict.get("meta_data").get("version_hash_raw_data").get("filename"):
+        filename = doc_dict.get("meta_data").get(
+            "version_hash_raw_data").get("filename")
+    else:
+        filename = (
+            f_name.absolute().name
+            if isinstance(f_name, Path)
+            else Path(str(f_name)).name
+        )
     doc_dict['filename'] = filename
     doc_dict['f_name'] = filename
     doc_dict["id"] = filename + "_0"
