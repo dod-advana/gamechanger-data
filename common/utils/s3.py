@@ -15,7 +15,7 @@ import typing as t
 import filetype
 
 
-from dataPipelines.gc_ingest.pipelines.utils import announce
+from dataPipelines.gc_ingest.pipelines.utils import announce, get_filepath_from_dir
 from time import sleep
 
 
@@ -313,9 +313,16 @@ class S3Utils:
                     self.format_as_prefix(relative_parent_dir_path)
                 )
 
+                object_name = get_filepath_from_dir(
+                    local_dir_path, local_dir_path)
+
                 print(f"Uploading {locpath.name} to prefix {prefix_path}")
                 self.upload_file(
-                    file=locpath, object_prefix=prefix_path, bucket=(bucket or self.bucket))
+                    file=locpath,
+                    object_prefix=prefix_path,
+                    bucket=(bucket or self.bucket),
+                    object_name=object_name
+                )
 
                 return os.path.join(final_prefix, locpath.name)
 
