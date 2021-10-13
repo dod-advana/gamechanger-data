@@ -6,7 +6,7 @@ from datetime import datetime
 from hashlib import sha256
 from functools import reduce
 
-from dataPipelines.gc_ingest.pipelines.utils import announce
+from dataPipelines.gc_ingest.pipelines.utils import announce, get_filepath_from_dir
 from time import sleep
 
 
@@ -61,13 +61,9 @@ class ManualMetadata:
             and filetype.guess(str(x)) is not None and (filetype.guess(str(x)).mime == "metadata")
         ]
 
-    def get_doc_filepath(self, filepath: Path) -> str:
-        filepath_str = str(filepath)
-        _, __, doc_filepath = filepath_str.partition(str(self.input_directory))
-        return doc_filepath
-
     def create_document(self, full_filepath: Path) -> t.Optional[t.Dict[str, t.Any]]:
-        doc_filepath = self.get_doc_filepath(full_filepath)
+        doc_filepath = get_filepath_from_dir(
+            self.input_directory, full_filepath)
         announce(
             f"create_document full filepath, {full_filepath}, 'doc path' {doc_filepath}")
         sleep(2)
@@ -75,7 +71,7 @@ class ManualMetadata:
         if self.document_group == "Memo":
             pdi = dict(doc_type="pdf", web_url="manual.ingest")
             version_hash_fields = {
-                "filename": self.get_doc_filepath(full_filepath)}
+                "filename": get_filepath_from_dir(self.input_directory, full_filepath)}
             doc = dict(
                 doc_name=Path(full_filepath).stem,
                 doc_title=Path(full_filepath).stem,
@@ -94,7 +90,7 @@ class ManualMetadata:
         elif self.document_group == "pdf":
             pdi = dict(doc_type="pdf", web_url="manual.ingest")
             version_hash_fields = {
-                "filename": self.get_doc_filepath(full_filepath)}
+                "filename": get_filepath_from_dir(self.input_directory, full_filepath)}
             doc = dict(
                 doc_name=Path(full_filepath).stem,
                 doc_title=Path(full_filepath).stem,
@@ -119,7 +115,7 @@ class ManualMetadata:
 
             pdi = dict(doc_type=Path(full_filepath).suffix[1:],
                        web_url="manual.ingest")
-            version_hash_fields = {"filename": self.get_doc_filepath(full_filepath),
+            version_hash_fields = {"filename": get_filepath_from_dir(self.input_directory, full_filepath),
                                    "doc_title": doc_title,
                                    "doc_num": doc_num,
                                    "doc_type": doc_type}
@@ -147,7 +143,7 @@ class ManualMetadata:
             pdi = dict(doc_type=Path(full_filepath).suffix[1:],
                        web_url="manual.ingest")
             version_hash_fields = {
-                "filename": self.get_doc_filepath(full_filepath)}
+                "filename": get_filepath_from_dir(self.input_directory, full_filepath)}
             doc = dict(
                 doc_name=Path(full_filepath).stem,
                 doc_title=Path(full_filepath).stem,

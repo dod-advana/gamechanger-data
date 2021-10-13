@@ -4,8 +4,9 @@ from datetime import datetime
 
 def assign_f_name_fields(f_name, doc_dict):
     if doc_dict.get("meta_data").get("version_hash_raw_data").get("filename"):
-        filename = doc_dict.get("meta_data").get(
+        from_meta = doc_dict.get("meta_data").get(
             "version_hash_raw_data").get("filename")
+        filename = from_meta[1:] if from_meta[0] == '/' else from_meta
     else:
         filename = (
             f_name.absolute().name
