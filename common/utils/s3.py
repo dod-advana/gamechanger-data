@@ -12,11 +12,7 @@ import os
 from .text_utils import size_fmt
 import datetime as dt
 import typing as t
-import filetype
-
-
-from dataPipelines.gc_ingest.pipelines.utils import announce, get_filepath_from_dir
-from time import sleep
+from dataPipelines.gc_ingest.pipelines.utils import get_filepath_from_dir
 
 
 class TimestampedPrefix:
@@ -100,10 +96,8 @@ class S3Utils:
     def iter_object_paths_at_prefix(self, prefix: str, bucket: Optional[str] = None) -> Iterable[str]:
         """Iterate over object keys at prefix"""
         bucket_name = bucket or self.bucket
-        announce('iter_object_paths_at_prefix')
+
         for obj_summary in self.ch.s3_resource.Bucket(bucket_name).objects.filter(Prefix=prefix):
-            k = obj_summary.key
-            announce(f"'obj_summary.key', {k}")
             yield obj_summary.key
 
     def get_prefix_stats(self, prefix: str, bucket: Optional[str] = None) -> Dict[str, Any]:
@@ -204,16 +198,14 @@ class S3Utils:
                      local_dir: Union[str, Path],
                      prefix_path: str = "",
                      bucket: Optional[str] = None,
-                     max_threads: int = 1
-                     ) -> None:
+                     max_threads: int = 1) -> None:
         """Downloads recursively the given S3 path to the target directory.
         :param local_dir: path to local dir
         :param prefix_path: the folder path in the s3 bucket
         :param bucket: Bucket name
         :param max_threads: number of threads for multithreading
         """
-        announce("DOWNLOAD DIR")
-        sleep(5)
+
         local_dir_path = Path(local_dir).resolve()
         s3_client = self.ch.s3_client
         s3_resource = self.ch.s3_resource
@@ -227,62 +219,44 @@ class S3Utils:
         # defining an inner function for the download commands for ease of running the multithreading command
         # makes it so that everything's in one place when I run executor.map() if multithreading
         def dl_inner_func(obpath):
-            announce(f"'obpath', {obpath}")
             path, filename = os.path.split(obpath)
             filename_root, ext = os.path.splitext(filename)
-
-            announce('path', path, 'filename', filename,
-                     'root', filename_root, 'ext', ext)
 
             # handle case where file dump has no extensions but is known as pdf
             if not ext:
                 filename = f"{filename_root}.pdf"
-                announce('Not extension, new filename', filename)
-
-            announce(f"'after ext check', {filename}")
-            sleep(5)
 
             if not obpath.endswith("/"):
-                announce('not obpath.endswith("/")')
                 tmp = path + "/"
                 if tmp.replace(prefix_path, "", 1) is None:
-                    announce("tmp.replace(prefix_path, "", 1) is None")
-                    announce("download file params: ",
-                             f"bucket={bucket_name}, object_path={obpath}, file={local_dir}/{filename}")
                     self.download_file(
                         bucket=bucket_name, object_path=obpath, file=local_dir + "/" + filename)
                 else:
-                    announce("ELSE")
                     sub_path = tmp.replace(prefix_path, "", 1)
                     base_path = Path(local_dir, sub_path)
                     base_path.mkdir(exist_ok=True, parents=True)
                     file_path = Path(base_path, filename)
-                    announce("ELSE filepath", file_path)
                     self.download_file(bucket=bucket_name,
                                        object_path=obpath, file=str(file_path))
 
         tasks_to_do = self.iter_object_paths_at_prefix(prefix=prefix_path)
-        announce(f"'TASKS TO DO', {tasks_to_do}")
 
-        for task in tasks_to_do:
-            dl_inner_func(task)
+        # if we use all available resources
+        # NOT recommended. This uses all computing power at once, will probably crash if big directory
+        if max_threads < 0:
+            max_workers = multiprocessing.cpu_count()
 
-        # # if we use all available resources
-        # # NOT recommended. This uses all computing power at once, will probably crash if big directory
-        # if max_threads < 0:
-        #     max_workers = multiprocessing.cpu_count()
+        # if we don't use multithreading or if we do partitioned multithreading
+        elif max_threads >= 1:
+            max_workers = max_threads
 
-        # # if we don't use multithreading or if we do partitioned multithreading
-        # elif max_threads >= 1:
-        #     max_workers = max_threads
+        # else, bad value inserted for max_threads
+        else:
+            raise ValueError(
+                f"Invalid max_threads value given: ${max_threads}")
 
-        # # else, bad value inserted for max_threads
-        # else:
-        #     raise ValueError(
-        #         f"Invalid max_threads value given: ${max_threads}")
-
-        # with ThreadPoolExecutor(max_workers=max_workers) as executor:
-        #     executor.map(dl_inner_func, (tasks for tasks in tasks_to_do))
+        with ThreadPoolExecutor(max_workers=max_workers) as executor:
+            executor.map(dl_inner_func, (tasks for tasks in tasks_to_do))
 
     def upload_dir(self,
                    local_dir: Union[str, Path],
@@ -315,8 +289,6 @@ class S3Utils:
 
                 object_name = get_filepath_from_dir(local_dir_path, locpath)
 
-                announce(
-                    f"Uploading {locpath.name} to prefix {prefix_path} with object_name {object_name!s}")
                 self.upload_file(
                     file=locpath,
                     object_prefix=prefix_path,

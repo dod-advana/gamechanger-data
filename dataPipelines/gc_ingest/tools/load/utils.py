@@ -7,7 +7,7 @@ from sqlalchemy.exc import IntegrityError, InvalidRequestError
 
 from dataPipelines.gc_ingest.config import Config
 from dataPipelines.gc_db_utils.orch.models import VersionedDoc, Publication
-from dataPipelines.gc_ingest.pipelines.utils import announce, get_filepath_from_dir
+from dataPipelines.gc_ingest.pipelines.utils import get_filepath_from_dir
 from common.utils.s3 import S3Utils
 from common.utils.parsers import parse_timestamp
 from pydantic import BaseModel
@@ -354,11 +354,6 @@ class LoadManager:
                     idg.thumbnail_idoc, ts=ts_set)
 
             yield idg
-
-        # for idg, ts in idgs:
-        #     result = upload_inner_func(idg, ts)
-        #     if result:
-        #         uploaded_files.append(result)
 
         with ThreadPoolExecutor(max_workers=max_workers) as executor:
             r = executor.map(
