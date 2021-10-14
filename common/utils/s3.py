@@ -313,10 +313,10 @@ class S3Utils:
                     self.format_as_prefix(relative_parent_dir_path)
                 )
 
-                object_name = get_filepath_from_dir(
-                    local_dir_path, local_dir_path)
+                object_name = get_filepath_from_dir(local_dir_path, locpath)
 
-                print(f"Uploading {locpath.name} to prefix {prefix_path}")
+                announce(
+                    f"Uploading {locpath.name} to prefix {prefix_path} with object_name {object_name!s}")
                 self.upload_file(
                     file=locpath,
                     object_prefix=prefix_path,
