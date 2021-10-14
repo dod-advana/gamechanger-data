@@ -7,7 +7,7 @@ from sqlalchemy.exc import IntegrityError, InvalidRequestError
 
 from dataPipelines.gc_ingest.config import Config
 from dataPipelines.gc_db_utils.orch.models import VersionedDoc, Publication
-from dataPipelines.gc_ingest.pipelines.utils import get_filepath_from_dir
+from dataPipelines.gc_ingest.pipelines.utils import announce, get_filepath_from_dir
 from common.utils.s3 import S3Utils
 from common.utils.parsers import parse_timestamp
 from pydantic import BaseModel
@@ -294,7 +294,8 @@ class LoadManager:
     def upload_docs_to_s3(self,
                           idgs: t.Iterable[IngestableDocGroup],
                           ts: t.Union[dt.datetime, str],
-                          max_threads: int) -> List[str]:
+                          max_threads: int,
+                          raw_dir=None) -> List[str]:
         """Upload all raw/parsed/metadata docs in a group to s3"""
         ts = parse_timestamp(ts, raise_parse_error=True)
         uploaded_files: List[str] = []
@@ -302,11 +303,25 @@ class LoadManager:
         def _upload_to_s3(idoc: GenericIngestableDoc, ts=dt.datetime) -> str:
             print(
                 f"Uploading doc {idoc.local_path!s} to S3 ... ", file=sys.stderr)
-            s3_location = Config.s3_utils.upload_file(
-                file=idoc.local_path,
-                object_prefix=self.get_timestamped_archive_prefix_for_idoc(
-                    idoc=idoc, ts=ts)
-            )
+
+            if raw_dir:
+                object_name = get_filepath_from_dir(raw_dir, idoc.local_path)
+                s3_location = Config.s3_utils.upload_file(
+                    file=idoc.local_path,
+                    object_name=object_name,
+                    object_prefix=self.get_timestamped_archive_prefix_for_idoc(
+                        idoc=idoc,
+                        ts=ts
+                    )
+                )
+            else:
+                s3_location = Config.s3_utils.upload_file(
+                    file=idoc.local_path,
+                    object_prefix=self.get_timestamped_archive_prefix_for_idoc(
+                        idoc=idoc,
+                        ts=ts
+                    )
+                )
             return s3_location
 
         # if we use all available resources
@@ -323,23 +338,24 @@ class LoadManager:
             raise ValueError(
                 f"Invalid max_threads value given: ${max_threads}")
 
-        def dl_inner_func(file, ts_set):
-            file.raw_idoc.s3_path = _upload_to_s3(file.raw_idoc, ts=ts_set)
-            if file.parsed_idoc:
-                file.parsed_idoc.s3_path = _upload_to_s3(
-                    file.parsed_idoc, ts=ts_set)
-            if file.metadata_idoc:
-                file.metadata_idoc.s3_path = _upload_to_s3(
-                    file.metadata_idoc, ts=ts_set)
-            if file.thumbnail_idoc:
-                file.thumbnail_idoc.s3_path = _upload_to_s3(
-                    file.thumbnail_idoc, ts=ts_set)
+        def upload_inner_func(idg: IngestableDocGroup, ts_set):
+            idg.raw_idoc.s3_path = _upload_to_s3(
+                idg.raw_idoc, ts=ts_set)
+            if idg.parsed_idoc:
+                idg.parsed_idoc.s3_path = _upload_to_s3(
+                    idg.parsed_idoc, ts=ts_set)
+            if idg.metadata_idoc:
+                idg.metadata_idoc.s3_path = _upload_to_s3(
+                    idg.metadata_idoc, ts=ts_set)
+            if idg.thumbnail_idoc:
+                idg.thumbnail_idoc.s3_path = _upload_to_s3(
+                    idg.thumbnail_idoc, ts=ts_set)
 
-            yield file
+            yield idg
 
         with ThreadPoolExecutor(max_workers=max_workers) as executor:
             r = executor.map(
-                dl_inner_func, (idg for idg in idgs), (ts for _ in idgs))
+                upload_inner_func, (idg for idg in idgs), (ts for _ in idgs))
             for result in r:
                 if result:
                     uploaded_files.append(next(result))
@@ -378,7 +394,7 @@ class LoadManager:
         if update_s3:
             print("Uploading docs to S3 ...", file=sys.stderr)
             uploaded_idgs = list(self.upload_docs_to_s3(
-                idgs=idgs, ts=ingest_ts, max_threads=max_threads))
+                idgs=idgs, ts=ingest_ts, max_threads=max_threads, raw_dir=raw_dir))
         else:
             print("Skipping s3 uploads of docs ...", file=sys.stderr)
 
