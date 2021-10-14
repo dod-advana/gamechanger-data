@@ -355,19 +355,19 @@ class LoadManager:
 
             yield idg
 
-        for idg, ts in idgs:
-            result = upload_inner_func(idg, ts)
-            if result:
-                uploaded_files.append(result)
+        # for idg, ts in idgs:
+        #     result = upload_inner_func(idg, ts)
+        #     if result:
+        #         uploaded_files.append(result)
 
-        # with ThreadPoolExecutor(max_workers=max_workers) as executor:
-        #     r = executor.map(
-        #         upload_inner_func, (idg for idg in idgs), (ts for _ in idgs))
-        #     for result in r:
-        #         if result:
-        #             uploaded_files.append(next(result))
+        with ThreadPoolExecutor(max_workers=max_workers) as executor:
+            r = executor.map(
+                upload_inner_func, (idg for idg in idgs), (ts for _ in idgs))
+            for result in r:
+                if result:
+                    uploaded_files.append(next(result))
 
-        # return uploaded_files
+        return uploaded_files
 
     def load(self,
              raw_dir: t.Union[Path, str],
