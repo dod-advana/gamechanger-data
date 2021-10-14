@@ -302,10 +302,12 @@ class LoadManager:
 
         def _upload_to_s3(idoc: GenericIngestableDoc, ts=dt.datetime) -> str:
             print(
-                f"Uploading doc {idoc.local_path!s} to S3 ... ", file=sys.stderr)
+                f"Uploading doc {idoc.local_path!s} to S3 ... from {raw_dir}", file=sys.stderr)
 
             if raw_dir:
                 object_name = get_filepath_from_dir(raw_dir, idoc.local_path)
+                print(
+                    f"raw_dir TRUE: {raw_dir!s}, {idoc.local_path!s}, {object_name!s}", file=sys.stderr)
                 s3_location = Config.s3_utils.upload_file(
                     file=idoc.local_path,
                     object_name=object_name,
