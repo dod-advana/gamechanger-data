@@ -17,14 +17,12 @@ ocrmypdf==11.3.*
 pandas==1.0.*
 pikepdf==2.0.*
 psycopg2==2.9.*
-psycopg2_binary==2.8.*
+psycopg2_binary==2.9.*
 pydantic==1.7.*
 pytest==6.2.*
 redis==3.5.*
 requests==2.23.*
 syntok==1.3.*
-tensorflow==2.4.*
-torch==1.7.*
 tqdm==4.46.*
 transformers==4.1.*
 weasyprint==53.*
