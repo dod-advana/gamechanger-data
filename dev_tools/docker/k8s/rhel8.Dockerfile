@@ -72,11 +72,11 @@ RUN \
 #          <- (rpm) qpdf-libs ?????
 #          <- (compiled) qpdf 8.2.1
 
-# jbig2enc - optional ocrmypf/tesseract dep
+# leptonica - tesseract/jbig2enc dep
 RUN \
-  git clone --depth 1 --branch "${JBIG2ENC_VERSION}" https://github.com/agl/jbig2enc.git /opt/jbig2enc \
-  && echo "[INFO] Installing from source: JBIG2ENC ..." && ( \
-    cd /opt/jbig2enc \
+  git clone --depth 1 --branch "${LEPTONICA_VERSION}" https://github.com/danbloomberg/leptonica.git /opt/leptonica \
+  && echo "[INFO] Installing from source: LEPTONICA ..." && ( \
+    cd /opt/leptonica \
     && ./autogen.sh \
     && ./configure \
     && make \
@@ -84,11 +84,11 @@ RUN \
     && ldconfig \
   ) 2>&1 1>/dev/null
 
-# leptonica - tesseract dep
+# jbig2enc - optional ocrmypf/tesseract dep
 RUN \
-  git clone --depth 1 --branch "${LEPTONICA_VERSION}" https://github.com/danbloomberg/leptonica.git /opt/leptonica \
-  && echo "[INFO] Installing from source: LEPTONICA ..." && ( \
-    cd /opt/leptonica \
+  git clone --depth 1 --branch "${JBIG2ENC_VERSION}" https://github.com/agl/jbig2enc.git /opt/jbig2enc \
+  && echo "[INFO] Installing from source: JBIG2ENC ..." && ( \
+    cd /opt/jbig2enc \
     && ./autogen.sh \
     && ./configure \
     && make \
