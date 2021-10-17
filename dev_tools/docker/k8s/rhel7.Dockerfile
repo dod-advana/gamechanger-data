@@ -2,7 +2,7 @@ ARG BASE_IMAGE='registry.access.redhat.com/ubi7/ubi:7.9-516'
 FROM --platform=x86_64 $BASE_IMAGE
 
 ARG \
-    PYTHON_VERSION=36 \
+    COMPILE_PYTHON_VERSION=36 \
     GHOSTSCRIPT_VERSION=9.55.0 \
     JBIG2ENC_VERSION=0.29 \
     LEPTONICA_VERSION=1.82.0 \
@@ -22,7 +22,7 @@ ENV LANG="C.utf8" \
     PKG_CONFIG_PATH=/usr/local/lib/pkgconfig \
     PKG_CONFIG=/usr/bin/pkg-config \
     TESSDATA_PREFIX=/usr/local/share/tessdata/ \
-    PYTHON_VERSION="${PYTHON_VERSION}"
+    COMPILE_PYTHON_VERSION="${PYTHON_VERSION}"
 
 # Additional Repos
 RUN \
@@ -41,11 +41,11 @@ RUN \
         gcc-c++ \
         llvm11  \
     && yum install -y \
-        "rh-python${PYTHON_VERSION}" \
-        "rh-python${PYTHON_VERSION}-devel" \
-        "rh-python${PYTHON_VERSION}-python-pip" \
-        "rh-python${PYTHON_VERSION}-python-setuptools" \
-        "rh-python${PYTHON_VERSION}-python-wheel" \
+        "rh-python${COMPILE_PYTHON_VERSION}" \
+        "rh-python${COMPILE_PYTHON_VERSION}-devel" \
+        "rh-python${COMPILE_PYTHON_VERSION}-python-pip" \
+        "rh-python${COMPILE_PYTHON_VERSION}-python-setuptools" \
+        "rh-python${COMPILE_PYTHON_VERSION}-python-wheel" \
         git \
         git-lfs \
         "postgresql${POSTGRESQL_MAJOR_VERSION}" \
@@ -186,4 +186,4 @@ COPY --chown="$APP_UID:$APP_GID" ./ "$APP_SRC"
 USER $APP_UID:$APP_GID
 # thou shall not root
 
-ENTRYPOINT "scl enable rh-python${PYTHON_VERSION} -- /bin/bash -c"
+ENTRYPOINT "scl enable rh-python${COMPILE_PYTHON_VERSION} -- /bin/bash -c"

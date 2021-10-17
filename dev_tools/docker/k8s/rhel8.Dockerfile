@@ -2,7 +2,7 @@ ARG BASE_IMAGE=registry.access.redhat.com/ubi8/python-39
 FROM --platform=x86_64 $BASE_IMAGE
 
 ARG \
-    PYTHON_VERSION=39 \
+    COMPILE_PYTHON_VERSION=39 \
     GHOSTSCRIPT_VERSION=9.55.0 \
     JBIG2ENC_VERSION=0.29 \
     LEPTONICA_VERSION=1.82.0 \
@@ -54,7 +54,7 @@ RUN \
         libtiff-devel \
         libjpeg-turbo \
         libjpeg-turbo-devel \
-        "python${PYTHON_VERSION}-devel" \
+        "python${COMPILE_PYTHON_VERSION}-devel" \
         "postgresql${POSTGRESQL_MAJOR_VERSION}" \
         "postgresql${POSTGRESQL_MAJOR_VERSION}-devel" \
         diffutils \
