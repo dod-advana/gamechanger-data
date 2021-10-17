@@ -1,4 +1,5 @@
-FROM --platform=x86_64 registry.access.redhat.com/ubi8/python-39
+ARG BASE_IMAGE=registry.access.redhat.com/ubi8/python-39
+FROM --platform=x86_64 $BASE_IMAGE
 
 ARG \
     PYTHON_VERSION_NO_DOTS=39 \
