@@ -1,7 +1,7 @@
-FROM --platform=x86_64 registry.access.redhat.com/ubi8/python-36
+FROM --platform=x86_64 registry.access.redhat.com/ubi8/python-39
 
 ARG \
-    PYTHON_VERSION_NO_DOTS=36 \
+    PYTHON_VERSION_NO_DOTS=39 \
     GHOSTSCRIPT_VERSION=9.55.0 \
     JBIG2ENC_VERSION=0.29 \
     LEPTONICA_VERSION=1.82.0 \
