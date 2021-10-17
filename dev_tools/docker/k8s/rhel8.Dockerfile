@@ -24,8 +24,6 @@ ENV LANG="C.utf8" \
     PKG_CONFIG=/usr/bin/pkg-config \
     TESSDATA_PREFIX=/usr/local/share/tessdata/
 
-
-
 # Additional Repos
 RUN \
       rpm --import https://download.postgresql.org/pub/repos/yum/RPM-GPG-KEY-PGDG \
