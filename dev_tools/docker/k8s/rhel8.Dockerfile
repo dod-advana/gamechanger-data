@@ -73,7 +73,7 @@ RUN \
 
 # jbig2enc - optional ocrmypf/tesseract dep
 RUN \
-  git clone --depth 1 --branch 0.29 https://github.com/agl/jbig2enc.git /opt/jbig2enc \
+  git clone --depth 1 --branch "${JBIG2ENC_VERSION}" https://github.com/agl/jbig2enc.git /opt/jbig2enc \
   && echo "[INFO] Installing from source: JBIG2ENC ..." && ( \
     cd /opt/jbig2enc \
     && ./autogen.sh \
@@ -85,7 +85,7 @@ RUN \
 
 # leptonica - tesseract dep
 RUN \
-  git clone --depth 1 --branch 1.82.0 https://github.com/danbloomberg/leptonica.git /opt/leptonica \
+  git clone --depth 1 --branch "${LEPTONICA_VERSION}" https://github.com/danbloomberg/leptonica.git /opt/leptonica \
   && echo "[INFO] Installing from source: LEPTONICA ..." && ( \
     cd /opt/leptonica \
     && ./autogen.sh \
