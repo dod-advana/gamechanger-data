@@ -8,7 +8,6 @@ ARG \
     LEPTONICA_VERSION=1.82.0 \
     TESSERACT_OCR_VERSION=4.1.1 \
     TESSERACT_OCR_LANGPACK_VERSION=4.1.0 \
-    POSTGRESQL_MAJOR_VERSION=96 \
     QPDF_VERSION=8.2.1
 
 USER root
@@ -48,8 +47,8 @@ RUN \
         "rh-python${COMPILE_PYTHON_VERSION}-python-wheel" \
         git \
         git-lfs \
-        "postgresql${POSTGRESQL_MAJOR_VERSION}" \
-        "postgresql${POSTGRESQL_MAJOR_VERSION}-devel" \
+        "postgresql13" \
+        "postgresql13-devel" \
         zip \
         unzip \
         gzip \
@@ -64,11 +63,9 @@ RUN \
         libtiff \
         libjpeg-turbo \
         libjpeg-turbo-devel \
-        "python${PYTHON_VERSION}-devel" \
         ghostscript \
-        "postgresql${POSTGRESQL_MAJOR_VERSION}" \
-        "postgresql${POSTGRESQL_MAJOR_VERSION}-devel" \
         diffutils \
+    &&  yum install libpq5-devel-13.4-42PGDG.rhel7.x86_64 \
     &&  yum clean all \
     &&  rm -rf /var/cache/yum
 

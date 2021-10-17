@@ -8,7 +8,6 @@ ARG \
     LEPTONICA_VERSION=1.82.0 \
     TESSERACT_OCR_VERSION=4.1.1 \
     TESSERACT_OCR_LANGPACK_VERSION=4.1.0 \
-    POSTGRESQL_MAJOR_VERSION=13 \
     QPDF_VERSION=8.2.1
 
 # BRIEFLY ROOT
@@ -55,10 +54,11 @@ RUN \
         libjpeg-turbo \
         libjpeg-turbo-devel \
         "python${COMPILE_PYTHON_VERSION}-devel" \
-        "postgresql${POSTGRESQL_MAJOR_VERSION}" \
-        "postgresql${POSTGRESQL_MAJOR_VERSION}-devel" \
+        "postgresql13" \
+        "postgresql13-devel" \
         diffutils \
-        file
+        file \
+      && dnf install -y libpq5-devel-13.4-42PGDG.rhel8
 
 RUN \
     curl -LfSo /tmp/awscliv2.zip "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" \
