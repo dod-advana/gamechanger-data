@@ -48,7 +48,6 @@ RUN \
         git \
         git-lfs \
         "postgresql13" \
-        "postgresql13-devel" \
         zip \
         unzip \
         gzip \
