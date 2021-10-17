@@ -164,26 +164,43 @@ RUN ( (getent group $APP_GID &> /dev/null) \
     )
 
 # ensure key app directories
-ENV \
-  APP_ROOT="${APP_ROOT:-/opt/app-root}" \
-  APP_VENV="${APP_VENV:-/opt/app-root/venv}" \
-  APP_SRC="${APP_ROOT}/src"
+ENV APP_ROOT="/opt/app-root"
+ENV APP_VENV="${APP_ROOT}"
+ENV APP_VENV_CFG="${APP_VENV}/etc"
+ENV APP_SRC="${APP_ROOT}/src"
 
-RUN mkdir -p \
-  "${APP_ROOT}" \
-  "${APP_VENV}" \
-  "${APP_SRC}"
+RUN \
+  mkdir -p \
+    "${APP_ROOT}" \
+    "${APP_VENV}" \
+    "${APP_VENV_CFG}" \
+    "${APP_SRC}" \
+  && chown -R "${APP_UID}:${APP_GID}" \
+    "${APP_ROOT}" \
+    "${APP_VENV}" \
+    "${APP_VENV_CFG}" \
+    "${APP_SRC}"
+
+# thou shall not root
+USER $APP_UID:$APP_GID
 
 # setup venv
 COPY ./dev_tools/requirements/requirements.txt /tmp/requirements.txt
 RUN \
-      python -m venv "${APP_VENV}" --prompt app-venv \
+      ( \
+        [[ ! -f "${APP_VENV}/bin/activate" ]] \
+          && python -m venv "${APP_VENV}" --prompt app-root \
+          || true \
+      ) \
   &&  "${APP_VENV}/bin/python" -m pip install --upgrade --no-cache-dir pip setuptools wheel \
   &&  "${APP_VENV}/bin/python" -m pip install --no-cache-dir -r /tmp/requirements.txt
 
-# setup app code
-COPY --chown="$APP_UID:$APP_GID" ./ "$APP_SRC"
-USER $APP_UID:$APP_GID
-# thou shall not root
+# setup entrypoint
+COPY --chown="$APP_UID:$APP_GID" ./dev_tools/docker/k8s/entrypoint.sh "${APP_VENV_CFG}/entrypoint.sh"
 
-ENTRYPOINT ". ${APP_VENV}/bin/activate && /bin/bash -c"
+ENV \
+    BASH_ENV="${APP_VENV_CFG}/entrypoint.sh" \
+    ENV="${APP_VENV_CFG}/entrypoint.sh" \
+    PROMPT_COMMAND=". ${APP_VENV_CFG}/entrypoint.sh"
+
+ENTRYPOINT "/bin/bash ${APP_VENV_CFG}/entrypoint.sh"
