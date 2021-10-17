@@ -167,11 +167,23 @@ RUN ( (getent group $APP_GID &> /dev/null) \
 ENV \
   APP_ROOT="${APP_ROOT:-/opt/app-root}" \
   APP_VENV="${APP_VENV:-/opt/app-root/venv}" \
-  APP_DIR="${APP_ROOT}/src"
+  APP_SRC="${APP_ROOT}/src"
+  
+RUN mkdir -p \
+  "${APP_ROOT}" \
+  "${APP_VENV}" \
+  "${APP_SRC}"
 
+# setup venv
+COPY ./dev_tools/requirements/requirements.txt /tmp/requirements.txt
 RUN \
-      mkdir -p "${APP_DIR}" "${APP_VENV}" \
-  &&  scl enable "rh-python${PYTHON_VERSION}" -- python -m venv "${APP_VENV}" --prompt app-venv \
-  && "${APP_VENV}/bin/python" -m pip install --upgrade --no-cache-dir pip setuptools wheel
+      scl enable "rh-python${PYTHON_VERSION}" -- python -m venv "${APP_VENV}" --prompt app-venv \
+  &&  scl enable "rh-python${PYTHON_VERSION}" -- "${APP_VENV}/bin/python" -m pip install --upgrade --no-cache-dir pip setuptools wheel \
+  &&  scl enable "rh-python${PYTHON_VERSION}" -- "${APP_VENV}/bin/python" -m pip install -r /tmp/requirements.txt
 
-ENTRYPOINT "scl enable rh-python${PYTHON_VERSION} -- "
+# setup app code
+COPY --chown="$APP_UID:$APP_GID" ./ "$APP_SRC"
+USER $APP_UID:$APP_GID
+# thou shall not root
+
+ENTRYPOINT "scl enable rh-python${PYTHON_VERSION} -- /bin/bash -c"
