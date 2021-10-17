@@ -57,7 +57,7 @@ RUN \
 RUN \
     curl -LfSo /tmp/awscliv2.zip "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" \
     && echo "[INFO] Installing AWS CLI ..." && ( \
-      &&  unzip -q /tmp/awscliv2.zip -d /opt \
+      unzip -q /tmp/awscliv2.zip -d /opt \
       &&  /opt/aws/install \
       &&  rm -f  /tmp/awscliv2.zip \
   ) 2>&1 1>/dev/null
