@@ -1,6 +1,6 @@
 Jinja2==2.11.*
 Mako==1.1.*
-PyMuPDF==1.17.*
+PyMuPDF==1.18.*
 PyPDF2==1.26.*
 PyYAML==6.*
 SQLAlchemy==1.3.*
@@ -13,7 +13,7 @@ gamechangerml @ https://github.com/dod-advana/gamechanger-ml/archive/refs/heads/
 joblib==0.15.*
 jsonschema==3.2.*
 neo4j==4.1.*
-ocrmypdf==11.3.*
+ocrmypdf==12.*
 pandas==1.0.*
 pikepdf==2.0.*
 psycopg2==2.9.*

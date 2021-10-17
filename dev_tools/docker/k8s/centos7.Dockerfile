@@ -3,12 +3,12 @@ FROM $BASE_OS_IMAGE
 
 USER root
 
-# LOCALE (important for python, etc.)
-RUN localedef -i en_US -f UTF-8 en_US.UTF-8
-
-ENV LANG="en_US.UTF-8"
-ENV LANGUAGE="en_US.UTF-8"
-ENV LC_ALL="en_US.UTF-8"
+# PYTHON & LOCALE ENV VARS
+ENV LANG="C.utf8" \
+    LANGUAGE="C.utf8" \
+    LC_ALL="C.utf8" \
+    PYTHONUNBUFFERED=1 \
+    PYTHONIOENCODING="UTF-8"
 
 #####
 ## ## SYS Package Setup
