@@ -1,17 +1,16 @@
-ARG BASE_IMAGE=registry.access.redhat.com/ubi8/python-39
+ARG BASE_IMAGE='registry.access.redhat.com/ubi7/ubi:7.9-516'
 FROM --platform=x86_64 $BASE_IMAGE
 
 ARG \
-    PYTHON_VERSION=39 \
+    PYTHON_VERSION=36 \
     GHOSTSCRIPT_VERSION=9.55.0 \
     JBIG2ENC_VERSION=0.29 \
     LEPTONICA_VERSION=1.82.0 \
     TESSERACT_OCR_VERSION=4.1.1 \
     TESSERACT_OCR_LANGPACK_VERSION=4.1.0 \
-    POSTGRESQL_MAJOR_VERSION=13 \
+    POSTGRESQL_MAJOR_VERSION=96 \
     QPDF_VERSION=8.2.1
 
-# BRIEFLY ROOT
 USER root
 
 # PYTHON & LOCALE ENV VARS
@@ -22,45 +21,57 @@ ENV LANG="C.utf8" \
     PYTHONIOENCODING="UTF-8" \
     PKG_CONFIG_PATH=/usr/local/lib/pkgconfig \
     PKG_CONFIG=/usr/bin/pkg-config \
-    TESSDATA_PREFIX=/usr/local/share/tessdata/
-
-
+    TESSDATA_PREFIX=/usr/local/share/tessdata/ \
+    PYTHON_VERSION="${PYTHON_VERSION}"
 
 # Additional Repos
 RUN \
       rpm --import https://download.postgresql.org/pub/repos/yum/RPM-GPG-KEY-PGDG \
-  &&  dnf install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-latest.noarch.rpm \
+  &&  yum install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm \
   &&  rpm --import https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL \
-  &&  rpm --import https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-8 \
-  &&  dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+  &&  rpm --import https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-7 \
+  &&  yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 
 # COMMON Packages & More Particular RPM Dependcies
 RUN \
-      dnf install -y \
+    yum install -y \
+        git \
+        git-lfs \
+        gcc \
+        gcc-c++ \
+        llvm11  \
+    && yum install -y \
+        "rh-python${PYTHON_VERSION}" \
+        "rh-python${PYTHON_VERSION}-devel" \
+        "rh-python${PYTHON_VERSION}-python-pip" \
+        "rh-python${PYTHON_VERSION}-python-setuptools" \
+        "rh-python${PYTHON_VERSION}-python-wheel" \
+        git \
+        git-lfs \
+        "postgresql${POSTGRESQL_MAJOR_VERSION}" \
+        "postgresql${POSTGRESQL_MAJOR_VERSION}-devel" \
         zip \
         unzip \
         gzip \
         zlib \
         zlib-devel \
-        git \
-        git-lfs \
         make \
         automake \
         autoconf \
         libtool \
-        gcc \
-        gcc-c++ \
         libpng \
         libpng-devel \
         libtiff \
-        libtiff-devel \
         libjpeg-turbo \
         libjpeg-turbo-devel \
         "python${PYTHON_VERSION}-devel" \
+        ghostscript \
         "postgresql${POSTGRESQL_MAJOR_VERSION}" \
         "postgresql${POSTGRESQL_MAJOR_VERSION}-devel" \
         diffutils \
-        file
+    &&  yum clean all \
+    &&  rm -rf /var/cache/yum
+
 
 RUN \
     curl -LfSo /tmp/awscliv2.zip "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" \
@@ -69,6 +80,7 @@ RUN \
       &&  /opt/aws/install \
       &&  rm -f  /tmp/awscliv2.zip \
   ) 2>&1 1>/dev/null
+
 
 # OCRMYPDF REQS: https://ocrmypdf.readthedocs.io/en/v12.7.0/installation.html
 # ocrmypdf <- (compiled) tesseract 4.0+
@@ -135,20 +147,6 @@ RUN \
       "https://github.com/tesseract-ocr/tessdata_fast/raw/${TESSERACT_OCR_LANGPACK_VERSION}/spa.traineddata" \
 )
 
-# ghostscript - ocrmypdf dep
-RUN \
-  curl -L \
-    "https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs9550/ghostscript-${GHOSTSCRIPT_VERSION}.tar.gz" \
-      | tar -xz -C /opt \
-  && echo "[INFO] Installing from source: GHOSTSCRIPT ..." && ( \
-    cd "/opt/ghostscript-${GHOSTSCRIPT_VERSION}" \
-    && ./autogen.sh \
-    && ./configure \
-    && make \
-    && make install \
-    && ldconfig \  
-  ) 2>&1 1>/dev/null
-
 #####
 ## ## APP SETUP
 #####
@@ -173,5 +171,7 @@ ENV \
 
 RUN \
       mkdir -p "${APP_DIR}" "${APP_VENV}" \
-  &&  python -m venv "${APP_VENV}" --prompt app-venv \
+  &&  scl enable "rh-python${PYTHON_VERSION}" -- python -m venv "${APP_VENV}" --prompt app-venv \
   && "${APP_VENV}/bin/python" -m pip install --upgrade --no-cache-dir pip setuptools wheel
+
+ENTRYPOINT "scl enable rh-python${PYTHON_VERSION} -- "
