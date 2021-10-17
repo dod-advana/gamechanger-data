@@ -15,7 +15,6 @@ jsonschema==3.2.*
 neo4j==4.1.*
 ocrmypdf==12.*
 pandas==1.0.*
-pikepdf==2.0.*
 psycopg2==2.9.*
 pydantic==1.7.*
 pytest==6.2.*
