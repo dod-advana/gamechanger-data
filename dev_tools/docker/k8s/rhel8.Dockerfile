@@ -52,7 +52,8 @@ RUN \
         ghostscript \
         qpdf-libs \
         "postgresql${POSTGRESQL_MAJOR_VERSION}" \
-        "postgresql${POSTGRESQL_MAJOR_VERSION}-devel"
+        "postgresql${POSTGRESQL_MAJOR_VERSION}-devel" \
+        diffutils
 
 RUN \
     curl -LfSo /tmp/awscliv2.zip "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" \
