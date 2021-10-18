@@ -63,13 +63,20 @@ ARG BUILDER_UNAME=builder
 ARG BUILDER_UID=1337
 ARG BUILDER_GID=1337
 
+# create group & user
 RUN \
+  ( \
+    (getent group "${BUILDER_GID}" &> /dev/null) \
+    || groupadd "${BUILDER_UNAME}" \
+        --gid "${BUILDER_GID}" \
+  ) && ( \
     useradd "${BUILDER_UNAME}" \
       --uid "${BUILDER_UID}" \
       --gid "${BUILDER_GID}" \
       --home-dir "/home/${BUILDER_UNAME}" \
       --create-home \
-      -p "${BUILDER_UNAME}"
+      -p "${BUILDER_UNAME}" \
+  )
 
 # Thou shall not root
 USER "${BUILDER_UID}:${BUILDER_GID}"
