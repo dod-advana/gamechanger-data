@@ -78,6 +78,10 @@ RUN \
       -p "${BUILDER_UNAME}" \
   )
 
+# Entrypoint with all SCL's/ENV enabled
+COPY ./dev_tools/docker/builder/entrypoint.sh /usr/bin/entrypoint
+RUN chmod a+rx "/usr/bin/entrypoint"
+
 # Thou shall not root
 USER "${BUILDER_UID}:${BUILDER_GID}"
 
@@ -87,13 +91,11 @@ ENV RPM_TOPDIR="${HOME}/rpmbuild"
 RUN mkdir -p "${RPM_TOPDIR}"/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
 RUN echo '%_topdir %{getenv:RPM_TOPDIR}/rpmbuild' > "${RPM_TOPDIR}/.rpmmacros"
 
+ENV \
+    BASH_ENV="/usr/bin/entrypoint" \
+    ENV="/usr/bin/entrypoint" \
+    PROMPT_COMMAND=". /usr/bin/entrypoint"
+
 WORKDIR "${HOME}"
 
-COPY --chown="${BUILDER_UID}:${BUILDER_GID}" ./dev_tools/docker/builder/entrypoint.sh "${HOME}/entrypoint.sh"
-ENV \
-    BASH_ENV="${HOME}/entrypoint.sh" \
-    ENV="${HOME}/entrypoint.sh" \
-    PROMPT_COMMAND=". ${HOME}/entrypoint.sh"
-RUN chmod +x "${HOME}/entrypoint.sh"
-
-ENTRYPOINT "${HOME}/entrypoint.sh"
+ENTRYPOINT [ "/usr/bin/entrypoint" ]

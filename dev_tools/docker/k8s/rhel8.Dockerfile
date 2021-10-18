@@ -181,9 +181,6 @@ RUN \
     "${APP_VENV_CFG}" \
     "${APP_SRC}"
 
-# thou shall not root
-USER $APP_UID:$APP_GID
-
 # setup venv
 COPY ./dev_tools/requirements/requirements.txt /tmp/requirements.txt
 RUN \
@@ -193,16 +190,19 @@ RUN \
           || true \
       ) \
   &&  "${APP_VENV}/bin/python" -m pip install --upgrade --no-cache-dir pip setuptools wheel \
-  &&  "${APP_VENV}/bin/python" -m pip install --no-cache-dir -r /tmp/requirements.txt
+  &&  "${APP_VENV}/bin/python" -m pip install --no-cache-dir -r /tmp/requirements.txt \
+  &&  chown -R "${APP_UID}:${APP_GID}" "${APP_VENV}"
 
-# setup entrypoint
-COPY --chown="$APP_UID:$APP_GID" ./dev_tools/docker/k8s/entrypoint.sh "${APP_VENV_CFG}/entrypoint.sh"
+# Entrypoint with all SCL's/ENV enabled
+COPY ./dev_tools/docker/builder/entrypoint.sh /usr/bin/entrypoint
+RUN chmod a+rx "/usr/bin/entrypoint"
+
+# thou shall not root
+USER $APP_UID:$APP_GID
 
 ENV \
-    BASH_ENV="${APP_VENV_CFG}/entrypoint.sh" \
-    ENV="${APP_VENV_CFG}/entrypoint.sh" \
-    PROMPT_COMMAND=". ${APP_VENV_CFG}/entrypoint.sh"
+    BASH_ENV="/usr/bin/entrypoint" \
+    ENV="/usr/bin/entrypoint" \
+    PROMPT_COMMAND=". /usr/bin/entrypoint"
 
-RUN chmod +x "${APP_VENV_CFG}/entrypoint.sh"
-
-ENTRYPOINT "${APP_VENV_CFG}/entrypoint.sh""
+ENTRYPOINT [ "/usr/bin/entrypoint" ]
