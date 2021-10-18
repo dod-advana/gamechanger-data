@@ -41,10 +41,7 @@ RUN \
         llvm11  \
     && yum install -y \
         "rh-python${COMPILE_PYTHON_VERSION}" \
-        "rh-python${COMPILE_PYTHON_VERSION}-devel" \
-        "rh-python${COMPILE_PYTHON_VERSION}-python-pip" \
-        "rh-python${COMPILE_PYTHON_VERSION}-python-setuptools" \
-        "rh-python${COMPILE_PYTHON_VERSION}-python-wheel" \
+        "rh-python${COMPILE_PYTHON_VERSION}-scldevel" \
         git \
         git-lfs \
         "postgresql13" \
@@ -194,5 +191,7 @@ ENV \
     BASH_ENV="${APP_VENV_CFG}/entrypoint.sh" \
     ENV="${APP_VENV_CFG}/entrypoint.sh" \
     PROMPT_COMMAND=". ${APP_VENV_CFG}/entrypoint.sh"
+    
+RUN chmod +x "${APP_VENV_CFG}/entrypoint.sh"
 
-ENTRYPOINT "/bin/bash ${APP_VENV_CFG}/entrypoint.sh"
+ENTRYPOINT "${APP_VENV_CFG}/entrypoint.sh""

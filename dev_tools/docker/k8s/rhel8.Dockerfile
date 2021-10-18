@@ -203,4 +203,6 @@ ENV \
     ENV="${APP_VENV_CFG}/entrypoint.sh" \
     PROMPT_COMMAND=". ${APP_VENV_CFG}/entrypoint.sh"
 
-ENTRYPOINT "/bin/bash ${APP_VENV_CFG}/entrypoint.sh"
+RUN chmod +x "${APP_VENV_CFG}/entrypoint.sh"
+
+ENTRYPOINT "${APP_VENV_CFG}/entrypoint.sh""
