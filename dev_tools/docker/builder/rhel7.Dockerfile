@@ -84,7 +84,7 @@ USER "${BUILDER_UID}:${BUILDER_GID}"
 # Setup Skeleton for RPM Builds
 ENV HOME="/home/${BUILDER_UNAME}"
 ENV RPM_TOPDIR="${HOME}/rpmbuild"
-RUN mkdir -p "${RPM_TOP_DIR}"/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
+RUN mkdir -p "${RPM_TOPDIR}"/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
 RUN echo '%_topdir %{getenv:RPM_TOPDIR}/rpmbuild' > "${RPM_TOPDIR}/.rpmmacros"
 
 WORKDIR "${HOME}"
