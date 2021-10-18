@@ -18,6 +18,7 @@ RUN \
         devtoolset-10 \
         rh-python38 \
         rh-python38-scldevel \
+  &&  yum install -y https://corretto.aws/downloads/latest/amazon-corretto-11-x64-linux-jdk.rpm \
   &&  yum install -y \
         rpm-build \
         rpm-sign \
@@ -31,12 +32,16 @@ RUN \
         zlib \
         zlib-devel \
         vim \
+        which \
         make \
         automake \
         autoconf \
         libtool \
         diffutils \
   &&  yum clean all -y
+
+# Make sure all apps can find java ...
+ENV JAVA_HOME=/etc/alternatives/java_sdk
 
 # Install GIT LFS
 RUN \
@@ -66,6 +71,7 @@ RUN \
       --create-home \
       -p "${BUILDER_UNAME}"
 
+# Thou shall not root
 USER "${BUILDER_UID}:${BUILDER_GID}"
 
 # Setup Skeleton for RPM Builds
