@@ -64,7 +64,7 @@ RUN \
         libjpeg-turbo-devel \
         ghostscript \
         diffutils \
-    &&  yum install libpq5-devel-13.4-42PGDG.rhel7.x86_64 \
+    &&  yum install -y libpq5-devel-13.4-42PGDG.rhel7.x86_64 \
     &&  yum clean all \
     &&  rm -rf /var/cache/yum
 
