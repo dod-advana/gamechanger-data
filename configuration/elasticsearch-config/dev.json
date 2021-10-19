@@ -51,7 +51,7 @@
             "match": "*_s",
             "match_mapping_type": "string",
             "mapping": {
-              "type": "keyword",
+              "type": "text",
               "store": true,
               "analyzer": "gc_english"
             }
@@ -255,6 +255,16 @@
           }
         },
         "display_doc_type_s": {
+          "type": "keyword",
+          "store": true,
+          "fields": {
+            "search": {
+              "type": "keyword",
+              "normalizer": "lowercase_normalizer"
+            }
+          }
+        },
+        "display_source_s": {
           "type": "keyword",
           "store": true,
           "fields": {
