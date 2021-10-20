@@ -195,8 +195,8 @@ RUN \
   &&  "${APP_VENV}/bin/python" -m pip install --no-cache-dir -r /tmp/requirements.txt \
   &&  chown -R "${APP_UID}:${APP_GID}" "${APP_VENV}"
 
-# Entrypoint with all SCL's/ENV enabled
-COPY ./dev_tools/docker/builder/entrypoint.sh /usr/bin/entrypoint
+# Entrypoint
+COPY ./dev_tools/docker/k8s/entrypoint.sh /usr/bin/entrypoint
 RUN chmod a+rx "/usr/bin/entrypoint"
 
 # thou shall not root
