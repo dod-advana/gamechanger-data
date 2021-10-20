@@ -1,8 +1,7 @@
-ARG BASE_IMAGE=registry.access.redhat.com/ubi8/python-39
+ARG BASE_IMAGE=registry.access.redhat.com/ubi8/ubi:8.4-211
 FROM --platform=x86_64 $BASE_IMAGE
 
 ARG \
-    COMPILE_PYTHON_VERSION=39 \
     GHOSTSCRIPT_VERSION=9.55.0 \
     JBIG2ENC_VERSION=0.29 \
     LEPTONICA_VERSION=1.82.0 \
@@ -33,7 +32,8 @@ RUN \
 
 # COMMON Packages & More Particular RPM Dependcies
 RUN \
-      dnf install -y \
+      dnf install -y glibc-locale-source.x86_64 \
+  &&  dnf install -y \
         zip \
         unzip \
         gzip \
@@ -47,18 +47,24 @@ RUN \
         libtool \
         gcc \
         gcc-c++ \
+        gcc-gfortran \
         libpng \
         libpng-devel \
         libtiff \
         libtiff-devel \
         libjpeg-turbo \
         libjpeg-turbo-devel \
-        "python${COMPILE_PYTHON_VERSION}-devel" \
+        python38 \
+        python38-devel \
+        python38-Cython \
         "postgresql13" \
         "postgresql13-devel" \
+        libpq5-devel-13.4-42PGDG.rhel8 \
+        openblas \
+        openblas-threads \
         diffutils \
         file \
-      && dnf install -y libpq5-devel-13.4-42PGDG.rhel8
+      && dnf clean all
 
 RUN \
     curl -LfSo /tmp/awscliv2.zip "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" \
@@ -101,51 +107,51 @@ RUN \
 
 # jbig2enc - optional ocrmypf/tesseract dep
 RUN \
-  git clone --depth 1 --branch "${JBIG2ENC_VERSION}" https://github.com/agl/jbig2enc.git /opt/jbig2enc \
-  && echo "[INFO] Installing from source: JBIG2ENC ..." && ( \
-    cd /opt/jbig2enc \
-    && ./autogen.sh \
-    && ./configure \
-    && make \
-    && make install \
-    && ldconfig \
-  ) 2>&1 1>/dev/null
+      git clone --depth 1 --branch "${JBIG2ENC_VERSION}" https://github.com/agl/jbig2enc.git /opt/jbig2enc \
+  &&  echo "[INFO] Installing from source: JBIG2ENC ..." && ( \
+        cd /opt/jbig2enc \
+        && ./autogen.sh \
+        && ./configure \
+        && make \
+        && make install \
+        && ldconfig \
+      ) 2>&1 1>/dev/null
 
 # tesseract - ocrmypdf dep
 RUN \
-  git clone --depth 1 --branch "${TESSERACT_OCR_VERSION}" https://github.com/tesseract-ocr/tesseract.git /opt/tesseract \
-  && echo "[INFO] Installing from source: TESSERACT-OCR ..." && ( \
-    cd /opt/tesseract \
-    && ./autogen.sh \
-    && ./configure \
-    && make \
-    && make install \
-    && ldconfig \
-  ) 2>&1 1>/dev/null
+      git clone --depth 1 --branch "${TESSERACT_OCR_VERSION}" https://github.com/tesseract-ocr/tesseract.git /opt/tesseract \
+  &&  echo "[INFO] Installing from source: TESSERACT-OCR ..." && ( \
+        cd /opt/tesseract \
+        && ./autogen.sh \
+        && ./configure \
+        && make \
+        && make install \
+        && ldconfig \
+      ) 2>&1 1>/dev/null
 
 # tesseract language packs - ocrmypdf dep
 RUN \
-  echo "[INFO] Installing language packs for TESSERACT-OCR ..." && ( \
-    mkdir -p "${TESSDATA_PREFIX}" \
-    && curl -L -o "${TESSDATA_PREFIX}/eng.traineddata" \
-      "https://github.com/tesseract-ocr/tessdata_fast/raw/${TESSERACT_OCR_LANGPACK_VERSION}/eng.traineddata" \
-    && curl -L -o "${TESSDATA_PREFIX}/spa.traineddata" \
-      "https://github.com/tesseract-ocr/tessdata_fast/raw/${TESSERACT_OCR_LANGPACK_VERSION}/spa.traineddata" \
+      echo "[INFO] Installing language packs for TESSERACT-OCR ..." && ( \
+      mkdir -p "${TESSDATA_PREFIX}" \
+      && curl -L -o "${TESSDATA_PREFIX}/eng.traineddata" \
+        "https://github.com/tesseract-ocr/tessdata_fast/raw/${TESSERACT_OCR_LANGPACK_VERSION}/eng.traineddata" \
+      && curl -L -o "${TESSDATA_PREFIX}/spa.traineddata" \
+        "https://github.com/tesseract-ocr/tessdata_fast/raw/${TESSERACT_OCR_LANGPACK_VERSION}/spa.traineddata" \
 )
 
 # ghostscript - ocrmypdf dep
 RUN \
-  curl -L \
-    "https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs9550/ghostscript-${GHOSTSCRIPT_VERSION}.tar.gz" \
-      | tar -xz -C /opt \
-  && echo "[INFO] Installing from source: GHOSTSCRIPT ..." && ( \
-    cd "/opt/ghostscript-${GHOSTSCRIPT_VERSION}" \
-    && ./autogen.sh \
-    && ./configure \
-    && make \
-    && make install \
-    && ldconfig \  
-  ) 2>&1 1>/dev/null
+      curl -L \
+      "https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs9550/ghostscript-${GHOSTSCRIPT_VERSION}.tar.gz" \
+        | tar -xz -C /opt \
+      && echo "[INFO] Installing from source: GHOSTSCRIPT ..." && ( \
+        cd "/opt/ghostscript-${GHOSTSCRIPT_VERSION}" \
+        && ./autogen.sh \
+        && ./configure \
+        && make \
+        && make install \
+        && ldconfig \
+      ) 2>&1 1>/dev/null
 
 #####
 ## ## APP SETUP
@@ -184,11 +190,7 @@ RUN \
 # setup venv
 COPY ./dev_tools/requirements/requirements.txt /tmp/requirements.txt
 RUN \
-      ( \
-        [[ ! -f "${APP_VENV}/bin/activate" ]] \
-          && python -m venv "${APP_VENV}" --prompt app-root \
-          || true \
-      ) \
+      python -m venv "${APP_VENV}" --prompt app-root \
   &&  "${APP_VENV}/bin/python" -m pip install --upgrade --no-cache-dir pip setuptools wheel \
   &&  "${APP_VENV}/bin/python" -m pip install --no-cache-dir -r /tmp/requirements.txt \
   &&  chown -R "${APP_UID}:${APP_GID}" "${APP_VENV}"

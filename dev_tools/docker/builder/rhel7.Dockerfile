@@ -2,6 +2,8 @@ FROM --platform=x86_64 centos:centos7.9.2009
 
 USER root
 
+ARG SCL_PYTHON_VERSION="38"
+
 RUN \
       rpm --import https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL \
   &&  rpm --import https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-7 \
@@ -16,8 +18,8 @@ RUN \
   &&  yum install -y \
         git224 \
         devtoolset-10 \
-        rh-python38 \
-        rh-python38-scldevel \
+        "rh-python${SCL_PYTHON_VERSION}" \
+        "rh-python${SCL_PYTHON_VERSION}-scldevel" \
   &&  yum install -y https://corretto.aws/downloads/latest/amazon-corretto-11-x64-linux-jdk.rpm \
   &&  yum install -y \
         rpm-build \
@@ -94,7 +96,8 @@ RUN echo '%_topdir %{getenv:RPM_TOPDIR}/rpmbuild' > "${RPM_TOPDIR}/.rpmmacros"
 ENV \
     BASH_ENV="/usr/bin/entrypoint" \
     ENV="/usr/bin/entrypoint" \
-    PROMPT_COMMAND=". /usr/bin/entrypoint"
+    PROMPT_COMMAND=". /usr/bin/entrypoint" \
+    SCL_PYTHON_VERSION="$SCL_PYTHON_VERSION"
 
 WORKDIR "${HOME}"
 
