@@ -3,10 +3,11 @@ from dataPipelines.gc_ingest.config import Config
 from dataPipelines.gc_ingest.pipelines.utils import announce
 from common.utils.s3 import TimestampedPrefix
 import typing as t
-from .configs import CoreIngestConfig, S3IngestConfig, LocalIngestConfig, CheckpointIngestConfig, DeleteConfig
+from .configs import CoreIngestConfig, S3IngestConfig, LocalIngestConfig, CheckpointIngestConfig, DeleteConfig, ManifestConfig
 from .steps import CoreIngestSteps
 from pathlib import Path
 import shutil
+import glob
 
 
 @click.group(name='core')
@@ -282,3 +283,46 @@ def core_delete(core_ingest_config: CoreIngestConfig, **kwargs):
 
     CoreIngestSteps.delete_from_s3(dc)
 
+@core_ingest_cli.command('manifest')
+@pass_core_ingest_config
+@ManifestConfig.pass_options
+def core_manifest(core_ingest_config: CoreIngestConfig, **kwargs):
+    """Pipeline for ingesting docs from local directories"""
+    mc = ManifestConfig.from_core_config(core_config=core_ingest_config, other_config_kwargs=kwargs)
+
+    # Setup Steps
+    announce("Aggregating files for processing ...")
+    announce(f"Downloading raw files from s3 prefix: {mc.s3_raw_ingest_prefix} ...")
+    Config.s3_utils.download_dir(
+        local_dir=mc.raw_doc_base_dir,
+        prefix_path=mc.s3_raw_ingest_prefix,
+        bucket=mc.bucket_name
+    )
+
+    CoreIngestSteps.backup_db(mc)
+    CoreIngestSteps.backup_snapshots(mc)
+    count_docs_copied = len(glob.glob(str(mc.raw_doc_base_dir) +"/*.*"))
+    if count_docs_copied == 0:
+        announce("[WARNING] No files were downloaded for processing, exiting pipeline.")
+        exit(1)
+    elif count_docs_copied > 1:
+        # Ingest Steps -- Skipped if no files to ingest
+        CoreIngestSteps.create_metadata_from_manifest(mc)
+        CoreIngestSteps.parse_and_ocr(mc)
+
+        CoreIngestSteps.update_thumbnails(mc)
+        CoreIngestSteps.load_files(mc)
+        CoreIngestSteps.update_s3_snapshots(mc)
+        CoreIngestSteps.refresh_materialized_tables(mc)
+        CoreIngestSteps.update_es(mc)
+        CoreIngestSteps.update_neo4j(mc)
+
+    # Delete Steps
+    CoreIngestSteps.delete_from_elasticsearch(mc)
+
+    CoreIngestSteps.delete_from_neo4j(mc)
+
+    CoreIngestSteps.delete_from_db(mc)
+    CoreIngestSteps.refresh_materialized_tables(mc)
+
+    CoreIngestSteps.delete_from_s3(mc)
