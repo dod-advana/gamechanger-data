@@ -51,7 +51,7 @@
             "match": "*_s",
             "match_mapping_type": "string",
             "mapping": {
-              "type": "text",
+              "type": "keyword",
               "store": true,
               "analyzer": "gc_english"
             }
