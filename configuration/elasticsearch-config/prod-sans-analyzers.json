@@ -6,7 +6,7 @@
                     "string": {
                         "mapping": {
                             "store": true,
-                            "type": "text"
+                            "type": "keyword"
                         },
                         "match": "*_s",
                         "match_mapping_type": "string"
