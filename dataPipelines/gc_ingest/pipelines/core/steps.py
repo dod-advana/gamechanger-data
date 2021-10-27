@@ -1,12 +1,13 @@
 from common.document_parser.cli import pdf_to_json
 from dataPipelines.gc_ingest.pipelines.utils import announce
-from .configs import CoreIngestConfig, S3IngestConfig,DeleteConfig
+from .configs import CoreIngestConfig, S3IngestConfig, DeleteConfig, ManifestConfig
 from dataPipelines.gc_ingest.tools.snapshot.utils import SnapshotType
 from datetime import datetime
 from dataPipelines.gc_ingest.tools.load.cli import remove_docs_from_db
 from dataPipelines.gc_ingest.tools.snapshot.cli import remove_docs_from_current_snapshot
 from dataPipelines.gc_elasticsearch_publisher.cli import remove_docs_from_index
 from dataPipelines.gc_neo4j_publisher.cli import remove_docs_from_neo4j
+from dataPipelines.gc_ingest.tools.metadata.metadata import create_metadata_from_manifest
 
 
 class PipelineSteps:
@@ -180,45 +181,48 @@ class CoreIngestSteps(PipelineSteps):
         c.thumbnail_job_manager.process_directory()
 
     @staticmethod
-    def delete_from_db(dc: DeleteConfig) -> None:
-        if dc.skip_db_update:
+    def delete_from_db(c: CoreIngestConfig) -> None:
+        if c.skip_db_update:
             announce("Skip DB removal ...")
             return
 
         announce("Removing docs from DB ...")
         remove_docs_from_db(
-            lm=dc.load_manager,
-            removal_list=dc.db_tuple_list
+            lm=c.load_manager,
+            removal_list=c.db_tuple_list
         )
 
     @staticmethod
-    def delete_from_s3(dc: DeleteConfig) -> None:
+    def delete_from_s3(c: CoreIngestConfig) -> None:
 
         announce("Removing docs from S3 ...")
         remove_docs_from_current_snapshot(
-            sm=dc.snapshot_manager,
-            removal_list=dc.removal_list
+            sm=c.snapshot_manager,
+            removal_list=c.removal_list
         )
 
     @staticmethod
-    def delete_from_elasticsearch(dc: DeleteConfig) -> None:
+    def delete_from_elasticsearch(c: CoreIngestConfig) -> None:
 
         announce("Removing docs from Elasticsearch ...")
 
-        remove_docs_from_index(index_name=dc.index_name,
-                               removal_list=dc.removal_list)
+        remove_docs_from_index(index_name=c.index_name,
+                               removal_list=c.removal_list)
 
     @staticmethod
-    def delete_from_neo4j(dc:DeleteConfig) -> None:
+    def delete_from_neo4j(c:CoreIngestConfig) -> None:
 
-        if dc.skip_neo4j_update:
+        if c.skip_neo4j_update:
             announce("Skip Neo4j removal ...")
             return
         announce("Removing docs from Neo4j ...")
         remove_docs_from_neo4j(
-            njm=dc.neo4j_job_manager,
-            removal_list=dc.removal_list
+            njm=c.neo4j_job_manager,
+            removal_list=c.removal_list
         )
 
-
+    @staticmethod
+    def create_metadata_from_manifest(mc: ManifestConfig) -> None:
+        create_metadata_from_manifest(manifest_dict=mc.insert_manifest,
+                                      output_dir=mc.raw_doc_base_dir)
 

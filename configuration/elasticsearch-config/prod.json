@@ -264,6 +264,16 @@
             }
           }
         },
+        "display_source_s": {
+          "type": "keyword",
+          "store": true,
+          "fields": {
+            "search": {
+              "type": "keyword",
+              "normalizer": "lowercase_normalizer"
+            }
+          }
+        },
         "display_title_s": {
           "type": "keyword",
           "store": true,
