@@ -3,8 +3,8 @@
         "settings": {
             "index.mapping.nested_objects.limit": 100000,
             "index": {
-                "number_of_shards": 5,
-                "number_of_replicas": 1,
+                "number_of_shards": 1,
+                "number_of_replicas": 0,
                 "mapping.nested_fields.limit": 20000
             },
             "analysis": {

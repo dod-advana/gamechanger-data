@@ -304,8 +304,8 @@
             },
             "index": {
                 "mapping.nested_fields.limit": 20000,
-                "number_of_replicas": 2,
-                "number_of_shards": 3
+                "number_of_replicas": 1,
+                "number_of_shards": 0
             },
             "index.mapping.nested_objects.limit": 100000
         }
