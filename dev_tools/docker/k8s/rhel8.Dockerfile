@@ -202,6 +202,8 @@ RUN chmod a+rx "/usr/bin/entrypoint"
 # thou shall not root
 USER $APP_UID:$APP_GID
 
+COPY --chown="${APP_UID}:${APP_GID}" ./ "${APP_SRC}/" 
+
 ENV \
     BASH_ENV="/usr/bin/entrypoint" \
     ENV="/usr/bin/entrypoint" \
