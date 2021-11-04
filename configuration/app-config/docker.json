@@ -1,10 +1,10 @@
 {
   "ml_api": {
     "flask_env": "local",
-    "flask_host": "gc-ml-api",
+    "flask_host": "ml-api",
     "worker_count": 1,
     "env_type": "local",
-    "redis_host": "gc-ml-api",
+    "redis_host": "redis",
     "redis_port": 6379,
     "flask_port": 5000,
     "data_api_base_url": "http://data:9346/v2/data",
