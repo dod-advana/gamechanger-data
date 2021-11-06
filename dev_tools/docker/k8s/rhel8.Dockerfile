@@ -208,6 +208,7 @@ WORKDIR "${APP_SRC}"
 ENV \
     BASH_ENV="/usr/bin/entrypoint" \
     ENV="/usr/bin/entrypoint" \
-    PROMPT_COMMAND=". /usr/bin/entrypoint"
+    PROMPT_COMMAND=". /usr/bin/entrypoint" \
+    LD_LIBRARY_PATH="/usr/local/lib/"
 
 ENTRYPOINT [ "/usr/bin/entrypoint" ]
