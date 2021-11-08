@@ -11,8 +11,45 @@ import json
 def cli():
     pass
 
+@cli.command(name='setup-index')
+@click.option(
+    "-i",
+    "--index_name",
+    help="The Elasticsearch Schema that will be created/used",
+    default="elasticsearch",
+    required=True,
+)
+@click.option(
+    "-a",
+    "--alias",
+    help="The Elasticsearch Alias that will be created/used. If not is provided, no alias will be used.",
+    default="",
+    required=False,
+)
+@click.option(
+    "-m",
+    "--mapping_file",
+    help="ES Index & Settings file",
+    type=click.Path(exists=True, file_okay=True,
+                    dir_okay=False, resolve_path=True),
+    default=os.path.join(RENDERED_DIR, "elasticsearch", "index.json"),
+    show_default=True,
+)
+def setup_index(index_name: str, alias: str, mapping_file: str) -> None:
+    """Create & configure ES index with (optional) alias"""
+    publisher = ConfiguredElasticsearchPublisher(
+        index_name=index_name,
+        ingest_dir=None,
+        mapping_file=mapping_file,
+        alias=alias,
+    )
 
-@cli.command()
+    publisher.create_index()
+    if alias:
+        publisher.update_alias()
+
+
+@cli.command(name='run')
 @click.option(
     "-i",
     "--index_name",
@@ -45,7 +82,7 @@ def cli():
     required=False,
 )
 def run(index_name: str, alias: str, mapping_file: str, ingest_dir) -> None:
-
+    """Index dir of files into elasticsearch."""
     start = time()
     publisher = ConfiguredElasticsearchPublisher(
         index_name=index_name,
@@ -73,7 +110,7 @@ def remove_docs_from_index(index_name: str, removal_list: list) -> None:
     publisher.delete_record(records=records)
 
 
-@cli.command()
+@cli.command(name='remove-docs-from-es')
 @click.option(
     "-i",
     "--index-name",
@@ -149,7 +186,7 @@ def remove_docs_from_es(index_name: str, input_json_path: str) -> None:
     show_default=True
 )
 def entity_insert(index_name: str, alias: str, mapping_file: str, entity_csv_path: str) -> None:
-    '''comment'''
+    '''Populate the entities index.'''
     start = time()
     publisher = ConfiguredEntityPublisher(
         index_name=index_name,
