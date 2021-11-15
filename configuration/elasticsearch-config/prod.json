@@ -294,6 +294,10 @@
             }
           }
         },
+        "pop_score": {
+          "type": "long",
+          "store": true
+        },
         "ref_list": {
           "type": "keyword",
           "store": true
