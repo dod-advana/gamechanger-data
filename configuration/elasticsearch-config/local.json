@@ -52,8 +52,7 @@
             "match_mapping_type": "string",
             "mapping": {
               "type": "text",
-              "store": true,
-              "analyzer": "gc_english"
+              "store": true
             }
           }
         },
