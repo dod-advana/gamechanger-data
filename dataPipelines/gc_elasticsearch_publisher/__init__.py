@@ -1,4 +1,4 @@
-from gamechangerml import AGENCY_DATA_PATH
+from gamechangerml import DATA_PATH
 import os
 
-DEFAULT_ENTITIY_CSV_PATH = os.path.join(AGENCY_DATA_PATH, "agencies_in_corpus.csv")
+DEFAULT_ENTITIY_CSV_PATH = os.path.join(DATA_PATH, "combined_entities.csv")

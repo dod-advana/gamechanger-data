@@ -52,8 +52,7 @@
             "match_mapping_type": "string",
             "mapping": {
               "type": "keyword",
-              "store": true,
-              "analyzer": "gc_english"
+              "store": true
             }
           }
         },
@@ -293,6 +292,10 @@
               "normalizer": "lowercase_normalizer"
             }
           }
+        },
+        "pop_score": {
+          "type": "long",
+          "store": true
         },
         "ref_list": {
           "type": "keyword",

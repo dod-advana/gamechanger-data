@@ -83,7 +83,7 @@ class CoreIngestConfig(IngestConfig):
             return self._download_base_dir
 
         self._download_base_dir = Path(self.job_dir, 'downloads')
-        self._download_base_dir.mkdir(exist_ok=False)
+        self._download_base_dir.mkdir(exist_ok=False, parents=True)
         return self._download_base_dir
 
     @property
@@ -92,7 +92,7 @@ class CoreIngestConfig(IngestConfig):
             return self._raw_doc_base_dir
 
         self._raw_doc_base_dir = Path(self.job_dir, 'raw_docs')
-        self._raw_doc_base_dir.mkdir(exist_ok=False)
+        self._raw_doc_base_dir.mkdir(exist_ok=False, parents=True)
         return self._raw_doc_base_dir
 
     @property
@@ -101,7 +101,7 @@ class CoreIngestConfig(IngestConfig):
             return self._parsed_doc_base_dir
 
         self._parsed_doc_base_dir = Path(self.job_dir, 'parsed_docs')
-        self._parsed_doc_base_dir.mkdir(exist_ok=False)
+        self._parsed_doc_base_dir.mkdir(exist_ok=False, parents=True)
         return self._parsed_doc_base_dir
 
     @property
@@ -110,7 +110,7 @@ class CoreIngestConfig(IngestConfig):
             return self._db_backup_dir
 
         self._db_backup_dir = Path(self.job_dir, 'db_backups')
-        self._db_backup_dir.mkdir(exist_ok=False)
+        self._db_backup_dir.mkdir(exist_ok=False, parents=True)
         return self._db_backup_dir
 
     @property
@@ -131,7 +131,7 @@ class CoreIngestConfig(IngestConfig):
             return self._thumbnail_doc_base_dir
 
         self._thumbnail_doc_base_dir = Path(self.job_dir, 'thumbnails')
-        self._thumbnail_doc_base_dir.mkdir(exist_ok=False)
+        self._thumbnail_doc_base_dir.mkdir(exist_ok=False, parents=True)
         return self._thumbnail_doc_base_dir
 
     @property
@@ -470,7 +470,7 @@ class LocalIngestConfig(CoreIngestConfig):
             self._parsed_doc_base_dir = Path(self.local_parsed_ingest_dir).resolve()
         else:
             self._parsed_doc_base_dir = Path(self.job_dir, 'parsed_docs')
-            self._parsed_doc_base_dir.mkdir(exist_ok=True)
+            self._parsed_doc_base_dir.mkdir(exist_ok=True, parents=True)
         return self._parsed_doc_base_dir
 
     @property
@@ -489,7 +489,7 @@ class LocalIngestConfig(CoreIngestConfig):
             return self._db_backup_dir
 
         self._db_backup_dir = Path(self.job_dir, 'db_backups')
-        self._db_backup_dir.mkdir(exist_ok=False)
+        self._db_backup_dir.mkdir(exist_ok=False, parents=True)
         return self._db_backup_dir
 
 class DeleteConfig(CoreIngestConfig):

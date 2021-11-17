@@ -16,7 +16,7 @@ services:
 
   elasticsearch:
     container_name: "${COMPOSE_PROJECT_NAME:-gc-dev}-elasticsearch"
-    image: elasticsearch:7.4.2
+    image: elasticsearch:7.10.1
     ports:
       - 9200:9200
       - 9300:9300
@@ -29,7 +29,7 @@ services:
 
   kibana:
     container_name: "${COMPOSE_PROJECT_NAME:-gc-dev}-kibana"
-    image: kibana:7.4.2
+    image: kibana:7.10.1
     ports:
       - 5601:5601
     networks:
@@ -37,7 +37,7 @@ services:
 
   s3-server:
     container_name: "${COMPOSE_PROJECT_NAME:-gc-dev}-s3-server"
-    image: "minio/minio:RELEASE.2020-07-24T22-43-05Z"
+    image: "minio/minio:RELEASE.2021-10-23T03-28-24Z"
     ports:
       - "9000:9000"
     volumes:
@@ -54,7 +54,7 @@ services:
 
   postgres:
     container_name: "${COMPOSE_PROJECT_NAME:-gc-dev}-postgres"
-    image: "postgres:9.6.19-alpine"
+    image: "postgres:13.4-alpine"
     ports:
       - "5432:5432"
     volumes:
