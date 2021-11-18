@@ -56,7 +56,7 @@ def csv_ingest(filepath: str):
         helpers.bulk(es, formatted, index=f'cdo_{ts}', alias='cdo')
 
 
-@click.command()
+@cli.command()
 @click.option(
     '-f',
     '--filepath',
