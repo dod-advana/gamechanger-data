@@ -14,6 +14,11 @@ import datetime
 coauth_re = re.compile('CoAuthor(?P<kind>.*\D)(?P<num>\d+)')
 
 
+@click.group()
+def cli():
+    pass
+
+
 @click.command()
 @click.option(
     '-f',
