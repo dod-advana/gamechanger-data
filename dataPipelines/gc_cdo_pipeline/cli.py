@@ -19,6 +19,32 @@ def cli():
     pass
 
 
+@cli.command()
+@click.option(
+    '-f',
+    '--filepath',
+    help="The location of the csv file to be indexed",
+    required=True,
+    type=click.Path(
+        exists=True,
+        file_okay=True,
+        dir_okay=False,
+        resolve_path=True,
+        allow_dash=False
+    ),
+)
+def run(filepath: str):
+    print("Starting Gamechanger CDO Pipeline")
+    start = perf_counter()
+    # Download PDF and metadata files
+
+    csv_ingest(filepath)
+
+    end = perf_counter()
+    print(f'Total time -- It took {end - start} seconds!')
+    print("DONE!!!!!!")
+
+
 def format_gen(reader: csv.DictReader):
     for row in reader:
         item = OrderedDict({})
@@ -52,31 +78,5 @@ def csv_ingest(filepath: str):
 
         reader = csv.DictReader(f)
         formatted = format_gen(reader)
-        ts = datetime.datetime.now().strftime('%Y%m%d')
-        helpers.bulk(es, formatted, index=f'cdo_{ts}', alias='cdo')
-
-
-@cli.command()
-@click.option(
-    '-f',
-    '--filepath',
-    help="The location of the csv file to be indexed",
-    required=True,
-    type=click.Path(
-        exists=True,
-        file_okay=True,
-        dir_okay=False,
-        resolve_path=True,
-        allow_dash=False
-    ),
-)
-def run(filepath: str):
-    print("Starting Gamechanger CDO Pipeline")
-    start = perf_counter()
-    # Download PDF and metadata files
-
-    csv_ingest(filepath)
-
-    end = perf_counter()
-    print(f'Total time -- It took {end - start} seconds!')
-    print("DONE!!!!!!")
+        # ts = datetime.datetime.now().strftime('%Y%m%d')
+        helpers.bulk(es, formatted, index=f'cdo')
