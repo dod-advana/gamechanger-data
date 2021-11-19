@@ -3,7 +3,6 @@ import click
 import csv
 from elasticsearch import helpers
 from .conf import Conf
-
 from collections import OrderedDict
 import pandas as pd
 import numpy as np
@@ -72,8 +71,6 @@ def csv_ingest(filepath: str):
     # NaN "empty" string values
     df.replace("empty", np.nan, regex=True, inplace=True)
 
-    # print(df.head())
-
     with tempfile.TemporaryFile(mode="r+") as f:
         df.to_csv(f, index=False)
         f.seek(0)
@@ -84,4 +81,10 @@ def csv_ingest(filepath: str):
         ts = datetime.datetime.now().strftime('%Y%m%d')
         index = f'gc-cdo_{ts}'
         helpers.bulk(es, formatted, index=index)
-        es.indices.put_alias(index=index, name='gc-cdo')
+        body = {
+            "actions": [
+                {"remove": {"index": 'gc-cdo_*', "alias": 'gc-cdo'}},
+                {"add": {"index": index, "alias": 'gc-cdo'}}
+            ]
+        }
+        es.indices.update_aliases(body)
