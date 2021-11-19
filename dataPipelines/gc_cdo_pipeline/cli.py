@@ -59,7 +59,7 @@ def format_gen(reader: csv.DictReader):
             else:
                 item[key] = val
 
-        item['CoAuthors'] = coauthors
+        item['CoAuthors'] = list(filter(lambda x: x['ID'], coauthors))
         yield item
 
 
