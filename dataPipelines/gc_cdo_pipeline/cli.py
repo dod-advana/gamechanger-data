@@ -65,12 +65,14 @@ def format_gen(reader: csv.DictReader):
 
 def csv_ingest(filepath: str):
     es = Conf.ch.es_client
-
     df = pd.read_csv(filepath, encoding="ISO-8859-1")
+    df = df[df.columns[2:]]
     # NaN space only values
-    df = df.replace(r'^\s*$', np.nan, regex=True)
+    df.replace(r'^\s*$', np.nan, regex=True, inplace=True)
     # NaN "empty" string values
-    df = df.replace("empty", np.nan, regex=True)
+    df.replace("empty", np.nan, regex=True, inplace=True)
+
+    # print(df.head())
 
     with tempfile.TemporaryFile(mode="r+") as f:
         df.to_csv(f, index=False)
@@ -78,5 +80,6 @@ def csv_ingest(filepath: str):
 
         reader = csv.DictReader(f)
         formatted = format_gen(reader)
+
         # ts = datetime.datetime.now().strftime('%Y%m%d')
         helpers.bulk(es, formatted, index=f'gc-cdo')
