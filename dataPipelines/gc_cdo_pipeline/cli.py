@@ -81,5 +81,7 @@ def csv_ingest(filepath: str):
         reader = csv.DictReader(f)
         formatted = format_gen(reader)
 
-        # ts = datetime.datetime.now().strftime('%Y%m%d')
-        helpers.bulk(es, formatted, index=f'gc-cdo')
+        ts = datetime.datetime.now().strftime('%Y%m%d')
+        index = f'gc-cdo_{ts}'
+        helpers.bulk(es, formatted, index=index)
+        es.indices.put_alias(index=index, name='gc-cdo')
