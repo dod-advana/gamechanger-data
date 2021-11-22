@@ -1,0 +1,1 @@
+FROM --platform=x86_64 centos8.4.2105

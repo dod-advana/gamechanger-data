@@ -1,11 +1,10 @@
+
 try:
     from gamechangerml.models.topic_models.tfidf import bigrams, tfidf_model
+    from gamechangerml.src.text_handling.process import topic_processing
 except ImportError:
     print("[IMPORT ERROR]: No Topic Models, skipping extract_topics")
     tfidf_model = bigrams = None
-
-from gamechangerml.src.text_handling.process import topic_processing
-
 
 def extract_topics(doc_dict):
     """

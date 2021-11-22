@@ -6,11 +6,11 @@ import hashlib
 import re
 import traceback
 from .config import Config
+import json
 import typing as t
 from configuration import RENDERED_DIR
 import pandas as pd
 from datetime import datetime
-
 
 def clean_string(string):
 
@@ -130,11 +130,16 @@ class ElasticsearchPublisher:
 
     def create_index(self):
         print("Starting to create new Schema")
-        with open(self.mapping_file, "r") as file:
-            mapping_file = file.read()
+        # TODO: Change how ES config is handled to support multiple index types avoid the need for config init
+        index_config=json.loads(Path(self.mapping_file).read_text())
+        if 'index' in index_config:
+            index_config=index_config['index']
+
         if not self.es.indices.exists(self.index_name):
             response = self.es.indices.create(
-                index=self.index_name, body=mapping_file)
+                index=self.index_name,
+                body=index_config
+            )
             if "acknowledged" in response:
                 if response["acknowledged"]:
                     print("INDEX MAPPING SUCCESS FOR INDEX:",

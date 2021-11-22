@@ -8,6 +8,7 @@ from .defaults import TEMPLATE_FILENAME_SUFFIX
 from .utils import get_config_renderer_from_env, get_connection_helper_from_env
 import typing as t
 import sys
+import os
 from common.utils.timeout_utils import raise_on_timeout, ContextTimeout
 
 @click.group()
@@ -19,8 +20,14 @@ def cli():
 @cli.command(name="clean")
 def clean_cmd() -> None:
     """Clean up old rendered configs"""
+
     if Path(RENDERED_DIR).exists():
-        shutil.rmtree(str(RENDERED_DIR))
+        for root, dirs, files in os.walk(RENDERED_DIR):
+            for f in files:
+                os.unlink(os.path.join(root, f))
+            for d in dirs:
+                shutil.rmtree(os.path.join(root, d))
+
     print(f"[OK] Old rendered directory tree removed: {RENDERED_DIR}")
 
 
