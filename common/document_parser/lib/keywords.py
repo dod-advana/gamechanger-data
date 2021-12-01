@@ -11,8 +11,3 @@ def add_keyw_5(doc_dict):
     kw_list.sort(reverse=True)
     doc_dict["keyw_5"] = [x[1] for x in kw_list[:10]]
     return doc_dict
-
-
-def add_kw_doc_score_r(doc_dict):
-    doc_dict["kw_doc_score_r"] = get_kw_score(doc_dict["id"])
-    return doc_dict

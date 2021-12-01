@@ -7,8 +7,6 @@ from common.document_parser.lib import (
     ref_list,
     abbreviations,
     summary,
-    page_rank,
-    organizations,
     keywords,
     text_length,
     read_meta,
