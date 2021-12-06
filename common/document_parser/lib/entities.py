@@ -1,5 +1,6 @@
 from gamechangerml.src.utilities.text_utils import simple_clean, utf8_pass
 import gamechangerml.src.utilities.spacy_model as spacy_
+import collections
 
 spacy_model = spacy_.get_lg_nlp()
 
@@ -13,7 +14,7 @@ def extract_entities(doc_dict):
         page_text = simple_clean(page_text)
         doc = spacy_model(page_text)
         page_dict[page["p_page"]] = doc
-
+    all_ents = []
     for par in doc_dict["paragraphs"]:
         entities = {
             "ORG": [],
@@ -30,16 +31,23 @@ def extract_entities(doc_dict):
         # doc is spacy obj
         for entity in doc.ents:
             if (
-                    entity.label_
-                    in ["ORG", "GPE", "LOC", "NORP", "LAW", "PERSON"]
-                    and entity.text in par_text
+                entity.label_ in ["ORG", "GPE", "LOC", "NORP", "LAW", "PERSON"]
+                and entity.text in par_text
             ):
                 entities[entity.label_].append(entity.text)
 
-        entity_json = {"ORG_s": list(set(entities["ORG"])), "GPE_s": list(set(entities["GPE"])),
-                       "NORP_s": list(set(entities["NORP"])), "LAW_s": list(set(entities["LAW"])),
-                       "LOC_s": list(set(entities["LOC"])), "PERSON_s": list(set(entities["PERSON"]))}
+        entity_json = {
+            "ORG_s": list(set(entities["ORG"])),
+            "GPE_s": list(set(entities["GPE"])),
+            "NORP_s": list(set(entities["NORP"])),
+            "LAW_s": list(set(entities["LAW"])),
+            "LOC_s": list(set(entities["LOC"])),
+            "PERSON_s": list(set(entities["PERSON"])),
+        }
 
         par["entities"] = entity_json
-
+        # print(entity_json)
+        all_ents = all_ents + sum(entity_json.values(), [])
+    counts = collections.Counter(all_ents)
+    doc_dict["top_entities_t"] = [x[0] for x in counts.most_common(5)]
     return doc_dict
