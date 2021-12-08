@@ -35,11 +35,5 @@ def extract_topics(doc_dict):
             topic_processing(doc_dict["text"], bigrams), topn=5
         )
         doc_dict['topics_s'] = [topic[1].replace("_", " ") for topic in topics]
-        """
-        for score, topic in topics:
-            topic = topic.replace("_", " ")
-            #doc_dict["topics_s"][topic] = score
-            doc_dict['topics_s'].append(topic)
-        """
 
     return doc_dict
