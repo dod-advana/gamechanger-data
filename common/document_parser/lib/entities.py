@@ -46,7 +46,6 @@ def extract_entities(doc_dict):
         }
 
         par["entities"] = entity_json
-        # print(entity_json)
         all_ents = all_ents + sum(entity_json.values(), [])
     counts = collections.Counter(all_ents)
     doc_dict["top_entities_t"] = [x[0] for x in counts.most_common(5)]
