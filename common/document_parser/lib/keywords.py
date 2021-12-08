@@ -1,5 +1,4 @@
 from collections import defaultdict
-from gamechangerml.src.featurization.rank_features.features import get_kw_score
 
 
 def add_keyw_5(doc_dict):
