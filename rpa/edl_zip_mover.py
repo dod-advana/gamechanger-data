@@ -34,7 +34,9 @@ def move_zips():
         for obj in s3.Bucket(source_bucket).objects.filter(Prefix=source_prefix):
             print(
                 f'checking s3 object: {source_bucket}/{source_prefix}{obj.key}')
-            if obj.key.endswith('.zip') and allowed_ids_re.match(obj.key):
+            id_match = allowed_ids_re.match(obj.key)
+            print('id match', id_match.groups())
+            if obj.key.endswith('.zip') and id_match:
                 try:
 
                     _, __, name_with_ext = obj.key.rpartition('/')
