@@ -1,7 +1,5 @@
-import subprocess
 import os
 import re
-import typing
 import boto3
 
 s3 = boto3.resource('s3')
@@ -43,7 +41,6 @@ def move_zips():
             if id_matches:
                 ids = id_matches.group('ids')
 
-            print('id check', ids, bool(ids))
             if obj.key.endswith('.zip') and ids:
                 try:
 
