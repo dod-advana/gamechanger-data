@@ -18,7 +18,7 @@ idens = "|".join(allowed_ids)
 allowed_ids_re = re.compile(f'.*({idens}).*')
 
 source_bucket = "advana-landing-zone"
-destination_bucket = "advana-data-zone/"
+destination_bucket = "advana-data-zone"
 
 source_prefix = "edl/non-sensitive/Gamechanger RPA"
 destination_prefix = "bronze/gamechanger/rpa-landing-zone/"
