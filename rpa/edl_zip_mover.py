@@ -9,10 +9,12 @@ s3_client = boto3.client('s3')
 
 destination_bucket = "advana-data-zone"
 
-allowed_ids = [
-    allowed_id.strip() for allowed_id in
-    os.environ.get('ALLOWED_IDS_CSV_STRING', '').split(',')
-]
+environ_ids = os.environ.get('ALLOWED_IDS_CSV_STRING', None)
+allowed_ids = []
+if environ_ids:
+    allowed_ids = [
+        allowed_id.strip() for allowed_id in environ_ids.split(',')
+    ]
 
 idens = "|".join(allowed_ids)
 allowed_ids_re = re.compile(f'.*(?P<ids>{idens}).*')
