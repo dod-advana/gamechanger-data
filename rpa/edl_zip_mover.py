@@ -17,10 +17,10 @@ allowed_ids = [
 idens = "|".join(allowed_ids)
 allowed_ids_re = re.compile(f'.*({idens}).*')
 
-source_bucket = "advana-landing-zone/"
+source_bucket = "advana-landing-zone"
 destination_bucket = "advana-data-zone/"
 
-source_prefix = "edl/non-sensitive/Gamechanger RPA/"
+source_prefix = "edl/non-sensitive/Gamechanger RPA"
 destination_prefix = "bronze/gamechanger/rpa-landing-zone/"
 
 
@@ -33,7 +33,7 @@ def move_zips():
 
         for obj in s3.Bucket(source_bucket).objects.filter(Prefix=source_prefix):
             print(
-                f'checking s3 object: {source_bucket}{source_prefix}{obj.key}')
+                f'checking s3 object: {source_bucket}/{source_prefix}{obj.key}')
             if obj.key.endswith('.zip') and allowed_ids_re.match(obj.key):
                 try:
 
@@ -46,18 +46,18 @@ def move_zips():
                         'Key': obj.key
                     }
                     print(
-                        f'copy {name_with_ext} to {destination_bucket}{destination_prefix}')
+                        f'copy {name_with_ext} to {destination_bucket}/{destination_prefix}')
                     s3.meta.client.copy(
                         copy_source,
                         destination_bucket,
-                        f"{destination_prefix}{name_with_ext}"
+                        f"{destination_prefix}/{name_with_ext}"
                     )
-                    print(f'deleting {source_bucket}{source_prefix}{obj.key}')
+                    print(f'deleting {source_bucket}/{source_prefix}{obj.key}')
                     obj.delete()
 
                 except Exception as e:
                     print(
-                        f'Error copying {obj.key} to {destination_prefix}{destination_prefix}', e)
+                        f'Error copying {obj.key} to {destination_prefix}/{destination_prefix}', e)
 
     except Exception as e:
         print('rpa.edl_zip_mover.move_zips() unexpected error:', e)
