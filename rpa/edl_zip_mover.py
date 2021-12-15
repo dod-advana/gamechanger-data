@@ -15,7 +15,7 @@ allowed_ids = [
 ]
 
 idens = "|".join(allowed_ids)
-allowed_ids_re = re.compile(f'.*({idens}).*')
+allowed_ids_re = re.compile(f'.*(?P<ids>{idens}).*')
 
 source_bucket = "advana-landing-zone"
 destination_bucket = "advana-data-zone"
@@ -33,10 +33,16 @@ def move_zips():
 
         for obj in s3.Bucket(source_bucket).objects.filter(Prefix=source_prefix):
             print(
-                f'checking s3 object: {source_bucket}/{source_prefix}{obj.key}')
-            id_match = allowed_ids_re.match(obj.key)
-            print('id match', id_match.groups())
-            if obj.key.endswith('.zip') and id_match:
+                f'checking s3 object: {source_bucket}/{obj.key}')
+
+            ids = []
+            id_matches = allowed_ids_re.match(obj.key)
+
+            if id_matches:
+                ids = id_matches.group('ids')
+
+            print('id check', ids, bool(ids))
+            if obj.key.endswith('.zip') and ids:
                 try:
 
                     _, __, name_with_ext = obj.key.rpartition('/')
@@ -54,7 +60,7 @@ def move_zips():
                         destination_bucket,
                         f"{destination_prefix}/{name_with_ext}"
                     )
-                    print(f'deleting {source_bucket}/{source_prefix}{obj.key}')
+                    print(f'deleting {source_bucket}/{obj.key}')
                     obj.delete()
 
                 except Exception as e:
