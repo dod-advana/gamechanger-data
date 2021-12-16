@@ -1,57 +1,73 @@
-import subprocess
 import os
 import re
+import boto3
 
-allowed_ids = [
-    allowed_id.strip() for allowed_id in
-    os.environ.get('ALLOWED_IDS_CSV_STRING', '').split(',')
-]
+s3 = boto3.resource('s3')
+s3_client = boto3.client('s3')
+
+destination_bucket = "advana-data-zone"
+
+environ_ids = os.environ.get('ALLOWED_IDS_CSV_STRING', None)
+allowed_ids = []
+if environ_ids:
+    allowed_ids = [
+        allowed_id.strip() for allowed_id in environ_ids.split(',')
+    ]
 
 idens = "|".join(allowed_ids)
-allowed_re = re.compile(f'.*({idens}).*')
+allowed_ids_re = re.compile(f'.*(?P<ids>{idens}).*')
 
-source_bucket = "advana-landing-zone/"
-destination_bucket = "advana-data-zone/"
+source_bucket = "advana-landing-zone"
+destination_bucket = "advana-data-zone"
 
-source_path = f"{source_bucket}edl/non-sensitive/Gamechanger RPA/"
-destination_path = f"{destination_bucket}bronze/gamechanger/rpa-landing-zone/"
+source_prefix = "edl/non-sensitive/Gamechanger RPA"
+destination_prefix = "bronze/gamechanger/rpa-landing-zone"
 
 
 def move_zips():
-    if not allowed_ids:
-        print(
-            'ALLOWED_IDS_CSV_STRING not set, exiting because nothing would be let through')
-        exit(1)
-
-    cmd = f'aws s3 ls --recursive {source_path}'.split()
     try:
-        file_list = [
-            line.decode().split() for line
-            in subprocess.check_output(cmd).splitlines()
-        ]
-        to_move = []
-        for s3_line in file_list:
-            try:
-                filename = s3_line[3]
-                if allowed_re.match(filename) and not filename.endswith('/'):
-                    to_move.append(filename)
-            except IndexError:
-                # skip empty names, wont have the 3 index
-                continue
+        if not allowed_ids:
+            print(
+                'ALLOWED_IDS_CSV_STRING env var not set, it should be a comma separated string of user ids, exiting because nothing would be let through')
+            exit(1)
 
-        for filename in to_move:
-            try:
-                file_from = f"{source_bucket}{filename}"
-                file_to = f"{destination_path}"
-                dryrun = ' --dryrun' if os.environ.get('DRY_RUN', None) else ''
-                cmd = f'aws s3 mv s3://{file_from} s3://{file_to}{dryrun}'.split()
-                res = subprocess.check_output(cmd)
-                print('mv response', res)
-            except (subprocess.CalledProcessError, OSError) as e:
-                print(f'Error trying to move {filename}\n\n', e)
+        for obj in s3.Bucket(source_bucket).objects.filter(Prefix=source_prefix):
+            print(
+                f'checking s3 object: {source_bucket}/{obj.key}')
 
-    except (subprocess.CalledProcessError, OSError) as e:
-        return 'ERROR GETTING RPA FILES'
+            ids = []
+            id_matches = allowed_ids_re.match(obj.key)
+
+            if id_matches:
+                ids = id_matches.group('ids')
+
+            if obj.key.endswith('.zip') and ids:
+                try:
+
+                    _, __, name_with_ext = obj.key.rpartition('/')
+                    if not name_with_ext:
+                        return
+
+                    copy_source = {
+                        'Bucket': source_bucket,
+                        'Key': obj.key
+                    }
+                    print(
+                        f'copy {name_with_ext} to {destination_bucket}/{destination_prefix}')
+                    s3.meta.client.copy(
+                        copy_source,
+                        destination_bucket,
+                        f"{destination_prefix}/{name_with_ext}"
+                    )
+                    print(f'deleting {source_bucket}/{obj.key}')
+                    obj.delete()
+
+                except Exception as e:
+                    print(
+                        f'Error copying {obj.key} to {destination_prefix}/{destination_prefix}', e)
+
+    except Exception as e:
+        print('rpa.edl_zip_mover.move_zips() unexpected error:', e)
 
 
 if __name__ == "__main__":
