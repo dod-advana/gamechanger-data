@@ -14,5 +14,5 @@ def move_from_edl():
 
 
 @cli.command()
-def filter_and_move():
+def filter_move():
     filter_and_move()
