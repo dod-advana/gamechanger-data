@@ -44,8 +44,10 @@ def filter_and_move():
 
         any error - delete the created external-uploads/crawler-downloader/{external_uploads_dt} bucket and dont delete the zip from rpa landing zone
     """
-
+    print('starting filter and move')
+    print('fetching zips...')
     zips_as_s3_objs = get_filename_s3_obj_map()
+    print('objs :', zips_as_s3_objs.values())
     for zip_filename, s3_obj in zips_as_s3_objs.items():
         print('checking', zip_filename)
         # archive keeps the original filename so zip_filename irrelevant when searching in the zip but it is useful for identifying the zip name
@@ -60,7 +62,7 @@ def filter_and_move():
             with create_zip_obj(s3_obj) as zf:
                 zip_names = zf.namelist()
                 # in archive base name (ie the original folder name when zipped)
-                base_dir = zip_names[0]
+                base_dir = base_dir_heuristic(zip_names)
 
                 corrected_manifest_jdocs: typing.List[dict] = []
                 # immediately try to upload this so it will error if not in the archive
@@ -169,6 +171,30 @@ def filter_and_move():
         s3_obj.delete()
 
 
+def base_dir_heuristic(zip_names: list):
+    dirs = [zn for zn in zip_names if zn.endswith("/")]
+    if len(dirs) == 0:
+        print(f'no dirs detected, attempting just filenames from {zip_names}')
+        return ''
+    elif len(dirs) == 1:
+        return dirs[0]
+    else:
+        base_dirs = []
+        for zdir in dirs:
+            count = 0
+            for letter in zdir:
+                if letter == '/':
+                    count += 1
+                if count > 1:
+                    break
+
+        if len(base_dirs) == 1:
+            return base_dirs[0]
+        else:
+            raise RuntimeError(
+                f'More than one dir detected in zip, cant find root dir from: {base_dirs}')
+
+
 def undo_uploads(prefix):
     s3.Bucket(destination_bucket).objects.filter(Prefix=prefix).delete()
 
@@ -212,6 +238,7 @@ def get_filename_s3_obj_map() -> typing.Dict[str, object]:
     out = {}
     for obj in s3.Bucket(source_bucket).objects.filter(Prefix=source_prefix):
         if obj.key.endswith('.zip'):
+            print('found', obj.key)
             _, __, name_with_ext = obj.key.rpartition('/')
             filename, *_ = name_with_ext.rpartition('.')
             out[filename] = obj
