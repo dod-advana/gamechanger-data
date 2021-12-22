@@ -13,6 +13,21 @@ def _remove_empty_attr(soup: bs4.BeautifulSoup, attr: str) -> None:
         if tag[attr] == '':
             del tag[attr]
 
+def _truncate_rowspan(soup: bs4.BeautifulSoup) -> None:
+    """Ensure rowspan does not extend beyond end of tables."""
+    tables = soup.find_all('table')
+    for table in tables:
+        rows = table.select('tr:not(:scope table tr)') # tr not nested inside another table
+        max_row = len(rows)
+        for i, row in enumerate(rows):
+            cells = row.select('th:not(:scope table th), td:not(:scope table td)') # th/td not nested inside another table
+            for cell in cells:
+                if cell.has_attr('rowspan'):
+                    rowspan = int(cell['rowspan'] or 1)
+                    if rowspan > max_row - i:
+                        cell['rowspan'] = f'{max_row - i}'
+
+
 def clean_html_for_pdf(markup: Union[IO, AnyStr]) -> str:
     """Cleans known issues from html that prevent pdf generation."""
     soup = bs4.BeautifulSoup(markup, 'html5lib')
@@ -34,6 +49,9 @@ def clean_html_for_pdf(markup: Union[IO, AnyStr]) -> str:
     # remove problematic empty attributes
     _remove_empty_attr(soup, 'colspan')
     _remove_empty_attr(soup, 'rowspan')
+
+    # cap overly large rowspan values
+    _truncate_rowspan(soup)
 
     return str(soup)
 
