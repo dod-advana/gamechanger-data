@@ -3,6 +3,8 @@ from pathlib import Path
 
 import bs4
 from xhtml2pdf import pisa
+from xhtml2pdf.context import pisaCSSBuilder
+from xhtml2pdf.w3c.cssParser import CSSParser
 
 def clean_html_for_pdf(markup: Union[IO, AnyStr]) -> str:
     """Cleans known issues from html that prevent pdf generation."""
@@ -13,6 +15,14 @@ def clean_html_for_pdf(markup: Union[IO, AnyStr]) -> str:
     for row in rows:
         if row.find('td') is None and row.find('th') is None:
             row.decompose()
+
+    # remove unparseable style attributes
+    css_parser = CSSParser(pisaCSSBuilder(mediumSet=["all", "print", "pdf"]))
+    styled_tags = soup.find_all(style=True)
+    for tag in styled_tags:
+        parsed_style = css_parser.parseInline(tag['style'])[0]
+        if any(value is NotImplemented for value in parsed_style.values()):
+            del tag['style']
 
     return str(soup)
 
