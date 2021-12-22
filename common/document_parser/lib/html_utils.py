@@ -46,7 +46,10 @@ def convert_html_to_pdf(filepath: Union[Path, str]) -> str:
         html = clean_html_for_pdf(html_file)
     pdf_path = filepath.with_suffix('.pdf')
     with open(pdf_path, 'w+b') as pdf_file:
-        pisaStatus = pisa.CreatePDF(html, dest=pdf_file)
+        try:
+            pisaStatus = pisa.CreatePDF(html, dest=pdf_file)
+        except Exception:
+            raise RuntimeError(f'unable to generate pdf from {filepath}')
     if pisaStatus.err:
         raise RuntimeError(f'unable to generate pdf from {filepath}')
 
