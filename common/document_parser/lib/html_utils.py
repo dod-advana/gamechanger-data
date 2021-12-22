@@ -6,6 +6,13 @@ from xhtml2pdf import pisa
 from xhtml2pdf.context import pisaCSSBuilder
 from xhtml2pdf.w3c.cssParser import CSSParser
 
+def _remove_empty_attr(soup: bs4.BeautifulSoup, attr: str) -> None:
+    """Removes the specified attribute from all tags if empty."""
+    tags = soup.find_all(attrs={attr: True})
+    for tag in tags:
+        if tag[attr] == '':
+            del tag[attr]
+
 def clean_html_for_pdf(markup: Union[IO, AnyStr]) -> str:
     """Cleans known issues from html that prevent pdf generation."""
     soup = bs4.BeautifulSoup(markup, 'html5lib')
@@ -23,6 +30,10 @@ def clean_html_for_pdf(markup: Union[IO, AnyStr]) -> str:
         parsed_style = css_parser.parseInline(tag['style'])[0]
         if any(value is NotImplemented for value in parsed_style.values()):
             del tag['style']
+
+    # remove problematic empty attributes
+    _remove_empty_attr(soup, 'colspan')
+    _remove_empty_attr(soup, 'rowspan')
 
     return str(soup)
 
