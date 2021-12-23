@@ -6,6 +6,22 @@ from xhtml2pdf import pisa
 from xhtml2pdf.context import pisaCSSBuilder
 from xhtml2pdf.w3c.cssParser import CSSParser
 
+def _remove_empty_rows(soup: bs4.BeautifulSoup) -> None:
+    """Remove any empty rows (i.e. <tr> tags without any child <td> or <th> tags)."""
+    rows = soup.find_all('tr')
+    for row in rows:
+        if row.find('td') is None and row.find('th') is None:
+            row.decompose()
+
+def _remove_unparseable_style_attrs(soup: bs4.BeautifulSoup) -> None:
+    """Removes unparseable style attributes."""
+    css_parser = CSSParser(pisaCSSBuilder(mediumSet=["all", "print", "pdf"]))
+    styled_tags = soup.find_all(style=True)
+    for tag in styled_tags:
+        parsed_style = css_parser.parseInline(tag['style'])[0]
+        if any(value is NotImplemented for value in parsed_style.values()):
+            del tag['style']
+
 def _remove_empty_attr(soup: bs4.BeautifulSoup, attr: str) -> None:
     """Removes the specified attribute from all tags if empty."""
     tags = soup.find_all(attrs={attr: True})
@@ -32,19 +48,11 @@ def clean_html_for_pdf(markup: Union[IO, AnyStr]) -> str:
     """Cleans known issues from html that prevent pdf generation."""
     soup = bs4.BeautifulSoup(markup, 'html5lib')
 
-    # remove any empty rows (i.e. <tr> tags without any child <td> or <th> tags)
-    rows = soup.find_all('tr')
-    for row in rows:
-        if row.find('td') is None and row.find('th') is None:
-            row.decompose()
+    # remove empty rows
+    _remove_empty_rows(soup)
 
     # remove unparseable style attributes
-    css_parser = CSSParser(pisaCSSBuilder(mediumSet=["all", "print", "pdf"]))
-    styled_tags = soup.find_all(style=True)
-    for tag in styled_tags:
-        parsed_style = css_parser.parseInline(tag['style'])[0]
-        if any(value is NotImplemented for value in parsed_style.values()):
-            del tag['style']
+    _remove_unparseable_style_attrs(soup)
 
     # remove problematic empty attributes
     _remove_empty_attr(soup, 'colspan')
