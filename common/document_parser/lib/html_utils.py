@@ -4,7 +4,17 @@ from pathlib import Path
 import bs4
 from xhtml2pdf import pisa
 from xhtml2pdf.context import pisaCSSBuilder
+from xhtml2pdf.default import DEFAULT_CSS as XHTML2PDF_DEFAULT_CSS
 from xhtml2pdf.w3c.cssParser import CSSParser
+
+_DEFAULT_CSS = f'{XHTML2PDF_DEFAULT_CSS} table {{ -pdf-keep-in-frame-mode: shrink; }}'
+"""Default CSS to use when rendering html to pdf.
+
+Xhtml2pdf is unable to break table cells across pdf pages so will error if a cell is larger
+than a page. To work around this we shrink tables to fit within a page. This can result in 
+very small tables which are not suitable for human consumption but are fine for machine text
+extraction.
+"""
 
 def _remove_empty_rows(soup: bs4.BeautifulSoup) -> None:
     """Remove any empty rows (i.e. <tr> tags without any child <td> or <th> tags)."""
@@ -73,7 +83,7 @@ def convert_html_to_pdf(filepath: Union[Path, str]) -> str:
     pdf_path = filepath.with_suffix('.pdf')
     with open(pdf_path, 'w+b') as pdf_file:
         try:
-            pisaStatus = pisa.CreatePDF(html, dest=pdf_file)
+            pisaStatus = pisa.CreatePDF(html, dest=pdf_file, default_css=_DEFAULT_CSS)
         except Exception:
             raise RuntimeError(f'unable to generate pdf from {filepath}')
     if pisaStatus.err:
