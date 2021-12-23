@@ -1,7 +1,9 @@
-from typing import AnyStr, IO, Union
+import mimetypes
 from pathlib import Path
+from typing import IO, AnyStr, Union
 
 import bs4
+from w3lib.url import url_query_cleaner
 from xhtml2pdf import pisa
 from xhtml2pdf.context import pisaCSSBuilder
 from xhtml2pdf.default import DEFAULT_CSS as XHTML2PDF_DEFAULT_CSS
@@ -15,6 +17,22 @@ than a page. To work around this we shrink tables to fit within a page. This can
 very small tables which are not suitable for human consumption but are fine for machine text
 extraction.
 """
+
+_BLACK_PIXEL_DATA_URL = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAYAAABytg0kAAAAAXNSR0IArs4c6QAAAAlwSFlzAAAWJQAAFiUBSVIk8AAAABNJREFUCB1jZGBg+A/EDEwgAgQADigBA//q6GsAAAAASUVORK5CYII%3D'
+"""Data URL containing a png with a single black pixel."""
+
+def _link_callback(uri: str, rel: str) -> str:
+    """Replace default link loading in xhtml2pdf.
+    
+    We don't want the pdf generation process to actually attempt to hit the network or
+    filesystem so we return a placeholder data URL for links that appear to be images
+    otherwise we simply return an empty string so that nothing is loaded."""
+    uri = url_query_cleaner(uri)
+    type_, _ = mimetypes.guess_type(uri)
+    if type_ and type_.startswith('image/'):
+        return _BLACK_PIXEL_DATA_URL
+    else:
+        return ''
 
 def _remove_empty_rows(soup: bs4.BeautifulSoup) -> None:
     """Remove any empty rows (i.e. <tr> tags without any child <td> or <th> tags)."""
@@ -83,7 +101,7 @@ def convert_html_to_pdf(filepath: Union[Path, str]) -> str:
     pdf_path = filepath.with_suffix('.pdf')
     with open(pdf_path, 'w+b') as pdf_file:
         try:
-            pisaStatus = pisa.CreatePDF(html, dest=pdf_file, default_css=_DEFAULT_CSS)
+            pisaStatus = pisa.CreatePDF(html, dest=pdf_file, link_callback=_link_callback, default_css=_DEFAULT_CSS)
         except Exception:
             raise RuntimeError(f'unable to generate pdf from {filepath}')
     if pisaStatus.err:
