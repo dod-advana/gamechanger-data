@@ -10,22 +10,31 @@ from common.document_parser.parsers.policy_analytics.display_mappings import (
 from common.utils.parsers import parse_timestamp
 from gamechangerml.src.utilities.text_utils import utf8_pass, clean_text
 
+DEFAULT_DATE_STRFMT = '%Y-%m-%dT%H:%M:%S'
+DEFAULT_DATE_STR = datetime.strftime(datetime.utcnow(), DEFAULT_DATE_STRFMT)
 
 def get_access_timestamp(doc_dict):
+
     try:
-        return datetime.strftime(datetime.strptime(doc_dict.get("access_timestamp", None), '%Y-%m-%d %H:%M:%S.%f'),
-                                 '%Y-%m-%dT%H:%M:%S')
+        return datetime.strftime(
+            datetime.strptime(
+                doc_dict.get("access_timestamp", None),
+                '%Y-%m-%d %H:%M:%S.%f'),
+            DEFAULT_DATE_STRFMT
+        )
     except:
-        return ""
+        # TODO: fix date field logic to omit date fields altogether when unknown
+        return DEFAULT_DATE_STR
 
 
 def get_publication_date(doc_dict):
     try:
         parsed_date = parse_timestamp(doc_dict.get("publication_date", None))
         if parsed_date:
-            return datetime.strftime(parsed_date, '%Y-%m-%dT%H:%M:%S')
+            return datetime.strftime(parsed_date, DEFAULT_DATE_STRFMT)
     except:
-        return ""
+        # TODO: fix date field logic to omit date fields altogether when unknown
+        return DEFAULT_DATE_STR
 
 
 def get_display_doc_type(doc_dict, meta_data):
