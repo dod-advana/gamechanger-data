@@ -60,7 +60,6 @@ RUN \
         "postgresql13" \
         "postgresql13-devel" \
         "postgresql13-libs" \
-        libpq5-devel-13.4-42PGDG.rhel8 \
         openblas \
         openblas-threads \
         diffutils \
