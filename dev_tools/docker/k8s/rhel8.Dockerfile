@@ -1,4 +1,4 @@
-ARG BASE_IMAGE=registry.access.redhat.com/ubi8/ubi:8.4-211
+ARG BASE_IMAGE=registry.access.redhat.com/ubi8/ubi:8.5-214
 FROM --platform=x86_64 $BASE_IMAGE
 
 ARG \
@@ -59,6 +59,7 @@ RUN \
         python38-Cython \
         "postgresql13" \
         "postgresql13-devel" \
+        "postgresql13-libs" \
         libpq5-devel-13.4-42PGDG.rhel8 \
         openblas \
         openblas-threads \
