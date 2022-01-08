@@ -58,8 +58,6 @@ RUN \
         python38-devel \
         python38-Cython \
         "postgresql13" \
-        "postgresql13-devel" \
-        "postgresql13-libs" \
         "libpq-devel-13.3-1.el8_4.x86_64" \
         openblas \
         openblas-threads \
