@@ -7,7 +7,7 @@ import json
 import typing
 import datetime
 import traceback
-
+import codecs
 
 def notify_with_tb(msg, tb):
     full = msg + '\n' + tb
@@ -100,6 +100,7 @@ def filter_and_move():
 
                 for name in zip_names:
                     if name.endswith('.metadata'):
+                        clean_metadata_utf8(name)  # clean the metadata in case of utf8 errors
                         with zf.open(name) as metadata:
                             jsondoc = json.loads(metadata.readline())
 
@@ -274,6 +275,14 @@ def upload_jsonlines(lines, filename, prefix, bucket=destination_bucket):
             Key=key
         )
 
+
+def clean_metadata_utf8(name):
+    with open(name, 'r+') as f:
+        content = f.read()
+        decoded_data = codecs.decode(content.encode(), 'utf-8-sig')
+        f.seek(0)
+        json.dump(json.loads(decoded_data), f)
+        f.truncate()
 
 if __name__ == '__main__':
     filter_and_move()
