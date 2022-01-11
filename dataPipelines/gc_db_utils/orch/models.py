@@ -38,7 +38,7 @@ class Publication(AutoRepr, PublicationSchema, DeferredOrchReflectedBase):
             type=doc['doc_type'],
             number=doc['doc_num'],
             is_ignored=False,
-            is_revoked=False
+            is_revoked=doc.get('is_revoked', False)
         )
 
     @staticmethod

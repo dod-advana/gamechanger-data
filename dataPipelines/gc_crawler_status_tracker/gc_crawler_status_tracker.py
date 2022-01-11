@@ -10,6 +10,7 @@ class CrawlerStatusTracker:
     def __init__(self, input_json):
         self._input_json = input_json
         self._input_doc_names = []
+        self._input_docs_revoked_by_crawler = set()
         self._crawlers_downloaded = []
         self._dbs_initiated = False
 
@@ -28,6 +29,9 @@ class CrawlerStatusTracker:
                             continue
                         self._input_doc_names.append(j_data["doc_name"])
                         self._crawlers_downloaded.append(j_data["crawler_used"])
+                        if j_data.get("is_revoked", False):
+                            self._input_docs_revoked_by_crawler.add(j_data["doc_name"])
+                        
                 self._crawlers_downloaded = list(set(self._crawlers_downloaded))
 
     def update_crawler_status(self, status: str, timestamp:dt.timestamp, update_db:bool):
@@ -68,20 +72,30 @@ class CrawlerStatusTracker:
                      if isinstance(j,str) else (name, j["crawler_used"])
                      for (name, j) in db_current]))
             for (doc, crawler) in db_current_list:
-                if doc not in self._input_doc_names and crawler in self._crawlers_downloaded and crawler != "legislation_pubs":
+                if (
+                    # we revoke if the document is now missing in the new ingest set ...
+                    (
+                        doc not in self._input_doc_names
+                        and crawler in self._crawlers_downloaded
+                        and crawler != "legislation_pubs"   # ??
+                    )
+                    # ... or if the document was explicitely set as revoked by the crawler
+                    or doc in self._input_docs_revoked_by_crawler
+                ):
                     print("Publication " + doc + " is now revoked")
                     if update_db:
                         print("Updating DB to reflect " + doc + " is revoked")
                         pub = session.query(Publication).filter_by(name=doc).one()
                         pub.is_revoked = True
             for (doc, crawler) in db_revoked_list:
+                # anything present in the new ingest set (that was not set as revoked by the crawler)
+                # will now be un-revoked
                 if doc in self._input_doc_names and crawler in self._crawlers_downloaded:
                     print("Publication " + doc + " is no longer revoked")
                     if update_db:
                         print("Updating DB to reflect " + doc + " is no longer revoked")
                         pub = session.query(Publication).filter_by(name=doc).one()
                         pub.is_revoked = False
-            session.commit()
 
     def _get_revoked_documents(self):
         with Config.connection_helper.orch_db_session_scope('rw') as session:
