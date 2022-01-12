@@ -59,7 +59,10 @@ def filter_and_move():
         crawler_used = None
         try:
             # create in memory zip file object
-            with create_zip_obj(s3_obj) as zf:
+            in_memory_zip = create_byte_obj(s3_obj)
+            clean_metadata_files(in_memory_zip)  # clean the metadata in case of utf8 errors
+
+            with ZipFile(in_memory_zip, 'r') as zf:
                 zip_names = zf.namelist()
                 # in archive base name (ie the original folder name when zipped)
                 base_dir = base_dir_heuristic(zip_names)
@@ -100,7 +103,6 @@ def filter_and_move():
 
                 for name in zip_names:
                     if name.endswith('.metadata'):
-                        clean_metadata_utf8(name)  # clean the metadata in case of utf8 errors
                         with zf.open(name) as metadata:
                             jsondoc = json.loads(metadata.readline())
 
@@ -246,11 +248,10 @@ def get_filename_s3_obj_map() -> typing.Dict[str, object]:
     return out
 
 
-def create_zip_obj(s3_obj) -> ZipFile:
+def create_byte_obj(s3_obj):
     body_bytes = s3_obj.get()['Body'].read()
     bytes_obj = BytesIO(body_bytes)
-    zf = ZipFile(bytes_obj, 'r')
-    return zf
+    return bytes_obj
 
 
 def upload_file_from_zip(zf_ref, zip_filename, prefix, bucket=destination_bucket):
@@ -276,13 +277,23 @@ def upload_jsonlines(lines, filename, prefix, bucket=destination_bucket):
         )
 
 
-def clean_metadata_utf8(name):
-    with open(name, 'r+') as f:
-        content = f.read()
-        decoded_data = codecs.decode(content.encode(), 'utf-8-sig')
-        f.seek(0)
-        json.dump(json.loads(decoded_data), f)
-        f.truncate()
+def clean_metadata_files(byte_file):
+    cleaned_metadata = {}    # dictionary to temporarily store our cleaned metadata. key=filename, element=data
+    with ZipFile(byte_file, 'r') as zf:
+        zip_names = zf.namelist()
+        for name in zip_names:
+            if name.endswith('.metadata'):
+                with zf.open(name, 'r') as f:
+                    content = f.read()
+                    decoded_data = codecs.decode(content, 'utf-8-sig')  # decode the data in the metadata files
+                    cleaned_metadata[name] = decoded_data   # store the cleaned metadata data in a new dictionary
+                f.close()  # superfluous close in case it doesn't close properly
+    zf.close()
+    with ZipFile(byte_file, 'w') as zf:
+        for name in cleaned_metadata.keys():
+            with zf.open(name, 'w') as f:
+                f.write(json.dumps(decoded_data).encode())  # write the new metadata content
+            f.close()  # superfluous close in case it doesn't close properly
 
 if __name__ == '__main__':
     filter_and_move()
