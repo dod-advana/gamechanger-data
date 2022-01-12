@@ -294,6 +294,7 @@ def clean_metadata_files(byte_file):
             with zf.open(name, 'w') as f:
                 f.write(json.dumps(decoded_data).encode())  # write the new metadata content
             f.close()  # superfluous close in case it doesn't close properly
+    zf.close()
 
 if __name__ == '__main__':
     filter_and_move()
