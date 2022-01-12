@@ -289,7 +289,7 @@ def clean_metadata_files(byte_file):
                     cleaned_metadata[name] = decoded_data   # store the cleaned metadata data in a new dictionary
                 f.close()  # superfluous close in case it doesn't close properly
     zf.close()
-    with ZipFile(byte_file, 'w') as zf:
+    with ZipFile(byte_file, 'a') as zf:
         for name in cleaned_metadata.keys():
             with zf.open(name, 'w') as f:
                 f.write(json.dumps(decoded_data).encode())  # write the new metadata content
