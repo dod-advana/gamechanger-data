@@ -76,7 +76,7 @@ def filter_and_move():
                     with zf.open(f'{base_dir}manifest.json') as manifest:
 
                         for line in manifest.readlines():
-                            line = codecs.decode(line, 'utf-8-sig')   # decode the line in the manifest files
+                            line = codecs.decode(line.encode(), 'utf-8-sig')   # decode the line in the manifest files
                             jsondoc = json.loads(line)
                             if not crawler_used:
                                 crawler_used = jsondoc['crawler_used']
@@ -106,7 +106,7 @@ def filter_and_move():
                     if name.endswith('.metadata'):
                         with zf.open(name) as metadata:
                             # we need to correct the metadata for utf-8 first, then read everything else
-                            corrected_metadata = codecs.decode(metadata.readline(), 'utf-8-sig')
+                            corrected_metadata = codecs.decode(metadata.readline().encode(), 'utf-8-sig')
                             jsondoc = json.loads(corrected_metadata)
                             version_hash = jsondoc.get('version_hash', None)
 
@@ -116,7 +116,7 @@ def filter_and_move():
                                 corrected_manifest_jdocs.append(jsondoc)
 
                                 # upload all of the files to s3
-                                zip_filename = name.replace('.metadata', '')
+                                zip_filename = name.replace('.metadata', '')  # name of the main file
                                 if zip_filename in zip_names:
                                     # upload the main file
                                     upload_file_from_zip(
@@ -269,10 +269,11 @@ def upload_file_from_zip(zf_ref, zip_filename, prefix, bucket=destination_bucket
 
 def upload_jsonlines(lines: typing.List[dict], filename: str, prefix: str, bucket=destination_bucket):
     """
-    lines: the list of json-readable lines to be uploaded as a single file to s3
-    filename: name of the file the jsons will be written into and uploaded in
-    prefix: prefix to upload to in s3
-    bucket: bucket to upload to in s3
+    This function takes in a list of jsons and puts it into an s3 location with the appropriate filename
+    :param lines: the list of json-readable lines to be uploaded as a single file to s3
+    :param filename: name of the file the jsons will be written into and uploaded in
+    :param prefix: prefix to upload to in s3
+    :param bucket: bucket to upload to in s3
     """
     with tempfile.TemporaryFile(mode='r+') as new_file:
         for line in lines:
