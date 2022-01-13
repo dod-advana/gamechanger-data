@@ -116,8 +116,12 @@ def filter_and_move():
                         # clean just in case for newlines
                         corrected_metadata = corrected_metadata.replace("\n", "")
                         # now read the metadata line as a json and get its version hash
-                        jsondoc = json.loads(corrected_metadata)
-                        version_hash = jsondoc.get('version_hash', None)
+                        try:
+                            jsondoc = json.loads(corrected_metadata)
+                            version_hash = jsondoc.get('version_hash', None)
+                        except:
+                            print("WARNING: metadata file errored on load. Skipping")
+                            continue
                         # only getting docs that aren't in previous hashes
                         if version_hash and not version_hash in previous_hashes:
                             not_in_previous_hashes.add(name)
