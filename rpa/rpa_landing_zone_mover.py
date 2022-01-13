@@ -60,7 +60,6 @@ def filter_and_move():
         try:
             # create in memory zip file object
             in_memory_zip = create_byte_obj(s3_obj)
-            clean_metadata_files(in_memory_zip)  # clean the metadata in case of utf8 errors
 
             with ZipFile(in_memory_zip, 'r') as zf:
                 zip_names = zf.namelist()
@@ -102,25 +101,31 @@ def filter_and_move():
 
                 not_in_previous_hashes = set()
 
+                # sorting through the version hashes and checking for new files
                 for name in zip_names:
                     if name.endswith('.metadata'):
                         with zf.open(name) as metadata:
-                            jsondoc = json.loads(metadata.readline())
-
+                            # we need to correct the metadata for utf-8 first, then read everything else
+                            corrected_metadata = codecs.decode(metadata.readline(), 'utf-8-sig')
+                            jsondoc = json.loads(corrected_metadata)
                             version_hash = jsondoc.get('version_hash', None)
+
+                            # getting docs that aren't in previous hashes
                             if version_hash and not version_hash in previous_hashes:
                                 not_in_previous_hashes.add(name)
                                 corrected_manifest_jdocs.append(jsondoc)
 
-                    for to_move_meta in not_in_previous_hashes:
-                        zip_filename = to_move_meta.replace('.metadata', '')
+                                # upload all of the files to s3
+                                zip_filename = name.replace('.metadata', '')
+                                if zip_filename in zip_names:
+                                    # upload the main file
+                                    upload_file_from_zip(
+                                        zf_ref=zf, zip_filename=zip_filename, prefix=destination_prefix_dt)
+                                    # upload the metadata
+                                    upload_jsonlines(
+                                        lines=[jsondoc], filename=name, prefix=destination_prefix_dt)
 
-                        if zip_filename in zip_names:
-                            upload_file_from_zip(
-                                zf_ref=zf, zip_filename=zip_filename, prefix=destination_prefix_dt)
-                            upload_file_from_zip(
-                                zf_ref=zf, zip_filename=to_move_meta, prefix=destination_prefix_dt)
-
+                # upload the manifest file
                 upload_jsonlines(
                     lines=corrected_manifest_jdocs, filename='manifest.json', prefix=destination_prefix_dt)
 
@@ -262,7 +267,13 @@ def upload_file_from_zip(zf_ref, zip_filename, prefix, bucket=destination_bucket
             f, bucket, f"{prefix}/{filename}")
 
 
-def upload_jsonlines(lines, filename, prefix, bucket=destination_bucket):
+def upload_jsonlines(lines: typing.List[dict], filename: str, prefix: str, bucket=destination_bucket):
+    """
+    lines: the list of json-readable lines to be uploaded as a single file to s3
+    filename: name of the file the jsons will be written into and uploaded in
+    prefix: prefix to upload to in s3
+    bucket: bucket to upload to in s3
+    """
     with tempfile.TemporaryFile(mode='r+') as new_file:
         for line in lines:
             jsondoc = json.dumps(line) + '\n'
@@ -277,25 +288,6 @@ def upload_jsonlines(lines, filename, prefix, bucket=destination_bucket):
             Key=key
         )
 
-
-def clean_metadata_files(byte_file):
-    cleaned_metadata = {}    # dictionary to temporarily store our cleaned metadata. key=filename, element=data
-    with ZipFile(byte_file, 'r') as zf:
-        zip_names = zf.namelist()
-        for name in zip_names:
-            if name.endswith('.metadata'):
-                with zf.open(name, 'r') as f:
-                    content = f.read()
-                    decoded_data = codecs.decode(content, 'utf-8-sig')  # decode the data in the metadata files
-                    cleaned_metadata[name] = decoded_data   # store the cleaned metadata data in a new dictionary
-                f.close()  # superfluous close in case it doesn't close properly
-    zf.close()
-    with ZipFile(byte_file, 'a') as zf:
-        for name in cleaned_metadata.keys():
-            with zf.open(name, 'w') as f:
-                f.write(json.dumps(decoded_data).encode())  # write the new metadata content
-            f.close()  # superfluous close in case it doesn't close properly
-    zf.close()
 
 if __name__ == '__main__':
     filter_and_move()
