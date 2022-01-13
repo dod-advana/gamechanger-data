@@ -106,7 +106,7 @@ def filter_and_move():
                     if name.endswith('.metadata'):
                         with zf.open(name) as metadata:
                             # we need to correct the metadata for utf-8 first, then read everything else
-                            corrected_metadata = codecs.decode(metadata.readline().encode(), 'utf-8-sig')
+                            corrected_metadata = codecs.decode(metadata.readline(), 'utf-8-sig')
                         metadata.close()
 
                         # now read the metadata line as a json and get its version hash
