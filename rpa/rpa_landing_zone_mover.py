@@ -291,6 +291,7 @@ def upload_jsonlines(lines: typing.List[dict], filename: str, prefix: str, bucke
             Bucket=bucket,
             Key=key
         )
+    new_file.close()  # extra close just to be safe
 
 
 if __name__ == '__main__':
