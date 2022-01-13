@@ -76,7 +76,7 @@ def filter_and_move():
                     with zf.open(f'{base_dir}manifest.json') as manifest:
 
                         for line in manifest.readlines():
-                            line = codecs.decode(line.encode(), 'utf-8-sig')   # decode the line in the manifest files
+                            line = codecs.decode(line, 'utf-8-sig')   # decode the line in the manifest files
                             jsondoc = json.loads(line)
                             if not crawler_used:
                                 crawler_used = jsondoc['crawler_used']
