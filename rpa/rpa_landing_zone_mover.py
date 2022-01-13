@@ -107,24 +107,26 @@ def filter_and_move():
                         with zf.open(name) as metadata:
                             # we need to correct the metadata for utf-8 first, then read everything else
                             corrected_metadata = codecs.decode(metadata.readline().encode(), 'utf-8-sig')
-                            # now read the metadata line as a json and get its version hash
-                            jsondoc = json.loads(corrected_metadata)
-                            version_hash = jsondoc.get('version_hash', None)
+                        metadata.close()
 
-                            # only getting docs that aren't in previous hashes
-                            if version_hash and not version_hash in previous_hashes:
-                                not_in_previous_hashes.add(name)
-                                corrected_manifest_jdocs.append(jsondoc)
+                        # now read the metadata line as a json and get its version hash
+                        jsondoc = json.loads(corrected_metadata)
+                        version_hash = jsondoc.get('version_hash', None)
 
-                                # upload all of the files not in previous version hashes to s3
-                                zip_filename = name.replace('.metadata', '')  # name of the main file
-                                if zip_filename in zip_names:
-                                    # upload the main file
-                                    upload_file_from_zip(
-                                        zf_ref=zf, zip_filename=zip_filename, prefix=destination_prefix_dt)
-                                    # upload the metadata
-                                    upload_jsonlines(
-                                        lines=[jsondoc], filename=name, prefix=destination_prefix_dt)
+                        # only getting docs that aren't in previous hashes
+                        if version_hash and not version_hash in previous_hashes:
+                            not_in_previous_hashes.add(name)
+                            corrected_manifest_jdocs.append(jsondoc)
+
+                            # upload all of the files not in previous version hashes to s3
+                            zip_filename = name.replace('.metadata', '')  # name of the main file
+                            if zip_filename in zip_names:
+                                # upload the main file
+                                upload_file_from_zip(
+                                    zf_ref=zf, zip_filename=zip_filename, prefix=destination_prefix_dt)
+                                # upload the metadata
+                                upload_jsonlines(
+                                    lines=[jsondoc], filename=name, prefix=destination_prefix_dt)
 
                 # upload the manifest file after getting all correctd metadata jdocs
                 upload_jsonlines(
