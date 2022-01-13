@@ -106,13 +106,15 @@ def filter_and_move():
                     if name.endswith('.metadata'):
                         with zf.open(name) as metadata:
                             # we need to correct the metadata for utf-8 first, then read everything else
-                            corrected_metadata = codecs.decode(metadata.readline(), 'utf-8-sig')
+                            corrected_metadata = codecs.decode(metadata.read(), 'utf-8-sig')
                         metadata.close()
 
+                        # clean just in case for newlines
+                        corrected_metadata = corrected_metadata.replace("\n", "")
                         # now read the metadata line as a json and get its version hash
                         jsondoc = json.loads(corrected_metadata)
                         version_hash = jsondoc.get('version_hash', None)
-
+                        json.loads()
                         # only getting docs that aren't in previous hashes
                         if version_hash and not version_hash in previous_hashes:
                             not_in_previous_hashes.add(name)
