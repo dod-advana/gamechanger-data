@@ -114,7 +114,6 @@ def filter_and_move():
                         # now read the metadata line as a json and get its version hash
                         jsondoc = json.loads(corrected_metadata)
                         version_hash = jsondoc.get('version_hash', None)
-                        json.loads()
                         # only getting docs that aren't in previous hashes
                         if version_hash and not version_hash in previous_hashes:
                             not_in_previous_hashes.add(name)
