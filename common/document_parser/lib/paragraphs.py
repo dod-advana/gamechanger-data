@@ -9,10 +9,10 @@ def get_paragraph_text(segmented):
     par_text = ""
 
     for sentence in segmented:
-        sentence_text = " ".join(
-            [token.value for token in sentence]
+        sentence_text = "".join(
+            [token.spacing + token.value for token in sentence]
         )
-        par_text += sentence_text
+        par_text += sentence_text.replace('\n', '')
 
     return par_text
 
@@ -29,7 +29,7 @@ def create_paragraph_dict(page_num, paragraph_num, paragraph_text, doc_dict):
     
     paragraph_text = handle_DoD_text(paragraph_text)
     
-    par["par_raw_text_t"] = utf8_pass(paragraph_text)
+    par["par_raw_text_t"] = utf8_pass(paragraph_text).replace('  ',' ')
 
     par["entities"] = []
 
