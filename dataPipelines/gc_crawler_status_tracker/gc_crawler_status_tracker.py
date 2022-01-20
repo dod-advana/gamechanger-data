@@ -1,39 +1,41 @@
-from pathlib import Path
 import json
-from .config import Config
-from dataPipelines.gc_db_utils.orch.models import Publication, VersionedDoc, CrawlerStatusEntry
+import os
 from datetime import datetime as dt
+from pathlib import Path
+from typing import Union
+
+from dataPipelines.gc_db_utils.orch.models import CrawlerStatusEntry, Publication, VersionedDoc
 from dataPipelines.gc_neo4j_publisher.neo4j_publisher import process_query
+
+from .config import Config
+
 
 class CrawlerStatusTracker:
 
-    def __init__(self, input_json):
+    def __init__(self, input_json: Union[str, os.PathLike]):
         self._input_json = input_json
-        self._input_doc_names = []
+        self._input_doc_names = set()
         self._input_docs_revoked_by_crawler = set()
-        self._crawlers_downloaded = []
+        self._crawlers_downloaded = set()
         self._dbs_initiated = False
 
     def _set_input_lists(self):
-        if Path(self._input_json).resolve():
-            input_json_path = Path(self._input_json).resolve()
-            with input_json_path.open(mode="r") as f:
-                for json_str in f.readlines():
-                    if not json_str.strip():
+        input_json_path = Path(self._input_json)
+        with input_json_path.open(mode="r") as f:
+            for json_str in f:
+                if json_str.isspace():
+                    continue
+                else:
+                    try:
+                        j_data = json.loads(json_str)
+                    except json.decoder.JSONDecodeError:
+                        print("Encountered JSON decode error while parsing crawler output.")
                         continue
-                    else:
-                        try:
-                            j_data = json.loads(json_str)
-                        except json.decoder.JSONDecodeError:
-                            print("Encountered JSON decode error while parsing crawler output.")
-                            continue
-                        self._input_doc_names.append(j_data["doc_name"])
-                        self._crawlers_downloaded.append(j_data["crawler_used"])
-                        if j_data.get("is_revoked", False):
-                            self._input_docs_revoked_by_crawler.add(j_data["doc_name"])
-                        
-                self._crawlers_downloaded = list(set(self._crawlers_downloaded))
-
+                    self._input_doc_names.add(j_data["doc_name"])
+                    self._crawlers_downloaded.add(j_data["crawler_used"])
+                    if j_data.get("is_revoked", False):
+                        self._input_docs_revoked_by_crawler.add(j_data["doc_name"])
+                    
     def update_crawler_status(self, status: str, timestamp:dt.timestamp, update_db:bool):
         if not self._dbs_initiated:
             Config.connection_helper.init_dbs()
@@ -49,7 +51,6 @@ class CrawlerStatusTracker:
                                                              crawler_name=crawler,
                                                              datetime=formatted_timestamp)
                     session.add(status_entry)
-                session.commit()
 
     def _revoke_documents(self, update_db:bool):
         with Config.connection_helper.orch_db_session_scope('rw') as session:
@@ -144,10 +145,10 @@ class CrawlerStatusTracker:
             )
 
     def handle_revocations(self, index_name: str, update_es: bool, update_db: bool, update_neo4j: bool):
-
         if not self._dbs_initiated:
             Config.connection_helper.init_dbs()
             self._dbs_initiated = True
+
         if not self._crawlers_downloaded and self._input_json:
             self._set_input_lists()
 
