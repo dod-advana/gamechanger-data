@@ -60,8 +60,6 @@ class CloneMetaSchema:
     graph_module = sa.Column(sa.String(512), nullable=True)
     search_bar_module = sa.Column(sa.String(512), nullable=True)
     s3_bucket = sa.Column(sa.String(512), nullable=True)
-    data_source_name = sa.Column(sa.String(512), nullable=True)
-    source_agency_name = sa.Column(sa.String(512), nullable=True)
     metadata_creation_group = sa.Column(sa.String(512), nullable=True)
     elasticsearch_index = sa.Column(sa.String(512), nullable=True)
     createdAt = sa.Column(sa.TIMESTAMP, nullable=True)
