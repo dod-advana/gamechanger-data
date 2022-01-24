@@ -1,5 +1,5 @@
 from collections import defaultdict
-from gamechangerml.src.search.ranking.features import get_kw_score
+#from gamechangerml.src.search.ranking.features import get_kw_score
 
 
 def add_keyw_5(doc_dict):
@@ -13,6 +13,6 @@ def add_keyw_5(doc_dict):
     return doc_dict
 
 
-def add_kw_doc_score_r(doc_dict):
-    doc_dict["kw_doc_score_r"] = get_kw_score(doc_dict["id"])
-    return doc_dict
+#def add_kw_doc_score_r(doc_dict):
+#    doc_dict["kw_doc_score_r"] = get_kw_score(doc_dict["id"])
+#    return doc_dict

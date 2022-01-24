@@ -1,4 +1,4 @@
-from gamechangerml.src.search.ranking import features as ft
+from gamechangerml.src.featurization.rank_features import features as ft
 
 
 def add_pagerank_r(doc_dict):
