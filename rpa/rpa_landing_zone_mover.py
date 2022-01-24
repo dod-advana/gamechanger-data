@@ -59,7 +59,9 @@ def filter_and_move():
         crawler_used = None
         try:
             # create in memory zip file object
-            with create_zip_obj(s3_obj) as zf:
+            in_memory_zip = create_byte_obj(s3_obj)
+
+            with ZipFile(in_memory_zip, 'r') as zf:
                 zip_names = zf.namelist()
                 # in archive base name (ie the original folder name when zipped)
                 base_dir = base_dir_heuristic(zip_names)
@@ -74,6 +76,7 @@ def filter_and_move():
                     with zf.open(f'{base_dir}manifest.json') as manifest:
 
                         for line in manifest.readlines():
+                            line = codecs.decode(line, 'utf-8-sig')   # decode the line in the manifest files
                             jsondoc = json.loads(line)
                             if not crawler_used:
                                 crawler_used = jsondoc['crawler_used']
@@ -98,26 +101,43 @@ def filter_and_move():
 
                 not_in_previous_hashes = set()
 
+                # sorting through the version hashes and checking for new files
                 for name in zip_names:
                     if name.endswith('.metadata'):
-                        clean_metadata_utf8(name)  # clean the metadata in case of utf8 errors
                         with zf.open(name) as metadata:
-                            jsondoc = json.loads(metadata.readline())
+                            # we need to correct the metadata for utf-8 first, then read everything else
+                            data = metadata.read()
+                            corrected_metadata = codecs.decode(data, 'utf-8-sig')
+                        metadata.close()
 
+                        # print for error checking (to be removed)
+                        print("raw data: " + data.decode() + "\n")
+                        print("cleaned metadata: " + str(corrected_metadata) + "\n")
+                        # clean just in case for newlines
+                        corrected_metadata = corrected_metadata.replace("\n", "")
+                        # now read the metadata line as a json and get its version hash
+                        try:
+                            jsondoc = json.loads(corrected_metadata)
                             version_hash = jsondoc.get('version_hash', None)
-                            if version_hash and not version_hash in previous_hashes:
-                                not_in_previous_hashes.add(name)
-                                corrected_manifest_jdocs.append(jsondoc)
+                        except:
+                            print("WARNING: metadata file errored on load. Skipping")
+                            continue
+                        # only getting docs that aren't in previous hashes
+                        if version_hash and not version_hash in previous_hashes:
+                            not_in_previous_hashes.add(name)
+                            corrected_manifest_jdocs.append(jsondoc)
 
-                    for to_move_meta in not_in_previous_hashes:
-                        zip_filename = to_move_meta.replace('.metadata', '')
+                            # upload all of the files not in previous version hashes to s3
+                            zip_filename = name.replace('.metadata', '')  # name of the main file
+                            if zip_filename in zip_names:
+                                # upload the main file
+                                upload_file_from_zip(
+                                    zf_ref=zf, zip_filename=zip_filename, prefix=destination_prefix_dt)
+                                # upload the metadata
+                                upload_jsonlines(
+                                    lines=[jsondoc], filename=name, prefix=destination_prefix_dt)
 
-                        if zip_filename in zip_names:
-                            upload_file_from_zip(
-                                zf_ref=zf, zip_filename=zip_filename, prefix=destination_prefix_dt)
-                            upload_file_from_zip(
-                                zf_ref=zf, zip_filename=to_move_meta, prefix=destination_prefix_dt)
-
+                # upload the manifest file after getting all correctd metadata jdocs
                 upload_jsonlines(
                     lines=corrected_manifest_jdocs, filename='manifest.json', prefix=destination_prefix_dt)
 
@@ -246,11 +266,10 @@ def get_filename_s3_obj_map() -> typing.Dict[str, object]:
     return out
 
 
-def create_zip_obj(s3_obj) -> ZipFile:
+def create_byte_obj(s3_obj):
     body_bytes = s3_obj.get()['Body'].read()
     bytes_obj = BytesIO(body_bytes)
-    zf = ZipFile(bytes_obj, 'r')
-    return zf
+    return bytes_obj
 
 
 def upload_file_from_zip(zf_ref, zip_filename, prefix, bucket=destination_bucket):
@@ -260,7 +279,14 @@ def upload_file_from_zip(zf_ref, zip_filename, prefix, bucket=destination_bucket
             f, bucket, f"{prefix}/{filename}")
 
 
-def upload_jsonlines(lines, filename, prefix, bucket=destination_bucket):
+def upload_jsonlines(lines: typing.List[dict], filename: str, prefix: str, bucket=destination_bucket):
+    """
+    This function takes in a list of jsons and puts it into an s3 location with the appropriate filename
+    :param lines: the list of json-readable lines to be uploaded as a single file to s3
+    :param filename: name of the file the jsons will be written into and uploaded in
+    :param prefix: prefix to upload to in s3
+    :param bucket: bucket to upload to in s3
+    """
     with tempfile.TemporaryFile(mode='r+') as new_file:
         for line in lines:
             jsondoc = json.dumps(line) + '\n'
@@ -274,15 +300,8 @@ def upload_jsonlines(lines, filename, prefix, bucket=destination_bucket):
             Bucket=bucket,
             Key=key
         )
+    new_file.close()  # extra close just to be safe
 
-
-def clean_metadata_utf8(name):
-    with open(name, 'r+') as f:
-        content = f.read()
-        decoded_data = codecs.decode(content.encode(), 'utf-8-sig')
-        f.seek(0)
-        json.dump(json.loads(decoded_data), f)
-        f.truncate()
 
 if __name__ == '__main__':
     filter_and_move()
