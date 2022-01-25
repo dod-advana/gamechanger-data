@@ -17,7 +17,6 @@ class CrawlerStatusTracker:
     def __init__(self, input_json: Union[str, os.PathLike]):
         self._input_json = input_json
         self._input_doc_names = set()
-        self._input_docs_revoked_by_crawler = set()
         self._crawlers_downloaded = set()
         self._dbs_initiated = False
 
@@ -35,8 +34,6 @@ class CrawlerStatusTracker:
                         continue
                     self._input_doc_names.add(j_data["doc_name"])
                     self._crawlers_downloaded.add(j_data["crawler_used"])
-                    if j_data.get("is_revoked", False):
-                        self._input_docs_revoked_by_crawler.add(j_data["doc_name"])
                     
     def update_crawler_status(self, status: str, timestamp:dt.timestamp, update_db:bool):
         if not self._dbs_initiated:
@@ -106,8 +103,10 @@ class CrawlerStatusTracker:
                 if crawler_used not in self._crawlers_downloaded:
                     continue
 
+                meta_is_revoked = doc_json_metadata.get('is_revoked', False)
+
                 # doc is considered revoked if marked as such by the crawler ...
-                if doc_name in self._input_docs_revoked_by_crawler:
+                if meta_is_revoked:
                     updated_is_revoked = True
                 else:  # ... otherwise doc is considered revoked if missing from the new input document set
                     updated_is_revoked = doc_name not in self._input_doc_names
