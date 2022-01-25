@@ -4,6 +4,8 @@ from datetime import datetime as dt
 from pathlib import Path
 from typing import Union
 
+from sqlalchemy import func
+
 from dataPipelines.gc_db_utils.orch.models import CrawlerStatusEntry, Publication, VersionedDoc
 from dataPipelines.gc_neo4j_publisher.neo4j_publisher import process_query
 
@@ -52,51 +54,69 @@ class CrawlerStatusTracker:
                                                              datetime=formatted_timestamp)
                     session.add(status_entry)
 
-    def _revoke_documents(self, update_db:bool):
+    def _revoke_documents(self, update_db: bool):
         with Config.connection_helper.orch_db_session_scope('rw') as session:
-            db_revoked = session.query(Publication.name, VersionedDoc.json_metadata). \
-                join(VersionedDoc, Publication.name == VersionedDoc.name). \
-                filter(Publication.is_revoked == True).all()
-            db_current = session.query(Publication.name, VersionedDoc.json_metadata). \
-                join(VersionedDoc, Publication.name == VersionedDoc.name). \
-                filter(Publication.is_revoked == False).all()
-            # extract crawler_used from metadata and de-dup the list
-            db_revoked_list = list(
-                set(
-                    [(name, json.loads(j)["crawler_used"])
-                        if isinstance(j,str)
-                        else (name,j["crawler_used"])
-                        for (name, j) in db_revoked]))
-            db_current_list = list(
-                set(
-                    [(name, json.loads(j)["crawler_used"])
-                     if isinstance(j,str) else (name, j["crawler_used"])
-                     for (name, j) in db_current]))
-            for (doc, crawler) in db_current_list:
-                if (
-                    # we revoke if the document is now missing in the new ingest set ...
-                    (
-                        doc not in self._input_doc_names
-                        and crawler in self._crawlers_downloaded
-                        and crawler != "legislation_pubs"   # ??
-                    )
-                    # ... or if the document was explicitely set as revoked by the crawler
-                    or doc in self._input_docs_revoked_by_crawler
-                ):
-                    print("Publication " + doc + " is now revoked")
+
+            # The following query should generate SQL to pull the publication and latest 
+            # versioned document that is equivalent to:
+            #
+            # SELECT p.name, p.is_revoked, v.json_metadata
+            # FROM publications AS p
+            # JOIN versioned_docs AS v 
+            # ON p.id = v.pub_id
+            # JOIN (
+            #     SELECT pub_id, MAX(batch_timestamp) AS max_timestamp
+            #     FROM versioned_docs
+            #     GROUP BY pub_id
+            # ) AS vmax
+            # ON v.pub_id = vmax.pub_id AND v.batch_timestamp = vmax.max_timestamp
+
+            recent_subq = session.query(
+                VersionedDoc.pub_id,
+                func.max(VersionedDoc.batch_timestamp).label('max_timestamp')
+            ).group_by(VersionedDoc.pub_id).subquery()
+
+            publications_query = session.query(
+                Publication.id,
+                Publication.name,
+                Publication.is_revoked,
+                VersionedDoc.json_metadata
+            ).join(
+                VersionedDoc,
+                Publication.id == VersionedDoc.pub_id
+            ).join(
+                recent_subq,
+                (VersionedDoc.pub_id == recent_subq.c.pub_id) &
+                (VersionedDoc.batch_timestamp == recent_subq.c.max_timestamp)
+            )
+
+            for doc_id, doc_name, doc_is_revoked, doc_json_metadata in publications_query.yield_per(10000):
+                # work around the fact that some json data is incorrectly stored in the database json column as
+                # json encoded strings -- i.e. `"{\"a\": \"b\"}"` instead of `{"a": "b"}`
+                if isinstance(doc_json_metadata, str):
+                    doc_json_metadata = json.loads(doc_json_metadata)
+
+                crawler_used = doc_json_metadata['crawler_used']
+
+                # not sure why this logic exists to ignore 'legislation_pubs' crawler...
+                if crawler_used == 'legislation_pubs':
+                    continue
+
+                # skip doc if not in the crawler set we are interested in
+                if crawler_used not in self._crawlers_downloaded:
+                    continue
+
+                # doc is considered revoked if marked as such by the crawler ...
+                if doc_name in self._input_docs_revoked_by_crawler:
+                    updated_is_revoked = True
+                else:  # ... otherwise doc is considered revoked if missing from the new input document set
+                    updated_is_revoked = doc_name not in self._input_doc_names
+
+                if updated_is_revoked != doc_is_revoked:
+                    print(f'Publication {doc_name} is {"now" if updated_is_revoked else "no longer"} revoked')
                     if update_db:
-                        print("Updating DB to reflect " + doc + " is revoked")
-                        pub = session.query(Publication).filter_by(name=doc).one()
-                        pub.is_revoked = True
-            for (doc, crawler) in db_revoked_list:
-                # anything present in the new ingest set (that was not set as revoked by the crawler)
-                # will now be un-revoked
-                if doc in self._input_doc_names and crawler in self._crawlers_downloaded:
-                    print("Publication " + doc + " is no longer revoked")
-                    if update_db:
-                        print("Updating DB to reflect " + doc + " is no longer revoked")
-                        pub = session.query(Publication).filter_by(name=doc).one()
-                        pub.is_revoked = False
+                        print(f'Updating DB to reflect {doc_name} is{" " if updated_is_revoked else " not "}revoked')
+                        session.query(Publication).filter_by(id=doc_id).update({'is_revoked': updated_is_revoked})
 
     def _get_revoked_documents(self):
         with Config.connection_helper.orch_db_session_scope('rw') as session:
