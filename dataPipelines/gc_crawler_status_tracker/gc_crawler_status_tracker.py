@@ -53,8 +53,6 @@ class CrawlerStatusTracker:
                     session.add(status_entry)
 
     def _revoke_documents(self, update_db: bool):
-        docs_to_update = []
-
         with Config.connection_helper.orch_db_session_scope('rw') as session:
             docs = self._fetch_docs(session=session)
 
@@ -82,9 +80,6 @@ class CrawlerStatusTracker:
                     if update_db:
                         print(f'Updating DB to reflect {doc.name} is{" " if now_is_revoked else " not "}revoked')
                         session.query(Publication).filter_by(id=doc.id).update({'is_revoked': now_is_revoked})
-                    docs_to_update.append(doc)
-
-        return docs_to_update
 
     def _fetch_docs(self, *, session=None):
         # if not provided with an open session open a new session; the use of an ExitStack context manager to
@@ -137,8 +132,8 @@ class CrawlerStatusTracker:
             ).all()
 
     def _update_revocations_es(self, docs, index_name:str):
+        print(f'Updating Elasticsearch revocation statuses')
         for doc in docs:
-            print(f'Updating Elasticsearch to reflect {doc.name} revocation status is {doc.is_revoked}')
             update_body = {
                 "query": {
                     "term": {
@@ -156,8 +151,8 @@ class CrawlerStatusTracker:
             Config.connection_helper.es_client.update_by_query(index=index_name, body=update_body)
 
     def _update_revocations_neo4j(self, docs):
+        print(f'Updating Neo4j revocation statuses')
         for doc in docs:
-            print(f'Updating Neo4j to reflect {doc.name} revocation status is {doc.is_revoked}')
             process_query(
                 f'MERGE (a:Document {{ name: "{doc.name}" }}) '
                 f'SET a.is_revoked_b = {"true" if doc.is_revoked else "false"}'
@@ -171,13 +166,10 @@ class CrawlerStatusTracker:
         if self._input_json and not self._crawlers_downloaded:
             self._set_input_lists()
 
-        docs = None
         if self._input_json:
-            docs = self._revoke_documents(update_db=update_db)
+            self._revoke_documents(update_db=update_db)
 
-        # if we are ingesting an input json we use the optimized list of docs whose revocation status
-        # actually changed otherwise we pull every doc and brute force update everything
-        if (docs is None) and (update_es or update_neo4j):
+        if update_es or update_neo4j:
             docs = self._fetch_docs()
 
         if update_es:
