@@ -5,7 +5,7 @@ from datetime import datetime as dt
 from pathlib import Path
 from typing import Union
 
-from sqlalchemy import func
+from sqlalchemy import case, cast, func, JSON
 
 from dataPipelines.gc_db_utils.orch.models import CrawlerStatusEntry, Publication, VersionedDoc
 from dataPipelines.gc_neo4j_publisher.neo4j_publisher import process_query
@@ -56,15 +56,9 @@ class CrawlerStatusTracker:
         docs_to_update = []
 
         with Config.connection_helper.orch_db_session_scope('rw') as session:
-
-            docs = self._fetch_docs(session=session, include_metadata=True)
+            docs = self._fetch_docs(session=session)
 
             for doc in docs:
-                # work around the fact that some json data is incorrectly stored in the database json column as
-                # json encoded strings -- i.e. `"{\"a\": \"b\"}"` instead of `{"a": "b"}`
-                if isinstance(doc.json_metadata, str):
-                    doc.json_metadata = json.loads(doc.json_metadata)
-
                 crawler_used = doc.json_metadata['crawler_used']
 
                 # not sure why this logic exists to ignore 'legislation_pubs' crawler...
@@ -92,7 +86,7 @@ class CrawlerStatusTracker:
 
         return docs_to_update
 
-    def _fetch_docs(self, *, session=None, include_metadata=False):
+    def _fetch_docs(self, *, session=None):
         # if not provided with an open session open a new session; the use of an ExitStack context manager to
         # optionally close only a new session could be cleaned up with the nullcontext when moving to Python 3.7+
         exit_stack = ExitStack()
@@ -115,15 +109,6 @@ class CrawlerStatusTracker:
             # ) AS vmax
             # ON v.pub_id = vmax.pub_id AND v.batch_timestamp = vmax.max_timestamp
 
-            fields = [
-                Publication.id,
-                Publication.name,
-                Publication.is_revoked,
-                VersionedDoc.filename,
-            ]
-            if include_metadata:
-                fields.append(VersionedDoc.json_metadata)
-
             recent_subq = session.query(
                 VersionedDoc.pub_id,
                 func.max(VersionedDoc.batch_timestamp).label('max_timestamp')
@@ -132,7 +117,16 @@ class CrawlerStatusTracker:
             ).subquery()
 
             return session.query(
-                *fields
+                Publication.id,
+                Publication.name,
+                Publication.is_revoked,
+                VersionedDoc.filename,
+                # work around the fact that some json data is incorrectly stored in the json_metadata column as
+                # json encoded strings -- i.e. `"{\"a\": \"b\"}"` instead of `{"a": "b"}` -- by conditionally
+                # extracting the string as text and re-parsing as json when a string is stored in the column
+                case({'string': cast(VersionedDoc.json_metadata.op('#>>')('{}'), JSON)},
+                     else_=VersionedDoc.json_metadata,
+                     value=func.json_typeof(VersionedDoc.json_metadata)).label('json_metadata')
             ).join(
                 VersionedDoc,
                 Publication.id == VersionedDoc.pub_id
