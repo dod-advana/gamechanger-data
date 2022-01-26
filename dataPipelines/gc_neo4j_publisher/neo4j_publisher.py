@@ -54,12 +54,12 @@ def process_ent(ent: str) -> t.Union[t.List[str], str]:
         return ent
 
 
-def process_query(query: str) -> None:
+def process_query(query: str, parameters: t.Dict[str, t.Any] = None, **kwparameters) -> None:
     with MainConfig.connection_helper.neo4j_session_scope() as session:
         try_count = 0
         while try_count <= 10:
             try:
-                result = session.run(query)
+                result = session.run(query, parameters, **kwparameters)
                 return
             except exceptions.TransientError:
                 try_count += 1

@@ -165,8 +165,11 @@ class CrawlerStatusTracker:
         print(f'Updating Neo4j revocation statuses')
         for doc in docs:
             process_query(
-                f'MERGE (a:Document {{ name: "{doc.name}" }}) '
-                f'SET a.is_revoked_b = {"true" if doc.is_revoked else "false"}'
+                'MATCH (a:Document { name: $name, crawler_used_s: $crawler_used })'
+                'SET a.is_revoked_b = $is_revoked',
+                name=doc.name,
+                crawler_used=doc.json_metadata['crawler_used'],
+                is_revoked=doc.is_revoked,
             )
 
     def handle_revocations(self, index_name: str, update_es: bool, update_db: bool, update_neo4j: bool):
