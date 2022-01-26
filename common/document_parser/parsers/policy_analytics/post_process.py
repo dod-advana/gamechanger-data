@@ -112,6 +112,13 @@ def get_file_extension(meta_data):
     file_ext = meta_data["downloadable_items"][0]["doc_type"]
     return file_ext
 
+def get_is_revoked(meta_data):
+    """
+    get revocation status from document metadata
+    :return: bool
+    """
+    return meta_data.get("is_revoked", False)
+
 
 def rename_and_format(doc_dict):
     doc_dict["raw_text"] = utf8_pass(doc_dict["text"])
@@ -128,8 +135,9 @@ def rename_and_format(doc_dict):
         doc_dict["data_source_s"] = get_data_source(doc_dict["meta_data"])
         doc_dict["source_title_s"] = get_source_title(doc_dict["meta_data"])
         doc_dict["display_source_s"] = get_display_source(doc_dict["meta_data"])
-
-    doc_dict["is_revoked_b"] = False
+        doc_dict["is_revoked_b"] = get_is_revoked(doc_dict["meta_data"])
+    else:
+        doc_dict["is_revoked_b"] = False
 
     to_rename = [
         ("txt_length", "text_length_r"),
@@ -145,7 +153,7 @@ def rename_and_format(doc_dict):
         try:
             doc_dict[needed] = doc_dict[current]
             del doc_dict[current]
-        except:
+        except KeyError:
             pass
 
     if doc_dict["meta_data"]:
@@ -172,7 +180,7 @@ def rename_and_format(doc_dict):
     for key in to_delete:
         try:
             del doc_dict[key]
-        except:
+        except KeyError:
             pass
 
     return doc_dict
