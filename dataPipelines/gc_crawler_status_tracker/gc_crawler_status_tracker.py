@@ -1,5 +1,6 @@
 import json
 import os
+from contextlib import ExitStack
 from datetime import datetime as dt
 from pathlib import Path
 from typing import Union
@@ -52,48 +53,19 @@ class CrawlerStatusTracker:
                     session.add(status_entry)
 
     def _revoke_documents(self, update_db: bool):
+        docs_to_update = []
+
         with Config.connection_helper.orch_db_session_scope('rw') as session:
 
-            # The following query should generate SQL to pull the publication and latest 
-            # versioned document that is equivalent to:
-            #
-            # SELECT p.name, p.is_revoked, v.json_metadata
-            # FROM publications AS p
-            # JOIN versioned_docs AS v 
-            # ON p.id = v.pub_id
-            # JOIN (
-            #     SELECT pub_id, MAX(batch_timestamp) AS max_timestamp
-            #     FROM versioned_docs
-            #     GROUP BY pub_id
-            # ) AS vmax
-            # ON v.pub_id = vmax.pub_id AND v.batch_timestamp = vmax.max_timestamp
+            docs = self._fetch_docs(session=session, include_metadata=True)
 
-            recent_subq = session.query(
-                VersionedDoc.pub_id,
-                func.max(VersionedDoc.batch_timestamp).label('max_timestamp')
-            ).group_by(VersionedDoc.pub_id).subquery()
-
-            publications_query = session.query(
-                Publication.id,
-                Publication.name,
-                Publication.is_revoked,
-                VersionedDoc.json_metadata
-            ).join(
-                VersionedDoc,
-                Publication.id == VersionedDoc.pub_id
-            ).join(
-                recent_subq,
-                (VersionedDoc.pub_id == recent_subq.c.pub_id) &
-                (VersionedDoc.batch_timestamp == recent_subq.c.max_timestamp)
-            )
-
-            for doc_id, doc_name, doc_is_revoked, doc_json_metadata in publications_query.yield_per(10000):
+            for doc in docs:
                 # work around the fact that some json data is incorrectly stored in the database json column as
                 # json encoded strings -- i.e. `"{\"a\": \"b\"}"` instead of `{"a": "b"}`
-                if isinstance(doc_json_metadata, str):
-                    doc_json_metadata = json.loads(doc_json_metadata)
+                if isinstance(doc.json_metadata, str):
+                    doc.json_metadata = json.loads(doc.json_metadata)
 
-                crawler_used = doc_json_metadata['crawler_used']
+                crawler_used = doc.json_metadata['crawler_used']
 
                 # not sure why this logic exists to ignore 'legislation_pubs' crawler...
                 if crawler_used == 'legislation_pubs':
@@ -103,64 +75,98 @@ class CrawlerStatusTracker:
                 if crawler_used not in self._crawlers_downloaded:
                     continue
 
-                meta_is_revoked = doc_json_metadata.get('is_revoked', False)
+                meta_is_revoked = doc.json_metadata.get('is_revoked', False)
 
                 # doc is considered revoked if marked as such by the crawler ...
                 if meta_is_revoked:
-                    updated_is_revoked = True
+                    now_is_revoked = True
                 else:  # ... otherwise doc is considered revoked if missing from the new input document set
-                    updated_is_revoked = doc_name not in self._input_doc_names
+                    now_is_revoked = doc.name not in self._input_doc_names
 
-                if updated_is_revoked != doc_is_revoked:
-                    print(f'Publication {doc_name} is {"now" if updated_is_revoked else "no longer"} revoked')
+                if now_is_revoked != doc.is_revoked:
+                    print(f'Publication {doc.name} is {"now" if now_is_revoked else "no longer"} revoked')
                     if update_db:
-                        print(f'Updating DB to reflect {doc_name} is{" " if updated_is_revoked else " not "}revoked')
-                        session.query(Publication).filter_by(id=doc_id).update({'is_revoked': updated_is_revoked})
+                        print(f'Updating DB to reflect {doc.name} is{" " if now_is_revoked else " not "}revoked')
+                        session.query(Publication).filter_by(id=doc.id).update({'is_revoked': now_is_revoked})
+                    docs_to_update.append(doc)
 
-    def _get_revoked_documents(self):
-        with Config.connection_helper.orch_db_session_scope('rw') as session:
-            db_revoked = session.query(Publication.name).\
-                filter(Publication.is_revoked == True).all()
-            db_revocations =list(set([name for (name,) in db_revoked]))
-            return db_revocations
+        return docs_to_update
 
-    def _get_non_revoked_documents(self):
-        with Config.connection_helper.orch_db_session_scope('rw') as session:
-            db_non_revoked = session.query(Publication.name).\
-                filter(Publication.is_revoked == False).all()
-            db_non_revocations =list(set([name for (name,) in db_non_revoked]))
-            return db_non_revocations
+    def _fetch_docs(self, *, session=None, include_metadata=False):
+        # if not provided with an open session open a new session; the use of an ExitStack context manager to
+        # optionally close only a new session could be cleaned up with the nullcontext when moving to Python 3.7+
+        exit_stack = ExitStack()
+        if not session:
+            session_scope = Config.connection_helper.orch_db_session_scope('ro')
+            session = exit_stack.enter_context(session_scope)
 
-# TODO fix "PDF" addition here. Add html
-    def _update_revocations_es(self, doc_name_list, index_name:str):
+        with exit_stack:          
+            # The following query should generate SQL to pull the publication and latest
+            # versioned document which is equivalent to:
+            #
+            # SELECT p.id, p.name, p.is_revoked, v.filename, v.json_metadata
+            # FROM publications AS p
+            # JOIN versioned_docs AS v
+            # ON p.id = v.pub_id
+            # JOIN (
+            #     SELECT pub_id, MAX(batch_timestamp) AS max_timestamp
+            #     FROM versioned_docs
+            #     GROUP BY pub_id
+            # ) AS vmax
+            # ON v.pub_id = vmax.pub_id AND v.batch_timestamp = vmax.max_timestamp
 
-        for doc in doc_name_list:
-            print(
-                "Updating Elasticsearch to reflect " + doc + " is revocation status has changed to " + str(True))
+            fields = [
+                Publication.id,
+                Publication.name,
+                Publication.is_revoked,
+                VersionedDoc.filename,
+            ]
+            if include_metadata:
+                fields.append(VersionedDoc.json_metadata)
+
+            recent_subq = session.query(
+                VersionedDoc.pub_id,
+                func.max(VersionedDoc.batch_timestamp).label('max_timestamp')
+            ).group_by(
+                VersionedDoc.pub_id
+            ).subquery()
+
+            return session.query(
+                *fields
+            ).join(
+                VersionedDoc,
+                Publication.id == VersionedDoc.pub_id
+            ).join(
+                recent_subq,
+                ((VersionedDoc.pub_id == recent_subq.c.pub_id)
+                 & (VersionedDoc.batch_timestamp == recent_subq.c.max_timestamp))
+            ).all()
+
+    def _update_revocations_es(self, docs, index_name:str):
+        for doc in docs:
+            print(f'Updating Elasticsearch to reflect {doc.name} revocation status is {doc.is_revoked}')
             update_body = {
                 "query": {
                     "term": {
-                        "filename": doc + ".pdf"
+                        "filename": doc.filename
                     }
                 },
                 "script": {
                     "source": "ctx._source.is_revoked_b = params.is_revoked_b",
                     "lang": "painless",
                     "params": {
-                        "is_revoked_b": True
+                        "is_revoked_b": doc.is_revoked
                     }
                 }
             }
             Config.connection_helper.es_client.update_by_query(index=index_name, body=update_body)
 
-    def _update_revocations_neo4j(self, revoked_docs, non_revoked_docs):
-        for doc in revoked_docs:
+    def _update_revocations_neo4j(self, docs):
+        for doc in docs:
+            print(f'Updating Neo4j to reflect {doc.name} revocation status is {doc.is_revoked}')
             process_query(
-                "MERGE (a:Document {name: \"" + doc + "\"}) SET a.is_revoked_b = true"
-            )
-        for doc in non_revoked_docs:
-            process_query(
-                "MERGE (a:Document {name: \"" + doc + "\"}) SET a.is_revoked_b = false"
+                f'MERGE (a:Document {{ name: "{doc.name}" }}) '
+                f'SET a.is_revoked_b = {"true" if doc.is_revoked else "false"}'
             )
 
     def handle_revocations(self, index_name: str, update_es: bool, update_db: bool, update_neo4j: bool):
@@ -168,16 +174,20 @@ class CrawlerStatusTracker:
             Config.connection_helper.init_dbs()
             self._dbs_initiated = True
 
-        if not self._crawlers_downloaded and self._input_json:
+        if self._input_json and not self._crawlers_downloaded:
             self._set_input_lists()
 
-        if self._input_json and Path(self._input_json).resolve():
-            self._revoke_documents(update_db=update_db)
+        docs = None
+        if self._input_json:
+            docs = self._revoke_documents(update_db=update_db)
 
-        docs_to_be_revoked = self._get_revoked_documents()
+        # if we are ingesting an input json we use the optimized list of docs whose revocation status
+        # actually changed otherwise we pull every doc and brute force update everything
+        if (docs is None) and (update_es or update_neo4j):
+            docs = self._fetch_docs()
+
         if update_es:
-            self._update_revocations_es(doc_name_list=docs_to_be_revoked, index_name=index_name)
+            self._update_revocations_es(docs, index_name=index_name)
 
-        non_revoked_docs = self._get_non_revoked_documents()
         if update_neo4j:
-            self._update_revocations_neo4j(revoked_docs=docs_to_be_revoked, non_revoked_docs=non_revoked_docs)
+            self._update_revocations_neo4j(docs)
