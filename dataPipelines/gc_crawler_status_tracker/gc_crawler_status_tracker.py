@@ -136,8 +136,19 @@ class CrawlerStatusTracker:
         for doc in docs:
             update_body = {
                 "query": {
-                    "term": {
-                        "filename": doc.filename
+                    "bool": {
+                        "must": [
+                            {
+                                "term": {
+                                    "filename": doc.filename
+                                }
+                            },
+                            {
+                                "term": {
+                                    "crawler_used_s": doc.json_metadata['crawler_used']
+                                }
+                            }
+                        ]
                     }
                 },
                 "script": {
