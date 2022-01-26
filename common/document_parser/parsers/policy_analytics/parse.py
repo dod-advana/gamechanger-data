@@ -38,7 +38,7 @@ def parse(
     if ocr_missing_doc or force_ocr:
         f_name = ocr.get_ocr_filename(f_name, num_ocr_threads, force_ocr)
     if str(f_name).endswith("html"):
-        f_name = html_utils.get_html_filename(f_name)
+        f_name = html_utils.convert_html_to_pdf(f_name)
         should_delete = True
     funcs = [ref_list.add_ref_list, entities.extract_entities, topics.extract_topics, keywords.add_keyw_5, abbreviations.add_abbreviations_n, summary.add_summary, add_pagerank_r, add_popscore_r, 
              text_length.add_word_count]
