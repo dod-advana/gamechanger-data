@@ -11,10 +11,10 @@ from textwrap import dedent
 s3 = boto3.resource('s3')
 s3_client = boto3.client('s3')
 
-source_bucket = "advana-data-zone"
+source_bucket = "advana-landing-zone"
 destination_bucket = "advana-data-zone"
 
-source_prefix = "advana-landing-zone/non-sensitive/Gamechanger Clones"
+source_prefix = "non-sensitive/Gamechanger Clones"
 destination_base_prefix = "bronze/gamechanger/clone_mover_landing_zone"
 errored_destination_base_prefix = "bronze/gamechanger/clone_mover_landing_zone_errored"
 
