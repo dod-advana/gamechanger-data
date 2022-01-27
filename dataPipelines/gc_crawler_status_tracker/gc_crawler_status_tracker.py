@@ -5,7 +5,7 @@ from datetime import datetime as dt
 from pathlib import Path
 from typing import Union
 
-from sqlalchemy import func
+from sqlalchemy import case, cast, func, JSON
 
 from dataPipelines.gc_db_utils.orch.models import CrawlerStatusEntry, Publication, VersionedDoc
 from dataPipelines.gc_neo4j_publisher.neo4j_publisher import process_query
@@ -53,18 +53,10 @@ class CrawlerStatusTracker:
                     session.add(status_entry)
 
     def _revoke_documents(self, update_db: bool):
-        docs_to_update = []
-
         with Config.connection_helper.orch_db_session_scope('rw') as session:
-
-            docs = self._fetch_docs(session=session, include_metadata=True)
+            docs = self._fetch_docs(session=session)
 
             for doc in docs:
-                # work around the fact that some json data is incorrectly stored in the database json column as
-                # json encoded strings -- i.e. `"{\"a\": \"b\"}"` instead of `{"a": "b"}`
-                if isinstance(doc.json_metadata, str):
-                    doc.json_metadata = json.loads(doc.json_metadata)
-
                 crawler_used = doc.json_metadata['crawler_used']
 
                 # not sure why this logic exists to ignore 'legislation_pubs' crawler...
@@ -88,11 +80,8 @@ class CrawlerStatusTracker:
                     if update_db:
                         print(f'Updating DB to reflect {doc.name} is{" " if now_is_revoked else " not "}revoked')
                         session.query(Publication).filter_by(id=doc.id).update({'is_revoked': now_is_revoked})
-                    docs_to_update.append(doc)
 
-        return docs_to_update
-
-    def _fetch_docs(self, *, session=None, include_metadata=False):
+    def _fetch_docs(self, *, session=None):
         # if not provided with an open session open a new session; the use of an ExitStack context manager to
         # optionally close only a new session could be cleaned up with the nullcontext when moving to Python 3.7+
         exit_stack = ExitStack()
@@ -115,15 +104,6 @@ class CrawlerStatusTracker:
             # ) AS vmax
             # ON v.pub_id = vmax.pub_id AND v.batch_timestamp = vmax.max_timestamp
 
-            fields = [
-                Publication.id,
-                Publication.name,
-                Publication.is_revoked,
-                VersionedDoc.filename,
-            ]
-            if include_metadata:
-                fields.append(VersionedDoc.json_metadata)
-
             recent_subq = session.query(
                 VersionedDoc.pub_id,
                 func.max(VersionedDoc.batch_timestamp).label('max_timestamp')
@@ -132,7 +112,16 @@ class CrawlerStatusTracker:
             ).subquery()
 
             return session.query(
-                *fields
+                Publication.id,
+                Publication.name,
+                Publication.is_revoked,
+                VersionedDoc.filename,
+                # work around the fact that some json data is incorrectly stored in the json_metadata column as
+                # json encoded strings -- i.e. `"{\"a\": \"b\"}"` instead of `{"a": "b"}` -- by conditionally
+                # extracting the string as text and re-parsing as json when a string is stored in the column
+                case({'string': cast(VersionedDoc.json_metadata.op('#>>')('{}'), JSON)},
+                     else_=VersionedDoc.json_metadata,
+                     value=func.json_typeof(VersionedDoc.json_metadata)).label('json_metadata')
             ).join(
                 VersionedDoc,
                 Publication.id == VersionedDoc.pub_id
@@ -143,12 +132,23 @@ class CrawlerStatusTracker:
             ).all()
 
     def _update_revocations_es(self, docs, index_name:str):
+        print(f'Updating Elasticsearch revocation statuses')
         for doc in docs:
-            print(f'Updating Elasticsearch to reflect {doc.name} revocation status is {doc.is_revoked}')
             update_body = {
                 "query": {
-                    "term": {
-                        "filename": doc.filename
+                    "bool": {
+                        "must": [
+                            {
+                                "term": {
+                                    "filename": doc.filename
+                                }
+                            },
+                            {
+                                "term": {
+                                    "crawler_used_s": doc.json_metadata['crawler_used']
+                                }
+                            }
+                        ]
                     }
                 },
                 "script": {
@@ -162,11 +162,14 @@ class CrawlerStatusTracker:
             Config.connection_helper.es_client.update_by_query(index=index_name, body=update_body)
 
     def _update_revocations_neo4j(self, docs):
+        print(f'Updating Neo4j revocation statuses')
         for doc in docs:
-            print(f'Updating Neo4j to reflect {doc.name} revocation status is {doc.is_revoked}')
             process_query(
-                f'MERGE (a:Document {{ name: "{doc.name}" }}) '
-                f'SET a.is_revoked_b = {"true" if doc.is_revoked else "false"}'
+                'MATCH (a:Document { name: $name, crawler_used_s: $crawler_used })'
+                'SET a.is_revoked_b = $is_revoked',
+                name=doc.name,
+                crawler_used=doc.json_metadata['crawler_used'],
+                is_revoked=doc.is_revoked,
             )
 
     def handle_revocations(self, index_name: str, update_es: bool, update_db: bool, update_neo4j: bool):
@@ -177,13 +180,10 @@ class CrawlerStatusTracker:
         if self._input_json and not self._crawlers_downloaded:
             self._set_input_lists()
 
-        docs = None
         if self._input_json:
-            docs = self._revoke_documents(update_db=update_db)
+            self._revoke_documents(update_db=update_db)
 
-        # if we are ingesting an input json we use the optimized list of docs whose revocation status
-        # actually changed otherwise we pull every doc and brute force update everything
-        if (docs is None) and (update_es or update_neo4j):
+        if update_es or update_neo4j:
             docs = self._fetch_docs()
 
         if update_es:
