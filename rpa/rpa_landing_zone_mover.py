@@ -2,16 +2,12 @@ import boto3
 import tempfile
 from zipfile import ZipFile
 from io import BytesIO
-from notification import slack
+from notification import slack, notify_with_tb
 import json
 import typing
 import datetime
 import traceback
 import codecs
-
-def notify_with_tb(msg, tb):
-    full = msg + '\n' + tb
-    slack.send_notification(full)
 
 
 s3 = boto3.resource('s3')
@@ -83,7 +79,7 @@ def filter_and_move():
 
                 except:
                     msg = f"[ERROR] RPA Landing Zone Mover failed to handle manifest file, skipping:\n {source_bucket}/{s3_obj.key} > {zip_filename}"
-                    notify_with_tb(msg, traceback.format_exc())
+                    notify_with_tb(msg, traceback)
                     # skip to next zip
                     continue
 
@@ -100,7 +96,8 @@ def filter_and_move():
 
                 for name in zip_names:
                     if name.endswith('.metadata'):
-                        clean_metadata_utf8(name)  # clean the metadata in case of utf8 errors
+                        # clean the metadata in case of utf8 errors
+                        clean_metadata_utf8(name)
                         with zf.open(name) as metadata:
                             jsondoc = json.loads(metadata.readline())
 
@@ -158,13 +155,13 @@ def filter_and_move():
 
         except:
             msg = f"[ERROR] RPA Landing Zone mover failed while handling the following:\n {source_bucket}/{s3_obj.key}"
-            notify_with_tb(msg, traceback.format_exc())
+            notify_with_tb(msg, traceback)
 
             try:
                 undo_uploads(prefix=destination_prefix_dt)
             except:
                 msg = '[ERROR] Failed undo_uploads'
-                notify_with_tb(msg, traceback.format_exc())
+                notify_with_tb(msg, traceback)
 
             continue
 
@@ -228,7 +225,7 @@ def get_previous_manifest_for_crawler(crawler_used) -> typing.Tuple[set, typing.
         slack.send_notification(msg)
     except Exception as e:
         msg = f"[ERROR] Unexpected error occurred getting previous manifest for crawler: {crawler_used}"
-        notify_with_tb(msg, traceback.format_exc())
+        notify_with_tb(msg, traceback)
         raise e
 
     finally:
@@ -283,6 +280,7 @@ def clean_metadata_utf8(name):
         f.seek(0)
         json.dump(json.loads(decoded_data), f)
         f.truncate()
+
 
 if __name__ == '__main__':
     filter_and_move()
