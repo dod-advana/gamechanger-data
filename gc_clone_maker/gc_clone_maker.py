@@ -22,11 +22,9 @@ class CloneParams:
     def __init__(self, *_, **kwargs):
         self.__dict__.update(kwargs)
 
-    source_agency_name: str
     metadata_creation_group: str = "pdf"
     clone_name: str
     elasticsearch_index: str
-    data_source_name: str
     source_s3_prefix: str
     source_s3_bucket: str
 
@@ -67,8 +65,6 @@ class CloneMaker:
     @staticmethod
     def make_clone_params(to_ingest):
         params_needed = [
-            # "source_agency_name",
-            # "data_source_name",
             "metadata_creation_group",
             "clone_name",
             "source_s3_bucket",
