@@ -16,5 +16,5 @@ def run():
 
 @cli.command()
 def edl_move():
-    print("Moving EDL upload files")
+    print("Clone maker: edl_move called")
     unzip_and_move()
