@@ -132,6 +132,9 @@ def unzip_and_move():
     except Exception as e:
         print('gc_clone_maker.clone_zip_mover.unzip_and_move() unexpected error:', e)
 
+    finally:
+        print("unzip_and_move() complete")
+
 
 if __name__ == "__main__":
     unzip_and_move()
