@@ -129,7 +129,12 @@ def unzip_and_move():
                     if should_delete:
                         s3_obj.delete()
                         send_notification(
-                            f"[SUCCESS] Unzipped and moved files from {source_bucket}/{s3_obj.key} to {destination_bucket}/{destination_prefix}! \n{clone_name} needs to be flagged for ingest")
+                            dedent(f"""
+                                [SUCCESS] JOB {clone_name} UNZIP AND MOVE\n
+                                \tUnzipped and moved files from `{source_bucket}/{s3_obj.key}` to `{destination_bucket}/{destination_prefix}`\n
+                                \t`{clone_name}` still needs to be flagged for ingest
+                            """)
+                        )
 
     except Exception as e:
         print('gc_clone_maker.clone_zip_mover.unzip_and_move() unexpected error:', e)
