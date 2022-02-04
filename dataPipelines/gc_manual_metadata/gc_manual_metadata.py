@@ -29,9 +29,10 @@ def dict_to_sha256_hex_digest(_dict: t.Dict[t.Any, t.Any]) -> str:
 
 class ManualMetadata:
 
-    def __init__(self, input_directory, document_group):
+    def __init__(self, input_directory, document_group, doc_type):
         self.input_directory = input_directory
         self.document_group = document_group
+        self.manual_doc_type = doc_type
         p = Path(self.input_directory).glob("**/*")
         self.files = [x for x in p if x.is_file() and (str(x).endswith("pdf") or str(x).endswith("html")
                                                        or (filetype.guess(str(x)) is not None and (
@@ -106,6 +107,38 @@ class ManualMetadata:
                 display_doc_type="Document",
                 display_org="NGA",
                 display_source="NGA Publications",
+                source_fqdn="manual.ingest",
+                version_hash=dict_to_sha256_hex_digest(version_hash_fields)
+            )
+        elif self.document_group == "navy":
+            before, part, after = Path(file).stem.partition("(")
+
+            doc_title = Path(file).stem
+            doc_type = self.manual_doc_type
+            doc_num = ""
+
+            pdi = dict(doc_type=Path(file).suffix[1:],
+                       web_url="manual.ingest")
+            version_hash_fields = {"filename": Path(file).name,
+                                   "doc_title": doc_title,
+                                   "doc_num": doc_num,
+                                   "doc_type": doc_type}
+
+            doc = dict(
+                doc_name=Path(file).stem,
+                doc_title=Path(file).stem,
+                doc_num=doc_num,
+                doc_type=doc_type,
+                publication_date="N/A",
+                access_timestamp=datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f'),
+                cac_login_required=True,
+                crawler_used="NAVY_manual",
+                source_page_url="manual.ingest",
+                version_hash_raw_data=version_hash_fields,
+                downloadable_items=[pdi],
+                display_doc_type=doc_type,
+                display_org="US Navy",
+                display_source="DON CDO",
                 source_fqdn="manual.ingest",
                 version_hash=dict_to_sha256_hex_digest(version_hash_fields)
             )

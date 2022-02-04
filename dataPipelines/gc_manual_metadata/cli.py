@@ -21,12 +21,20 @@ def cli():
     show_default=True,
     help="default metadata entries to use from config"
 )
+@click.option(
+    "-d",
+    "--doc-type",
+    help="The given doc type for a manual metadata ingest",
+    default="",
+    required=False,
+)
 
-def run (input_directory: str, document_group:str) -> None:
+def run (input_directory: str, document_group:str, doc_type:str) -> None:
 
     meta = ManualMetadata(
         input_directory=input_directory,
-        document_group=document_group
+        document_group=document_group,
+        doc_type=doc_type
     )
 
     meta.create_metadata()
