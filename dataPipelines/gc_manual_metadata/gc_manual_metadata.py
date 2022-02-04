@@ -113,7 +113,8 @@ class ManualMetadata:
         elif self.document_group == "navy":
             doc_title = Path(file).stem.split("_", 1)[1]
             doc_type = self.manual_doc_type
-            doc_num = Path(file).stem.split("_")[0]
+            doc_num = ""
+            publication_date = Path(file).stem.split("_")[0]
 
             pdi = dict(doc_type=Path(file).suffix[1:],
                        web_url="manual.ingest")
@@ -124,10 +125,10 @@ class ManualMetadata:
 
             doc = dict(
                 doc_name=Path(file).stem,
-                doc_title=Path(file).stem,
+                doc_title=doc_title,
                 doc_num=doc_num,
                 doc_type=doc_type,
-                publication_date="N/A",
+                publication_date=publication_date,
                 access_timestamp=datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f'),
                 cac_login_required=True,
                 crawler_used="NAVY_manual",
