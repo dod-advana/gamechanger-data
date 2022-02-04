@@ -117,9 +117,15 @@ class ManualMetadata:
             try:
                 doc_title = Path(file).stem.split("_", 1)[1]
                 publication_date = Path(file).stem.split("_")[0]
+                int(publication_date)
             except:
-                doc_title = Path(file).stem.split(" ", 1)[1]
-                publication_date = Path(file).stem.split(" ")[0]
+                try:
+                    doc_title = Path(file).stem.split(" ", 1)[1]
+                    publication_date = Path(file).stem.split(" ")[0]
+                    int(publication_date)
+                except:
+                    doc_title = Path(file).stem
+                    publication_date = ""
 
             pdi = dict(doc_type=Path(file).suffix[1:],
                        web_url="manual.ingest")
