@@ -111,11 +111,9 @@ class ManualMetadata:
                 version_hash=dict_to_sha256_hex_digest(version_hash_fields)
             )
         elif self.document_group == "navy":
-            before, part, after = Path(file).stem.partition("(")
-
-            doc_title = Path(file).stem
+            doc_title = Path(file).stem.split("_", 1)[1]
             doc_type = self.manual_doc_type
-            doc_num = ""
+            doc_num = Path(file).stem.split("_")[0]
 
             pdi = dict(doc_type=Path(file).suffix[1:],
                        web_url="manual.ingest")
