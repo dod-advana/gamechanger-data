@@ -63,13 +63,18 @@ def unzip_and_move():
                 base_dir = ''
                 # get the clone name to make destination for files
                 with ZipFile(bytes_obj, 'r') as zf:
-                    # skip OS prefixed names
+                    # skip OS prefixed names and hidden files
                     # this is zf.nameslist() example from local zip
-                    #   ['clone_mover_test/',
-                    #   'clone_mover_test/DoD365LaptopTabletUserGuide_v30Apr2021.pdf',
-                    #    '__MACOSX/clone_mover_test/._DoD365LaptopTabletUserGuide_v30Apr2021.pdf']
+                    #   [
+                    #    'clone_mover_test/',
+                    #    'clone_mover_test/DoD365LaptopTabletUserGuide_v30Apr2021.pdf',
+                    #    '__MACOSX/clone_mover_test/._DoD365LaptopTabletUserGuide_v30Apr2021.pdf'
+                    # ]
                     zip_names = [
-                        n for n in zf.namelist() if n.startswith(base_dir)
+                        n for n in zf.namelist() if
+                        not n.startswith('.') and
+                        not n.startswith('__MACOSX') and
+                        n.startswith(base_dir)
                     ]
                     # in archive base name (ie the original folder name when zipped)
                     base_dir = base_dir_heuristic(zip_names)
