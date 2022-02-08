@@ -2,16 +2,12 @@ import boto3
 import tempfile
 from zipfile import ZipFile
 from io import BytesIO
-from notification import slack
+from notification import slack, notify_with_tb
 import json
 import typing
 import datetime
 import traceback
 import codecs
-
-def notify_with_tb(msg, tb):
-    full = msg + '\n' + tb
-    slack.send_notification(full)
 
 
 s3 = boto3.resource('s3')
@@ -76,7 +72,8 @@ def filter_and_move():
                     with zf.open(f'{base_dir}manifest.json') as manifest:
 
                         for line in manifest.readlines():
-                            line = codecs.decode(line, 'utf-8-sig')   # decode the line in the manifest files
+                            # decode the line in the manifest files
+                            line = codecs.decode(line, 'utf-8-sig')
                             jsondoc = json.loads(line)
                             if not crawler_used:
                                 crawler_used = jsondoc['crawler_used']
@@ -86,7 +83,7 @@ def filter_and_move():
 
                 except:
                     msg = f"[ERROR] RPA Landing Zone Mover failed to handle manifest file, skipping:\n {source_bucket}/{s3_obj.key} > {zip_filename}"
-                    notify_with_tb(msg, traceback.format_exc())
+                    notify_with_tb(msg, traceback)
                     # skip to next zip
                     continue
 
@@ -104,17 +101,22 @@ def filter_and_move():
                 # sorting through the version hashes and checking for new files
                 for name in zip_names:
                     if name.endswith('.metadata'):
+                        # clean the metadata in case of utf8 errors
+                        clean_metadata_utf8(name)
                         with zf.open(name) as metadata:
                             # we need to correct the metadata for utf-8 first, then read everything else
                             data = metadata.read()
-                            corrected_metadata = codecs.decode(data, 'utf-8-sig')
+                            corrected_metadata = codecs.decode(
+                                data, 'utf-8-sig')
                         metadata.close()
 
                         # print for error checking (to be removed)
                         print("raw data: " + data.decode() + "\n")
-                        print("cleaned metadata: " + str(corrected_metadata) + "\n")
+                        print("cleaned metadata: " +
+                              str(corrected_metadata) + "\n")
                         # clean just in case for newlines
-                        corrected_metadata = corrected_metadata.replace("\n", "")
+                        corrected_metadata = corrected_metadata.replace(
+                            "\n", "")
                         # now read the metadata line as a json and get its version hash
                         try:
                             jsondoc = json.loads(corrected_metadata)
@@ -128,7 +130,8 @@ def filter_and_move():
                             corrected_manifest_jdocs.append(jsondoc)
 
                             # upload all of the files not in previous version hashes to s3
-                            zip_filename = name.replace('.metadata', '')  # name of the main file
+                            zip_filename = name.replace(
+                                '.metadata', '')  # name of the main file
                             if zip_filename in zip_names:
                                 # upload the main file
                                 upload_file_from_zip(
@@ -178,13 +181,13 @@ def filter_and_move():
 
         except:
             msg = f"[ERROR] RPA Landing Zone mover failed while handling the following:\n {source_bucket}/{s3_obj.key}"
-            notify_with_tb(msg, traceback.format_exc())
+            notify_with_tb(msg, traceback)
 
             try:
                 undo_uploads(prefix=destination_prefix_dt)
             except:
                 msg = '[ERROR] Failed undo_uploads'
-                notify_with_tb(msg, traceback.format_exc())
+                notify_with_tb(msg, traceback)
 
             continue
 
@@ -248,7 +251,7 @@ def get_previous_manifest_for_crawler(crawler_used) -> typing.Tuple[set, typing.
         slack.send_notification(msg)
     except Exception as e:
         msg = f"[ERROR] Unexpected error occurred getting previous manifest for crawler: {crawler_used}"
-        notify_with_tb(msg, traceback.format_exc())
+        notify_with_tb(msg, traceback)
         raise e
 
     finally:
@@ -301,6 +304,15 @@ def upload_jsonlines(lines: typing.List[dict], filename: str, prefix: str, bucke
             Key=key
         )
     new_file.close()  # extra close just to be safe
+
+
+def clean_metadata_utf8(name):
+    with open(name, 'r+') as f:
+        content = f.read()
+        decoded_data = codecs.decode(content.encode(), 'utf-8-sig')
+        f.seek(0)
+        json.dump(json.loads(decoded_data), f)
+        f.truncate()
 
 
 if __name__ == '__main__':
