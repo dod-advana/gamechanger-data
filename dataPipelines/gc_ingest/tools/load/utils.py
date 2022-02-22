@@ -57,7 +57,7 @@ class IngestableDocGroup(BaseModel):
 
 
 class LoadManager:
-    SUPPORTED_RAW_DOC_EXTENSIONS = frozenset({'.pdf', '.html'})
+    SUPPORTED_RAW_DOC_EXTENSIONS = frozenset({'.pdf', '.html', '.txt'})
     METADATA_DOC_EXTENSION = '.metadata'
     PARSED_DOC_EXTENSION = '.json'
     THUMBNAIL_EXTENSION = '.png'
