@@ -91,13 +91,9 @@ def clean_html_for_pdf(markup: Union[IO, AnyStr]) -> str:
 
     return str(soup)
 
-def convert_html_to_pdf(filepath: Union[Path, str]) -> str:
-    """Creates pdf for parsing."""
+def convert_html_to_pdf(filepath: Union[Path, str], html: str) -> str:
+    """Creates pdf file for parsing from an html string."""
     filepath = Path(filepath)
-    if filepath.suffix == '.pdf':
-        return str(filepath)
-    with open(filepath, 'rb') as html_file:
-        html = clean_html_for_pdf(html_file)
     pdf_path = filepath.with_suffix('.pdf')
     with open(pdf_path, 'w+b') as pdf_file:
         try:
@@ -106,5 +102,24 @@ def convert_html_to_pdf(filepath: Union[Path, str]) -> str:
             raise RuntimeError(f'unable to generate pdf from {filepath}')
     if pisaStatus.err:
         raise RuntimeError(f'unable to generate pdf from {filepath}')
-
     return str(pdf_path)
+    
+def convert_html_file_to_pdf(filepath: Union[Path, str]) -> str:
+    """Creates pdf file for parsing from an html file."""
+    with open(filepath, 'rb') as html_file:
+        html = clean_html_for_pdf(html_file)
+    return convert_html_to_pdf(filepath, html)
+
+def convert_text_to_html(text: str) -> str:
+    """Returns equivalent html containing the provided text."""
+    lines = text.splitlines()
+
+    soup = bs4.BeautifulSoup('<html><body></body></html>', 'html5lib')
+    body = soup.body
+    for line in lines:
+        body.append(line)
+        br = soup.new_tag('br')
+        body.append(br)
+
+    html = str(soup)
+    return html

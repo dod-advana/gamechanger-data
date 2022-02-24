@@ -12,6 +12,7 @@ from common.document_parser.ref_utils import make_dict
 from collections import defaultdict
 from typing import Pattern, List
 import typing as t
+import chardet
 
 ref_regex = make_dict()
 
@@ -34,7 +35,7 @@ def read_doc_dict(fname: Path) -> defaultdict:
 
 def read_plain_text(fname: Path) -> str:
     """
-    Reading Plain text file
+    Reading Plain text file. Attempts to guess the correct encoding, else falls back to latin1.
 
     Args:
         fname: name of text file
@@ -42,7 +43,7 @@ def read_plain_text(fname: Path) -> str:
     Returns:
         text string from file
     """
-    with open(fname) as f_in:
-        text = f_in.read()
-
-    return text
+    with open(fname, 'rb') as f_in:
+        text_bytes = f_in.read()
+    encoding = chardet.detect(text_bytes)['encoding'] or 'latin1'
+    return text_bytes.decode(encoding)

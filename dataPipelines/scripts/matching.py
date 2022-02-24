@@ -13,7 +13,10 @@ output_base_dir.mkdir(exist_ok=True)
 output_unparsed.mkdir(exist_ok=True)
 output_raw.mkdir(exist_ok=True)
 output_parsed.mkdir(exist_ok=True)
-raw_docs = [x for x in raw_docs_dir.iterdir() if x.name.lower().endswith("pdf") or x.name.lower().endswith("html")]
+raw_docs = [x for x in raw_docs_dir.iterdir() if x.name.lower().endswith("pdf")
+            or x.name.lower().endswith("html")
+            or x.name.lower().endswith("txt")
+            ]
 crawler_output_file = Path(raw_docs_dir, "crawler_output.json")
 
 for raw_file in raw_docs:
