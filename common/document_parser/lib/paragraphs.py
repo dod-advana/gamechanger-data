@@ -1,19 +1,25 @@
-import syntok.segmenter as segmenter
-
 import re
-import string
-from gamechangerml.src.utilities.text_utils import utf8_pass, clean_text
+from typing import Iterable, List
+
+import syntok.segmenter as segmenter
+import syntok.tokenizer as tokenizer
+from gamechangerml.src.utilities.text_utils import utf8_pass
 
 
-def get_paragraph_text(segmented):
-    par_text = ""
-
+def get_paragraph_text(segmented: Iterable[List[tokenizer.Token]]) -> str:
+    sentences = []
     for sentence in segmented:
-        sentence_text = "".join(
+        sentence_text = ''.join(
             [token.spacing + token.value for token in sentence]
         )
-        par_text += sentence_text.replace('\n', '')
-
+        # substitute newlines that do not have whitespace before or after with a space
+        sentence_text = re.sub(r'(?<=\S)\n(?=\S)', ' ', sentence_text)
+        # strip any remaining newlines
+        sentence_text = sentence_text.replace('\n', '')
+        # clean any extra whitespace at the beginning or end
+        sentence_text = sentence_text.strip()
+        sentences.append(sentence_text)
+    par_text = ' '.join(sentences)
     return par_text
 
 
