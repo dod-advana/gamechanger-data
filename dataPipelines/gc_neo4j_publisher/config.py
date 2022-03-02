@@ -6,8 +6,8 @@ from functools import lru_cache
 
 class Config:
     connection_helper = get_connection_helper_from_env()
-    abbcount_json_path = os.path.join(PACKAGE_PATH, "src/featurization/data/abbcounts.json")
-    agencies_csv_path = os.path.join(PACKAGE_PATH, "data/agencies/agencies.csv")
+    abbcount_json_path = os.path.join(PACKAGE_PATH, "data/features/abbcounts.json")
+    agencies_csv_path = os.path.join(PACKAGE_PATH, "data/features/agencies.csv")
 
     @classmethod
     @lru_cache(maxsize=None)
