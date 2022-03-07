@@ -90,7 +90,7 @@ def pdf_ocr(file: str, staging_folder: str, multiprocess: int) -> (bool, bool):
                     ocr = PDFOCR(
                         input_file=saved_file,
                         output_file=saved_file,
-                        ocr_job_type=OCRJobType.REDO_OCR,
+                        ocr_job_type=OCRJobType.FORCE_OCR,
                         ignore_init_errors=True,
                         num_threads=multiprocess
                     )
