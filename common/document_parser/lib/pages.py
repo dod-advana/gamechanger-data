@@ -1,5 +1,6 @@
-from dataScience.src.utilities.text_utils import utf8_pass, clean_text
-from dataScience.src.featurization.keywords.extract_keywords import get_keywords
+# from dataScience.src.utilities.text_utils import utf8_pass, clean_text
+from dataPipelines.gc_eda_pipeline.utils.text_utils import utf8_pass, clean_text
+# from dataScience.src.featurization.keywords.extract_keywords import get_keywords
 
 
 def create_page_dict(page_num, page_text, doc_dict):
@@ -8,7 +9,7 @@ def create_page_dict(page_num, page_text, doc_dict):
     page_dict = {}
     page_dict["type"] = "page"
     page_dict["p_text"] = utf8_ptext
-    doc_dict["keyw_5"].append(get_keywords(page_text))
+    # doc_dict["keyw_5"].append(get_keywords(page_text))
     page_dict["p_raw_text"] = page_text
     page_dict["p_page"] = page_num
     page_dict["filename"] = doc_dict["filename"]

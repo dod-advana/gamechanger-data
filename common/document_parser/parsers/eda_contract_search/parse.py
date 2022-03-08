@@ -1,8 +1,8 @@
 from common.document_parser.lib import (
     pages,
-    ref_list,
-    page_rank,
-    keywords,
+    # ref_list,
+    # page_rank,
+    # keywords,
     text_length,
     read_meta,
     pdf_reader,
@@ -21,10 +21,10 @@ def parse(f_name, meta_data=None, ocr_missing_doc=False, num_ocr_threads=2, out_
     pages.handle_pages(doc_obj, doc_dict)
     doc_obj.close()
 
-    page_rank.add_pagerank_r(doc_dict)
+    # page_rank.add_pagerank_r(doc_dict)
 
 
-    text_length.add_txt_length(doc_dict)
+    # text_length.add_txt_length(doc_dict)
     text_length.add_word_count(doc_dict)
 
     # adds dates but they arent supposed to be in output?

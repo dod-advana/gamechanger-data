@@ -1,8 +1,8 @@
-from dataScience.src.search.ranking.features import get_txt_length
+# from dataScience.src.search.ranking.features import get_txt_length
 
 
 def add_txt_length(doc_dict):
-    doc_dict["txt_length"] = get_txt_length(doc_dict["id"])
+    # doc_dict["txt_length"] = get_txt_length(doc_dict["id"])
     return doc_dict
 
 

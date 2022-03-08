@@ -88,7 +88,7 @@ def ingestion(staging_folder: str, aws_s3_input_pdf_prefix: str, max_workers: in
     aws_s3_output_pdf_prefix = data_conf_filter['eda']['aws_s3_output_pdf_prefix']
     aws_s3_json_prefix = data_conf_filter['eda']['aws_s3_json_prefix']
 
-    # Create EDA indexe
+    # Create EDA index
     print(f"EDA Index {data_conf_filter['eda']['eda_index']}")
     create_index(index_name=data_conf_filter['eda']['eda_index'], alias=data_conf_filter['eda']['eda_index_alias'])
 
@@ -124,12 +124,12 @@ def ingestion(staging_folder: str, aws_s3_input_pdf_prefix: str, max_workers: in
                             if fut.result() is not None:
                                 status = fut.result().get('status')
                                 if "already_processed" == status:
-                                    # print(f"Following file {fut.result().get('filename')} was already processed, extra info: "
-                                    #     f"{fut.result().get('info')}")
+                                    print(f"Following file {fut.result().get('filename')} was already processed, extra info: "
+                                        f"{fut.result().get('info')}")
                                     number_file_processed = number_file_processed + 1
                                 elif "completed" == status:
-                                    # print(f"Following file {fut.result().get('filename')} was processed, extra info: "
-                                    #       f"{fut.result().get('info')}")
+                                    print(f"Following file {fut.result().get('filename')} was processed, extra info: "
+                                          f"{fut.result().get('info')}")
                                     number_file_processed = number_file_processed + 1
                                 elif "failed" == status:
                                     print(f"Following file {fut.result().get('filename')} failed, extra info: "
