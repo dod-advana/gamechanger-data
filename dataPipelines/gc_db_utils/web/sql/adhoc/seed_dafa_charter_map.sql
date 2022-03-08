@@ -37,7 +37,7 @@ INSERT INTO manual_mappings VALUES
 
 DELETE FROM dafa_charter_map;
 INSERT INTO dafa_charter_map
-SELECT
+SELECT DISTINCT
     org_abbreviation,
     org_name,
     s.pub_id
