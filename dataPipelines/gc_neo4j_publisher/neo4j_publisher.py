@@ -35,6 +35,18 @@ def get_agency_names() -> t.List[str]:
     agencies = [x.lower() for x in agencies]
     return agencies
 
+@lru_cache(maxsize=None)
+def get_orgs_df() -> pd.DataFrame:
+    orgs_df = pd.read_excel(Config.graph_relations_xls_path,"Orgs")
+    orgs_df = orgs_df.drop([col for col in orgs_df.columns if "Unnamed" in col], axis=1)
+    return orgs_df
+
+@lru_cache(maxsize=None)
+def get_roles_df() -> pd.DataFrame:
+    roles_df = pd.read_excel(Config.graph_relations_xls_path,"Roles")
+    roles_df = roles_df.drop([col for col in roles_df.columns if "Unnamed" in col], axis=1)
+    return roles_df
+
 
 def process_ent(ent: str) -> t.Union[t.List[str], str]:
     first_word = ent.split(" ")[0]
@@ -232,6 +244,24 @@ class Neo4jPublisher:
         print('Inserting {0} entities ...'.format(total_ents))
         entity_json = self.verifiedEnts.to_json(orient="records")
         process_query('CALL policy.createEntityNodesFromJson(' + json.dumps(entity_json) + ')')
+        return
+
+    def process_orgs(self):
+        orgs_df = get_orgs_df()
+        print('Inserting {0} orgs ...'.format(orgs_df.shape[0]))
+        # orgs_df['Aliases'] = list(
+        #     map(lambda x: [alias.strip() for alias in x.split(";")] if pd.notna(x) else [], orgs_df["Aliases"]))
+        orgs_json = orgs_df.to_json(orient="records")
+        process_query('CALL policy.createOrgNodesFromJson(' + json.dumps(orgs_json) + ')')
+        return
+
+    def process_roles(self):
+        roles_df = get_roles_df()
+        print('Inserting {0} orgs ...'.format(roles_df.shape[0]))
+        # roles_df['Aliases'] = list(
+        #     map(lambda x: [alias.strip() for alias in x.split(";")] if pd.notna(x) else [], roles_df["Aliases"]))
+        roles_json = roles_df.to_json(orient="records")
+        process_query('CALL policy.createRoleNodesFromJson(' + json.dumps(roles_json) + ')')
         return
 
     def process_dir(self, files: t.List[str], file_dir: str, q: mp.Queue, max_threads: int) -> None:

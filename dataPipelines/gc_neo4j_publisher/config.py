@@ -8,6 +8,7 @@ class Config:
     connection_helper = get_connection_helper_from_env()
     abbcount_json_path = os.path.join(PACKAGE_PATH, "src/featurization/data/abbcounts.json")
     agencies_csv_path = os.path.join(PACKAGE_PATH, "data/agencies/agencies.csv")
+    graph_relations_xls_path = os.path.join(PACKAGE_PATH, "data/agencies/GraphRelations.xls")
 
     @classmethod
     @lru_cache(maxsize=None)
