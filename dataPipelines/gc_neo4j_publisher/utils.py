@@ -128,7 +128,7 @@ class Neo4jJobManager:
 
                 # next set up a few things to make sure that entities/documents/pubs aren't being inserted more than once.
                 session.run("CREATE CONSTRAINT unique_docs IF NOT EXISTS ON (d:Document) ASSERT d.doc_id IS UNIQUE")
-                session.run("CREATE CONSTRAINT unique_ents IF NOT EXISTS ON (e:Entity) ASSERT e.name IS UNIQUE")
+                # session.run("CREATE CONSTRAINT unique_ents IF NOT EXISTS ON (e:Entity) ASSERT e.name IS UNIQUE")
                 session.run("CREATE CONSTRAINT unique_orgs IF NOT EXISTS ON (o:Org) ASSERT o.name IS UNIQUE")
                 session.run("CREATE CONSTRAINT unique_roles IF NOT EXISTS ON (r:Role) ASSERT r.name IS UNIQUE")
                 session.run(
@@ -139,15 +139,14 @@ class Neo4jJobManager:
                 session.run("CREATE INDEX document_index IF NOT EXISTS FOR (d:Document) ON (d.doc_id, d.ref_name)")
                 session.run(
                     "CREATE INDEX ukn_document_index IF NOT EXISTS FOR (d:UKN_Document) ON (d.doc_id, d.ref_name)")
-                session.run("CREATE INDEX entity_index IF NOT EXISTS FOR (e:Entity) ON (e.name)")
+                # session.run("CREATE INDEX entity_index IF NOT EXISTS FOR (e:Entity) ON (e.name)")
                 session.run("CREATE INDEX org_index IF NOT EXISTS FOR (o:Org) ON (o.name)")
                 session.run("CREATE INDEX role_index IF NOT EXISTS FOR (r:Role) ON (r.name)")
                 session.run("CREATE INDEX topic_index IF NOT EXISTS FOR (t:Topic) ON (t.name)")
                 session.run("CREATE INDEX responsibility_index IF NOT EXISTS FOR (r:Responsibility) ON (r.name)")
 
         publisher = Neo4jPublisher()
-        publisher.populate_verified_ents()
-        publisher.process_entity_relationships()
+        publisher.populate_crowdsourced_ents()
         publisher.process_orgs()
         publisher.process_roles()
 
@@ -176,8 +175,8 @@ class Neo4jJobManager:
                 session.run(
                     "CALL gds.alpha.node2vec.write( " +
                     "   { " +
-                    "       nodeProjection: ['Document', 'Entity', 'Topic', 'UKN_Document'], " +
-                    "       relationshipProjection: ['REFERENCES', 'REFERENCES_UKN', 'CHILD_OF', 'RELATED_TO', 'CONTAINS', 'MENTIONS', 'IS_IN'], " +
+                    "       nodeProjection: ['Document', 'Org', 'Role', 'Topic', 'UKN_Document'], " +
+                    "       relationshipProjection: ['REFERENCES', 'REFERENCES_UKN', 'CHILD_OF', 'RELATED_TO', 'CONTAINS', 'MENTIONS', 'IS_IN', 'HAS_HEAD', 'HAS_ROLE', 'TYPE_OF'], " +
                     "       relationshipProperties: ['count', 'relevancy'], " +
                     "       embeddingDimension: 64, " +
                     "       walkLength: 10, " +
@@ -202,7 +201,8 @@ class Neo4jJobManager:
                 )
 
                 # delete any entity nodes without a name
-                session.run("MATCH (e:Entity {name: ''}) detach delete (e);")
+                session.run("MATCH (o:Org {name: ''}) detach delete (o);")
+                session.run("MATCH (r:Role {name: ''}) detach delete (r);")
             except Exception as e:
                 print("Error: {0}".format(e))
 
