@@ -36,11 +36,22 @@ def get_agency_names() -> t.List[str]:
     return agencies
 
 @lru_cache(maxsize=None)
-def get_all_entities_list() -> t.List[str]:
+def get_all_entities_and_aliases() -> t.List[str]:
     orgs_df = pd.read_excel(Config.graph_relations_xls_path,"Orgs")
     roles_df = pd.read_excel(Config.graph_relations_xls_path, "Roles")
     all_entities = list(orgs_df['Name']) + list(roles_df['Name'])
-    return all_entities
+    alias_mapping_dict = {}
+    for name, aliases in orgs_df[["Name","Aliases"]].itertuples(index=False):
+        if pd.isna(aliases):
+            continue
+        alias_keys = aliases.split(";")
+        alias_mapping_dict.update({alias_key:name for alias_key in alias_keys})
+    for name, aliases in roles_df[["Name","Aliases"]].itertuples(index=False):
+        if pd.isna(aliases):
+            continue
+        alias_keys = aliases.split(";")
+        alias_mapping_dict.update({alias_key:name for alias_key in alias_keys})
+    return all_entities, alias_mapping_dict
 
 @lru_cache(maxsize=None)
 def get_orgs_df() -> pd.DataFrame:
@@ -96,7 +107,7 @@ def process_query(query: str, parameters: t.Dict[str, t.Any] = None, **kwparamet
 class Neo4jPublisher:
     def __init__(self):
         self.entEntRelationsStmt = []
-        self.verified_entities_list = get_all_entities_list()
+        self.verified_entities_list, self.alias_mapping_dict = get_all_entities_and_aliases()
         self.crowdsourcedEnts = set()
 
     def process_json(self, filepath: str, q: mp.Queue) -> str:
@@ -136,6 +147,7 @@ class Neo4jPublisher:
             o["kw_doc_score_r"] = j.get("kw_doc_score_r", 0)
             o["version_hash_s"] = j.get("version_hash_s", "")
             o["is_revoked_b"] = j.get("is_revoked_b", False)
+            o["entities"] = self.process_entity_list(j, "entities")
             o["orgs"] = self.process_entity_list(j, "orgs")
             o["roles"] = self.process_entity_list(j, "roles")
             process_query('CALL policy.createDocumentNodesFromJson(' + json.dumps(json.dumps(o)) + ')')
@@ -207,7 +219,7 @@ class Neo4jPublisher:
         entity_count: t.Dict[str, int] = {}
         try:
             for p in j["paragraphs"]:
-                entities = p[entity_type_key]
+                entities = p.get(entity_type_key,{})
                 types = list(entities.keys())
                 for type in types:
                     entity_list = entities[type]
@@ -221,7 +233,7 @@ class Neo4jPublisher:
                             entity_dict[ans].append(p["par_inc_count"])
                             entity_count[ans] += 1
         except:
-            print('Error creating entities for: ' + j["id"], file=sys.stderr)
+            print('Error creating ' + entity_type_key + ' for: ' + j["id"], file=sys.stderr)
 
         return {"entityPars": entity_dict, "entityCounts": entity_count}
 
@@ -280,6 +292,8 @@ class Neo4jPublisher:
             match_idx = [ent.upper() for ent in self.verified_entities_list].index(new_ent.upper())
             return self.verified_entities_list[match_idx]
         except:
+            if new_ent in self.alias_mapping_dict:
+                return self.alias_mapping_dict[new_ent]
             if new_ent in self.crowdsourcedEnts:
                 return new_ent
             else:
