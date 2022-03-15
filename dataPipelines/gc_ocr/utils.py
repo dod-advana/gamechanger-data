@@ -115,7 +115,9 @@ class PDFOCR:
             redo_ocr=True if self.job_type == OCRJobType.REDO_OCR else None,
             force_ocr=True if self.job_type == OCRJobType.FORCE_OCR else None,
             progress_bar=self.show_progress_bar,
-            jobs=self.num_threads
+            jobs=self.num_threads,
+            deskew = True,
+            rotate_pages = True
         )
 
         is_successful = exit_code == ocrmypdf.ExitCode.ok
