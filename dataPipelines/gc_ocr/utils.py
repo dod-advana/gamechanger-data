@@ -99,7 +99,7 @@ class PDFOCR:
                 print(e)
             else:
                 raise e
-        elif is_ocr_pdf(self.input_file) and not self.job_type == OCRJobType.NORMAL:
+        elif is_ocr_pdf(self.input_file) and not self.job_type in [OCRJobType.FORCE_OCR,OCRJobType.REDO_OCR]:
             e = PreviouslyOCRError(f"Given file is already OCR'ed: {self.input_file!s}")
             if not ignore_init_errors:
                 print(e)
