@@ -1,0 +1,1410 @@
+{
+  "pipelineConfig" : {
+    "schemaVersion" : 6,
+    "version" : 10,
+    "pipelineId" : "EDLtoHDFSTransferV7e5f96fb4-52e9-4212-bbc8-733fa17401e2",
+    "title" : "EDL to HDFS Transfer V7",
+    "description" : "",
+    "uuid" : "b879e2c9-fb43-4ee9-9519-f6cf5e9c6884",
+    "configuration" : [ {
+      "name" : "executionMode",
+      "value" : "STANDALONE"
+    }, {
+      "name" : "edgeHttpUrl",
+      "value" : "http://localhost:18633"
+    }, {
+      "name" : "deliveryGuarantee",
+      "value" : "AT_LEAST_ONCE"
+    }, {
+      "name" : "testOriginStage",
+      "value" : "streamsets-datacollector-dev-lib::com_streamsets_pipeline_stage_devtest_rawdata_RawDataDSource::3"
+    }, {
+      "name" : "startEventStage",
+      "value" : "streamsets-datacollector-basic-lib::com_streamsets_pipeline_stage_destination_devnull_ToErrorNullDTarget::1"
+    }, {
+      "name" : "stopEventStage",
+      "value" : "streamsets-datacollector-basic-lib::com_streamsets_pipeline_stage_destination_devnull_ToErrorNullDTarget::1"
+    }, {
+      "name" : "shouldRetry",
+      "value" : true
+    }, {
+      "name" : "retryAttempts",
+      "value" : -1
+    }, {
+      "name" : "memoryLimit",
+      "value" : "${jvm:maxMemoryMB() * 0.85}"
+    }, {
+      "name" : "memoryLimitExceeded",
+      "value" : "LOG"
+    }, {
+      "name" : "notifyOnStates",
+      "value" : [ "RUN_ERROR", "STOPPED", "FINISHED" ]
+    }, {
+      "name" : "emailIDs",
+      "value" : [ ]
+    }, {
+      "name" : "constants",
+      "value" : [ ]
+    }, {
+      "name" : "badRecordsHandling",
+      "value" : "streamsets-datacollector-cdh_kafka_3_0-lib::com_streamsets_pipeline_stage_destination_kafka_ToErrorKafkaDTarget::4"
+    }, {
+      "name" : "errorRecordPolicy",
+      "value" : "ORIGINAL_RECORD"
+    }, {
+      "name" : "statsAggregatorStage",
+      "value" : "streamsets-datacollector-basic-lib::com_streamsets_pipeline_stage_destination_devnull_StatsDpmDirectlyDTarget::1"
+    }, {
+      "name" : "workerCount",
+      "value" : 0
+    }, {
+      "name" : "clusterSlaveMemory",
+      "value" : 2048
+    }, {
+      "name" : "clusterSlaveJavaOpts",
+      "value" : "-XX:+UseConcMarkSweepGC -XX:+UseParNewGC -Dlog4j.debug"
+    }, {
+      "name" : "clusterLauncherEnv",
+      "value" : [ ]
+    }, {
+      "name" : "mesosDispatcherURL",
+      "value" : null
+    }, {
+      "name" : "logLevel",
+      "value" : "INFO"
+    }, {
+      "name" : "hdfsS3ConfDir",
+      "value" : null
+    }, {
+      "name" : "rateLimit",
+      "value" : 0
+    }, {
+      "name" : "maxRunners",
+      "value" : 0
+    }, {
+      "name" : "shouldCreateFailureSnapshot",
+      "value" : true
+    }, {
+      "name" : "runnerIdleTIme",
+      "value" : 60
+    }, {
+      "name" : "webhookConfigs",
+      "value" : [ ]
+    }, {
+      "name" : "sparkConfigs",
+      "value" : [ ]
+    }, {
+      "name" : "amazonEMRConfig.userRegion",
+      "value" : null
+    }, {
+      "name" : "amazonEMRConfig.userRegionCustom",
+      "value" : null
+    }, {
+      "name" : "amazonEMRConfig.accessKey",
+      "value" : null
+    }, {
+      "name" : "amazonEMRConfig.secretKey",
+      "value" : null
+    }, {
+      "name" : "amazonEMRConfig.s3StagingUri",
+      "value" : null
+    }, {
+      "name" : "amazonEMRConfig.provisionNewCluster",
+      "value" : false
+    }, {
+      "name" : "amazonEMRConfig.clusterId",
+      "value" : null
+    }, {
+      "name" : "amazonEMRConfig.clusterPrefix",
+      "value" : null
+    }, {
+      "name" : "amazonEMRConfig.terminateCluster",
+      "value" : false
+    }, {
+      "name" : "amazonEMRConfig.loggingEnabled",
+      "value" : true
+    }, {
+      "name" : "amazonEMRConfig.s3LogUri",
+      "value" : null
+    }, {
+      "name" : "amazonEMRConfig.enableEMRDebugging",
+      "value" : true
+    }, {
+      "name" : "amazonEMRConfig.serviceRole",
+      "value" : "EMR_DefaultRole"
+    }, {
+      "name" : "amazonEMRConfig.jobFlowRole",
+      "value" : "EMR_EC2_DefaultRole"
+    }, {
+      "name" : "amazonEMRConfig.visibleToAllUsers",
+      "value" : true
+    }, {
+      "name" : "amazonEMRConfig.ec2SubnetId",
+      "value" : null
+    }, {
+      "name" : "amazonEMRConfig.masterSecurityGroup",
+      "value" : null
+    }, {
+      "name" : "amazonEMRConfig.slaveSecurityGroup",
+      "value" : null
+    }, {
+      "name" : "amazonEMRConfig.instanceCount",
+      "value" : 2
+    }, {
+      "name" : "amazonEMRConfig.masterInstanceType",
+      "value" : null
+    }, {
+      "name" : "amazonEMRConfig.masterInstanceTypeCustom",
+      "value" : null
+    }, {
+      "name" : "amazonEMRConfig.slaveInstanceType",
+      "value" : null
+    }, {
+      "name" : "amazonEMRConfig.slaveInstanceTypeCustom",
+      "value" : null
+    } ],
+    "uiInfo" : {
+      "previewConfig" : {
+        "previewSource" : "CONFIGURED_SOURCE",
+        "batchSize" : "10",
+        "timeout" : 30000,
+        "writeToDestinations" : false,
+        "executeLifecycleEvents" : false,
+        "showHeader" : true,
+        "showFieldType" : true,
+        "rememberMe" : false
+      }
+    },
+    "fragments" : [ ],
+    "stages" : [ {
+      "instanceName" : "JDBCQueryConsumer_01",
+      "library" : "streamsets-datacollector-jdbc-lib",
+      "stageName" : "com_streamsets_pipeline_stage_origin_jdbc_JdbcDSource",
+      "stageVersion" : "10",
+      "configuration" : [ {
+        "name" : "isIncrementalMode",
+        "value" : true
+      }, {
+        "name" : "query",
+        "value" : "SELECT id, \"userId\", \"createdAt\", \"lastUpdate\", filepath, status, filename, ownername, system, portfolio, product from edlhistory where status = 'COMPLETED' and  id > ${OFFSET} ORDER BY id;"
+      }, {
+        "name" : "initialOffset",
+        "value" : "0"
+      }, {
+        "name" : "offsetColumn",
+        "value" : "id"
+      }, {
+        "name" : "jdbcRecordType",
+        "value" : "LIST_MAP"
+      }, {
+        "name" : "queryInterval",
+        "value" : "${300 * SECONDS}"
+      }, {
+        "name" : "commonSourceConfigBean.maxBatchSize",
+        "value" : 1000
+      }, {
+        "name" : "commonSourceConfigBean.maxClobSize",
+        "value" : 1000
+      }, {
+        "name" : "commonSourceConfigBean.maxBlobSize",
+        "value" : 1000
+      }, {
+        "name" : "commonSourceConfigBean.numSQLErrorRetries",
+        "value" : 0
+      }, {
+        "name" : "commonSourceConfigBean.newTableQueryInterval",
+        "value" : "${10 * SECONDS}"
+      }, {
+        "name" : "commonSourceConfigBean.noMoreDataEventDelay",
+        "value" : 0
+      }, {
+        "name" : "txnIdColumnName",
+        "value" : null
+      }, {
+        "name" : "txnMaxSize",
+        "value" : 10000
+      }, {
+        "name" : "hikariConfigBean.connectionString",
+        "value" : "jdbc:postgresql://PG_HOST/uot"
+      }, {
+        "name" : "hikariConfigBean.useCredentials",
+        "value" : true
+      }, {
+        "name" : "hikariConfigBean.username",
+        "value" : "edl_readonly"
+      }, {
+        "name" : "hikariConfigBean.password",
+        "value" : ""
+      }, {
+        "name" : "hikariConfigBean.driverProperties",
+        "value" : [ { } ]
+      }, {
+        "name" : "hikariConfigBean.driverClassName",
+        "value" : "org.postgresql.Driver"
+      }, {
+        "name" : "hikariConfigBean.connectionTestQuery",
+        "value" : null
+      }, {
+        "name" : "hikariConfigBean.maximumPoolSize",
+        "value" : 1
+      }, {
+        "name" : "hikariConfigBean.minIdle",
+        "value" : 1
+      }, {
+        "name" : "hikariConfigBean.connectionTimeout",
+        "value" : "${30 * SECONDS}"
+      }, {
+        "name" : "hikariConfigBean.idleTimeout",
+        "value" : "${10 * MINUTES}"
+      }, {
+        "name" : "hikariConfigBean.maxLifetime",
+        "value" : "${30 * MINUTES}"
+      }, {
+        "name" : "hikariConfigBean.autoCommit",
+        "value" : false
+      }, {
+        "name" : "hikariConfigBean.readOnly",
+        "value" : true
+      }, {
+        "name" : "hikariConfigBean.initialQuery",
+        "value" : null
+      }, {
+        "name" : "hikariConfigBean.transactionIsolation",
+        "value" : "DEFAULT"
+      }, {
+        "name" : "createJDBCNsHeaders",
+        "value" : true
+      }, {
+        "name" : "jdbcNsHeaderPrefix",
+        "value" : "jdbc."
+      }, {
+        "name" : "disableValidation",
+        "value" : false
+      }, {
+        "name" : "unknownTypeAction",
+        "value" : "STOP_PIPELINE"
+      }, {
+        "name" : "stageOnRecordError",
+        "value" : "TO_ERROR"
+      }, {
+        "name" : "commonSourceConfigBean.convertTimestampToString",
+        "value" : false
+      } ],
+      "uiInfo" : {
+        "description" : "",
+        "label" : "Query EDL table",
+        "xPos" : 57.50836181640625,
+        "yPos" : 52.330787658691406,
+        "stageType" : "SOURCE"
+      },
+      "inputLanes" : [ ],
+      "outputLanes" : [ "JDBCQueryConsumer_01OutputLane15592348204870" ],
+      "eventLanes" : [ ],
+      "services" : [ ]
+    }, {
+      "instanceName" : "JythonEvaluator_01",
+      "library" : "streamsets-datacollector-jython_2_7-lib",
+      "stageName" : "com_streamsets_pipeline_stage_processor_jython_JythonDProcessor",
+      "stageVersion" : "2",
+      "configuration" : [ {
+        "name" : "processingMode",
+        "value" : "BATCH"
+      }, {
+        "name" : "initScript",
+        "value" : ""
+      }, {
+        "name" : "script",
+        "value" : "import os\nfrom java.lang import Class\nfrom java.sql import DriverManager, SQLException\n\nfor record in records:\n  try:\n    #source_filename = record.value['fname']\n    base_path = record.value['filepath'].replace('/opt/UA/volumes/uploads', '')\n    output_filename = os.path.basename(base_path)\n    #### COST system ####\n    if (record.value['system'] == 'COST'):\n      product_arr = record.value['product']\n      if (',' in product_arr):\n        product_info = product_arr.split(',')[0][1:-1]\n      else:\n        product_info = product_arr[2:-2]\n      #log.info(\"first thing is \" + product_info)\n      if (product_info == 'Cost Management - Enterprise'):\n          record.value['hdfs_file_path'] = '/data_zones/raw_zone/CostManagement/DCMO_Cost_Raw_Ent/' + output_filename\n          record.value['input_file_path'] = '/apps/webapp/ExternalDataLoadUploads' + base_path\n          record.attributes['move_flag'] = 'Yes'\n      elif (product_info == 'Cost Management - IT'):\n          record.value['hdfs_file_path'] = '/data_zones/raw_zone/CostManagement/DCMO_Cost_Raw_IT/' + output_filename\n          record.value['input_file_path'] = '/apps/webapp/ExternalDataLoadUploads' + base_path\n          record.attributes['move_flag'] = 'Yes'\n      elif (product_info == 'Cost Management - FM'):\n          record.value['hdfs_file_path'] = '/data_zones/raw_zone/CostManagement/DCMO_Cost_Raw_FM/' + output_filename\n          record.value['input_file_path'] = '/apps/webapp/ExternalDataLoadUploads' + base_path\n          record.attributes['move_flag'] = 'Yes'\n      elif (product_info == 'Cost Management - Medical'):\n          record.value['hdfs_file_path'] = '/data_zones/raw_zone/CostManagement/DCMO_Cost_Raw_Med/' + output_filename\n          record.value['input_file_path'] = '/apps/webapp/ExternalDataLoadUploads' + base_path\n          record.attributes['move_flag'] = 'Yes'\n      elif (product_info == 'Cost Management - Reference'):\n          record.value['hdfs_file_path'] = '/data_zones/raw_zone/CostManagement/DCMO_Cost_Raw_REF/' + output_filename\n          record.value['input_file_path'] = '/apps/webapp/ExternalDataLoadUploads' + base_path\n          record.attributes['move_flag'] = 'Yes'\n      elif (product_info == 'Cost Management - Real Property'):\n          record.value['hdfs_file_path'] = '/data_zones/raw_zone/CostManagement/DCMO_Cost_Raw_RP/' + output_filename\n          record.value['input_file_path'] = '/apps/webapp/ExternalDataLoadUploads' + base_path\n          record.attributes['move_flag'] = 'Yes'\n      else:\n          record.value['hdfs_file_path'] = '/data_zones/raw_zone/CostManagement/DCMO_Cost_Raw_Other/' + output_filename\n          record.value['input_file_path'] = '/apps/webapp/ExternalDataLoadUploads' + base_path\n          record.attributes['move_flag'] = 'Yes'\n    #### (EA) Policy Analytics product #### --> just routes to normal folder for now WIP\n    elif (record.value['system'] == 'Policy Analytics'):\n          record.value['hdfs_file_path'] = '/data_zones/raw_zone/POLICY_ANALYTICS/' + output_filename\n          record.value['input_file_path'] = '/apps/webapp/ExternalDataLoadUploads' + base_path\n          record.value['output_filename'] = output_filename\n          if \"zip\" in output_filename:\n             record.attributes['jaic_zip'] = 'Yes'  \n             #record.value['input_file_path'] = '/apps/webapp/ExternalDataLoadUploads/' + output_filename.replace(\".\",\"\").replace(\" \",\"\") + \"*/\"\n             record.value['input_file_path'] = '/apps/webapp/ExternalDataLoadUploads' + base_path.rsplit('/', 1)[0] + '/'\n             record.value['pdf_file_path'] = '/data_zones/raw_zone/gamechanger/'\n          elif \"json\" in output_filename:\n             record.attributes['jaic_json'] = 'Yes'  \n          elif \"pdf\" in output_filename:\n             record.attributes['jaic_pdf'] = 'Yes'  \n             record.value['pdf_file_path'] = '/data_zones/raw_zone/gamechanger/' + output_filename\n          record.attributes['move_flag'] = 'Yes'\n\n    #### Budget Analytics product ####\n    elif (record.value['system'] == 'OMB-MAX'):\n      product_arr = record.value['product']\n      if (',' in product_arr):\n        product_info = product_arr.split(',')[0][1:-1]\n      else:\n        product_info = product_arr[2:-2]\n      if (product_info == 'Budget Analytics' and record.value['filename'][0:12] == 'BA_132Daily_'):\n        record.value['hdfs_file_path'] = '/data_zones/raw_zone/BudgetAnalytics/132_DailyFiles/' + output_filename\n        record.value['input_file_path'] = '/apps/webapp/ExternalDataLoadUploads' + base_path\n        record.attributes['move_flag'] = 'Yes'\n        \n   ###### COVID Taskforce Daily uploaded datasets #####\n    elif (record.value['system'] == 'COVID-taskforce'):\n      ##### Carepoint data #####\n      if ('_carepoint_mtfbedstatus.xlsx' in output_filename):\n        record.value['hdfs_file_path'] = '/data_zones/raw_zone/carepoint/military_treatment_facility_bed_status_staging/' + output_filename\n        record.value['input_file_path'] = '/apps/webapp/ExternalDataLoadUploads' + base_path\n        record.attributes['move_flag'] = 'Yes'\n      ##### DoDCases data #####\n      elif(output_filename.startswith('dodcases_')):\n        record.value['hdfs_file_path'] = '/data_zones/raw_zone/covid_taskforce/dod_case_location_staging/' + output_filename\n        record.value['input_file_path'] = '/apps/webapp/ExternalDataLoadUploads' + base_path\n        record.attributes['move_flag'] = 'Yes'\n      ##### DMA data #####\n      elif(output_filename.startswith('DOD_covid_JS_data_')):\n        record.value['hdfs_file_path'] = '/data_zones/raw_zone/covid_taskforce/dod_casedata_dma_staging/' + output_filename\n        record.value['input_file_path'] = '/apps/webapp/ExternalDataLoadUploads' + base_path\n        record.attributes['move_flag'] = 'Yes'\n    ###### PBIS #####\n    elif (record.value['system'] == 'PBIS'):\n      ##### Allocation Table #####\n      if ('PBIS_ALLOCATION_TABLE' in output_filename):\n        record.value['hdfs_file_path'] = '/data_zones/raw_zone/PBIS/allocation_detail/allocation_table/latest/' + output_filename\n        record.value['input_file_path'] = '/apps/webapp/ExternalDataLoadUploads' + base_path\n        record.attributes['move_flag'] = 'Yes'\n    else:\n      record.attributes['move_flag'] = 'No'    \n    output.write(record)\n  except Exception as e:\n    # Send record to error\n    error.write(record, str(e))"
+      }, {
+        "name" : "destroyScript",
+        "value" : ""
+      }, {
+        "name" : "stageOnRecordError",
+        "value" : "TO_ERROR"
+      }, {
+        "name" : "stageRequiredFields",
+        "value" : [ ]
+      }, {
+        "name" : "stageRecordPreconditions",
+        "value" : [ ]
+      } ],
+      "uiInfo" : {
+        "description" : "",
+        "label" : "Move the file",
+        "xPos" : 277.51287841796875,
+        "yPos" : 54.66157531738281,
+        "stageType" : "PROCESSOR"
+      },
+      "inputLanes" : [ "JDBCQueryConsumer_01OutputLane15592348204870" ],
+      "outputLanes" : [ "JythonEvaluator_01OutputLane15659819721100" ],
+      "eventLanes" : [ ],
+      "services" : [ ]
+    }, {
+      "instanceName" : "StreamSelector_01",
+      "library" : "streamsets-datacollector-basic-lib",
+      "stageName" : "com_streamsets_pipeline_stage_processor_selector_SelectorDProcessor",
+      "stageVersion" : "1",
+      "configuration" : [ {
+        "name" : "lanePredicates",
+        "value" : [ {
+          "outputLane" : "StreamSelector_01OutputLane1582603484871",
+          "predicate" : "${record:attribute('jaic_zip') == 'Yes'}"
+        }, {
+          "outputLane" : "StreamSelector_01OutputLane1579734682571",
+          "predicate" : "${record:attribute('jaic_pdf') == 'Yes'}"
+        }, {
+          "outputLane" : "StreamSelector_01OutputLane1579587813041",
+          "predicate" : "${record:attribute('jaic_json') == 'Yes'}"
+        }, {
+          "outputLane" : "StreamSelector_01OutputLane1566577272037",
+          "predicate" : "${record:attribute('move_flag') == 'Yes'}"
+        }, {
+          "outputLane" : "StreamSelector_01OutputLane1566577257483",
+          "predicate" : "default"
+        } ]
+      }, {
+        "name" : "stageOnRecordError",
+        "value" : "TO_ERROR"
+      }, {
+        "name" : "stageRequiredFields",
+        "value" : [ ]
+      }, {
+        "name" : "stageRecordPreconditions",
+        "value" : [ ]
+      } ],
+      "uiInfo" : {
+        "description" : "",
+        "label" : "Stream Selector 1",
+        "xPos" : 460.3765869140625,
+        "yPos" : 335.18572998046875,
+        "stageType" : "PROCESSOR"
+      },
+      "inputLanes" : [ "JythonEvaluator_01OutputLane15659819721100" ],
+      "outputLanes" : [ "StreamSelector_01OutputLane1582603484871", "StreamSelector_01OutputLane1579734682571", "StreamSelector_01OutputLane1579587813041", "StreamSelector_01OutputLane1566577272037", "StreamSelector_01OutputLane1566577257483" ],
+      "eventLanes" : [ ],
+      "services" : [ ]
+    }, {
+      "instanceName" : "Shell_01",
+      "library" : "streamsets-datacollector-basic-lib",
+      "stageName" : "com_streamsets_pipeline_stage_executor_shell_ShellDExecutor",
+      "stageVersion" : "1",
+      "configuration" : [ {
+        "name" : "config.environmentVariables",
+        "value" : [ {
+          "value" : "${record:value('/input_file_path')}",
+          "key" : "input_file"
+        }, {
+          "key" : "output_file",
+          "value" : "${record:value('/hdfs_file_path')}"
+        } ]
+      }, {
+        "name" : "config.timeout",
+        "value" : "100000"
+      }, {
+        "name" : "config.script",
+        "value" : "kinit -k -t /etc/security/keytabs/streamsets.keytab ${KRB_NAME}\nhdfs dfs -cp \"${input_file}\" \"${output_file}\""
+      }, {
+        "name" : "stageOnRecordError",
+        "value" : "TO_ERROR"
+      }, {
+        "name" : "stageRequiredFields",
+        "value" : [ ]
+      }, {
+        "name" : "stageRecordPreconditions",
+        "value" : [ ]
+      } ],
+      "uiInfo" : {
+        "description" : "",
+        "label" : "Copy file to proper output directory",
+        "xPos" : 901.5383911132812,
+        "yPos" : 422.3077087402344,
+        "stageType" : "EXECUTOR"
+      },
+      "inputLanes" : [ "StreamSelector_01OutputLane1566577272037" ],
+      "outputLanes" : [ ],
+      "eventLanes" : [ ],
+      "services" : [ ]
+    }, {
+      "instanceName" : "HadoopFS_01",
+      "library" : "streamsets-datacollector-cdh_6_0-lib",
+      "stageName" : "com_streamsets_pipeline_stage_destination_hdfs_HdfsDTarget",
+      "stageVersion" : "4",
+      "configuration" : [ {
+        "name" : "hdfsTargetConfigBean.uniquePrefix",
+        "value" : "sdc-${sdc:id()}"
+      }, {
+        "name" : "hdfsTargetConfigBean.fileNameSuffix",
+        "value" : null
+      }, {
+        "name" : "hdfsTargetConfigBean.dirPathTemplateInHeader",
+        "value" : false
+      }, {
+        "name" : "hdfsTargetConfigBean.dirPathTemplate",
+        "value" : "/data_zones/validation_zone/edl_log"
+      }, {
+        "name" : "hdfsTargetConfigBean.timeZoneID",
+        "value" : "UTC"
+      }, {
+        "name" : "hdfsTargetConfigBean.timeDriver",
+        "value" : "${time:now()}"
+      }, {
+        "name" : "hdfsTargetConfigBean.maxRecordsPerFile",
+        "value" : 0
+      }, {
+        "name" : "hdfsTargetConfigBean.maxFileSize",
+        "value" : 0
+      }, {
+        "name" : "hdfsTargetConfigBean.idleTimeout",
+        "value" : "${1 * HOURS}"
+      }, {
+        "name" : "hdfsTargetConfigBean.compression",
+        "value" : "NONE"
+      }, {
+        "name" : "hdfsTargetConfigBean.otherCompression",
+        "value" : null
+      }, {
+        "name" : "hdfsTargetConfigBean.fileType",
+        "value" : "TEXT"
+      }, {
+        "name" : "hdfsTargetConfigBean.keyEl",
+        "value" : "${uuid()}"
+      }, {
+        "name" : "hdfsTargetConfigBean.seqFileCompressionType",
+        "value" : "BLOCK"
+      }, {
+        "name" : "hdfsTargetConfigBean.lateRecordsLimit",
+        "value" : "${1 * HOURS}"
+      }, {
+        "name" : "hdfsTargetConfigBean.rollIfHeader",
+        "value" : false
+      }, {
+        "name" : "hdfsTargetConfigBean.rollHeaderName",
+        "value" : "roll"
+      }, {
+        "name" : "hdfsTargetConfigBean.lateRecordsAction",
+        "value" : "SEND_TO_ERROR"
+      }, {
+        "name" : "hdfsTargetConfigBean.lateRecordsDirPathTemplate",
+        "value" : "/tmp/late/${YYYY()}-${MM()}-${DD()}"
+      }, {
+        "name" : "hdfsTargetConfigBean.dataFormat",
+        "value" : "DELIMITED"
+      }, {
+        "name" : "hdfsTargetConfigBean.hdfsPermissionCheck",
+        "value" : true
+      }, {
+        "name" : "hdfsTargetConfigBean.permissionEL",
+        "value" : null
+      }, {
+        "name" : "hdfsTargetConfigBean.skipOldTempFileRecovery",
+        "value" : false
+      }, {
+        "name" : "hdfsTargetConfigBean.dataGeneratorFormatConfig.charset",
+        "value" : "UTF-8"
+      }, {
+        "name" : "hdfsTargetConfigBean.dataGeneratorFormatConfig.csvFileFormat",
+        "value" : "CUSTOM"
+      }, {
+        "name" : "hdfsTargetConfigBean.dataGeneratorFormatConfig.csvHeader",
+        "value" : "WITH_HEADER"
+      }, {
+        "name" : "hdfsTargetConfigBean.dataGeneratorFormatConfig.csvReplaceNewLines",
+        "value" : true
+      }, {
+        "name" : "hdfsTargetConfigBean.dataGeneratorFormatConfig.csvReplaceNewLinesString",
+        "value" : ""
+      }, {
+        "name" : "hdfsTargetConfigBean.dataGeneratorFormatConfig.csvCustomDelimiter",
+        "value" : "|"
+      }, {
+        "name" : "hdfsTargetConfigBean.dataGeneratorFormatConfig.csvCustomEscape",
+        "value" : "\\"
+      }, {
+        "name" : "hdfsTargetConfigBean.dataGeneratorFormatConfig.csvCustomQuote",
+        "value" : "\""
+      }, {
+        "name" : "hdfsTargetConfigBean.dataGeneratorFormatConfig.jsonMode",
+        "value" : "MULTIPLE_OBJECTS"
+      }, {
+        "name" : "hdfsTargetConfigBean.dataGeneratorFormatConfig.textFieldPath",
+        "value" : "/text"
+      }, {
+        "name" : "hdfsTargetConfigBean.dataGeneratorFormatConfig.textRecordSeparator",
+        "value" : "\\n"
+      }, {
+        "name" : "hdfsTargetConfigBean.dataGeneratorFormatConfig.textFieldMissingAction",
+        "value" : "ERROR"
+      }, {
+        "name" : "hdfsTargetConfigBean.dataGeneratorFormatConfig.textEmptyLineIfNull",
+        "value" : false
+      }, {
+        "name" : "hdfsTargetConfigBean.dataGeneratorFormatConfig.avroSchemaSource",
+        "value" : null
+      }, {
+        "name" : "hdfsTargetConfigBean.dataGeneratorFormatConfig.avroSchema",
+        "value" : null
+      }, {
+        "name" : "hdfsTargetConfigBean.dataGeneratorFormatConfig.registerSchema",
+        "value" : false
+      }, {
+        "name" : "hdfsTargetConfigBean.dataGeneratorFormatConfig.schemaRegistryUrlsForRegistration",
+        "value" : [ ]
+      }, {
+        "name" : "hdfsTargetConfigBean.dataGeneratorFormatConfig.schemaRegistryUrls",
+        "value" : [ ]
+      }, {
+        "name" : "hdfsTargetConfigBean.dataGeneratorFormatConfig.schemaLookupMode",
+        "value" : "SUBJECT"
+      }, {
+        "name" : "hdfsTargetConfigBean.dataGeneratorFormatConfig.subject",
+        "value" : null
+      }, {
+        "name" : "hdfsTargetConfigBean.dataGeneratorFormatConfig.subjectToRegister",
+        "value" : null
+      }, {
+        "name" : "hdfsTargetConfigBean.dataGeneratorFormatConfig.schemaId",
+        "value" : null
+      }, {
+        "name" : "hdfsTargetConfigBean.dataGeneratorFormatConfig.avroCompression",
+        "value" : "NULL"
+      }, {
+        "name" : "hdfsTargetConfigBean.dataGeneratorFormatConfig.binaryFieldPath",
+        "value" : "/"
+      }, {
+        "name" : "hdfsTargetConfigBean.dataGeneratorFormatConfig.protoDescriptorFile",
+        "value" : null
+      }, {
+        "name" : "hdfsTargetConfigBean.dataGeneratorFormatConfig.messageType",
+        "value" : null
+      }, {
+        "name" : "hdfsTargetConfigBean.dataGeneratorFormatConfig.fileNameEL",
+        "value" : null
+      }, {
+        "name" : "hdfsTargetConfigBean.dataGeneratorFormatConfig.wholeFileExistsAction",
+        "value" : "TO_ERROR"
+      }, {
+        "name" : "hdfsTargetConfigBean.dataGeneratorFormatConfig.includeChecksumInTheEvents",
+        "value" : false
+      }, {
+        "name" : "hdfsTargetConfigBean.dataGeneratorFormatConfig.checksumAlgorithm",
+        "value" : "MD5"
+      }, {
+        "name" : "hdfsTargetConfigBean.dataGeneratorFormatConfig.xmlPrettyPrint",
+        "value" : true
+      }, {
+        "name" : "hdfsTargetConfigBean.dataGeneratorFormatConfig.xmlValidateSchema",
+        "value" : false
+      }, {
+        "name" : "hdfsTargetConfigBean.dataGeneratorFormatConfig.xmlSchema",
+        "value" : null
+      }, {
+        "name" : "hdfsTargetConfigBean.hdfsUri",
+        "value" : null
+      }, {
+        "name" : "hdfsTargetConfigBean.hdfsUser",
+        "value" : "sdc"
+      }, {
+        "name" : "hdfsTargetConfigBean.hdfsKerberos",
+        "value" : false
+      }, {
+        "name" : "hdfsTargetConfigBean.hdfsConfDir",
+        "value" : "hadoop"
+      }, {
+        "name" : "hdfsTargetConfigBean.hdfsConfigs",
+        "value" : [ { } ]
+      }, {
+        "name" : "stageOnRecordError",
+        "value" : "TO_ERROR"
+      }, {
+        "name" : "stageRequiredFields",
+        "value" : [ ]
+      }, {
+        "name" : "stageRecordPreconditions",
+        "value" : [ ]
+      } ],
+      "uiInfo" : {
+        "description" : "",
+        "label" : "Log Input/Outpath to EDL table",
+        "xPos" : 1138.4547119140625,
+        "yPos" : 365.292724609375,
+        "stageType" : "TARGET"
+      },
+      "inputLanes" : [ "StreamSelector_01OutputLane1566577272037" ],
+      "outputLanes" : [ ],
+      "eventLanes" : [ ],
+      "services" : [ ]
+    }, {
+      "instanceName" : "Shell_02",
+      "library" : "streamsets-datacollector-basic-lib",
+      "stageName" : "com_streamsets_pipeline_stage_executor_shell_ShellDExecutor",
+      "stageVersion" : "1",
+      "configuration" : [ {
+        "name" : "config.environmentVariables",
+        "value" : [ {
+          "value" : "${record:value('/input_file_path')}",
+          "key" : "input_file"
+        }, {
+          "key" : "output_file",
+          "value" : "${record:value('/hdfs_file_path')}"
+        }, {
+          "key" : "s3_bucket_json",
+          "value" : "advana-raw-zone"
+        } ]
+      }, {
+        "name" : "config.timeout",
+        "value" : "100000"
+      }, {
+        "name" : "config.script",
+        "value" : "#!/bin/bash\n\nkinit -k -t /etc/security/keytabs/streamsets.keytab ${KRB_NAME}\nhdfs dfs -cp \"${input_file}\" \"${output_file}\"\n\nhdfs dfs -cp ${input_file}  s3a://${s3_bucket_json}/gamechanger/json/\n\nfilename=${output_file}\nfilename=${filename//' '/'\\ '}\ncomma=\"\\,\"\nfilename=${filename//,/$comma}\n#echo $filename\n#echo \"filename = $filename\"\nvalue=`hdfs dfs -cat \"${filename}\"`\nvalue=\"[$value]\" \necho $value | curl --negotiate -u : -b ~/cookiejar.txt -c ~/cookiejar.txt -k -s -X POST -H 'Content-Type: application/json' 'https://${SOLR_HOST}:8985/solr/game_changer/update/json/docs' --data-binary @-"
+      }, {
+        "name" : "stageOnRecordError",
+        "value" : "TO_ERROR"
+      }, {
+        "name" : "stageRequiredFields",
+        "value" : [ ]
+      }, {
+        "name" : "stageRecordPreconditions",
+        "value" : [ ]
+      } ],
+      "uiInfo" : {
+        "description" : "",
+        "label" : "Execute JAIC GameChanger Ingest",
+        "xPos" : 870.8817749023438,
+        "yPos" : 296.39007568359375,
+        "stageType" : "EXECUTOR"
+      },
+      "inputLanes" : [ "StreamSelector_01OutputLane1579587813041" ],
+      "outputLanes" : [ ],
+      "eventLanes" : [ ],
+      "services" : [ ]
+    }, {
+      "instanceName" : "Shell_03",
+      "library" : "streamsets-datacollector-basic-lib",
+      "stageName" : "com_streamsets_pipeline_stage_executor_shell_ShellDExecutor",
+      "stageVersion" : "1",
+      "configuration" : [ {
+        "name" : "config.environmentVariables",
+        "value" : [ {
+          "value" : "${record:value('/input_file_path')}",
+          "key" : "input_file"
+        }, {
+          "key" : "output_file",
+          "value" : "${record:value('/pdf_file_path')}"
+        }, {
+          "key" : "s3_bucket_pdf",
+          "value" : "advana-raw-zone"
+        } ]
+      }, {
+        "name" : "config.timeout",
+        "value" : "100000"
+      }, {
+        "name" : "config.script",
+        "value" : "#!/bin/bash\n\nkinit -k -t /etc/security/keytabs/streamsets.keytab ${KRB_NAME}\nhdfs dfs -cp \"${input_file}\" \"${output_file}\"\n\nhdfs dfs -cp ${input_file}  s3a://${s3_bucket_pdf}/gamechanger/pdf/"
+      }, {
+        "name" : "stageOnRecordError",
+        "value" : "TO_ERROR"
+      }, {
+        "name" : "stageRequiredFields",
+        "value" : [ ]
+      }, {
+        "name" : "stageRecordPreconditions",
+        "value" : [ ]
+      } ],
+      "uiInfo" : {
+        "description" : "",
+        "label" : "JAIC GameChanger PDF",
+        "xPos" : 720,
+        "yPos" : 168.029541015625,
+        "stageType" : "EXECUTOR"
+      },
+      "inputLanes" : [ "StreamSelector_01OutputLane1579734682571" ],
+      "outputLanes" : [ ],
+      "eventLanes" : [ ],
+      "services" : [ ]
+    }, {
+      "instanceName" : "Shell_04",
+      "library" : "streamsets-datacollector-basic-lib",
+      "stageName" : "com_streamsets_pipeline_stage_executor_shell_ShellDExecutor",
+      "stageVersion" : "1",
+      "configuration" : [ {
+        "name" : "config.environmentVariables",
+        "value" : [ {
+          "key" : "output_file",
+          "value" : "${record:value('/pdf_file_path')}"
+        }, {
+          "key" : "unzip_dir",
+          "value" : "${record:value('/input_file_path')}"
+        }, {
+          "key" : "zip_filename",
+          "value" : "${record:value('/output_filename')}"
+        }, {
+          "key" : "USE_KEYTAB",
+          "value" : "true"
+        }, {
+          "key" : "SCRIPT_ENV",
+          "value" : "prod"
+        }, {
+          "key" : "INDEX_NAME",
+          "value" : "gamechanger"
+        }, {
+          "key" : "INDEX_TYPE",
+          "value" : "es"
+        }, {
+          "key" : "USERNAME",
+          "value" : ""
+        }, {
+          "key" : "PASSWORD",
+          "value" : ""
+        }, {
+          "key" : "AWS_REGION",
+          "value" : ""
+        }, {
+          "key" : "",
+          "value" : ""
+        } ]
+      }, {
+        "name" : "config.timeout",
+        "value" : "100000"
+      }, {
+        "name" : "config.script",
+        "value" : "#!/usr/bin/env bash\nset -o errexit\nset -o nounset\nset -o pipefail\n\nSECONDS=0\n\n#####\n## ## SETUP TMP DIR\n#####\nfunction setup_tmp_dir() {\n  LOCAL_TMP_DIR=$(mktemp -d)\n}\nsetup_tmp_dir # CALLING RIGHT AWAY (to avoid issues with unbound var later)\nfunction echo_tmp_dir_locaton() {\n  echo \"TEMP DIR IS AT $LOCAL_TMP_DIR\"\n}\nfunction remove_tmp_dir() {\n  if [[ -d \"$LOCAL_TMP_DIR\" ]]; then\n    rm -r \"$LOCAL_TMP_DIR\"\n  fi\n}\n#####\n## ## REGISTER CLEANUP HOOKS\n#####\nfunction cleanup_hooks() {\n  remove_tmp_dir\n}\ntrap cleanup_hooks EXIT\n#####\n## ## SETUP Keytab (used in production)\n#####\nfunction init_prod_key_tab() {\n  USE_KEYTAB=\"${USE_KEYTAB:-true}\"\n  if [[ \"$USE_KEYTAB\" == \"true\" ]]; then\n   kinit -k -t /etc/security/keytabs/streamsets.keytab ${KRB_NAME}\n  fi\n}\n#####\n## ## Commands to use ES, Solr and AWS\n#####\nfunction setup_aws_solr_es_commands() {\n  case \"$SCRIPT_ENV\" in\n  dev)\n    AWS_CMD=\"aws\"\n    SOLR_INDEX_UPDATE_API_ENDPOINT=\"http://localhost:8983/solr/${INDEX_NAME}/update/json/docs\"\n    ES_INDEX_UPDATE_API_ENDPOINT=\"https://vpc-gamechanger-iquxkyq2dobz4antllp35g2vby.us-east-1.es.amazonaws.com/${INDEX_NAME}/_doc\"\n    ;;\n  prod)\n    AWS_CMD=\"aws\"\n \tSOLR_INDEX_UPDATE_API_ENDPOINT=\"https://${SOLR_HOST}:8985/solr/${INDEX_NAME}/update/json/docs\"\n    ES_INDEX_UPDATE_API_ENDPOINT=\"https://vpc-gamechanger-5x2kdwryrtatmfbrflj25mye4q.us-gov-west-1.es.amazonaws.com/${INDEX_NAME}/_doc\"\n    ;;\n  docker)\n    AWS_CMD=\"aws --endpoint-url http://localstack:4572\"\n    SOLR_INDEX_UPDATE_API_ENDPOINT=\"http://solr:8984/solr/${INDEX_NAME}/update/json/docs\"\n    ES_INDEX_UPDATE_API_ENDPOINT=\"http://elasticsearch:9200/${INDEX_NAME}/_doc\"\n    ;;\n  *)\n    echo >&2 \"Must set SCRIPT_ENV = (docker|dev|test)\"\n    exit 2\n    ;;\n  esac\n  echo \"Using AWS: $AWS_CMD\"\n  echo \"Solr Update URL: $SOLR_INDEX_UPDATE_API_ENDPOINT\"\n  echo \"ES Update URL: $ES_INDEX_UPDATE_API_ENDPOINT\"\n}\n#####\n## ## S3/HDFS ENV Vars\n#####\nfunction setup_s3_vars_and_dirs() {\n  S3_GAMECHANGER_PATH=\"advana-raw-zone/gamechanger\"\n  # pdf/json \n  S3_GC_PDF_PATH=\"$S3_GAMECHANGER_PATH/pdf\"\n  \n  if [ \"$INDEX_TYPE\" == \"es\" ]; then\n\tS3_GC_JSON_PATH=\"$S3_GAMECHANGER_PATH/json_es\"\n  else\n      echo \"----- Solr Indexing ------\"\n      S3_GC_JSON_PATH=\"$S3_GAMECHANGER_PATH/json\"\n  fi\n  S3_GC_JSON_PATH=\"$S3_GAMECHANGER_PATH/json\"\n  S3_GC_JSON_FAIL_SOLR_PATH=\"$S3_GAMECHANGER_PATH/json_fail_index_solr\"\n  echo \"S3 GC Path PDF: $S3_GC_PDF_PATH\"\n  echo \"S3 GC Path JSON: $S3_GC_JSON_PATH\"\n  echo \"S3 GC Path fail index JSON: $S3_GC_JSON_FAIL_SOLR_PATH\"\n}\n\nfunction update_solr_index() {\n  local RESPONSE_HEADER=\"responseHeader\"\n  find \"$LOCAL_TMP_DIR/output/\" -name \"*.json\" -print0 | while IFS= read -r -d '' file; do\n  \techo \"file = $file\"\n    local _test=$(curl --negotiate -u : -b ~/cookiejar.txt -c ~/cookiejar.txt --show-error --fail -s -k -X POST -H 'Content-Type: application/json' ${SOLR_INDEX_UPDATE_API_ENDPOINT} --data-binary \"@$file\")\n    echo \"----- Message: $_test\"\n    if [[ \"$_test\" == *\"$RESPONSE_HEADER\"* ]]; then\n      echo \"File $file add to Solr $INDEX_NAME\"\n    else\n      echo \"Failed to index $file adding file to advana-raw-zone/gamechanger/json_failed_add_solr\"\n      export AWS_DEFAULT_REGION=$AWS_REGION\n      $AWS_CMD s3 cp \"$file\" \"s3://$S3_GC_JSON_FAIL_SOLR_PATH/$_filename.json\"\n    fi\n  done\n}\n\n#####\n## ## Elasticsearxh Index Update Vars/Functions\n#####\nfunction update_es_index() {\n  local RESPONSE_HEADER=\"result\"\n  find \"$LOCAL_TMP_DIR/output/\" -name \"*.json\" -print0 | while IFS= read -r -d '' file; do\n  \techo \"file = $file\"\n    _filename=$(basename \"$file\" .json)\n    _id=$(echo -n \"$_filename\" | md5sum | cut -d' ' -f1)\n    if [ -z \"$PASSWORD\" ]; then\n       _test=$(curl --silent  --show-error  -H \"Content-Type: application/json\" -XPOST \"${ES_INDEX_UPDATE_API_ENDPOINT}/${_id}\" --data-binary \"@$file\")\n     else\n       _test=$(curl --silent  --show-error --fail  -H \"Content-Type: application/json\" -u $USERNAME:$PASSWORD -XPOST \"${ES_INDEX_UPDATE_API_ENDPOINT}/${_id}\" --data-binary \"@$file\")\n       \n      fi\n     echo $_test\n    if [[ \"$_test\" == *\"$RESPONSE_HEADER\"* ]]; then\n    \techo \"File $file add to Elasticsearch $INDEX_NAME\"\n    else\n    \techo \"Failed to index $file adding file to advana-raw-zone/gamechanger/json_failed_add_solr\"\n    \texport AWS_DEFAULT_REGION=$AWS_REGION\n    \t$AWS_CMD s3 cp \"$file\" \"s3://$S3_GC_JSON_FAIL_SOLR_PATH/$_filename.json\"\n    fi\n  done\n}\n\n#####\n## ## Update S3/Functions\n#####\nfunction update_s3_pdf() {\n  find $LOCAL_TMP_DIR/output/ -name \"*.pdf\" -print0 | while IFS= read -r -d '' file; do\n    echo \"file = $file\";\n    name=$(basename \"$file\")\n    $AWS_CMD s3 cp \"${file}\" \"s3://$S3_GC_PDF_PATH/${name}\"\n    cat \"${file}\" | hdfs dfs -put -f - \"/data_zones/raw_zone/gamechanger/${name}\"\n  done\n}\n\nfunction update_s3_json() {\n  find $LOCAL_TMP_DIR/output/ -name \"*.json\" -print0 | while IFS= read -r -d '' file; do\n    echo \"file = $file\";\n    name=$(basename \"$file\")\n    $AWS_CMD s3 cp \"${file}\" \"s3://$S3_GC_JSON_PATH/${name}\"\n  done\n}\n\n\n\necho \"***************************** Start *****************************\"\n\ninit_prod_key_tab\necho_tmp_dir_locaton\nsetup_aws_solr_es_commands\nsetup_s3_vars_and_dirs\n\necho $unzip_dir\nhdfs dfs -get $unzip_dir $LOCAL_TMP_DIR/json.zip\nunzip $LOCAL_TMP_DIR/json.zip -d $LOCAL_TMP_DIR/output\n\n\nupdate_s3_pdf\nupdate_s3_json\n\n# update index\nif [ \"$INDEX_TYPE\" == \"es\" ]; then\n\techo \"----- Elasticsearch Indexing ------\"\n\tupdate_es_index\nelse\n\techo \"----- Solr Indexing ------\"\n    update_solr_index\nfi\n\nduration=$SECONDS\necho \"$(($duration / 60)) minutes and $(($duration % 60)) seconds elapsed.\"\necho \"***************************** Done *****************************\""
+      }, {
+        "name" : "stageOnRecordError",
+        "value" : "TO_ERROR"
+      }, {
+        "name" : "stageRequiredFields",
+        "value" : [ ]
+      }, {
+        "name" : "stageRecordPreconditions",
+        "value" : [ ]
+      } ],
+      "uiInfo" : {
+        "description" : "",
+        "label" : "JAIC GameChanger Unzip",
+        "xPos" : 720,
+        "yPos" : 40,
+        "stageType" : "EXECUTOR"
+      },
+      "inputLanes" : [ "StreamSelector_01OutputLane1582603484871" ],
+      "outputLanes" : [ ],
+      "eventLanes" : [ ],
+      "services" : [ ]
+    }, {
+      "instanceName" : "Trash_01",
+      "library" : "streamsets-datacollector-basic-lib",
+      "stageName" : "com_streamsets_pipeline_stage_destination_devnull_NullDTarget",
+      "stageVersion" : "1",
+      "configuration" : [ ],
+      "uiInfo" : {
+        "description" : "",
+        "label" : "Trash 1",
+        "xPos" : 890,
+        "yPos" : 557.6923217773438,
+        "stageType" : "TARGET"
+      },
+      "inputLanes" : [ "StreamSelector_01OutputLane1566577257483" ],
+      "outputLanes" : [ ],
+      "eventLanes" : [ ],
+      "services" : [ ]
+    } ],
+    "errorStage" : {
+      "instanceName" : "WritetoKafka_ErrorStage",
+      "library" : "streamsets-datacollector-cdh_kafka_3_0-lib",
+      "stageName" : "com_streamsets_pipeline_stage_destination_kafka_ToErrorKafkaDTarget",
+      "stageVersion" : "4",
+      "configuration" : [ {
+        "name" : "conf.dataGeneratorFormatConfig.charset",
+        "value" : "UTF-8"
+      }, {
+        "name" : "conf.dataGeneratorFormatConfig.csvFileFormat",
+        "value" : "CSV"
+      }, {
+        "name" : "conf.dataGeneratorFormatConfig.csvHeader",
+        "value" : "NO_HEADER"
+      }, {
+        "name" : "conf.dataGeneratorFormatConfig.csvReplaceNewLines",
+        "value" : true
+      }, {
+        "name" : "conf.dataGeneratorFormatConfig.csvReplaceNewLinesString",
+        "value" : " "
+      }, {
+        "name" : "conf.dataGeneratorFormatConfig.csvCustomDelimiter",
+        "value" : "|"
+      }, {
+        "name" : "conf.dataGeneratorFormatConfig.csvCustomEscape",
+        "value" : "\\"
+      }, {
+        "name" : "conf.dataGeneratorFormatConfig.csvCustomQuote",
+        "value" : "\""
+      }, {
+        "name" : "conf.dataGeneratorFormatConfig.jsonMode",
+        "value" : "MULTIPLE_OBJECTS"
+      }, {
+        "name" : "conf.dataGeneratorFormatConfig.textFieldPath",
+        "value" : "/text"
+      }, {
+        "name" : "conf.dataGeneratorFormatConfig.textRecordSeparator",
+        "value" : "\\n"
+      }, {
+        "name" : "conf.dataGeneratorFormatConfig.textFieldMissingAction",
+        "value" : "ERROR"
+      }, {
+        "name" : "conf.dataGeneratorFormatConfig.textEmptyLineIfNull",
+        "value" : false
+      }, {
+        "name" : "conf.dataGeneratorFormatConfig.avroSchemaSource",
+        "value" : null
+      }, {
+        "name" : "conf.dataGeneratorFormatConfig.avroSchema",
+        "value" : null
+      }, {
+        "name" : "conf.dataGeneratorFormatConfig.registerSchema",
+        "value" : false
+      }, {
+        "name" : "conf.dataGeneratorFormatConfig.schemaRegistryUrlsForRegistration",
+        "value" : [ ]
+      }, {
+        "name" : "conf.dataGeneratorFormatConfig.schemaRegistryUrls",
+        "value" : [ ]
+      }, {
+        "name" : "conf.dataGeneratorFormatConfig.schemaLookupMode",
+        "value" : "SUBJECT"
+      }, {
+        "name" : "conf.dataGeneratorFormatConfig.subject",
+        "value" : null
+      }, {
+        "name" : "conf.dataGeneratorFormatConfig.subjectToRegister",
+        "value" : null
+      }, {
+        "name" : "conf.dataGeneratorFormatConfig.schemaId",
+        "value" : null
+      }, {
+        "name" : "conf.dataGeneratorFormatConfig.includeSchema",
+        "value" : true
+      }, {
+        "name" : "conf.dataGeneratorFormatConfig.avroCompression",
+        "value" : "NULL"
+      }, {
+        "name" : "conf.dataGeneratorFormatConfig.binaryFieldPath",
+        "value" : "/"
+      }, {
+        "name" : "conf.dataGeneratorFormatConfig.protoDescriptorFile",
+        "value" : null
+      }, {
+        "name" : "conf.dataGeneratorFormatConfig.messageType",
+        "value" : null
+      }, {
+        "name" : "conf.dataGeneratorFormatConfig.fileNameEL",
+        "value" : null
+      }, {
+        "name" : "conf.dataGeneratorFormatConfig.wholeFileExistsAction",
+        "value" : "TO_ERROR"
+      }, {
+        "name" : "conf.dataGeneratorFormatConfig.includeChecksumInTheEvents",
+        "value" : false
+      }, {
+        "name" : "conf.dataGeneratorFormatConfig.checksumAlgorithm",
+        "value" : "MD5"
+      }, {
+        "name" : "conf.dataGeneratorFormatConfig.xmlPrettyPrint",
+        "value" : true
+      }, {
+        "name" : "conf.dataGeneratorFormatConfig.xmlValidateSchema",
+        "value" : false
+      }, {
+        "name" : "conf.dataGeneratorFormatConfig.xmlSchema",
+        "value" : null
+      }, {
+        "name" : "conf.metadataBrokerList",
+        "value" : "KAFKA_BROKER_HOST:9093"
+      }, {
+        "name" : "conf.runtimeTopicResolution",
+        "value" : false
+      }, {
+        "name" : "conf.topicExpression",
+        "value" : "${record:value('/topic')}"
+      }, {
+        "name" : "conf.topicWhiteList",
+        "value" : "*"
+      }, {
+        "name" : "conf.topic",
+        "value" : "error_log"
+      }, {
+        "name" : "conf.partitionStrategy",
+        "value" : "ROUND_ROBIN"
+      }, {
+        "name" : "conf.partition",
+        "value" : "${0}"
+      }, {
+        "name" : "conf.singleMessagePerBatch",
+        "value" : false
+      }, {
+        "name" : "conf.kafkaProducerConfigs",
+        "value" : [ {
+          "key" : "security.protocol",
+          "value" : "SSL"
+        }, {
+          "key" : "ssl.truststore.location",
+          "value" : "/opt/cloudera/security/pki/truststore.jks"
+        }, {
+          "value" : "cloudera",
+          "key" : "ssl.truststore.password"
+        }, {
+          "key" : "ssl.keystore.location",
+          "value" : "/opt/cloudera/security/pki/agent.jks"
+        }, {
+          "key" : "ssl.keystore.password",
+          "value" : "cloudera"
+        }, {
+          "key" : "ssl.enabled.protocols",
+          "value" : "TLSv1.2"
+        }, {
+          "key" : "ssl.keystore.type",
+          "value" : "JKS"
+        } ]
+      }, {
+        "name" : "responseConf.responseType",
+        "value" : "SUCCESS_RECORDS"
+      } ],
+      "uiInfo" : {
+        "description" : "",
+        "label" : "Error Records - Write to Kafka",
+        "xPos" : 1110,
+        "yPos" : 50,
+        "stageType" : "TARGET"
+      },
+      "inputLanes" : [ ],
+      "outputLanes" : [ ],
+      "eventLanes" : [ ],
+      "services" : [ ]
+    },
+    "info" : {
+      "pipelineId" : "EDLtoHDFSTransferV7e5f96fb4-52e9-4212-bbc8-733fa17401e2",
+      "title" : "EDL to HDFS Transfer V7",
+      "description" : "",
+      "created" : 1597754499212,
+      "lastModified" : 1597754645919,
+      "creator" : "admin",
+      "lastModifier" : "admin",
+      "lastRev" : "0",
+      "uuid" : "b879e2c9-fb43-4ee9-9519-f6cf5e9c6884",
+      "valid" : false,
+      "metadata" : {
+        "labels" : [ "Universal" ]
+      },
+      "name" : "EDLtoHDFSTransferV7e5f96fb4-52e9-4212-bbc8-733fa17401e2",
+      "sdcVersion" : "3.6.1",
+      "sdcId" : "63eddde9-e0bf-11ea-8a77-eb3755d94e59"
+    },
+    "metadata" : {
+      "labels" : [ "Universal" ]
+    },
+    "statsAggregatorStage" : {
+      "instanceName" : "statsAggregatorStageInstance",
+      "library" : "streamsets-datacollector-basic-lib",
+      "stageName" : "com_streamsets_pipeline_stage_destination_devnull_StatsDpmDirectlyDTarget",
+      "stageVersion" : "1",
+      "configuration" : [ ],
+      "uiInfo" : {
+        "stageType" : "TARGET",
+        "label" : "Stats Aggregator -Write to Control Hub directly"
+      },
+      "inputLanes" : [ ],
+      "outputLanes" : [ ],
+      "eventLanes" : [ ],
+      "services" : [ ]
+    },
+    "startEventStages" : [ {
+      "instanceName" : "Discard_StartEventStage",
+      "library" : "streamsets-datacollector-basic-lib",
+      "stageName" : "com_streamsets_pipeline_stage_destination_devnull_ToErrorNullDTarget",
+      "stageVersion" : "1",
+      "configuration" : [ ],
+      "uiInfo" : {
+        "description" : "",
+        "label" : "Start Event - Discard",
+        "xPos" : 280,
+        "yPos" : 50,
+        "stageType" : "TARGET"
+      },
+      "inputLanes" : [ ],
+      "outputLanes" : [ ],
+      "eventLanes" : [ ],
+      "services" : [ ]
+    } ],
+    "stopEventStages" : [ {
+      "instanceName" : "Discard_StopEventStage",
+      "library" : "streamsets-datacollector-basic-lib",
+      "stageName" : "com_streamsets_pipeline_stage_destination_devnull_ToErrorNullDTarget",
+      "stageVersion" : "1",
+      "configuration" : [ ],
+      "uiInfo" : {
+        "description" : "",
+        "label" : "Stop Event - Discard",
+        "xPos" : 280,
+        "yPos" : 50,
+        "stageType" : "TARGET"
+      },
+      "inputLanes" : [ ],
+      "outputLanes" : [ ],
+      "eventLanes" : [ ],
+      "services" : [ ]
+    } ],
+    "testOriginStage" : {
+      "instanceName" : "com_streamsets_pipeline_stage_devtest_rawdata_RawDataDSource_TestOriginStage",
+      "library" : "streamsets-datacollector-dev-lib",
+      "stageName" : "com_streamsets_pipeline_stage_devtest_rawdata_RawDataDSource",
+      "stageVersion" : "3",
+      "configuration" : [ {
+        "name" : "rawData",
+        "value" : "{\n  \"f1\": \"abc\",\n  \"f2\": \"xyz\",\n  \"f3\": \"lmn\"\n}"
+      }, {
+        "name" : "stopAfterFirstBatch",
+        "value" : false
+      }, {
+        "name" : "stageOnRecordError",
+        "value" : "TO_ERROR"
+      } ],
+      "uiInfo" : {
+        "stageType" : "SOURCE",
+        "label" : "Test Origin - Dev Raw Data Source"
+      },
+      "inputLanes" : [ ],
+      "outputLanes" : [ "com_streamsets_pipeline_stage_devtest_rawdata_RawDataDSource_TestOriginStageOutputLane1" ],
+      "eventLanes" : [ ],
+      "services" : [ {
+        "service" : "com.streamsets.pipeline.api.service.dataformats.DataFormatParserService",
+        "serviceVersion" : 1,
+        "configuration" : [ {
+          "name" : "displayFormats",
+          "value" : "DELIMITED,JSON,LOG,SDC_JSON,TEXT,XML"
+        }, {
+          "name" : "dataFormat",
+          "value" : "JSON"
+        }, {
+          "name" : "dataFormatConfig.compression",
+          "value" : "NONE"
+        }, {
+          "name" : "dataFormatConfig.filePatternInArchive",
+          "value" : "*"
+        }, {
+          "name" : "dataFormatConfig.charset",
+          "value" : "UTF-8"
+        }, {
+          "name" : "dataFormatConfig.removeCtrlChars",
+          "value" : false
+        }, {
+          "name" : "dataFormatConfig.textMaxLineLen",
+          "value" : 1024
+        }, {
+          "name" : "dataFormatConfig.useCustomDelimiter",
+          "value" : false
+        }, {
+          "name" : "dataFormatConfig.customDelimiter",
+          "value" : "\\r\\n"
+        }, {
+          "name" : "dataFormatConfig.includeCustomDelimiterInTheText",
+          "value" : false
+        }, {
+          "name" : "dataFormatConfig.jsonContent",
+          "value" : "MULTIPLE_OBJECTS"
+        }, {
+          "name" : "dataFormatConfig.jsonMaxObjectLen",
+          "value" : 4096
+        }, {
+          "name" : "dataFormatConfig.csvFileFormat",
+          "value" : "CSV"
+        }, {
+          "name" : "dataFormatConfig.csvHeader",
+          "value" : "NO_HEADER"
+        }, {
+          "name" : "dataFormatConfig.csvAllowExtraColumns",
+          "value" : false
+        }, {
+          "name" : "dataFormatConfig.csvExtraColumnPrefix",
+          "value" : "_extra_"
+        }, {
+          "name" : "dataFormatConfig.csvMaxObjectLen",
+          "value" : 1024
+        }, {
+          "name" : "dataFormatConfig.csvCustomDelimiter",
+          "value" : "|"
+        }, {
+          "name" : "dataFormatConfig.csvCustomEscape",
+          "value" : "\\"
+        }, {
+          "name" : "dataFormatConfig.csvCustomQuote",
+          "value" : "\""
+        }, {
+          "name" : "dataFormatConfig.csvEnableComments",
+          "value" : false
+        }, {
+          "name" : "dataFormatConfig.csvCommentMarker",
+          "value" : "#"
+        }, {
+          "name" : "dataFormatConfig.csvIgnoreEmptyLines",
+          "value" : false
+        }, {
+          "name" : "dataFormatConfig.csvRecordType",
+          "value" : "LIST_MAP"
+        }, {
+          "name" : "dataFormatConfig.csvSkipStartLines",
+          "value" : 0
+        }, {
+          "name" : "dataFormatConfig.parseNull",
+          "value" : false
+        }, {
+          "name" : "dataFormatConfig.nullConstant",
+          "value" : "\\\\N"
+        }, {
+          "name" : "dataFormatConfig.xmlRecordElement",
+          "value" : null
+        }, {
+          "name" : "dataFormatConfig.includeFieldXpathAttributes",
+          "value" : false
+        }, {
+          "name" : "dataFormatConfig.xPathNamespaceContext",
+          "value" : [ ]
+        }, {
+          "name" : "dataFormatConfig.outputFieldAttributes",
+          "value" : false
+        }, {
+          "name" : "dataFormatConfig.xmlMaxObjectLen",
+          "value" : 4096
+        }, {
+          "name" : "dataFormatConfig.logMode",
+          "value" : "COMMON_LOG_FORMAT"
+        }, {
+          "name" : "dataFormatConfig.logMaxObjectLen",
+          "value" : 1024
+        }, {
+          "name" : "dataFormatConfig.retainOriginalLine",
+          "value" : false
+        }, {
+          "name" : "dataFormatConfig.customLogFormat",
+          "value" : "%h %l %u %t \"%r\" %>s %b"
+        }, {
+          "name" : "dataFormatConfig.regex",
+          "value" : "^(\\S+) (\\S+) (\\S+) \\[([\\w:/]+\\s[+\\-]\\d{4})\\] \"(\\S+) (\\S+) (\\S+)\" (\\d{3}) (\\d+)"
+        }, {
+          "name" : "dataFormatConfig.fieldPathsToGroupName",
+          "value" : [ {
+            "fieldPath" : "/",
+            "group" : 1
+          } ]
+        }, {
+          "name" : "dataFormatConfig.grokPatternDefinition",
+          "value" : null
+        }, {
+          "name" : "dataFormatConfig.grokPattern",
+          "value" : "%{COMMONAPACHELOG}"
+        }, {
+          "name" : "dataFormatConfig.onParseError",
+          "value" : "ERROR"
+        }, {
+          "name" : "dataFormatConfig.maxStackTraceLines",
+          "value" : 50
+        }, {
+          "name" : "dataFormatConfig.enableLog4jCustomLogFormat",
+          "value" : false
+        }, {
+          "name" : "dataFormatConfig.log4jCustomLogFormat",
+          "value" : "%r [%t] %-5p %c %x - %m%n"
+        }, {
+          "name" : "dataFormatConfig.avroSchemaSource",
+          "value" : null
+        }, {
+          "name" : "dataFormatConfig.avroSchema",
+          "value" : null
+        }, {
+          "name" : "dataFormatConfig.schemaRegistryUrls",
+          "value" : [ ]
+        }, {
+          "name" : "dataFormatConfig.schemaLookupMode",
+          "value" : "SUBJECT"
+        }, {
+          "name" : "dataFormatConfig.subject",
+          "value" : null
+        }, {
+          "name" : "dataFormatConfig.schemaId",
+          "value" : null
+        }, {
+          "name" : "dataFormatConfig.protoDescriptorFile",
+          "value" : null
+        }, {
+          "name" : "dataFormatConfig.messageType",
+          "value" : null
+        }, {
+          "name" : "dataFormatConfig.isDelimited",
+          "value" : false
+        }, {
+          "name" : "dataFormatConfig.binaryMaxObjectLen",
+          "value" : 1024
+        }, {
+          "name" : "dataFormatConfig.datagramMode",
+          "value" : "SYSLOG"
+        }, {
+          "name" : "dataFormatConfig.typesDbPath",
+          "value" : null
+        }, {
+          "name" : "dataFormatConfig.convertTime",
+          "value" : false
+        }, {
+          "name" : "dataFormatConfig.excludeInterval",
+          "value" : false
+        }, {
+          "name" : "dataFormatConfig.authFilePath",
+          "value" : null
+        }, {
+          "name" : "dataFormatConfig.netflowOutputValuesMode",
+          "value" : "RAW_AND_INTERPRETED"
+        }, {
+          "name" : "dataFormatConfig.maxTemplateCacheSize",
+          "value" : -1
+        }, {
+          "name" : "dataFormatConfig.templateCacheTimeoutMs",
+          "value" : -1
+        }, {
+          "name" : "dataFormatConfig.netflowOutputValuesModeDatagram",
+          "value" : "RAW_AND_INTERPRETED"
+        }, {
+          "name" : "dataFormatConfig.maxTemplateCacheSizeDatagram",
+          "value" : -1
+        }, {
+          "name" : "dataFormatConfig.templateCacheTimeoutMsDatagram",
+          "value" : -1
+        }, {
+          "name" : "dataFormatConfig.wholeFileMaxObjectLen",
+          "value" : 8192
+        }, {
+          "name" : "dataFormatConfig.rateLimit",
+          "value" : "-1"
+        }, {
+          "name" : "dataFormatConfig.verifyChecksum",
+          "value" : false
+        }, {
+          "name" : "dataFormatConfig.excelHeader",
+          "value" : null
+        } ]
+      } ]
+    },
+    "valid" : false,
+    "issues" : {
+      "stageIssues" : {
+        "WritetoKafka_ErrorStage" : [ {
+          "additionalInfo" : null,
+          "configGroup" : null,
+          "configName" : null,
+          "count" : 1,
+          "level" : "STAGE",
+          "instanceName" : "WritetoKafka_ErrorStage",
+          "serviceName" : null,
+          "message" : "CONTAINER_0901 - Could not find stage definition for 'streamsets-datacollector-cdh_kafka_3_0-lib:com_streamsets_pipeline_stage_destination_kafka_ToErrorKafkaDTarget'"
+        }, {
+          "additionalInfo" : null,
+          "configGroup" : null,
+          "configName" : null,
+          "count" : 1,
+          "level" : "STAGE",
+          "instanceName" : "WritetoKafka_ErrorStage",
+          "serviceName" : null,
+          "message" : "CREATION_006 - Stage definition not found Library 'streamsets-datacollector-cdh_kafka_3_0-lib' Stage 'com_streamsets_pipeline_stage_destination_kafka_ToErrorKafkaDTarget' Version '4'"
+        }, {
+          "additionalInfo" : null,
+          "configGroup" : "WritetoKafka_ErrorStage",
+          "configName" : null,
+          "count" : 1,
+          "level" : "STAGE",
+          "instanceName" : "WritetoKafka_ErrorStage",
+          "serviceName" : null,
+          "message" : "VALIDATION_0006 - Stage definition does not exist, library 'streamsets-datacollector-cdh_kafka_3_0-lib', name 'com_streamsets_pipeline_stage_destination_kafka_ToErrorKafkaDTarget', version '4'"
+        }, {
+          "additionalInfo" : null,
+          "configGroup" : null,
+          "configName" : null,
+          "count" : 1,
+          "level" : "STAGE",
+          "instanceName" : "WritetoKafka_ErrorStage",
+          "serviceName" : null,
+          "message" : "VALIDATION_0006 - Stage definition does not exist, library 'streamsets-datacollector-cdh_kafka_3_0-lib', name 'com_streamsets_pipeline_stage_destination_kafka_ToErrorKafkaDTarget', version '4'"
+        } ]
+      },
+      "issueCount" : 4,
+      "pipelineIssues" : [ ]
+    },
+    "previewable" : false
+  },
+  "pipelineRules" : {
+    "schemaVersion" : 3,
+    "version" : 2,
+    "metricsRuleDefinitions" : [ {
+      "id" : "badRecordsAlertID",
+      "alertText" : "High incidence of Error Records",
+      "metricId" : "pipeline.batchErrorRecords.counter",
+      "metricType" : "COUNTER",
+      "metricElement" : "COUNTER_COUNT",
+      "condition" : "${value() > 100}",
+      "sendEmail" : false,
+      "enabled" : false,
+      "timestamp" : 1550181833344,
+      "valid" : true
+    }, {
+      "id" : "stageErrorAlertID",
+      "alertText" : "High incidence of Stage Errors",
+      "metricId" : "pipeline.batchErrorMessages.counter",
+      "metricType" : "COUNTER",
+      "metricElement" : "COUNTER_COUNT",
+      "condition" : "${value() > 100}",
+      "sendEmail" : false,
+      "enabled" : false,
+      "timestamp" : 1550181833344,
+      "valid" : true
+    }, {
+      "id" : "idleGaugeID",
+      "alertText" : "Pipeline is Idle",
+      "metricId" : "RuntimeStatsGauge.gauge",
+      "metricType" : "GAUGE",
+      "metricElement" : "TIME_OF_LAST_RECEIVED_RECORD",
+      "condition" : "${time:now() - value() > 120000}",
+      "sendEmail" : false,
+      "enabled" : false,
+      "timestamp" : 1550181833344,
+      "valid" : true
+    }, {
+      "id" : "batchTimeAlertID",
+      "alertText" : "Batch taking more time to process",
+      "metricId" : "RuntimeStatsGauge.gauge",
+      "metricType" : "GAUGE",
+      "metricElement" : "CURRENT_BATCH_AGE",
+      "condition" : "${value() > 200}",
+      "sendEmail" : false,
+      "enabled" : false,
+      "timestamp" : 1550181833344,
+      "valid" : true
+    }, {
+      "id" : "memoryLimitAlertID",
+      "alertText" : "Memory limit for pipeline exceeded",
+      "metricId" : "pipeline.memoryConsumed.counter",
+      "metricType" : "COUNTER",
+      "metricElement" : "COUNTER_COUNT",
+      "condition" : "${value() > (jvm:maxMemoryMB() * 0.65)}",
+      "sendEmail" : false,
+      "enabled" : false,
+      "timestamp" : 1550181833344,
+      "valid" : true
+    } ],
+    "dataRuleDefinitions" : [ ],
+    "driftRuleDefinitions" : [ ],
+    "uuid" : "528b794f-9026-4396-bb06-69570b2f9e83",
+    "configuration" : [ {
+      "name" : "emailIDs",
+      "value" : [ ]
+    }, {
+      "name" : "webhookConfigs",
+      "value" : [ ]
+    } ],
+    "ruleIssues" : [ ],
+    "configIssues" : [ ]
+  },
+  "libraryDefinitions" : null
+}

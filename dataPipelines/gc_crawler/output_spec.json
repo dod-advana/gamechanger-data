@@ -1,0 +1,184 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "title": "GameChanger Crawler Output Schema",
+  "description": "Output schema for arguments used to invoke GC crawler.",
+  "examples": [
+    {
+      "doc_name": "Misc Publication, Volume 4",
+      "source_page_url": "https://example.local/page_2.html",
+      "downloadable_items": [
+        {
+          "doc_type": "pdf",
+          "web_url": "https://example.local/pubs/misc_pub_vol4.pdf",
+          "compression_type": null
+        },
+        {
+          "doc_type": "xml",
+          "web_url": "https://example.local/pubs/misc_pub_vol4.xml",
+          "compression_type": null
+        }
+      ],
+      "version_hash_raw_data": {
+        "pub_date": "2020-06-01"
+      },
+      "access_timestamp": "2020-06-28 22:59:57.274200",
+      "source_fqdn": "example.local"
+    }
+  ],
+  "required": [
+    "doc_name",
+    "source_page_url",
+    "downloadable_items",
+    "version_hash_raw_data",
+    "access_timestamp",
+    "source_fqdn",
+    "doc_type",
+    "doc_num",
+    "doc_title",
+    "publication_date",
+    "cac_login_required",
+    "crawler_used"
+  ],
+  "properties": {
+    "doc_type": {
+      "type": "string",
+      "title": "Document Type",
+      "description": "Document Publication Type.",
+      "examples": [
+        "Title"
+      ]
+    },
+    "doc_num": {
+      "type": "string",
+      "title": "Document Number",
+      "description": "Document Number",
+      "examples": [
+        "20.4"
+      ]
+    },
+    "doc_title": {
+      "type": "string",
+      "title": "Document Title",
+      "description": "Full document title - sometimes different from doc_name",
+      "examples": [
+        "Misc Publication, Volume 4"
+      ]
+    },
+    "doc_name": {
+      "type": "string",
+      "title": "Document Name",
+      "description": "Document Name as derived from source context.",
+      "examples": [
+        "Misc Publication, Volume 4"
+      ]
+    },
+    "publication_date": {
+      "type": ["string", "null"],
+      "title": "Publication Date",
+      "description": "Date the publication was most recently published",
+      "examples": ["01/20/2020"],
+      "default": null
+    },
+    "original_publication_date": {
+      "type": ["string", "null"],
+      "title": "Publication Date",
+      "description": "Date the publication was originally published",
+      "examples": ["01/20/2020"],
+      "default": null
+    },
+    "cac_login_required": {
+      "type": "boolean",
+      "title": "Restricted Document",
+      "description": "Access level of the document derived from context"
+    },
+    "crawler_used": {
+      "type": "string",
+      "title": "Crawler Used",
+      "description": "Name of the crawler the scraped the data"
+    },
+    "source_page_url": {
+      "type": "string",
+      "title": "Source Page URL",
+      "description": "URL at which the document links and other context was found.",
+      "examples": [
+        "https://example.local/page_2.html"
+      ],
+      "pattern": "^https?://\\S+$"
+    },
+    "downloadable_items": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/downloadable_item"
+      },
+      "minItems": 1
+    },
+    "version_hash_raw_data": {
+      "type": "object",
+      "title": "The version_hash_raw_data schema",
+      "description": "An explanation about the purpose of this instance.",
+      "examples": [
+        {
+          "pub_date": "2020-06-01"
+        }
+      ]
+    },
+    "access_timestamp": {
+      "type": "string",
+      "title": "The access_timestamp schema",
+      "description": "An explanation about the purpose of this instance.",
+      "examples": [
+        "2020-06-28 22:59:57.274200"
+      ],
+      "pattern": "\\d{4}-\\d{2}-\\d{2}[ ]\\d{2}:\\d{2}:\\d{2}[.]\\d+"
+    },
+    "source_fqdn": {
+      "type": "string",
+      "title": "Source FQDN",
+      "description": "Fully-qualified domain name of the website where document links were located.",
+      "examples": [
+        "example.local"
+      ]
+    }
+  },
+  "definitions": {
+    "downloadable_item": {
+      "type": "object",
+      "title": "Downloadable Item",
+      "description": "Downloadable item that's a part or whole of the larger document",
+      "examples": [
+        {
+          "doc_type": "pdf",
+          "web_url": "https://example.local/pubs/misc_pub_vol4.pdf",
+          "compression_type": null
+        }
+      ],
+      "required": [
+        "doc_type",
+        "web_url",
+        "compression_type"
+      ],
+      "properties": {
+        "doc_type": {
+          "type": "string",
+          "title": "Document Type",
+          "description": "The ultimate document file type when decompressed",
+          "enum": ["pdf","xml","xhtml", "html"]
+        },
+        "web_url": {
+          "type": "string",
+          "title": "Web Url",
+          "description": "Web url to a downloadable artifact, compressed or not",
+          "pattern": "^https?://\\S+$"
+        },
+        "compression_type": {
+          "type": ["string","null"],
+          "title": "Compression Type",
+          "description": "Compression type of the downloaded artifact.",
+          "enum" : [null, "tar", "tar.gz", "tar.bz", "zip"],
+          "default": null
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,147 @@
+<html>
+<style>
+    @page {
+        size: letter portrait;
+        @frame content_frame {
+            left: 25pt;
+            width: 562pt;
+            top: 25pt;
+            height: 742pt;
+        }
+    }
+    .title {
+        font-size: 16px;
+        line-height: 1.25;
+        margin-bottom: 16px;
+        font-weight: 500;
+
+    }
+    .author {
+        text-align: left;
+        font-size: 10px;
+    }
+    .name {
+        font-size: 10px;
+        font-weight: 900;
+    }
+    .name_info {
+        font-size: 10px;
+    }
+    .email {
+        font-size: 10px;
+    }
+    .body_text {
+        text-align: justify;
+        font-size: 10px;
+    }
+    .section {
+        font-size: 15px;
+        text-align: left;
+        border-bottom: 2px solid gray;
+        border-radius: 1px;
+    }
+    html {
+        font-size: 10px;
+    }
+</style>
+<body>
+    <div class="title">${doc_dict['metadata'].title}</div>
+    <p>
+    <div class="section">Author Information</div>
+    <br />
+    %for author in doc_dict['metadata'].authors:
+        ${author}<br />
+    %endfor
+    <br />
+    </p>
+
+    <p>
+    <div class="section">Metadata Information</div>
+    <br />
+    <table style="width:100%">
+        <tr>
+            <td><span class="name">Journal:</span> ${doc_dict['metadata'].journal}</td>
+            <td><span class="name">PMCID:</span> ${doc_dict['metadata'].pmcid}</td>
+        </tr>
+        <tr>
+            <td><span class="name">Published:</span> ${doc_dict['metadata'].publish_time} doi:${doc_dict['metadata'].doi}         </td>
+            <td><span class="name">PMID:</span> ${doc_dict['metadata'].pubmed_id}</td>
+
+        </tr>
+        <tr>
+            <td><span class="name">License(s) found within this paper:</span> ${doc_dict['metadata'].license}</td>
+            <td><span class="name">WHOID:</span> ${doc_dict['metadata'].who_covidence_id}</td>
+        </tr>
+         <tr>
+            <td><span class="name">Sources:</span> ${doc_dict['metadata'].source_x}</td>
+            <td></td>
+        </tr>
+    </table>
+    <br />
+    <span class="name">URL(s)</span><br />
+    %for url in doc_dict['metadata'].urls:
+        ${url}<br />
+     %endfor
+    <br />
+
+    <p>
+     %for abstract in doc_dict['abstracts'].body:
+        <div class="section">${abstract.section}</div>
+        <br />
+        <div class="body_text">${abstract.text}</div>
+    %endfor
+    </p>
+    <p>
+    %for body_text in doc_dict['body_texts'].body:
+        <div class="section">${body_text.section}</div>
+        <br />
+        <div class="body_text">${body_text.text}</div>
+    %endfor
+     </p>
+    <p>
+    %for body_text in doc_dict['back_matters'].body:
+
+        %if len(body_text.section) != 0:
+        <div class="section">${body_text.section}</div>
+        <br />
+        <div class="body_text">${body_text.text}</div>
+        % endif
+    %endfor
+     </p>
+
+    <p>
+        <div class="section">References Entries</div>
+        <br />
+        <div class="body_text">
+        <%
+            r_list = doc_dict['ref_entries'].ref
+        %>
+        % for ref_d in r_list:
+            <span class="name">${ref_d.ref_name | h}:</span>&nbsp;<span class="name_info">${ref_d.text | h}</span>
+            <br>
+            ${ref_d.html}
+            <br />
+            <br />
+        %endfor
+        </div>
+    </p>
+
+    <p>
+        <div class="section">References</div>
+        <br />
+        <div class="body_text">
+        <%
+           list = doc_dict['bib_entries'].bib
+           i = 1
+        %>
+        % for ref in list:
+            ${i}  ${ref.authors | h}: ${ref.title | h}  ${ref.venue | h}. ${ref.year | h}  ${ref.volume | h} ${ref.pages | h} ${ref.issn | h}
+            <br />
+            <br />
+            <% i = i + 1 %>
+         %endfor
+        </div>
+    </p>
+
+</body>
+</html>

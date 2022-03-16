@@ -1,0 +1,1 @@
+DROP VIEW IF EXISTS gc_document_corpus_snapshot_vw CASCADE;

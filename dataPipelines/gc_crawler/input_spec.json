@@ -1,0 +1,7 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "title": "GameChanger Crawler Input Schema",
+  "description": "[No-Op] Invoked programmatically or through CLI only",
+  "default": {}
+}
