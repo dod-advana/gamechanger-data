@@ -163,7 +163,7 @@ class Neo4jPublisher:
         return id
 
     def process_responsibilities(self, text: str) -> None:
-        resp = get_responsibilities(text, agencies=get_agency_names())
+        resp = get_responsibilities(text, agencies=self.verified_entities_list)
         if resp:
             for d in resp.values():
                 ent = d["Agency"]
