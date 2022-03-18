@@ -118,3 +118,64 @@ def title(filename: str) -> str:
         return "NA"
 
     return contract + "-" + ordernum + "-" + modification
+
+
+def extract_fpds_ng_quey_values(filename: str) -> (str, str, str):
+    parsed = filename.split('-')
+    if (len(parsed) - 1) == 9:
+        contract = parsed[2]
+        ordernum = parsed[3]
+        acomod = parsed[4]
+        pcomod = parsed[5]
+        if pcomod == 'empty':
+            modification = acomod
+        else:
+            modification = pcomod
+    elif (len(parsed) - 1) == 10:
+        contract = parsed[3]
+        ordernum = parsed[4]
+        acomod = parsed[5]
+        pcomod = parsed[6]
+        if pcomod == 'empty':
+            modification = acomod
+        else:
+            modification = pcomod
+    elif (len(parsed) - 1) == 11:
+        contract = parsed[4]
+        ordernum = parsed[5]
+        acomod = parsed[6]
+        pcomod = parsed[7]
+        if pcomod == 'empty':
+            modification = acomod
+        else:
+            modification = pcomod
+    elif (len(parsed) - 1) == 12:
+        contract = parsed[5]
+        ordernum = parsed[6]
+        acomod = parsed[7]
+        pcomod = parsed[8]
+        if pcomod == 'empty':
+            modification = acomod
+        else:
+            modification = pcomod
+    elif (len(parsed) - 1) == 13:
+        contract = parsed[6]
+        ordernum = parsed[7]
+        acomod = parsed[8]
+        pcomod = parsed[9]
+        if pcomod == 'empty':
+            modification = acomod
+        else:
+            modification = pcomod
+    else:
+        return None, None, None
+
+    # idv_piid <-- contract
+    # piid <-- ordernum
+    # modification_number <--modification
+    idv_piid = contract
+    piid = ordernum
+    modification_number = modification
+    return idv_piid, piid, modification_number
+
+

@@ -15,7 +15,7 @@ import copy
 #         {
 #           "term": {
 #             "s3_loc_eda_ext.keyword": {
-#               "value": "s3://advana-raw-zone/eda/pds/N0018910DZ0271018/EDAPDS-022471CEB5AB12BEE05400215A9BA3BA-N0018910DZ027-1018-empty-empty-PDS-2014-09-03.json"
+#               "value": "s3://advana-data-zone/eda/pds/N0018910DZ0271018/EDAPDS-022471CEB5AB12BEE05400215A9BA3BA-N0018910DZ027-1018-empty-empty-PDS-2014-09-03.json"
 #             }
 #           }
 #         }

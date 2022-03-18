@@ -11,6 +11,7 @@ import traceback
 from dataPipelines.gc_eda_pipeline.metadata.pds_extract_json import extract_pds
 from dataPipelines.gc_eda_pipeline.metadata.syn_extract_json import extract_syn
 from dataPipelines.gc_eda_pipeline.metadata.metadata_util import title, mod_identifier
+from dataPipelines.gc_eda_pipeline.metadata.fpds_ng import fpds_ng
 
 from urllib3.exceptions import ProtocolError
 
@@ -59,6 +60,10 @@ def metadata_extraction(filename_input: str, data_conf_filter: dict,
         # Check if file has metadata from PDS
         cursor.execute(sql_check_if_pds_metadata_exist, (filename,))
         is_pds_metadata = cursor.fetchone()
+
+        print("-------------")
+        print(is_pds_metadata)
+        print("-------------")
 
         if is_pds_metadata is not None:
             # Get General PDS Metadata
@@ -111,7 +116,7 @@ def metadata_extraction(filename_input: str, data_conf_filter: dict,
             # Download File from S3
             s3_location = s3_location.strip()
             if operating_environment == "dev":
-                s3_supplementary_data = s3_location.replace("s3://advana-raw-zone/", "")
+                s3_supplementary_data = s3_location.replace("s3://advana-data-zone/", "")
             else:
                 s3_supplementary_data = s3_location.replace("s3://advana-eda-wawf-restricted/", "")
 
@@ -119,7 +124,7 @@ def metadata_extraction(filename_input: str, data_conf_filter: dict,
             # Download File from S3
             s3_location = s3_location.strip()
             if operating_environment == "dev":
-                s3_supplementary_data = s3_location.replace("s3://advana-raw-zone/", "")
+                s3_supplementary_data = s3_location.replace("s3://advana-data-zone/", "")
             else:
                 s3_supplementary_data = s3_location.replace("s3://advana-eda-wawf-restricted/", "")
 
@@ -156,6 +161,17 @@ def metadata_extraction(filename_input: str, data_conf_filter: dict,
             is_supplementary_data_successful = True
             is_supplementary_file_missing = False
 
+        # print(filename)
+        fpds_data = fpds_ng(filename)
+        # print("-------")
+        # # print(type(extensions_metadata))
+        # print(fpds_data)
+        # print(json.dumps(fpds_data, indent=2))
+        # print("-------")
+        # print(json.loads(temp))
+
+        if fpds_data is not None:
+            extensions_metadata['fpds_ng_n'] = fpds_data
         data['extensions'] = extensions_metadata
 
     except (Exception, psycopg2.Error) as error:

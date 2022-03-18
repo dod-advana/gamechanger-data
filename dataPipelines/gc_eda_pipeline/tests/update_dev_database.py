@@ -61,7 +61,7 @@ def run(staging_folder: str):
             else:
                 prefix = contact_metadata
 
-            s3_loc = "s3://advana-raw-zone/eda/syn/" + prefix + "/" + syn_json_filename
+            s3_loc = "s3://advana-data-zone/eda/syn/" + prefix + "/" + syn_json_filename
             print(s3_loc)
             syn_xml_filename = None
             syn_directory = None
@@ -98,7 +98,7 @@ def run(staging_folder: str):
             else:
                 prefix = contact_metadata
 
-            s3_loc = "s3://advana-raw-zone/eda/pds/" + prefix + "/" + pds_json_filename
+            s3_loc = "s3://advana-data-zone/eda/pds/" + prefix + "/" + pds_json_filename
             print(s3_loc)
 
             pds_xml_filename = None
