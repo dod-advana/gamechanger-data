@@ -106,7 +106,7 @@ class PDFOCR:
             else:
                 raise e
 
-    def convert(self, raise_error: bool = False) -> bool:
+    def convert(self, raise_error: bool = False, **kwargs) -> bool:
         print(f"[INFO] OCR'ing file {self.input_file!s}, writing output to {self.output_file!s}", file=sys.stderr)
         exit_code = ocrmypdf.ocr(
             input_file=self.input_file,
@@ -116,8 +116,8 @@ class PDFOCR:
             force_ocr=True if self.job_type == OCRJobType.FORCE_OCR else None,
             progress_bar=self.show_progress_bar,
             jobs=self.num_threads,
-            deskew = True,
-            rotate_pages = True
+            deskew = kwargs.get("deskew",False),
+            rotate_pages = kwargs.get("rotate_pages",False)
         )
 
         is_successful = exit_code == ocrmypdf.ExitCode.ok
@@ -140,6 +140,7 @@ class PDFOCR:
                             OCRJobType.REDO_OCR: '--redo-ocr',
                             OCRJobType.FORCE_OCR: '--force-ocr'
                         }.get(self.job_type)
+
                     ] if p
                 ],
                 f'--jobs={self.num_threads}',

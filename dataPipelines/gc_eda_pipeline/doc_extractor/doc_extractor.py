@@ -6,7 +6,7 @@ import os
 from typing import Union
 from pathlib import Path
 from ocrmypdf import SubprocessOutputError
-from common.utils.file_utils import is_pdf, is_ocr_pdf, is_encrypted_pdf
+from common.utils.file_utils import is_pdf, is_encrypted_pdf, check_ocr_status_job_type
 from dataPipelines.gc_ocr.utils import PDFOCR, OCRJobType
 import traceback
 from urllib3.exceptions import ProtocolError
@@ -85,17 +85,20 @@ def pdf_ocr(file: str, staging_folder: str, multiprocess: int) -> (bool, bool):
             else:
                 is_pdf_file = True
             try:
-                if is_pdf(str(saved_file)) and not is_ocr_pdf(str(saved_file)) and not is_encrypted_pdf(str(saved_file)):
+                ocrd_pdf, ocr_job_type = check_ocr_status_job_type(str(saved_file))
+                if is_pdf(str(saved_file)) and not ocrd_pdf and not is_encrypted_pdf(str(saved_file)):
                     is_pdf_file = True
+                    kwargs = {"deskew": True if ocr_job_type == OCRJobType.FORCE_OCR else False,
+                              "rotate_pages": True}
                     ocr = PDFOCR(
                         input_file=saved_file,
                         output_file=saved_file,
-                        ocr_job_type=OCRJobType.FORCE_OCR,
+                        ocr_job_type=ocr_job_type,
                         ignore_init_errors=True,
                         num_threads=multiprocess
                     )
                     try:
-                        is_ocr = ocr.convert()
+                        is_ocr = ocr.convert(**kwargs)
                     except SubprocessOutputError as e:
                         print(e)
                         is_ocr = False
