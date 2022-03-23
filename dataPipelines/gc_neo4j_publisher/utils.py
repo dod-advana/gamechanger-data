@@ -190,6 +190,51 @@ class Neo4jJobManager:
                     "WITH gds.util.asNode(item1) AS NODE1, gds.util.asNode(item2) AS NODE2, similarity " +
                     "MERGE (NODE1)-[:SIMILAR_TO {similarity: similarity}]->(NODE2);"
                 )
+                
+                # create graph
+                print("Creating graph for making clusters ... ", file=sys.stderr)
+                try:
+                    session.run(
+                        "CALL gds.graph.create.cypher('recGraph'," +
+                        "MATCH (n) WHERE n:Document OR n:Entity OR n:Topic OR n:Responsibility" +
+                        "RETURN id(n) AS id, labels(n) AS labels'," +
+                        "MATCH (n)-[r:REFERENCES|MENTIONS|IS_IN|CONTAINS|CHILD_OF]->(m)" +
+                        "RETURN id(n) AS source, id(m) AS target, type(r) AS type')" +
+                        "YIELD" +
+                        "graphName AS graph, nodeQuery, nodeCount AS nodes, relationshipCount AS rels"
+                    )
+                except Exception as e:
+                    print(f"Error: {e}")
+
+                # create louvain clusters
+                print("Creating and writing Louvain cluster assignments ... ", file=sys.stderr)
+                try:
+                    session.run(
+                        "CALL gds.louvain.write('recGraph', { writeProperty: 'louvain_community' })" + 
+                        "YIELD communityCount, modularity, modularities"
+                    )
+                except Exception as e:
+                    print(f"Error: {e}")
+
+                # make label prop clusters
+                print("Creating and writing label propagation cluster assignments ... ", file=sys.stderr)
+                try:
+                    session.run(
+                        "CALL gds.labelPropagation.write('recGraph', { writeProperty: 'lp_community' })" +
+                        "YIELD communityCount, ranIterations, didConverge"
+                    )
+                except Exception as e:
+                    print(f"Error: {e}")
+                
+                print("Getting and writing betweenness scores ... ", file=sys.stderr)
+                try:
+                    session.run(
+                        "CALL gds.betweenness.write('recGraph', { writeProperty: 'betweenness' })" +
+                        "YIELD centralityDistribution, nodePropertiesWritten" +
+                        "RETURN centralityDistribution.min AS minimumScore, centralityDistribution.mean AS meanScore, nodePropertiesWritten"
+                    )
+                except Exception as e:
+                    print(f"Error: {e}")
 
                 # delete any entity nodes without a name
                 session.run("MATCH (e:Entity {name: ''}) detach delete (e);")
