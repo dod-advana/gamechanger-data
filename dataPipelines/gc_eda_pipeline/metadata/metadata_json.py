@@ -33,7 +33,6 @@ def metadata_extraction(filename_input: str, data_conf_filter: dict,
     sql_check_if_syn_metadata_exist = data_conf_filter['eda']['sql_check_if_syn_metadata_exist']
     sql_check_if_pds_metadata_exist = data_conf_filter['eda']['sql_check_if_pds_metadata_exist']
 
-    global date_fields_l
     date_fields_l = data_conf_filter['eda']['sql_filter_fields']['date']
     operating_environment = data_conf_filter['eda']['operating_environment']
 
@@ -52,6 +51,7 @@ def metadata_extraction(filename_input: str, data_conf_filter: dict,
 
         is_pds_data = False
         is_syn_data = False
+        is_fpds_data = False
         metadata_type = "none"
         s3_supplementary_data = ""
         metadata_filename = ""
@@ -60,10 +60,6 @@ def metadata_extraction(filename_input: str, data_conf_filter: dict,
         # Check if file has metadata from PDS
         cursor.execute(sql_check_if_pds_metadata_exist, (filename,))
         is_pds_metadata = cursor.fetchone()
-
-        print("-------------")
-        print(is_pds_metadata)
-        print("-------------")
 
         if is_pds_metadata is not None:
             # Get General PDS Metadata
@@ -171,6 +167,7 @@ def metadata_extraction(filename_input: str, data_conf_filter: dict,
         # print(json.loads(temp))
 
         if fpds_data is not None:
+            is_fpds_data = True
             extensions_metadata['fpds_ng_n'] = fpds_data
         data['extensions'] = extensions_metadata
 
@@ -185,4 +182,4 @@ def metadata_extraction(filename_input: str, data_conf_filter: dict,
                 cursor.close()
             conn.close()
 
-    return is_supplementary_data_successful, is_supplementary_file_missing, metadata_type, data
+    return is_supplementary_data_successful, is_supplementary_file_missing, metadata_type, is_pds_data, is_syn_data, is_fpds_data, data

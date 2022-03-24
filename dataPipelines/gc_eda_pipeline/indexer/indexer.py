@@ -2,6 +2,7 @@ from dataPipelines.gc_eda_pipeline.indexer.eda_indexer import EDSConfiguredElast
 import time
 import hashlib
 import json
+import os
 
 
 def create_index(index_name: str, alias: str, ingest_dir=""):
@@ -27,10 +28,31 @@ def index_data_file(staging_folder: str, index_file_local_path: str,  metadata_f
 
     index_json_data = {**parsed_pdf_file_data, **metadata_file_data}
 
-    index_json_data["_id"] = hashlib.sha256(ex_file_s3_path.encode()).hexdigest()
+    path, filename = os.path.split(ex_file_s3_path)
+    filename_without_ext, file_extension = os.path.splitext(filename)
+
+    index_json_data["_id"] = hashlib.sha256(filename_without_ext.encode()).hexdigest()
+    # index_json_data["_id"] = hashlib.sha256(ex_file_s3_path.encode()).hexdigest()
     # is_index = publish_es.index_data(index_json_data, ex_file_s3_path)
 
     with open(staging_folder + "/index/" + index_file_local_path, "w") as output_file:
         json.dump(index_json_data, output_file)
 
     audit_rec.update({"modified_date_dt": int(time.time())})
+
+
+def index_data_file_v2(publish_es: EDSConfiguredElasticsearchPublisher, metadata_file_data: str, parsed_pdf_file_data: str, ex_file_s3_path: str, audit_rec: dict):
+    if 'extensions' in metadata_file_data.keys():
+        extensions_json = metadata_file_data["extensions"]
+        parsed_pdf_file_data = {**parsed_pdf_file_data, **extensions_json}
+        del metadata_file_data['extensions']
+
+    index_json_data = {**parsed_pdf_file_data, **metadata_file_data}
+
+    path, filename = os.path.split(ex_file_s3_path)
+    filename_without_ext, file_extension = os.path.splitext(filename)
+
+    is_index = publish_es.index_data(index_json_data, filename_without_ext)
+
+
+    audit_rec.update({"modified_date_dt": int(time.time()), "is_elasticsearch": is_index})

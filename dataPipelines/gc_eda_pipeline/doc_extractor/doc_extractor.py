@@ -43,7 +43,6 @@ def ocr_process(staging_folder: str, file: str, multiprocess: int, aws_s3_output
 
 def extract_text(staging_folder: str, pdf_file_local_path: str, path: str, filename_without_ext: str,
                  aws_s3_json_prefix: str, audit_rec: dict):
-    doc_time_start = time.time()
     ex_file_local_path = staging_folder + "/json/" + path + "/" + filename_without_ext + ".json"
     ex_file_s3_path = aws_s3_json_prefix + "/" + path + "/" + filename_without_ext + ".json"
 
@@ -53,9 +52,6 @@ def extract_text(staging_folder: str, pdf_file_local_path: str, path: str, filen
         is_extract_suc = True
     else:
         is_extract_suc = False
-
-    doc_time_end = time.time()
-    time_dp = doc_time_end - doc_time_start
 
     audit_rec.update({"json_path": ex_file_s3_path,  "modified_date_dt": int(time.time())})
 

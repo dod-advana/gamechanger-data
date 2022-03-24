@@ -4,8 +4,8 @@ import psycopg2
 from psycopg2.extras import RealDictCursor
 
 from dataPipelines.gc_eda_pipeline.utils.eda_utils import read_extension_conf
-from dataPipelines.gc_eda_pipeline.gc_eda_pipeline import ingestion
-from dataPipelines.gc_eda_pipeline.utils.eda_job_type import EDAJobType
+from dataPipelines.gc_eda_pipeline.gc_eda_ocr_pipeline import ingestion as ingestion_ocr
+from dataPipelines.gc_eda_pipeline.gc_eda_metadata_pipline import ingestion as ingestion_metadata_es
 from dataPipelines.gc_eda_pipeline.conf import Conf
 from datetime import datetime
 
@@ -34,13 +34,8 @@ from datetime import datetime
     help="Multiprocessing. If treated like flag, will do max cores available. \
                 if treated like option will take integer for number of cores.",
 )
-@click.option(
-    '--eda-job-type',
-    type=click.Choice([e.value for e in EDAJobType]),
-    help="""Determines how the data should be processed, """,
-    default=EDAJobType.NORMAL.value
-)
-def run(staging_folder: str,  max_workers: int, workers_ocr: int, eda_job_type: str):
+
+def run(staging_folder: str,  max_workers: int, workers_ocr: int,):
     print("Daily -- CronJob Process ---")
 
     # Load Extensions configuration files.
@@ -91,9 +86,10 @@ def run(staging_folder: str,  max_workers: int, workers_ocr: int, eda_job_type: 
                 print(f"Processing {cursor.query}")
                 conn.commit()
 
-                ingestion(staging_folder=staging_folder, aws_s3_input_pdf_prefix=process_directory,
-                          max_workers=max_workers, eda_job_type=eda_job_type, workers_ocr=workers_ocr,
-                          loop_number=50000)
+                ingestion_ocr(staging_folder=staging_folder, workers_ocr=workers_ocr, max_workers=max_workers,
+                              aws_s3_input_pdf_prefix=process_directory, loop_number=50000)
+
+                ingestion_metadata_es(max_workers=max_workers, aws_s3_input_pdf_prefix=process_directory)
 
                 # Update Daily EDA Table
                 cursor.execute(sql_set_daily_status_on_log, ("Completed", audit_moved_loc, output_path))
