@@ -99,14 +99,14 @@ class PDFOCR:
                 print(e)
             else:
                 raise e
-        elif is_ocr_pdf(self.input_file) and not self.job_type == OCRJobType.NORMAL:
+        elif is_ocr_pdf(self.input_file) and not self.job_type in [OCRJobType.FORCE_OCR,OCRJobType.REDO_OCR]:
             e = PreviouslyOCRError(f"Given file is already OCR'ed: {self.input_file!s}")
             if not ignore_init_errors:
                 print(e)
             else:
                 raise e
 
-    def convert(self, raise_error: bool = False) -> bool:
+    def convert(self, raise_error: bool = False, **kwargs) -> bool:
         print(f"[INFO] OCR'ing file {self.input_file!s}, writing output to {self.output_file!s}", file=sys.stderr)
         exit_code = ocrmypdf.ocr(
             input_file=self.input_file,
@@ -115,7 +115,9 @@ class PDFOCR:
             redo_ocr=True if self.job_type == OCRJobType.REDO_OCR else None,
             force_ocr=True if self.job_type == OCRJobType.FORCE_OCR else None,
             progress_bar=self.show_progress_bar,
-            jobs=self.num_threads
+            jobs=self.num_threads,
+            deskew = kwargs.get("deskew",False),
+            rotate_pages = kwargs.get("rotate_pages",False)
         )
 
         is_successful = exit_code == ocrmypdf.ExitCode.ok
@@ -138,6 +140,7 @@ class PDFOCR:
                             OCRJobType.REDO_OCR: '--redo-ocr',
                             OCRJobType.FORCE_OCR: '--force-ocr'
                         }.get(self.job_type)
+
                     ] if p
                 ],
                 f'--jobs={self.num_threads}',
