@@ -12,19 +12,20 @@ import ocrmypdf
 import sys
 from enum import Enum
 import subprocess as sub
+from common.utils.file_utils import OCRJobType
 
 
-class OCRJobType(Enum):
-    """
-    :param NORMAL: only OCR if not already OCR'ed
-    :param SKIP_TEXT: OCR any non-OCR'ed text in a PDF, but keep what was already OCR'ed
-    :param REDO_OCR: re-OCR any text except vector text
-    :param FORCE_OCR: Convert PDF pages to images and OCR everything, whether already OCR'ed or not
-    """
-    NORMAL='normal'
-    SKIP_TEXT='skip-text'
-    REDO_OCR='redo-ocr'
-    FORCE_OCR='force-ocr'
+# class OCRJobType(Enum):
+#     """
+#     :param NORMAL: only OCR if not already OCR'ed
+#     :param SKIP_TEXT: OCR any non-OCR'ed text in a PDF, but keep what was already OCR'ed
+#     :param REDO_OCR: re-OCR any text except vector text
+#     :param FORCE_OCR: Convert PDF pages to images and OCR everything, whether already OCR'ed or not
+#     """
+#     NORMAL='normal'
+#     SKIP_TEXT='skip-text'
+#     REDO_OCR='redo-ocr'
+#     FORCE_OCR='force-ocr'
 
 
 class OCRError(Exception):

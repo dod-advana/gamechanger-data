@@ -2,9 +2,10 @@ from dataPipelines.gc_eda_pipeline.metadata.metadata_util import format_suppleme
 from dataPipelines.gc_eda_pipeline.metadata.vendor_org_hierarchy import vendor_org_hierarchy
 from dataPipelines.gc_eda_pipeline.metadata.dodaac_org_type_metadata import dodaac_org_type_metadata, \
     contract_issue_office_majcom_metadata
+from dataPipelines.gc_eda_pipeline.database.connection import ConnectionPool
 
 
-def extract_syn(data_conf_filter: dict, data: dict):
+def extract_syn(data_conf_filter: dict, data: dict, db_pool: ConnectionPool):
     dodaacs_data = {}
     date_fields_l = data_conf_filter['eda']['sql_filter_fields']['date']
     extracted_data_eda_n = {}
@@ -71,7 +72,7 @@ def extract_syn(data_conf_filter: dict, data: dict):
     # if currency_buying:
     #     extracted_data_eda_n["currency_buying_eda_ext"] = currency_buying
 
-    vendor_org_hierarchy_extensions_metadata = vendor_org_hierarchy(vendor_cage=vendor_cage, dodacc_map=dodaacs_data, data_conf_filter=data_conf_filter)
+    vendor_org_hierarchy_extensions_metadata = vendor_org_hierarchy(vendor_cage=vendor_cage, dodacc_map=dodaacs_data, data_conf_filter=data_conf_filter, db_pool=db_pool)
 
     extracted_data_eda_n["vendor_org_hierarchy_eda_n"] = vendor_org_hierarchy_extensions_metadata
 

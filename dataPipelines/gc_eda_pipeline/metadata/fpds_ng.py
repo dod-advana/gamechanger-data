@@ -13,11 +13,11 @@ def __sql_fpds_ng_piid_less_or_equal_4_chars(idv_piid, piid, modification_number
 
     conn = None
     try:
-        conn = psycopg2.connect(host=data_conf_filter['eda']['database']['hostname'],
-                                port=data_conf_filter['eda']['database']['port'],
-                                user=data_conf_filter['eda']['database']['user'],
-                                password=data_conf_filter['eda']['database']['password'],
-                                dbname=data_conf_filter['eda']['database']['db'],
+        conn = psycopg2.connect(host=data_conf_filter['eda']['database_pbis']['hostname'],
+                                port=data_conf_filter['eda']['database_pbis']['port'],
+                                user=data_conf_filter['eda']['database_pbis']['user'],
+                                password=data_conf_filter['eda']['database_pbis']['password'],
+                                dbname=data_conf_filter['eda']['database_pbis']['db'],
                                 cursor_factory=psycopg2.extras.DictCursor)
         cursor = conn.cursor()
         cursor.execute(sql_fpds_ng_piid_less_or_equal_4_chars, (idv_piid, piid, modification_number))
@@ -47,11 +47,11 @@ def __sql_fpds_ng_piid_more_than_4_chars(piid: str, modification_number: str):
 
     conn = None
     try:
-        conn = psycopg2.connect(host=data_conf_filter['eda']['database']['hostname'],
-                                port=data_conf_filter['eda']['database']['port'],
-                                user=data_conf_filter['eda']['database']['user'],
-                                password=data_conf_filter['eda']['database']['password'],
-                                dbname=data_conf_filter['eda']['database']['db'],
+        conn = psycopg2.connect(host=data_conf_filter['eda']['database_pbis']['hostname'],
+                                port=data_conf_filter['eda']['database_pbis']['port'],
+                                user=data_conf_filter['eda']['database_pbis']['user'],
+                                password=data_conf_filter['eda']['database_pbis']['password'],
+                                dbname=data_conf_filter['eda']['database_pbis']['db'],
                                 cursor_factory=psycopg2.extras.DictCursor)
         cursor = conn.cursor()
         cursor.execute(sql_fpds_ng_piid_more_than_4_chars, (piid, modification_number))
@@ -86,35 +86,35 @@ def fpds_ng(filename: str):
     return None
 
 
-if __name__ == '__main__':
-    filenames = ["EDAPDF-00B49ADF6C0854B7E05400215A9BA3BA-N0018910DZ027-1008-empty-09-PDS-2014-08-15.pdf",
-        "EDAPDF-0ba1e026-58f4-4599-b0a9-06827f933e78-H9222215D0022-0003-empty-24-PDS-2020-04-22.pdf",
-        "EDAPDF-0CA73B35B30D038EE05400215A9BA3BA-HQ014710D0011-0006-empty-12-PDS-2015-01-14.pdf",
-        "EDAPDF-0CA2081E6C020E5CE05400215A9BA3BA-GS23F9755H-M6700414F4045-empty-P00001-PDS-2015-01-14.pdf"
-        ]
-
-    for filename in filenames:
-        (idv_piid, piid, modification_number) = extract_fpds_ng_quey_values(filename)
-        print('idv_piid: ' + idv_piid + ' piid: ' + piid + ' modification_number: ' + modification_number)
-
-        if len(piid) > 4:
-            print("Greater then 4")
-            print("""IF PIID is more than 4 characters, perform join with the PDF based on
-            the values in the FPDS-NG columns entitled PIID AND Modification Num,
-             and the file name values in positions 2, 3, and 4
-             (note, position 1 is an IDV number, but including that is not necessary to perform a join)""")
-            print("Filename: " + filename)
-            data = __sql_fpds_ng_piid_more_than_4_chars(piid, modification_number)
-            print(data)
-
-        if len(piid) <= 4:
-            print("Less then or equal to 4")
-            print("""If the PIID is 4 or fewer characters, perform join with the PDF based on the values
-            in the FPDS-NG columns entitled IDV PIID, PIID AND Modification Num, and the file name values
-            in positions 1, 2, 3, and 4""")
-            print("Filename: " + filename)
-            data = __sql_fpds_ng_piid_less_or_equal_4_chars(idv_piid, piid, modification_number)
-            print(data)
-
-        print("-------------------------------------------------------------------------------------------------------")
+# if __name__ == '__main__':
+#     filenames = ["EDAPDF-00B49ADF6C0854B7E05400215A9BA3BA-N0018910DZ027-1008-empty-09-PDS-2014-08-15.pdf",
+#         "EDAPDF-0ba1e026-58f4-4599-b0a9-06827f933e78-H9222215D0022-0003-empty-24-PDS-2020-04-22.pdf",
+#         "EDAPDF-0CA73B35B30D038EE05400215A9BA3BA-HQ014710D0011-0006-empty-12-PDS-2015-01-14.pdf",
+#         "EDAPDF-0CA2081E6C020E5CE05400215A9BA3BA-GS23F9755H-M6700414F4045-empty-P00001-PDS-2015-01-14.pdf"
+#         ]
+#
+#     for filename in filenames:
+#         (idv_piid, piid, modification_number) = extract_fpds_ng_quey_values(filename)
+#         print('idv_piid: ' + idv_piid + ' piid: ' + piid + ' modification_number: ' + modification_number)
+#
+#         if len(piid) > 4:
+#             print("Greater then 4")
+#             print("""IF PIID is more than 4 characters, perform join with the PDF based on
+#             the values in the FPDS-NG columns entitled PIID AND Modification Num,
+#              and the file name values in positions 2, 3, and 4
+#              (note, position 1 is an IDV number, but including that is not necessary to perform a join)""")
+#             print("Filename: " + filename)
+#             data = __sql_fpds_ng_piid_more_than_4_chars(piid, modification_number)
+#             print(data)
+#
+#         if len(piid) <= 4:
+#             print("Less then or equal to 4")
+#             print("""If the PIID is 4 or fewer characters, perform join with the PDF based on the values
+#             in the FPDS-NG columns entitled IDV PIID, PIID AND Modification Num, and the file name values
+#             in positions 1, 2, 3, and 4""")
+#             print("Filename: " + filename)
+#             data = __sql_fpds_ng_piid_less_or_equal_4_chars(idv_piid, piid, modification_number)
+#             print(data)
+#
+#         print("-------------------------------------------------------------------------------------------------------")
 

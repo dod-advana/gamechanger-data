@@ -9,15 +9,19 @@ SECONDS=0
 # S3_GC_REPO_TGZ_PATH=advana-eda-wawf-restricted/gamechanger/projects/eda/data-pipelines/orchestration/repo/gamechanger-repo.tgz
 # GC_APP_CONFIG_EXT_S3_PATH=advana-eda-wawf-restricted/gamechanger/projects/eda/data-pipelines/orchestration/repo/eda_prod.json
 # GC_APP_CONFIG_NAME=eda_prod
-# MAX_WORKERS=384
 # WORKER_OCR=1
+# MAX_WORKERS=384
+# NUM_DATASETS_PROCESS_AT_TIME=5
+# NUM_THREADS_PER_DATASET=250
 
 AWS_REGION=us-east-1
 S3_GC_REPO_TGZ_PATH=advana-data-zone/bronze/gamechanger/projects/eda/data-pipelines/orchestration/repo/gamechanger-repo.tgz
 GC_APP_CONFIG_EXT_S3_PATH=advana-data-zone/bronze/gamechanger/projects/eda/data-pipelines/orchestration/repo/eda_dev.json
 GC_APP_CONFIG_NAME=eda_dev
-MAX_WORKERS=64
-WORKER_OCR=2
+WORKER_OCR=1
+MAX_WORKERS=5
+NUM_DATASETS_PROCESS_AT_TIME=5
+NUM_THREADS_PER_DATASET=250
 
 export AWS_METADATA_SERVICE_TIMEOUT=20
 export AWS_METADATA_SERVICE_NUM_ATTEMPTS=40
@@ -28,6 +32,8 @@ export AWS_METADATA_SERVICE_NUM_ATTEMPTS=40
 [ -z "$GC_APP_CONFIG_NAME" ] && echo "Please provide the location of the GC App Config file location in S3" && exit 2
 [ -z "$MAX_WORKERS" ] && echo "Please provide number of threads to run at a time" && exit 2
 [ -z "$WORKER_OCR" ] && echo "Please provide number of threads to run at a time" && exit 2
+[ -z "$NUM_DATASETS_PROCESS_AT_TIME" ] && echo "Please provide number of dataset  to run at a time" && exit 2
+[ -z "$NUM_THREADS_PER_DATASET" ] && echo "Please provide number of threads to run at a time" && exit 2
 
 # always set in stage params
 GC_APP_CONFIG_NAME=${GC_APP_CONFIG_NAME:-eda_prod}
@@ -164,7 +170,7 @@ function eda_files() {
     echo "---------------------------------------------------------------"
     "$PYTHON_CMD" -m configuration init "$GC_APP_CONFIG_NAME"
     echo "---------------------------------------------------------------"
-    "$PYTHON_CMD" -m dataPipelines.gc_eda_pipeline.gc_eda_daily_process --staging-folder $LOCAL_GC_DIR --workers-ocr $WORKER_OCR --max-workers $MAX_WORKERS
+    "$PYTHON_CMD" -m dataPipelines.gc_eda_pipeline.gc_eda_daily_process --staging-folder $LOCAL_GC_DIR --workers-ocr $WORKER_OCR --max-workers $MAX_WORKERS  --number-of-datasets-to-process-at-time $NUM_DATASETS_PROCESS_AT_TIME --number-threads-per-dataset $NUM_THREADS_PER_DATASET
 }
 echo "***************************** Start *****************************"
 setup_aws_and_python_exec_commands

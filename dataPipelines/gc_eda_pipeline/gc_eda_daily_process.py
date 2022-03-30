@@ -5,7 +5,7 @@ from psycopg2.extras import RealDictCursor
 
 from dataPipelines.gc_eda_pipeline.utils.eda_utils import read_extension_conf
 from dataPipelines.gc_eda_pipeline.gc_eda_ocr_pipeline import ingestion as ingestion_ocr
-from dataPipelines.gc_eda_pipeline.gc_eda_metadata_pipline import ingestion as ingestion_metadata_es
+from dataPipelines.gc_eda_pipeline.gc_eda_metadata_pipeline import ingestion as ingestion_metadata_es
 from dataPipelines.gc_eda_pipeline.conf import Conf
 from datetime import datetime
 
@@ -27,15 +27,24 @@ from datetime import datetime
                 if treated like option will take integer for number of cores.",
 )
 @click.option(
-    '--max-workers',
+    '-p',
+    '--number-of-datasets-to-process-at-time',
     required=False,
-    default=-1,
+    default=1,
+    help="The number of datasets to process at time. Locally should be set to 1-5, prod/dev should be around 250",
+    type=int
+)
+@click.option(
+    '-t',
+    '--number-threads-per-dataset',
+    required=False,
+    default=1,
     type=int,
-    help="Multiprocessing. If treated like flag, will do max cores available. \
-                if treated like option will take integer for number of cores.",
+    help="Number of threads to run within a dataset. Locally should be set to 1-20, prod/dev should be around 250",
 )
 
-def run(staging_folder: str,  max_workers: int, workers_ocr: int,):
+
+def run(staging_folder: str,  number_of_datasets_to_process_at_time: int, number_threads_per_dataset: int, max_workers: int, workers_ocr: int):
     print("Daily -- CronJob Process ---")
 
     # Load Extensions configuration files.
@@ -89,7 +98,9 @@ def run(staging_folder: str,  max_workers: int, workers_ocr: int,):
                 ingestion_ocr(staging_folder=staging_folder, workers_ocr=workers_ocr, max_workers=max_workers,
                               aws_s3_input_pdf_prefix=process_directory, loop_number=50000)
 
-                ingestion_metadata_es(max_workers=max_workers, aws_s3_input_pdf_prefix=process_directory)
+                ingestion_metadata_es(number_of_datasets_to_process_at_time=number_of_datasets_to_process_at_time,
+                                      number_threads_per_dataset=number_threads_per_dataset,
+                                      aws_s3_input_pdf_prefix=process_directory)
 
                 # Update Daily EDA Table
                 cursor.execute(sql_set_daily_status_on_log, ("Completed", audit_moved_loc, output_path))

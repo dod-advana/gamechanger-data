@@ -4,8 +4,20 @@ import fitz
 import os
 import PyPDF2
 from PyPDF2.utils import PdfReadError
-from dataPipelines.gc_ocr.utils import OCRJobType
+from enum import Enum
 
+# from dataPipelines.gc_ocr.utils import OCRJobType
+class OCRJobType(Enum):
+    """
+    :param NORMAL: only OCR if not already OCR'ed
+    :param SKIP_TEXT: OCR any non-OCR'ed text in a PDF, but keep what was already OCR'ed
+    :param REDO_OCR: re-OCR any text except vector text
+    :param FORCE_OCR: Convert PDF pages to images and OCR everything, whether already OCR'ed or not
+    """
+    NORMAL='normal'
+    SKIP_TEXT='skip-text'
+    REDO_OCR='redo-ocr'
+    FORCE_OCR='force-ocr'
 
 def walk_files(src: t.Union[Path, str]) -> t.Iterable[Path]:
     src_path = Path(src)
