@@ -95,8 +95,8 @@ function setup_local_vars_and_dirs() {
 function setup_aws_and_python_exec_commands() {
     case "$GC_APP_CONFIG_NAME" in
         eda_dev)
-            #PYTHON_CMD="/opt/gc-venv/bin/python"
-            PYTHON_CMD="/home/centos/anaconda3/envs/eda/bin/python"
+            PYTHON_CMD="/opt/gc-venv/bin/python"
+            #PYTHON_CMD="/home/centos/anaconda3/envs/eda/bin/python"
             AWS_CMD="/usr/local/bin/aws"
         ;;
         eda_prod)
@@ -130,7 +130,7 @@ function setup_local_repo_copy() {
     export PYTHONPATH="$LOCAL_GC_REPO_BASE_DIR/gamechanger-data"
     case "$GC_APP_CONFIG_NAME" in
     eda_dev)
-        # source /opt/gc-venv/bin/activate
+        source /opt/gc-venv/bin/activate
         ;;
     eda_prod)
         source /opt/gc-venv-blue/bin/activate
