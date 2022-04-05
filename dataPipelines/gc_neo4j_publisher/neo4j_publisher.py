@@ -101,7 +101,7 @@ class Neo4jPublisher:
             o["summary_30"] = j.get("summary_30", "")
             o["type"] = j.get("type", "")
             o["page_count"] = j.get("page_count", 0)
-            o["topics_rs"] = j.get("topics_rs", [])
+            o["topics_rs"] = j.get("topics_s", [])
             o["init_date"] = j.get("init_date", "")
             o["change_date"] = j.get("change_date", "")
             o["author"] = j.get("author", "")
