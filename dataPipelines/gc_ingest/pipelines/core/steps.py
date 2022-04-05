@@ -50,6 +50,8 @@ class CoreIngestSteps(PipelineSteps):
 
     @staticmethod
     def load_files(c: CoreIngestConfig) -> None:
+        """Runs the load function, updating the publications table, the versioned_docs table, and s3.
+        Docs are only updated in versioned_docs if they are also uploaded to s3"""
         announce("Loading files into S3 & DB ...")
         c.load_manager.load(
             raw_dir=c.raw_doc_base_dir,
@@ -72,6 +74,8 @@ class CoreIngestSteps(PipelineSteps):
 
     @staticmethod
     def update_s3_snapshots(c: CoreIngestConfig) -> None:
+        """Uploads s3 snapshots of the raw+parsed corpus to s3, allowing for reversion if anything gets corrupted
+        in the main prefixes"""
         announce("Updating raw/parsed snapshot locations in S3")
         c.snapshot_manager.update_current_snapshot_from_disk(
             local_dir=c.raw_doc_base_dir,
@@ -172,7 +176,7 @@ class CoreIngestSteps(PipelineSteps):
 
     @staticmethod
     def update_thumbnails(c: CoreIngestConfig) -> None:
-
+        """Uploads the .png thumbnails of the raw documents to the appropriate s3 prefix"""
         if c.skip_thumbnail_generation:
             announce("Skipping Thumbnails update [flag set] ...")
             return

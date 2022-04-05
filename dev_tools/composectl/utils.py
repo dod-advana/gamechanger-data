@@ -16,7 +16,7 @@ def get_command_names() -> t.List[str]:
     """Get names of all command-type pseudo services"""
     with open(Config.COMMAND_COMPOSE_FILE_PATH, "r") as f:
         d = yaml.load(f, yaml.CLoader)
-        return list(d['services'].keys())
+        s = list(d['services'].keys())
 
 
 @lru_cache(maxsize=None)
