@@ -348,7 +348,7 @@ class Neo4jPublisher:
                 if key == 'Redirect_Name':  # we don't need this as it's just name in the metadata
                     continue
                 # r is the relationship statement between nodes
-                r = 'MATCH (e:Entity) where o.name =~ \"(?i)' + self._normalize_string(name) + '\"  '
+                r = 'MATCH (e:Entity) where e.name =~ \"(?i)' + self._normalize_string(name) + '\"  '
                 ins = info[key]
                 # sometimes the value is a list depending on HTML format, so unwrap it
                 if isinstance(ins, list):
