@@ -173,7 +173,7 @@ class Neo4jPublisher:
                     if filtered_ent:
                         for r in resps:
                             process_query(
-                                'MATCH (e: Role) WHERE toLower(e.name) = \"'
+                                'MATCH (e: Entity) WHERE toLower(e.name) = \"'
                                 + filtered_ent.lower()
                                 + '\" '
                                 + 'MERGE (r: Responsibility {name: \"'
@@ -266,7 +266,7 @@ class Neo4jPublisher:
 
     def process_roles(self) -> None:
         roles_df = get_roles_df()
-        print('Inserting {0} orgs ...'.format(roles_df.shape[0]))
+        print('Inserting {0} roles ...'.format(roles_df.shape[0]))
         roles_json = roles_df.to_json(orient="records")
         process_query('CALL policy.createRoleNodesFromJson(' + json.dumps(roles_json) + ')')
         return
@@ -340,15 +340,15 @@ class Neo4jPublisher:
             else:
                 name = ent
 
-            # s is the insert statement for this orgs's node
-            s = 'MERGE (o:Org {name: \"' + self._normalize_string(name) + '\"})  '
+            # s is the insert statement for this entity's node
+            s = 'MERGE (e:Entity {name: \"' + self._normalize_string(name) + '\"})  '
 
             # loop through the keys and add the metadata to the node
             for key in info.keys():
                 if key == 'Redirect_Name':  # we don't need this as it's just name in the metadata
                     continue
                 # r is the relationship statement between nodes
-                r = 'MATCH (o:Org) where o.name =~ \"(?i)' + self._normalize_string(name) + '\"  '
+                r = 'MATCH (e:Entity) where o.name =~ \"(?i)' + self._normalize_string(name) + '\"  '
                 ins = info[key]
                 # sometimes the value is a list depending on HTML format, so unwrap it
                 if isinstance(ins, list):
@@ -361,11 +361,11 @@ class Neo4jPublisher:
                             rel = 'HAS_CHILD'
                         else:
                             rel = key
-                        r += 'MATCH (f: Org) where f.name =~ \"(?i)' + exp + '\" '
-                        r += 'CREATE (o)-[:' + self._normalize_string(rel).upper() + ']->(f)'
+                        r += 'MATCH (f: Entity) where f.name =~ \"(?i)' + exp + '\" '
+                        r += 'CREATE (e)-[:' + self._normalize_string(rel).upper() + ']->(f)'
                         self.entEntRelationsStmt.append(r)
                         # reset the relationship insert string
-                        r = 'MATCH (o:Org) where o.name =~ \"(?i)' + self._normalize_string(name) + '\"  '
+                        r = 'MATCH (e:Entity) where e.name =~ \"(?i)' + self._normalize_string(name) + '\"  '
 
                     # must unwind the list to add to neo4j as a param ([1,2,3] -> '1;2;3')
                     ins = ''

@@ -175,7 +175,7 @@ class Neo4jJobManager:
                 session.run(
                     "CALL gds.alpha.node2vec.write( " +
                     "   { " +
-                    "       nodeProjection: ['Document', 'Org', 'Role', 'Topic', 'UKN_Document'], " +
+                    "       nodeProjection: ['Document', 'Entity', 'Topic', 'UKN_Document'], " +
                     "       relationshipProjection: ['REFERENCES', 'REFERENCES_UKN', 'CHILD_OF', 'RELATED_TO', 'CONTAINS', 'MENTIONS', 'IS_IN', 'HAS_HEAD', 'HAS_ROLE', 'TYPE_OF'], " +
                     "       relationshipProperties: ['count', 'relevancy'], " +
                     "       embeddingDimension: 64, " +
@@ -201,8 +201,7 @@ class Neo4jJobManager:
                 )
 
                 # delete any entity nodes without a name
-                session.run("MATCH (o:Org {name: ''}) detach delete (o);")
-                session.run("MATCH (r:Role {name: ''}) detach delete (r);")
+                session.run("MATCH (e:Entity {name: ''}) detach delete (e);")
             except Exception as e:
                 print("Error: {0}".format(e))
 
