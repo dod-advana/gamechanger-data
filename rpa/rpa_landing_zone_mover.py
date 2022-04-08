@@ -9,6 +9,7 @@ import datetime
 import traceback
 import codecs
 
+
 def notify_with_tb(msg, tb):
     full = msg + '\n' + tb
     slack.send_notification(full)
@@ -76,7 +77,8 @@ def filter_and_move():
                     with zf.open(f'{base_dir}manifest.json') as manifest:
 
                         for line in manifest.readlines():
-                            line = codecs.decode(line, 'utf-8-sig')   # decode the line in the manifest files
+                            # decode the line in the manifest files
+                            line = codecs.decode(line, 'utf-8-sig')
                             jsondoc = json.loads(line)
                             if not crawler_used:
                                 crawler_used = jsondoc['crawler_used']
@@ -104,17 +106,22 @@ def filter_and_move():
                 # sorting through the version hashes and checking for new files
                 for name in zip_names:
                     if name.endswith('.metadata'):
+                        # clean the metadata in case of utf8 errors
+                        clean_metadata_utf8(name)
                         with zf.open(name) as metadata:
                             # we need to correct the metadata for utf-8 first, then read everything else
                             data = metadata.read()
-                            corrected_metadata = codecs.decode(data, 'utf-8-sig')
+                            corrected_metadata = codecs.decode(
+                                data, 'utf-8-sig')
                         metadata.close()
 
                         # print for error checking (to be removed)
                         print("raw data: " + data.decode() + "\n")
-                        print("cleaned metadata: " + str(corrected_metadata) + "\n")
+                        print("cleaned metadata: " +
+                              str(corrected_metadata) + "\n")
                         # clean just in case for newlines
-                        corrected_metadata = corrected_metadata.replace("\n", "")
+                        corrected_metadata = corrected_metadata.replace(
+                            "\n", "")
                         # now read the metadata line as a json and get its version hash
                         try:
                             jsondoc = json.loads(corrected_metadata)
@@ -128,7 +135,8 @@ def filter_and_move():
                             corrected_manifest_jdocs.append(jsondoc)
 
                             # upload all of the files not in previous version hashes to s3
-                            zip_filename = name.replace('.metadata', '')  # name of the main file
+                            zip_filename = name.replace(
+                                '.metadata', '')  # name of the main file
                             if zip_filename in zip_names:
                                 # upload the main file
                                 upload_file_from_zip(
@@ -233,12 +241,18 @@ def get_previous_manifest_for_crawler(crawler_used) -> typing.Tuple[set, typing.
         s3_obj = s3.Object(source_bucket, key)
         lines = s3_obj.get()['Body'].read().decode(
             'utf-8').splitlines()
+        print('get_previous_manifest_for_crawler lines count', len(lines))
         if lines:
+            count = 0
             for line in lines:
                 jsondoc = json.loads(line)
-                version_hash = jsondoc.get('version_hash', None)
-                if version_hash:
-                    previous_hashes.add(version_hash)
+                if count < 5 and type(jsondoc) == str:
+                    print(
+                        'string type jsondoc: jsondoc[0:50] ->', jsondoc[0:50])
+                else:
+                    version_hash = jsondoc.get('version_hash', None)
+                    if version_hash:
+                        previous_hashes.add(version_hash)
 
             # only set it if it has lines, would still be an Object otherwise
             manifest_s3_obj = s3_obj
@@ -301,6 +315,15 @@ def upload_jsonlines(lines: typing.List[dict], filename: str, prefix: str, bucke
             Key=key
         )
     new_file.close()  # extra close just to be safe
+
+
+def clean_metadata_utf8(name):
+    with open(name, 'r+') as f:
+        content = f.read()
+        decoded_data = codecs.decode(content.encode(), 'utf-8-sig')
+        f.seek(0)
+        json.dump(json.loads(decoded_data), f)
+        f.truncate()
 
 
 if __name__ == '__main__':
