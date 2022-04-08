@@ -1,4 +1,4 @@
-from dataPipelines.gc_eda_pipeline.database.connection import ConnectionPool
+from dataPipelines.gc_eda_pipeline.migration.connection import ConnectionPool
 
 
 def line_item_details(data_conf_filter: dict, header_details_id: str, db_pool: ConnectionPool) -> []:

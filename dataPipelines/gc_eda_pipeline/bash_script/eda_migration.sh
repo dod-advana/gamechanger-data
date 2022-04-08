@@ -156,7 +156,7 @@ function change_into_local_repo_dir() {
 ## Run EDA Files
 #####
 function eda_files() {
-    echo "RUNNING Gamechanger EDA OCR"
+    echo "RUNNING Gamechanger EDA Migration"
     export PYTHONPATH=$LOCAL_TMP_DIR/app-repo/gamechanger-data
     export GC_APP_CONFIG_NAME=$GC_APP_CONFIG_NAME
     export GC_APP_CONFIG_EXT_NAME=$GC_APP_CONFIG_EXT_PATH

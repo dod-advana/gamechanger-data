@@ -1,4 +1,3 @@
-import time
 import click
 import json
 import os
@@ -11,8 +10,20 @@ from dataPipelines.gc_eda_pipeline.conf import Conf
 from dataPipelines.gc_eda_pipeline.metadata.generate_metadata import generate_metadata_data
 from dataPipelines.gc_eda_pipeline.utils.eda_utils import read_extension_conf
 from dataPipelines.gc_eda_pipeline.indexer.indexer import index_data_file_v2, create_index, get_es_publisher
+from dataPipelines.gc_eda_pipeline.database.database import audit_fetch_all_records_for_base_path, audit_success_record, audit_failed_record
+import psycopg2.extras
+import time
+from psycopg2.pool import ThreadedConnectionPool
 
-from dataPipelines.gc_eda_pipeline.database.connection import ConnectionPool
+
+data_conf_filter = read_extension_conf()
+
+db_pool = ThreadedConnectionPool(1, 3000, host=data_conf_filter['eda']['database']['hostname'],
+                                 port=data_conf_filter['eda']['database']['port'],
+                                 user=data_conf_filter['eda']['database']['user'],
+                                 password=data_conf_filter['eda']['database']['password'],
+                                 database=data_conf_filter['eda']['database']['db'],
+                                 cursor_factory=psycopg2.extras.DictCursor)
 
 @click.command()
 @click.option(
@@ -23,29 +34,21 @@ from dataPipelines.gc_eda_pipeline.database.connection import ConnectionPool
     required=False,
     type=str
 )
-@click.option(
-    '-p',
-    '--number-of-datasets-to-process-at-time',
-    required=False,
-    default=1,
-    help="The number of datasets to process at time. Locally should be set to 1-5, prod/dev should be around 250",
-    type=int
-)
+
 @click.option(
     '-t',
-    '--number-threads-per-dataset',
+    '--workers',
     required=False,
     default=1,
     type=int,
     help="Number of threads to run within a dataset. Locally should be set to 1-20, prod/dev should be around 250",
 )
-def run(aws_s3_input_pdf_prefix: str, number_of_datasets_to_process_at_time: int, number_threads_per_dataset: int):
+def run(aws_s3_input_pdf_prefix: str, workers: int):
     ingestion(aws_s3_input_pdf_prefix=aws_s3_input_pdf_prefix,
-              number_of_datasets_to_process_at_time=number_of_datasets_to_process_at_time,
-              number_threads_per_dataset=number_threads_per_dataset)
+              workers=workers)
 
 
-def ingestion(aws_s3_input_pdf_prefix: str, number_of_datasets_to_process_at_time: int, number_threads_per_dataset: int):
+def ingestion(aws_s3_input_pdf_prefix: str, workers: int):
     print("Starting Gamechanger Metadata/Index Pipeline")
     os.environ["AWS_METADATA_SERVICE_TIMEOUT"] = "20"
     os.environ["AWS_METADATA_SERVICE_NUM_ATTEMPTS"] = "40"
@@ -58,48 +61,27 @@ def ingestion(aws_s3_input_pdf_prefix: str, number_of_datasets_to_process_at_tim
     print(f"EDA Index {data_conf_filter['eda']['eda_index']}")
     create_index(index_name=data_conf_filter['eda']['eda_index'], alias=data_conf_filter['eda']['eda_index_alias'])
 
-    with concurrent.futures.ProcessPoolExecutor(max_workers=number_of_datasets_to_process_at_time) as executor:
-        results = [executor.submit(metadata_dir_task, input_loc, number_threads_per_dataset)
-                   for input_loc in aws_s3_input_pdf_prefix.split(",")]
-
-        none_type = type(None)
-        for fut in concurrent.futures.as_completed(results):
-            if not isinstance(fut, none_type):
-                try:
-                    if fut.result() is not None:
-                        print(fut.result())
-                except Exception as exc:
-                    value = str(exc)
-                    print(value)
-            else:
-                print("Somethting went really wrong")
-        executor.shutdown(wait=True)
+    for input_loc in aws_s3_input_pdf_prefix.split(","):
+        metadata_dir_task(input_loc=input_loc, workers=workers)
 
     print("DONE!!!!!!")
     end_app = time.time()
     print(f'Total APP time -- It took {end_app - start_app} seconds!')
 
 
-def metadata_dir_task(input_loc: str, number_threads_per_dataset: int):
+def metadata_dir_task(input_loc: str, workers: int):
     print(f"Processing Directory {input_loc}")
     start = time.time()
     print(type(Conf.ch.s3_client))  # Issue if this is not call before using s3 command in threads.
-    # Get a list of files already ocr/pdf from the audit tables in postgres
-    data_conf_filter = read_extension_conf()
-    db_pool = ConnectionPool(db_hostname=data_conf_filter['eda']['database']['hostname'],
-                             db_port_number=data_conf_filter['eda']['database']['port'],
-                             db_user_name=data_conf_filter['eda']['database']['user'],
-                             db_password=data_conf_filter['eda']['database']['password'],
-                             db_dbname=data_conf_filter['eda']['database']['db'], multithreading=True, maxconn=500)
 
-    map_filename_audit_record = db_pool.audit_fetch_all_records_for_base_path(input_loc)
+    map_filename_audit_record = audit_fetch_all_records_for_base_path(db_pool, input_loc)
     total_num_files = len(map_filename_audit_record.keys())
 
     number_file_processed = 0
     number_file_failed = 0
     percentage_completed = 5
 
-    with concurrent.futures.ThreadPoolExecutor(max_workers=number_threads_per_dataset) as executor:
+    with concurrent.futures.ThreadPoolExecutor(max_workers=workers) as executor:
         results = [executor.submit(process_doc, filename, map_filename_audit_record[filename], data_conf_filter) for
                    filename in map_filename_audit_record]
         count = 0
@@ -148,15 +130,10 @@ def metadata_dir_task(input_loc: str, number_threads_per_dataset: int):
         print(f'Total time -- It took {round(end - start, 2)} seconds!')
         print("--------------------------------------")
 
+
 def process_doc(filename: str, audit_details: dict, data_conf_filter: dict):
     os.environ["AWS_METADATA_SERVICE_TIMEOUT"] = "20"
     os.environ["AWS_METADATA_SERVICE_NUM_ATTEMPTS"] = "40"
-
-    db_pool = ConnectionPool(db_hostname=data_conf_filter['eda']['database']['hostname'],
-                              db_port_number=data_conf_filter['eda']['database']['port'],
-                              db_user_name=data_conf_filter['eda']['database']['user'],
-                              db_password=data_conf_filter['eda']['database']['password'],
-                              db_dbname=data_conf_filter['eda']['database']['db'], multithreading=True, maxconn=500)
     audit_rec = audit_details
     ex_file_s3_path = audit_rec.get('json_path')
     ex_file_s3_pdf_path = audit_rec.get('gc_path')
@@ -180,19 +157,18 @@ def process_doc(filename: str, audit_details: dict, data_conf_filter: dict):
                                audit_rec=audit_rec)
 
             audit_list = [audit_rec]
-            db_pool.audit_success_record(data=audit_list)
+            audit_success_record(db_pool=db_pool, data=audit_list)
 
             return {'filename': filename, "status": "completed", "info": "update-metadata"}
         else:
             failed_data = {"filename": filename, "base_path": path, "reason": "Extract JSON file is missing.",
                            "modified_date_dt": int(time.time())}
             audit_list = [failed_data]
-            db_pool.audit_failed_record(data=audit_list)
+            audit_failed_record(db_pool=db_pool, data=audit_list)
 
             return {'filename': filename, "status": "failed", "info": "unable to file docfile " + ex_file_s3_path + " file"}
     except (ProtocolError, ConnectionError) as e:
         print(e)
-    db_pool.close_all()
 
 
 if __name__ == '__main__':

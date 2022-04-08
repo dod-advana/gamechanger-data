@@ -1,4 +1,4 @@
-from dataPipelines.gc_eda_pipeline.database.connection import ConnectionPool
+from dataPipelines.gc_eda_pipeline.migration.connection import ConnectionPool
 
 
 def vendor_org_hierarchy(vendor_cage: str, dodacc_map: dict, data_conf_filter: dict, db_pool: ConnectionPool) -> dict:

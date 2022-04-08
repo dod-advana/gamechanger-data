@@ -1,5 +1,4 @@
 import os
-import time
 import json
 from datetime import datetime
 from dataPipelines.gc_eda_pipeline.conf import Conf
@@ -8,13 +7,14 @@ from dataPipelines.gc_eda_pipeline.metadata.pds_extract_json import extract_pds
 from dataPipelines.gc_eda_pipeline.metadata.syn_extract_json import extract_syn
 from dataPipelines.gc_eda_pipeline.metadata.metadata_util import title, mod_identifier
 from dataPipelines.gc_eda_pipeline.metadata.fpds_ng import fpds_ng
-from dataPipelines.gc_eda_pipeline.database.connection import ConnectionPool
 
 from urllib3.exceptions import ProtocolError
+import time
+from psycopg2.pool import ThreadedConnectionPool
 
 
 def metadata_extraction(filename_input: str, data_conf_filter: dict,
-                        aws_s3_output_pdf_prefix: str, db_pool: ConnectionPool):
+                        aws_s3_output_pdf_prefix: str, db_pool: ThreadedConnectionPool):
 
     postfix_es = data_conf_filter['eda']['postfix_es']
 
@@ -45,7 +45,14 @@ def metadata_extraction(filename_input: str, data_conf_filter: dict,
         s3_location = ""
 
         # Check if file has metadata from PDS
-        is_pds_metadata = db_pool.fetchone_sql(sql_check_if_pds_metadata_exist, (filename,))
+        conn = db_pool.getconn()
+        cursor = conn.cursor()
+        cursor.execute(sql_check_if_pds_metadata_exist, (filename,))
+        is_pds_metadata = cursor.fetchone()
+        db_pool.putconn(conn)
+
+
+        # is_pds_metadata = db_pool.fetchone_sql(sql_check_if_pds_metadata_exist, (filename,))
 
         if is_pds_metadata is not None:
             data = dict(is_pds_metadata)
@@ -67,7 +74,16 @@ def metadata_extraction(filename_input: str, data_conf_filter: dict,
 
         if not is_pds_data:
             # Check if file has metadata from SYN
+            conn = db_pool.getconn()
+            cursor = conn.cursor()
+            cursor.execute(sql_check_if_syn_metadata_exist, (filename,))
+            is_syn_metadata = cursor.fetchone()
+            db_pool.putconn(conn)
+
             is_syn_metadata = db_pool.fetchone_sql(sql_check_if_syn_metadata_exist, (filename,))
+
+
+
             if is_syn_metadata is not None:
                 data = dict(is_syn_metadata)
                 for col_name, val in data.items():
@@ -85,6 +101,7 @@ def metadata_extraction(filename_input: str, data_conf_filter: dict,
                 is_pds_data = False
                 is_syn_data = False
                 metadata_type = "none"
+        # db_pool.close_all()
 
         extensions_metadata["metadata_type" + postfix_es] = metadata_type
         extensions_metadata['dir_location_eda_ext'] = path
@@ -149,7 +166,7 @@ def metadata_extraction(filename_input: str, data_conf_filter: dict,
         # print("-------")
         # print(json.loads(temp))
 
-        if fpds_data is not None:
+        if fpds_data is not None and len(fpds_data) > 0:
             is_fpds_data = True
             extensions_metadata['fpds_ng_n'] = fpds_data
         data['extensions'] = extensions_metadata

@@ -1,8 +1,5 @@
 from dataPipelines.gc_eda_pipeline.metadata.metadata_util import format_supplementary_data
-from dataPipelines.gc_eda_pipeline.metadata.vendor_org_hierarchy import vendor_org_hierarchy
-from dataPipelines.gc_eda_pipeline.metadata.dodaac_org_type_metadata import dodaac_org_type_metadata, \
-    contract_issue_office_majcom_metadata
-from dataPipelines.gc_eda_pipeline.database.connection import ConnectionPool
+from dataPipelines.gc_eda_pipeline.migration.connection import ConnectionPool
 
 
 def extract_syn(data_conf_filter: dict, data: dict, db_pool: ConnectionPool):
@@ -72,17 +69,17 @@ def extract_syn(data_conf_filter: dict, data: dict, db_pool: ConnectionPool):
     # if currency_buying:
     #     extracted_data_eda_n["currency_buying_eda_ext"] = currency_buying
 
-    vendor_org_hierarchy_extensions_metadata = vendor_org_hierarchy(vendor_cage=vendor_cage, dodacc_map=dodaacs_data, data_conf_filter=data_conf_filter, db_pool=db_pool)
+    # vendor_org_hierarchy_extensions_metadata = vendor_org_hierarchy(vendor_cage=vendor_cage, dodacc_map=dodaacs_data, data_conf_filter=data_conf_filter, db_pool=db_pool)
+    #
+    # extracted_data_eda_n["vendor_org_hierarchy_eda_n"] = vendor_org_hierarchy_extensions_metadata
 
-    extracted_data_eda_n["vendor_org_hierarchy_eda_n"] = vendor_org_hierarchy_extensions_metadata
-
-    dodaac_org_type = dodaac_org_type_metadata(extracted_data_eda_n)
-    if dodaac_org_type:
-        extracted_data_eda_n["dodaac_org_type_eda_ext"] = dodaac_org_type
-
-    contract_issue_office_majcom = contract_issue_office_majcom_metadata(extracted_data_eda_n)
-    if contract_issue_office_majcom:
-        extracted_data_eda_n["contract_issue_office_majcom_eda_ext"] = contract_issue_office_majcom
+    # dodaac_org_type = dodaac_org_type_metadata(extracted_data_eda_n)
+    # if dodaac_org_type:
+    #     extracted_data_eda_n["dodaac_org_type_eda_ext"] = dodaac_org_type
+    #
+    # contract_issue_office_majcom = contract_issue_office_majcom_metadata(extracted_data_eda_n)
+    # if contract_issue_office_majcom:
+    #     extracted_data_eda_n["contract_issue_office_majcom_eda_ext"] = contract_issue_office_majcom
 
     return {"extracted_data_eda_n": extracted_data_eda_n}
 

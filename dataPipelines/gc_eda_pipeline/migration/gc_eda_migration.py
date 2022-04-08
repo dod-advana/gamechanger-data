@@ -1,10 +1,9 @@
 import time
 import click
 import os
-from tqdm import tqdm
 import concurrent.futures
 from dataPipelines.gc_eda_pipeline.conf import Conf
-from dataPipelines.gc_eda_pipeline.database.connection import ConnectionPool
+from dataPipelines.gc_eda_pipeline.migration.connection import ConnectionPool
 from dataPipelines.gc_eda_pipeline.utils.eda_utils import read_extension_conf
 
 

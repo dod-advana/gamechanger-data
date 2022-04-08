@@ -10,8 +10,11 @@ from typing import Union
 from pathlib import Path
 from dataPipelines.gc_eda_pipeline.conf import Conf
 from dataPipelines.gc_eda_pipeline.utils.eda_utils import read_extension_conf
-from dataPipelines.gc_eda_pipeline.database.connection import ConnectionPool
+# from dataPipelines.gc_eda_pipeline.database.connection import ConnectionPool
+from dataPipelines.gc_eda_pipeline.database.database import audit_is_processed, audit_success_record, audit_failed_record
 from dataPipelines.gc_eda_pipeline.doc_extractor.doc_extractor import ocr_process, extract_text
+from psycopg2.pool import ThreadedConnectionPool
+import psycopg2.extras
 
 @click.command()
 @click.option(
@@ -159,11 +162,19 @@ def process_doc(file: str, staging_folder: Union[str, Path], data_conf_filter: d
     files_delete = []
 
     data_conf_filter = read_extension_conf()
-    db_pool = ConnectionPool(db_hostname=data_conf_filter['eda']['database']['hostname'],
-                             db_port_number=data_conf_filter['eda']['database']['port'],
-                             db_user_name=data_conf_filter['eda']['database']['user'],
-                             db_password=data_conf_filter['eda']['database']['password'],
-                             db_dbname=data_conf_filter['eda']['database']['db'], multithreading=True, maxconn=500)
+
+    db_pool = ThreadedConnectionPool(1, 3000, host=data_conf_filter['eda']['database']['hostname'],
+                                     port=data_conf_filter['eda']['database']['port'],
+                                     user=data_conf_filter['eda']['database']['user'],
+                                     password=data_conf_filter['eda']['database']['password'],
+                                     database=data_conf_filter['eda']['database']['db'],
+                                     cursor_factory=psycopg2.extras.DictCursor)
+
+    # db_pool = ConnectionPool(db_hostname=data_conf_filter['eda']['database']['hostname'],
+    #                          db_port_number=data_conf_filter['eda']['database']['port'],
+    #                          db_user_name=data_conf_filter['eda']['database']['user'],
+    #                          db_password=data_conf_filter['eda']['database']['password'],
+    #                          db_dbname=data_conf_filter['eda']['database']['db'], multithreading=True, maxconn=500)
 
     path, filename = os.path.split(file)
     filename_without_ext, file_extension = os.path.splitext(filename)
@@ -178,18 +189,18 @@ def process_doc(file: str, staging_folder: Union[str, Path], data_conf_filter: d
         failed_data = {"filename": filename, "base_path": path, "reason": "File is not pdf",
                        "modified_date_dt": int(time.time())}
         audit_list = [failed_data]
-        db_pool.audit_failed_record(data=audit_list)
+        audit_failed_record(db_pool=db_pool, data=audit_list)
         return {'filename': filename, "status": "failed", "info": "File does not have a pdf extension"}
 
     # Check if file is a dup.
     # Check to see if the file as been processed before
-    is_process_filename, is_process_base_path = db_pool.audit_is_processed(filename)
+    is_process_filename, is_process_base_path = audit_is_processed(db_pool=db_pool, filename=filename)
     if is_process_filename:
         if is_process_base_path != path:
             failed_data = {"filename": filename, "base_path": path, "reason": "File is duplication",
                            "modified_date_dt": int(time.time())}
             audit_list = [failed_data]
-            db_pool.audit_failed_record(data=audit_list)
+            audit_failed_record(db_pool=db_pool, data=audit_list)
             return {'filename': filename, "status": "already_processed", "info": "File is duplication"}
 
     # Download PDF file/OCR PDF if need be
@@ -212,7 +223,7 @@ def process_doc(file: str, staging_folder: Union[str, Path], data_conf_filter: d
             # Delete for local file system to free up space.
             cleanup_record(files_delete)
             audit_list = [audit_rec]
-            db_pool.audit_success_record(data=audit_list)
+            audit_success_record(db_pool=db_pool, data=audit_list)
             return {'filename': filename, "status": "completed", "info": "new record"}
         else:
             # Delete for local file system to free up space.
@@ -220,14 +231,14 @@ def process_doc(file: str, staging_folder: Union[str, Path], data_conf_filter: d
             failed_data = {"filename": filename, "base_path": path, "reason": "File might be corrupted",
                            "modified_date_dt": int(time.time())}
             audit_list = [failed_data]
-            db_pool.audit_failed_record(data=audit_list)
+            audit_failed_record(db_pool=db_pool, data=audit_list)
             return {'filename': filename, "status": "failed", "info": "Not a PDF file"}
 
     failed_data = {"filename": filename, "base_path": path, "reason": "File might be corrupted",
                    "modified_date_dt": int(time.time())}
 
     audit_list = [failed_data]
-    db_pool.audit_failed_record(data=audit_list)
+    audit_failed_record(db_pool=db_pool, data=audit_list)
     return {'filename': filename, "status": "failed", "info": "File might be corrupted"}
 
 
