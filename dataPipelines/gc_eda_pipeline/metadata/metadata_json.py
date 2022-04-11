@@ -80,7 +80,7 @@ def metadata_extraction(filename_input: str, data_conf_filter: dict,
             is_syn_metadata = cursor.fetchone()
             db_pool.putconn(conn)
 
-            is_syn_metadata = db_pool.fetchone_sql(sql_check_if_syn_metadata_exist, (filename,))
+            # is_syn_metadata = db_pool.fetchone_sql(sql_check_if_syn_metadata_exist, (filename,))
 
 
 
