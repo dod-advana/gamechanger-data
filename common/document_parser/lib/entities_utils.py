@@ -17,9 +17,6 @@ def make_entities_dict(
         df['Aliases'].fillna('', inplace=True)
         return df
 
-    orgs = clean_df(orgs)
-    roles = clean_df(roles)
-
     def collect_ents(ents_dict, df, name_type):
         '''Update a dictionary with names, aliases, parents and types from a df'''
         for i in df.index:
@@ -35,6 +32,11 @@ def make_entities_dict(
                 ents_dict[parent] = 'ORG'
         return ents_dict
 
+    # clean the different entity dataframes
+    orgs = clean_df(orgs)
+    roles = clean_df(roles)
+
+    # extract out the entities as a dictionary
     ents_dict = collect_ents(ents_dict={}, df=orgs, name_type='ORG')
     ents_dict = collect_ents(ents_dict=ents_dict, df=roles, name_type='PERSON')
 
@@ -61,7 +63,6 @@ def remove_overlapping_entities(ents):
                 else:
                     remove.append(i)
             n += 1
-
     remove = list(set(remove))
     remove.sort()
     for x in remove[::-1]:
@@ -85,6 +86,7 @@ def get_entities_from_text(text, entities):
     if ents != []:
         ents = remove_overlapping_entities(ents) # remove overlapping spans
     ents.sort(key=lambda x: x[0], reverse=False)
+    # transform tuple into dictionary representation for downstream
     ents_list = [{"span_start":ent[0],
                   "span_end": ent[1],
                   "entity_type":ent[2],
