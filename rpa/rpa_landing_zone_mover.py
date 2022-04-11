@@ -8,6 +8,7 @@ import typing
 import datetime
 import traceback
 import codecs
+import io
 
 
 def notify_with_tb(msg, tb):
@@ -70,15 +71,13 @@ def filter_and_move():
                 corrected_manifest_jdocs: typing.List[dict] = []
                 # immediately try to upload this so it will error if not in the archive
                 upload_file_from_zip(
-                    zf_ref=zf, zip_filename=f'{base_dir}crawler_output.json', prefix=destination_prefix_dt)
+                    zf_ref=zf, zip_filename=f'{base_dir}crawler_output.json', prefix=destination_prefix_dt, convert_sig=True)
 
                 # get crawler name from manifest file
                 try:
                     with zf.open(f'{base_dir}manifest.json') as manifest:
 
-                        for line in manifest.readlines():
-                            # decode the line in the manifest files
-                            line = codecs.decode(line, 'utf-8-sig')
+                        for line in io.TextIOWrapper(manifest, encoding="utf-8-sig"):
                             jsondoc = json.loads(line)
                             if not crawler_used:
                                 crawler_used = jsondoc['crawler_used']
@@ -87,12 +86,14 @@ def filter_and_move():
                                 corrected_manifest_jdocs.append(jsondoc)
 
                 except:
+                    print(msg)
                     msg = f"[ERROR] RPA Landing Zone Mover failed to handle manifest file, skipping:\n {source_bucket}/{s3_obj.key} > {zip_filename}"
                     notify_with_tb(msg, traceback.format_exc())
                     # skip to next zip
                     continue
 
                 if not crawler_used:
+                    print(msg)
                     msg = f"[ERROR] RPA Landing Zone Mover failed to discover crawler_used, skipping:\n {source_bucket}/{s3_obj.key} > {zip_filename} \n(check manifest.json)"
                     slack.send_notification(msg)
                     # skip to next zip
@@ -106,28 +107,19 @@ def filter_and_move():
                 # sorting through the version hashes and checking for new files
                 for name in zip_names:
                     if name.endswith('.metadata'):
-                        # clean the metadata in case of utf8 errors
-                        clean_metadata_utf8(name)
-                        with zf.open(name) as metadata:
-                            # we need to correct the metadata for utf-8 first, then read everything else
-                            data = metadata.read()
-                            corrected_metadata = codecs.decode(
-                                data, 'utf-8-sig')
-                        metadata.close()
-
-                        # print for error checking (to be removed)
-                        print("raw data: " + data.decode() + "\n")
-                        print("cleaned metadata: " +
-                              str(corrected_metadata) + "\n")
-                        # clean just in case for newlines
-                        corrected_metadata = corrected_metadata.replace(
-                            "\n", "")
-                        # now read the metadata line as a json and get its version hash
                         try:
-                            jsondoc = json.loads(corrected_metadata)
-                            version_hash = jsondoc.get('version_hash', None)
-                        except:
-                            print("WARNING: metadata file errored on load. Skipping")
+                            with zf.open(name) as metadata:
+                                metadata_str = next(
+                                    io.TextIOWrapper(
+                                        metadata, encoding="utf-8-sig")
+                                )
+
+                            jsondoc = json.loads(metadata_str)
+                            version_hash = jsondoc.get(
+                                'version_hash', None)
+                        except Exception as e:
+                            print(
+                                f"WARNING: metadata file errored on load. Skipping", name, '::', e)
                             continue
                         # only getting docs that aren't in previous hashes
                         if version_hash and not version_hash in previous_hashes:
@@ -137,15 +129,17 @@ def filter_and_move():
                             # upload all of the files not in previous version hashes to s3
                             zip_filename = name.replace(
                                 '.metadata', '')  # name of the main file
+
+                            # make sure file the metadata is for is actually available to send
                             if zip_filename in zip_names:
-                                # upload the main file
+                                # upload the main file, don't convert
                                 upload_file_from_zip(
-                                    zf_ref=zf, zip_filename=zip_filename, prefix=destination_prefix_dt)
+                                    zf_ref=zf, zip_filename=zip_filename, prefix=destination_prefix_dt, convert_sig=False)
                                 # upload the metadata
                                 upload_jsonlines(
                                     lines=[jsondoc], filename=name, prefix=destination_prefix_dt)
 
-                # upload the manifest file after getting all correctd metadata jdocs
+                # upload the manifest file after getting all metadata jdocs
                 upload_jsonlines(
                     lines=corrected_manifest_jdocs, filename='manifest.json', prefix=destination_prefix_dt)
 
@@ -248,7 +242,7 @@ def get_previous_manifest_for_crawler(crawler_used) -> typing.Tuple[set, typing.
                 jsondoc = json.loads(line)
                 if count < 5 and type(jsondoc) == str:
                     print(
-                        'string type jsondoc: jsondoc[0:50] ->', jsondoc[0:50])
+                        'string type jsondoc: jsondoc[0:20], jsondoc[-20:] ->', jsondoc[0:20], jsondoc[-20:])
                 else:
                     version_hash = jsondoc.get('version_hash', None)
                     if version_hash:
@@ -260,13 +254,13 @@ def get_previous_manifest_for_crawler(crawler_used) -> typing.Tuple[set, typing.
     except s3_client.exceptions.NoSuchKey:
         msg = f"[WARN] No cumulative-manifest found for {crawler_used}, a new one will be created"
         slack.send_notification(msg)
+        return (previous_hashes, manifest_s3_obj, lines)
     except Exception as e:
         msg = f"[ERROR] Unexpected error occurred getting previous manifest for crawler: {crawler_used}"
         notify_with_tb(msg, traceback.format_exc())
         raise e
 
-    finally:
-        return (previous_hashes, manifest_s3_obj, lines)
+    return (previous_hashes, manifest_s3_obj, lines)
 
 
 def get_filename_s3_obj_map() -> typing.Dict[str, object]:
@@ -286,11 +280,17 @@ def create_byte_obj(s3_obj):
     return bytes_obj
 
 
-def upload_file_from_zip(zf_ref, zip_filename, prefix, bucket=destination_bucket):
+def upload_file_from_zip(zf_ref, zip_filename, prefix, bucket=destination_bucket, convert_sig=False):
     with zf_ref.open(zip_filename, "r") as f:
         _, __, filename = zip_filename.rpartition('/')
+
+        if convert_sig:
+            data = io.TextIOWrapper(f, encoding="utf-8-sig")
+        else:
+            data = f
+
         s3_client.upload_fileobj(
-            f, bucket, f"{prefix}/{filename}")
+            data, bucket, f"{prefix}/{filename}")
 
 
 def upload_jsonlines(lines: typing.List[dict], filename: str, prefix: str, bucket=destination_bucket):
@@ -314,16 +314,6 @@ def upload_jsonlines(lines: typing.List[dict], filename: str, prefix: str, bucke
             Bucket=bucket,
             Key=key
         )
-    new_file.close()  # extra close just to be safe
-
-
-def clean_metadata_utf8(name):
-    with open(name, 'r+') as f:
-        content = f.read()
-        decoded_data = codecs.decode(content.encode(), 'utf-8-sig')
-        f.seek(0)
-        json.dump(json.loads(decoded_data), f)
-        f.truncate()
 
 
 if __name__ == '__main__':
