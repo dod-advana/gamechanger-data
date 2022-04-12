@@ -8,15 +8,15 @@ SECONDS=0
 # S3_GC_REPO_TGZ_PATH=advana-eda-wawf-restricted/gamechanger/projects/eda/data-pipelines/orchestration/repo/gamechanger-repo.tgz
 # GC_APP_CONFIG_EXT_S3_PATH=advana-eda-wawf-restricted/gamechanger/projects/eda/data-pipelines/orchestration/repo/eda_prod.json
 # GC_APP_CONFIG_NAME=eda_prod
-# MAX_WORKERS=384
+# MAX_WORKERS=512
 # WORKER_OCR=1
 
 AWS_REGION=us-east-1
 S3_GC_REPO_TGZ_PATH=advana-data-zone/bronze/gamechanger/projects/eda/data-pipelines/orchestration/repo/gamechanger-repo.tgz
 GC_APP_CONFIG_EXT_S3_PATH=advana-data-zone/bronze/gamechanger/projects/eda/data-pipelines/orchestration/repo/eda_dev.json
 GC_APP_CONFIG_NAME=eda_dev
-MAX_WORKERS=64
-WORKER_OCR=1
+MAX_WORKERS=16
+WORKER_OCR=2
 
 export AWS_METADATA_SERVICE_TIMEOUT=20
 export AWS_METADATA_SERVICE_NUM_ATTEMPTS=40
@@ -129,7 +129,7 @@ function setup_local_repo_copy() {
     export PYTHONPATH="$LOCAL_GC_REPO_BASE_DIR/gamechanger-data"
     case "$GC_APP_CONFIG_NAME" in
     eda_dev)
-        source /opt/gc-venv/bin/activate
+        # source /opt/gc-venv/bin/activate
         ;;
     eda_prod)
         source /opt/gc-venv-blue/bin/activate
