@@ -285,7 +285,11 @@ def upload_file_from_zip(zf_ref, zip_filename, prefix, bucket=destination_bucket
         _, __, filename = zip_filename.rpartition('/')
 
         if convert_sig:
-            data = io.TextIOWrapper(f, encoding="utf-8-sig")
+            contents = f.read()
+            data = codecs.encode(
+                contents.decode(encoding="utf-8-sig"),
+                encoding="utf-8"
+            )
         else:
             data = f
 
