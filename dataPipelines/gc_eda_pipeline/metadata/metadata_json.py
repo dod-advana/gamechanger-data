@@ -14,7 +14,7 @@ from psycopg2.pool import ThreadedConnectionPool
 
 
 def metadata_extraction(filename_input: str, data_conf_filter: dict,
-                        aws_s3_output_pdf_prefix: str, db_pool: ThreadedConnectionPool):
+                         db_pool: ThreadedConnectionPool):
 
     postfix_es = data_conf_filter['eda']['postfix_es']
 
@@ -51,9 +51,6 @@ def metadata_extraction(filename_input: str, data_conf_filter: dict,
         is_pds_metadata = cursor.fetchone()
         db_pool.putconn(conn)
 
-
-        # is_pds_metadata = db_pool.fetchone_sql(sql_check_if_pds_metadata_exist, (filename,))
-
         if is_pds_metadata is not None:
             data = dict(is_pds_metadata)
             # print(data)
@@ -80,10 +77,6 @@ def metadata_extraction(filename_input: str, data_conf_filter: dict,
             is_syn_metadata = cursor.fetchone()
             db_pool.putconn(conn)
 
-            # is_syn_metadata = db_pool.fetchone_sql(sql_check_if_syn_metadata_exist, (filename,))
-
-
-
             if is_syn_metadata is not None:
                 data = dict(is_syn_metadata)
                 for col_name, val in data.items():
@@ -105,7 +98,7 @@ def metadata_extraction(filename_input: str, data_conf_filter: dict,
 
         extensions_metadata["metadata_type" + postfix_es] = metadata_type
         extensions_metadata['dir_location_eda_ext'] = path
-        extensions_metadata['file_location_eda_ext'] = aws_s3_output_pdf_prefix + "/" + filename_input
+        extensions_metadata['file_location_eda_ext'] = filename_input
         data['doc_title'] = title(filename_without_ext)
 
         if is_pds_data:

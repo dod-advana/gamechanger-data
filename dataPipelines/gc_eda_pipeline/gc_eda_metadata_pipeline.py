@@ -145,8 +145,7 @@ def process_doc(filename: str, audit_details: dict, data_conf_filter: dict):
             raw_docparser_data = json.loads(Conf.s3_utils.object_content(object_path=ex_file_s3_path))
 
             md_data = generate_metadata_data(data_conf_filter=data_conf_filter,
-                                             file=ex_file_s3_pdf_path, filename=filename,
-                                             aws_s3_output_pdf_prefix=aws_s3_output_pdf_prefix,
+                                             file=ex_file_s3_pdf_path,
                                              audit_rec=audit_rec, db_pool=db_pool)
 
             publish_es = get_es_publisher(staging_folder="/tmp", index_name=data_conf_filter['eda']['eda_index'],
