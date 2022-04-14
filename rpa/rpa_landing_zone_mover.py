@@ -286,15 +286,15 @@ def upload_file_from_zip(zf_ref, zip_filename, prefix, bucket=destination_bucket
 
         if convert_sig:
             contents = f.read()
-            data = codecs.encode(
-                contents.decode(encoding="utf-8-sig"),
-                encoding="utf-8"
-            )
+            data = contents.decode(encoding="utf-8-sig")
+            with tempfile.TemporaryFile(mode='w') as new_file:
+                new_file.write(data)
+                new_file.seek(0)
+                s3_client.upload_fileobj(
+                    new_file, bucket, f"{prefix}/{filename}")
         else:
-            data = f
-
-        s3_client.upload_fileobj(
-            data, bucket, f"{prefix}/{filename}")
+            s3_client.upload_fileobj(
+                f, bucket, f"{prefix}/{filename}")
 
 
 def upload_jsonlines(lines: typing.List[dict], filename: str, prefix: str, bucket=destination_bucket):
