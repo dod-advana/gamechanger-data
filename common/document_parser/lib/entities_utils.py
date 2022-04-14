@@ -1,6 +1,9 @@
 import pandas as pd
 import re
 
+def replace_nonalpha_chars(text, replace_char=""):
+    return re.sub("[^a-zA-Z\s]+", replace_char, text)
+
 def make_entities_dict(
         entities_path,
         must_include={'DoD': 'ORG', 'Department of Defense': 'ORG', 'DOD': 'ORG'}
@@ -23,13 +26,18 @@ def make_entities_dict(
             name = df.loc[i, 'Name'].strip().lstrip()
             aliases = df.loc[i, 'Aliases']
             parent = df.loc[i, 'Parent'].strip().lstrip()
-            ents_dict[name] = name_type
+            ents_dict[replace_nonalpha_chars(name)] = {"ent_type":name_type,"raw_ent":name}
+            if "OrgParent" in df.columns:
+                org_parent = df.loc[i, 'Parent'].strip().lstrip()
+                if org_parent!="":
+                    ents_dict[replace_nonalpha_chars(org_parent)] = {"ent_type": "ORG", "raw_ent": org_parent}
+
             if aliases != '':
                 aliases = [i.strip().lstrip() for i in aliases.split(';')]
-            for x in aliases:
-                ents_dict[x] = name_type
+                for alias in aliases:
+                    ents_dict[replace_nonalpha_chars(alias)] = {"ent_type":name_type,"raw_ent":alias}
             if parent != '':
-                ents_dict[parent] = 'ORG'
+                ents_dict[replace_nonalpha_chars(parent)] = {"ent_type":name_type,"raw_ent":parent}
         return ents_dict
 
     # clean the different entity dataframes
@@ -42,7 +50,7 @@ def make_entities_dict(
 
     for x in must_include.keys():
         if x not in ents_dict.keys():
-            ents_dict[x] = must_include[x]
+            ents_dict[replace_nonalpha_chars(x)] = {"ent_type":must_include[x],"raw_ent":x}
     if "" in ents_dict:
         ents_dict.pop("")
     return ents_dict
@@ -72,17 +80,20 @@ def remove_overlapping_entities(ents):
             pass
     return ents
 
-def get_entities_from_text(text, entities):
+def sort_list_by_str_length(l):
+    l.sort(key=lambda s: len(s),reverse=True)
+    return l
+
+def get_entities_from_text(text, entities_dict):
     '''Lookup entities in single page of text, remove overlapping (shorter) spans'''
     ents = []
-    for x in entities.keys():
-        try:
-            pattern = r"\b{}\b".format(x)
-            for match in re.finditer(pattern, text):
-                tup = (match.start(), match.end(), entities[x], text[match.start():match.end()])
-                ents.append(tup)
-        except Exception as e:
-            print(e)
+    text = replace_nonalpha_chars(text)
+    sorted_ent_keys = sort_list_by_str_length(list(entities_dict.keys()))
+    # combine all search terms into single regex (using word bounds around each word for to ensure aliases are not part
+    # of a larger word)
+    for match in re.finditer(r"(?=(\b" + r'\b|\b'.join(sorted_ent_keys) + r"\b))", text):
+        tup = (match.regs[1][0], match.regs[1][1], entities_dict[match[1]]["ent_type"], entities_dict[match[1]]["raw_ent"])
+        ents.append(tup)
     if ents != []:
         ents = remove_overlapping_entities(ents) # remove overlapping spans
     ents.sort(key=lambda x: x[0], reverse=False)

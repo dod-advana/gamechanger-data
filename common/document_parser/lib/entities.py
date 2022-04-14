@@ -11,12 +11,6 @@ entities_dict = make_entities_dict(os.path.join(DATA_PATH,"features/GraphRelatio
 def extract_entities(doc_dict):
     # Utilizes GraphRelations.xlsx in gamechangerml to find gold standard entities within each page's text. Then, check
     # if the entities are mentioned in the paragraphs and append to paragraph  metadata.
-    page_dict = {}
-    for page in doc_dict["pages"]:
-        page_text = utf8_pass(page["p_raw_text"])
-        page_text = simple_clean(page_text)
-        page_entities = get_entities_from_text(page_text,entities_dict)
-        page_dict[page["p_page"]] = page_entities
     all_ents = []
     for par in doc_dict["paragraphs"]:
         entities = {
@@ -27,17 +21,14 @@ def extract_entities(doc_dict):
             "LOC": [],
             "PERSON": []
         }
+        # clean and get entities from paragraph
         par_text = par["par_raw_text_t"]
         par_text = simple_clean(par_text)
-        page_entities = page_dict[par["page_num_i"]]
+        par_entities = get_entities_from_text(par_text, entities_dict)
 
-        # doc is spacy obj
-        for entity in page_entities:
-            if (
-                    entity['entity_type'] in ["ORG", "GPE", "LOC", "NORP", "LAW", "PERSON"]
-                    and entity["entity_text"] in par_text
-            ):
-                entities[entity['entity_type']].append(entity["entity_text"])
+        ## extract out non-duplicative entities
+        for entity in par_entities:
+            entities[entity['entity_type']].append(entity["entity_text"])
 
         entity_json = {
             "ORG_s": list(set(entities["ORG"])),
