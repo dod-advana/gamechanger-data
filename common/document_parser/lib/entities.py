@@ -12,14 +12,23 @@ def extract_entities(doc_dict):
     # Utilizes GraphRelations.xlsx in gamechangerml to find gold standard entities within each page's text. Then, check
     # if the entities are mentioned in the paragraphs and append to paragraph  metadata.
     all_ents = []
-    for par in doc_dict["paragraphs"]:
-        entities = {
+    # for use in extracting out the entities at the document level
+    doc_entities_dict = {
             "ORG": [],
             "GPE": [],
             "NORP": [],
             "LAW": [],
             "LOC": [],
-            "PERSON": []
+            "PERSON": [],
+    }
+    for par in doc_dict["paragraphs"]:
+        par_entities_dict = {
+            "ORG": [],
+            "GPE": [],
+            "NORP": [],
+            "LAW": [],
+            "LOC": [],
+            "PERSON": [],
         }
         # clean and get entities from paragraph
         par_text = par["par_raw_text_t"]
@@ -28,19 +37,28 @@ def extract_entities(doc_dict):
 
         ## extract out non-duplicative entities
         for entity in par_entities:
-            entities[entity['entity_type']].append(entity["entity_text"])
-
+            par_entities_dict[entity['entity_type']].append(entity["entity_text"])
+            doc_entities_dict[entity['entity_type']].append(entity["entity_text"])
         entity_json = {
-            "ORG_s": list(set(entities["ORG"])),
-            "GPE_s": list(set(entities["GPE"])),
-            "NORP_s": list(set(entities["NORP"])),
-            "LAW_s": list(set(entities["LAW"])),
-            "LOC_s": list(set(entities["LOC"])),
-            "PERSON_s": list(set(entities["PERSON"])),
+            "ORG_s": list(set(par_entities_dict["ORG"])),
+            "GPE_s": list(set(par_entities_dict["GPE"])),
+            "NORP_s": list(set(par_entities_dict["NORP"])),
+            "LAW_s": list(set(par_entities_dict["LAW"])),
+            "LOC_s": list(set(par_entities_dict["LOC"])),
+            "PERSON_s": list(set(par_entities_dict["PERSON"])),
         }
         par["entities"] = entity_json
         all_ents = all_ents + sum(entity_json.values(), [])
+    doc_entities_dict = {
+        "ORG_s": list(set(doc_entities_dict["ORG"])),
+        "GPE_s": list(set(doc_entities_dict["GPE"])),
+        "NORP_s": list(set(doc_entities_dict["NORP"])),
+        "LAW_s": list(set(doc_entities_dict["LAW"])),
+        "LOC_s": list(set(doc_entities_dict["LOC"])),
+        "PERSON_s": list(set(doc_entities_dict["PERSON"])),
+    }
     counts = collections.Counter(all_ents)
+    doc_dict['entities'] = doc_entities_dict
     doc_dict["top_entities_t"] = [x[0] for x in counts.most_common(5)]
     return doc_dict
 
@@ -55,7 +73,7 @@ def extract_entities_spacy(doc_dict):
         page_dict[page["p_page"]] = doc
     all_ents = []
     for par in doc_dict["paragraphs"]:
-        entities = {
+        par_entities_dict = {
             "ORG": [],
             "GPE": [],
             "NORP": [],
@@ -73,15 +91,15 @@ def extract_entities_spacy(doc_dict):
                 entity.label_ in ["ORG", "GPE", "LOC", "NORP", "LAW", "PERSON"]
                 and entity.text in par_text
             ):
-                entities[entity.label_].append(entity.text)
+                par_entities_dict[entity.label_].append(entity.text)
 
         entity_json = {
-            "ORG_s": list(set(entities["ORG"])),
-            "GPE_s": list(set(entities["GPE"])),
-            "NORP_s": list(set(entities["NORP"])),
-            "LAW_s": list(set(entities["LAW"])),
-            "LOC_s": list(set(entities["LOC"])),
-            "PERSON_s": list(set(entities["PERSON"])),
+            "ORG_s": list(set(par_entities_dict["ORG"])),
+            "GPE_s": list(set(par_entities_dict["GPE"])),
+            "NORP_s": list(set(par_entities_dict["NORP"])),
+            "LAW_s": list(set(par_entities_dict["LAW"])),
+            "LOC_s": list(set(par_entities_dict["LOC"])),
+            "PERSON_s": list(set(par_entities_dict["PERSON"])),
         }
 
         par["entities"] = entity_json
