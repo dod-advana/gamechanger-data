@@ -179,3 +179,8 @@ def extract_fpds_ng_quey_values(filename: str) -> (str, str, str):
     return idv_piid, piid, modification_number
 
 
+if __name__ == "__main__":
+    test = "EDAPDF-5A1008FA3B0B148EE05400215A9BA3BA-HQ003414D0003-HQ003417F0296-empty-P00001-PDS-2017-09-25.pdf"
+    (idv_piid, piid, modification_number) = extract_fpds_ng_quey_values(test)
+
+    print(f"idv_piid: {idv_piid}, piid: {piid} modification_number: {modification_number}" )
