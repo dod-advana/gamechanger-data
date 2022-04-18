@@ -287,8 +287,9 @@ def upload_file_from_zip(zf_ref, zip_filename, prefix, bucket=destination_bucket
         if convert_sig:
             contents = f.read()
             data = contents.decode(encoding="utf-8-sig")
-            with tempfile.TemporaryFile(mode='w') as new_file:
-                new_file.write(data)
+
+            with tempfile.TemporaryFile(mode='w+b') as new_file:
+                new_file.write(data.encode('utf-8'))
                 new_file.seek(0)
                 s3_client.upload_fileobj(
                     new_file, bucket, f"{prefix}/{filename}")
