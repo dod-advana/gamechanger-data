@@ -70,6 +70,13 @@ def get_roles_df() -> pd.DataFrame:
     return roles_df
 
 
+def map_node_type(entity_type: str) -> str:
+    """
+    Transforms the entity types (ORG_s, PERSON_s) into the respective node types used in the graphs (Org, Role) and defaults
+    to Org if entity_type is not found.
+    """
+    return {"ORG_s": "Org", "PERSON_s": "Role"}.get(entity_type, "Org")
+
 def process_ent(ent: str) -> t.Union[t.List[str], str]:
     first_word = ent.split(" ")[0]
     if (
@@ -148,8 +155,6 @@ class Neo4jPublisher:
             o["version_hash_s"] = j.get("version_hash_s", "")
             o["is_revoked_b"] = j.get("is_revoked_b", False)
             o["entities"] = self.process_entity_list(j, "entities")
-            o["orgs"] = self.process_entity_list(j, "orgs")
-            o["roles"] = self.process_entity_list(j, "roles")
             process_query('CALL policy.createDocumentNodesFromJson(' + json.dumps(json.dumps(o)) + ')')
 
             # # TODO responsibilities
@@ -173,7 +178,7 @@ class Neo4jPublisher:
                     if filtered_ent:
                         for r in resps:
                             process_query(
-                                'MATCH (e: Entity) WHERE toLower(e.name) = \"'
+                                'MATCH (e: Role) WHERE toLower(e.name) = \"'
                                 + filtered_ent.lower()
                                 + '\" '
                                 + 'MERGE (r: Responsibility {name: \"'
@@ -214,9 +219,10 @@ class Neo4jPublisher:
             )
         return
 
-    def process_entity_list(self, j: t.Dict[str, t.Any], entity_type_key="orgs") -> t.Dict[str, t.Any]:
+    def process_entity_list(self, j: t.Dict[str, t.Any], entity_type_key="entities") -> t.Dict[str, t.Any]:
         entity_dict: t.Dict[str, t.Any] = {}
         entity_count: t.Dict[str, int] = {}
+        entity_types: t.Dict[str, str] = {}
         try:
             for p in j["paragraphs"]:
                 entities = p.get(entity_type_key,{})
@@ -229,13 +235,14 @@ class Neo4jPublisher:
                             if ans not in entity_dict:
                                 entity_dict[ans] = []
                                 entity_count[ans] = 0
+                                entity_types[ans] = map_node_type(type)
 
                             entity_dict[ans].append(p["par_inc_count"])
                             entity_count[ans] += 1
         except:
             print('Error creating ' + entity_type_key + ' for: ' + j["id"], file=sys.stderr)
 
-        return {"entityPars": entity_dict, "entityCounts": entity_count}
+        return {"entityPars": entity_dict, "entityCounts": entity_count, "entityTypes":entity_types}
 
     def populate_crowdsourced_ents(self) -> None:
         if Config.does_assist_table_exist():
