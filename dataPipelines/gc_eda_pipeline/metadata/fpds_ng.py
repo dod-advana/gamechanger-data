@@ -22,6 +22,7 @@ def __sql_fpds_ng_piid_less_or_equal_4_chars(idv_piid, piid, modification_number
         cursor = conn.cursor()
         cursor.execute(sql_fpds_ng_piid_less_or_equal_4_chars, (idv_piid, piid, modification_number))
         rows = cursor.fetchall()
+        date_filter = ['date_signed', 'closed_date', 'effective_date']
         # data = []
         items = {}
         for row in rows:
@@ -30,7 +31,10 @@ def __sql_fpds_ng_piid_less_or_equal_4_chars(idv_piid, piid, modification_number
             for col in col_names:
                 val = row[col]
                 if val:
-                    items[col + postfix_es] = str(val)
+                    if col.strip() in date_filter:
+                        items[col + postfix_es + '_dt'] = str(val)
+                    else:
+                        items[col + postfix_es] = str(val)
             # data.append(items)
         return items
     except (Exception, psycopg2.DatabaseError) as error:
@@ -56,14 +60,17 @@ def __sql_fpds_ng_piid_more_than_4_chars(piid: str, modification_number: str):
         cursor = conn.cursor()
         cursor.execute(sql_fpds_ng_piid_more_than_4_chars, (piid, modification_number))
         rows = cursor.fetchall()
-        # data = []
+        date_filter = ['date_signed', 'closed_date', 'effective_date']
         items = {}
         for row in rows:
             col_names = [desc[0] for desc in cursor.description]
             for col in col_names:
                 val = row[col]
                 if val:
-                    items[col + postfix_es] = str(val)
+                    if col.strip() in date_filter:
+                        items[col + postfix_es + '_dt'] = str(val)
+                    else:
+                        items[col + postfix_es] = str(val)
             # data.append(items)
         return items
     except (Exception, psycopg2.DatabaseError) as error:
