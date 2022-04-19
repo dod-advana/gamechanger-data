@@ -81,20 +81,20 @@ def fpds_ng(filename: str):
     q_modification_number = modification_number
     q_piid = piid
 
-    # The mod number’s need to be ‘00’ instead of null (or `empty` and when piid’s are null (or `empty`),
+    # The mod number’s need to be ‘00’ instead of null (or `empty`) and when piid’s are null (or `empty`),
     # you need to make the idv_piid the piid before querying the FPDS db
     if modification_number == 'empty' or modification_number is None:
         q_modification_number == '00'
     if piid == 'empty' or piid is None:
         q_piid = idv_piid
 
+    fpds_data = None
     if q_piid and len(q_piid) > 4:
-        return __sql_fpds_ng_piid_more_than_4_chars(q_piid, q_modification_number)
-        return fpds_ng
+        fpds_data = __sql_fpds_ng_piid_more_than_4_chars(q_piid, q_modification_number)
     if piid and len(piid) <= 4:
-        return __sql_fpds_ng_piid_less_or_equal_4_chars(q_idv_piid, q_piid, q_modification_number)
+        fpds_data = __sql_fpds_ng_piid_less_or_equal_4_chars(q_idv_piid, q_piid, q_modification_number)
 
-    return None
+    return fpds_data
 
 
 # if __name__ == '__main__':

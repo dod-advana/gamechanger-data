@@ -52,10 +52,10 @@ def metadata_extraction(filename_input: str, data_conf_filter: dict,
         db_pool.putconn(conn)
 
         if is_pds_metadata is not None:
-            data = dict(is_pds_metadata)
+            data_pds = dict(is_pds_metadata)
             # print(data)
             # Get General PDS Metadata
-            for col_name, val in data.items():
+            for col_name, val in data_pds.items():
                 # print(col_name, '->', val)
                 if col_name in date_fields_l and val is not None and val is not '':
                     extensions_metadata[col_name + postfix_es + "_dt"] = val
@@ -78,8 +78,8 @@ def metadata_extraction(filename_input: str, data_conf_filter: dict,
             db_pool.putconn(conn)
 
             if is_syn_metadata is not None:
-                data = dict(is_syn_metadata)
-                for col_name, val in data.items():
+                data_syn = dict(is_syn_metadata)
+                for col_name, val in data_syn.items():
                     if col_name in date_fields_l and val is not None and val is not '':
                         extensions_metadata[col_name + postfix_es + "_dt"] = val
                     else:
@@ -94,7 +94,6 @@ def metadata_extraction(filename_input: str, data_conf_filter: dict,
                 is_pds_data = False
                 is_syn_data = False
                 metadata_type = "none"
-        # db_pool.close_all()
 
         extensions_metadata["metadata_type" + postfix_es] = metadata_type
         extensions_metadata['dir_location_eda_ext'] = path

@@ -65,7 +65,7 @@ def extract_syn(data_conf_filter: dict, data: dict, db_pool: ConnectionPool):
     if total_obligated_amount:
         extracted_data_eda_n["total_obligated_amount_eda_ext_f"] = total_obligated_amount
 
-    currency_buying = populate_currency_buying(data)
+    # currency_buying = populate_currency_buying(data)
     # if currency_buying:
     #     extracted_data_eda_n["currency_buying_eda_ext"] = currency_buying
 
