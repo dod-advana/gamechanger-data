@@ -33,6 +33,8 @@ def __sql_fpds_ng_piid_less_or_equal_4_chars(idv_piid, piid, modification_number
                 if val:
                     if col.strip() in date_filter:
                         items[col + postfix_es + '_dt'] = str(val)
+                    elif col.strip() == 'dollars_obligated':
+                        items[col + postfix_es + '_f'] = float(val)
                     else:
                         items[col + postfix_es] = str(val)
             # data.append(items)
@@ -69,6 +71,8 @@ def __sql_fpds_ng_piid_more_than_4_chars(piid: str, modification_number: str):
                 if val:
                     if col.strip() in date_filter:
                         items[col + postfix_es + '_dt'] = str(val)
+                    elif col.strip() == 'dollars_obligated':
+                        items[col + postfix_es + '_f'] = float(val)
                     else:
                         items[col + postfix_es] = str(val)
             # data.append(items)
