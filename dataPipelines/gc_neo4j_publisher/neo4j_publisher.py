@@ -35,6 +35,40 @@ def get_agency_names() -> t.List[str]:
     agencies = [x.lower() for x in agencies]
     return agencies
 
+@lru_cache(maxsize=None)
+def get_all_entities_and_aliases() -> t.List[str]:
+    orgs_df = pd.read_excel(Config.graph_relations_xls_path,"Orgs")
+    roles_df = pd.read_excel(Config.graph_relations_xls_path, "Roles")
+    all_entities = list(orgs_df['Name']) + list(roles_df['Name'])
+    alias_mapping_dict = {}
+    for name, aliases in orgs_df[["Name","Aliases"]].itertuples(index=False):
+        if pd.isna(aliases):
+            continue
+        alias_keys = aliases.split(";")
+        alias_mapping_dict.update({alias_key:name for alias_key in alias_keys})
+    for name, aliases in roles_df[["Name","Aliases"]].itertuples(index=False):
+        if pd.isna(aliases):
+            continue
+        alias_keys = aliases.split(";")
+        alias_mapping_dict.update({alias_key:name for alias_key in alias_keys})
+    return all_entities, alias_mapping_dict
+
+@lru_cache(maxsize=None)
+def get_orgs_df() -> pd.DataFrame:
+    orgs_df = pd.read_excel(Config.graph_relations_xls_path,"Orgs")
+    orgs_df = orgs_df.drop([col for col in orgs_df.columns if "Unnamed" in col], axis=1)
+    orgs_df = orgs_df.fillna("")
+    orgs_df = orgs_df.applymap(lambda x: x.strip() if isinstance(x, str) else x)
+    return orgs_df
+
+@lru_cache(maxsize=None)
+def get_roles_df() -> pd.DataFrame:
+    roles_df = pd.read_excel(Config.graph_relations_xls_path,"Roles")
+    roles_df = roles_df.drop([col for col in roles_df.columns if "Unnamed" in col], axis=1)
+    roles_df = roles_df.fillna("")
+    roles_df = roles_df.applymap(lambda x: x.strip() if isinstance(x, str) else x)
+    return roles_df
+
 
 def process_ent(ent: str) -> t.Union[t.List[str], str]:
     first_word = ent.split(" ")[0]
@@ -73,7 +107,7 @@ def process_query(query: str, parameters: t.Dict[str, t.Any] = None, **kwparamet
 class Neo4jPublisher:
     def __init__(self):
         self.entEntRelationsStmt = []
-        self.verifiedEnts = pd.DataFrame()
+        self.verified_entities_list, self.alias_mapping_dict = get_all_entities_and_aliases()
         self.crowdsourcedEnts = set()
 
     def process_json(self, filepath: str, q: mp.Queue) -> str:
@@ -113,8 +147,9 @@ class Neo4jPublisher:
             o["kw_doc_score_r"] = j.get("kw_doc_score_r", 0)
             o["version_hash_s"] = j.get("version_hash_s", "")
             o["is_revoked_b"] = j.get("is_revoked_b", False)
-            o["entities"] = self.process_entity_list(j)
-
+            o["entities"] = self.process_entity_list(j, "entities")
+            o["orgs"] = self.process_entity_list(j, "orgs")
+            o["roles"] = self.process_entity_list(j, "roles")
             process_query('CALL policy.createDocumentNodesFromJson(' + json.dumps(json.dumps(o)) + ')')
 
             # # TODO responsibilities
@@ -128,7 +163,7 @@ class Neo4jPublisher:
         return id
 
     def process_responsibilities(self, text: str) -> None:
-        resp = get_responsibilities(text, agencies=get_agency_names())
+        resp = get_responsibilities(text, agencies=self.verified_entities_list)
         if resp:
             for d in resp.values():
                 ent = d["Agency"]
@@ -179,12 +214,12 @@ class Neo4jPublisher:
             )
         return
 
-    def process_entity_list(self, j: t.Dict[str, t.Any]) -> t.Dict[str, t.Any]:
+    def process_entity_list(self, j: t.Dict[str, t.Any], entity_type_key="orgs") -> t.Dict[str, t.Any]:
         entity_dict: t.Dict[str, t.Any] = {}
         entity_count: t.Dict[str, int] = {}
         try:
             for p in j["paragraphs"]:
-                entities = p["entities"]
+                entities = p.get(entity_type_key,{})
                 types = list(entities.keys())
                 for type in types:
                     entity_list = entities[type]
@@ -198,15 +233,11 @@ class Neo4jPublisher:
                             entity_dict[ans].append(p["par_inc_count"])
                             entity_count[ans] += 1
         except:
-            print('Error creatign entities for: ' + j["id"], file=sys.stderr)
+            print('Error creating ' + entity_type_key + ' for: ' + j["id"], file=sys.stderr)
 
         return {"entityPars": entity_dict, "entityCounts": entity_count}
 
-    def populate_verified_ents(self, csv: str = Config.agencies_csv_path) -> None:
-        csv_untrimmed = pd.read_csv(csv, na_filter=False)
-        csv = csv_untrimmed.apply(lambda x: x.str.strip() if x.dtype == "object" else x)
-        self.verifiedEnts = csv
-
+    def populate_crowdsourced_ents(self) -> None:
         if Config.does_assist_table_exist():
             with Config.connection_helper.web_db_session_scope('ro') as session:
                 verified_pg = session.execute("SELECT tokens_assumed FROM gc_assists WHERE tagged_correctly=true")
@@ -224,14 +255,20 @@ class Neo4jPublisher:
             if new_ent.upper() not in upper_set:
                 upper_set.add(new_ent.upper())
                 processed_set.add(new_ent)
-
         self.crowdsourcedEnts = processed_set
 
-    def process_entity_relationships(self) -> None:
-        total_ents = len(self.verifiedEnts)
-        print('Inserting {0} entities ...'.format(total_ents))
-        entity_json = self.verifiedEnts.to_json(orient="records")
-        process_query('CALL policy.createEntityNodesFromJson(' + json.dumps(entity_json) + ')')
+    def process_orgs(self) -> None:
+        orgs_df = get_orgs_df()
+        print('Inserting {0} orgs ...'.format(orgs_df.shape[0]))
+        orgs_json = orgs_df.to_json(orient="records")
+        process_query('CALL policy.createOrgNodesFromJson(' + json.dumps(orgs_json) + ')')
+        return
+
+    def process_roles(self) -> None:
+        roles_df = get_roles_df()
+        print('Inserting {0} roles ...'.format(roles_df.shape[0]))
+        roles_json = roles_df.to_json(orient="records")
+        process_query('CALL policy.createRoleNodesFromJson(' + json.dumps(roles_json) + ')')
         return
 
     def process_dir(self, files: t.List[str], file_dir: str, q: mp.Queue, max_threads: int) -> None:
@@ -251,12 +288,12 @@ class Neo4jPublisher:
 
     def filter_ents(self, ent: str) -> str:
         new_ent = process_ent(ent)
-        name_df = self.verifiedEnts[
-            self.verifiedEnts["Agency_Name"].str.upper() == new_ent.upper()
-            ]
-        if len(name_df):
-            return name_df.iloc[0, 1]
-        else:
+        try:
+            match_idx = [ent.upper() for ent in self.verified_entities_list].index(new_ent.upper())
+            return self.verified_entities_list[match_idx]
+        except:
+            if new_ent in self.alias_mapping_dict:
+                return self.alias_mapping_dict[new_ent]
             if new_ent in self.crowdsourcedEnts:
                 return new_ent
             else:
