@@ -1,11 +1,11 @@
 [tool.poetry]
 name = "gamechanger-data"
-version = "0.1.0"
+version = "1.5.0"
 description = ""
-authors = ["Gabriella Melki <melki_gabriella@bah.com>"]
+authors = ["Booz Allen Hamilton <gamechanger@advana>"]
 
 [tool.poetry.dependencies]
-python = "3.8.13"
+python = "3.10"
 tensorflow = "^2.8.0"
 tensorboard = "^2.8.0"
 tensorflow-estimator = "^2.8.0"
@@ -37,6 +37,7 @@ txtai = "^4.3.1"
 fastapi-utils = "^0.2.1"
 uvicorn = "^0.17.6"
 PyMuPDF = "^1.19.6"
+gamechangerml = {path = "../gamechanger-ml/dist/gamechangerml-0.1.0-py3-none-any.whl", develop = true}
 
 [tool.poetry.dev-dependencies]
 ipython = "^8.2.0"
