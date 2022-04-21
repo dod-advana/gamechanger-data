@@ -32,7 +32,7 @@ def __sql_fpds_ng_piid_less_or_equal_4_chars(idv_piid, piid, modification_number
                 val = row[col]
                 if val:
                     if col.strip() in date_filter:
-                        items[col + postfix_es + '_dt'] = str(val)
+                        items[col + postfix_es + '_dt'] = __strip_end(str(val), " 00:00:00.000")
                     elif col.strip() == 'dollars_obligated':
                         items[col + postfix_es + '_f'] = float(val)
                     else:
@@ -70,7 +70,7 @@ def __sql_fpds_ng_piid_more_than_4_chars(piid: str, modification_number: str):
                 val = row[col]
                 if val:
                     if col.strip() in date_filter:
-                        items[col + postfix_es + '_dt'] = str(val)
+                        items[col + postfix_es + '_dt'] = __strip_end(str(val), " 00:00:00.000")
                     elif col.strip() == 'dollars_obligated':
                         items[col + postfix_es + '_f'] = float(val)
                     else:
@@ -85,6 +85,11 @@ def __sql_fpds_ng_piid_more_than_4_chars(piid: str, modification_number: str):
     return None
 
 
+def __strip_end(text, suffix):
+    if suffix and text.endswith(suffix):
+        return text[:-len(suffix)]
+    return text
+
 def fpds_ng(filename: str):
     # fpds_ng =
     (idv_piid, piid, modification_number) = extract_fpds_ng_quey_values(filename)
@@ -95,7 +100,7 @@ def fpds_ng(filename: str):
     # The mod number’s need to be ‘00’ instead of null (or `empty`) and when piid’s are null (or `empty`),
     # you need to make the idv_piid the piid before querying the FPDS db
     if modification_number == 'empty' or modification_number is None:
-        q_modification_number == '00'
+        q_modification_number = '00'
     if piid == 'empty' or piid is None:
         q_piid = idv_piid
 
