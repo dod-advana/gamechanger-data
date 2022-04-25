@@ -7,7 +7,7 @@ from dataPipelines.gc_eda_pipeline.utils.eda_utils import read_extension_conf
 data_conf_filter = read_extension_conf()
 
 
-def __sql_fpds_ng_piid_less_or_equal_4_chars(idv_piid, piid, modification_number):
+def __sql_fpds_ng_piid_less_or_equal_4_chars(idv_piid, piid, modification_number: list):
     sql_fpds_ng_piid_less_or_equal_4_chars = data_conf_filter['eda']['sql_fpds_ng_piid_less_or_equal_4_chars']
     postfix_es = data_conf_filter['eda']['postfix_es']
 
@@ -20,7 +20,9 @@ def __sql_fpds_ng_piid_less_or_equal_4_chars(idv_piid, piid, modification_number
                                 dbname=data_conf_filter['eda']['database_pbis']['db'],
                                 cursor_factory=psycopg2.extras.DictCursor)
         cursor = conn.cursor()
-        cursor.execute(sql_fpds_ng_piid_less_or_equal_4_chars, (idv_piid, piid, modification_number))
+        # print(f"sql_fpds_ng_piid_more_than_4_chars :: {idv_piid} --  {piid}  --  {modification_number} ")
+        cursor.execute(sql_fpds_ng_piid_less_or_equal_4_chars, (idv_piid, piid, tuple(modification_number),))
+        # print(cursor.query)
         rows = cursor.fetchall()
         date_filter = ['date_signed', 'closed_date', 'effective_date']
         # data = []
@@ -47,7 +49,7 @@ def __sql_fpds_ng_piid_less_or_equal_4_chars(idv_piid, piid, modification_number
     return None
 
 
-def __sql_fpds_ng_piid_more_than_4_chars(piid: str, modification_number: str):
+def __sql_fpds_ng_piid_more_than_4_chars(piid: str, modification_number: list):
     sql_fpds_ng_piid_more_than_4_chars = data_conf_filter['eda']['sql_fpds_ng_piid_more_than_4_chars']
     postfix_es = data_conf_filter['eda']['postfix_es']
 
@@ -60,7 +62,9 @@ def __sql_fpds_ng_piid_more_than_4_chars(piid: str, modification_number: str):
                                 dbname=data_conf_filter['eda']['database_pbis']['db'],
                                 cursor_factory=psycopg2.extras.DictCursor)
         cursor = conn.cursor()
-        cursor.execute(sql_fpds_ng_piid_more_than_4_chars, (piid, modification_number))
+        # print(f"sql_fpds_ng_piid_more_than_4_chars :: {piid}  --  {modification_number} ")
+        cursor.execute(sql_fpds_ng_piid_more_than_4_chars, (piid, tuple(modification_number),))
+        # print(cursor.query)
         rows = cursor.fetchall()
         date_filter = ['date_signed', 'closed_date', 'effective_date']
         items = {}
@@ -94,13 +98,17 @@ def fpds_ng(filename: str):
     # fpds_ng =
     (idv_piid, piid, modification_number) = extract_fpds_ng_quey_values(filename)
     q_idv_piid = idv_piid
-    q_modification_number = modification_number
+    q_modification_number = []
     q_piid = piid
 
     # The mod number’s need to be ‘00’ instead of null (or `empty`) and when piid’s are null (or `empty`),
     # you need to make the idv_piid the piid before querying the FPDS db
     if modification_number == 'empty' or modification_number is None:
-        q_modification_number = '00'
+        q_modification_number.append('00')
+        q_modification_number.append('0')
+    else:
+        q_modification_number.append(modification_number)
+
     if piid == 'empty' or piid is None:
         q_piid = idv_piid
 
