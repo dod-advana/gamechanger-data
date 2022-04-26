@@ -5,7 +5,7 @@ description = ""
 authors = ["Booz Allen Hamilton <gamechanger@advana>"]
 
 [tool.poetry.dependencies]
-python = "3.10"
+python = "3.10.3"
 tensorflow = "^2.8.0"
 tensorboard = "^2.8.0"
 tensorflow-estimator = "^2.8.0"
@@ -37,7 +37,7 @@ txtai = "^4.3.1"
 fastapi-utils = "^0.2.1"
 uvicorn = "^0.17.6"
 PyMuPDF = "^1.19.6"
-gamechangerml = {path = "../gamechanger-ml/dist/gamechangerml-0.1.0-py3-none-any.whl", develop = true}
+gamechangerml = {path = "../gamechanger-ml/", develop = true}
 
 [tool.poetry.dev-dependencies]
 ipython = "^8.2.0"
