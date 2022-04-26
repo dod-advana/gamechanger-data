@@ -12,15 +12,6 @@ def extract_entities(doc_dict):
     # Utilizes GraphRelations.xlsx in gamechangerml to find gold standard entities within each page's text. Then, check
     # if the entities are mentioned in the paragraphs and append to paragraph  metadata.
     all_ents = []
-    # for use in extracting out the entities at the document level
-    doc_entities_dict = {
-            "ORG": [],
-            "GPE": [],
-            "NORP": [],
-            "LAW": [],
-            "LOC": [],
-            "PERSON": [],
-    }
     for par in doc_dict["paragraphs"]:
         par_entities_dict = {
             "ORG": [],
@@ -38,7 +29,7 @@ def extract_entities(doc_dict):
         ## extract out non-duplicative entities
         for entity in par_entities:
             par_entities_dict[entity['entity_type']].append(entity["entity_text"])
-            doc_entities_dict[entity['entity_type']].append(entity["entity_text"])
+
         entity_json = {
             "ORG_s": list(set(par_entities_dict["ORG"])),
             "GPE_s": list(set(par_entities_dict["GPE"])),
@@ -49,16 +40,10 @@ def extract_entities(doc_dict):
         }
         par["entities"] = entity_json
         all_ents = all_ents + sum(entity_json.values(), [])
-    doc_entities_dict = {
-        "ORG_s": list(set(doc_entities_dict["ORG"])),
-        "GPE_s": list(set(doc_entities_dict["GPE"])),
-        "NORP_s": list(set(doc_entities_dict["NORP"])),
-        "LAW_s": list(set(doc_entities_dict["LAW"])),
-        "LOC_s": list(set(doc_entities_dict["LOC"])),
-        "PERSON_s": list(set(doc_entities_dict["PERSON"])),
-    }
+
     counts = collections.Counter(all_ents)
-    doc_dict['entities'] = doc_entities_dict
+
+    doc_dict['entities'] = list(set(all_ents))
     doc_dict["top_entities_t"] = [x[0] for x in counts.most_common(5)]
     return doc_dict
 
