@@ -18,6 +18,12 @@
             ]
           }
         }
+      },
+      "similarity" : {
+        "dct_similarity" : {
+          "type" : "LMJelinekMercer",
+          "lambda" : "0.7"
+        }
       }
     },
     "mappings": {
@@ -333,6 +339,11 @@
             "p_text": {
               "type": "text",
               "store": true
+            },
+            "p_raw_text": {
+              "type": "text",
+              "store": true,
+              "similarity": "dct_similarity"
             }
           }
         }

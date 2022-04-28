@@ -19,11 +19,10 @@ WORKERS=50
 export AWS_METADATA_SERVICE_TIMEOUT=20
 export AWS_METADATA_SERVICE_NUM_ATTEMPTS=40
 
-AWS_PDF_LOC=$1
 
 [ -z "$AWS_REGION" ] && echo "Please provide AWS Region" && exit 2
 [ -z "$S3_GC_REPO_TGZ_PATH" ] && echo "Please provide GC source code path in S3" && exit 2
-[ -z "$AWS_PDF_LOC" ] && echo "Please provide PDF input prefix in S3" && exit 2
+[ -z "$AWS_S3_INPUT_PDF_PREFIX" ] && echo "Please provide PDF input prefix in S3" && exit 2
 [ -z "$GC_APP_CONFIG_EXT_S3_PATH" ] && echo "Please provide the location of the GC App Config file location in S3" && exit 2
 [ -z "$GC_APP_CONFIG_NAME" ] && echo "Please provide the location of the GC App Config file location in S3" && exit 2
 
@@ -162,7 +161,7 @@ function eda_files() {
     echo "---------------------------------------------------------------"
     "$PYTHON_CMD" -m configuration init "$GC_APP_CONFIG_NAME"
     echo "---------------------------------------------------------------"
-    "$PYTHON_CMD" -m  dataPipelines.gc_eda_pipeline.gc_eda_metadata_pipeline --aws-s3-input-pdf-prefix $AWS_PDF_LOC --workers $WORKERS
+    "$PYTHON_CMD" -m  dataPipelines.gc_eda_pipeline.gc_eda_metadata_pipeline --aws-s3-input-pdf-prefix $AWS_S3_INPUT_PDF_PREFIX --workers $WORKERS
 }
 echo "***************************** Start *****************************"
 setup_aws_and_python_exec_commands
