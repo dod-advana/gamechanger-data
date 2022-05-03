@@ -179,9 +179,44 @@ def extract_fpds_ng_quey_values(filename: str) -> (str, str, str):
     return idv_piid, piid, modification_number
 
 
+def vu(idv_piid: str, piid: str, modification_number: str):
+    q_idv_piid = idv_piid
+    q_modification_number = []
+    q_piid = piid
+
+    # The mod number’s need to be ‘00’ instead of null (or `empty`) and when piid’s are null (or `empty`),
+    # you need to make the idv_piid the piid before querying the FPDS db
+    if modification_number == 'empty' or modification_number is None:
+        q_modification_number.append('00')
+        q_modification_number.append('0')
+    else:
+        q_modification_number.append(modification_number)
+
+    if piid == 'empty' or piid is None:
+        q_piid = idv_piid
+
+
+    print(f"final q_idv_piid: {q_idv_piid}, q_piid: {q_piid}, q_modification_number: {str(q_modification_number)}")
+
+
+    if q_piid and len(q_piid) > 4:
+        print(f"We would use q_piid: {q_piid}, q_modification_number : {str(q_modification_number)}")
+    if piid and len(piid) <= 4:
+        print(f"We would use q_idv_piid: {q_idv_piid}, q_piid: {q_piid}, q_modification_number : {str(q_modification_number)}")
+
+    # fpds_data = None
+    # if q_piid and len(q_piid) > 4:
+    #     fpds_data = __sql_fpds_ng_piid_more_than_4_chars(q_piid, q_modification_number)
+    # if piid and len(piid) <= 4:
+    #     fpds_data = __sql_fpds_ng_piid_less_or_equal_4_chars(q_idv_piid, q_piid, q_modification_number)
+
+    # return fpds_data
+
 if __name__ == "__main__":
-    test = "EDAPDF-057e78b7-8285-4171-8863-0172862d2db1-GS21F0015X-47QDCC21M6TLZ-empty-empty-PDS-2021-03-08.pdf"
-    # test = "EDAPDF-5A1008FA3B0B148EE05400215A9BA3BA-HQ003414D0003-HQ003417F0296-empty-P00001-PDS-2017-09-25.pdf"
+    # https: // search.advana.data.mil /  # /pdfviewer/gamechanger?filename=gamechanger/projects/eda/pdf/piee/daily_piee_untarred/edapdf/2021/03/17/EDAPDF-bbd01293-076d-433a-a518-5c6522fe795b-HQ003421C0005-empty-empty-empty-PDS-2021-03-16.pdf&prevSearchText=undefined&pageNumber=0&cloneIndex=eda
+    # https: // search.advana.data.mil /  # /pdfviewer/gamechanger?filename=gamechanger/projects/eda/pdf/piee/unarchive_pdf/daily/20210308/pdf_dly_39/EDAPDF-3c758ac4-4748-4f1b-8a66-8f17ee563d67-N6833521C0077-empty-empty-empty-PDS-2020-10-06.pdf&prevSearchText=undefined&pageNumber=0&cloneIndex=eda
+    test = "EDAPDF-bbd01293-076d-433a-a518-5c6522fe795b-HQ003421C0005-empty-empty-empty-PDS-2021-03-16.pd"
     (idv_piid, piid, modification_number) = extract_fpds_ng_quey_values(test)
 
     print(f"idv_piid: {idv_piid}, piid: {piid} modification_number: {modification_number}" )
+    vu(idv_piid, piid, modification_number)
