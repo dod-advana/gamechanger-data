@@ -14,7 +14,7 @@ from psycopg2.pool import ThreadedConnectionPool
 
 
 def metadata_extraction(filename_input: str, data_conf_filter: dict,
-                         db_pool: ThreadedConnectionPool):
+                         db_pool: ThreadedConnectionPool, db_pool_pbis: ThreadedConnectionPool ):
 
     postfix_es = data_conf_filter['eda']['postfix_es']
 
@@ -150,7 +150,7 @@ def metadata_extraction(filename_input: str, data_conf_filter: dict,
             is_supplementary_file_missing = False
 
         # print(filename)
-        fpds_data = fpds_ng(filename)
+        fpds_data = fpds_ng(filename, db_pool_pbis)
         # print("-------")
         # print(type(extensions_metadata))
         # print(fpds_data)

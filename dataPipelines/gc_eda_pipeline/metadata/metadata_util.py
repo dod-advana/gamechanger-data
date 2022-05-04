@@ -215,7 +215,7 @@ def vu(idv_piid: str, piid: str, modification_number: str):
 if __name__ == "__main__":
     # https: // search.advana.data.mil /  # /pdfviewer/gamechanger?filename=gamechanger/projects/eda/pdf/piee/daily_piee_untarred/edapdf/2021/03/17/EDAPDF-bbd01293-076d-433a-a518-5c6522fe795b-HQ003421C0005-empty-empty-empty-PDS-2021-03-16.pdf&prevSearchText=undefined&pageNumber=0&cloneIndex=eda
     # https: // search.advana.data.mil /  # /pdfviewer/gamechanger?filename=gamechanger/projects/eda/pdf/piee/unarchive_pdf/daily/20210308/pdf_dly_39/EDAPDF-3c758ac4-4748-4f1b-8a66-8f17ee563d67-N6833521C0077-empty-empty-empty-PDS-2020-10-06.pdf&prevSearchText=undefined&pageNumber=0&cloneIndex=eda
-    test = "EDAPDF-bbd01293-076d-433a-a518-5c6522fe795b-HQ003421C0005-empty-empty-empty-PDS-2021-03-16.pd"
+    test = "EDAPDF-12f0f703-fb72-4abf-99ad-52fa5957bda4-GS00T07NSD0038-HC101320FD730-empty-P00001-PDS-2020-11-25.pdf"
     (idv_piid, piid, modification_number) = extract_fpds_ng_quey_values(test)
 
     print(f"idv_piid: {idv_piid}, piid: {piid} modification_number: {modification_number}" )

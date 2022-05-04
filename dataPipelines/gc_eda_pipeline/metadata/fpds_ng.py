@@ -2,28 +2,40 @@ from dataPipelines.gc_eda_pipeline.metadata.metadata_util import extract_fpds_ng
 import psycopg2
 from psycopg2.extras import RealDictCursor
 from dataPipelines.gc_eda_pipeline.utils.eda_utils import read_extension_conf
-
+from psycopg2.pool import ThreadedConnectionPool
 
 data_conf_filter = read_extension_conf()
 
 
-def __sql_fpds_ng_piid_less_or_equal_4_chars(idv_piid, piid, modification_number: list):
+def __sql_fpds_ng_piid_less_or_equal_4_chars(idv_piid, piid, modification_number: list, db_pool_pbis: ThreadedConnectionPool, filename: str):
     sql_fpds_ng_piid_less_or_equal_4_chars = data_conf_filter['eda']['sql_fpds_ng_piid_less_or_equal_4_chars']
     postfix_es = data_conf_filter['eda']['postfix_es']
 
-    conn = None
+    # conn = None
     try:
-        conn = psycopg2.connect(host=data_conf_filter['eda']['database_pbis']['hostname'],
-                                port=data_conf_filter['eda']['database_pbis']['port'],
-                                user=data_conf_filter['eda']['database_pbis']['user'],
-                                password=data_conf_filter['eda']['database_pbis']['password'],
-                                dbname=data_conf_filter['eda']['database_pbis']['db'],
-                                cursor_factory=psycopg2.extras.DictCursor)
+        conn = db_pool_pbis.getconn()
         cursor = conn.cursor()
-        # print(f"sql_fpds_ng_piid_more_than_4_chars :: {idv_piid} --  {piid}  --  {modification_number} ")
         cursor.execute(sql_fpds_ng_piid_less_or_equal_4_chars, (idv_piid, piid, tuple(modification_number),))
+        # print("-------")
+        # print(filename)
+        # print("-------")
         # print(cursor.query)
         rows = cursor.fetchall()
+        db_pool_pbis.putconn(conn)
+
+
+
+        # conn = psycopg2.connect(host=data_conf_filter['eda']['database_pbis']['hostname'],
+        #                         port=data_conf_filter['eda']['database_pbis']['port'],
+        #                         user=data_conf_filter['eda']['database_pbis']['user'],
+        #                         password=data_conf_filter['eda']['database_pbis']['password'],
+        #                         dbname=data_conf_filter['eda']['database_pbis']['db'],
+        #                         cursor_factory=psycopg2.extras.DictCursor)
+        # cursor = conn.cursor()
+        # # print(f"sql_fpds_ng_piid_more_than_4_chars :: {idv_piid} --  {piid}  --  {modification_number} ")
+        # cursor.execute(sql_fpds_ng_piid_less_or_equal_4_chars, (idv_piid, piid, tuple(modification_number),))
+        # # print(cursor.query)
+        # rows = cursor.fetchall()
         date_filter = ['date_signed', 'closed_date', 'effective_date']
         # data = []
         items = {}
@@ -34,7 +46,7 @@ def __sql_fpds_ng_piid_less_or_equal_4_chars(idv_piid, piid, modification_number
                 val = row[col]
                 if val:
                     if col.strip() in date_filter:
-                        items[col + postfix_es + '_dt'] = __strip_end(str(val), " 00:00:00.000")
+                        items[col + postfix_es + '_dt'] = __strip_end(str(val))
                     elif col.strip() == 'dollars_obligated':
                         items[col + postfix_es + '_f'] = float(val)
                     else:
@@ -43,29 +55,36 @@ def __sql_fpds_ng_piid_less_or_equal_4_chars(idv_piid, piid, modification_number
         return items
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
-    finally:
-        if conn is not None:
-            conn.close()
     return None
 
 
-def __sql_fpds_ng_piid_more_than_4_chars(piid: str, modification_number: list):
+def __sql_fpds_ng_piid_more_than_4_chars(piid: str, modification_number: list, db_pool_pbis: ThreadedConnectionPool, filename:str):
     sql_fpds_ng_piid_more_than_4_chars = data_conf_filter['eda']['sql_fpds_ng_piid_more_than_4_chars']
     postfix_es = data_conf_filter['eda']['postfix_es']
 
-    conn = None
+    # conn = None
     try:
-        conn = psycopg2.connect(host=data_conf_filter['eda']['database_pbis']['hostname'],
-                                port=data_conf_filter['eda']['database_pbis']['port'],
-                                user=data_conf_filter['eda']['database_pbis']['user'],
-                                password=data_conf_filter['eda']['database_pbis']['password'],
-                                dbname=data_conf_filter['eda']['database_pbis']['db'],
-                                cursor_factory=psycopg2.extras.DictCursor)
+        conn = db_pool_pbis.getconn()
         cursor = conn.cursor()
-        # print(f"sql_fpds_ng_piid_more_than_4_chars :: {piid}  --  {modification_number} ")
-        cursor.execute(sql_fpds_ng_piid_more_than_4_chars, (piid, tuple(modification_number),))
+        cursor.execute(sql_fpds_ng_piid_more_than_4_chars, (piid, piid, tuple(modification_number),))
+        # print("-------")
+        # print(filename)
         # print(cursor.query)
+        # print("-------")
         rows = cursor.fetchall()
+        db_pool_pbis.putconn(conn)
+
+        # conn = psycopg2.connect(host=data_conf_filter['eda']['database_pbis']['hostname'],
+        #                         port=data_conf_filter['eda']['database_pbis']['port'],
+        #                         user=data_conf_filter['eda']['database_pbis']['user'],
+        #                         password=data_conf_filter['eda']['database_pbis']['password'],
+        #                         dbname=data_conf_filter['eda']['database_pbis']['db'],
+        #                         cursor_factory=psycopg2.extras.DictCursor)
+        # cursor = conn.cursor()
+        # print(f"sql_fpds_ng_piid_more_than_4_chars :: {piid}  --  {modification_number} ")
+        # cursor.execute(sql_fpds_ng_piid_more_than_4_chars, (piid, tuple(modification_number),))
+        # # print(cursor.query)
+        # rows = cursor.fetchall()
         date_filter = ['date_signed', 'closed_date', 'effective_date']
         items = {}
         for row in rows:
@@ -74,7 +93,7 @@ def __sql_fpds_ng_piid_more_than_4_chars(piid: str, modification_number: list):
                 val = row[col]
                 if val:
                     if col.strip() in date_filter:
-                        items[col + postfix_es + '_dt'] = __strip_end(str(val), " 00:00:00.000")
+                        items[col + postfix_es + '_dt'] = __strip_end(str(val))
                     elif col.strip() == 'dollars_obligated':
                         items[col + postfix_es + '_f'] = float(val)
                     else:
@@ -83,18 +102,15 @@ def __sql_fpds_ng_piid_more_than_4_chars(piid: str, modification_number: list):
         return items
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
-    finally:
-        if conn is not None:
-            conn.close()
     return None
 
 
-def __strip_end(text, suffix):
-    if suffix and text.endswith(suffix):
-        return text[:-len(suffix)]
+def __strip_end(text):
+    if text:
+        return text[:10]
     return text
 
-def fpds_ng(filename: str):
+def fpds_ng(filename: str, db_pool_pbis: ThreadedConnectionPool):
     # fpds_ng =
     (idv_piid, piid, modification_number) = extract_fpds_ng_quey_values(filename)
     q_idv_piid = idv_piid
@@ -114,14 +130,19 @@ def fpds_ng(filename: str):
 
     fpds_data = None
     if q_piid and len(q_piid) > 4:
-        fpds_data = __sql_fpds_ng_piid_more_than_4_chars(q_piid, q_modification_number)
+        fpds_data = __sql_fpds_ng_piid_more_than_4_chars(q_piid, q_modification_number, db_pool_pbis, filename)
     if piid and len(piid) <= 4:
-        fpds_data = __sql_fpds_ng_piid_less_or_equal_4_chars(q_idv_piid, q_piid, q_modification_number)
+        fpds_data = __sql_fpds_ng_piid_less_or_equal_4_chars(q_idv_piid, q_piid, q_modification_number, db_pool_pbis, filename)
 
     return fpds_data
 
 
-# if __name__ == '__main__':
+if __name__ == '__main__':
+
+
+    print(__strip_end("2016-01-21 00:00:00.000"))
+
+
 #     filenames = ["EDAPDF-00B49ADF6C0854B7E05400215A9BA3BA-N0018910DZ027-1008-empty-09-PDS-2014-08-15.pdf",
 #         "EDAPDF-0ba1e026-58f4-4599-b0a9-06827f933e78-H9222215D0022-0003-empty-24-PDS-2020-04-22.pdf",
 #         "EDAPDF-0CA73B35B30D038EE05400215A9BA3BA-HQ014710D0011-0006-empty-12-PDS-2015-01-14.pdf",
