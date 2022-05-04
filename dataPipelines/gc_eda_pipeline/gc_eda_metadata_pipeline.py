@@ -25,6 +25,14 @@ db_pool = ThreadedConnectionPool(1, 3000, host=data_conf_filter['eda']['database
                                  database=data_conf_filter['eda']['database']['db'],
                                  cursor_factory=psycopg2.extras.DictCursor)
 
+db_pool_pbis = ThreadedConnectionPool(1, 3000, host=data_conf_filter['eda']['database_pbis']['hostname'],
+                                 port=data_conf_filter['eda']['database_pbis']['port'],
+                                 user=data_conf_filter['eda']['database_pbis']['user'],
+                                 password=data_conf_filter['eda']['database_pbis']['password'],
+                                 database=data_conf_filter['eda']['database_pbis']['db'],
+                                 cursor_factory=psycopg2.extras.DictCursor)
+
+
 @click.command()
 @click.option(
     '--aws-s3-input-pdf-prefix',
@@ -146,7 +154,7 @@ def process_doc(filename: str, audit_details: dict, data_conf_filter: dict):
 
             md_data = generate_metadata_data(data_conf_filter=data_conf_filter,
                                              file=ex_file_s3_pdf_path,
-                                             audit_rec=audit_rec, db_pool=db_pool)
+                                             audit_rec=audit_rec, db_pool=db_pool, db_pool_pbis=db_pool_pbis)
 
             publish_es = get_es_publisher(staging_folder="/tmp", index_name=data_conf_filter['eda']['eda_index'],
                                           alias=data_conf_filter['eda']['eda_index_alias'])
