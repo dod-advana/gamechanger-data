@@ -32,7 +32,7 @@ RUN \
 # COMMON Packages & More Particular RPM Dependcies
 # ensure RHEL host repos are enabled (undo what's done here https://repo1.dso.mil/dsop/redhat/ubi/ubi8/-/blob/development/Dockerfile#L22)
 RUN sed -i "s/enabled=0/enabled=1/" /etc/dnf/plugins/subscription-manager.conf \
-  dnf install -y glibc-locale-source.x86_64 \
+  && dnf install -y glibc-locale-source.x86_64 \
   && dnf module install postgresql:13/client \
   &&  dnf install -y \
   zip \
