@@ -49,9 +49,10 @@ function ensure_gamechangerml_is_installed() {
     git clone https://github.com/dod-advana/gamechanger-ml.git "$GAMECHANGERML_PKG_DIR"
   fi
 
-  if $PYTHON_CMD -m pip freeze | grep -qv gamechangerml ; then
-    >&2 echo "[INFO] Installing gamechangerml in the user packages ..."
-    $PYTHON_CMD -m pip install --no-deps -e "$GAMECHANGERML_PKG_DIR"
+  package=$($PYTHON_CMD -m pip list | grep -i gamechangerml)
+  if [[ $package == "" ]]; then
+      >&2 echo "[INFO] Installing gamechangerml in the user packages ..."
+      $PYTHON_CMD -m pip install --no-deps -e "$GAMECHANGERML_PKG_DIR"
   fi
 }
 
