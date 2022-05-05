@@ -26,7 +26,7 @@ RUN rpm --import https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL \
   &&  rpm --import https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-8 \
   &&  dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
 
-# COMMON Packages & More Particular RPM Dependcies
+# COMMON Packages & More Particular RPM Dependencies
 # ensure RHEL host repos are enabled (undo what's done here https://repo1.dso.mil/dsop/redhat/ubi/ubi8/-/blob/development/Dockerfile#L22)
 RUN sed -i "s/enabled=0/enabled=1/" /etc/dnf/plugins/subscription-manager.conf \
   && dnf install -y glibc-locale-source.x86_64 \
@@ -55,7 +55,6 @@ RUN sed -i "s/enabled=0/enabled=1/" /etc/dnf/plugins/subscription-manager.conf \
   python38 \
   python38-devel \
   python38-Cython \
-  libpq5-devel-13.4-42PGDG.rhel8 \
   openblas \
   openblas-threads \
   diffutils \
