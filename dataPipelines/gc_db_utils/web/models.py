@@ -22,6 +22,8 @@ class DAFACharterMap(AutoRepr, DAFACharterMapSchema, DeferredWebReflectedBase):
 class DAFACharterMapFlattened(AutoRepr, DAFACharterMapFlattenedSchema, DeferredWebReflectedBase):
     __tablename__ = 'dafa_charter_map_flattened_vw'
 
+# TODO: this causes an error if uncommented
+# error results from running: python -m dev_tools.universal_test_harness setup
 
 class CloneMeta(AutoRepr, CloneMetaSchema, DeferredWebReflectedBase):
     __tablename__ = 'clone_meta'
