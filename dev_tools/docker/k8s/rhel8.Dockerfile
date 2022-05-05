@@ -22,10 +22,7 @@ ENV LANG="C.utf8" \
   TESSDATA_PREFIX=/usr/local/share/tessdata/
 
 # Additional Repos
-RUN \
-  rpm --import https://download.postgresql.org/pub/repos/yum/RPM-GPG-KEY-PGDG \
-  &&  dnf install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-latest.noarch.rpm \
-  &&  rpm --import https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL \
+RUN rpm --import https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL \
   &&  rpm --import https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-8 \
   &&  dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
 
@@ -33,7 +30,7 @@ RUN \
 # ensure RHEL host repos are enabled (undo what's done here https://repo1.dso.mil/dsop/redhat/ubi/ubi8/-/blob/development/Dockerfile#L22)
 RUN sed -i "s/enabled=0/enabled=1/" /etc/dnf/plugins/subscription-manager.conf \
   && dnf install -y glibc-locale-source.x86_64 \
-  && dnf module install postgresql:13/client \
+  && dnf module install -y postgresql:13/client \
   &&  dnf install -y \
   zip \
   unzip \
