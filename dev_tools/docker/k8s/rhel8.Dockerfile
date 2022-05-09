@@ -55,6 +55,7 @@ RUN sed -i "s/enabled=0/enabled=1/" /etc/dnf/plugins/subscription-manager.conf \
   python38 \
   python38-devel \
   python38-Cython \
+  libpq-devel \
   openblas \
   openblas-threads \
   diffutils \
