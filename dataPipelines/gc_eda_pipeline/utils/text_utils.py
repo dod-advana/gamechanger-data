@@ -35,21 +35,18 @@ def extract_sow_pws(text):
     Returns:SOW/PWS text for the contract if found, if not found, returns None
 
     """
-    section_C_exists = re.search('Section C.*-', text)
-    pws_exists = re.search('PERFORMANCE WORK STATEMENT', text)
-    sow_exist = re.search('STATEMENT OF WORK', text)
-    if section_C_exists:
-        sow_pws_start = section_C_exists.span()[0]
-    elif pws_exists:
-        sow_pws_start = pws_exists.span()[0]
-    elif sow_exist:
-        sow_pws_start = sow_exist.span()[0]
-    else:
-        return None
-    sow_pws_end = re.search('Section [D-Z].*-', text[sow_pws_start:])
-    if sow_pws_end is None:
-        sow_pws_end = len(text)
-    else:
-        sow_pws_end = sow_pws_start + sow_pws_end.span()[0]
-    sow_pws_text = text[sow_pws_start:sow_pws_end]
-    return sow_pws_text
+    sow_regex_list = ['Section C.*-',"'SECTION C.*-'",'PERFORMANCE WORK STATEMENT','STATEMENT OF WORK']
+    for sow_regex in sow_regex_list:
+        sow_exist = re.search(sow_regex, text)
+        if sow_exist:
+            sow_pws_start = sow_exist.span()[0]
+        else:
+            continue
+        sow_pws_end = re.search('Section [D-Z].*-', text[sow_pws_start:])
+        if sow_pws_end is None:
+            sow_pws_end = len(text)
+        else:
+            sow_pws_end = sow_pws_start + sow_pws_end.span()[0]
+        sow_pws_text = text[sow_pws_start:sow_pws_end]
+        return sow_pws_text
+    return ""

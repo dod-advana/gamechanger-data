@@ -8,7 +8,7 @@ from common.document_parser.parsers.policy_analytics.display_mappings import (
 
 from common.utils.parsers import parse_timestamp
 # from dataScience.src.utilities.text_utils import utf8_pass, clean_text
-from dataPipelines.gc_eda_pipeline.utils.text_utils import utf8_pass, clean_text, extract_sow_pws
+from dataPipelines.gc_eda_pipeline.utils.text_utils import utf8_pass, clean_text
 
 
 def get_access_timestamp(doc_dict):
@@ -78,7 +78,6 @@ def get_display_title(meta_data):
 def rename_and_format(doc_dict):
     doc_dict["raw_text"] = utf8_pass(doc_dict["text"])
     doc_dict["text"] = clean_text(doc_dict["text"])
-    doc_dict["sow_pws_text"] = extract_sow_pws(doc_dict["text"])
     # doc_dict["access_timestamp_dt"] = get_access_timestamp(doc_dict)
     # doc_dict["publication_date_dt"] = get_publication_date(doc_dict)
 
