@@ -153,6 +153,7 @@ def process_doc(filename: str, audit_details: dict, data_conf_filter: dict):
         if Conf.s3_utils.prefix_exists(prefix_path=ex_file_s3_path):
             raw_docparser_data = json.loads(Conf.s3_utils.object_content(object_path=ex_file_s3_path))
             raw_docparser_data['sow_pws_text_eda_ext_t'] = extract_sow_pws(raw_docparser_data['raw_text'])
+            raw_docparser_data['sow_pws_populated_b'] = False if raw_docparser_data['sow_pws_text_eda_ext_t']=="" else True
 
             md_data = generate_metadata_data(data_conf_filter=data_conf_filter,
                                              file=ex_file_s3_pdf_path,
