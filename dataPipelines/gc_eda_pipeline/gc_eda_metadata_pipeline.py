@@ -11,6 +11,7 @@ from dataPipelines.gc_eda_pipeline.metadata.generate_metadata import generate_me
 from dataPipelines.gc_eda_pipeline.utils.eda_utils import read_extension_conf
 from dataPipelines.gc_eda_pipeline.indexer.indexer import index_data_file_v2, create_index, get_es_publisher
 from dataPipelines.gc_eda_pipeline.database.database import audit_fetch_all_records_for_base_path, audit_success_record, audit_failed_record
+from dataPipelines.gc_eda_pipeline.utils.text_utils import clean_text
 import psycopg2.extras
 import time
 from psycopg2.pool import ThreadedConnectionPool
@@ -152,7 +153,7 @@ def process_doc(filename: str, audit_details: dict, data_conf_filter: dict):
     try:
         if Conf.s3_utils.prefix_exists(prefix_path=ex_file_s3_path):
             raw_docparser_data = json.loads(Conf.s3_utils.object_content(object_path=ex_file_s3_path))
-            raw_docparser_data['sow_pws_text_eda_ext_t'] = extract_sow_pws(raw_docparser_data['raw_text'])
+            raw_docparser_data['sow_pws_text_eda_ext_t'] = clean_text(extract_sow_pws(raw_docparser_data['raw_text']))
             raw_docparser_data['sow_pws_populated_b'] = False if raw_docparser_data['sow_pws_text_eda_ext_t']=="" else True
 
             md_data = generate_metadata_data(data_conf_filter=data_conf_filter,
