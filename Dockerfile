@@ -59,7 +59,6 @@ RUN \
         python38-Cython \
         "postgresql13" \
         "postgresql13-devel" \
-        libpq5-devel-13.4-42PGDG.rhel8 \
         openblas \
         openblas-threads \
         diffutils \
