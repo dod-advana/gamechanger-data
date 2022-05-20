@@ -161,15 +161,15 @@ def parse_clin(text, re_clin=r"(ITEM NO){s<=1}\s*\n", attempt=0):
         
         clin_data = text[clin_data_start:clin_data_end].split('\n')
         clin_num = clin_data[0].strip()
-        clins.append({  'ITEM NO':clin_num,
-                        'SUPPLIES/SERVICES':clin_data[1].strip() + '\n' + clin_ref_text,
-                        'QUANTITY':clin_data[2].strip(),
-                        'UNIT':clin_data[3].strip(),
-                        'UNIT PRICE':[clin_data[4].strip()],
-                        'AMOUNT':[clin_data[5].strip()],
-                        'PSC Code':PSC_code,
-                        'Purchase Request Number':Purchase_Request_Num,
-                        'GOOD PARSE': clin_num[0:4].isnumeric()
+        clins.append({  'clin_num_eda_ext':clin_num,
+                        'supplies_services_eda_ext':clin_data[1].strip() + '\n' + clin_ref_text,
+                        'quantity_eda_ext':clin_data[2].strip(),
+                        'unit_eda_ext':clin_data[3].strip(),
+                        'unit_price_eda_ext':[clin_data[4].strip()],
+                        'amount_eda_ext':[clin_data[5].strip()],
+                        'psc_code_eda_ext':PSC_code,
+                        'purchase_request_number_eda_ext':Purchase_Request_Num,
+                        'successful_parse_eda_ext': clin_num[0:4].isnumeric()
                      })
     
     # If we don't find anything, we can try again but be more lax in our search
@@ -182,10 +182,10 @@ def parse_clin(text, re_clin=r"(ITEM NO){s<=1}\s*\n", attempt=0):
 
 # Determines if a document was successfully parsed for CLIN
 def check_clin_parse(clins):
-    if clins == 'None' or len(clins) == 0:
+    if clins == None or len(clins) == 0:
         return True
     else:
-        return all(clin['GOOD PARSE'] for clin in clins)
+        return all(clin['successful_parse_eda_ext'] for clin in clins)
 
 def extract_clin(text):
     """
@@ -198,5 +198,8 @@ def extract_clin(text):
     """
     clin_full_text = extract_clin_section(text)
     clins = parse_clin(clin_full_text)
+
+    if clins == "None":
+        clins = []
 
     return clins
