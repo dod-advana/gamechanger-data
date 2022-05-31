@@ -11,9 +11,11 @@ from dataPipelines.gc_eda_pipeline.metadata.generate_metadata import generate_me
 from dataPipelines.gc_eda_pipeline.utils.eda_utils import read_extension_conf
 from dataPipelines.gc_eda_pipeline.indexer.indexer import index_data_file_v2, create_index, get_es_publisher
 from dataPipelines.gc_eda_pipeline.database.database import audit_fetch_all_records_for_base_path, audit_success_record, audit_failed_record
+from dataPipelines.gc_eda_pipeline.utils.text_utils import clean_text
 import psycopg2.extras
 import time
 from psycopg2.pool import ThreadedConnectionPool
+from dataPipelines.gc_eda_pipeline.utils.text_utils import extract_sow_pws, extract_clin, check_clin_parse
 
 
 data_conf_filter = read_extension_conf()
@@ -152,6 +154,21 @@ def process_doc(filename: str, audit_details: dict, data_conf_filter: dict):
         if Conf.s3_utils.prefix_exists(prefix_path=ex_file_s3_path):
             raw_docparser_data = json.loads(Conf.s3_utils.object_content(object_path=ex_file_s3_path))
 
+            raw_docparser_data['sow_pws_text_eda_ext_t'] = clean_text(extract_sow_pws(raw_docparser_data['raw_text']))
+            raw_docparser_data['sow_pws_populated_b'] = False if raw_docparser_data['sow_pws_text_eda_ext_t']=="" else True
+            
+            clins = extract_clin(raw_docparser_data['raw_text'])
+            clins_status = check_clin_parse(clins)
+
+            if clins_status:
+                raw_docparser_data['clins_text_n'] = clins
+                raw_docparser_data['clins_populated_b'] = False if clins == None or len(clins) == 0 else True
+            else:
+                raw_docparser_data['clins_text_n'] = clins #none
+                raw_docparser_data['clins_populated_b'] = True
+
+            raw_docparser_data['clins_parsed_successfully_b'] = clins_status
+            
             md_data = generate_metadata_data(data_conf_filter=data_conf_filter,
                                              file=ex_file_s3_pdf_path,
                                              audit_rec=audit_rec, db_pool=db_pool, db_pool_pbis=db_pool_pbis)
