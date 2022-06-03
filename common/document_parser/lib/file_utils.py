@@ -9,7 +9,7 @@ def coerce_file_to_pdf(filepath: Union[Path, str]) -> str:
     """Attempts to convert the given file to a pdf and returns the pdf filepath."""
     filepath = Path(filepath)
     filetype = filepath.suffix
-    if filetype == '.pdf':
+    if filetype == '.pdf' or filetype == '.PDF':
         return str(filepath)
     elif filetype == '.html':
         return convert_html_file_to_pdf(filepath)
