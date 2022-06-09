@@ -29,8 +29,8 @@ case $SCRIPT_ENV in
     ;;
   dev)
     AWS_DEFAULT_REGION="${AWS_DEFAULT_REGION:-us-east-1}"
-    APP_CONFIG_S3_PATH="${APP_CONFIG_S3_PATH:-s3://${S3_BUCKET_NAME}/bronze/gamechanger/configuration/app-config/dev.20211118.json}"
-    TOPIC_MODEL_S3_PATH="${TOPIC_MODEL_S3_PATH:-s3://${S3_BUCKET_NAME}/bronze/gamechanger/models/topic_model/v1/20210208.tar.gz}"
+    APP_CONFIG_S3_PATH="${APP_CONFIG_S3_PATH:-s3://${S3_BUCKET_NAME}/bronze/gamechanger/configuration/app-config/dev.20220419.json}"
+    TOPIC_MODEL_S3_PATH="${TOPIC_MODEL_S3_PATH:-s3://${S3_BUCKET_NAME}/bronze/gamechanger/models/topic_model/v2/topic_model_20220125163613.tar.gz}"
     ;;
   local)
     >&2 echo "[INFO] LOCAL SETUP: Skipping app config install and topic model install."
