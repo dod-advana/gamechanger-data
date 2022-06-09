@@ -39,7 +39,7 @@ cssselect==1.1.0
 cymem==2.0.3
 cytoolz==0.10.1
 databricks-cli==0.13.0
-dataclasses==0.7
+dataclasses==0.6
 decorator==4.4.2
 dill==0.3.3
 distlib==0.3.1
