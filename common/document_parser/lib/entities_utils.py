@@ -2,7 +2,7 @@ import pandas as pd
 import re
 
 def replace_nonalpha_chars(text, replace_char=""):
-    return re.sub("[^a-zA-Z\s]+", replace_char, text)
+    return re.sub("[^a-zA-Z0-9\s]+", replace_char, text)
 
 def make_entities_dict(
         entities_path,
