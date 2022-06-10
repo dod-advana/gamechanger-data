@@ -218,11 +218,11 @@ def build_cmd(ctx: click.Context, force: bool):
     ])
 
     # then build baseline image
-    run_sup_compose_commands(
-        commands_to_run=['cmd-ensure-baseline-image'],
-        in_order=True,
-        verbose=True
-    )
+    #run_sup_compose_commands(
+    #    commands_to_run=['cmd-ensure-baseline-image'],
+    #    in_order=True,
+    #    verbose=True
+    #)
 
     # then build everything else
     ctx.invoke(raw_cmd, docker_compose_args=[

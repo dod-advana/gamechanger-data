@@ -12,8 +12,8 @@
 ## (Linux) Dev/Prod Deployment Instructions
 
 - Clone fresh `gamechanger-data` repo
-- Setup python3.6 venv with packages in requirements.txt.
-  - Create python3.6 venv, e.g. `python3 -m venv /opt/gc-venv-20210613`
+- Setup python3.8 venv with packages in requirements.txt.
+  - Create python3.8 venv, e.g. `python3 -m venv /opt/gc-venv-20210613`
   - Before installing packages, update pip/wheel/setuptools, e.g. `<venv>/bin/pip install --upgrade pip setuptools wheel`
   - Install packages from `requirements.txt`, with no additional dependencies, e.g. `<venv>/bin/pip install --no-deps -r requirements.txt`
 - Set up symlink `/opt/gc-venv-current` to the freshly created venv, e.g. `ln -s /opt/gc-venv-20210613 /opt/gc-venv-current`
@@ -27,8 +27,8 @@
 - (MacOS Only) Install "brew" then use it to install tesseract `brew install tesseract-lang `
 - Install Miniconda or Anaconda (Miniconda is much smaller)
     - `https://docs.conda.io/en/latest/miniconda.html`
-- Create gamechanger python3.6 environment, like so:
-    - `conda create -n gc python=3.6`
+- Create gamechanger python3.8 environment, like so:
+    - `conda create -n gc python=3.8`
 - Clone the repo and change into that dir `git clone ...; cd gamechanger`
 - Activate conda environment and install requirements:
     - :bangbang: <span style="color:red"> reeeealy important - make sure you change into repo directory</span>
@@ -45,8 +45,8 @@
     - Install ocrmypdf dependencies following ubuntu instructions here: https://ocrmypdf.readthedocs.io/en/latest/installation.html#installing-on-linux
     - Install Miniconda or Anaconda (Miniconda is much smaller)
         - `https://docs.conda.io/en/latest/miniconda.html`
-    - Create gamechanger python3.6 environment, like so:
-        - `conda create -n gc python=3.6`
+    - Create gamechanger python3.8 environment, like so:
+        - `conda create -n gc python=3.8`
     - Clone the repo and change into that dir `git clone ...; cd gamechanger-data`
     - Activate conda environment and install requirements:
         - :bangbang: <span style="color:red"> reeeealy important - make sure you change into repo directory</span>

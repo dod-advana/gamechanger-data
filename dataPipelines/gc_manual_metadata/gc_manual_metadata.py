@@ -33,7 +33,7 @@ class ManualMetadata:
         self.input_directory = input_directory
         self.document_group = document_group
         p = Path(self.input_directory).glob("**/*")
-        self.files = [x for x in p if x.is_file() and (str(x).endswith("pdf") or str(x).endswith("html")
+        self.files = [x for x in p if x.is_file() and (x.suffix.lower() in (".pdf", ".html", ".txt")
                                                        or (filetype.guess(str(x)) is not None and (
                                                            filetype.guess(str(x)).mime == "pdf" or filetype.guess(str(x)).mime == "application/pdf")))]
         self.metadata_files = [Path(x).stem for x in p if x.is_file() and filetype.guess(str(x)) is not None and (

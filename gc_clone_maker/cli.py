@@ -1,5 +1,6 @@
 import click
 from gc_clone_maker.gc_clone_maker import CloneMaker
+from gc_clone_maker.clone_zip_mover import unzip_and_move
 
 
 @click.group()
@@ -11,3 +12,9 @@ def cli():
 def run():
     print("GENERATING CLONE")
     CloneMaker().generate_clone()
+
+
+@cli.command()
+def edl_move():
+    print("Clone maker: edl_move called")
+    unzip_and_move()

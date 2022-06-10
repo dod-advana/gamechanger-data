@@ -1,4 +1,4 @@
-from gamechangerml.src.search.ranking.features import get_pr
+from gamechangerml.src.featurization.rank_features.features import get_pr
 
 
 def add_pagerank_r(doc_dict):

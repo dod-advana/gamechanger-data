@@ -57,7 +57,7 @@ class IngestableDocGroup(BaseModel):
 
 
 class LoadManager:
-    SUPPORTED_RAW_DOC_EXTENSIONS = frozenset({'.pdf', '.html'})
+    SUPPORTED_RAW_DOC_EXTENSIONS = frozenset({'.pdf', '.html', '.txt'})
     METADATA_DOC_EXTENSION = '.metadata'
     PARSED_DOC_EXTENSION = '.json'
     THUMBNAIL_EXTENSION = '.png'
@@ -348,7 +348,7 @@ class LoadManager:
         ))
 
         if update_db:
-            print("Updating S3: Updating pub entries in 'publications' table ...", file=sys.stderr)
+            print("Updating pub entries in 'publications' table ...", file=sys.stderr)
             self.process_db_pub_updates(idgs=idgs)
         else:
             print("Skipping updates to 'publications' table ...", file=sys.stderr)
@@ -361,7 +361,7 @@ class LoadManager:
             print("Skipping s3 uploads of docs ...", file=sys.stderr)
 
         if update_db:
-            print("Updating S3: Updating pub entries in 'publications' table ...", file=sys.stderr)
+            print("Updating pub entries in 'versioned_docs' table ...", file=sys.stderr)
             self.process_db_doc_updates(idgs=uploaded_idgs or idgs, ts=ingest_ts)
         else:
             print("Skipping updates to 'versioned_docs' table ...", file=sys.stderr)

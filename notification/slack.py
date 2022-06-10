@@ -1,6 +1,7 @@
 import os
 import json
 import urllib.request as urq
+import traceback
 
 
 def send_notification(message: str, SLACK_HOOK_CHANNEL=None, SLACK_HOOK_URL=None, use_env_vars=True):
@@ -32,3 +33,12 @@ def send_notification(message: str, SLACK_HOOK_CHANNEL=None, SLACK_HOOK_URL=None
         )
 
         urq.urlopen(url=req)
+
+
+def notify_with_tb(msg, tb: traceback):
+    try:
+        full = msg + '\n' + tb.format_exc()
+        send_notification(full)
+    except:
+        send_notification(
+            msg + '\n' + 'missing trace - notify_with_tb > tb.format_exc() failed')

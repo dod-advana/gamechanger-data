@@ -37,7 +37,8 @@ def purge(purge_choice: str):
 
     def purge_aliases():
         print("Purging aliases ::")
-        for alias in [a for a in aliases if not any([pattern in a for pattern in exclude_patterns])]:
+        for alias in [a for a in aliases if (not any([pattern in a for pattern in exclude_patterns])
+                                             and not a == 'ilm-history-3')]:
             print(f'Deleting alias :: {alias}')
             es.indices.delete_alias(index='_all', name=alias)
 
