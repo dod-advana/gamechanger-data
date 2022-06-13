@@ -26,14 +26,14 @@ def reset():
     for d in Path(Config.CRAWLER_OUTPUT_PATH).iterdir():
         s3u.upload_dir(
             local_dir=(d.resolve()),
-            prefix_path='gamechanger/external-uploads/crawler-downloader/' + d.name
+            prefix_path='bronze/gamechanger/external-uploads/crawler-downloader/' + d.name
         )
 
     print(Config.PARSED_OUTPUT_PATH)
     for d in Path(Config.PARSED_OUTPUT_PATH).iterdir():
         s3u.upload_dir(
             local_dir=(d.resolve()),
-            prefix_path='gamechanger/external-uploads/parsed-crawler-downloader/' + d.name
+            prefix_path='bronze/gamechanger/external-uploads/parsed-crawler-downloader/' + d.name
         )
 
 @s3_cli.command('peek')

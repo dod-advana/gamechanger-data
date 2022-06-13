@@ -20,7 +20,7 @@ class Config:
     ENV_FILE_PATH = Path(RENDERED_DIR, 'composectl/.env')
     BASE_DOCKER_COMPOSE_ARGS = [
         'docker-compose',
-        '--project-dir', str(PROJECT_DIR),
+        '--project-directory', str(PROJECT_DIR),
         '--env-file', str(ENV_FILE_PATH),
         '-f', str(MAIN_COMPOSE_FILE_PATH)
     ]
