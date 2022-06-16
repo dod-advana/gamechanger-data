@@ -3,6 +3,7 @@ import json
 import argparse
 from pathlib import Path
 from common.document_parser.ref_utils import make_dict
+from common.document_parser.lib.ref_list_dod import add_ref_list_dod
 from collections import defaultdict
 from typing import Pattern, List
 import typing as t
@@ -65,6 +66,10 @@ def collect_ref_list(text: str) -> defaultdict:
 
 
 def add_ref_list(doc_dict):
-    iss_ref = collect_ref_list(doc_dict["text"])
-    doc_dict["ref_list"] = list(iss_ref)
+    fn = doc_dict.get("filename").lower()
+    if "dodd" in fn or "dodi" in fn:
+        add_ref_list_dod(doc_dict, doc_dict.get("f_name"))
+    else:
+        doc_dict["ref_list"] = list(collect_ref_list(doc_dict["text"]))
+
     return doc_dict
