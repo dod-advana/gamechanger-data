@@ -165,18 +165,17 @@ class CrawlerStatusTracker:
 
         for doc in docs:
             crawler = doc.json_metadata['crawler_used']
-            if crawler in crawler_batched_filenames:
-                if doc.is_revoked:
-                    crawler_batched_filenames[crawler]['revoked'].append(doc.filename)
-                else:
-                    crawler_batched_filenames[crawler]['unrevoked'].append(doc.filename)
+            # If the crawler is not currently in the dict, initialize it and the filename lists under it
+            if not crawler in crawler_batched_filenames:
+                crawler_batched_filenames[crawler] = {}
+                crawler_batched_filenames[crawler]['revoked'] = []
+                crawler_batched_filenames[crawler]['unrevoked'] = []
+
+            # Add the file to either the revoked or unrevoked list
+            if doc.is_revoked:
+                crawler_batched_filenames[crawler]['revoked'].append(doc.filename)
             else:
-                if doc.is_revoked:
-                    crawler_batched_filenames[crawler]['revoked'] = [doc.filename]
-                    crawler_batched_filenames[crawler]['unrevoked'] = []
-                else:
-                    crawler_batched_filenames[crawler]['revoked'] = []
-                    crawler_batched_filenames[crawler]['unrevoked'] = [doc.filename]
+                crawler_batched_filenames[crawler]['unrevoked'].append(doc.filename)
 
         max_updates = 65536
 
