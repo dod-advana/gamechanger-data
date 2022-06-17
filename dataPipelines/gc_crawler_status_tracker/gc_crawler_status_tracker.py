@@ -142,6 +142,11 @@ class CrawlerStatusTracker:
                                     "terms": {
                                         "filename": []
                                     }
+                                },
+                                {
+                                    "term": {
+                                        "crawler_used_s": ''
+                                    }
                                 }
                             ]
                         }
@@ -155,40 +160,52 @@ class CrawlerStatusTracker:
                     }
                 }
         
-        revoked_filenames = []
-        unrevoked_filenames = []
+
+        crawler_batched_filenames = {}
 
         for doc in docs:
-            if doc.is_revoked:
-                revoked_filenames.append(doc.filename)
+            crawler = doc.json_metadata['crawler_used']
+            if crawler in crawler_batched_filenames:
+                if doc.is_revoked:
+                    crawler_batched_filenames[crawler]['revoked'].append(doc.filename)
+                else:
+                    crawler_batched_filenames[crawler]['unrevoked'].append(doc.filename)
             else:
-                unrevoked_filenames.append(doc.filename)
+                if doc.is_revoked:
+                    crawler_batched_filenames[crawler]['revoked'] = [doc.filename]
+                    crawler_batched_filenames[crawler]['unrevoked'] = []
+                else:
+                    crawler_batched_filenames[crawler]['revoked'] = []
+                    crawler_batched_filenames[crawler]['unrevoked'] = [doc.filename]
 
         max_updates = 65536
 
-        # Update revoked files
-        # If there are more than the max updates we can make in one update_by_query, loop through and batch process them
-        if len(revoked_filenames) > max_updates:
-            for i in range(0, len(revoked_filenames), max_updates):
-                update_body['query']['bool']['must'][0]['terms']['filename'] = revoked_filenames[0+i:max_updates+i]
+
+        for crawler in crawler_batched_filenames:
+            revoked_filenames = crawler_batched_filenames[crawler]['revoked']
+            unrevoked_filenames = crawler_batched_filenames[crawler]['unrevoked']
+            # Update revoked files
+            # If there are more than the max updates we can make in one update_by_query, loop through and batch process them
+            if len(revoked_filenames) > max_updates:
+                for i in range(0, len(revoked_filenames), max_updates):
+                    update_body['query']['bool']['must'][0]['terms']['filename'] = revoked_filenames[0+i:max_updates+i]
+                    Config.connection_helper.es_client.update_by_query(index=index_name, body=update_body)
+            else:
+                update_body['query']['bool']['must'][0]['terms']['filename'] = revoked_filenames
                 Config.connection_helper.es_client.update_by_query(index=index_name, body=update_body)
-        else:
-            update_body['query']['bool']['must'][0]['terms']['filename'] = revoked_filenames
-            Config.connection_helper.es_client.update_by_query(index=index_name, body=update_body)
-        
-        # Update unrevoked files
-        # Same as above chunk but for unrevoked files
-        update_body['script']['params']['is_revoked_b'] = False
-        if len(unrevoked_filenames) > max_updates:
-            for i in range(0, len(unrevoked_filenames), max_updates):
-                update_body['query']['bool']['must'][0]['terms']['filename'] = unrevoked_filenames[0+i:max_updates+i]
+            
+            # Update unrevoked files
+            # Same as above chunk but for unrevoked files
+            update_body['script']['params']['is_revoked_b'] = False
+            if len(unrevoked_filenames) > max_updates:
+                for i in range(0, len(unrevoked_filenames), max_updates):
+                    update_body['query']['bool']['must'][0]['terms']['filename'] = unrevoked_filenames[0+i:max_updates+i]
+                    Config.connection_helper.es_client.update_by_query(index=index_name, body=update_body)
+            else:
+                update_body['query']['bool']['must'][0]['terms']['filename'] = unrevoked_filenames
                 Config.connection_helper.es_client.update_by_query(index=index_name, body=update_body)
-        else:
-            update_body['query']['bool']['must'][0]['terms']['filename'] = unrevoked_filenames
-            Config.connection_helper.es_client.update_by_query(index=index_name, body=update_body)
     
         
-
     def _update_revocations_neo4j(self, docs):
         print(f'Updating Neo4j revocation statuses')
         for doc in docs:
