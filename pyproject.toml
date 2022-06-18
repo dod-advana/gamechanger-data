@@ -38,6 +38,7 @@ uvicorn = "^0.17.6"
 PyMuPDF = "^1.19.6"
 gamechangerml = {path = "../gamechanger-ml/", develop = true}
 syntok = "^1.4.4"
+chardet = "^4.0.0"
 
 [tool.poetry.dev-dependencies]
 ipython = "^8.2.0"
