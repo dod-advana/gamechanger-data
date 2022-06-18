@@ -50,6 +50,10 @@ mypy = "^0.942"
 pylint = "^2.13.5"
 hypothesis = "^6.43.1"
 typing-extensions = "^4.1.1"
+xlrd = "^2.0.1"
+w3lib = "^1.22.0"
+xhtml2pdf = "^0.2.8"
+black = "^22.3.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
