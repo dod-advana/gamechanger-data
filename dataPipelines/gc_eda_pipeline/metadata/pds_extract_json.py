@@ -1,8 +1,10 @@
 from dataPipelines.gc_eda_pipeline.metadata.metadata_util import format_supplementary_data
 
+from typing import Tuple
+
 
 def extract_pds(data_conf_filter: dict, data: dict, extensions_metadata: dict):
-    date_fields_l = data_conf_filter['eda']['sql_filter_fields']['date']
+    date_fields_l = data_conf_filter["eda"]["sql_filter_fields"]["date"]
     extracted_data_eda_n = {}
     format_supplementary_data(data, date_fields_l)
 
@@ -16,7 +18,12 @@ def extract_pds(data_conf_filter: dict, data: dict, extensions_metadata: dict):
     if referenced_idv:
         extracted_data_eda_n["referenced_idv_eda_ext"] = referenced_idv
 
-    contract_admin_office_dodaac, contract_admin_agency_name, contract_payment_office_dodaac, contract_payment_office_name = populate_address(data)
+    (
+        contract_admin_office_dodaac,
+        contract_admin_agency_name,
+        contract_payment_office_dodaac,
+        contract_payment_office_name,
+    ) = populate_address(data)
     if contract_admin_office_dodaac:
         extracted_data_eda_n["contract_admin_office_dodaac_eda_ext"] = contract_admin_office_dodaac
     if contract_admin_agency_name:
@@ -34,7 +41,11 @@ def extract_pds(data_conf_filter: dict, data: dict, extensions_metadata: dict):
     if vendor_cage:
         extracted_data_eda_n["vendor_cage_eda_ext"] = vendor_cage
 
-    contract_issue_office_name, contract_issue_office_dodaac, dodaac_org_type = populate_contract_issue_office_name_and_contract_issue_office_dodaa(data)
+    (
+        contract_issue_office_name,
+        contract_issue_office_dodaac,
+        dodaac_org_type,
+    ) = populate_contract_issue_office_name_and_contract_issue_office_dodaa(data)
     if contract_issue_office_name:
         extracted_data_eda_n["contract_issue_office_name_eda_ext"] = contract_issue_office_name
     if contract_issue_office_dodaac:
@@ -79,7 +90,7 @@ def populate_modification(data: dict) -> str:
 
 
 # To populate Award ID, ReferencedIDV
-def populate_award_id_referenced_idv(data: dict, extensions_metadata: dict) -> (str, str):
+def populate_award_id_referenced_idv(data: dict, extensions_metadata: dict) -> Tuple[str, str]:
     order_number = None
     contract_number = None
     award_id = None
@@ -101,7 +112,7 @@ def populate_award_id_referenced_idv(data: dict, extensions_metadata: dict) -> (
 
 
 # To populate address fields
-def populate_address(data) -> (str, str, str, str):
+def populate_address(data) -> Tuple[str, str, str, str]:
     contract_admin_office_row_id = None
     paying_office_row_id = None
     contract_admin_agency_name = None
@@ -125,11 +136,16 @@ def populate_address(data) -> (str, str, str, str):
                 contract_payment_office_name = address.get("org_name_eda_ext")
                 contract_payment_office_dodaac = address.get("orgid_dodaac_eda_ext")
 
-    return contract_admin_agency_name, contract_admin_office_dodaac, contract_payment_office_name, contract_payment_office_dodaac
+    return (
+        contract_admin_agency_name,
+        contract_admin_office_dodaac,
+        contract_payment_office_name,
+        contract_payment_office_dodaac,
+    )
 
 
 # To populate Vendor
-def populate_vendor(data: dict) -> (str, str, str):
+def populate_vendor(data: dict) -> Tuple[str, str, str]:
     row_ids = []
     if "address_details_eda_ext_n" in data:
         for address_detail in data["address_details_eda_ext_n"]:
@@ -164,7 +180,7 @@ def populate_vendor_sub(data: dict):
 
 
 # To populate contract issue office name and contract issue office  Dodaac:
-def populate_contract_issue_office_name_and_contract_issue_office_dodaa(data: dict) -> (str,str):
+def populate_contract_issue_office_name_and_contract_issue_office_dodaa(data: dict) -> Tuple[str, str]:
     row_id = None
     if "address_details_eda_ext_n" in data:
         for address_detail in data["address_details_eda_ext_n"]:
@@ -190,12 +206,12 @@ def populate_contract_issue_office_name_and_contract_issue_office_dodaa(data: di
                 else:
                     dodaac_org_type = "estate"
 
-                return contract_issue_office_name,contract_issue_office_dodaac, dodaac_org_type
+                return contract_issue_office_name, contract_issue_office_dodaac, dodaac_org_type
     return None, None, None, None
 
 
 # To populate Signature Dates
-def contract_effective_and_signed_date(data: dict) -> (str, str):
+def contract_effective_and_signed_date(data: dict) -> Tuple[str, str]:
     effective_date = None
     signature_date = None
     if "proc_inst_header_details_eda_ext_n" in data:
@@ -203,7 +219,7 @@ def contract_effective_and_signed_date(data: dict) -> (str, str):
             if "ko_signature_date_eda_ext" in proc_inst_header_detail:
                 signature_date = proc_inst_header_detail.get("ko_signature_date_eda_ext")
     if "proc_effective_date_eda_ext_n" in data:
-        for proc_effective_date in data['proc_effective_date_eda_ext_n']:
+        for proc_effective_date in data["proc_effective_date_eda_ext_n"]:
             if "value_eda_ext" in proc_effective_date:
                 effective_date = proc_effective_date.get("value_eda_ext")
 
@@ -214,15 +230,19 @@ def contract_effective_and_signed_date(data: dict) -> (str, str):
 def populate_total_obligated_amount(data: dict) -> str:
     total_obligated_amount = 0.0
     if "obligated_amounts_eda_ext_n" in data:
-        for obligated_amount in data.get('obligated_amounts_eda_ext_n'):
+        for obligated_amount in data.get("obligated_amounts_eda_ext_n"):
             if "chgtxt_eda_ext" in obligated_amount:
                 try:
-                    total_obligated_amount = total_obligated_amount + float(obligated_amount.get("obligated_amount_delta_eda_ext"))
+                    total_obligated_amount = total_obligated_amount + float(
+                        obligated_amount.get("obligated_amount_delta_eda_ext")
+                    )
                 except ValueError:
                     pass
             elif "obligated_amount_eda_ext" in obligated_amount:
                 try:
-                    total_obligated_amount = total_obligated_amount + float(obligated_amount.get("obligated_amount_eda_ext"))
+                    total_obligated_amount = total_obligated_amount + float(
+                        obligated_amount.get("obligated_amount_eda_ext")
+                    )
                 except ValueError:
                     pass
     return total_obligated_amount
@@ -231,10 +251,9 @@ def populate_total_obligated_amount(data: dict) -> str:
 # To Populate NAICS
 def populate_naics(data: dict) -> str:
     if "refnum_eda_ext_n" in data:
-        for refnum in data['refnum_eda_ext_n']:
+        for refnum in data["refnum_eda_ext_n"]:
             if "ref_desc_eda_ext" in refnum:
-                if refnum['ref_desc_eda_ext'] == "North American Industry Classification System (NAICS)":
+                if refnum["ref_desc_eda_ext"] == "North American Industry Classification System (NAICS)":
                     if "ref_value_eda_ext" in refnum:
                         return refnum.get("ref_value_eda_ext")
     return None
-

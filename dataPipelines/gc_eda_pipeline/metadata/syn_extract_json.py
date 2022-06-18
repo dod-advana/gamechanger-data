@@ -1,8 +1,9 @@
+from typing import Tuple
 from dataPipelines.gc_eda_pipeline.metadata.metadata_util import format_supplementary_data
 
 
 def extract_syn(data_conf_filter: dict, data: dict):
-    date_fields_l = data_conf_filter['eda']['sql_filter_fields']['date']
+    date_fields_l = data_conf_filter["eda"]["sql_filter_fields"]["date"]
     extracted_data_eda_n = {}
     format_supplementary_data(data, date_fields_l)
 
@@ -16,7 +17,12 @@ def extract_syn(data_conf_filter: dict, data: dict):
     if referenced_idv:
         extracted_data_eda_n["referenced_idv_eda_ext"] = referenced_idv
 
-    contract_admin_office_dodaac, contract_admin_agency_name, contract_payment_office_dodaac, contract_payment_office_name = populate_address(data)
+    (
+        contract_admin_office_dodaac,
+        contract_admin_agency_name,
+        contract_payment_office_dodaac,
+        contract_payment_office_name,
+    ) = populate_address(data)
     if contract_admin_office_dodaac:
         extracted_data_eda_n["contract_admin_office_dodaac_eda_ext"] = contract_admin_office_dodaac
     if contract_admin_agency_name:
@@ -34,7 +40,11 @@ def extract_syn(data_conf_filter: dict, data: dict):
     if vendor_cage:
         extracted_data_eda_n["vendor_cage_eda_ext"] = vendor_cage
 
-    contracting_agency_name, contract_issuing_office_dodaac, dodaac_org_type = contract_agency_name_and_issuing_office_dodaac(data)
+    (
+        contracting_agency_name,
+        contract_issuing_office_dodaac,
+        dodaac_org_type,
+    ) = contract_agency_name_and_issuing_office_dodaac(data)
     if contracting_agency_name:
         extracted_data_eda_n["contracting_agency_name_eda_ext"] = contracting_agency_name
     if contract_issuing_office_dodaac:
@@ -76,7 +86,7 @@ def populate_modification(data: dict):
 
 
 # To populate Award ID, ReferencedIDV
-def populate_award_id_referenced_idv(data: dict) -> (str, str):
+def populate_award_id_referenced_idv(data: dict) -> Tuple[str, str]:
     award_id = None
     referenced_idv = None
     order_number = None
@@ -98,7 +108,7 @@ def populate_award_id_referenced_idv(data: dict) -> (str, str):
 
 
 # To populate address fields
-def populate_address(data: dict) -> (str, str, str, str):
+def populate_address(data: dict) -> Tuple[str, str, str, str]:
     contract_admin_agency_name = None
     contract_admin_office_dodaac = None
     contract_payment_office_name = None
@@ -113,13 +123,23 @@ def populate_address(data: dict) -> (str, str, str, str):
                 contract_payment_office_dodaac = contract.get("pay_org_dodaac_eda_ext")
             if contract.get("pay_org_name_eda_ext"):
                 contract_payment_office_name = contract.get("pay_org_name_eda_ext")
-            return contract_admin_agency_name, contract_admin_office_dodaac, contract_payment_office_name, contract_payment_office_dodaac
+            return (
+                contract_admin_agency_name,
+                contract_admin_office_dodaac,
+                contract_payment_office_name,
+                contract_payment_office_dodaac,
+            )
 
-    return contract_admin_agency_name, contract_admin_office_dodaac, contract_payment_office_name, contract_payment_office_dodaac
+    return (
+        contract_admin_agency_name,
+        contract_admin_office_dodaac,
+        contract_payment_office_name,
+        contract_payment_office_dodaac,
+    )
 
 
 # To populate vendor name, vendor duns, and vendor cage
-def populate_vendor(data: dict) -> (str, str, str):
+def populate_vendor(data: dict) -> Tuple[str, str, str]:
     vendor_name = None
     vendor_duns = None
     vendor_cage = None
@@ -136,7 +156,7 @@ def populate_vendor(data: dict) -> (str, str, str):
 
 
 # To populate contracting agency name and contract issuing office  Dodaac:
-def contract_agency_name_and_issuing_office_dodaac(data: dict) -> (str, str):
+def contract_agency_name_and_issuing_office_dodaac(data: dict) -> Tuple[str, str]:
     contracting_agency_name = None
     contract_issuing_office_dodaac = None
     if "syn_contract_eda_ext_n" in data:
@@ -159,12 +179,12 @@ def contract_agency_name_and_issuing_office_dodaac(data: dict) -> (str, str):
             else:
                 dodaac_org_type = "estate"
 
-            return contracting_agency_name,contract_issuing_office_dodaac, dodaac_org_type
+            return contracting_agency_name, contract_issuing_office_dodaac, dodaac_org_type
     return contracting_agency_name, contract_issuing_office_dodaac
 
 
 # To populate date fields
-def contract_effective_and_signed_date(data: dict) -> (str, str):
+def contract_effective_and_signed_date(data: dict) -> Tuple[str, str]:
     effective_date = None
     signature_date = None
     if "syn_contract_eda_ext_n" in data:
@@ -184,19 +204,23 @@ def populate_total_obligated_amount(data: dict, is_award: bool):
         for syn_contract in data.get("syn_contract_eda_ext_n"):
             if syn_contract.get("total_obligated_amt_eda_ext") and is_award:
                 try:
-                    total_obligated_amount = total_obligated_amount + float(syn_contract.get("total_obligated_amt_eda_ext"))
+                    total_obligated_amount = total_obligated_amount + float(
+                        syn_contract.get("total_obligated_amt_eda_ext")
+                    )
                 except ValueError:
                     pass
             if syn_contract.get("total_obligated_amt_delta_eda_ext") and not is_award:
                 try:
-                    total_obligated_amount = total_obligated_amount + float(syn_contract.get("total_obligated_amt_delta_eda_ext"))
+                    total_obligated_amount = total_obligated_amount + float(
+                        syn_contract.get("total_obligated_amt_delta_eda_ext")
+                    )
                 except ValueError:
                     pass
     return total_obligated_amount
 
 
 # To populate header PSC
-def header_psc(data: dict) -> (str):
+def header_psc(data: dict) -> str:
     psc_on_contract_header = None
     if "syn_contract_eda_ext_n" in data:
         for contract in data.get("syn_contract_eda_ext_n"):
@@ -204,5 +228,3 @@ def header_psc(data: dict) -> (str):
                 psc_on_contract_header = contract.get("misc_fsc_eda_ext")
             return psc_on_contract_header
     return psc_on_contract_header
-
-
