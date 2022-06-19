@@ -191,8 +191,8 @@ def memory_limit(memory_percentage: float):
     soft, hard = resource.getrlimit(resource.RLIMIT_AS)
     print("Memory Hard Limit: " + str(hard) + " Soft Limit: " + str(soft) +
           " Maximum of percentage of memory use: " + str(memory_percentage))
-    resource.setrlimit(resource.RLIMIT_AS, (get_memory()
-                                            * 1024 * memory_percentage, hard))
+    resource.setrlimit(resource.RLIMIT_AS, (int(get_memory()
+                                            * 1024 * memory_percentage), hard))
 
 
 def get_memory():
