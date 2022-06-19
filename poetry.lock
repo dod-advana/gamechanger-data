@@ -521,7 +521,6 @@ spacy = ">=3.2.0,<3.3.0"
 [package.source]
 type = "url"
 url = "https://github.com/explosion/spacy-models/releases/download/en_core_web_lg-3.2.0/en_core_web_lg-3.2.0.tar.gz"
-
 [[package]]
 name = "en-core-web-md"
 version = "3.2.0"
@@ -536,7 +535,6 @@ spacy = ">=3.2.0,<3.3.0"
 [package.source]
 type = "url"
 url = "https://github.com/explosion/spacy-models/releases/download/en_core_web_md-3.2.0/en_core_web_md-3.2.0.tar.gz"
-
 [[package]]
 name = "en-core-web-sm"
 version = "3.2.0"
@@ -551,7 +549,6 @@ spacy = ">=3.2.0,<3.3.0"
 [package.source]
 type = "url"
 url = "https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.2.0/en_core_web_sm-3.2.0.tar.gz"
-
 [[package]]
 name = "entrypoints"
 version = "0.4"
@@ -1539,7 +1536,7 @@ signedtoken = ["cryptography (>=3.0.0)", "pyjwt (>=2.0.0,<3)"]
 
 [[package]]
 name = "ocrmypdf"
-version = "13.4.7"
+version = "13.5.0"
 description = "OCRmyPDF adds an OCR text layer to scanned PDF files, allowing them to be searched"
 category = "main"
 optional = false
@@ -1547,12 +1544,12 @@ python-versions = ">=3.7"
 
 [package.dependencies]
 coloredlogs = ">=14.0"
-img2pdf = ">=0.3.0,<0.5"
+img2pdf = ">=0.3.0"
 packaging = ">=20"
 "pdfminer.six" = ">=20191110,<20200720 || >20200720"
 pikepdf = ">=4.0.0,<5.0.0 || >5.0.0"
 Pillow = ">=8.2.0"
-pluggy = ">=0.13.0,<2"
+pluggy = ">=0.13.0"
 reportlab = ">=3.5.66"
 tqdm = ">=4"
 
@@ -1560,8 +1557,8 @@ tqdm = ">=4"
 docs = ["sphinx", "sphinx-issues", "sphinx-rtd-theme"]
 extended_test = ["PyMuPDF (==1.19.1)"]
 test = ["coverage[toml] (>=5)", "pytest (>=6.0.0)", "pytest-cov (>=2.11.1)", "pytest-xdist (>=2.2.0)", "python-xmp-toolkit (==2.0.1)"]
-watcher = ["watchdog (>=1.0.2,<3)"]
-webservice = ["Flask (>=1,<3)"]
+watcher = ["watchdog (>=1.0.2)"]
+webservice = ["Flask (>=1)"]
 
 [[package]]
 name = "opt-einsum"
@@ -4239,8 +4236,8 @@ oauthlib = [
     {file = "oauthlib-3.2.0.tar.gz", hash = "sha256:23a8208d75b902797ea29fd31fa80a15ed9dc2c6c16fe73f5d346f83f6fa27a2"},
 ]
 ocrmypdf = [
-    {file = "ocrmypdf-13.4.7-py37-none-any.whl", hash = "sha256:7bf9a20bcc8d0c01712d8413a0a7275c32a95accc2de75e7bc6f6e69af468e3f"},
-    {file = "ocrmypdf-13.4.7.tar.gz", hash = "sha256:8a0a2fa07cf0aac4dea11990d27a15b552afa7ff2dfffdb322bfd8bd0b77751d"},
+    {file = "ocrmypdf-13.5.0-py37-none-any.whl", hash = "sha256:f9bcb0dcf55b4e782887003bacab0d1ff4b288b981247b2d32b652f626064fdc"},
+    {file = "ocrmypdf-13.5.0.tar.gz", hash = "sha256:434dacc4e43a7db9af15daf96a16a1a5926a9d2f2a28da2862ae918dce5b3cc7"},
 ]
 opt-einsum = [
     {file = "opt_einsum-3.3.0-py3-none-any.whl", hash = "sha256:2455e59e3947d3c275477df7f5205b30635e266fe6dc300e3d9f9646bfcea147"},
