@@ -18,7 +18,7 @@ APP_CONFIG_NAME="${APP_CONFIG_NAME:-$SCRIPT_ENV}"
 ES_CONFIG_NAME="${ES_CONFIG_NAME:-$SCRIPT_ENV}"
 APP_CONFIG_LOCAL_PATH="${REPO_DIR}/configuration/app-config/${APP_CONFIG_NAME}.json"
 GAMECHANGERML_PKG_DIR="${GAMECHANGERML_PKG_DIR:-${REPO_DIR}/var/gamechanger-ml}"
-TOPIC_MODEL_LOCAL_DIR="${GAMECHANGERML_PKG_DIR}/gamechangerml/models/topic_models/models/"
+TOPIC_MODEL_LOCAL_DIR="${GAMECHANGERML_PKG_DIR}/gamechangerml/models/topic_models/"
 
 
 case $SCRIPT_ENV in
@@ -26,11 +26,13 @@ case $SCRIPT_ENV in
     AWS_DEFAULT_REGION="${AWS_DEFAULT_REGION:-us-gov-west-1}"
     APP_CONFIG_S3_PATH="${APP_CONFIG_S3_PATH:-s3://${S3_BUCKET_NAME}/bronze/gamechanger/configuration/app-config/prod.20210416.json}"
     TOPIC_MODEL_S3_PATH="${TOPIC_MODEL_S3_PATH:-s3://${S3_BUCKET_NAME}/bronze/gamechanger/models/topic_model/v1/20210208.tar.gz}"
+    TOPIC_MODEL_SCRIPT_S3_PATH="${TOPIC_MODEL_S3_PATH:-s3://${S3_BUCKET_NAME}/bronze/gamechanger/models/topic_model/tfidf.py}"
     ;;
   dev)
     AWS_DEFAULT_REGION="${AWS_DEFAULT_REGION:-us-east-1}"
     APP_CONFIG_S3_PATH="${APP_CONFIG_S3_PATH:-s3://${S3_BUCKET_NAME}/bronze/gamechanger/configuration/app-config/dev.20220419.json}"
     TOPIC_MODEL_S3_PATH="${TOPIC_MODEL_S3_PATH:-s3://${S3_BUCKET_NAME}/bronze/gamechanger/models/topic_model/v2/topic_model_20220125163613.tar.gz}"
+    TOPIC_MODEL_SCRIPT_S3_PATH="${TOPIC_MODEL_S3_PATH:-s3://${S3_BUCKET_NAME}/bronze/gamechanger/models/topic_model/tfidf.py}"
     ;;
   local)
     >&2 echo "[INFO] LOCAL SETUP: Skipping app config install and topic model install."
@@ -68,6 +70,15 @@ function install_app_config() {
   fi
 }
 
+function install_topic_model_script() {
+  if [[ "${SCRIPT_ENV}" != "local" ]]; then
+      mkdir -p "$TOPIC_MODEL_LOCAL_DIR"
+
+      >&2 echo "[INFO] Inserting topic model script into gamechangerml"
+      $AWS_CMD s3 cp "$TOPIC_MODEL_SCRIPT_S3_PATH" "$TOPIC_MODEL_LOCAL_DIR"
+  fi
+}
+
 function install_topic_models() {
    if [[ "${SCRIPT_ENV}" != "local" ]]; then
       if [ -d "$TOPIC_MODEL_LOCAL_DIR" ]; then
@@ -78,7 +89,7 @@ function install_topic_models() {
       mkdir -p "$TOPIC_MODEL_LOCAL_DIR"
 
       >&2 echo "[INFO] Fetching new topic model"
-      $AWS_CMD s3 cp "$TOPIC_MODEL_S3_PATH" - | tar -xzf - -C "$TOPIC_MODEL_LOCAL_DIR"
+      $AWS_CMD s3 cp "$TOPIC_MODEL_S3_PATH" - | tar -xzf - -C "${TOPIC_MODEL_LOCAL_DIR}models/"
    fi
 }
 
