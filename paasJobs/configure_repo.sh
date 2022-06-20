@@ -70,15 +70,6 @@ function install_app_config() {
   fi
 }
 
-function install_topic_model_script() {
-  if [[ "${SCRIPT_ENV}" != "local" ]]; then
-      mkdir -p "$TOPIC_MODEL_LOCAL_DIR"
-
-      >&2 echo "[INFO] Inserting topic model script into gamechangerml"
-      $AWS_CMD s3 cp "$TOPIC_MODEL_SCRIPT_S3_PATH" "$TOPIC_MODEL_LOCAL_DIR"
-  fi
-}
-
 function install_topic_models() {
    if [[ "${SCRIPT_ENV}" != "local" ]]; then
       if [ -d "$TOPIC_MODEL_LOCAL_DIR" ]; then
@@ -91,6 +82,15 @@ function install_topic_models() {
       >&2 echo "[INFO] Fetching new topic model"
       $AWS_CMD s3 cp "$TOPIC_MODEL_S3_PATH" - | tar -xzf - -C "${TOPIC_MODEL_LOCAL_DIR}models/"
    fi
+}
+
+function install_topic_model_script() {
+  if [[ "${SCRIPT_ENV}" != "local" ]]; then
+      mkdir -p "$TOPIC_MODEL_LOCAL_DIR"
+
+      >&2 echo "[INFO] Inserting topic model script into gamechangerml"
+      $AWS_CMD s3 cp "$TOPIC_MODEL_SCRIPT_S3_PATH" "$TOPIC_MODEL_LOCAL_DIR"
+  fi
 }
 
 function configure_repo() {
@@ -123,8 +123,8 @@ EOF
 
 install_app_config
 ensure_gamechangerml_is_installed
-install_topic_model_script
 install_topic_models
+install_topic_model_script
 configure_repo
 post_checks
 
