@@ -86,7 +86,7 @@ function install_topic_models() {
         rm -rf "$TOPIC_MODEL_LOCAL_DIR"
       fi
 
-      mkdir -p "$TOPIC_MODEL_LOCAL_DIR"
+      mkdir -p "${TOPIC_MODEL_LOCAL_DIR}models/"
 
       >&2 echo "[INFO] Fetching new topic model"
       $AWS_CMD s3 cp "$TOPIC_MODEL_S3_PATH" - | tar -xzf - -C "${TOPIC_MODEL_LOCAL_DIR}models/"
