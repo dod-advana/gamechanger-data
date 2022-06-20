@@ -123,6 +123,7 @@ EOF
 
 install_app_config
 ensure_gamechangerml_is_installed
+install_topic_model_script
 install_topic_models
 configure_repo
 post_checks
