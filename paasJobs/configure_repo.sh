@@ -81,7 +81,8 @@ function install_topic_models() {
       mkdir -p "$TOPIC_MODEL_LOCAL_DIR"
 
       >&2 echo "[INFO] Fetching new topic model"
-      $AWS_CMD s3 cp "$TOPIC_MODEL_S3_PATH" - | tar -xzf - -C "$TOPIC_MODEL_LOCAL_DIR"
+      # TODO: Dynamically handle tar files that tar root directory (dealing with strip-components), or communicate with the data science team for clarity
+      $AWS_CMD s3 cp "$TOPIC_MODEL_S3_PATH" - | tar -xzf - -C "$TOPIC_MODEL_LOCAL_DIR" --strip-components=1
    fi
 }
 
