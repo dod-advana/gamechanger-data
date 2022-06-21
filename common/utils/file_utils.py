@@ -30,7 +30,7 @@ def is_pdf(file: t.Union[Path, str]) -> bool:
     try:
         doc = fitz.open(file_path)
     except RuntimeError as e:
-        if 'no objects found' in e.args:
+        if "no objects found" in e.args:
             return False
     except:
         return False
@@ -45,8 +45,8 @@ def is_ocr_pdf(file: t.Union[Path, str]) -> bool:
     file_path = Path(file).resolve()
     try:
         with fitz.open(str(file_path)) as doc:
-            for page_num in range(doc.pageCount):
-                if doc.getPageText(page_num).strip():
+            for page_num in range(doc.page_count):
+                if doc.get_page_text(page_num).strip():
                     return True
             return False
     except Exception as e:

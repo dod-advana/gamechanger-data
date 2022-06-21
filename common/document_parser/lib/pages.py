@@ -28,6 +28,6 @@ def handle_pages(doc_obj, doc_dict):
     doc_dict["pages"] = []
     doc_dict["keyw_5"] = []
     for page_num, page in enumerate(doc_obj.pages()):
-        page_text = page.getText()
+        page_text = page.get_text()
         doc_dict["text"] = doc_dict["text"] + page_text
         handle_page(page_num, page_text, doc_dict)
