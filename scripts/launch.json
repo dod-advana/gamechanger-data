@@ -1,0 +1,117 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Test Setup",
+            "type": "python",
+            "request": "launch",
+            "module": "dev_tools.universal_test_harness",
+            "args": [
+                "setup"
+            ]
+        },
+        {
+            "name": "Test Neo4j",
+            "type": "python",
+            "request": "launch",
+            "module": "dev_tools.universal_test_harness",
+            "args": [
+                "neo",
+                "peek"
+            ]
+        },
+        {
+            "name": "update_neo4j",
+            "type": "python",
+            "request": "launch",
+            "module": "dataPipelines.gc_ingest",
+            "args": [
+                "pipelines",
+                "core",
+                "ingest",
+                "--skip-neo4j-update=no",
+                "--skip-snapshot-backup=yes",
+                "--skip-db-backup=no",
+                "--skip-db-update=no",
+                "--current-snapshot-prefix=bronze/gamechanger/",
+                "--backup-snapshot-prefix=bronze/gamechanger/backup/",
+                "--db-backup-base-prefix=bronze/gamechanger/backup/db/",
+                "--load-archive-base-prefix=bronze/gamechanger/load-archive/",
+                "--bucket-name=advana-data-zone",
+                "--job-dir=tmp/job",
+                "--batch-timestamp=2022-05-04T21:15:10",
+                "--index-name=gamechanger_20210409",
+                "--alias-name=''",
+                "--max-threads=16",
+                "--max-ocr-threads=2",
+                "--max-s3-threads=1",
+                "--skip-revocation-update=no",
+                "--skip-es-revocation=yes",
+                "update-neo4j"
+            ]
+        },
+        {
+            "name": "ingest",
+            "type": "python",
+            "request": "launch",
+            "module": "dataPipelines.gc_ingest",
+            "args": [
+                "pipelines",
+                "core",
+                "ingest",
+                "--skip-neo4j-update=no",
+                "--skip-snapshot-backup=yes",
+                "--skip-db-backup=no",
+                "--skip-db-update=no",
+                "--current-snapshot-prefix=gamechanger/projects/melkiga/",
+                "--backup-snapshot-prefix=gamechanger/projects/melkiga/backup/",
+                "--db-backup-base-prefix=gamechanger/projects/melkiga/backup/db/",
+                "--load-archive-base-prefix=gamechanger/projects/melkiga/load-archive/",
+                "--bucket-name=advana-data-zone",
+                "--job-dir=tmp/test",
+                "--batch-timestamp=2022-05-04T21:15:10",
+                "--index-name=gamechanger_20210409",
+                "--alias-name=''",
+                "--max-threads=16",
+                "--max-ocr-threads=2",
+                "--max-s3-threads=1",
+                "--skip-revocation-update=no",
+                "--skip-es-revocation=yes",
+                "--crawler-output=tmp/test/crawler-output/output.json",
+                "local",
+                "--local-raw-ingest-dir=tmp/test/crawler-output",
+                "--local-parsed-ingest-dir=tmp/test/parsed-output"
+            ]
+        },
+        {
+            "name": "Document Parser",
+            "type": "python",
+            "request": "launch",
+            "module": "common.document_parser",
+            "args": [
+                "pdf-to-json",
+                "-s",
+                "tmp/test/crawler-output",
+                "-d",
+                "tmp/test/parsed-output"
+            ]
+        },
+        {
+            "name": "Document Parser 2",
+            "type": "python",
+            "request": "launch",
+            "module": "common.document_parser",
+            "args": [
+                "pdf-to-json",
+                "-w",
+                "-s",
+                "tmp/example-1/crawler-output/DoD C3 Strategy.pdf",
+                "-d",
+                "tmp/example-1/parsed-output"
+            ]
+        }
+    ]
+}
