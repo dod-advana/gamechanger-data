@@ -15,6 +15,7 @@ from gamechangerml.src.featurization.responsibilities import get_responsibilitie
 from dataPipelines.gc_neo4j_publisher.config import Config
 from dataPipelines.gc_neo4j_publisher import wiki_utils as wu
 from neo4j import exceptions
+import flatdict
 import common.utils.text_utils as tu
 import re
 from .config import Config as MainConfig
@@ -69,6 +70,11 @@ def get_roles_df() -> pd.DataFrame:
     roles_df = roles_df.applymap(lambda x: x.strip() if isinstance(x, str) else x)
     return roles_df
 
+@lru_cache(maxsize=None)
+def get_hierarchy_json() -> dict:
+    hierarchy_dict = json.load(open(Config.hierarchy_json_path, "r"))
+    return hierarchy_dict
+
 
 def process_ent(ent: str) -> t.Union[t.List[str], str]:
     first_word = ent.split(" ")[0]
@@ -94,7 +100,7 @@ def process_query(query: str, parameters: t.Dict[str, t.Any] = None, **kwparamet
         while try_count <= 10:
             try:
                 result = session.run(query, parameters, **kwparameters)
-                return
+                return result.data()
             except exceptions.TransientError:
                 try_count += 1
                 time.sleep(10)
@@ -270,6 +276,69 @@ class Neo4jPublisher:
         roles_json = roles_df.to_json(orient="records")
         process_query('CALL policy.createRoleNodesFromJson(' + json.dumps(roles_json) + ')')
         return
+
+    def ingest_hierarchy_information(self) -> None:
+        """
+        This function pulls in the hierarchy json and generates an authority tree in the graph
+        1) load in the hierarchy json as a python dictionary
+        2) Create any nodes that are not currently in the graph (including matching by name/alias)
+            a) This is commonly for non-org/roles, such as `United States Constitution`
+        3) Create `HAS_AUTHORITY_OVER` relationships between the nodes in the authority tree
+        Returns: None
+        """
+        print("Inserting Hierarchy Relationships ...")
+        hierarchy_dict = get_hierarchy_json()
+
+        # creates a flattened dictionary where the keys capture the hierarchy
+        # e.g., Constitution.United States Code.President of the United States.Executive Branch.Secretary of Defense...
+        # which can be unraveled by doing a str.split('.') to extract out the chain of hierarchy
+        flat_hierarchy_dict = dict(flatdict.FlatDict(hierarchy_dict, delimiter='.'))
+        all_hierarchy_nodes = []
+        for key in flat_hierarchy_dict.keys():
+            all_hierarchy_nodes.extend(key.split("."))
+        all_hier_nodes = list(set(all_hierarchy_nodes))
+
+        # check to see if the nodes are currently in the graph, for those that aren't (e.g., `United States Constitution`)
+        # create a new node for those
+        hierarchy_nodes_created = 0
+        for hierarchy_node in all_hier_nodes:
+            match_cypher = "OPTIONAL MATCH (n:Entity) " \
+                           "WHERE n.name='" + hierarchy_node + "' OR '" + hierarchy_node + "' in split(n.aliases,';') "\
+                           "RETURN n IS NOT NULL AS Exists"
+            # result = process_query(match_cypher)
+
+            # create the node if the match_cypher above does not match on an existing node
+            if not process_query(match_cypher)[0]['Exists']:
+                create_cypher = "CREATE (n:Entity {name: '" + hierarchy_node + "'})"
+                process_query(create_cypher)
+                hierarchy_nodes_created+=1
+        print(f"Inserted {hierarchy_nodes_created} hierarchy nodes (entity node type)")
+
+        cypher_list = []
+        # flat_hierarchy_dict.keys() looks similar to below:
+        # Constitution.United States Code.President of the United States.Executive Branch.Secretary of Defense...
+        # split('.') on this to create a list and iterate over tuples to create `HAS_AUTHORITY_OVER` relationships
+        for key in flat_hierarchy_dict.keys():
+            hierarchy_nodes = key.split(".")
+            if len(hierarchy_nodes) > 1:
+                hierarchy_relationships = [(hierarchy_nodes[i], hierarchy_nodes[i + 1]) for i in range(len(hierarchy_nodes) - 1)]
+                for hierarchy_relationship in hierarchy_relationships:
+                    # Example of the cypher generated:
+                    # MATCH (a:Entity), (b:Entity)
+                    # WHERE (a.name = 'Constitution' OR 'Constitution' in split(a.aliases, ';'))
+                    # AND (b.name = 'United States Code' OR 'United States Code' in split(b.aliases, ';'))
+                    # MERGE (a)-[r:HAS_AUTHORITY_OVER]->(b)
+                    cypher_list.append("MATCH (a:Entity), (b:Entity) " +
+                                       "WHERE (a.name = '" + hierarchy_relationship[0] + "' OR '" +
+                                       hierarchy_relationship[0] + "' in split(a.aliases, ';')) " +
+                                       "AND (b.name = '" + hierarchy_relationship[1] + "' OR '" +
+                                       hierarchy_relationship[1] + "' in split(b.aliases, ';')) " +
+                                       "MERGE (a)-[r:HAS_AUTHORITY_OVER]->(b)")
+        cypher_list = list(set(cypher_list))
+        print(f"Inserting {len(cypher_list)} hierarchy relationships ...")
+        # Execute all of the `HAS_AUTHORITY_OVER` cypher commands
+        for cypher in cypher_list:
+            process_query(cypher)
 
     def process_dir(self, files: t.List[str], file_dir: str, q: mp.Queue, max_threads: int) -> None:
         if not files:
