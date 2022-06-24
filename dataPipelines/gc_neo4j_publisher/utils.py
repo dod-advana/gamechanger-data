@@ -161,6 +161,8 @@ class Neo4jJobManager:
         q.put(None)
         proc.join()
 
+        publisher.ingest_user_graph_data()
+
         if scrape_wiki:
             publisher.process_crowdsourced_ents(without_web_scraping, infobox_dir)
 

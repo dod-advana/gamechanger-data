@@ -271,6 +271,40 @@ class Neo4jPublisher:
         process_query('CALL policy.createRoleNodesFromJson(' + json.dumps(roles_json) + ')')
         return
 
+    def ingest_user_graph_data(self):
+
+        user_data = json.load((Config.user_aggregation_path,'r'))
+
+        cypher_list = []
+
+        for visitor_json in user_data["users"]:
+            cypher_list.append("CREATE (n:User {name: '" + visitor_json['idvisitor'] + "', " \
+                                                                                       "docs_opened: '" + str(
+                visitor_json['docs_opened']) + "', " \
+                                               "searches_made: '" + str(visitor_json['searches_made']) + "'})")
+            if visitor_json["opened"]:
+                for opened_doc_name in visitor_json["opened"]:
+                    cypher_list.append("MATCH (a:User), (b:Document) " \
+                                       "WHERE a.name = '" + visitor_json[
+                                           'idvisitor'] + "' AND b.filename = '" + opened_doc_name + "' " \
+                                                                                                     "CREATE (a)-[r:HAS_OPENED]->(b)")
+            if visitor_json["export"]:
+                for opened_doc_name in visitor_json["export"]:
+                    cypher_list.append("MATCH (a:User), (b:Document) " \
+                                       "WHERE a.name = '" + visitor_json[
+                                           'idvisitor'] + "' AND b.filename = '" + opened_doc_name + "' " \
+                                                                                                     "CREATE (a)-[r:HAS_EXPORTED]->(b)")
+            if visitor_json["favorite"]:
+                for opened_doc_name in visitor_json["favorite"]:
+                    cypher_list.append("MATCH (a:User), (b:Document) " \
+                                       "WHERE a.name = '" + visitor_json[
+                                           'idvisitor'] + "' AND b.filename = '" + opened_doc_name + "' " \
+                                                                                                     "CREATE (a)-[r:HAS_FAVORITED]->(b)")
+        for cypher in cypher_list:
+            process_query(cypher)
+
+
+
     def process_dir(self, files: t.List[str], file_dir: str, q: mp.Queue, max_threads: int) -> None:
         if not files:
             return
