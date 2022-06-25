@@ -6,10 +6,13 @@ from common.document_parser.ref_utils import make_dict
 from collections import defaultdict
 from typing import Pattern, List
 import typing as t
+
 ref_regex = make_dict()
 
 
-def look_for_general(m_str: str, ref_dict: defaultdict, base_num: t.Pattern[str], full_num: t.Pattern[str], doc_type: str) -> defaultdict:
+def look_for_general(
+    m_str: str, ref_dict: defaultdict, base_num: t.Pattern[str], full_num: t.Pattern[str], doc_type: str
+) -> defaultdict:
     """
     Reference Extraction by Regular Expression: For general use
 
@@ -31,7 +34,7 @@ def look_for_general(m_str: str, ref_dict: defaultdict, base_num: t.Pattern[str]
 
     directive = full_num.findall(m_str)
 
-    if directive is not None:
+    if directive is not None and directive != []:
         for match in directive:
             num_match = base_num.search(match[0])
             if not num_match:
@@ -55,6 +58,8 @@ def collect_ref_list(text: str) -> defaultdict:
     text = text.replace("\n", "")
     # allows regex to interpret the unicode as a -
     text = text.replace("\u2013", "-")
+    text = text.replace("\u2022", "")
+    text = text.replace("\u2019", "'")
     text = re.sub(r"[()]", " ", text)
 
     for key, value in ref_regex.items():
