@@ -173,7 +173,7 @@ readonly JOB_TS="$(date +%FT%T)"
 if [[ $UPDATE_NEO4J != "yes" ]]; then
     poetry run $DATA_PYTHON_CMD -m dataPipelines.gc_ingest pipelines core ingest \
         --skip-neo4j-update=no \
-        --skip-snapshot-backup=yes \
+        --skip-snapshot-backup=no \
         --skip-db-backup=no \
         --skip-db-update=no \
         --current-snapshot-prefix="${SNAPSHOT_PREIX}/" \
@@ -184,16 +184,16 @@ if [[ $UPDATE_NEO4J != "yes" ]]; then
         --job-dir=$JOB_DIR \
         --batch-timestamp=$JOB_TS \
         --index-name=gamechanger_20210409 \
-        --alias-name=\'\' \
+        --alias-name="alias-test-0" \
         --max-threads=16 \
         --max-ocr-threads=4 \
         --max-s3-threads=1 \
         --skip-revocation-update=no \
-        --skip-es-revocation=yes \
+        --skip-es-revocation=no \
         --crawler-output=$CRAWLER_OUTPUT_DIR/output.json \
         local \
         --local-raw-ingest-dir=$CRAWLER_OUTPUT_DIR \
-        --local-parsed-ingest-dir=$PARSED_OUTPUT_DIR
+        #--local-parsed-ingest-dir=$PARSED_OUTPUT_DIR
     fi
 
 
@@ -217,7 +217,7 @@ if [[ $UPDATE_NEO4J ]]; then
         --max-ocr-threads=4 \
         --max-s3-threads=1 \
         --skip-revocation-update=no \
-        --skip-es-revocation=yes \
+        --skip-es-revocation=no \
         update-neo4j
     fi
 
