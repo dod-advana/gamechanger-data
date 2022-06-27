@@ -178,7 +178,7 @@ class Neo4jJobManager:
                     "CALL gds.alpha.node2vec.write( " +
                     "   { " +
                     "       nodeProjection: ['Document', 'Entity', 'Topic', 'UKN_Document'], " +
-                    "       relationshipProjection: ['REFERENCES', 'REFERENCES_UKN', 'CHILD_OF', 'CONTAINS', 'MENTIONS', 'HAS_HEAD', 'HAS_ROLE', 'TYPE_OF'], " +
+                    "       relationshipProjection: ['REFERENCES', 'REFERENCES_UKN', 'CHILD_OF', 'CONTAINS', 'MENTIONS', 'IS_IN', 'HAS_HEAD', 'HAS_ROLE', 'TYPE_OF'], " +
                     "       relationshipProperties: ['count', 'relevancy'], " +
                     "       embeddingDimension: 64, " +
                     "       walkLength: 10, " +
