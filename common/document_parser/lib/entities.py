@@ -1,94 +1,112 @@
-from gamechangerml.src.utilities.text_utils import simple_clean, utf8_pass
-import gamechangerml.src.utilities.spacy_model as spacy_
-from common.document_parser.lib.entities_utils import *
-import collections
-import os
-from gamechangerml import DATA_PATH
+from os.path import join
+from re import compile, finditer
+from collections import Counter
+from itertools import chain
 
-spacy_model = spacy_.get_lg_nlp()
-entities_dict = make_entities_dict(os.path.join(DATA_PATH,"features/GraphRelations.xls"))
+from gamechangerml import DATA_PATH
+from gamechangerml.src.utilities.text_utils import simple_clean
+
+from common.document_parser.lib.document import Document, FieldNames
+from common.document_parser.lib.entities_utils import (
+    remove_overlapping_ents,
+    replace_nonalpha_chars,
+    make_entities_lookup_dict,
+)
+
+
+# The graph relations file from gamechangerml is used as gold standard entities.
+ENTITIES_LOOKUP_DICT = make_entities_lookup_dict(
+    join(DATA_PATH, "features/GraphRelations.xls")
+)
+
+# Used to search for entities in documents.
+ENTITIES_PATTERN = compile(
+    r"(?=(\b" + r"\b|\b".join(ENTITIES_LOOKUP_DICT.keys()) + r"\b))"
+)
+
+# Used to rename entity types from how they exist in the graph relations file
+# to how they will exist in document dictionaries.
+ENTITY_RENAME_DICT = {
+    "ORG": "ORG_s",
+    "GPE": "GPE_s",
+    "NORP": "NORP_s",
+    "LAW": "LAW_s",
+    "LOC": "LOC_s",
+    "PERSON": "PERSON_s",
+}
+
 
 def extract_entities(doc_dict):
-    # Utilizes GraphRelations.xlsx in gamechangerml to find gold standard entities within each page's text. Then, check
-    # if the entities are mentioned in the paragraphs and append to paragraph  metadata.
+    """Extract entities from a document's text.
+
+    Utilizes GraphRelations.xls from gamechangerml as gold standard entities.
+
+
+    Adds the following new keys/ values to doc_dict:
+        "entities" (list of str): Entities extracted from the document.
+        "top_entities_t" (list of str): Most common entities in the document
+
+    Also adds the following to each item of doc_dict["paragraphs"]:
+        "entities" (dict): Keys (str) are entity types and values (list of str) 
+            are the entities extracted from the paragraph.
+    Args:
+        doc_dict (dict): Dictionary representation of a document. Must have  
+            the following keys/ values:
+                "paragraphs" (list of dict): Dictionary representations of the 
+                    document's paragraphs. Each dict must have the key 
+                    "par_raw_text_t" with the corresponding value (str) being 
+                    the paragraph's text.
+            Example:
+            {
+                "paragraphs": [
+                    {
+                        "par_raw_text_t": "hello"
+                    }
+                ]
+            }
+
+    Returns:
+        dict: The updated document dictionary
+    """
+    doc = Document(doc_dict)
+    paragraphs = doc.get_field(FieldNames.PARAGRAPHS)
     all_ents = []
-    for par in doc_dict["paragraphs"]:
-        par_entities_dict = {
-            "ORG": [],
-            "GPE": [],
-            "NORP": [],
-            "LAW": [],
-            "LOC": [],
-            "PERSON": [],
-        }
-        # clean and get entities from paragraph
-        par_text = par["par_raw_text_t"]
-        par_text = simple_clean(par_text)
-        par_entities = get_entities_from_text(par_text, entities_dict)
 
-        ## extract out non-duplicative entities
-        for entity in par_entities:
-            par_entities_dict[entity['entity_type']].append(entity["entity_text"])
+    for par in paragraphs:
+        ents_by_type = dict(
+            zip(
+                list(ENTITY_RENAME_DICT.values()),
+                [set() for _ in range(len(ENTITY_RENAME_DICT))],
+            )
+        )
+        text = par.get(FieldNames.PAR_RAW_TEXT)
+        if text is None:
+            par[FieldNames.ENTITIES] = ents_by_type
+            continue
+        text = simple_clean(text)
+        text = replace_nonalpha_chars(text, "")
 
-        entity_json = {
-            "ORG_s": list(set(par_entities_dict["ORG"])),
-            "GPE_s": list(set(par_entities_dict["GPE"])),
-            "NORP_s": list(set(par_entities_dict["NORP"])),
-            "LAW_s": list(set(par_entities_dict["LAW"])),
-            "LOC_s": list(set(par_entities_dict["LOC"])),
-            "PERSON_s": list(set(par_entities_dict["PERSON"])),
-        }
-        par["entities"] = entity_json
-        all_ents = all_ents + sum(entity_json.values(), [])
+        ents = [
+            (
+                match.regs[1][0],
+                match.regs[1][1],
+                ENTITIES_LOOKUP_DICT[match[1]]["raw_ent"],
+                ENTITIES_LOOKUP_DICT[match[1]]["ent_type"],
+            )
+            for match in finditer(ENTITIES_PATTERN, text,)
+        ]
+        ents = remove_overlapping_ents(ents)
+        for ent in ents:
+            ents_by_type[ENTITY_RENAME_DICT[ent[3]]].add(ent[2])
+        ents_by_type = {k: list(v) for k, v in ents_by_type.items()}
 
-    counts = collections.Counter(all_ents)
+        doc.set_paragraph_entities(par, ents_by_type)
+        all_ents += list(chain.from_iterable(ents_by_type.values()))
 
-    doc_dict['entities'] = list(set(all_ents))
-    doc_dict["top_entities_t"] = [x[0] for x in counts.most_common(5)]
-    return doc_dict
+    doc.set_field(FieldNames.ENTITIES, (list(set(all_ents))))
+    doc.set_field(
+        FieldNames.TOP_ENTITIES,
+        ([ent[0] for ent in Counter(all_ents).most_common(5)]),
+    )
 
-def extract_entities_spacy(doc_dict):
-    # OLD Function utilizing Spacy to extract out entities. Get entities in each page then check if the entities are mentioned in the paragraphs and append
-    # to paragraph  metadata.
-    page_dict = {}
-    for page in doc_dict["pages"]:
-        page_text = utf8_pass(page["p_raw_text"])
-        page_text = simple_clean(page_text)
-        doc = spacy_model(page_text)
-        page_dict[page["p_page"]] = doc
-    all_ents = []
-    for par in doc_dict["paragraphs"]:
-        par_entities_dict = {
-            "ORG": [],
-            "GPE": [],
-            "NORP": [],
-            "LAW": [],
-            "LOC": [],
-            "PERSON": [],
-        }
-        par_text = par["par_raw_text_t"]
-        par_text = simple_clean(par_text)
-        doc = page_dict[par["page_num_i"]]
-
-        # doc is spacy obj
-        for entity in doc.ents:
-            if (
-                entity.label_ in ["ORG", "GPE", "LOC", "NORP", "LAW", "PERSON"]
-                and entity.text in par_text
-            ):
-                par_entities_dict[entity.label_].append(entity.text)
-
-        entity_json = {
-            "ORG_s": list(set(par_entities_dict["ORG"])),
-            "GPE_s": list(set(par_entities_dict["GPE"])),
-            "NORP_s": list(set(par_entities_dict["NORP"])),
-            "LAW_s": list(set(par_entities_dict["LAW"])),
-            "LOC_s": list(set(par_entities_dict["LOC"])),
-            "PERSON_s": list(set(par_entities_dict["PERSON"])),
-        }
-
-        par["entities"] = entity_json
-        all_ents = all_ents + sum(entity_json.values(), [])
-    counts = collections.Counter(all_ents)
-    doc_dict["top_entities_t"] = [x[0] for x in counts.most_common(5)]
-    return doc_dict
+    return doc.doc_dict
