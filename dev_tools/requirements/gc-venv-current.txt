@@ -15,7 +15,7 @@ beautifulsoup4==4.9.1
 bert-extractive-summarizer==0.5.1
 blis==0.4.1
 boto==2.49.0
-boto3==1.13.2
+boto3==1.15.18
 botocore==1.16.2
 cachetools==4.1.0
 catalogue==2.0.4
@@ -48,7 +48,7 @@ docker==4.3.1
 docutils==0.15.2
 dotmap==1.3.0
 elastic-apm==5.9.0
-elasticsearch==7.9.1
+elasticsearch==7.13.4
 eli5==0.10.1
 en-core-web-lg @ https://github.com/explosion/spacy-models/releases/download/en_core_web_lg-3.0.0/en_core_web_lg-3.0.0.tar.gz
 en-core-web-md @ https://github.com/explosion/spacy-models/releases/download/en_core_web_md-3.0.0/en_core_web_md-3.0.0.tar.gz
@@ -72,7 +72,7 @@ flask-restplus==0.13.0
 flatbuffers==1.12
 future==0.18.2
 gast==0.3.3
-gensim==3.8.3
+gensim==4.1.2
 gitdb==4.0.5
 GitPython==3.1.11
 google-auth==1.16.1
@@ -81,7 +81,7 @@ google-pasta==0.2.0
 gorilla==0.3.0
 graphviz==0.14
 grpcio==1.32.0
-gunicorn==20.0.4
+gunicorn==20.1.0
 h11==0.9.0
 h5py==2.10.0
 hnswlib==0.5.1
@@ -203,7 +203,7 @@ smart-open==3.0.0
 smmap==3.0.4
 sortedcontainers==2.2.2
 soupsieve==2.0.1
-spacy==3.0.6
+spacy===3.0.7
 spacy-legacy==3.0.5
 spicy==0.16.0
 SQLAlchemy==1.3.13
@@ -215,7 +215,7 @@ syntok==1.3.1
 tabulate==0.8.7
 tensorboard==2.4.1
 tensorboard-plugin-wit==1.7.0
-tensorflow==2.4.1
+tensorflow==2.5.1
 tensorflow-estimator==2.4.0
 termcolor==1.1.0
 textblob==0.15.3
@@ -230,7 +230,7 @@ torchvision==0.8.2
 tox==3.20.1
 tqdm==4.46.1
 traits==6.1.0
-transformers==4.1.1
+transformers==4.11.3
 Twisted==20.3.0
 txtai==2.0.0
 typed-ast==1.4.1
