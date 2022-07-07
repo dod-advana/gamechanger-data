@@ -17,7 +17,9 @@ from common.document_parser.lib import (
 )
 from . import post_process, init_doc
 from common.document_parser.lib.ml_features import (
-    add_pagerank_r, add_popscore_r)
+    add_pagerank_r,
+    add_popscore_r,
+)
 
 
 def parse(
@@ -41,14 +43,23 @@ def parse(
         if not str(f_name).endswith(".pdf"):
             f_name = file_utils.coerce_file_to_pdf(f_name)
             should_delete = True
-        funcs = [ref_list.add_ref_list, entities.extract_entities, topics.extract_topics, keywords.add_keyw_5, abbreviations.add_abbreviations_n, summary.add_summary, add_pagerank_r, add_popscore_r,
-                 text_length.add_word_count]
+        funcs = [
+            ref_list.add_ref_list,
+            entities.extract_entities,
+            topics.extract_topics,
+            keywords.add_keyw_5,
+            abbreviations.add_abbreviations_n,
+            summary.add_summary,
+            add_pagerank_r,
+            add_popscore_r,
+            text_length.add_word_count,
+        ]
 
         doc_obj = pdf_reader.get_fitz_doc_obj(f_name)
         pages.handle_pages(doc_obj, doc_dict)
         doc_obj.close()
 
-        paragraphs.handle_paragraphs(doc_dict)
+        paragraphs.add_paragraphs(doc_dict)
 
         for func in funcs:
             try:
