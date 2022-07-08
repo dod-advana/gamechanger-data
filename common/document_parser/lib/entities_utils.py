@@ -27,13 +27,18 @@ def make_entities_lookup_dict(
             - values (dict) contains:
                 - key "raw_ent" with corresponding values (str) that are the 
                     entities in the form that they should be added to a 
-                    document's metadata.
+                    document's metadata (may contain non-alphanumeric 
+                    characters).
                 - key "ent_type" with corresponding values (str) that are the 
                     type of entity (GPE, LOC, etc.)
 
-            Example: { "USC Title 10A": {"raw_ent": "U.S.C. Title 10-A", "ent_type": "LAW"}}
+            Example: 
+            {
+                 "USC Title 10A": {"raw_ent": "U.S.C. Title 10-A", "ent_type": "LAW"}}
 
     """
+    # The "Orgs" excel sheet contains "ORG" type entities.
+    # The "Roles" excel sheet contains "PERSON" type entities.
     dfs = [
         (read_excel(io=entities_path, sheet_name="Orgs"), "ORG"),
         (read_excel(io=entities_path, sheet_name="Roles"), "PERSON"),
@@ -42,38 +47,57 @@ def make_entities_lookup_dict(
 
     for df, ent_type in dfs:
         df.dropna(subset=["Name"], inplace=True)
+        # Columns that contain entities to add to the lookup dictionary.
         cols = [
             col
             for col in df.columns
-            if col in ["Name", "Parent", "OrgParent", "Aliases"]
+            if col in ["Name", "OrgParent", "Aliases", "Parent"]
         ]
 
         for col in cols:
             df[col].fillna("", inplace=True)
-            df[col] = df[col].apply(lambda x: x.strip())
-            for ent in df[col]:
-                if col == "Aliases":
-                    for alias in ent.split(";"):
-                        if ent != "":
-                            ents_dict[replace_nonalpha_chars(ent, "")] = {
-                                "raw_ent": alias,
-                                "ent_type": ent_type,
-                            }
-                else:
-                    if ent != "":
-                        ents_dict[replace_nonalpha_chars(ent, "")] = {
-                            "raw_ent": ent,
-                            "ent_type": ent_type,
-                        }
-
+            df[col] = df[col].apply(lambda x: x.strip().lstrip())
+        
+        for col in cols:
+            if col == "OrgParent" and "Parent" in df.columns:
+                for i in df.index:
+                    update_ents_dict(df.loc[i, "Parent"], "ORG", ents_dict)
+            elif col == "Aliases":
+                for ents in df[col]:
+                    update_ents_dict(ents.split(";"), ent_type, ents_dict)
+            else:
+                for ent in df[col]:
+                    update_ents_dict(ent, ent_type, ents_dict)
+  
+        # If an item in must_include already exists in the lookup dictionary,
+        # the item in the lookup dictionary will NOT be overwritten.
         for ent, ent_type in must_include.items():
             if ent != "" and ent not in ents_dict.keys():
-                ents_dict[replace_nonalpha_chars(ent, "")] = {
-                    "raw_ent": ent,
-                    "ent_type": ent_type,
-                }
+                update_ents_dict(ent, ent_type, ents_dict)
 
     return ents_dict
+
+
+def update_ents_dict(ents, ent_type, ents_dict):
+    """Helper function used in make_entities_lookup_dict(). Used to add values 
+    to the entities lookup dictionary.
+
+    Args:
+        ents (str or list of str): Entities to add to ents_dict.
+        ent_type (str): The type of entity/ entities being added to ents_dict.
+        ent_dict (dict): Dictionary such that keys (str) are
+    """
+    if type(ents) == str:
+        ents = [ents]
+
+    for ent in ents:
+        ent = ent.strip()
+        ent_alphanum = replace_nonalpha_chars(ent, "")
+        if ent_alphanum != "":
+            ents_dict[ent_alphanum] = {
+                "raw_ent": ent,
+                "ent_type": ent_type,
+            }
 
 
 def remove_overlapping_ents(ents):
@@ -134,5 +158,24 @@ def replace_nonalpha_chars(text, replace_char=""):
     Returns:
         str: The text with non-alphanumeric characters replaced.
     """
-    return sub("[^a-zA-Z0-9\s]+", replace_char, text)
+    text = sub("[^a-zA-Z0-9\s]+", replace_char, text)
+    
+    return sub("\\s{2,}", " ", text)
+
+
+def sort_by_str_len(strs, descending=True):
+    """Sort a list of strings by the lengths of the strings.
+
+    Args:
+        strs (list of strs): The list to sort.
+        descending (bool, optional): True to sort the strings by length in 
+            descending order. False to sort by ascending order. Defaults to 
+            True.
+
+    Returns:
+        list of str
+    """
+    strs.sort(key=lambda s: len(s), reverse=descending)
+
+    return strs
 

@@ -11,6 +11,7 @@ from common.document_parser.lib.entities_utils import (
     remove_overlapping_ents,
     replace_nonalpha_chars,
     make_entities_lookup_dict,
+    sort_by_str_len,
 )
 
 
@@ -20,8 +21,10 @@ ENTITIES_LOOKUP_DICT = make_entities_lookup_dict(
 )
 
 # Used to search for entities in documents.
+# Sorting by string length is necessary here because of how regex treats the
+# "|" operator.
 ENTITIES_PATTERN = compile(
-    r"(?=(\b" + r"\b|\b".join(ENTITIES_LOOKUP_DICT.keys()) + r"\b))"
+    r"(?=(\b" + r"\b|\b".join(sort_by_str_len(list(ENTITIES_LOOKUP_DICT.keys()))) + r"\b))"
 )
 
 # Used to rename entity types from how they exist in the graph relations file
@@ -79,21 +82,25 @@ def extract_entities(doc_dict):
                 [set() for _ in range(len(ENTITY_RENAME_DICT))],
             )
         )
+
         text = par.get(FieldNames.PAR_RAW_TEXT)
         if text is None:
             par[FieldNames.ENTITIES] = ents_by_type
             continue
         text = simple_clean(text)
+        # Remove non-alphanumeric characters in the paragraph's text since we
+        # search for entities using the keys of ENTITIES_LOOKUP_DICT which also
+        # have non-alphanumeric characters removed.
         text = replace_nonalpha_chars(text, "")
 
         ents = [
             (
-                match.regs[1][0],
-                match.regs[1][1],
+                match.regs[1][0],  # start character index
+                match.regs[1][1],  # end character index
                 ENTITIES_LOOKUP_DICT[match[1]]["raw_ent"],
                 ENTITIES_LOOKUP_DICT[match[1]]["ent_type"],
             )
-            for match in finditer(ENTITIES_PATTERN, text,)
+            for match in finditer(ENTITIES_PATTERN, text)
         ]
         ents = remove_overlapping_ents(ents)
         for ent in ents:
