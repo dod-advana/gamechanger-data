@@ -56,8 +56,6 @@ en-core-web-sm @ https://github.com/explosion/spacy-models/releases/download/en_
 english==2020.7.0
 entrypoints==0.3
 etelemetry==0.2.1
-faiss-cpu==1.6.3
-faiss-gpu==1.6.3
 fastapi==0.61.1
 fastapi-utils==0.2.1
 fasteners==0.16
