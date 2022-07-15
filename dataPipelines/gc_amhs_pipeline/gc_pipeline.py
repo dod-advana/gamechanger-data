@@ -7,7 +7,7 @@ import csv
 from elasticsearch import helpers, Elasticsearch
 import json
 from .conf import Conf
-from dataPipelines.gc_amhs_pipeline import amhs_parser as parser
+from common.document_parser.parsers.amhs import amhs_parser as parser
 
 
 @click.command()
