@@ -56,7 +56,7 @@ def extract_document(filename: str):
     doc = fitz.open(filename)
     offset = 0
     while offset < doc.pageCount:
-        curr_order = doc.get_page_text(offset)
+        curr_order = doc.getPageText(offset)
         txt_dict = extract_sections(doc, curr_order, offset=offset)
         txt_orders.append(txt_dict)
         offset += txt_dict["pages"]
