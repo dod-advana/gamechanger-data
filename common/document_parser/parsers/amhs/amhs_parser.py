@@ -38,7 +38,7 @@ def extract_sections(doc: fitz.Document, txt: str, offset: int = 0):
     txt_dict = dict(zip(names, values))
 
     for i in range(1 + offset, offset + last_pg):
-        txt = doc.get_page_text(i)
+        txt = doc.getPageText(i)
         body += txt
     txt_dict["Body"] = body
     txt_dict["pages"] = last_pg
