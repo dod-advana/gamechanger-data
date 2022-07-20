@@ -1,0 +1,1040 @@
+{
+  "type": "document",
+  "id": "DoDD 1000.20.pdf_0",
+  "filename": "DoDD 1000.20.pdf",
+  "page_count": 14,
+  "par_count_i": 42,
+  "doc_type": "DoDD",
+  "doc_num": "1000.20",
+  "ref_list": [
+    "DoDD 1000.20",
+    "DoDD 1332.14",
+    "DoDI 1336.1",
+    "DoDI 1300.9",
+    "Title 10",
+    "Title 38"
+  ],
+  "summary_30": "References: Department of Defense Directive 1000.20, \"Determinations of Active Military Service and Establishes the Department of Defense Civilian/Military Service Review Board and the Advisory The Department of Defense Civilian/Military Service Board shall consider the group",
+  "abbreviations_n": [
+    {
+      "abbr_s": "Department of Defense",
+      "description_s": "dod"
+    },
+    {
+      "abbr_s": "Department of Defense directive",
+      "description_s": "dodd"
+    },
+    {
+      "abbr_s": "Department of Transportation",
+      "description_s": "dot"
+    },
+    {
+      "abbr_s": "Office of the Secretary of Defense",
+      "description_s": "osd"
+    },
+    {
+      "abbr_s": "Department of Veterans Affairs",
+      "description_s": "va"
+    }
+  ],
+  "init_date": "NA",
+  "change_date": "NA",
+  "entities": [
+    "NA_1",
+    "NA_2"
+  ],
+  "author": "NA",
+  "signature": "NA",
+  "subject": "NA",
+  "title": "Active Duty Service Determinations for Civilian or Contractual Groups",
+  "word_count": 4142,
+  "classification": "NA",
+  "group_s": "DoDD 1000.20.pdf_0",
+  "keyw_5": [
+    "armed forces",
+    "coast guard",
+    "air force",
+    "contractual group",
+    "active duty",
+    "advisory panel",
+    "ad service",
+    "written submissions",
+    "world wars",
+    "vital element"
+  ],
+  "paragraphs": [
+    {
+      "type": "paragraph",
+      "id": "DoDD 1000.20.pdf_0",
+      "filename": "DoDD 1000.20.pdf",
+      "page_num_i": 0,
+      "par_raw_text_t": "Department of Defense ",
+      "par_count_i": 0,
+      "par_inc_count": 0,
+      "entities": {
+        "ORG_s": [],
+        "GPE_s": [],
+        "NORP_s": [],
+        "LAW_s": [],
+        "LOC_s": [],
+        "PERSON_s": []
+      }
+    },
+    {
+      "type": "paragraph",
+      "id": "DoDD 1000.20.pdf_1",
+      "filename": "DoDD 1000.20.pdf",
+      "page_num_i": 0,
+      "par_raw_text_t": "DIRECTIVE ",
+      "par_count_i": 1,
+      "par_inc_count": 1,
+      "entities": {
+        "ORG_s": [],
+        "GPE_s": [],
+        "NORP_s": [],
+        "LAW_s": [],
+        "LOC_s": [],
+        "PERSON_s": []
+      }
+    },
+    {
+      "type": "paragraph",
+      "id": "DoDD 1000.20.pdf_2",
+      "filename": "DoDD 1000.20.pdf",
+      "page_num_i": 0,
+      "par_raw_text_t": "NUMBER 1000.20 September 11 , 1989 Certified Current as of November 21 , 2003 ",
+      "par_count_i": 2,
+      "par_inc_count": 2,
+      "entities": {
+        "ORG_s": [],
+        "GPE_s": [],
+        "NORP_s": [],
+        "LAW_s": [],
+        "LOC_s": [],
+        "PERSON_s": []
+      }
+    },
+    {
+      "type": "paragraph",
+      "id": "DoDD 1000.20.pdf_3",
+      "filename": "DoDD 1000.20.pdf",
+      "page_num_i": 0,
+      "par_raw_text_t": "ASD ( FM&P )SUBJECT : Active Duty Service Determinations for Civilian or Contractual Groups References : ( a ) Do D Directive 1000.20 , \" Determinations of Active Military Service and Discharge : Civilian or Contractual Personnel , \" June 9 , 1983 ( hereby canceled ) ( b )Public Law 95-202 , \" The G.I . Bill Improvement Act of 1977 , \" Section 401 , November 23 , 1977 ( 38 U.S.C . 106 Note ) ( c )Title 10 , United States Code , Section 802 ( a ) ( d )Do D Instruction 1336.1 , \" Certificate of Release or Discharge from Active Duty ( DD Form 214/5 Series ) , \" January 6 , 1989 ( e ) through ( g ) , see enclosure 1",
+      "par_count_i": 3,
+      "par_inc_count": 3,
+      "entities": {
+        "ORG_s": [
+          "Active Duty",
+          "Active Duty Service Determinations for Civilian or Contractual Groups References"
+        ],
+        "GPE_s": [],
+        "NORP_s": [],
+        "LAW_s": [
+          "United States Code"
+        ],
+        "LOC_s": [],
+        "PERSON_s": []
+      }
+    },
+    {
+      "type": "paragraph",
+      "id": "DoDD 1000.20.pdf_4",
+      "filename": "DoDD 1000.20.pdf",
+      "page_num_i": 0,
+      "par_raw_text_t": "1 . REISSUANCE AND PURPOSE This Directive : 1.1 . Reissues reference ( a ) .1.2 . Implements reference ( b ) .1.3 . Directs the Secretary of the Air Force to determine if an established group of civilian employees or contract workers provided service to the U.S . Armed Forces in a manner considered active military service for Department of Veterans Affairs ( VA ) benefits .1.4 . Establishes the Do D Civilian/Military Service Review Board and the Advisory Panel .1.5 . Establishes policy , assigns responsibilities , prescribes application procedures for groups and individuals , and clarifies the factors used to determine active duty ( AD ) service .",
+      "par_count_i": 4,
+      "par_inc_count": 4,
+      "entities": {
+        "ORG_s": [
+          "the Advisory Panel",
+          "Department of Veterans Affairs",
+          "the Air Force"
+        ],
+        "GPE_s": [],
+        "NORP_s": [],
+        "LAW_s": [],
+        "LOC_s": [],
+        "PERSON_s": [
+          "1.3"
+        ]
+      }
+    },
+    {
+      "type": "paragraph",
+      "id": "DoDD 1000.20.pdf_5",
+      "filename": "DoDD 1000.20.pdf",
+      "page_num_i": 1,
+      "par_raw_text_t": "Do DD 1000.20 , September 11 , 1989 ",
+      "par_count_i": 0,
+      "par_inc_count": 5,
+      "entities": {
+        "ORG_s": [],
+        "GPE_s": [],
+        "NORP_s": [],
+        "LAW_s": [],
+        "LOC_s": [],
+        "PERSON_s": []
+      }
+    },
+    {
+      "type": "paragraph",
+      "id": "DoDD 1000.20.pdf_6",
+      "filename": "DoDD 1000.20.pdf",
+      "page_num_i": 1,
+      "par_raw_text_t": "2 . APPLICABILITY AND SCOPE This Directive : 2.1 . Applies to the Office of the Secretary of Defense ( OSD ) , the Military Departments , and by agreement with the Department of Transportation ( Do T ) , the U.S . Coast Guard .2.2 . Applies to any group application considered under reference ( b ) after the effective date of this Directive and to any individual who applies for discharge documents as a member of a group recognized by the Secretary of the Air Force .",
+      "par_count_i": 1,
+      "par_inc_count": 6,
+      "entities": {
+        "ORG_s": [
+          "the Military Departments",
+          "the Office of the Secretary of Defense",
+          "OSD",
+          "the Department of Transportation",
+          "Directive",
+          "the Air Force"
+        ],
+        "GPE_s": [],
+        "NORP_s": [],
+        "LAW_s": [],
+        "LOC_s": [],
+        "PERSON_s": []
+      }
+    },
+    {
+      "type": "paragraph",
+      "id": "DoDD 1000.20.pdf_7",
+      "filename": "DoDD 1000.20.pdf",
+      "page_num_i": 1,
+      "par_raw_text_t": "3 . DEFINITIONS The terms used in this Directive are defined in enclosure 2 .",
+      "par_count_i": 2,
+      "par_inc_count": 7,
+      "entities": {
+        "ORG_s": [
+          "Directive"
+        ],
+        "GPE_s": [],
+        "NORP_s": [],
+        "LAW_s": [],
+        "LOC_s": [],
+        "PERSON_s": []
+      }
+    },
+    {
+      "type": "paragraph",
+      "id": "DoDD 1000.20.pdf_8",
+      "filename": "DoDD 1000.20.pdf",
+      "page_num_i": 1,
+      "par_raw_text_t": "4 . POLICY 4.1 . Eligibility for Consideration .To be eligible to apply for consideration under P.L . 95-202 ( reference ( b ) ) and this Directive , a group must : 4.1.1 . Have been similarly situated to the Women 's Air Forces Service Pilots of World War II . 4.1.2 . Have rendered service to the United States in what was considered civilian employment with the U.S . Armed Forces either through formal Civil Service hiring or less formal hiring if the engagement was created under the exigencies of war , or as the result of a contract with the U.S . Government to provide direct support to the U.S . Armed Forces .4.1.3 . Have rendered that service during a period of armed conflict .4.1.4 . Consist of living persons to whom VA benefits can accrue .4.1.5 . Not have already received benefits from the Federal Government for the service in question .4.2 .A determination of AD service that is considered to be equivalent to active military service is made on the extent to which the group was under the control of the U.S . Armed Forces in support of a military operation or mission during an armed ",
+      "par_count_i": 3,
+      "par_inc_count": 8,
+      "entities": {
+        "ORG_s": [
+          "the Federal Government",
+          "Directive"
+        ],
+        "GPE_s": [
+          "the United States"
+        ],
+        "NORP_s": [],
+        "LAW_s": [],
+        "LOC_s": [],
+        "PERSON_s": []
+      }
+    },
+    {
+      "type": "paragraph",
+      "id": "DoDD 1000.20.pdf_9",
+      "filename": "DoDD 1000.20.pdf",
+      "page_num_i": 1,
+      "par_raw_text_t": "2 ",
+      "par_count_i": 4,
+      "par_inc_count": 9,
+      "entities": {
+        "ORG_s": [],
+        "GPE_s": [],
+        "NORP_s": [],
+        "LAW_s": [],
+        "LOC_s": [],
+        "PERSON_s": []
+      }
+    },
+    {
+      "type": "paragraph",
+      "id": "DoDD 1000.20.pdf_10",
+      "filename": "DoDD 1000.20.pdf",
+      "page_num_i": 2,
+      "par_raw_text_t": "Do DD 1000.20 , September 11 , 1989 conflict .The extent of control exerted over the group must be similar to that exerted over military personnel and shall be determined by , but not necessarily limited to , the following : 4.2.1 . Incidents Favoring Equivalency 4.2.1.1 . Uniqueness of Service .Civilian service ( civilian employment or contractual service ) is a vital element of the war fighting capability of the Armed Forces .Civilian service during a period of armed conflict is not necessarily equivalent to active military service , even when performed in a combat zone .Service must be beyond that generally performed by civilian employees and must be occasioned by unique circumstances .For civilian service to be recognized under this Directive , the following factors must be present : 4.2.1.1.1 .The group was created or organized by U.S . Government authorities to fill a wartime need or , if a group was not created specifically for a wartime need , but existed before that time , then its wartime mission was of a nature to substantially alter the organization 's prewar character .4.2.1.1.2 . If the application is based on service in a combat zone , the mission of the group in a combat zone must have been substantially different from the mission of similar groups not in a combat zone .4.2.1.2 . Organizational Authority Over the Group .The concept of military control is reinforced if the military command authority determines such things as the structure of the civilian organization , the location of the group , the mission and activities of the group , and the staffing requirements to include the length of employment and pay grades of the members of the group .4.2.1.3 . Integration into the Military Organization .Integrated civilian groups are subject to the regulations , standards , and control of the military command authority .4.2.1.3.1 . Examples include the following : 4.2.1.3.1.1 . Exchanging military courtesies .4.2.1.3.1.2 . Wearing military clothing , insignia , and devices .4.2.1.3.1.3 . Assimilating the group into the military organizational structure .4.2.1.3.1.4 . Emoluments associated with military personnel ; i.e . , the use of commissaries and exchanges , and membership in military clubs .",
+      "par_count_i": 0,
+      "par_inc_count": 10,
+      "entities": {
+        "ORG_s": [
+          "the Military Organization",
+          "Directive",
+          "Organizational Authority Over the Group",
+          "the Armed Forces"
+        ],
+        "GPE_s": [],
+        "NORP_s": [],
+        "LAW_s": [],
+        "LOC_s": [],
+        "PERSON_s": []
+      }
+    },
+    {
+      "type": "paragraph",
+      "id": "DoDD 1000.20.pdf_11",
+      "filename": "DoDD 1000.20.pdf",
+      "page_num_i": 2,
+      "par_raw_text_t": "3 ",
+      "par_count_i": 1,
+      "par_inc_count": 11,
+      "entities": {
+        "ORG_s": [],
+        "GPE_s": [],
+        "NORP_s": [],
+        "LAW_s": [],
+        "LOC_s": [],
+        "PERSON_s": []
+      }
+    },
+    {
+      "type": "paragraph",
+      "id": "DoDD 1000.20.pdf_12",
+      "filename": "DoDD 1000.20.pdf",
+      "page_num_i": 3,
+      "par_raw_text_t": "Do DD 1000.20 , September 11 , 1989 4.2.1.3.2 .A group fully integrated into the military would give the impression that the members of the group were military , except that they were paid and accounted for as civilians .4.2.1.3.3 . Integration into the military may lead to an expectation by members of the group that the service of the group imminently would be recognized as active military service .Such integration acts in favor of recognition .4.2.1.4 . Subjection to Military Discipline .During past armed conflicts , U.S . military commanders sometimes restricted the rights or liberties of civilian members as if they were military members .4.2.1.4.1 . Examples include the following : 4.2.1.4.1.1 . Placing members under a curfew .4.2.1.4.1.2 . Requiring members to work extended hours or unusual shifts .4.2.1.4.1.3 . Changing duty assignments and responsibilities .4.2.1.4.1.4 . Restricting proximity travel to and from the military installation .4.2.1.4.1.5 . Imposing dress and grooming standards .4.2.1.4.2 . Consequences for noncompliance might include a loss of some privilege , dismissal from the group , or trial under military law .Such military discipline acts in favor of recognition .4.2.1.5 . Subjection to Military Justice .Military members are subject to the military criminal justice system .During times of war , \" persons serving with or accompanying an Armed Force in the field \" are subject to the military criminal justice code ( reference ( c ) ) .Those who were SERVING WITH the U.S . Armed Forces may have been treated as if they were military and subjected to court martial jurisdiction to maintain discipline .Such treatment is a factor in favor of recognition .4.2.1.6 . Prohibition Against Members of the Group Joining the Armed Forces .Some organizations may have been formed to serve in a military capacity to overcome the operation of existing laws or treaty or because of a governmentally established policy to retain individuals in the group as part of a civilian force .These factors act in favor of recognition .",
+      "par_count_i": 0,
+      "par_inc_count": 12,
+      "entities": {
+        "ORG_s": [
+          "the Armed Forces"
+        ],
+        "GPE_s": [],
+        "NORP_s": [],
+        "LAW_s": [],
+        "LOC_s": [],
+        "PERSON_s": []
+      }
+    },
+    {
+      "type": "paragraph",
+      "id": "DoDD 1000.20.pdf_13",
+      "filename": "DoDD 1000.20.pdf",
+      "page_num_i": 3,
+      "par_raw_text_t": "4 ",
+      "par_count_i": 1,
+      "par_inc_count": 13,
+      "entities": {
+        "ORG_s": [],
+        "GPE_s": [],
+        "NORP_s": [],
+        "LAW_s": [],
+        "LOC_s": [],
+        "PERSON_s": []
+      }
+    },
+    {
+      "type": "paragraph",
+      "id": "DoDD 1000.20.pdf_14",
+      "filename": "DoDD 1000.20.pdf",
+      "page_num_i": 4,
+      "par_raw_text_t": "Do DD 1000.20 , September 11 , 1989 4.2.1.7 . Receipt of Military Training and/or Achievement of Military Capability .If a group employed skills or resources that were enhanced as the result of military training or equipment designed or issued for that purpose , this acts toward recognition .4.2.2 . Incidents Not Favoring Equivalency 4.2.2.1 . Submission to the U.S . Armed Forces for Protection .A group that seeks protection and assistance from the U.S . Armed Forces and submits to military control for its own well being is not deemed to have provided service to the Armed Forces equivalent to AD military service , even though the group may have been as follows : 4.2.2.1.1 . Armed by the U.S . military for defensive purposes .4.2.2.1.2 . Routed by the U.S . military to avoid the enemy .4.2.2.1.3 . Instructed by the U.S . military for the defense of the group when attacked by , or in danger of attack by , the enemy .4.2.2.1.4 .Otherwise submitted themselves to the U.S . military for sustenance and protection .4.2.2.2 . Permitted to Resign .The ability of members to resign at will and without penalty acts against military control .Penalty may be direct and severe , such as confinement , or indirect and moderate , such as difficult and costly transportation from an overseas location .4.2.2.3 . Prior Recognition of Group Service .Recognition of a group 's service by agencies of State or local government does not provide support in favor of recognition under this Directive .4.2.3 . Status of Group in International Law .In addition to other factors , consideration will be given to whether members of the group were regarded and treated as civilians , or assimilated to the Armed Forces as reflected in treaties , customary international law , judicial decisions , and U.S . diplomatic practice .4.3 . Reconsideration .Applications by groups previously denied a favorable determination by the Secretary of the Air Force shall be reconsidered under this Directive if the group submits evidence that is new , relevant , and substantive .Any request that the Do D Civilian/Military Service Review Board established hereunder ( see paragraph 5.2 . ) determines does not provide new , relevant , and substantive evidence shall be returned to the applicant with the reasons for non acceptance .",
+      "par_count_i": 0,
+      "par_inc_count": 14,
+      "entities": {
+        "ORG_s": [
+          "the Armed Forces",
+          "Recognition",
+          "State",
+          "Armed Forces",
+          "Recognition of Group Service",
+          "Directive"
+        ],
+        "GPE_s": [],
+        "NORP_s": [],
+        "LAW_s": [],
+        "LOC_s": [],
+        "PERSON_s": []
+      }
+    },
+    {
+      "type": "paragraph",
+      "id": "DoDD 1000.20.pdf_15",
+      "filename": "DoDD 1000.20.pdf",
+      "page_num_i": 4,
+      "par_raw_text_t": "5 ",
+      "par_count_i": 1,
+      "par_inc_count": 15,
+      "entities": {
+        "ORG_s": [],
+        "GPE_s": [],
+        "NORP_s": [],
+        "LAW_s": [],
+        "LOC_s": [],
+        "PERSON_s": []
+      }
+    },
+    {
+      "type": "paragraph",
+      "id": "DoDD 1000.20.pdf_16",
+      "filename": "DoDD 1000.20.pdf",
+      "page_num_i": 5,
+      "par_raw_text_t": "Do DD 1000.20 , September 11 , 1989 4.4 . Counsel Representation .Neither the Department of Defense nor Department of Transportation shall provide representation by counsel or defray the cost of such representation with respect to any matter covered by this Directive .",
+      "par_count_i": 0,
+      "par_inc_count": 16,
+      "entities": {
+        "ORG_s": [
+          "Directive",
+          "the Department of Defense nor Department of Transportation",
+          "Transportation",
+          "Defense"
+        ],
+        "GPE_s": [],
+        "NORP_s": [],
+        "LAW_s": [],
+        "LOC_s": [],
+        "PERSON_s": []
+      }
+    },
+    {
+      "type": "paragraph",
+      "id": "DoDD 1000.20.pdf_17",
+      "filename": "DoDD 1000.20.pdf",
+      "page_num_i": 5,
+      "par_raw_text_t": "5 . RESPONSIBILITIES 5.1 .The Assistant Secretary of Defense ( Force Management and Personnel ) ( ASD ( FM&P ) ) shall : 5.1.1 . Appoint a primary and an alternate member in the grade of O 6 or GM - 15 or higher to the Do D Civilian/Military Service Review Board .5.1.2 . Exercise oversight over the Military Departments and the U.S . Coast Guard for compliance with this Directive and in the issuance of discharge documents and casualty reports to members of recognized groups .5.2 .The Secretary of the Air Force , as the designated Executive Agent of the Secretary of Defense for the administration of P . L . 95-202 ( reference ( b ) ) , shall : 5.2.1 . Establish the Do D Civilian/Military Service Review Board and the Advisory Panel .5.2.2 . Appoint as board president a member or employee of the Air Force in grade O 6 or GM 15 or higher .5.2.3 . Request the Secretary of Transportation to appoint an additional voting member from the U.S . Coast Guard when the board is considering the application of a group claiming active Coast Guard service .5.2.4 . Provide a recorder and an assistant to maintain the records of the board and administer the functions of this Directive .5.2.5 . Provide nonvoting legal advisors and historians .5.2.6 . Publish notices of group applications and other P.L . 95-202 ( reference ( b ) ) announcements in the \" Federal Register . \"5.2.7 . Consider the rationale and recommendations of the Do D Civilians Military Service Review Board .5.2.8 . Determine whether the service rendered by a civilian or contractual group shall be considered AD service to the U.S . Armed Forces for all laws administered by the VA .The decision of the Secretary of the Air Force is final .There is no appeal .",
+      "par_count_i": 1,
+      "par_inc_count": 17,
+      "entities": {
+        "ORG_s": [
+          "the Military Departments",
+          "the Advisory Panel",
+          "Defense",
+          "Coast Guard",
+          "Transportation",
+          "Directive",
+          "the Air Force"
+        ],
+        "GPE_s": [
+          "VA"
+        ],
+        "NORP_s": [],
+        "LAW_s": [],
+        "LOC_s": [],
+        "PERSON_s": []
+      }
+    },
+    {
+      "type": "paragraph",
+      "id": "DoDD 1000.20.pdf_18",
+      "filename": "DoDD 1000.20.pdf",
+      "page_num_i": 5,
+      "par_raw_text_t": "6 ",
+      "par_count_i": 2,
+      "par_inc_count": 18,
+      "entities": {
+        "ORG_s": [],
+        "GPE_s": [],
+        "NORP_s": [],
+        "LAW_s": [],
+        "LOC_s": [],
+        "PERSON_s": []
+      }
+    },
+    {
+      "type": "paragraph",
+      "id": "DoDD 1000.20.pdf_19",
+      "filename": "DoDD 1000.20.pdf",
+      "page_num_i": 6,
+      "par_raw_text_t": "Do DD 1000.20 , September 11 , 1989 5.2.9 . Notify the following persons in writing when a group determination is made ( if the Secretary of the Air Force disagrees with the rationale or recommendations of the board , the Secretary of the Air Force shall provide the decision and reasons for it in writing to these persons ) : 5.2.9.1 .The applicant ( s ) for the group .5.2.9.2 .The Secretary of the Department of Veterans Affairs .5.2.9.3 .The Secretary of the Army .5.2.9.4 .The Secretary of the Navy .5.2.9.5 .The ASD ( FM&P ) .5.2.9.6 .The Secretary of Transportation ( when a group claims active Coast Guard service ) .5.3 .The Secretary of the Army , Secretary of the Navy , Secretary of the Air Force , and Commandant of the Coast Guard shall : 5.3.1 . Appoint to the board a primary and an alternate member in the grades of O 6 or GM 15 or higher from their respective Military Services .5.3.2 . Process applications for discharge documents from individuals claiming membership in a recognized group in accordance with applicable laws , Directives , the Secretary of the Air Force rationale and instrument effecting a group determination , and any other instructions of the board .5.3.3 . Determine whether the applicant was a member of a recognized group after considering the individual 's evidence of membership and verifying the service against available Government records .5.3.4 . Issue a DD Form 214 , \" Certificate of Release or Discharge from Active Duty , \" and a DD Form 256 , \" Honorable Discharge Certificate , \" or a DD Form 257 , \" General Discharge Certificate , \" as appropriate , consistent with Do D Instruction 1336.1 and Do D Directive 1332.14 ( references ( d ) and ( e ) ) and the implementing documents of the appropriate statutes of the Military Department concerned or the Do T and the instructions of the Do D Civilian/Military Service Review Board .5.3.5 . Issue a DD Form 1300 , \" Report of Casualty , \" in accordance with Do D Instruction 1300.9 ( reference ( f ) ) if a verified member was killed during the period of AD service .",
+      "par_count_i": 0,
+      "par_inc_count": 19,
+      "entities": {
+        "ORG_s": [
+          "Coast Guard",
+          "Navy",
+          "Transportation",
+          "the Department of Veterans Affairs",
+          "Army",
+          "the Coast Guard",
+          "Military Services",
+          "General Discharge Certificate",
+          "the Military Department",
+          "the Air Force"
+        ],
+        "GPE_s": [],
+        "NORP_s": [],
+        "LAW_s": [],
+        "LOC_s": [],
+        "PERSON_s": []
+      }
+    },
+    {
+      "type": "paragraph",
+      "id": "DoDD 1000.20.pdf_20",
+      "filename": "DoDD 1000.20.pdf",
+      "page_num_i": 6,
+      "par_raw_text_t": "7 ",
+      "par_count_i": 1,
+      "par_inc_count": 20,
+      "entities": {
+        "ORG_s": [],
+        "GPE_s": [],
+        "NORP_s": [],
+        "LAW_s": [],
+        "LOC_s": [],
+        "PERSON_s": []
+      }
+    },
+    {
+      "type": "paragraph",
+      "id": "DoDD 1000.20.pdf_21",
+      "filename": "DoDD 1000.20.pdf",
+      "page_num_i": 7,
+      "par_raw_text_t": "Do DD 1000.20 , September 11 , 1989 5.3.6 . Ensure that each DD Form 214 , \" Certificate of Release or Discharge from Active Duty , \" and each DD Form 1300 , \" Report of Casualty , \" have the following statement entered in the \" Remarks \" section : ",
+      "par_count_i": 0,
+      "par_inc_count": 21,
+      "entities": {
+        "ORG_s": [
+          "Report of Casualty"
+        ],
+        "GPE_s": [],
+        "NORP_s": [],
+        "LAW_s": [],
+        "LOC_s": [],
+        "PERSON_s": []
+      }
+    },
+    {
+      "type": "paragraph",
+      "id": "DoDD 1000.20.pdf_22",
+      "filename": "DoDD 1000.20.pdf",
+      "page_num_i": 7,
+      "par_raw_text_t": "\" This document , issued under P . L . 95-202 ( 38 U.S.C . 106 Note ) , administratively establishes active duty service for the purposes of Department of Veterans Affairs benefits . \"5.3.7 . Determine the equivalent military pay grade , when required by the Department of Veterans Affairs .For VA benefits , a pay grade is needed only in cases when an individual was killed or received service connected injuries or disease during the recognized period of AD service .A DD Form 1300 shall be issued with the equivalent pay grade annotated for a member who died during the recognized period of service .A DD Form 214 shall not include pay grade , unless the Department of Veterans Affairs requests that a grade determination be given .Determinations of equivalent grade shall be based on the following criteria in order of importance : 5.3.7.1 . Officially recognized organizational grade or equivalent rank .5.3.7.2 .The corresponding rank for civilian pay grade .5.3.7.3 . If neither of the criteria in subparagraphs 5.3.7.1 . and 5.3.7.2 . , above , applies , only one of three grades may be issued ; i.e . , O 1 , E 4 , or E 1 .Selection depends on the nature of the job performed , the level of supervision exercised , and the military privileges to which the individual was entitled .5.3.8 . Adjudicate applicant challenges to the period of AD service , characterization of service , or other administrative aspects of the discharge documents issued .",
+      "par_count_i": 1,
+      "par_inc_count": 22,
+      "entities": {
+        "ORG_s": [
+          "the Department of Veterans Affairs",
+          "Department of Veterans Affairs",
+          "VA benefits"
+        ],
+        "GPE_s": [],
+        "NORP_s": [],
+        "LAW_s": [],
+        "LOC_s": [],
+        "PERSON_s": []
+      }
+    },
+    {
+      "type": "paragraph",
+      "id": "DoDD 1000.20.pdf_23",
+      "filename": "DoDD 1000.20.pdf",
+      "page_num_i": 7,
+      "par_raw_text_t": "6 . PROCEDURES 6.1 . Submitting Group Applications .Applications on behalf of a civilian or contractual group shall be submitted to the Secretary of the Air Force using the instructions in enclosure 3 .6.2 . Processing Group Applications 6.2.1 . When received , the recorder shall review the application for sufficiency and either return it for more information or accept it for consideration and announce acceptance in the \" Federal Register . \"6.2.2 .The recorder shall send the application to the appropriate advisory panel for historical review and analysis .",
+      "par_count_i": 2,
+      "par_inc_count": 23,
+      "entities": {
+        "ORG_s": [
+          "the Air Force"
+        ],
+        "GPE_s": [],
+        "NORP_s": [],
+        "LAW_s": [],
+        "LOC_s": [],
+        "PERSON_s": []
+      }
+    },
+    {
+      "type": "paragraph",
+      "id": "DoDD 1000.20.pdf_24",
+      "filename": "DoDD 1000.20.pdf",
+      "page_num_i": 7,
+      "par_raw_text_t": "8 ",
+      "par_count_i": 3,
+      "par_inc_count": 24,
+      "entities": {
+        "ORG_s": [],
+        "GPE_s": [],
+        "NORP_s": [],
+        "LAW_s": [],
+        "LOC_s": [],
+        "PERSON_s": []
+      }
+    },
+    {
+      "type": "paragraph",
+      "id": "DoDD 1000.20.pdf_25",
+      "filename": "DoDD 1000.20.pdf",
+      "page_num_i": 8,
+      "par_raw_text_t": "Do DD 1000.20 , September 11 , 1989 6.2.3 . When received , the recorder shall send the advisory panel 's report to the applicant for comment .The applicant 's comments shall be referred to the advisory panel if significant disagreement requires resolution .Additional comments from the historians also shall be referred to the applicant for comment .6.2.4 .The Do D Civilian/Military Service Board shall consider the group application , as established , in paragraph 6.1 . and subparagraphs 6.2.1 . through 6.2.3 . , above .6.2.5 . After the Secretary of the Air Force makes a decision , the recorder shall notify the applicant of the decision and announce it in the \" Federal Register . \"6.3 . Submitting Individual Applications .When a group is recognized , individual members may apply to the appropriate Military Department or to the Coast Guard for discharge documents .Submit applications on DD Form 2168 , \" Application for Discharge of Member or Survivor of Member of Group Certified to Have Performed Active Duty with the Armed Forces of the United States . \"An application on behalf of a deceased or incompetent member submitted by the next of kin must be accompanied by proof of death or incompetence .",
+      "par_count_i": 0,
+      "par_inc_count": 25,
+      "entities": {
+        "ORG_s": [
+          "the Coast Guard",
+          "Military Department",
+          "the Air Force"
+        ],
+        "GPE_s": [],
+        "NORP_s": [],
+        "LAW_s": [],
+        "LOC_s": [],
+        "PERSON_s": []
+      }
+    },
+    {
+      "type": "paragraph",
+      "id": "DoDD 1000.20.pdf_26",
+      "filename": "DoDD 1000.20.pdf",
+      "page_num_i": 8,
+      "par_raw_text_t": "7 . EFFECTIVE DATE AND IMPLEMENTATION This Directive is effective immediately .Forward one copy of implementing documents to the Assistant Secretary of Defense ( Force Management and Personnel ) within 120 days .",
+      "par_count_i": 1,
+      "par_inc_count": 26,
+      "entities": {
+        "ORG_s": [],
+        "GPE_s": [],
+        "NORP_s": [],
+        "LAW_s": [],
+        "LOC_s": [],
+        "PERSON_s": []
+      }
+    },
+    {
+      "type": "paragraph",
+      "id": "DoDD 1000.20.pdf_27",
+      "filename": "DoDD 1000.20.pdf",
+      "page_num_i": 8,
+      "par_raw_text_t": "Enclosures - 4 E1 .References , continued E2 .Definitions E3 .Instructions for Submitting Group Applications Under P.L . 95-202 ( reference ( b ) ) E4 .The Do D Civilian/Military Service Review Board and the Advisory Panel",
+      "par_count_i": 2,
+      "par_inc_count": 27,
+      "entities": {
+        "ORG_s": [
+          "Advisory Panel"
+        ],
+        "GPE_s": [],
+        "NORP_s": [],
+        "LAW_s": [],
+        "LOC_s": [],
+        "PERSON_s": []
+      }
+    },
+    {
+      "type": "paragraph",
+      "id": "DoDD 1000.20.pdf_28",
+      "filename": "DoDD 1000.20.pdf",
+      "page_num_i": 8,
+      "par_raw_text_t": "9 ",
+      "par_count_i": 3,
+      "par_inc_count": 28,
+      "entities": {
+        "ORG_s": [],
+        "GPE_s": [],
+        "NORP_s": [],
+        "LAW_s": [],
+        "LOC_s": [],
+        "PERSON_s": []
+      }
+    },
+    {
+      "type": "paragraph",
+      "id": "DoDD 1000.20.pdf_29",
+      "filename": "DoDD 1000.20.pdf",
+      "page_num_i": 9,
+      "par_raw_text_t": "Do DD 1000.20 , September 11 , 1989 E1 .ENCLOSURE 1 REFERENCES , continued ",
+      "par_count_i": 0,
+      "par_inc_count": 29,
+      "entities": {
+        "ORG_s": [],
+        "GPE_s": [],
+        "NORP_s": [],
+        "LAW_s": [],
+        "LOC_s": [],
+        "PERSON_s": []
+      }
+    },
+    {
+      "type": "paragraph",
+      "id": "DoDD 1000.20.pdf_30",
+      "filename": "DoDD 1000.20.pdf",
+      "page_num_i": 9,
+      "par_raw_text_t": "( e ) Do D Directive 1332.14 , \" Enlisted Administrative Separations , \" January 28 , 1982 ( f ) Do D Instruction 1300.9 , \" Military Personnel Casualties Notification and Assistance to Next of Kin , \" March 23 , 1973 ( g ) Title 38 , United States Code , Section 101 ENCLOSURE 1 10 ",
+      "par_count_i": 1,
+      "par_inc_count": 30,
+      "entities": {
+        "ORG_s": [
+          "Military Personnel Casualties Notification"
+        ],
+        "GPE_s": [],
+        "NORP_s": [],
+        "LAW_s": [],
+        "LOC_s": [],
+        "PERSON_s": []
+      }
+    },
+    {
+      "type": "paragraph",
+      "id": "DoDD 1000.20.pdf_31",
+      "filename": "DoDD 1000.20.pdf",
+      "page_num_i": 10,
+      "par_raw_text_t": "Do DD 1000.20 , September 11 , 1989 E2 .ENCLOSURE 2 DEFINITIONS ",
+      "par_count_i": 0,
+      "par_inc_count": 31,
+      "entities": {
+        "ORG_s": [],
+        "GPE_s": [],
+        "NORP_s": [],
+        "LAW_s": [],
+        "LOC_s": [],
+        "PERSON_s": []
+      }
+    },
+    {
+      "type": "paragraph",
+      "id": "DoDD 1000.20.pdf_32",
+      "filename": "DoDD 1000.20.pdf",
+      "page_num_i": 10,
+      "par_raw_text_t": "E2.1.1 . Armed Conflict .A prolonged period of sustained combat involving members of the U.S . Armed Forces against a foreign belligerent .The term connotes more than a military engagement of limited duration or for limited objectives , and involves a significant use of military and civilian forces .E2.1.1.1 . Examples of armed conflict are World Wars I and II , and the Korean and Vietnam Conflicts .E2.1.1.2 . Examples of military actions that are not armed conflicts are as follows : E2.1.1.2.1 .The incursion into Lebanon in 1958 , and the peacekeeping force there in 1983 and 1984 .E2.1.1.2.2 .The incursions into the Dominican Republic in 1965 and into Libya in 1986 .E2.1.1.2.3 .The intervention into Grenada in 1983 .E2.1.2 . Civilian or Contractual Group .An organization similarly situated to the Women 's Air Forces Service Pilots ( a group of Federal civilian employees attached to the U.S . Army Air Force in World War II ) .Those organization members rendered service to the U.S . Armed Forces during a period of armed conflict in a capacity that was then considered civilian employment with the Armed Forces , or the result of a contract with the U.S . Government , to provide direct support to the Armed Forces .E2.1.3 . Recognized Group .A group whose service the Secretary of the Air Force administratively has determined to have been \" active duty for the purposes of all laws administered by the Department of Veterans Affairs ; \" i.e . , VA benefits under 38 U.S.C . 101 ( reference ( g ) ) .E2.1.4 .Similarly Situated .A civilian or contractual group is similarly situated to the Women 's Air Forces Service Pilots when it existed as an identifiable group at the time the service was being rendered to the U.S . Armed Forces during a period of armed conflict .Persons who individually provided support through civilian employment or contract , but who were not members of an identifiable group at the time the services were rendered , are not \" similarly situated \" to the Women 's Air Forces Service Pilots of World War II . ENCLOSURE 2 11 ",
+      "par_count_i": 1,
+      "par_inc_count": 32,
+      "entities": {
+        "ORG_s": [
+          "the Department of Veterans Affairs",
+          "Civilian or Contractual Group",
+          "the Air Force",
+          "the Armed Forces"
+        ],
+        "GPE_s": [
+          "Vietnam",
+          "Grenada",
+          "Lebanon",
+          "the Dominican Republic",
+          "Libya"
+        ],
+        "NORP_s": [
+          "Korean"
+        ],
+        "LAW_s": [],
+        "LOC_s": [],
+        "PERSON_s": []
+      }
+    },
+    {
+      "type": "paragraph",
+      "id": "DoDD 1000.20.pdf_33",
+      "filename": "DoDD 1000.20.pdf",
+      "page_num_i": 11,
+      "par_raw_text_t": "Do DD 1000.20 , September 11 , 1989 E3 .ENCLOSURE 3 INSTRUCTIONS FOR SUBMITTING GROUP APPLICATIONS UNDER P . L . 95-202 ",
+      "par_count_i": 0,
+      "par_inc_count": 33,
+      "entities": {
+        "ORG_s": [],
+        "GPE_s": [],
+        "NORP_s": [],
+        "LAW_s": [],
+        "LOC_s": [],
+        "PERSON_s": []
+      }
+    },
+    {
+      "type": "paragraph",
+      "id": "DoDD 1000.20.pdf_34",
+      "filename": "DoDD 1000.20.pdf",
+      "page_num_i": 11,
+      "par_raw_text_t": "E3.1 . IN SUBMITTING A GROUP APPLICATION : E3.1.1 . Define the group to include the time period that your group provided service to the U.S . Armed Forces .E3.1.2 . Show the relationship that the group had with the U.S . Armed Forces , the manner in which members of the group were employed , and the services the members of the group provided to the Armed Forces .E3.1.3 . Address each of the factors in section 4 . , above .E3.1.4 . Substantiate and document the application .( The burden of proof rests with the applicant . )",
+      "par_count_i": 1,
+      "par_inc_count": 34,
+      "entities": {
+        "ORG_s": [
+          "the Armed Forces"
+        ],
+        "GPE_s": [],
+        "NORP_s": [],
+        "LAW_s": [
+          "section 4"
+        ],
+        "LOC_s": [],
+        "PERSON_s": []
+      }
+    },
+    {
+      "type": "paragraph",
+      "id": "DoDD 1000.20.pdf_35",
+      "filename": "DoDD 1000.20.pdf",
+      "page_num_i": 11,
+      "par_raw_text_t": "E3.2 . SEND COMPLETED GROUP APPLICATIONS TO : ",
+      "par_count_i": 2,
+      "par_inc_count": 35,
+      "entities": {
+        "ORG_s": [],
+        "GPE_s": [],
+        "NORP_s": [],
+        "LAW_s": [],
+        "LOC_s": [],
+        "PERSON_s": []
+      }
+    },
+    {
+      "type": "paragraph",
+      "id": "DoDD 1000.20.pdf_36",
+      "filename": "DoDD 1000.20.pdf",
+      "page_num_i": 11,
+      "par_raw_text_t": "Secretary of the Air Force ( SAF/MRC ) Do D Civilian/Military Service Review Board Washington , DC 20330-1000 ENCLOSURE 3 12 ",
+      "par_count_i": 3,
+      "par_inc_count": 36,
+      "entities": {
+        "ORG_s": [
+          "the Air Force"
+        ],
+        "GPE_s": [
+          "Washington"
+        ],
+        "NORP_s": [],
+        "LAW_s": [],
+        "LOC_s": [],
+        "PERSON_s": []
+      }
+    },
+    {
+      "type": "paragraph",
+      "id": "DoDD 1000.20.pdf_37",
+      "filename": "DoDD 1000.20.pdf",
+      "page_num_i": 12,
+      "par_raw_text_t": "Do DD 1000.20 , September 11 , 1989 E4 .ENCLOSURE 4 THE Do D CIVILIAN/MILITARY SERVICE REVIEW BOARD AND THE ADVISORY PANEL ",
+      "par_count_i": 0,
+      "par_inc_count": 37,
+      "entities": {
+        "ORG_s": [],
+        "GPE_s": [],
+        "NORP_s": [],
+        "LAW_s": [],
+        "LOC_s": [],
+        "PERSON_s": []
+      }
+    },
+    {
+      "type": "paragraph",
+      "id": "DoDD 1000.20.pdf_38",
+      "filename": "DoDD 1000.20.pdf",
+      "page_num_i": 12,
+      "par_raw_text_t": "E4.1 . ORGANIZATION AND MANAGEMENT E4.1.1 .The board shall consist of a president selected from the Department of the Air Force and one representative each from the OSD , the Department of the Army , the Department of the Navy , the Department of the Air Force , and the U.S . Coast Guard ( when the group claims active Coast Guard service ) .Each member shall have one vote except that the president shall vote only to break a tie .The Board 's decision is determined by majority vote .The president and two voting members shall constitute a quorum .E4.1.2 .The advisory panel shall act as a nonvoting adjunct to the board .It shall consist of historians selected by the Secretaries of the Military Departments and , if required , by the Secretary of Transportation .The respective Military Departments and the Do T shall ensure that the advisory panel is provided with administrative and legal support .",
+      "par_count_i": 1,
+      "par_inc_count": 38,
+      "entities": {
+        "ORG_s": [
+          "Coast Guard",
+          "the Department of the Navy",
+          "the Department of the Army",
+          "Transportation",
+          "Board",
+          "the Department of the Air Force",
+          "the Secretaries of the Military Departments",
+          "OSD"
+        ],
+        "GPE_s": [],
+        "NORP_s": [],
+        "LAW_s": [],
+        "LOC_s": [],
+        "PERSON_s": []
+      }
+    },
+    {
+      "type": "paragraph",
+      "id": "DoDD 1000.20.pdf_39",
+      "filename": "DoDD 1000.20.pdf",
+      "page_num_i": 12,
+      "par_raw_text_t": "E4.2 . FUNCTIONS E4.2.1 .The board shall meet in executive session at the call of the president , and shall limit its reviews to the following : E4.2.1.1 . Written submissions by an applicant on behalf of a civilian or contractual group .Presentations to the board are not allowed .E4.2.1.2 . Written report ( s ) prepared by the advisory panel .E4.2.1.3 . Any other relevant written information available .E4.2.1.4 . Factors established in this Directive for determining AD service .E4.2.2 .The board shall return to the applicant any application that does not meet the eligibility criteria established in paragraph 4.1 . of this Directive .The board only needs to state the reasons why the group is ineligible for consideration under this Directive .ENCLOSURE 4 13 ",
+      "par_count_i": 2,
+      "par_inc_count": 39,
+      "entities": {
+        "ORG_s": [
+          "FUNCTIONS"
+        ],
+        "GPE_s": [],
+        "NORP_s": [],
+        "LAW_s": [],
+        "LOC_s": [],
+        "PERSON_s": [
+          "E4.2.1.1"
+        ]
+      }
+    },
+    {
+      "type": "paragraph",
+      "id": "DoDD 1000.20.pdf_40",
+      "filename": "DoDD 1000.20.pdf",
+      "page_num_i": 13,
+      "par_raw_text_t": "Do DD 1000.20 , September 11 , 1989 ",
+      "par_count_i": 0,
+      "par_inc_count": 40,
+      "entities": {
+        "ORG_s": [],
+        "GPE_s": [],
+        "NORP_s": [],
+        "LAW_s": [],
+        "LOC_s": [],
+        "PERSON_s": []
+      }
+    },
+    {
+      "type": "paragraph",
+      "id": "DoDD 1000.20.pdf_41",
+      "filename": "DoDD 1000.20.pdf",
+      "page_num_i": 13,
+      "par_raw_text_t": "E4.2.3 . If the board determines that an application is eligible for consideration under paragraph 4.1 . of this Directive , the board shall provide , to the Secretary of the Air Force , a recommendation on the AD service determination for the group and the rationale for that recommendation that shall include , but not be limited to , a discussion of the factors listed in section 4 . of this Directive .E4.2.3.1 .No factors shall be established that require automatic recognition .Neither the board nor the Secretary of the Air Force shall be bound by any method in reaching a decision .E4.2.3.2 . Prior group determinations made under P.L . 95-202 ( reference ( b ) ) do not bind the board or the Secretary of the Air Force .The board and the Secretary of the Air Force fully and impartially shall consider each group on its own merit in relation to the factors listed in section 4 . of this Directive .ENCLOSURE 4 14 ",
+      "par_count_i": 1,
+      "par_inc_count": 41,
+      "entities": {
+        "ORG_s": [
+          "Directive",
+          "the Air Force"
+        ],
+        "GPE_s": [],
+        "NORP_s": [],
+        "LAW_s": [
+          "section 4"
+        ],
+        "LOC_s": [],
+        "PERSON_s": [
+          "E4.2.3.2"
+        ]
+      }
+    }
+  ],
+  "text": "Department of Defense DIRECTIVE NUMBER 1000.20 September 11 1989 Certified Current as of November 21 2003 ASDFMP SUBJECT Active Duty Service Determinations for Civilian or Contractual Groups References a Department of Defense Directive 1000.20 Determinations of Active Military Service and Discharge Civilian or Contractual Personnel June 9 1983 hereby canceled b Public Law 95202 The G.I. Bill Improvement Act of 1977 Section 401 November 23 1977 38 U.S.C. 106 Note c Title 10 United States Code Section 802a d Department of Defense Instruction 1336.1 Certificate of Release or Discharge from Active Duty DD Form 2145 Series January 6 1989 e through g see enclosure 1 1. REISSUANCE AND PURPOSE This Directive 1.1. Reissues reference a. 1.2. Implements reference b. 1.3. Directs the Secretary of the Air Force to determine if an established group of civilian employees or contract workers provided service to the U.S. Armed Forces in a manner considered active military service for Department of Veterans Affairs Department of Veterans Affairs benefits. 1.4. Establishes the Department of Defense CivilianMilitary Service Review Board and the Advisory Panel. 1.5. Establishes policy assigns responsibilities prescribes application procedures for groups and individuals and clarifies the factors used to determine active duty AD service. Department of DefenseD 1000.20 September 11 1989 2. APPLICABILITY AND SCOPE This Directive 2.1. Applies to the Office of the Secretary of Defense Office of the Secretary of Defense the Military Departments and by agreement with the Department of Transportation Department of Transportation the U.S. Coast Guard. 2.2. Applies to any group application considered under reference b after the effective date of this Directive and to any individual who applies for discharge documents as a member of a group recognized by the Secretary of the Air Force. 3. DEFINITIONS The terms used in this Directive are defined in enclosure 2. 4. POLICY 4.1. Eligibility for Consideration. To be eligible to apply for consideration under P.L. 95202 reference b and this Directive a group must 4.1.1. Have been similarly situated to the Womens Air Forces Service Pilots of World War II. 4.1.2. Have rendered service to the United States in what was considered civilian employment with the U.S. Armed Forces either through formal Civil Service hiring or less formal hiring if the engagement was created under the exigencies of war or as the result of a contract with the U.S. Government to provide direct support to the U.S. Armed Forces. 4.1.3. Have rendered that service during a period of armed conflict. 4.1.4. Consist of living persons to whom Department of Veterans Affairs benefits can accrue. 4.1.5. Not have already received benefits from the Federal Government for the service in question. 4.2. A determination of AD service that is considered to be equivalent to active military service is made on the extent to which the group was under the control of the U.S. Armed Forces in support of a military operation or mission during an armed 2 Department of DefenseD 1000.20 September 11 1989 conflict. The extent of control exerted over the group must be similar to that exerted over military personnel and shall be determined by but not necessarily limited to the following 4.2.1. Incidents Favoring Equivalency 4.2.1.1. Uniqueness of Service. Civilian service civilian employment or contractual service is a vital element of the warfighting capability of the Armed Forces. Civilian service during a period of armed conflict is not necessarily equivalent to active military service even when performed in a combat zone. Service must be beyond that generally performed by civilian employees and must be occasioned by unique circumstances. For civilian service to be recognized under this Directive the following factors must be present 4.2.1.1.1. The group was created or organized by U.S. Government authorities to fill a wartime need or if a group was not created specifically for a wartime need but existed before that time then its wartime mission was of a nature to substantially alter the organizations prewar character. 4.2.1.1.2. If the application is based on service in a combat zone the mission of the group in a combat zone must have been substantially different from the mission of similar groups not in a combat zone. 4.2.1.2. Organizational Authority Over the Group. The concept of military control is reinforced if the military command authority determines such things as the structure of the civilian organization the location of the group the mission and activities of the group and the staffing requirements to include the length of employment and pay grades of the members of the group. 4.2.1.3. Integration into the Military Organization. Integrated civilian groups are subject to the regulations standards and control of the military command authority. 4.2.1.3.1. Examples include the following 4.2.1.3.1.1. Exchanging military courtesies. 4.2.1.3.1.2. Wearing military clothing insignia and devices. 4.2.1.3.1.3. Assimilating the group into the military organizational structure. 4.2.1.3.1.4. Emoluments associated with military personnel i.e. the use of commissaries and exchanges and membership in military clubs. 3 Department of DefenseD 1000.20 September 11 1989 4.2.1.3.2. A group fully integrated into the military would give the impression that the members of the group were military except that they were paid and accounted for as civilians. 4.2.1.3.3. Integration into the military may lead to an expectation by members of the group that the service of the group imminently would be recognized as active military service. Such integration acts in favor of recognition. 4.2.1.4. Subjection to Military Discipline. During past armed conflicts U.S. military commanders sometimes restricted the rights or liberties of civilian members as if they were military members. 4.2.1.4.1. Examples include the following 4.2.1.4.1.1. Placing members under a curfew. 4.2.1.4.1.2. Requiring members to work extended hours or unusual shifts. 4.2.1.4.1.3. Changing duty assignments and responsibilities. 4.2.1.4.1.4. Restricting proximity travel to and from the military installation. 4.2.1.4.1.5. Imposing dress and grooming standards. 4.2.1.4.2. Consequences for noncompliance might include a loss of some privilege dismissal from the group or trial under military law. Such military discipline acts in favor of recognition. 4.2.1.5. Subjection to Military Justice. Military members are subject to the military criminal justice system. During times of war persons serving with or accompanying an Armed Force in the field are subject to the military criminal justice code reference c. Those who were SERVING WITH the U.S. Armed Forces may have been treated as if they were military and subjected to courtmartial jurisdiction to maintain discipline. Such treatment is a factor in favor of recognition. 4.2.1.6. Prohibition Against Members of the Group Joining the Armed Forces. Some organizations may have been formed to serve in a military capacity to overcome the operation of existing laws or treaty or because of a governmentally established policy to retain individuals in the group as part of a civilian force. These factors act in favor of recognition. 4 Department of DefenseD 1000.20 September 11 1989 4.2.1.7. Receipt of Military Training andor Achievement of Military Capability. If a group employed skills or resources that were enhanced as the result of military training or equipment designed or issued for that purpose this acts toward recognition. 4.2.2. Incidents Not Favoring Equivalency 4.2.2.1. Submission to the U.S. Armed Forces for Protection. A group that seeks protection and assistance from the U.S. Armed Forces and submits to military control for its own wellbeing is not deemed to have provided service to the Armed Forces equivalent to AD military service even though the group may have been as follows 4.2.2.1.1. Armed by the U.S. military for defensive purposes. 4.2.2.1.2. Routed by the U.S. military to avoid the enemy. 4.2.2.1.3. Instructed by the U.S. military for the defense of the group when attacked by or in danger of attack by the enemy. 4.2.2.1.4. Otherwise submitted themselves to the U.S. military for sustenance and protection. 4.2.2.2. Permitted to Resign. The ability of members to resign at will and without penalty acts against military control. Penalty may be direct and severe such as confinement or indirect and moderate such as difficult and costly transportation from an overseas location. 4.2.2.3. Prior Recognition of Group Service. Recognition of a groups service by agencies of State or local government does not provide support in favor of recognition under this Directive. 4.2.3. Status of Group in International Law. In addition to other factors consideration will be given to whether members of the group were regarded and treated as civilians or assimilated to the Armed Forces as reflected in treaties customary international law judicial decisions and U.S. diplomatic practice. 4.3. Reconsideration. Applications by groups previously denied a favorable determination by the Secretary of the Air Force shall be reconsidered under this Directive if the group submits evidence that is new relevant and substantive. Any request that the Department of Defense CivilianMilitary Service Review Board established hereunder see paragraph 5.2. determines does not provide new relevant and substantive evidence shall be returned to the applicant with the reasons for nonacceptance. 5 Department of DefenseD 1000.20 September 11 1989 4.4. Counsel Representation. Neither the Department of Defense nor Department of Transportation shall provide representation by counsel or defray the cost of such representation with respect to any matter covered by this Directive. 5. RESPONSIBILITIES 5.1. The Assistant Secretary of Defense Force Management and Personnel ASDFMP shall 5.1.1. Appoint a primary and an alternate member in the grade of O6 or GM 15 or higher to the Department of Defense CivilianMilitary Service Review Board. 5.1.2. Exercise oversight over the Military Departments and the U.S. Coast Guard for compliance with this Directive and in the issuance of discharge documents and casualty reports to members of recognized groups. 5.2. The Secretary of the Air Force as the designated Executive Agent of the Secretary of Defense for the administration of P. L. 95202 reference b shall 5.2.1. Establish the Department of Defense CivilianMilitary Service Review Board and the Advisory Panel. 5.2.2. Appoint as board president a member or employee of the Air Force in grade O6 or GM15 or higher. 5.2.3. Request the Secretary of Transportation to appoint an additional voting member from the U.S. Coast Guard when the board is considering the application of a group claiming active Coast Guard service. 5.2.4. Provide a recorder and an assistant to maintain the records of the board and administer the functions of this Directive. 5.2.5. Provide nonvoting legal advisors and historians. 5.2.6. Publish notices of group applications and other P.L. 95202 reference b announcements in the Federal Register. 5.2.7. Consider the rationale and recommendations of the Department of Defense Civilians Military Service Review Board. 5.2.8. Determine whether the service rendered by a civilian or contractual group shall be considered AD service to the U.S. Armed Forces for all laws administered by the Department of Veterans Affairs. The decision of the Secretary of the Air Force is final. There is no appeal. 6 Department of DefenseD 1000.20 September 11 1989 5.2.9. Notify the following persons in writing when a group determination is made if the Secretary of the Air Force disagrees with the rationale or recommendations of the board the Secretary of the Air Force shall provide the decision and reasons for it in writing to these persons 5.2.9.1. The applicants for the group. 5.2.9.2. The Secretary of the Department of Veterans Affairs. 5.2.9.3. The Secretary of the Army. 5.2.9.4. The Secretary of the Navy. 5.2.9.5. The ASDFMP. 5.2.9.6. The Secretary of Transportation when a group claims active Coast Guard service. 5.3. The Secretary of the Army Secretary of the Navy Secretary of the Air Force and Commandant of the Coast Guard shall 5.3.1. Appoint to the board a primary and an alternate member in the grades of O6 or GM15 or higher from their respective Military Services. 5.3.2. Process applications for discharge documents from individuals claiming membership in a recognized group in accordance with applicable laws Directives the Secretary of the Air Force rationale and instrument effecting a group determination and any other instructions of the board. 5.3.3. Determine whether the applicant was a member of a recognized group after considering the individuals evidence of membership and verifying the service against available Government records. 5.3.4. Issue a DD Form 214 Certificate of Release or Discharge from Active Duty and a DD Form 256 Honorable Discharge Certificate or a DD Form 257 General Discharge Certificate as appropriate consistent with Department of Defense Instruction 1336.1 and Department of Defense Directive 1332.14 references d and e and the implementing documents of the appropriate statutes of the Military Department concerned or the Department of Transportation and the instructions of the Department of Defense CivilianMilitary Service Review Board. 5.3.5. Issue a DD Form 1300 Report of Casualty in accordance with Department of Defense Instruction 1300.9 reference f if a verified member was killed during the period of AD service. 7 Department of DefenseD 1000.20 September 11 1989 5.3.6. Ensure that each DD Form 214 Certificate of Release or Discharge from Active Duty and each DD Form 1300 Report of Casualty have the following statement entered in the Remarks section This document issued under P. L. 95202 38 U.S.C. 106 Note administratively establishes active duty service for the purposes of Department of Veterans Affairs benefits. 5.3.7. Determine the equivalent military pay grade when required by the Department of Veterans Affairs. For Department of Veterans Affairs benefits a pay grade is needed only in cases when an individual was killed or received serviceconnected injuries or disease during the recognized period of AD service. A DD Form 1300 shall be issued with the equivalent pay grade annotated for a member who died during the recognized period of service. A DD Form 214 shall not include pay grade unless the Department of Veterans Affairs requests that a grade determination be given. Determinations of equivalent grade shall be based on the following criteria in order of importance 5.3.7.1. Officially recognized organizational grade or equivalent rank. 5.3.7.2. The corresponding rank for civilian pay grade. 5.3.7.3. If neither of the criteria in subparagraphs 5.3.7.1. and 5.3.7.2. above applies only one of three grades may be issued i.e. O1 E4 or E1. Selection depends on the nature of the job performed the level of supervision exercised and the military privileges to which the individual was entitled. 5.3.8. Adjudicate applicant challenges to the period of AD service characterization of service or other administrative aspects of the discharge documents issued. 6. PROCEDURES 6.1. Submitting Group Applications. Applications on behalf of a civilian or contractual group shall be submitted to the Secretary of the Air Force using the instructions in enclosure 3. 6.2. Processing Group Applications 6.2.1. When received the recorder shall review the application for sufficiency and either return it for more information or accept it for consideration and announce acceptance in the Federal Register. 6.2.2. The recorder shall send the application to the appropriate advisory panel for historical review and analysis. 8 Department of DefenseD 1000.20 September 11 1989 6.2.3. When received the recorder shall send the advisory panels report to the applicant for comment. The applicants comments shall be referred to the advisory panel if significant disagreement requires resolution. Additional comments from the historians also shall be referred to the applicant for comment. 6.2.4. The Department of Defense CivilianMilitary Service Board shall consider the group application as established in paragraph 6.1. and subparagraphs 6.2.1. through 6.2.3. above. 6.2.5. After the Secretary of the Air Force makes a decision the recorder shall notify the applicant of the decision and announce it in the Federal Register. 6.3. Submitting Individual Applications. When a group is recognized individual members may apply to the appropriate Military Department or to the Coast Guard for discharge documents. Submit applications on DD Form 2168 Application for Discharge of Member or Survivor of Member of Group Certified to Have Performed Active Duty with the Armed Forces of the United States. An application on behalf of a deceased or incompetent member submitted by the next of kin must be accompanied by proof of death or incompetence. 7. EFFECTIVE DATE AND IMPLEMENTATION This Directive is effective immediately. Forward one copy of implementing documents to the Assistant Secretary of Defense Force Management and Personnel within 120 days. Enclosures  4 E1. References continued E2. Definitions E3. Instructions for Submitting Group Applications Under P.L. 95202 reference b E4. The Department of Defense CivilianMilitary Service Review Board and the Advisory Panel 9 Department of DefenseD 1000.20 September 11 1989 E1. ENCLOSURE 1 REFERENCES continued e Department of Defense Directive 1332.14 Enlisted Administrative Separations January 28 1982 f Department of Defense Instruction 1300.9 Military Personnel Casualties Notification and Assistance to Next of Kin March 23 1973 g Title 38 United States Code Section 101 ENCLOSURE 1 10 Department of DefenseD 1000.20 September 11 1989 E2. ENCLOSURE 2 DEFINITIONS E2.1.1. Armed Conflict. A prolonged period of sustained combat involving members of the U.S. Armed Forces against a foreign belligerent. The term connotes more than a military engagement of limited duration or for limited objectives and involves a significant use of military and civilian forces. E2.1.1.1. Examples of armed conflict are World Wars I and II and the Korean and Vietnam Conflicts. E2.1.1.2. Examples of military actions that are not armed conflicts are as follows E2.1.1.2.1. The incursion into Lebanon in 1958 and the peacekeeping force there in 1983 and 1984. E2.1.1.2.2. The incursions into the Dominican Republic in 1965 and into Libya in 1986. E2.1.1.2.3. The intervention into Grenada in 1983. E2.1.2. Civilian or Contractual Group. An organization similarly situated to the Womens Air Forces Service Pilots a group of Federal civilian employees attached to the U.S. Army Air Force in World War II. Those organization members rendered service to the U.S. Armed Forces during a period of armed conflict in a capacity that was then considered civilian employment with the Armed Forces or the result of a contract with the U.S. Government to provide direct support to the Armed Forces. E2.1.3. Recognized Group. A group whose service the Secretary of the Air Force administratively has determined to have been active duty for the purposes of all laws administered by the Department of Veterans Affairs i.e. Department of Veterans Affairs benefits under 38 U.S.C. 101 reference g. E2.1.4. Similarly Situated. A civilian or contractual group is similarly situated to the Womens Air Forces Service Pilots when it existed as an identifiable group at the time the service was being rendered to the U.S. Armed Forces during a period of armed conflict. Persons who individually provided support through civilian employment or contract but who were not members of an identifiable group at the time the services were rendered are not similarly situated to the Womens Air Forces Service Pilots of World War II. ENCLOSURE 2 11 Department of DefenseD 1000.20 September 11 1989 E3. ENCLOSURE 3 INSTRUCTIONS FOR SUBMITTING GROUP APPLICATIONS UNDER P. L. 95202 E3.1. IN SUBMITTING A GROUP APPLICATION E3.1.1. Define the group to include the time period that your group provided service to the U.S. Armed Forces. E3.1.2. Show the relationship that the group had with the U.S. Armed Forces the manner in which members of the group were employed and the services the members of the group provided to the Armed Forces. E3.1.3. Address each of the factors in section 4. above. E3.1.4. Substantiate and document the application. The burden of proof rests with the applicant. E3.2. SEND COMPLETED GROUP APPLICATIONS TO Secretary of the Air Force SAFMRC Department of Defense CivilianMilitary Service Review Board Washington DC 203301000 ENCLOSURE 3 12 Department of DefenseD 1000.20 September 11 1989 E4. ENCLOSURE 4 THE Department of Defense CIVILIANMILITARY SERVICE REVIEW BOARD AND THE ADVISORY PANEL E4.1. ORGANIZATION AND MANAGEMENT E4.1.1. The board shall consist of a president selected from the Department of the Air Force and one representative each from the Office of the Secretary of Defense the Department of the Army the Department of the Navy the Department of the Air Force and the U.S. Coast Guard when the group claims active Coast Guard service. Each member shall have one vote except that the president shall vote only to break a tie. The Boards decision is determined by majority vote. The president and two voting members shall constitute a quorum. E4.1.2. The advisory panel shall act as a nonvoting adjunct to the board. It shall consist of historians selected by the Secretaries of the Military Departments and if required by the Secretary of Transportation. The respective Military Departments and the Department of Transportation shall ensure that the advisory panel is provided with administrative and legal support. E4.2. FUNCTIONS E4.2.1. The board shall meet in executive session at the call of the president and shall limit its reviews to the following E4.2.1.1. Written submissions by an applicant on behalf of a civilian or contractual group. Presentations to the board are not allowed. E4.2.1.2. Written reports prepared by the advisory panel. E4.2.1.3. Any other relevant written information available. E4.2.1.4. Factors established in this Directive for determining AD service. E4.2.2. The board shall return to the applicant any application that does not meet the eligibility criteria established in paragraph 4.1. of this Directive. The board only needs to state the reasons why the group is ineligible for consideration under this Directive. ENCLOSURE 4 13 Department of DefenseD 1000.20 September 11 1989 E4.2.3. If the board determines that an application is eligible for consideration under paragraph 4.1. of this Directive the board shall provide to the Secretary of the Air Force a recommendation on the AD service determination for the group and the rationale for that recommendation that shall include but not be limited to a discussion of the factors listed in section 4. of this Directive. E4.2.3.1. No factors shall be established that require automatic recognition. Neither the board nor the Secretary of the Air Force shall be bound by any method in reaching a decision. E4.2.3.2. Prior group determinations made under P.L. 95202 reference b do not bind the board or the Secretary of the Air Force. The board and the Secretary of the Air Force fully and impartially shall consider each group on its own merit in relation to the factors listed in section 4. of this Directive. ENCLOSURE 4 14 ",
+  "raw_text": "Department of Defense \n \n \nDIRECTIVE \n \nNUMBER 1000.20 \nSeptember 11, 1989 \nCertified Current as of November 21, 2003 \n \n \n \nASD(FM&P)  \nSUBJECT:  Active Duty Service Determinations for Civilian or Contractual Groups \nReferences: (a)  Department of Defense Directive 1000.20, \"Determinations of Active Military Service and \nDischarge: Civilian or Contractual Personnel,\" June 9, 1983 (hereby \ncanceled)  \n(b)  Public Law 95-202, \"The G.I. Bill Improvement Act of 1977,\" Section \n401, November 23, 1977 (38 U.S.C.  106 Note)  \n(c)  Title 10, United States Code, Section 802(a)  \n(d)  Department of Defense Instruction 1336.1, \"Certificate of Release or Discharge from \nActive Duty (DD Form 214/5 Series),\" January 6, 1989  \n(e)  through (g), see enclosure 1\n \n1.  REISSUANCE AND PURPOSE \nThis Directive:  \n1.1.  Reissues reference (a).\n1.2.  Implements reference (b).\n1.3.  Directs the Secretary of the Air Force to determine if an established group of \ncivilian employees or contract workers provided service to the U.S. Armed Forces in a \nmanner considered active military service for Department of Veterans Affairs (Department of Veterans Affairs) \nbenefits.   \n1.4.  Establishes the Department of Defense Civilian/Military Service Review Board and the Advisory \nPanel.   \n1.5.  Establishes policy, assigns responsibilities, prescribes application procedures \nfor groups and individuals, and clarifies the factors used to determine active duty (AD) \nservice.   \nDepartment of DefenseD 1000.20, September 11, 1989 \n \n2.  APPLICABILITY AND SCOPE \nThis Directive:  \n2.1.  Applies to the Office of the Secretary of Defense (Office of the Secretary of Defense), the Military \nDepartments, and by agreement with the Department of Transportation (Department of Transportation), the U.S. \nCoast Guard.   \n2.2.  Applies to any group application considered under reference (b) after the \neffective date of this Directive and to any individual who applies for discharge \ndocuments as a member of a group recognized by the Secretary of the Air Force.   \n \n3.  DEFINITIONS \nThe terms used in this Directive are defined in enclosure 2.\n \n4.  POLICY \n4.1.  Eligibility for Consideration.  To be eligible to apply for consideration under \nP.L. 95-202 (reference (b)) and this Directive, a group must:  \n4.1.1.  Have been similarly situated to the Women's Air Forces Service Pilots \nof World War II.   \n4.1.2.  Have rendered service to the United States in what was considered \ncivilian employment with the U.S. Armed Forces either through formal Civil Service \nhiring or less formal hiring if the engagement was created under the exigencies of war, or \nas the result of a contract with the U.S. Government to provide direct support to the U.S. \nArmed Forces.   \n4.1.3.  Have rendered that service during a period of armed conflict.   \n4.1.4.  Consist of living persons to whom Department of Veterans Affairs benefits can accrue.   \n4.1.5.  Not have already received benefits from the Federal Government for the \nservice in question.   \n4.2.  A determination of AD service that is considered to be equivalent to active \nmilitary service is made on the extent to which the group was under the control of the \nU.S. Armed Forces in support of a military operation or mission during an armed  \n \n2\nDepartment of DefenseD 1000.20, September 11, 1989 \nconflict.  The extent of control exerted over the group must be similar to that exerted over \nmilitary personnel and shall be determined by, but not necessarily limited to, the \nfollowing:  \n4.2.1.  Incidents Favoring Equivalency \n4.2.1.1.  Uniqueness of Service.  Civilian service (civilian employment or \ncontractual service) is a vital element of the war-fighting capability of the Armed Forces.  \nCivilian service during a period of armed conflict is not necessarily equivalent to active \nmilitary service, even when performed in a combat zone.  Service must be beyond that \ngenerally performed by civilian employees and must be occasioned by unique \ncircumstances.  For civilian service to be recognized under this Directive, the following \nfactors must be present:  \n4.2.1.1.1.  The group was created or organized by U.S.  Government \nauthorities to fill a wartime need or, if a group was not created specifically for a wartime \nneed, but existed before that time, then its wartime mission was of a nature to \nsubstantially alter the organization's prewar character.   \n4.2.1.1.2.  If the application is based on service in a combat zone, the \nmission of the group in a combat zone must have been substantially different from the \nmission of similar groups not in a combat zone.   \n4.2.1.2.  Organizational Authority Over the Group.  The concept of \nmilitary control is reinforced if the military command authority determines such things as \nthe structure of the civilian organization, the location of the group, the mission and \nactivities of the group, and the staffing requirements to include the length of employment \nand pay grades of the members of the group.   \n4.2.1.3.  Integration into the Military Organization.  Integrated civilian \ngroups are subject to the regulations, standards, and control of the military command \nauthority.   \n4.2.1.3.1.  Examples include the following:  \n4.2.1.3.1.1.  Exchanging military courtesies.   \n4.2.1.3.1.2.  Wearing military clothing, insignia, and devices.   \n4.2.1.3.1.3.  Assimilating the group into the military \norganizational structure.   \n4.2.1.3.1.4.  Emoluments associated with military personnel; i.e., \nthe use of commissaries and exchanges, and membership in military clubs.   \n \n3\nDepartment of DefenseD 1000.20, September 11, 1989 \n4.2.1.3.2.  A group fully integrated into the military would give the \nimpression that the members of the group were military, except that they were paid and \naccounted for as civilians.   \n4.2.1.3.3.  Integration into the military may lead to an expectation by \nmembers of the group that the service of the group imminently would be recognized as \nactive military service.  Such integration acts in favor of recognition.   \n4.2.1.4.  Subjection to Military Discipline.  During past armed conflicts, \nU.S.  military commanders sometimes restricted the rights or liberties of civilian \nmembers as if they were military members.   \n4.2.1.4.1.  Examples include the following:  \n4.2.1.4.1.1.  Placing members under a curfew.   \n4.2.1.4.1.2.  Requiring members to work extended hours or \nunusual shifts.   \n4.2.1.4.1.3.  Changing duty assignments and responsibilities.   \n4.2.1.4.1.4.  Restricting proximity travel to and from the military \ninstallation.   \n4.2.1.4.1.5.  Imposing dress and grooming standards.   \n4.2.1.4.2.  Consequences for noncompliance might include a loss of \nsome privilege, dismissal from the group, or trial under military law.  Such military \ndiscipline acts in favor of recognition.   \n4.2.1.5.  Subjection to Military Justice.  Military members are subject to \nthe military criminal justice system.  During times of war, \"persons serving with or \naccompanying an Armed Force in the field\" are subject to the military criminal justice \ncode (reference (c)). Those who were SERVING WITH the U.S. Armed Forces may have \nbeen treated as if they were military and subjected to court-martial jurisdiction to \nmaintain discipline.  Such treatment is a factor in favor of recognition.   \n4.2.1.6.  Prohibition Against Members of the Group Joining the Armed \nForces.  Some organizations may have been formed to serve in a military capacity to \novercome the operation of existing laws or treaty or because of a governmentally \nestablished policy to retain individuals in the group as part of a civilian force.  These \nfactors act in favor of recognition.   \n \n \n4\nDepartment of DefenseD 1000.20, September 11, 1989 \n4.2.1.7.  Receipt of Military Training and/or Achievement of Military \nCapability.  If a group employed skills or resources that were enhanced as the result of \nmilitary training or equipment designed or issued for that purpose, this acts toward \nrecognition.   \n4.2.2.  Incidents Not Favoring Equivalency \n4.2.2.1.  Submission to the U.S.  Armed Forces for Protection.  A group \nthat seeks protection and assistance from the U.S.  Armed Forces and submits to military \ncontrol for its own well-being is not deemed to have provided service to the Armed \nForces equivalent to AD military service, even though the group may have been as \nfollows:  \n4.2.2.1.1.  Armed by the U.S. military for defensive purposes.   \n4.2.2.1.2.  Routed by the U.S. military to avoid the enemy.   \n4.2.2.1.3.  Instructed by the U.S. military for the defense of the group \nwhen attacked by, or in danger of attack by, the enemy.   \n4.2.2.1.4.  Otherwise submitted themselves to the U.S. military for \nsustenance and protection.   \n4.2.2.2.  Permitted to Resign.  The ability of members to resign at will and \nwithout penalty acts against military control.  Penalty may be direct and severe, such as \nconfinement, or indirect and moderate, such as difficult and costly transportation from an \noverseas location.   \n4.2.2.3.  Prior Recognition of Group Service.  Recognition of a group's \nservice by agencies of State or local government does not provide support in favor of \nrecognition under this Directive.   \n4.2.3.  Status of Group in International Law.  In addition to other factors, \nconsideration will be given to whether members of the group were regarded and treated \nas civilians, or assimilated to the Armed Forces as reflected in treaties, customary \ninternational law, judicial decisions, and U.S. diplomatic practice.   \n4.3.  Reconsideration.  Applications by groups previously denied a favorable \ndetermination by the Secretary of the Air Force shall be reconsidered under this Directive \nif the group submits evidence that is new, relevant, and substantive.  Any request that the \nDepartment of Defense Civilian/Military Service Review Board established hereunder (see paragraph 5.2.) \ndetermines does not provide new, relevant, and substantive evidence shall be returned to \nthe applicant with the reasons for non-acceptance.   \n \n5\nDepartment of DefenseD 1000.20, September 11, 1989 \n4.4.  Counsel Representation.  Neither the Department of Defense nor Department of \nTransportation shall provide representation by counsel or defray the cost of such \nrepresentation with respect to any matter covered by this Directive.   \n \n5.  RESPONSIBILITIES \n5.1.  The Assistant Secretary of Defense (Force Management and Personnel) \n(ASD(FM&P)) shall:  \n5.1.1.  Appoint a primary and an alternate member in the grade of O-6 or GM-\n15 or higher to the Department of Defense Civilian/Military Service Review Board.   \n5.1.2.  Exercise oversight over the Military Departments and the U.S.  Coast \nGuard for compliance with this Directive and in the issuance of discharge documents and \ncasualty reports to members of recognized groups.   \n5.2.  The Secretary of the Air Force, as the designated Executive Agent of the \nSecretary of Defense for the administration of P. L. 95-202 (reference (b)), shall:  \n5.2.1.  Establish the Department of Defense Civilian/Military Service Review Board and the \nAdvisory Panel.   \n5.2.2.  Appoint as board president a member or employee of the Air Force in \ngrade O-6 or GM-15 or higher.   \n5.2.3.  Request the Secretary of Transportation to appoint an additional voting \nmember from the U.S.  Coast Guard when the board is considering the application of a \ngroup claiming active Coast Guard service.   \n5.2.4.  Provide a recorder and an assistant to maintain the records of the board \nand administer the functions of this Directive.   \n5.2.5.  Provide nonvoting legal advisors and historians.   \n5.2.6.  Publish notices of group applications and other P.L. 95-202 (reference \n(b)) announcements in the \"Federal Register.\"  \n5.2.7.  Consider the rationale and recommendations of the Department of Defense Civilians \nMilitary Service Review Board.   \n5.2.8.  Determine whether the service rendered by a civilian or contractual \ngroup shall be considered AD service to the U.S.  Armed Forces for all laws administered \nby the Department of Veterans Affairs.  The decision of the Secretary of the Air Force is final.  There is no appeal.   \n \n6\nDepartment of DefenseD 1000.20, September 11, 1989 \n5.2.9.  Notify the following persons in writing when a group determination is \nmade (if the Secretary of the Air Force disagrees with the rationale or recommendations \nof the board, the Secretary of the Air Force shall provide the decision and reasons for it in \nwriting to these persons):  \n5.2.9.1.  The applicant(s) for the group.   \n5.2.9.2.  The Secretary of the Department of Veterans Affairs.   \n5.2.9.3.  The Secretary of the Army.   \n5.2.9.4.  The Secretary of the Navy.   \n5.2.9.5.  The ASD(FM&P).   \n5.2.9.6.  The Secretary of Transportation (when a group claims active \nCoast Guard service).   \n5.3.  The Secretary of the Army, Secretary of the Navy, Secretary of the Air Force, \nand Commandant of the Coast Guard shall:  \n5.3.1.  Appoint to the board a primary and an alternate member in the grades of \nO-6 or GM-15 or higher from their respective Military Services.   \n5.3.2.  Process applications for discharge documents from individuals claiming \nmembership in a recognized group in accordance with applicable laws, Directives, the \nSecretary of the Air Force rationale and instrument effecting a group determination, and \nany other instructions of the board.   \n5.3.3.  Determine whether the applicant was a member of a recognized group \nafter considering the individual's evidence of membership and verifying the service \nagainst available Government records.   \n5.3.4.  Issue a DD Form 214, \"Certificate of Release or Discharge from Active \nDuty,\" and a DD Form 256, \"Honorable Discharge Certificate,\" or a DD Form 257, \n\"General Discharge Certificate,\" as appropriate, consistent with Department of Defense Instruction 1336.1 \nand Department of Defense Directive 1332.14 (references (d) and (e)) and the implementing documents of \nthe appropriate statutes of the Military Department concerned or the Department of Transportation and the \ninstructions of the Department of Defense Civilian/Military Service Review Board.   \n5.3.5.  Issue a DD Form 1300, \"Report of Casualty,\" in accordance with Department of Defense \nInstruction 1300.9 (reference (f)) if a verified member was killed during the period of AD \nservice.   \n \n7\nDepartment of DefenseD 1000.20, September 11, 1989 \n5.3.6.  Ensure that each DD Form 214, \"Certificate of Release or Discharge \nfrom Active Duty,\" and each DD Form 1300, \"Report of Casualty,\" have the following \nstatement entered in the \"Remarks\" section:  \n \n\"This document, issued under P. L.  95-202 (38 U.S.C.  106 Note), administratively \nestablishes active duty service for the purposes of Department of Veterans Affairs \nbenefits.\"  \n5.3.7.  Determine the equivalent military pay grade, when required by the \nDepartment of Veterans Affairs.  For Department of Veterans Affairs benefits, a pay grade is needed only in cases \nwhen an individual was killed or received service-connected injuries or disease during the \nrecognized period of AD service.  A DD Form 1300 shall be issued with the equivalent \npay grade annotated for a member who died during the recognized period of service.  A \nDD Form 214 shall not include pay grade, unless the Department of Veterans Affairs \nrequests that a grade determination be given.  Determinations of equivalent grade shall be \nbased on the following criteria in order of importance:  \n5.3.7.1.  Officially recognized organizational grade or equivalent rank.   \n5.3.7.2.  The corresponding rank for civilian pay grade.   \n5.3.7.3.  If neither of the criteria in subparagraphs 5.3.7.1. and 5.3.7.2., \nabove, applies, only one of three grades may be issued; i.e., O-1, E-4, or E-1.  Selection \ndepends on the nature of the job performed, the level of supervision exercised, and the \nmilitary privileges to which the individual was entitled.   \n5.3.8.  Adjudicate applicant challenges to the period of AD service, \ncharacterization of service, or other administrative aspects of the discharge documents \nissued. \n \n6.  PROCEDURES \n6.1.  Submitting Group Applications.  Applications on behalf of a civilian or \ncontractual group shall be submitted to the Secretary of the Air Force using the \ninstructions in enclosure 3.\n6.2.  Processing Group Applications \n6.2.1.  When received, the recorder shall review the application for sufficiency \nand either return it for more information or accept it for consideration and announce \nacceptance in the \"Federal Register.\"  \n6.2.2.  The recorder shall send the application to the appropriate advisory panel \nfor historical review and analysis.   \n \n8\nDepartment of DefenseD 1000.20, September 11, 1989 \n6.2.3.  When received, the recorder shall send the advisory panel's report to the \napplicant for comment.  The applicant's comments shall be referred to the advisory panel \nif significant disagreement requires resolution.  Additional comments from the historians \nalso shall be referred to the applicant for comment.   \n6.2.4.  The Department of Defense Civilian/Military Service Board shall consider the group \napplication, as established, in paragraph 6.1. and subparagraphs 6.2.1. through 6.2.3., \nabove.   \n6.2.5.  After the Secretary of the Air Force makes a decision, the recorder shall \nnotify the applicant of the decision and announce it in the \"Federal Register.\"  \n6.3.  Submitting Individual Applications.  When a group is recognized, individual \nmembers may apply to the appropriate Military Department or to the Coast Guard for \ndischarge documents.  Submit applications on DD Form 2168, \"Application for \nDischarge of Member or Survivor of Member of Group Certified to Have Performed \nActive Duty with the Armed Forces of the United States.\" An application on behalf of a \ndeceased or incompetent member submitted by the next of kin must be accompanied by \nproof of death or incompetence. \n \n7.  EFFECTIVE DATE AND IMPLEMENTATION \nThis Directive is effective immediately.  Forward one copy of implementing documents \nto the Assistant Secretary of Defense (Force Management and Personnel) within 120 \ndays.   \n                                                       \n \nEnclosures - 4  \nE1.  References, continued\nE2.  Definitions\nE3.  Instructions for Submitting Group Applications Under P.L.  95-202 (reference (b))\nE4.  The Department of Defense Civilian/Military Service Review Board and the Advisory Panel\n \n9\nDepartment of DefenseD 1000.20, September 11, 1989 \nE1.  ENCLOSURE 1 \nREFERENCES, continued \n \n \n(e)  Department of Defense Directive 1332.14, \"Enlisted Administrative Separations,\" January 28, 1982  \n(f)  Department of Defense Instruction 1300.9, \"Military Personnel Casualties Notification and Assistance \nto Next of Kin,\" March 23, 1973  \n(g)  Title 38, United States Code, Section 101  \nENCLOSURE 1 \n10\nDepartment of DefenseD 1000.20, September 11, 1989 \nE2.  ENCLOSURE 2 \nDEFINITIONS \n \n \nE2.1.1.  Armed Conflict.  A prolonged period of sustained combat involving \nmembers of the U.S. Armed Forces against a foreign belligerent.  The term connotes \nmore than a military engagement of limited duration or for limited objectives, and \ninvolves a significant use of military and civilian forces.   \nE2.1.1.1.  Examples of armed conflict are World Wars I and II, and the Korean \nand Vietnam Conflicts.   \nE2.1.1.2.  Examples of military actions that are not armed conflicts are as \nfollows:  \nE2.1.1.2.1.  The incursion into Lebanon in 1958, and the peacekeeping \nforce there in 1983 and 1984.   \nE2.1.1.2.2.  The incursions into the Dominican Republic in 1965 and into \nLibya in 1986.   \nE2.1.1.2.3.  The intervention into Grenada in 1983.   \nE2.1.2.  Civilian or Contractual Group.  An organization similarly situated to the \nWomen's Air Forces Service Pilots (a group of Federal civilian employees attached to the \nU.S. Army Air Force in World War II).  Those organization members rendered service to \nthe U.S. Armed Forces during a period of armed conflict in a capacity that was then \nconsidered civilian employment with the Armed Forces, or the result of a contract with \nthe U.S. Government, to provide direct support to the Armed Forces.   \nE2.1.3.  Recognized Group.  A group whose service the Secretary of the Air Force \nadministratively has determined to have been \"active duty for the purposes of all laws \nadministered by the Department of Veterans Affairs;\" i.e., Department of Veterans Affairs benefits under 38 U.S.C. \n101 (reference (g)).\nE2.1.4.  Similarly Situated.  A civilian or contractual group is similarly situated to \nthe Women's Air Forces Service Pilots when it existed as an identifiable group at the time \nthe service was being rendered to the U.S. Armed Forces during a period of armed \nconflict.  Persons who individually provided support through civilian employment or \ncontract, but who were not members of an identifiable group at the time the services were \nrendered, are not \"similarly situated\" to the Women's Air Forces Service Pilots of World \nWar II.   \nENCLOSURE 2 \n11\nDepartment of DefenseD 1000.20, September 11, 1989 \nE3.  ENCLOSURE 3 \nINSTRUCTIONS FOR SUBMITTING GROUP APPLICATIONS UNDER P. L. 95-202 \n \n \nE3.1.  IN SUBMITTING A GROUP APPLICATION: \nE3.1.1.  Define the group to include the time period that your group provided service \nto the U.S. Armed Forces.   \nE3.1.2.  Show the relationship that the group had with the U.S. Armed Forces, the \nmanner in which members of the group were employed, and the services the members of \nthe group provided to the Armed Forces.   \nE3.1.3.  Address each of the factors in section 4., above.   \nE3.1.4.  Substantiate and document the application.  (The burden of proof rests with \nthe applicant.)  \n \nE3.2.  SEND COMPLETED GROUP APPLICATIONS TO: \n \nSecretary of the Air Force (SAF/MRC)  \nDepartment of Defense Civilian/Military Service Review Board  \nWashington, DC  20330-1000  \nENCLOSURE 3 \n12\nDepartment of DefenseD 1000.20, September 11, 1989 \nE4.  ENCLOSURE 4 \nTHE Department of Defense CIVILIAN/MILITARY SERVICE REVIEW BOARD AND THE \nADVISORY PANEL \n \n \nE4.1.  ORGANIZATION AND MANAGEMENT \nE4.1.1.  The board shall consist of a president selected from the Department of the \nAir Force and one representative each from the Office of the Secretary of Defense, the Department of the Army, the \nDepartment of the Navy, the Department of the Air Force, and the U.S. Coast Guard \n(when the group claims active Coast Guard service).  Each member shall have one vote \nexcept that the president shall vote only to break a tie.  The Board's decision is \ndetermined by majority vote.  The president and two voting members shall constitute a \nquorum.   \nE4.1.2.  The advisory panel shall act as a nonvoting adjunct to the board.  It shall \nconsist of historians selected by the Secretaries of the Military Departments and, if \nrequired, by the Secretary of Transportation.  The respective Military Departments and \nthe Department of Transportation shall ensure that the advisory panel is provided with administrative and legal \nsupport. \n \nE4.2.  FUNCTIONS \nE4.2.1.  The board shall meet in executive session at the call of the president, and \nshall limit its reviews to the following:  \nE4.2.1.1.  Written submissions by an applicant on behalf of a civilian or \ncontractual group.  Presentations to the board are not allowed.   \nE4.2.1.2.  Written report(s) prepared by the advisory panel.   \nE4.2.1.3.  Any other relevant written information available.   \nE4.2.1.4.  Factors established in this Directive for determining AD service.   \nE4.2.2.  The board shall return to the applicant any application that does not meet \nthe eligibility criteria established in paragraph 4.1. of this Directive.  The board only \nneeds to state the reasons why the group is ineligible for consideration under this \nDirective.   \nENCLOSURE 4 \n13\nDepartment of DefenseD 1000.20, September 11, 1989 \n \nE4.2.3.  If the board determines that an application is eligible for consideration \nunder paragraph 4.1. of this Directive, the board shall provide, to the Secretary of the Air \nForce, a recommendation on the AD service determination for the group and the rationale \nfor that recommendation that shall include, but not be limited to, a discussion of the \nfactors listed in section 4. of this Directive.   \nE4.2.3.1.  No factors shall be established that require automatic recognition.  \nNeither the board nor the Secretary of the Air Force shall be bound by any method in \nreaching a decision.   \nE4.2.3.2.  Prior group determinations made under P.L. 95-202 (reference (b)) \ndo not bind the board or the Secretary of the Air Force.  The board and the Secretary of \nthe Air Force fully and impartially shall consider each group on its own merit in relation \nto the factors listed in section 4. of this Directive.   \nENCLOSURE 4 \n14\n",
+  "pages": [
+    {
+      "type": "page",
+      "id": "DoDD 1000.20.pdf_0",
+      "filename": "DoDD 1000.20.pdf",
+      "p_page": 0,
+      "p_text": "Department of Defense DIRECTIVE NUMBER 1000.20 September 11 1989 Certified Current as of November 21 2003 ASDFMP SUBJECT Active Duty Service Determinations for Civilian or Contractual Groups References a DoD Directive 1000.20 Determinations of Active Military Service and Discharge Civilian or Contractual Personnel June 9 1983 hereby canceled b Public Law 95202 The G.I. Bill Improvement Act of 1977 Section 401 November 23 1977 38 U.S.C. 106 Note c Title 10 United States Code Section 802a d DoD Instruction 1336.1 Certificate of Release or Discharge from Active Duty DD Form 2145 Series January 6 1989 e through g see enclosure 1 1. REISSUANCE AND PURPOSE This Directive 1.1. Reissues reference a. 1.2. Implements reference b. 1.3. Directs the Secretary of the Air Force to determine if an established group of civilian employees or contract workers provided service to the U.S. Armed Forces in a manner considered active military service for Department of Veterans Affairs VA benefits. 1.4. Establishes the DoD CivilianMilitary Service Review Board and the Advisory Panel. 1.5. Establishes policy assigns responsibilities prescribes application procedures for groups and individuals and clarifies the factors used to determine active duty AD service. ",
+      "p_raw_text": "Department of Defense \n \n \nDIRECTIVE \n \nNUMBER 1000.20 \nSeptember 11, 1989 \nCertified Current as of November 21, 2003 \n \n \n \nASD(FM&P)  \nSUBJECT:  Active Duty Service Determinations for Civilian or Contractual Groups \nReferences: (a)  DoD Directive 1000.20, \"Determinations of Active Military Service and \nDischarge: Civilian or Contractual Personnel,\" June 9, 1983 (hereby \ncanceled)  \n(b)  Public Law 95-202, \"The G.I. Bill Improvement Act of 1977,\" Section \n401, November 23, 1977 (38 U.S.C.  106 Note)  \n(c)  Title 10, United States Code, Section 802(a)  \n(d)  DoD Instruction 1336.1, \"Certificate of Release or Discharge from \nActive Duty (DD Form 214/5 Series),\" January 6, 1989  \n(e)  through (g), see enclosure 1\n \n1.  REISSUANCE AND PURPOSE \nThis Directive:  \n1.1.  Reissues reference (a).\n1.2.  Implements reference (b).\n1.3.  Directs the Secretary of the Air Force to determine if an established group of \ncivilian employees or contract workers provided service to the U.S. Armed Forces in a \nmanner considered active military service for Department of Veterans Affairs (VA) \nbenefits.   \n1.4.  Establishes the DoD Civilian/Military Service Review Board and the Advisory \nPanel.   \n1.5.  Establishes policy, assigns responsibilities, prescribes application procedures \nfor groups and individuals, and clarifies the factors used to determine active duty (AD) \nservice.   \n"
+    },
+    {
+      "type": "page",
+      "id": "DoDD 1000.20.pdf_1",
+      "filename": "DoDD 1000.20.pdf",
+      "p_page": 1,
+      "p_text": "DoDD 1000.20 September 11 1989 2. APPLICABILITY AND SCOPE This Directive 2.1. Applies to the Office of the Secretary of Defense OSD the Military Departments and by agreement with the Department of Transportation DoT the U.S. Coast Guard. 2.2. Applies to any group application considered under reference b after the effective date of this Directive and to any individual who applies for discharge documents as a member of a group recognized by the Secretary of the Air Force. 3. DEFINITIONS The terms used in this Directive are defined in enclosure 2. 4. POLICY 4.1. Eligibility for Consideration. To be eligible to apply for consideration under P.L. 95202 reference b and this Directive a group must 4.1.1. Have been similarly situated to the Womens Air Forces Service Pilots of World War II. 4.1.2. Have rendered service to the United States in what was considered civilian employment with the U.S. Armed Forces either through formal Civil Service hiring or less formal hiring if the engagement was created under the exigencies of war or as the result of a contract with the U.S. Government to provide direct support to the U.S. Armed Forces. 4.1.3. Have rendered that service during a period of armed conflict. 4.1.4. Consist of living persons to whom VA benefits can accrue. 4.1.5. Not have already received benefits from the Federal Government for the service in question. 4.2. A determination of AD service that is considered to be equivalent to active military service is made on the extent to which the group was under the control of the U.S. Armed Forces in support of a military operation or mission during an armed 2 ",
+      "p_raw_text": "DoDD 1000.20, September 11, 1989 \n \n2.  APPLICABILITY AND SCOPE \nThis Directive:  \n2.1.  Applies to the Office of the Secretary of Defense (OSD), the Military \nDepartments, and by agreement with the Department of Transportation (DoT), the U.S. \nCoast Guard.   \n2.2.  Applies to any group application considered under reference (b) after the \neffective date of this Directive and to any individual who applies for discharge \ndocuments as a member of a group recognized by the Secretary of the Air Force.   \n \n3.  DEFINITIONS \nThe terms used in this Directive are defined in enclosure 2.\n \n4.  POLICY \n4.1.  Eligibility for Consideration.  To be eligible to apply for consideration under \nP.L. 95-202 (reference (b)) and this Directive, a group must:  \n4.1.1.  Have been similarly situated to the Women's Air Forces Service Pilots \nof World War II.   \n4.1.2.  Have rendered service to the United States in what was considered \ncivilian employment with the U.S. Armed Forces either through formal Civil Service \nhiring or less formal hiring if the engagement was created under the exigencies of war, or \nas the result of a contract with the U.S. Government to provide direct support to the U.S. \nArmed Forces.   \n4.1.3.  Have rendered that service during a period of armed conflict.   \n4.1.4.  Consist of living persons to whom VA benefits can accrue.   \n4.1.5.  Not have already received benefits from the Federal Government for the \nservice in question.   \n4.2.  A determination of AD service that is considered to be equivalent to active \nmilitary service is made on the extent to which the group was under the control of the \nU.S. Armed Forces in support of a military operation or mission during an armed  \n \n2\n"
+    },
+    {
+      "type": "page",
+      "id": "DoDD 1000.20.pdf_2",
+      "filename": "DoDD 1000.20.pdf",
+      "p_page": 2,
+      "p_text": "DoDD 1000.20 September 11 1989 conflict. The extent of control exerted over the group must be similar to that exerted over military personnel and shall be determined by but not necessarily limited to the following 4.2.1. Incidents Favoring Equivalency 4.2.1.1. Uniqueness of Service. Civilian service civilian employment or contractual service is a vital element of the warfighting capability of the Armed Forces. Civilian service during a period of armed conflict is not necessarily equivalent to active military service even when performed in a combat zone. Service must be beyond that generally performed by civilian employees and must be occasioned by unique circumstances. For civilian service to be recognized under this Directive the following factors must be present 4.2.1.1.1. The group was created or organized by U.S. Government authorities to fill a wartime need or if a group was not created specifically for a wartime need but existed before that time then its wartime mission was of a nature to substantially alter the organizations prewar character. 4.2.1.1.2. If the application is based on service in a combat zone the mission of the group in a combat zone must have been substantially different from the mission of similar groups not in a combat zone. 4.2.1.2. Organizational Authority Over the Group. The concept of military control is reinforced if the military command authority determines such things as the structure of the civilian organization the location of the group the mission and activities of the group and the staffing requirements to include the length of employment and pay grades of the members of the group. 4.2.1.3. Integration into the Military Organization. Integrated civilian groups are subject to the regulations standards and control of the military command authority. 4.2.1.3.1. Examples include the following 4.2.1.3.1.1. Exchanging military courtesies. 4.2.1.3.1.2. Wearing military clothing insignia and devices. 4.2.1.3.1.3. Assimilating the group into the military organizational structure. 4.2.1.3.1.4. Emoluments associated with military personnel i.e. the use of commissaries and exchanges and membership in military clubs. 3 ",
+      "p_raw_text": "DoDD 1000.20, September 11, 1989 \nconflict.  The extent of control exerted over the group must be similar to that exerted over \nmilitary personnel and shall be determined by, but not necessarily limited to, the \nfollowing:  \n4.2.1.  Incidents Favoring Equivalency \n4.2.1.1.  Uniqueness of Service.  Civilian service (civilian employment or \ncontractual service) is a vital element of the war-fighting capability of the Armed Forces.  \nCivilian service during a period of armed conflict is not necessarily equivalent to active \nmilitary service, even when performed in a combat zone.  Service must be beyond that \ngenerally performed by civilian employees and must be occasioned by unique \ncircumstances.  For civilian service to be recognized under this Directive, the following \nfactors must be present:  \n4.2.1.1.1.  The group was created or organized by U.S.  Government \nauthorities to fill a wartime need or, if a group was not created specifically for a wartime \nneed, but existed before that time, then its wartime mission was of a nature to \nsubstantially alter the organization's prewar character.   \n4.2.1.1.2.  If the application is based on service in a combat zone, the \nmission of the group in a combat zone must have been substantially different from the \nmission of similar groups not in a combat zone.   \n4.2.1.2.  Organizational Authority Over the Group.  The concept of \nmilitary control is reinforced if the military command authority determines such things as \nthe structure of the civilian organization, the location of the group, the mission and \nactivities of the group, and the staffing requirements to include the length of employment \nand pay grades of the members of the group.   \n4.2.1.3.  Integration into the Military Organization.  Integrated civilian \ngroups are subject to the regulations, standards, and control of the military command \nauthority.   \n4.2.1.3.1.  Examples include the following:  \n4.2.1.3.1.1.  Exchanging military courtesies.   \n4.2.1.3.1.2.  Wearing military clothing, insignia, and devices.   \n4.2.1.3.1.3.  Assimilating the group into the military \norganizational structure.   \n4.2.1.3.1.4.  Emoluments associated with military personnel; i.e., \nthe use of commissaries and exchanges, and membership in military clubs.   \n \n3\n"
+    },
+    {
+      "type": "page",
+      "id": "DoDD 1000.20.pdf_3",
+      "filename": "DoDD 1000.20.pdf",
+      "p_page": 3,
+      "p_text": "DoDD 1000.20 September 11 1989 4.2.1.3.2. A group fully integrated into the military would give the impression that the members of the group were military except that they were paid and accounted for as civilians. 4.2.1.3.3. Integration into the military may lead to an expectation by members of the group that the service of the group imminently would be recognized as active military service. Such integration acts in favor of recognition. 4.2.1.4. Subjection to Military Discipline. During past armed conflicts U.S. military commanders sometimes restricted the rights or liberties of civilian members as if they were military members. 4.2.1.4.1. Examples include the following 4.2.1.4.1.1. Placing members under a curfew. 4.2.1.4.1.2. Requiring members to work extended hours or unusual shifts. 4.2.1.4.1.3. Changing duty assignments and responsibilities. 4.2.1.4.1.4. Restricting proximity travel to and from the military installation. 4.2.1.4.1.5. Imposing dress and grooming standards. 4.2.1.4.2. Consequences for noncompliance might include a loss of some privilege dismissal from the group or trial under military law. Such military discipline acts in favor of recognition. 4.2.1.5. Subjection to Military Justice. Military members are subject to the military criminal justice system. During times of war persons serving with or accompanying an Armed Force in the field are subject to the military criminal justice code reference c. Those who were SERVING WITH the U.S. Armed Forces may have been treated as if they were military and subjected to courtmartial jurisdiction to maintain discipline. Such treatment is a factor in favor of recognition. 4.2.1.6. Prohibition Against Members of the Group Joining the Armed Forces. Some organizations may have been formed to serve in a military capacity to overcome the operation of existing laws or treaty or because of a governmentally established policy to retain individuals in the group as part of a civilian force. These factors act in favor of recognition. 4 ",
+      "p_raw_text": "DoDD 1000.20, September 11, 1989 \n4.2.1.3.2.  A group fully integrated into the military would give the \nimpression that the members of the group were military, except that they were paid and \naccounted for as civilians.   \n4.2.1.3.3.  Integration into the military may lead to an expectation by \nmembers of the group that the service of the group imminently would be recognized as \nactive military service.  Such integration acts in favor of recognition.   \n4.2.1.4.  Subjection to Military Discipline.  During past armed conflicts, \nU.S.  military commanders sometimes restricted the rights or liberties of civilian \nmembers as if they were military members.   \n4.2.1.4.1.  Examples include the following:  \n4.2.1.4.1.1.  Placing members under a curfew.   \n4.2.1.4.1.2.  Requiring members to work extended hours or \nunusual shifts.   \n4.2.1.4.1.3.  Changing duty assignments and responsibilities.   \n4.2.1.4.1.4.  Restricting proximity travel to and from the military \ninstallation.   \n4.2.1.4.1.5.  Imposing dress and grooming standards.   \n4.2.1.4.2.  Consequences for noncompliance might include a loss of \nsome privilege, dismissal from the group, or trial under military law.  Such military \ndiscipline acts in favor of recognition.   \n4.2.1.5.  Subjection to Military Justice.  Military members are subject to \nthe military criminal justice system.  During times of war, \"persons serving with or \naccompanying an Armed Force in the field\" are subject to the military criminal justice \ncode (reference (c)). Those who were SERVING WITH the U.S. Armed Forces may have \nbeen treated as if they were military and subjected to court-martial jurisdiction to \nmaintain discipline.  Such treatment is a factor in favor of recognition.   \n4.2.1.6.  Prohibition Against Members of the Group Joining the Armed \nForces.  Some organizations may have been formed to serve in a military capacity to \novercome the operation of existing laws or treaty or because of a governmentally \nestablished policy to retain individuals in the group as part of a civilian force.  These \nfactors act in favor of recognition.   \n \n \n4\n"
+    },
+    {
+      "type": "page",
+      "id": "DoDD 1000.20.pdf_4",
+      "filename": "DoDD 1000.20.pdf",
+      "p_page": 4,
+      "p_text": "DoDD 1000.20 September 11 1989 4.2.1.7. Receipt of Military Training andor Achievement of Military Capability. If a group employed skills or resources that were enhanced as the result of military training or equipment designed or issued for that purpose this acts toward recognition. 4.2.2. Incidents Not Favoring Equivalency 4.2.2.1. Submission to the U.S. Armed Forces for Protection. A group that seeks protection and assistance from the U.S. Armed Forces and submits to military control for its own wellbeing is not deemed to have provided service to the Armed Forces equivalent to AD military service even though the group may have been as follows 4.2.2.1.1. Armed by the U.S. military for defensive purposes. 4.2.2.1.2. Routed by the U.S. military to avoid the enemy. 4.2.2.1.3. Instructed by the U.S. military for the defense of the group when attacked by or in danger of attack by the enemy. 4.2.2.1.4. Otherwise submitted themselves to the U.S. military for sustenance and protection. 4.2.2.2. Permitted to Resign. The ability of members to resign at will and without penalty acts against military control. Penalty may be direct and severe such as confinement or indirect and moderate such as difficult and costly transportation from an overseas location. 4.2.2.3. Prior Recognition of Group Service. Recognition of a groups service by agencies of State or local government does not provide support in favor of recognition under this Directive. 4.2.3. Status of Group in International Law. In addition to other factors consideration will be given to whether members of the group were regarded and treated as civilians or assimilated to the Armed Forces as reflected in treaties customary international law judicial decisions and U.S. diplomatic practice. 4.3. Reconsideration. Applications by groups previously denied a favorable determination by the Secretary of the Air Force shall be reconsidered under this Directive if the group submits evidence that is new relevant and substantive. Any request that the DoD CivilianMilitary Service Review Board established hereunder see paragraph 5.2. determines does not provide new relevant and substantive evidence shall be returned to the applicant with the reasons for nonacceptance. 5 ",
+      "p_raw_text": "DoDD 1000.20, September 11, 1989 \n4.2.1.7.  Receipt of Military Training and/or Achievement of Military \nCapability.  If a group employed skills or resources that were enhanced as the result of \nmilitary training or equipment designed or issued for that purpose, this acts toward \nrecognition.   \n4.2.2.  Incidents Not Favoring Equivalency \n4.2.2.1.  Submission to the U.S.  Armed Forces for Protection.  A group \nthat seeks protection and assistance from the U.S.  Armed Forces and submits to military \ncontrol for its own well-being is not deemed to have provided service to the Armed \nForces equivalent to AD military service, even though the group may have been as \nfollows:  \n4.2.2.1.1.  Armed by the U.S. military for defensive purposes.   \n4.2.2.1.2.  Routed by the U.S. military to avoid the enemy.   \n4.2.2.1.3.  Instructed by the U.S. military for the defense of the group \nwhen attacked by, or in danger of attack by, the enemy.   \n4.2.2.1.4.  Otherwise submitted themselves to the U.S. military for \nsustenance and protection.   \n4.2.2.2.  Permitted to Resign.  The ability of members to resign at will and \nwithout penalty acts against military control.  Penalty may be direct and severe, such as \nconfinement, or indirect and moderate, such as difficult and costly transportation from an \noverseas location.   \n4.2.2.3.  Prior Recognition of Group Service.  Recognition of a group's \nservice by agencies of State or local government does not provide support in favor of \nrecognition under this Directive.   \n4.2.3.  Status of Group in International Law.  In addition to other factors, \nconsideration will be given to whether members of the group were regarded and treated \nas civilians, or assimilated to the Armed Forces as reflected in treaties, customary \ninternational law, judicial decisions, and U.S. diplomatic practice.   \n4.3.  Reconsideration.  Applications by groups previously denied a favorable \ndetermination by the Secretary of the Air Force shall be reconsidered under this Directive \nif the group submits evidence that is new, relevant, and substantive.  Any request that the \nDoD Civilian/Military Service Review Board established hereunder (see paragraph 5.2.) \ndetermines does not provide new, relevant, and substantive evidence shall be returned to \nthe applicant with the reasons for non-acceptance.   \n \n5\n"
+    },
+    {
+      "type": "page",
+      "id": "DoDD 1000.20.pdf_5",
+      "filename": "DoDD 1000.20.pdf",
+      "p_page": 5,
+      "p_text": "DoDD 1000.20 September 11 1989 4.4. Counsel Representation. Neither the Department of Defense nor Department of Transportation shall provide representation by counsel or defray the cost of such representation with respect to any matter covered by this Directive. 5. RESPONSIBILITIES 5.1. The Assistant Secretary of Defense Force Management and Personnel ASDFMP shall 5.1.1. Appoint a primary and an alternate member in the grade of O6 or GM 15 or higher to the DoD CivilianMilitary Service Review Board. 5.1.2. Exercise oversight over the Military Departments and the U.S. Coast Guard for compliance with this Directive and in the issuance of discharge documents and casualty reports to members of recognized groups. 5.2. The Secretary of the Air Force as the designated Executive Agent of the Secretary of Defense for the administration of P. L. 95202 reference b shall 5.2.1. Establish the DoD CivilianMilitary Service Review Board and the Advisory Panel. 5.2.2. Appoint as board president a member or employee of the Air Force in grade O6 or GM15 or higher. 5.2.3. Request the Secretary of Transportation to appoint an additional voting member from the U.S. Coast Guard when the board is considering the application of a group claiming active Coast Guard service. 5.2.4. Provide a recorder and an assistant to maintain the records of the board and administer the functions of this Directive. 5.2.5. Provide nonvoting legal advisors and historians. 5.2.6. Publish notices of group applications and other P.L. 95202 reference b announcements in the Federal Register. 5.2.7. Consider the rationale and recommendations of the DoD Civilians Military Service Review Board. 5.2.8. Determine whether the service rendered by a civilian or contractual group shall be considered AD service to the U.S. Armed Forces for all laws administered by the VA. The decision of the Secretary of the Air Force is final. There is no appeal. 6 ",
+      "p_raw_text": "DoDD 1000.20, September 11, 1989 \n4.4.  Counsel Representation.  Neither the Department of Defense nor Department of \nTransportation shall provide representation by counsel or defray the cost of such \nrepresentation with respect to any matter covered by this Directive.   \n \n5.  RESPONSIBILITIES \n5.1.  The Assistant Secretary of Defense (Force Management and Personnel) \n(ASD(FM&P)) shall:  \n5.1.1.  Appoint a primary and an alternate member in the grade of O-6 or GM-\n15 or higher to the DoD Civilian/Military Service Review Board.   \n5.1.2.  Exercise oversight over the Military Departments and the U.S.  Coast \nGuard for compliance with this Directive and in the issuance of discharge documents and \ncasualty reports to members of recognized groups.   \n5.2.  The Secretary of the Air Force, as the designated Executive Agent of the \nSecretary of Defense for the administration of P. L. 95-202 (reference (b)), shall:  \n5.2.1.  Establish the DoD Civilian/Military Service Review Board and the \nAdvisory Panel.   \n5.2.2.  Appoint as board president a member or employee of the Air Force in \ngrade O-6 or GM-15 or higher.   \n5.2.3.  Request the Secretary of Transportation to appoint an additional voting \nmember from the U.S.  Coast Guard when the board is considering the application of a \ngroup claiming active Coast Guard service.   \n5.2.4.  Provide a recorder and an assistant to maintain the records of the board \nand administer the functions of this Directive.   \n5.2.5.  Provide nonvoting legal advisors and historians.   \n5.2.6.  Publish notices of group applications and other P.L. 95-202 (reference \n(b)) announcements in the \"Federal Register.\"  \n5.2.7.  Consider the rationale and recommendations of the DoD Civilians \nMilitary Service Review Board.   \n5.2.8.  Determine whether the service rendered by a civilian or contractual \ngroup shall be considered AD service to the U.S.  Armed Forces for all laws administered \nby the VA.  The decision of the Secretary of the Air Force is final.  There is no appeal.   \n \n6\n"
+    },
+    {
+      "type": "page",
+      "id": "DoDD 1000.20.pdf_6",
+      "filename": "DoDD 1000.20.pdf",
+      "p_page": 6,
+      "p_text": "DoDD 1000.20 September 11 1989 5.2.9. Notify the following persons in writing when a group determination is made if the Secretary of the Air Force disagrees with the rationale or recommendations of the board the Secretary of the Air Force shall provide the decision and reasons for it in writing to these persons 5.2.9.1. The applicants for the group. 5.2.9.2. The Secretary of the Department of Veterans Affairs. 5.2.9.3. The Secretary of the Army. 5.2.9.4. The Secretary of the Navy. 5.2.9.5. The ASDFMP. 5.2.9.6. The Secretary of Transportation when a group claims active Coast Guard service. 5.3. The Secretary of the Army Secretary of the Navy Secretary of the Air Force and Commandant of the Coast Guard shall 5.3.1. Appoint to the board a primary and an alternate member in the grades of O6 or GM15 or higher from their respective Military Services. 5.3.2. Process applications for discharge documents from individuals claiming membership in a recognized group in accordance with applicable laws Directives the Secretary of the Air Force rationale and instrument effecting a group determination and any other instructions of the board. 5.3.3. Determine whether the applicant was a member of a recognized group after considering the individuals evidence of membership and verifying the service against available Government records. 5.3.4. Issue a DD Form 214 Certificate of Release or Discharge from Active Duty and a DD Form 256 Honorable Discharge Certificate or a DD Form 257 General Discharge Certificate as appropriate consistent with DoD Instruction 1336.1 and DoD Directive 1332.14 references d and e and the implementing documents of the appropriate statutes of the Military Department concerned or the DoT and the instructions of the DoD CivilianMilitary Service Review Board. 5.3.5. Issue a DD Form 1300 Report of Casualty in accordance with DoD Instruction 1300.9 reference f if a verified member was killed during the period of AD service. 7 ",
+      "p_raw_text": "DoDD 1000.20, September 11, 1989 \n5.2.9.  Notify the following persons in writing when a group determination is \nmade (if the Secretary of the Air Force disagrees with the rationale or recommendations \nof the board, the Secretary of the Air Force shall provide the decision and reasons for it in \nwriting to these persons):  \n5.2.9.1.  The applicant(s) for the group.   \n5.2.9.2.  The Secretary of the Department of Veterans Affairs.   \n5.2.9.3.  The Secretary of the Army.   \n5.2.9.4.  The Secretary of the Navy.   \n5.2.9.5.  The ASD(FM&P).   \n5.2.9.6.  The Secretary of Transportation (when a group claims active \nCoast Guard service).   \n5.3.  The Secretary of the Army, Secretary of the Navy, Secretary of the Air Force, \nand Commandant of the Coast Guard shall:  \n5.3.1.  Appoint to the board a primary and an alternate member in the grades of \nO-6 or GM-15 or higher from their respective Military Services.   \n5.3.2.  Process applications for discharge documents from individuals claiming \nmembership in a recognized group in accordance with applicable laws, Directives, the \nSecretary of the Air Force rationale and instrument effecting a group determination, and \nany other instructions of the board.   \n5.3.3.  Determine whether the applicant was a member of a recognized group \nafter considering the individual's evidence of membership and verifying the service \nagainst available Government records.   \n5.3.4.  Issue a DD Form 214, \"Certificate of Release or Discharge from Active \nDuty,\" and a DD Form 256, \"Honorable Discharge Certificate,\" or a DD Form 257, \n\"General Discharge Certificate,\" as appropriate, consistent with DoD Instruction 1336.1 \nand DoD Directive 1332.14 (references (d) and (e)) and the implementing documents of \nthe appropriate statutes of the Military Department concerned or the DoT and the \ninstructions of the DoD Civilian/Military Service Review Board.   \n5.3.5.  Issue a DD Form 1300, \"Report of Casualty,\" in accordance with DoD \nInstruction 1300.9 (reference (f)) if a verified member was killed during the period of AD \nservice.   \n \n7\n"
+    },
+    {
+      "type": "page",
+      "id": "DoDD 1000.20.pdf_7",
+      "filename": "DoDD 1000.20.pdf",
+      "p_page": 7,
+      "p_text": "DoDD 1000.20 September 11 1989 5.3.6. Ensure that each DD Form 214 Certificate of Release or Discharge from Active Duty and each DD Form 1300 Report of Casualty have the following statement entered in the Remarks section This document issued under P. L. 95202 38 U.S.C. 106 Note administratively establishes active duty service for the purposes of Department of Veterans Affairs benefits. 5.3.7. Determine the equivalent military pay grade when required by the Department of Veterans Affairs. For VA benefits a pay grade is needed only in cases when an individual was killed or received serviceconnected injuries or disease during the recognized period of AD service. A DD Form 1300 shall be issued with the equivalent pay grade annotated for a member who died during the recognized period of service. A DD Form 214 shall not include pay grade unless the Department of Veterans Affairs requests that a grade determination be given. Determinations of equivalent grade shall be based on the following criteria in order of importance 5.3.7.1. Officially recognized organizational grade or equivalent rank. 5.3.7.2. The corresponding rank for civilian pay grade. 5.3.7.3. If neither of the criteria in subparagraphs 5.3.7.1. and 5.3.7.2. above applies only one of three grades may be issued i.e. O1 E4 or E1. Selection depends on the nature of the job performed the level of supervision exercised and the military privileges to which the individual was entitled. 5.3.8. Adjudicate applicant challenges to the period of AD service characterization of service or other administrative aspects of the discharge documents issued. 6. PROCEDURES 6.1. Submitting Group Applications. Applications on behalf of a civilian or contractual group shall be submitted to the Secretary of the Air Force using the instructions in enclosure 3. 6.2. Processing Group Applications 6.2.1. When received the recorder shall review the application for sufficiency and either return it for more information or accept it for consideration and announce acceptance in the Federal Register. 6.2.2. The recorder shall send the application to the appropriate advisory panel for historical review and analysis. 8 ",
+      "p_raw_text": "DoDD 1000.20, September 11, 1989 \n5.3.6.  Ensure that each DD Form 214, \"Certificate of Release or Discharge \nfrom Active Duty,\" and each DD Form 1300, \"Report of Casualty,\" have the following \nstatement entered in the \"Remarks\" section:  \n \n\"This document, issued under P. L.  95-202 (38 U.S.C.  106 Note), administratively \nestablishes active duty service for the purposes of Department of Veterans Affairs \nbenefits.\"  \n5.3.7.  Determine the equivalent military pay grade, when required by the \nDepartment of Veterans Affairs.  For VA benefits, a pay grade is needed only in cases \nwhen an individual was killed or received service-connected injuries or disease during the \nrecognized period of AD service.  A DD Form 1300 shall be issued with the equivalent \npay grade annotated for a member who died during the recognized period of service.  A \nDD Form 214 shall not include pay grade, unless the Department of Veterans Affairs \nrequests that a grade determination be given.  Determinations of equivalent grade shall be \nbased on the following criteria in order of importance:  \n5.3.7.1.  Officially recognized organizational grade or equivalent rank.   \n5.3.7.2.  The corresponding rank for civilian pay grade.   \n5.3.7.3.  If neither of the criteria in subparagraphs 5.3.7.1. and 5.3.7.2., \nabove, applies, only one of three grades may be issued; i.e., O-1, E-4, or E-1.  Selection \ndepends on the nature of the job performed, the level of supervision exercised, and the \nmilitary privileges to which the individual was entitled.   \n5.3.8.  Adjudicate applicant challenges to the period of AD service, \ncharacterization of service, or other administrative aspects of the discharge documents \nissued. \n \n6.  PROCEDURES \n6.1.  Submitting Group Applications.  Applications on behalf of a civilian or \ncontractual group shall be submitted to the Secretary of the Air Force using the \ninstructions in enclosure 3.\n6.2.  Processing Group Applications \n6.2.1.  When received, the recorder shall review the application for sufficiency \nand either return it for more information or accept it for consideration and announce \nacceptance in the \"Federal Register.\"  \n6.2.2.  The recorder shall send the application to the appropriate advisory panel \nfor historical review and analysis.   \n \n8\n"
+    },
+    {
+      "type": "page",
+      "id": "DoDD 1000.20.pdf_8",
+      "filename": "DoDD 1000.20.pdf",
+      "p_page": 8,
+      "p_text": "DoDD 1000.20 September 11 1989 6.2.3. When received the recorder shall send the advisory panels report to the applicant for comment. The applicants comments shall be referred to the advisory panel if significant disagreement requires resolution. Additional comments from the historians also shall be referred to the applicant for comment. 6.2.4. The DoD CivilianMilitary Service Board shall consider the group application as established in paragraph 6.1. and subparagraphs 6.2.1. through 6.2.3. above. 6.2.5. After the Secretary of the Air Force makes a decision the recorder shall notify the applicant of the decision and announce it in the Federal Register. 6.3. Submitting Individual Applications. When a group is recognized individual members may apply to the appropriate Military Department or to the Coast Guard for discharge documents. Submit applications on DD Form 2168 Application for Discharge of Member or Survivor of Member of Group Certified to Have Performed Active Duty with the Armed Forces of the United States. An application on behalf of a deceased or incompetent member submitted by the next of kin must be accompanied by proof of death or incompetence. 7. EFFECTIVE DATE AND IMPLEMENTATION This Directive is effective immediately. Forward one copy of implementing documents to the Assistant Secretary of Defense Force Management and Personnel within 120 days. Enclosures  4 E1. References continued E2. Definitions E3. Instructions for Submitting Group Applications Under P.L. 95202 reference b E4. The DoD CivilianMilitary Service Review Board and the Advisory Panel 9 ",
+      "p_raw_text": "DoDD 1000.20, September 11, 1989 \n6.2.3.  When received, the recorder shall send the advisory panel's report to the \napplicant for comment.  The applicant's comments shall be referred to the advisory panel \nif significant disagreement requires resolution.  Additional comments from the historians \nalso shall be referred to the applicant for comment.   \n6.2.4.  The DoD Civilian/Military Service Board shall consider the group \napplication, as established, in paragraph 6.1. and subparagraphs 6.2.1. through 6.2.3., \nabove.   \n6.2.5.  After the Secretary of the Air Force makes a decision, the recorder shall \nnotify the applicant of the decision and announce it in the \"Federal Register.\"  \n6.3.  Submitting Individual Applications.  When a group is recognized, individual \nmembers may apply to the appropriate Military Department or to the Coast Guard for \ndischarge documents.  Submit applications on DD Form 2168, \"Application for \nDischarge of Member or Survivor of Member of Group Certified to Have Performed \nActive Duty with the Armed Forces of the United States.\" An application on behalf of a \ndeceased or incompetent member submitted by the next of kin must be accompanied by \nproof of death or incompetence. \n \n7.  EFFECTIVE DATE AND IMPLEMENTATION \nThis Directive is effective immediately.  Forward one copy of implementing documents \nto the Assistant Secretary of Defense (Force Management and Personnel) within 120 \ndays.   \n                                                       \n \nEnclosures - 4  \nE1.  References, continued\nE2.  Definitions\nE3.  Instructions for Submitting Group Applications Under P.L.  95-202 (reference (b))\nE4.  The DoD Civilian/Military Service Review Board and the Advisory Panel\n \n9\n"
+    },
+    {
+      "type": "page",
+      "id": "DoDD 1000.20.pdf_9",
+      "filename": "DoDD 1000.20.pdf",
+      "p_page": 9,
+      "p_text": "DoDD 1000.20 September 11 1989 E1. ENCLOSURE 1 REFERENCES continued e DoD Directive 1332.14 Enlisted Administrative Separations January 28 1982 f DoD Instruction 1300.9 Military Personnel Casualties Notification and Assistance to Next of Kin March 23 1973 g Title 38 United States Code Section 101 ENCLOSURE 1 10 ",
+      "p_raw_text": "DoDD 1000.20, September 11, 1989 \nE1.  ENCLOSURE 1 \nREFERENCES, continued \n \n \n(e)  DoD Directive 1332.14, \"Enlisted Administrative Separations,\" January 28, 1982  \n(f)  DoD Instruction 1300.9, \"Military Personnel Casualties Notification and Assistance \nto Next of Kin,\" March 23, 1973  \n(g)  Title 38, United States Code, Section 101  \nENCLOSURE 1 \n10\n"
+    },
+    {
+      "type": "page",
+      "id": "DoDD 1000.20.pdf_10",
+      "filename": "DoDD 1000.20.pdf",
+      "p_page": 10,
+      "p_text": "DoDD 1000.20 September 11 1989 E2. ENCLOSURE 2 DEFINITIONS E2.1.1. Armed Conflict. A prolonged period of sustained combat involving members of the U.S. Armed Forces against a foreign belligerent. The term connotes more than a military engagement of limited duration or for limited objectives and involves a significant use of military and civilian forces. E2.1.1.1. Examples of armed conflict are World Wars I and II and the Korean and Vietnam Conflicts. E2.1.1.2. Examples of military actions that are not armed conflicts are as follows E2.1.1.2.1. The incursion into Lebanon in 1958 and the peacekeeping force there in 1983 and 1984. E2.1.1.2.2. The incursions into the Dominican Republic in 1965 and into Libya in 1986. E2.1.1.2.3. The intervention into Grenada in 1983. E2.1.2. Civilian or Contractual Group. An organization similarly situated to the Womens Air Forces Service Pilots a group of Federal civilian employees attached to the U.S. Army Air Force in World War II. Those organization members rendered service to the U.S. Armed Forces during a period of armed conflict in a capacity that was then considered civilian employment with the Armed Forces or the result of a contract with the U.S. Government to provide direct support to the Armed Forces. E2.1.3. Recognized Group. A group whose service the Secretary of the Air Force administratively has determined to have been active duty for the purposes of all laws administered by the Department of Veterans Affairs i.e. VA benefits under 38 U.S.C. 101 reference g. E2.1.4. Similarly Situated. A civilian or contractual group is similarly situated to the Womens Air Forces Service Pilots when it existed as an identifiable group at the time the service was being rendered to the U.S. Armed Forces during a period of armed conflict. Persons who individually provided support through civilian employment or contract but who were not members of an identifiable group at the time the services were rendered are not similarly situated to the Womens Air Forces Service Pilots of World War II. ENCLOSURE 2 11 ",
+      "p_raw_text": "DoDD 1000.20, September 11, 1989 \nE2.  ENCLOSURE 2 \nDEFINITIONS \n \n \nE2.1.1.  Armed Conflict.  A prolonged period of sustained combat involving \nmembers of the U.S. Armed Forces against a foreign belligerent.  The term connotes \nmore than a military engagement of limited duration or for limited objectives, and \ninvolves a significant use of military and civilian forces.   \nE2.1.1.1.  Examples of armed conflict are World Wars I and II, and the Korean \nand Vietnam Conflicts.   \nE2.1.1.2.  Examples of military actions that are not armed conflicts are as \nfollows:  \nE2.1.1.2.1.  The incursion into Lebanon in 1958, and the peacekeeping \nforce there in 1983 and 1984.   \nE2.1.1.2.2.  The incursions into the Dominican Republic in 1965 and into \nLibya in 1986.   \nE2.1.1.2.3.  The intervention into Grenada in 1983.   \nE2.1.2.  Civilian or Contractual Group.  An organization similarly situated to the \nWomen's Air Forces Service Pilots (a group of Federal civilian employees attached to the \nU.S. Army Air Force in World War II).  Those organization members rendered service to \nthe U.S. Armed Forces during a period of armed conflict in a capacity that was then \nconsidered civilian employment with the Armed Forces, or the result of a contract with \nthe U.S. Government, to provide direct support to the Armed Forces.   \nE2.1.3.  Recognized Group.  A group whose service the Secretary of the Air Force \nadministratively has determined to have been \"active duty for the purposes of all laws \nadministered by the Department of Veterans Affairs;\" i.e., VA benefits under 38 U.S.C. \n101 (reference (g)).\nE2.1.4.  Similarly Situated.  A civilian or contractual group is similarly situated to \nthe Women's Air Forces Service Pilots when it existed as an identifiable group at the time \nthe service was being rendered to the U.S. Armed Forces during a period of armed \nconflict.  Persons who individually provided support through civilian employment or \ncontract, but who were not members of an identifiable group at the time the services were \nrendered, are not \"similarly situated\" to the Women's Air Forces Service Pilots of World \nWar II.   \nENCLOSURE 2 \n11\n"
+    },
+    {
+      "type": "page",
+      "id": "DoDD 1000.20.pdf_11",
+      "filename": "DoDD 1000.20.pdf",
+      "p_page": 11,
+      "p_text": "DoDD 1000.20 September 11 1989 E3. ENCLOSURE 3 INSTRUCTIONS FOR SUBMITTING GROUP APPLICATIONS UNDER P. L. 95202 E3.1. IN SUBMITTING A GROUP APPLICATION E3.1.1. Define the group to include the time period that your group provided service to the U.S. Armed Forces. E3.1.2. Show the relationship that the group had with the U.S. Armed Forces the manner in which members of the group were employed and the services the members of the group provided to the Armed Forces. E3.1.3. Address each of the factors in section 4. above. E3.1.4. Substantiate and document the application. The burden of proof rests with the applicant. E3.2. SEND COMPLETED GROUP APPLICATIONS TO Secretary of the Air Force SAFMRC DoD CivilianMilitary Service Review Board Washington DC 203301000 ENCLOSURE 3 12 ",
+      "p_raw_text": "DoDD 1000.20, September 11, 1989 \nE3.  ENCLOSURE 3 \nINSTRUCTIONS FOR SUBMITTING GROUP APPLICATIONS UNDER P. L. 95-202 \n \n \nE3.1.  IN SUBMITTING A GROUP APPLICATION: \nE3.1.1.  Define the group to include the time period that your group provided service \nto the U.S. Armed Forces.   \nE3.1.2.  Show the relationship that the group had with the U.S. Armed Forces, the \nmanner in which members of the group were employed, and the services the members of \nthe group provided to the Armed Forces.   \nE3.1.3.  Address each of the factors in section 4., above.   \nE3.1.4.  Substantiate and document the application.  (The burden of proof rests with \nthe applicant.)  \n \nE3.2.  SEND COMPLETED GROUP APPLICATIONS TO: \n \nSecretary of the Air Force (SAF/MRC)  \nDoD Civilian/Military Service Review Board  \nWashington, DC  20330-1000  \nENCLOSURE 3 \n12\n"
+    },
+    {
+      "type": "page",
+      "id": "DoDD 1000.20.pdf_12",
+      "filename": "DoDD 1000.20.pdf",
+      "p_page": 12,
+      "p_text": "DoDD 1000.20 September 11 1989 E4. ENCLOSURE 4 THE DoD CIVILIANMILITARY SERVICE REVIEW BOARD AND THE ADVISORY PANEL E4.1. ORGANIZATION AND MANAGEMENT E4.1.1. The board shall consist of a president selected from the Department of the Air Force and one representative each from the OSD the Department of the Army the Department of the Navy the Department of the Air Force and the U.S. Coast Guard when the group claims active Coast Guard service. Each member shall have one vote except that the president shall vote only to break a tie. The Boards decision is determined by majority vote. The president and two voting members shall constitute a quorum. E4.1.2. The advisory panel shall act as a nonvoting adjunct to the board. It shall consist of historians selected by the Secretaries of the Military Departments and if required by the Secretary of Transportation. The respective Military Departments and the DoT shall ensure that the advisory panel is provided with administrative and legal support. E4.2. FUNCTIONS E4.2.1. The board shall meet in executive session at the call of the president and shall limit its reviews to the following E4.2.1.1. Written submissions by an applicant on behalf of a civilian or contractual group. Presentations to the board are not allowed. E4.2.1.2. Written reports prepared by the advisory panel. E4.2.1.3. Any other relevant written information available. E4.2.1.4. Factors established in this Directive for determining AD service. E4.2.2. The board shall return to the applicant any application that does not meet the eligibility criteria established in paragraph 4.1. of this Directive. The board only needs to state the reasons why the group is ineligible for consideration under this Directive. ENCLOSURE 4 13 ",
+      "p_raw_text": "DoDD 1000.20, September 11, 1989 \nE4.  ENCLOSURE 4 \nTHE DoD CIVILIAN/MILITARY SERVICE REVIEW BOARD AND THE \nADVISORY PANEL \n \n \nE4.1.  ORGANIZATION AND MANAGEMENT \nE4.1.1.  The board shall consist of a president selected from the Department of the \nAir Force and one representative each from the OSD, the Department of the Army, the \nDepartment of the Navy, the Department of the Air Force, and the U.S. Coast Guard \n(when the group claims active Coast Guard service).  Each member shall have one vote \nexcept that the president shall vote only to break a tie.  The Board's decision is \ndetermined by majority vote.  The president and two voting members shall constitute a \nquorum.   \nE4.1.2.  The advisory panel shall act as a nonvoting adjunct to the board.  It shall \nconsist of historians selected by the Secretaries of the Military Departments and, if \nrequired, by the Secretary of Transportation.  The respective Military Departments and \nthe DoT shall ensure that the advisory panel is provided with administrative and legal \nsupport. \n \nE4.2.  FUNCTIONS \nE4.2.1.  The board shall meet in executive session at the call of the president, and \nshall limit its reviews to the following:  \nE4.2.1.1.  Written submissions by an applicant on behalf of a civilian or \ncontractual group.  Presentations to the board are not allowed.   \nE4.2.1.2.  Written report(s) prepared by the advisory panel.   \nE4.2.1.3.  Any other relevant written information available.   \nE4.2.1.4.  Factors established in this Directive for determining AD service.   \nE4.2.2.  The board shall return to the applicant any application that does not meet \nthe eligibility criteria established in paragraph 4.1. of this Directive.  The board only \nneeds to state the reasons why the group is ineligible for consideration under this \nDirective.   \nENCLOSURE 4 \n13\n"
+    },
+    {
+      "type": "page",
+      "id": "DoDD 1000.20.pdf_13",
+      "filename": "DoDD 1000.20.pdf",
+      "p_page": 13,
+      "p_text": "DoDD 1000.20 September 11 1989 E4.2.3. If the board determines that an application is eligible for consideration under paragraph 4.1. of this Directive the board shall provide to the Secretary of the Air Force a recommendation on the AD service determination for the group and the rationale for that recommendation that shall include but not be limited to a discussion of the factors listed in section 4. of this Directive. E4.2.3.1. No factors shall be established that require automatic recognition. Neither the board nor the Secretary of the Air Force shall be bound by any method in reaching a decision. E4.2.3.2. Prior group determinations made under P.L. 95202 reference b do not bind the board or the Secretary of the Air Force. The board and the Secretary of the Air Force fully and impartially shall consider each group on its own merit in relation to the factors listed in section 4. of this Directive. ENCLOSURE 4 14 ",
+      "p_raw_text": "DoDD 1000.20, September 11, 1989 \n \nE4.2.3.  If the board determines that an application is eligible for consideration \nunder paragraph 4.1. of this Directive, the board shall provide, to the Secretary of the Air \nForce, a recommendation on the AD service determination for the group and the rationale \nfor that recommendation that shall include, but not be limited to, a discussion of the \nfactors listed in section 4. of this Directive.   \nE4.2.3.1.  No factors shall be established that require automatic recognition.  \nNeither the board nor the Secretary of the Air Force shall be bound by any method in \nreaching a decision.   \nE4.2.3.2.  Prior group determinations made under P.L. 95-202 (reference (b)) \ndo not bind the board or the Secretary of the Air Force.  The board and the Secretary of \nthe Air Force fully and impartially shall consider each group on its own merit in relation \nto the factors listed in section 4. of this Directive.   \nENCLOSURE 4 \n14\n"
+    }
+  ],
+  "pagerank_r": 0.00011520730436235583,
+  "kw_doc_score_r": null,
+  "orgs_rs": {
+    "the Air Force": 15,
+    "the Armed Forces": 6,
+    "Transportation": 3,
+    "Coast Guard": 3,
+    "the Federal Register": 3,
+    "the U.S. Government": 2,
+    "Army": 2,
+    "Navy": 2,
+    "the Coast Guard": 2,
+    "the Federal Government": 1,
+    "State": 1,
+    "Defense": 1,
+    "Military Services": 1,
+    "Military Department": 1,
+    "Federal": 1,
+    "U.S.C.": 1
+  },
+  "text_length_r": 0.02329685845393576
+}

@@ -1,0 +1,28 @@
+
+log_id: "distilbert-gc-example-dodd.log"
+
+# class instantiation
+model_name: "distilbert-base-uncased"
+epochs: 1
+batch_size: 8
+random_state: 42
+
+# update these for your environment (note `~` means `None`)
+checkpoint_path: ~
+tensorboard_path: ~
+
+# Training args
+num_labels: 2
+split: 0.90
+warmup_steps: 0
+lr: 1.0e-05
+weight_decay: 0.0
+eps: 1.0e-08
+clip_grad_norm: 1.0
+drop_last: False
+truncate: False
+
+# if ~ (None), the max_seq_len will be computed from
+# the encoded text up to 512
+max_seq_len: ~
+max_seq_len: 256

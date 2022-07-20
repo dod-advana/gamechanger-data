@@ -1,0 +1,16 @@
+Metadata-Version: 2.1
+Name: gamechanger
+Version: evergreen
+Summary: UNKNOWN
+Home-page: https://bitbucket.di2e.net/projects/UOT/repos/gamechanger
+Author: gamechanger@advana
+License: UNKNOWN
+Platform: UNKNOWN
+Requires-Python: ==3.6.*
+Provides-Extra: dev
+Provides-Extra: ci
+Provides-Extra: covid-dev
+License-File: LICENSE.md
+
+UNKNOWN
+

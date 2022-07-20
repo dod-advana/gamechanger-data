@@ -18,6 +18,7 @@ from common.document_parser.lib import (
 from . import post_process, init_doc
 from common.document_parser.lib.ml_features import (
     add_pagerank_r, add_popscore_r)
+from gamechangerml.src.utilities.text_utils import utf8_pass, clean_text # ###########
 
 
 def parse(
@@ -60,7 +61,8 @@ def parse(
         # doc_dict = dates.process(doc_dict)
 
         # TODO: post process is mostly unnecessary renaming etc that can be refactored into prior steps
-        doc_dict = post_process.process(doc_dict)
+        # doc_dict = post_process.process(doc_dict)
+        doc_dict = process(doc_dict)
 
         write_doc_dict_to_json.write(out_dir=out_dir, ex_dict=doc_dict)
     except Exception as e:
@@ -68,3 +70,29 @@ def parse(
     finally:
         if should_delete:
             os.remove(f_name)
+
+
+def process(doc_dict):  # #########################################
+    doc_dict["raw_text"] = utf8_pass(doc_dict["text"])
+    doc_dict["text"] = clean_text(doc_dict["text"])
+
+    try:
+        doc_dict["text_length"] = doc_dict["text_length_r"]
+        del doc_dict["text_length"]
+    except KeyError:
+        pass
+
+    to_delete = [
+        "meta_data",
+        "ingest_date",
+        "orgs",
+        "f_name"
+    ]
+
+    for key in to_delete:
+        try:
+            del doc_dict[key]
+        except KeyError:
+            pass
+
+    return doc_dict

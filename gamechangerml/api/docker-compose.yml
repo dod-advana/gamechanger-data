@@ -1,0 +1,41 @@
+version: '3'
+services:
+  gc-redis:
+    container_name: gc-redis
+    hostname: gc-redis
+    image: redis
+    ports:
+      - "6380:6380"
+    command: ["redis-server", "--appendonly", "yes","--port 6380"]
+    expose:
+      - "6380"
+    networks:
+      - app-net
+    volumes:
+      - ../redis-data:/data
+  gamechanger-ml-gpu:
+    container_name: gc-ml-gpu
+    image: gamechanger-ml-gpu
+    build:
+      context: ../../.
+      dockerfile: gamechangerml/api/fastapi/gpu.mlapp.Dockerfile
+    deploy:
+      resources:
+        reservations:
+          devices:
+          - capabilities: [gpu]
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env
+    volumes:
+      - "../../gamechangerml/:/opt/app-root/src/gamechangerml/"
+      - ~/.aws/:/.aws
+    depends_on:
+      - gc-redis
+    networks:
+      - app-net
+
+networks:
+  app-net:
+    name: "${COMPOSE_PROJECT_NAME:-gc-dev}-network"

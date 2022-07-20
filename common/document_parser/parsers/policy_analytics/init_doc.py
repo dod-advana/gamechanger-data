@@ -41,25 +41,38 @@ def create_doc_dict_with_meta(meta_data={}) -> dict:
     default_url = ""
     default_cac_login_required = True
     default_hash = ""
+    default_doc_type = "" 
+    default_org = ""
+    default_source = ""
+    default_source_title = ""
+    default_title = ""
+    default_revoked = ""
 
-    try:
-        if meta_data["downloadable_items"][0]:
-            meta_data["download_url"] = meta_data["downloadable_items"][0]['web_url']
-    except:
-        pass
+#    try:
+#        if meta_data["downloadable_items"][0]:
+#            meta_data["download_url_s"] = meta_data["downloadable_items"][0]['download_url']
+#    except:
+#        pass
 
     doc_dict = {
-        "access_timestamp": meta_data.get("access_timestamp", default_date),
-        "publication_date": meta_data.get("publication_date", default_date),
-        "crawler_used": meta_data.get("crawler_used", default_crawler),
-        "source_fqdn": meta_data.get("source_fqdn", default_url),
-        "source_page_url": meta_data.get("source_page_url", default_url),
-        "cac_login_required": meta_data.get("cac_login_required", default_cac_login_required),
-        "download_url": meta_data.get("download_url", default_url),
-        "version_hash": meta_data.get("version_hash", default_hash),
-
+        "access_timestamp_dt": meta_data.get("access_timestamp_dt", default_date),
+        "publication_date_dt": meta_data.get("publication_date_dt", default_date),
+        "crawler_used_s": meta_data.get("crawler_used_s", default_crawler),
+        "source_fqdn_s": meta_data.get("source_fqdn_s", default_url),
+        "source_page_url_s": meta_data.get("source_page_url_s", default_url),
+        "cac_login_required_b": meta_data.get("cac_login_required_b", default_cac_login_required),
+        "download_url_s": meta_data.get("download_url_s", default_url),
+        "file_ext_s": meta_data.get("file_ext_s", default_url),
+        "version_hash_s": meta_data.get("version_hash_s", default_hash),
+        "display_doc_type_s": meta_data.get("display_doc_type_s", default_doc_type),
+        "display_org_s": meta_data.get("display_org_s", default_org),
+        "data_source_s": meta_data.get("data_source_s", default_source),
+        "source_title_s": meta_data.get("source_title_s", default_source_title),
+        "display_source_s": meta_data.get("display_source_s", default_source),
+        "display_title_s": meta_data.get("display_title_s", default_title),
+        "is_revoked_b": meta_data.get("is_revoked_b", default_revoked),
         "title": meta_data.get("doc_title", "NA"),
-        "ingest_date": meta_data.get("access_timestamp", False),
+        "ingest_date": meta_data.get("access_timestamp_dt", False),
         "meta_data": meta_data
     }
 

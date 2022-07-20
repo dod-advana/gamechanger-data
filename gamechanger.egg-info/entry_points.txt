@@ -1,0 +1,6 @@
+[console_scripts]
+composectl = dev.composectl.__main__:main
+configuration = configuration.__main__:main
+gci = dataPipelines.gc_ingest.__main__:cli
+uni = dev.universal_test_harness.__main__:cli
+
