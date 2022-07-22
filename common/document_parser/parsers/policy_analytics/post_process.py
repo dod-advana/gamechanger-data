@@ -119,6 +119,27 @@ def get_is_revoked(meta_data):
     """
     return meta_data.get("is_revoked", False)
 
+def get_status(meta_data):
+    """
+    get revocation status from document metadata
+    :return: bool
+    """
+    return meta_data.get("status", False)
+
+def get_country(meta_data):
+    """
+    get revocation status from document metadata
+    :return: bool
+    """
+    return meta_data.get("country", False)
+
+def get_expiration_date(meta_data):
+    """
+    get revocation status from document metadata
+    :return: bool
+    """
+    return meta_data.get("expiration_date", False)
+
 
 def rename_and_format(doc_dict):
     doc_dict["raw_text"] = utf8_pass(doc_dict["text"])
@@ -130,12 +151,16 @@ def rename_and_format(doc_dict):
         doc_dict["file_ext_s"] = get_file_extension(doc_dict["meta_data"])
         doc_dict["display_doc_type_s"] = get_display_doc_type(
             doc_dict, doc_dict["meta_data"])
+        doc_dict["expiration_date"] = get_expiration_date(doc_dict["meta_data"])
+        doc_dict["status_s"] = get_status(doc_dict["meta_data"])
+        doc_dict["country_s"] = get_country(doc_dict["meta_data"])
+        doc_dict["is_revoked_b"] = get_is_revoked(doc_dict["meta_data"])
         doc_dict["display_title_s"] = get_display_title(doc_dict["meta_data"])
         doc_dict["display_org_s"] = get_display_org(doc_dict["meta_data"])
         doc_dict["data_source_s"] = get_data_source(doc_dict["meta_data"])
         doc_dict["source_title_s"] = get_source_title(doc_dict["meta_data"])
         doc_dict["display_source_s"] = get_display_source(doc_dict["meta_data"])
-        doc_dict["is_revoked_b"] = get_is_revoked(doc_dict["meta_data"])
+
     else:
         doc_dict["is_revoked_b"] = False
 
