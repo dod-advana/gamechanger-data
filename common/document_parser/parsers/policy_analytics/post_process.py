@@ -90,7 +90,7 @@ def get_display_source(meta_data):
     :return: string
     """
     data_source = get_data_source(meta_data)
-    source_title =get_source_title(meta_data)
+    source_title = get_source_title(meta_data)
     return data_source + " - " + source_title
 
 def get_display_title(meta_data):
