@@ -1,5 +1,5 @@
 from gamechangerml.configs import BertSummConfig
-from gamechangerml.src.featurization.summary import GensimSumm
+#from gamechangerml.src.featurization.summary import GensimSumm
 
 
 def get_summary(text: str) -> str:
