@@ -1,7 +1,7 @@
 from os.path import join
-from re import compile, finditer
 from collections import Counter
 from itertools import chain
+from flashtext import KeywordProcessor
 
 from gamechangerml import DATA_PATH
 from gamechangerml.src.utilities.text_utils import simple_clean
@@ -11,7 +11,6 @@ from common.document_parser.lib.entities_utils import (
     remove_overlapping_ents,
     replace_nonalpha_chars,
     make_entities_lookup_dict,
-    sort_by_str_len,
 )
 
 
@@ -20,12 +19,10 @@ ENTITIES_LOOKUP_DICT = make_entities_lookup_dict(
     join(DATA_PATH, "features/GraphRelations.xls")
 )
 
-# Used to search for entities in documents.
-# Sorting by string length is necessary here because of how regex treats the
-# "|" operator.
-ENTITIES_PATTERN = compile(
-    r"(?=(\b" + r"\b|\b".join(sort_by_str_len(list(ENTITIES_LOOKUP_DICT.keys()))) + r"\b))"
-)
+# Used to find entities in text.
+PROCESSOR = KeywordProcessor(case_sensitive=True)
+for ent in ENTITIES_LOOKUP_DICT.keys():
+    PROCESSOR.add_keyword(ent)
 
 # Used to rename entity types from how they exist in the graph relations file
 # to how they will exist in document dictionaries.
@@ -50,14 +47,14 @@ def extract_entities(doc_dict):
         "top_entities_t" (list of str): Most common entities in the document
 
     Also adds the following to each item of doc_dict["paragraphs"]:
-        "entities" (dict): Keys (str) are entity types and values (list of str) 
+        "entities" (dict): Keys (str) are entity types and values (list of str)
             are the entities extracted from the paragraph.
     Args:
-        doc_dict (dict): Dictionary representation of a document. Must have  
+        doc_dict (dict): Dictionary representation of a document. Must have
             the following keys/ values:
-                "paragraphs" (list of dict): Dictionary representations of the 
-                    document's paragraphs. Each dict must have the key 
-                    "par_raw_text_t" with the corresponding value (str) being 
+                "paragraphs" (list of dict): Dictionary representations of the
+                    document's paragraphs. Each dict must have the key
+                    "par_raw_text_t" with the corresponding value (str) being
                     the paragraph's text.
             Example:
             {
@@ -93,14 +90,17 @@ def extract_entities(doc_dict):
         # have non-alphanumeric characters removed.
         text = replace_nonalpha_chars(text, "")
 
+        # The flashtext KeywordProcessor (inspired by the Aho-Corasick
+        # algorithm and Trie data structure) is MUCH faster than re.finditer()
+        # in this case.
         ents = [
             (
-                match.regs[1][0],  # start character index
-                match.regs[1][1],  # end character index
-                ENTITIES_LOOKUP_DICT[match[1]]["raw_ent"],
-                ENTITIES_LOOKUP_DICT[match[1]]["ent_type"],
+                e[1],
+                e[2],
+                ENTITIES_LOOKUP_DICT[e[0]]["raw_ent"],
+                ENTITIES_LOOKUP_DICT[e[0]]["ent_type"],
             )
-            for match in finditer(ENTITIES_PATTERN, text)
+            for e in PROCESSOR.extract_keywords(text, span_info=True)
         ]
         ents = remove_overlapping_ents(ents)
         for ent in ents:
