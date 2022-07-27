@@ -1,0 +1,311 @@
+[2022-07-18 11:44:53,702    INFO], [qe.py:80 - __init__()], loading bert-base-uncased
+[2022-07-18 11:44:56,670    INFO], [qe.py:92 - __init__()], QeMLM 0.3.4
+[2022-07-18 11:44:56,672 WARNING], [qe.py:129 - _expand()], number of tokens 1 < min_tokens 3
+[2022-07-18 11:44:58,593    INFO], [test_ebr_query_json.py:17 - test_query_in()], query : blahblahblah
+[2022-07-18 11:44:58,593    INFO], [sparse.py:67 - __init__()], SparseReader 0.5.1
+[2022-07-18 11:44:58,593    INFO], [sparse.py:68 - __init__()], instantiating base reader
+[2022-07-18 11:44:58,594    INFO], [sparse.py:69 - __init__()],          model_name : distilbert-base-uncased-distilled-squad
+[2022-07-18 11:44:58,594    INFO], [sparse.py:70 - __init__()], context_window_size : 150
+[2022-07-18 11:44:58,594    INFO], [sparse.py:71 - __init__()],            use__gpu : False
+[2022-07-18 11:45:00,853    INFO], [sparse.py:118 - predict()], n questions: 10
+[2022-07-18 11:45:00,853    INFO], [sparse.py:119 - predict()], n docs     : 10
+[2022-07-18 11:45:32,092    INFO], [sparse.py:135 - predict()], Length of answers from transformer nlp: 10
+[2022-07-18 11:45:32,095    INFO], [test_ebr_query_json.py:22 - test_query_in()], {'answers': [{'answer': 'Do S guidelines',
+              'context': 'f . Administer Do D passport and passport agent '
+                         'services and ensure that Do D passport and passport '
+                         'agent services are instituted according to Do S '
+                         'guidelines .',
+              'id': 'DoDD 1000.21E, 10 20 2009 OCR.pdf_2_10',
+              'text': 'f . Administer Do D passport and passport agent '
+                      'services and ensure that Do D passport and passport '
+                      'agent services are instituted according to Do S '
+                      'guidelines .'},
+             {'answer': 'D Directive 1000.21',
+              'context': 'SUBJECT : Do D Passport and Passport Agent Services '
+                         'References : ( a ) Do D Directive 1000.21 , “ Do D '
+                         'Passport and Passport Agent Services , ” July 9 , '
+                         '1992 ( hereby canceled ) ',
+              'id': 'DoDD 1000.21E, 10 20 2009 OCR.pdf_0_5',
+              'text': 'SUBJECT : Do D Passport and Passport Agent Services '
+                      'References : ( a ) Do D Directive 1000.21 , “ Do D '
+                      'Passport and Passport Agent Services , ” July 9 , 1992 '
+                      '( hereby canceled ) '},
+             {'answer': 'Do D passport and passport agent services',
+              'context': 'b . Exercise program management and oversight of Do '
+                         'D passport and passport agent services .',
+              'id': 'DoDD 1000.21E, 10 20 2009 OCR.pdf_2_6',
+              'text': 'b . Exercise program management and oversight of Do D '
+                      'passport and passport agent services .'},
+             {'answer': 'D passport and passport agent services points of '
+                        'contact for the Do D Components',
+              'context': 'i . Maintain the names of individuals who will serve '
+                         'as Do D passport and passport agent services points '
+                         'of contact for the Do D Components .',
+              'id': "'DoDD 1000.21E, 10 20 2009 OCR.pdf_2_13",
+              'text': 'i . Maintain the names of individuals who will serve as '
+                      'Do D passport and passport agent services points of '
+                      'contact for the Do D Components .'},
+             {'answer': 'visa',
+              'context': 'ries of the Military Departments to accept passport '
+                         'applications and perform passport services to '
+                         'include administering oaths for passport purposes . '
+                         'visa .A stamp or impression placed on a page of a '
+                         'valid passport by a foreign embassy or consulate '
+                         'empowered to grant permission , as of the date '
+                         'issued ,',
+              'id': 'DoDD 1000.21E, 10 20 2009 OCR.pdf_4_5',
+              'text': 'A diplomatic passport , issued to a foreign service '
+                      'officer , a person in the diplomatic service , or a '
+                      'person having diplomatic status either because of the '
+                      'nature of his or her foreign mission or by reason of '
+                      'the office he or she holds . passport agent .A person '
+                      'authorized and empowered by the Secretary of State , '
+                      'the Do D EA for Do D Passport and Passport Agent '
+                      'Services , or the Secretaries of the Military '
+                      'Departments to accept passport applications and perform '
+                      'passport services to include administering oaths for '
+                      'passport purposes . visa .A stamp or impression placed '
+                      'on a page of a valid passport by a foreign embassy or '
+                      'consulate empowered to grant permission , as of the '
+                      'date issued , for the applicant to enter and remain in '
+                      'that country for a specific period of time .'},
+             {'answer': 'Do D EA for acceptance of official U.S . passport '
+                        'applications',
+              'context': 'd . Ensure that interdepartmental Do D passport '
+                         'agents perform all services required by Do S and the '
+                         'Do D EA for acceptance of official U.S . passport '
+                         'applications .',
+              'id': 'DoDD 1000.21E, 10 20 2009 OCR.pdf_3_6',
+              'text': 'd . Ensure that interdepartmental Do D passport agents '
+                      'perform all services required by Do S and the Do D EA '
+                      'for acceptance of official U.S . passport applications '
+                      '.'},
+             {'answer': 'Do D',
+              'context': 'j . Perform an annual review of Do D passport and '
+                         'passport agent services with Do S and the Do D '
+                         'Components .',
+              'id': 'DoDD 1000.21E, 10 20 2009 OCR.pdf_2_14',
+              'text': 'j . Perform an annual review of Do D passport and '
+                      'passport agent services with Do S and the Do D '
+                      'Components .'},
+             {'answer': 'representative to jointly review Do D EA',
+              'context': 'c . Provide annually a representative to jointly '
+                         'review Do D EA intradepartmental policies and '
+                         'procedures supporting Do D passport and passport '
+                         'agent services .',
+              'id': 'DoDD 1000.21E, 10 20 2009 OCR.pdf_3_5',
+              'text': 'c . Provide annually a representative to jointly review '
+                      'Do D EA intradepartmental policies and procedures '
+                      'supporting Do D passport and passport agent services .'},
+             {'answer': 'Do D passport agents',
+              'context': 'e . Designated Do D passport agents shall not accept '
+                         'regular U.S . passport applications unless granted '
+                         'written permission to do so by the Department of '
+                         'State ( Do S ) and the Do D EA f',
+              'id': 'DoDD 1000.21E, 10 20 2009 OCR.pdf_1_3',
+              'text': 'e . Designated Do D passport agents shall not accept '
+                      'regular U.S . passport applications unless granted '
+                      'written permission to do so by the Department of State '
+                      '( Do S ) and the Do D EA for Do D Passport and Passport '
+                      'Agent Services .5 . RESPONSIBILITIES .See Enclosure 2 '
+                      '.6 . RELEASABILITY .Cleared for public release .This '
+                      'Directive is available on the Do D Issuances Web Site '
+                      'at http://www.dtic.mil/whs/directives . 7 .EFFECTIVE '
+                      'DATE .This Directive is effective October 20 , 2009 .'},
+             {'answer': 'b .Do D employees and eligible family members '
+                        'traveling outside the United States',
+              'context': 'Y .It is Do D policy that : a .Passports issued by '
+                         'the U.S . Government are official U.S . documents '
+                         'and are considered at all times U.S . property . b '
+                         '.Do D employees and eligible family members '
+                         'traveling outside the United States on official '
+                         'travel to a foreign country requiring a U.S . '
+                         'passport pursuant to section 51.3 ( b ) of Reference '
+                         '( b ) shall be provided an official U.',
+              'id': 'DoDD 1000.21E, 10 20 2009 OCR.pdf_1_2',
+              'text': '4 . POLICY .It is Do D policy that : a .Passports '
+                      'issued by the U.S . Government are official U.S . '
+                      'documents and are considered at all times U.S . '
+                      'property . b .Do D employees and eligible family '
+                      'members traveling outside the United States on official '
+                      'travel to a foreign country requiring a U.S . passport '
+                      'pursuant to section 51.3 ( b ) of Reference ( b ) shall '
+                      'be provided an official U.S . passport , to include '
+                      'visas when required , at no expense to the Do D '
+                      'employees or their family members . c .Do D passport '
+                      'and passport agent services shall be made available to '
+                      'all Do D employees and family members through '
+                      'designated Do D passport agents . d .Designated Do D '
+                      'passport agents shall be full time or permanent part '
+                      'time Do D employees or members of the Military Services '
+                      '.'}],
+ 'query': 'blahblahblah'}
+[2022-07-18 11:45:32,109    INFO], [test_ebr_query_json.py:29 - test_bad_query()], query : blahblahblah
+[2022-07-18 11:45:32,109    INFO], [sparse.py:67 - __init__()], SparseReader 0.5.1
+[2022-07-18 11:45:32,109    INFO], [sparse.py:68 - __init__()], instantiating base reader
+[2022-07-18 11:45:32,110    INFO], [sparse.py:69 - __init__()],          model_name : distilbert-base-uncased-distilled-squad
+[2022-07-18 11:45:32,110    INFO], [sparse.py:70 - __init__()], context_window_size : 150
+[2022-07-18 11:45:32,110    INFO], [sparse.py:71 - __init__()],            use__gpu : False
+[2022-07-18 11:45:34,451    INFO], [sparse.py:118 - predict()], n questions: 10
+[2022-07-18 11:45:34,451    INFO], [sparse.py:119 - predict()], n docs     : 10
+[2022-07-18 11:46:05,615    INFO], [sparse.py:135 - predict()], Length of answers from transformer nlp: 10
+[2022-07-18 11:46:05,617    INFO], [test_ebr_query_json.py:34 - test_bad_query()], {'answers': [{'answer': 'Do S guidelines',
+              'context': 'f . Administer Do D passport and passport agent '
+                         'services and ensure that Do D passport and passport '
+                         'agent services are instituted according to Do S '
+                         'guidelines .',
+              'id': 'DoDD 1000.21E, 10 20 2009 OCR.pdf_2_10',
+              'text': 'f . Administer Do D passport and passport agent '
+                      'services and ensure that Do D passport and passport '
+                      'agent services are instituted according to Do S '
+                      'guidelines .'},
+             {'answer': 'D Directive 1000.21',
+              'context': 'SUBJECT : Do D Passport and Passport Agent Services '
+                         'References : ( a ) Do D Directive 1000.21 , “ Do D '
+                         'Passport and Passport Agent Services , ” July 9 , '
+                         '1992 ( hereby canceled ) ',
+              'id': 'DoDD 1000.21E, 10 20 2009 OCR.pdf_0_5',
+              'text': 'SUBJECT : Do D Passport and Passport Agent Services '
+                      'References : ( a ) Do D Directive 1000.21 , “ Do D '
+                      'Passport and Passport Agent Services , ” July 9 , 1992 '
+                      '( hereby canceled ) '},
+             {'answer': 'Do D passport and passport agent services',
+              'context': 'b . Exercise program management and oversight of Do '
+                         'D passport and passport agent services .',
+              'id': 'DoDD 1000.21E, 10 20 2009 OCR.pdf_2_6',
+              'text': 'b . Exercise program management and oversight of Do D '
+                      'passport and passport agent services .'},
+             {'answer': 'D passport and passport agent services points of '
+                        'contact for the Do D Components',
+              'context': 'i . Maintain the names of individuals who will serve '
+                         'as Do D passport and passport agent services points '
+                         'of contact for the Do D Components .',
+              'id': "'DoDD 1000.21E, 10 20 2009 OCR.pdf_2_13",
+              'text': 'i . Maintain the names of individuals who will serve as '
+                      'Do D passport and passport agent services points of '
+                      'contact for the Do D Components .'},
+             {'answer': 'visa',
+              'context': 'ries of the Military Departments to accept passport '
+                         'applications and perform passport services to '
+                         'include administering oaths for passport purposes . '
+                         'visa .A stamp or impression placed on a page of a '
+                         'valid passport by a foreign embassy or consulate '
+                         'empowered to grant permission , as of the date '
+                         'issued ,',
+              'id': 'DoDD 1000.21E, 10 20 2009 OCR.pdf_4_5',
+              'text': 'A diplomatic passport , issued to a foreign service '
+                      'officer , a person in the diplomatic service , or a '
+                      'person having diplomatic status either because of the '
+                      'nature of his or her foreign mission or by reason of '
+                      'the office he or she holds . passport agent .A person '
+                      'authorized and empowered by the Secretary of State , '
+                      'the Do D EA for Do D Passport and Passport Agent '
+                      'Services , or the Secretaries of the Military '
+                      'Departments to accept passport applications and perform '
+                      'passport services to include administering oaths for '
+                      'passport purposes . visa .A stamp or impression placed '
+                      'on a page of a valid passport by a foreign embassy or '
+                      'consulate empowered to grant permission , as of the '
+                      'date issued , for the applicant to enter and remain in '
+                      'that country for a specific period of time .'},
+             {'answer': 'Do D EA for acceptance of official U.S . passport '
+                        'applications',
+              'context': 'd . Ensure that interdepartmental Do D passport '
+                         'agents perform all services required by Do S and the '
+                         'Do D EA for acceptance of official U.S . passport '
+                         'applications .',
+              'id': 'DoDD 1000.21E, 10 20 2009 OCR.pdf_3_6',
+              'text': 'd . Ensure that interdepartmental Do D passport agents '
+                      'perform all services required by Do S and the Do D EA '
+                      'for acceptance of official U.S . passport applications '
+                      '.'},
+             {'answer': 'Do D',
+              'context': 'j . Perform an annual review of Do D passport and '
+                         'passport agent services with Do S and the Do D '
+                         'Components .',
+              'id': 'DoDD 1000.21E, 10 20 2009 OCR.pdf_2_14',
+              'text': 'j . Perform an annual review of Do D passport and '
+                      'passport agent services with Do S and the Do D '
+                      'Components .'},
+             {'answer': 'representative to jointly review Do D EA',
+              'context': 'c . Provide annually a representative to jointly '
+                         'review Do D EA intradepartmental policies and '
+                         'procedures supporting Do D passport and passport '
+                         'agent services .',
+              'id': 'DoDD 1000.21E, 10 20 2009 OCR.pdf_3_5',
+              'text': 'c . Provide annually a representative to jointly review '
+                      'Do D EA intradepartmental policies and procedures '
+                      'supporting Do D passport and passport agent services .'},
+             {'answer': 'Do D passport agents',
+              'context': 'e . Designated Do D passport agents shall not accept '
+                         'regular U.S . passport applications unless granted '
+                         'written permission to do so by the Department of '
+                         'State ( Do S ) and the Do D EA f',
+              'id': 'DoDD 1000.21E, 10 20 2009 OCR.pdf_1_3',
+              'text': 'e . Designated Do D passport agents shall not accept '
+                      'regular U.S . passport applications unless granted '
+                      'written permission to do so by the Department of State '
+                      '( Do S ) and the Do D EA for Do D Passport and Passport '
+                      'Agent Services .5 . RESPONSIBILITIES .See Enclosure 2 '
+                      '.6 . RELEASABILITY .Cleared for public release .This '
+                      'Directive is available on the Do D Issuances Web Site '
+                      'at http://www.dtic.mil/whs/directives . 7 .EFFECTIVE '
+                      'DATE .This Directive is effective October 20 , 2009 .'},
+             {'answer': 'b .Do D employees and eligible family members '
+                        'traveling outside the United States',
+              'context': 'Y .It is Do D policy that : a .Passports issued by '
+                         'the U.S . Government are official U.S . documents '
+                         'and are considered at all times U.S . property . b '
+                         '.Do D employees and eligible family members '
+                         'traveling outside the United States on official '
+                         'travel to a foreign country requiring a U.S . '
+                         'passport pursuant to section 51.3 ( b ) of Reference '
+                         '( b ) shall be provided an official U.',
+              'id': 'DoDD 1000.21E, 10 20 2009 OCR.pdf_1_2',
+              'text': '4 . POLICY .It is Do D policy that : a .Passports '
+                      'issued by the U.S . Government are official U.S . '
+                      'documents and are considered at all times U.S . '
+                      'property . b .Do D employees and eligible family '
+                      'members traveling outside the United States on official '
+                      'travel to a foreign country requiring a U.S . passport '
+                      'pursuant to section 51.3 ( b ) of Reference ( b ) shall '
+                      'be provided an official U.S . passport , to include '
+                      'visas when required , at no expense to the Do D '
+                      'employees or their family members . c .Do D passport '
+                      'and passport agent services shall be made available to '
+                      'all Do D employees and family members through '
+                      'designated Do D passport agents . d .Designated Do D '
+                      'passport agents shall be full time or permanent part '
+                      'time Do D employees or members of the Military Services '
+                      '.'}],
+ 'query': 'blahblahblah'}
+[2022-07-18 11:46:05,647    INFO], [build_qe_model.py:138 - main()], gamechangerml.src.search.query_expansion.build_ann_cli.build_qe_model version 0.7.3
+[2022-07-18 11:46:05,649    INFO], [ltr.py:107 - read_mappings()], LTR - Not production environment, defaulting to local mappings
+[2022-07-18 11:46:05,743 WARNING], [ltr.py:112 - read_mappings()], LTR - Could not request or read mappings
+[2022-07-18 11:46:05,743 WARNING], [ltr.py:113 - read_mappings()], The truth value of a DataFrame is ambiguous. Use a.empty, a.bool(), a.item(), a.any() or a.all().
+[2022-07-18 11:46:49,994    INFO], [ltr.py:304 - process_ltr_log()], LTR - processing logs
+[2022-07-18 11:46:51,800    INFO], [SentenceTransformer.py:100 - __init__()], Use pytorch device: cpu
+[2022-07-18 11:46:51,801    INFO], [model.py:162 - index_documents()], Indexing documents from /Users/robertha/Documents/gamechanger-project/gamechanger-ml/gamechangerml/src/search/sent_transformer/tests/test_data
+[2022-07-18 11:46:51,828    INFO], [model.py:174 - index_documents()], 
+Length of batch (in par ids) for indexing : 82
+[2022-07-18 11:46:51,829    INFO], [model.py:77 - _index()], Getting ids, dimensions, stream
+[2022-07-18 11:47:00,457    INFO], [model.py:80 - _index()], Loading embeddings into memory
+[2022-07-18 11:47:00,458    INFO], [model.py:88 - _index()], Removing temporary file
+[2022-07-18 11:47:00,458    INFO], [model.py:90 - _index()], Making dataframe
+[2022-07-18 11:47:00,512    INFO], [model.py:133 - _index()], Saving data.csv to /Users/robertha/Documents/gamechanger-project/gamechanger-ml/gamechangerml/src/search/sent_transformer/tests/test_index/data.csv
+[2022-07-18 11:47:00,515    INFO], [model.py:144 - _index()], Creating embeddings and index
+[2022-07-18 11:47:00,516    INFO], [model.py:146 - _index()], Created embeddings
+[2022-07-18 11:47:00,516    INFO], [model.py:150 - _index()], Built the embeddings index
+[2022-07-18 11:47:00,518    INFO], [model.py:203 - index_documents()], Saved embedder to /Users/robertha/Documents/gamechanger-project/gamechanger-ml/gamechangerml/src/search/sent_transformer/tests/test_index
+[2022-07-18 11:47:00,520    INFO], [model.py:162 - index_documents()], Indexing documents from /Users/robertha/Documents/gamechanger-project/gamechanger-ml/gamechangerml/src/search/sent_transformer/tests/test_data_2
+[2022-07-18 11:47:00,557    INFO], [model.py:174 - index_documents()], 
+Length of batch (in par ids) for indexing : 79
+[2022-07-18 11:47:00,557    INFO], [model.py:77 - _index()], Getting ids, dimensions, stream
+[2022-07-18 11:47:12,116    INFO], [model.py:80 - _index()], Loading embeddings into memory
+[2022-07-18 11:47:12,117    INFO], [model.py:88 - _index()], Removing temporary file
+[2022-07-18 11:47:12,117    INFO], [model.py:90 - _index()], Making dataframe
+[2022-07-18 11:47:12,118    INFO], [model.py:133 - _index()], Saving data.csv to /Users/robertha/Documents/gamechanger-project/gamechanger-ml/gamechangerml/src/search/sent_transformer/tests/test_index/data.csv
+[2022-07-18 11:47:12,120    INFO], [model.py:144 - _index()], Creating embeddings and index
+[2022-07-18 11:47:12,121    INFO], [model.py:146 - _index()], Created embeddings
+[2022-07-18 11:47:12,121    INFO], [model.py:150 - _index()], Built the embeddings index
+[2022-07-18 11:47:12,123    INFO], [model.py:203 - index_documents()], Saved embedder to /Users/robertha/Documents/gamechanger-project/gamechanger-ml/gamechangerml/src/search/sent_transformer/tests/test_index
