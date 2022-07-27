@@ -52,7 +52,7 @@ def collect_ref_list(text: str) -> defaultdict:
         ref_dict with all references and their counts
     """
     ref_dict = defaultdict(int)
-    text = text.replace("\n", "")
+    text = " ".join(text.split())
     # allows regex to interpret the unicode as a -
     text = text.replace("\u2013", "-")
     text = re.sub(r"[()]", " ", text)
