@@ -9,6 +9,7 @@ boto3~=1.15.18
 click~=7.1.2
 elasticsearch==7.13.4
 filetype~=1.0.8
+flashtext==2.7
 gamechangerml @ https://github.com/dod-advana/gamechanger-ml/archive/refs/heads/task/UOT-117914.zip
 joblib~=1.1.0
 jsonschema~=4.1.1
