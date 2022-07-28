@@ -183,7 +183,7 @@ RUN \
   "${APP_SRC}"
 
 # setup venv
-COPY ./dev_tools/requirements/requirements.txt /tmp/requirements.txt
+COPY ./dev_tools/requirements/gc-venv-current.txt /tmp/requirements.txt
 RUN \
   python3 -m venv "${APP_VENV}" --prompt app-root \
   &&  "${APP_VENV}/bin/python" -m pip install --upgrade --no-cache-dir pip setuptools wheel \
