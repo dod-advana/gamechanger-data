@@ -83,7 +83,7 @@ setup(
         "ci": parse_requirements(CI_REQUIREMENTS_PATH),
         "covid-dev": parse_requirements(CDVID19_REQUIREMENTS_PATH),
     },
-    python_requires="==3.6.*",
+    python_requires="==3.8.*",
     entry_points = {
         'console_scripts': [
             'composectl=dev.composectl.__main__:main',
