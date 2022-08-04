@@ -83,6 +83,8 @@ def post_process(doc_dict):
         doc_dict["data_source_s"] = doc_dict["meta_data"]["data_source"]
         doc_dict["source_title_s"] = doc_dict["meta_data"]["source_title"]
         doc_dict["display_source_s"] = doc_dict["meta_data"]["display_source"]
+        doc_dict["access_timestamp_dt"] = doc_dict["meta_data"]["access_timestamp"]
+        doc_dict["publication_date_dt"] = doc_dict["meta_data"]["publication_date"]
         doc_dict["is_revoked_b"] = doc_dict["meta_data"]["is_revoked"]
     else:
         doc_dict["is_revoked_b"] = False
@@ -95,7 +97,6 @@ def post_process(doc_dict):
         ("cac_login_required", "cac_login_required_b"),
         ("download_url", "download_url_s"),
         ("version_hash", "version_hash_s"),
-        ("access_timestamp", "access_timestamp_dt")
     ]
 
     for current, needed in to_rename:
