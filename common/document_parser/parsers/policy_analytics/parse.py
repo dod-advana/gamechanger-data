@@ -94,7 +94,8 @@ def post_process(doc_dict):
         ("source_page_url", "source_page_url_s"),
         ("cac_login_required", "cac_login_required_b"),
         ("download_url", "download_url_s"),
-        ("version_hash", "version_hash_s")
+        ("version_hash", "version_hash_s"),
+        ("access_timestamp", "access_timestamp_dt")
     ]
 
     for current, needed in to_rename:
