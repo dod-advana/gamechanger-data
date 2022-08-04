@@ -1,0 +1,5856 @@
+{
+  "ASD(EI&E)": [
+    "Assistant Secretary of Defense for Energy, Installations, and Environment",
+    "Assistant Secretary of Defense Energy, Installations, and Environment"
+  ],
+  "CATCODE": [
+    "category code"
+  ],
+  "ECP": [
+    "engineering change proposal",
+    "entry control point"
+  ],
+  "FAC": [
+    "facility analysis category",
+    "forward air controller"
+  ],
+  "PRV": [
+    "plant replacement value"
+  ],
+  "RPCP": [
+    "Real Property Categorization Panel"
+  ],
+  "RPCS": [
+    "Real Property Categorization System"
+  ],
+  "WHS": [
+    "Washington Headquarters Services",
+    "Washington Headquarters Service"
+  ],
+  "CPDF": [
+    "Central Personnel Data File"
+  ],
+  "DA&M": [
+    "Director of Administration and Management",
+    "Director, Administration and Management"
+  ],
+  "DASD(CPP)": [
+    "Deputy Assistant Secretary of Defense for Civilian Personnel Policy",
+    "Deputy Assistant Secretary of Defense Civilian Personnel Policy"
+  ],
+  "DoDDS": [
+    "DoD Dependents Schools"
+  ],
+  "DoDI": [
+    "DoD Instruction",
+    "Department of Defense Instruction"
+  ],
+  "DCPAS": [
+    "Defense Civilian Personnel Advisory Service"
+  ],
+  "DoDHRA": [
+    "Department of Defense Human Resources Activity",
+    "DoD Human Resources Activity"
+  ],
+  "DFM": [
+    "Defense of Freedom Medal"
+  ],
+  "GWOT": [
+    "Global War on Terrorism"
+  ],
+  "GWOTEM": [
+    "GWOT Expeditionary Medal"
+  ],
+  "OPM": [
+    "Office of Personnel Management",
+    "U.S. Office of Personnel Management"
+  ],
+  "U.S.C.": [
+    "United States Code"
+  ],
+  "USD(P&R)": [
+    "Under Secretary of Defense for Personnel and Readiness",
+    "Under Secretary of Defense for Personnel & Readiness"
+  ],
+  "AC": [
+    "Active Component"
+  ],
+  "AD": [
+    "active duty",
+    "air defense",
+    " area denial"
+  ],
+  "ADOS": [
+    "active duty operational support",
+    "active duty for operational support"
+  ],
+  "ADOT": [
+    "active duty other than training",
+    "active duty other than for training"
+  ],
+  "ADT": [
+    "active duty training",
+    "active duty for training"
+  ],
+  "AFHPSP": [
+    "Armed Forces Health Professions Scholarship Program",
+    "F. Edward Hebert Armed Forces Health Professions Scholarship Program"
+  ],
+  "AFTP": [
+    "additional flying and flight training period"
+  ],
+  "AGR": [
+    "active guard and reserve",
+    "Active Guard Reserve"
+  ],
+  "ANGUS": [
+    "Air National Guard of the United States"
+  ],
+  "ARNG": [
+    "Army National Guard"
+  ],
+  "ARNGUS": [
+    "Army National Guard of the United States"
+  ],
+  "ASD(HD&ASA)": [
+    "Assistant Secretary of Defense for Homeland Defense and Americas\u2019 Security Affairs",
+    "Assistant Secretary of Defense (Homeland Defense and Americas\u2019 Security Affairs)"
+  ],
+  "ASD(RA)": [
+    "Assistant Secretary of Defense for Reserve Affairs",
+    "Assistant Secretary of Defense (Reserve Affairs)"
+  ],
+  "ASD(R&FM)": [
+    "Assistant Secretary of Defense for Readiness and Force Management"
+  ],
+  "ASL": [
+    "active status list"
+  ],
+  "AT": [
+    "annual training",
+    "assistive technology",
+    "antiterrorism"
+  ],
+  "ATP": [
+    "additional training period",
+    " Army techniques publication",
+    "Allied tactical publication"
+  ],
+  "CIV": [
+    "civil service employees",
+    "federal civilian employee"
+  ],
+  "CONUS": [
+    "continental United States"
+  ],
+  "DCO": [
+    "defense coordinating officer",
+    "debarkation control officer",
+    " defensive cyberspace operations"
+  ],
+  "DCPDS": [
+    "Defense Civilian Personnel Data System"
+  ],
+  "DSCA": [
+    "defense support to civil authorities",
+    "Defense Security Cooperation Agency",
+    "defense support of civil authorities"
+  ],
+  "EPLO": [
+    "emergency preparedness liaison officer"
+  ],
+  "ET": [
+    "equivalent training",
+    "earned time",
+    "electronics technician"
+  ],
+  "FAP": [
+    "Financial Assistance Program",
+    "Family Advocacy Program"
+  ],
+  "MAR": [
+    "major assembly release"
+  ],
+  "MCs": [
+    "military characteristics"
+  ],
+  "FEMA": [
+    "Federal Emergency Management Agency",
+    "Federal Emergency Management Agency (DHS)"
+  ],
+  "FHD": [
+    "funeral honors duty"
+  ],
+  "FTNGD": [
+    "full-time National Guard duty"
+  ],
+  "FTNGD-AGR": [
+    "full-time National Guard duty-active guard and reserve"
+  ],
+  "FTNGD-AT": [
+    "full-time National Guard duty-annual training"
+  ],
+  "FTNGD-OS": [
+    "full-time National Guard duty-operational support"
+  ],
+  "FTNGD-OT": [
+    "full-time National Guard duty-other than for training"
+  ],
+  "FTNGD-OTD": [
+    "full-time National Guard duty-other training duty"
+  ],
+  "FTNGD-T": [
+    "full-time National Guard duty-training"
+  ],
+  "FTS": [
+    "full-time support"
+  ],
+  "FY": [
+    "fiscal year"
+  ],
+  "IADT": [
+    "initial active duty training",
+    "Initial Active Duty for Training"
+  ],
+  "ING": [
+    "Inactive National Guard"
+  ],
+  "IDT": [
+    "inactive duty training",
+    "inactive duty for training"
+  ],
+  "IMA": [
+    "individual mobilization augmentee"
+  ],
+  "IRR": [
+    "Individual Ready Reserve"
+  ],
+  "ISL": [
+    "inactive status list"
+  ],
+  "JTR": [
+    "Joint Travel Regulation",
+    "Joint Travel Regulations"
+  ],
+  "MD": [
+    "muster duty",
+    "missile defense",
+    " moderate damage"
+  ],
+  "MSO": [
+    "military service obligation",
+    " military",
+    "map support office",
+    " maritime security operations",
+    " military source operation",
+    " military strategic objective"
+  ],
+  "MSSA": [
+    "Military Selective Service Act"
+  ],
+  "MT": [
+    "medical technologist",
+    "military technician"
+  ],
+  "NDST": [
+    "non-dual status military technician",
+    "non-dual status technician"
+  ],
+  "NPS": [
+    "non-prior service",
+    "Naval Postgraduate School",
+    "National Park Service",
+    " nonprior service"
+  ],
+  "OS": [
+    "operational support",
+    "organization server",
+    " operating system",
+    "operating stocks"
+  ],
+  "OTD": [
+    "other training duty"
+  ],
+  "RC": [
+    "Reserve Component",
+    " resident coordinator (UN)"
+  ],
+  "RCC": [
+    "Reserve Component categories",
+    "recovery care coordinator",
+    "Reserve Component Category",
+    " rescue coordination center",
+    "regional contracting center"
+  ],
+  "RCCPDS": [
+    "Reserve Component Common Personal Data System",
+    "Reserve Component Common Personnel Data System",
+    "Reserve Components Common Personnel Data System"
+  ],
+  "RMP": [
+    "readiness management period",
+    "religious ministry professional"
+  ],
+  "ROTC": [
+    "Reserve Officers\u2019 Training Corps",
+    "Reserve Officer Training Corps"
+  ],
+  "SSS": [
+    "Selective Service System",
+    "special safety study"
+  ],
+  "TRC": [
+    "training and retirement categories",
+    "Training and Retirement Category",
+    "technical review committee"
+  ],
+  "TRO": [
+    "training readiness oversight",
+    "tax relief office",
+    "training and readiness oversight"
+  ],
+  "USD(P)": [
+    "Under Secretary of Defense for Policy"
+  ],
+  "USCG": [
+    "United States Coast Guard",
+    "U. S. Coast Guard"
+  ],
+  "ASD(M&RA)": [
+    "Assistant Secretary of Defense for Manpower and Reserve Affairs",
+    "Assistant Secretary for Defense for Manpower and Reserve Affairs"
+  ],
+  "NAF": [
+    "nonappropriated fund",
+    "nonappropriated funds",
+    "non-appropriated funds",
+    " numbered air force"
+  ],
+  "AOR": [
+    "ar0065a of responsibility",
+    "area of responsibility"
+  ],
+  "DDESB": [
+    "Department of Defense Explosives Safety Board",
+    "DoD Explosives Safety Board"
+  ],
+  "DDESTSG": [
+    "Department of Defense Explosives Safety Testing Steering Group"
+  ],
+  "DOT": [
+    "Department of Transportation"
+  ],
+  "DoT": [
+    "Department of Transportation"
+  ],
+  "ES": [
+    "exposed site",
+    "Enterprise Services",
+    " executive secretariat",
+    "electromagnetic support",
+    " expeditionary salvage"
+  ],
+  "ESM": [
+    "explosives safety management",
+    "expeditionary site mapping"
+  ],
+  "ESMP": [
+    "Explosives Safety Management Program"
+  ],
+  "ESQD": [
+    "explosives safety quantity-distance"
+  ],
+  "HSS": [
+    "hybrid safety submission",
+    "health service support"
+  ],
+  "IPT": [
+    "integrated project team",
+    " Integrated Product Team",
+    "integrated planning team",
+    " intelligence planning team"
+  ],
+  "MEC": [
+    "munitions and explosives of concern"
+  ],
+  "MILREP": [
+    "military representative"
+  ],
+  "MMRS": [
+    "military munitions risk stewardship"
+  ],
+  "MRA": [
+    "munitions response area",
+    "materiel receipt acknowledgement"
+  ],
+  "MRCSS": [
+    "munitions response chemical safety submission"
+  ],
+  "MRESS": [
+    "munitions response explosives safety submission"
+  ],
+  "NATO": [
+    "North Atlantic Treaty Organization"
+  ],
+  "OSD": [
+    "Office of the Secretary of Defense"
+  ],
+  "PES": [
+    "potential explosion site",
+    "Private Express Statutes"
+  ],
+  "QD": [
+    "quantity-distance"
+  ],
+  "QRA": [
+    "quantitative risk assessment"
+  ],
+  "RDT&E": [
+    "research, development, testing, and evaluation",
+    "research, development, test, and evaluation"
+  ],
+  "RESS": [
+    "required explosives safety submission"
+  ],
+  "SG": [
+    "sub-group",
+    "surgeon general",
+    "steering group"
+  ],
+  "TP": [
+    "technical paper",
+    "technical publication",
+    "transportation priority"
+  ],
+  "WG": [
+    "working group"
+  ],
+  "AoA": [
+    "analysis of alternatives"
+  ],
+  "ASD(R&E)": [
+    "Assistant Secretary of Defense for Research and Engineering"
+  ],
+  "DAB": [
+    "Defense Acquisition Board"
+  ],
+  "DASD(DT&E)": [
+    "Deputy Assistant Secretary of Defense for Developmental Test and Evaluation"
+  ],
+  "DASD(SE)": [
+    "Deputy Assistant Secretary of Defense for Systems Engineering"
+  ],
+  "DCAPE": [
+    "Director of Cost Assessment and Program Evaluation",
+    "Director, Cost Assessment and Program Evaluation"
+  ],
+  "eCMRA": [
+    "enterprise Contract Manpower Reporting Application"
+  ],
+  "DOT&E": [
+    "Director of Operational Test and Evaluation",
+    "Director, Operational Test and Evaluation"
+  ],
+  "DT&E": [
+    "developmental test and evaluation"
+  ],
+  "MAIS": [
+    "Major Automated Information System"
+  ],
+  "MDA": [
+    "Milestone Decision Authority",
+    "Missile Defense Agency",
+    "maritime domain awareness"
+  ],
+  "MDAP": [
+    "Major Defense Acquisition Program"
+  ],
+  "PARCA": [
+    "Performance Assessments and Root Cause Analyses"
+  ],
+  "T&E": [
+    "test and evaluation"
+  ],
+  "TEMP": [
+    "Test and Evaluation Master Plan"
+  ],
+  "TRMC": [
+    "Test Resource Management Center"
+  ],
+  "ASD(HA)": [
+    "Assistant Secretary of Defense for Health Affairs",
+    "Assistant Secretary for Defense for Health Affairs",
+    "Assistant Secretary of Defense (Health Affairs)"
+  ],
+  "DEP": [
+    "Delayed Entry Program"
+  ],
+  "DET": [
+    "delayed entry into training DoDD DoD Directive DoDI DoD Instruction"
+  ],
+  "SELRES": [
+    "Selected Reserve",
+    "Selected Reserves"
+  ],
+  "USD(C)/CFO": [
+    "Under Secretary of Defense (Comptroller)/Chief Financial Officer"
+  ],
+  "VRI": [
+    "voluntary retirement incentive"
+  ],
+  "AFIT": [
+    "Air Force Institute of Technology"
+  ],
+  "ASD(NII)/DoD CIO": [
+    "Assistant Secretary of Defense for Networks and Information Integration/Department of Defense Chief Information Officer"
+  ],
+  "CAE": [
+    "Center of Academic Excellence"
+  ],
+  "CAE/IAE": [
+    "Center of Academic Excellence in Information Assurance Education"
+  ],
+  "CAE-R": [
+    "Center of Academic Excellence in Information Assurance Research"
+  ],
+  "DIRNSA": [
+    "Director, National Security Agency"
+  ],
+  "IASP": [
+    "Department of Defense Information Assurance Scholarship Program"
+  ],
+  "GMAT": [
+    "Graduate Management Admissions Test"
+  ],
+  "GPA": [
+    "grade point average"
+  ],
+  "GRE": [
+    "Graduate Record Examination"
+  ],
+  "GS": [
+    "General Schedule",
+    "general support",
+    "General Service"
+  ],
+  "IA": [
+    "information assurance",
+    "Individuals accounts",
+    "individual augmentee",
+    "imagery analyst",
+    " implementing arrangement"
+  ],
+  "IRMC": [
+    "Information Resources Management College"
+  ],
+  "IT": [
+    "information technology",
+    "information system technician"
+  ],
+  "MS": [
+    "Master of Science",
+    "Microsoft"
+  ],
+  "NIETP": [
+    "National Information Assurance Education and Training Program"
+  ],
+  "NSA": [
+    "National Security Agency",
+    " national shipping authority",
+    " North Atlantic Treaty Organization (NATO)"
+  ],
+  "WO": [
+    "Warrant Officer"
+  ],
+  "CI": [
+    "counterintelligence",
+    "configuration item"
+  ],
+  "CM": [
+    "collection management",
+    "configuration management",
+    "contract monitor",
+    "case management",
+    "combination module",
+    " cruise missile"
+  ],
+  "CCMD": [
+    "Combatant Command"
+  ],
+  "CJCS": [
+    "Chairmen of the Joint Chiefs of Staff",
+    "Chairman of the Joint Chiefs of Staff"
+  ],
+  "CRM": [
+    "collection requirements management",
+    " comment resolution matrix"
+  ],
+  "CSS": [
+    "Central Security Service",
+    "Central Security Service (NSA)",
+    " combat service support"
+  ],
+  "DCM": [
+    "Defense Collection Manager",
+    " deputy chief of mission",
+    " directed communication model"
+  ],
+  "DCMB": [
+    "Defense CM Board"
+  ],
+  "DCME": [
+    "Defense CM Enterprise",
+    "Defense Collection Management Enterprise"
+  ],
+  "DCMP": [
+    "Defense CM Program"
+  ],
+  "DCMWG": [
+    "Defense CM Working Group"
+  ],
+  "DIA": [
+    "Defense Intelligence Agency"
+  ],
+  "DIRNSA/CHCSS": [
+    "Director, NSA/Chief, CSS",
+    "Director, National Security Agency/Chief, Central Security Service"
+  ],
+  "DOTMLPF": [
+    "doctrine, organization, training, materiel, leadership and education, personnel, and facilities",
+    "doctrine, organization, training, materiel, leadership, personnel, and facilities"
+  ],
+  "FM/CM": [
+    "Functional Manager for Collection Management"
+  ],
+  "GEOINT": [
+    "geospatial intelligence"
+  ],
+  "HUMINT": [
+    "human intelligence"
+  ],
+  "IC": [
+    "Intelligence Community",
+    "inter-office correspondence",
+    "incident commander"
+  ],
+  "ISR": [
+    "intelligence, surveillance, and reconnaissance"
+  ],
+  "MASINT": [
+    "measurement and signature intelligence"
+  ],
+  "NGA": [
+    "National Geospatial-Intelligence Agency",
+    "National Geospatial Agency"
+  ],
+  "NRO": [
+    "National Reconnaissance Office"
+  ],
+  "OUSD(I)": [
+    "Office of the Under Secretary of Defense for Intelligence",
+    "Office of the Under Secretary of Defense (Intelligence)"
+  ],
+  "PIR": [
+    "priority intelligence requirement"
+  ],
+  "SIGINT": [
+    "signals intelligence"
+  ],
+  "USD(I)": [
+    "Under Secretary of Defense for Intelligence"
+  ],
+  "AAA": [
+    "access approval authority",
+    "antiaircraft artillery"
+  ],
+  "CA": [
+    "cognizant authority",
+    " credibility assessment",
+    "civil affairs",
+    " combat assessment",
+    " coordinating altitude",
+    " criticality assessment"
+  ],
+  "CAF": [
+    "consolidated adjudications facility",
+    "central adjudication facility",
+    "combat air forces",
+    " Conflict Assessment Framework (USAID)"
+  ],
+  "CMO": [
+    "Chief Management Officer of the Department of Defense",
+    "Committee Management Officer",
+    "civil-military operations"
+  ],
+  "CPSO": [
+    "contractor program security officer"
+  ],
+  "CSP": [
+    "counterintelligence-scope polygraph",
+    "cryptographic security plan",
+    "consolidated special pays",
+    "campaign support plan",
+    " career sea pay"
+  ],
+  "DSS": [
+    "Defense Security Service",
+    "Distribution Standard System",
+    "Decision Support System"
+  ],
+  "FBI": [
+    "Federal Bureau of Investigation",
+    "Federal Bureau of Investigation (DOJ)"
+  ],
+  "GPM": [
+    "government program manager",
+    "gallons per minute",
+    " global pallet manager"
+  ],
+  "GSSO": [
+    "government special access program security officer"
+  ],
+  "LOCN": [
+    "letter of compelling need"
+  ],
+  "MDCO": [
+    "Military Department Counter Intelligence Organization",
+    "Military Department Counterintelligence Organization"
+  ],
+  "NTK": [
+    "need to know"
+  ],
+  "OA": [
+    "oversight authority",
+    "objective area",
+    " operational area"
+  ],
+  "PAR": [
+    "program access request",
+    "parent involvement",
+    "population at risk"
+  ],
+  "PM": [
+    "program manager",
+    "precious metals",
+    "pipeline measurement",
+    " program",
+    "Bureau of Political-Military Affairs (DOS)",
+    " patient movement",
+    " peacemaking",
+    " preventive medicine"
+  ],
+  "PSA": [
+    "Principal Staff Assistant",
+    "Principal Staff Advisor",
+    "port support activity"
+  ],
+  "PSO": [
+    "program security officer",
+    " post security officer",
+    "peace support operations (NATO)"
+  ],
+  "SAP": [
+    "special access program",
+    "special access programs"
+  ],
+  "SAPCO": [
+    "special access program central office"
+  ],
+  "SAPIA": [
+    "special access program indoctrination agreement"
+  ],
+  "SAPNP": [
+    "special access program nomination process"
+  ],
+  "SCI": [
+    "sensitive compartmented information"
+  ],
+  "SF": [
+    "Standard Form",
+    "special forces"
+  ],
+  "SO": [
+    "security officer",
+    "service obligation"
+  ],
+  "SPO": [
+    "special access program personnel security official"
+  ],
+  "SSBI": [
+    "single-scope background investigation"
+  ],
+  "SSBI-PR": [
+    "single scope background investigation periodic reinvestigation"
+  ],
+  "TOA": [
+    "transfer of access",
+    " transfer of authority",
+    "table of allowance"
+  ],
+  "ASD(L&MR)": [
+    "Assistant Secretary of Defense for Logistics and Materiel Readiness"
+  ],
+  "ASD(R)": [
+    "Assistant Secretary of Defense for Readiness and Force Management",
+    "Assistant Secretary of Defense for Readiness"
+  ],
+  "BOS": [
+    "base operations support",
+    "base operating support"
+  ],
+  "CIO": [
+    "Chief Information Officer"
+  ],
+  "USD(AT&L)": [
+    "Under Secretary of Defense for Acquisition, Technology, and Logistics"
+  ],
+  "ANG": [
+    "Air National Guard"
+  ],
+  "DRRS": [
+    "Defense Readiness Reporting System"
+  ],
+  "JDAL": [
+    "Joint Duty Assignment List"
+  ],
+  "JTF": [
+    "joint task force"
+  ],
+  "NG": [
+    "National Guard"
+  ],
+  "NGB": [
+    "National Guard Bureau"
+  ],
+  "PPBE": [
+    "planning, programming, budgeting, and execution"
+  ],
+  "SAD": [
+    "state active duty"
+  ],
+  "ATSD(PA)": [
+    "Assistant to the Secretary of Defense for Public Affairs"
+  ],
+  "AP": [
+    "Associated Press",
+    "antipersonnel"
+  ],
+  "CE": [
+    "civilian enterprise",
+    "circular error",
+    " command element (USMC)"
+  ],
+  "CFC": [
+    "Combined Federal Campaign",
+    "Combined Forces Command"
+  ],
+  "CUI": [
+    "controlled unclassified information"
+  ],
+  "DFARS": [
+    "Defense Federal Acquisition Regulation Supplement"
+  ],
+  "DIMOC": [
+    "Defense Imagery Management Operations Center"
+  ],
+  "DMA": [
+    "Defense Media Activity",
+    "document management activity"
+  ],
+  "FAR": [
+    "Federal Acquisition Regulation",
+    " formal assessment report"
+  ],
+  "GPO": [
+    "Government Printing Office"
+  ],
+  "MWR": [
+    "morale, welfare, and recreation"
+  ],
+  "PA": [
+    "public affairs",
+    "physician assistant",
+    " primary agency",
+    " probability of arrival"
+  ],
+  "PAO": [
+    "public affairs officer",
+    "principal authorizing official",
+    "public affairs office"
+  ],
+  "RFP": [
+    "request for proposal"
+  ],
+  "S&S": [
+    "Stars and Stripes"
+  ],
+  "SOW": [
+    "statement of work",
+    "special operations wing",
+    " standoff weapon"
+  ],
+  "SSAC": [
+    "Source Selection Advisory Committee"
+  ],
+  "SSP": [
+    "source selection plan",
+    "Subspecialty Code"
+  ],
+  "UPI": [
+    "United Press International"
+  ],
+  "ASD(LA)": [
+    "Assistant Secretary of Defense for Legislative Affairs"
+  ],
+  "ASD(SO/LIC)": [
+    "Assistant Secretary of Defense for Special Operations and Low Intensity Conflict",
+    "Assistant Secretary of Defense for Special Operations and Low-Intensity Conflict",
+    "Assistant Secretary of Defense for Special Operations/Low Intensity Conflict",
+    "Assistant Secretary of Defense for Special Operations and Low-Intensity Conflict and Interdependent Capabilities"
+  ],
+  "FMS": [
+    "foreign military sales",
+    "force module subsystem"
+  ],
+  "GC,": [
+    "DoD General Counsel of the Department of Defense"
+  ],
+  "NC": [
+    "nonrecurring cost",
+    "non-compliant"
+  ],
+  "OHDACA": [
+    "Overseas Humanitarian Disaster and Civic Aid",
+    "Overseas Humanitarian, Disaster, and Civic Aid (DSCA)"
+  ],
+  "OUSD(AT&L)": [
+    "Office of the Under Secretary of Defense for Acquisition, Technology, and Logistics"
+  ],
+  "SCO": [
+    "security cooperation organization",
+    " state",
+    "secondary control officer",
+    " senior contracting official"
+  ],
+  "SCSG": [
+    "Security Cooperation Steering Group"
+  ],
+  "CSG": [
+    "Counterterrorism Security Group",
+    "carrier strike group",
+    " cryptologic services group",
+    " Cryptologic Support Group"
+  ],
+  "SDO/DATT": [
+    "Senior Defense Official/Defense Attach\u00e9"
+  ],
+  "SecDef": [
+    "Secretary of Defense"
+  ],
+  "SPSG": [
+    "Strategic Planning Support Group"
+  ],
+  "TSFDO": [
+    "Technology Security and Foreign Disclosure Office"
+  ],
+  "DLA": [
+    "Defense Logistics Agency"
+  ],
+  "DISA": [
+    "Defense Information Systems Agency"
+  ],
+  "DLIS": [
+    "DLA Logistics Information Service",
+    "Defense Logistics Information Service"
+  ],
+  "DLMS": [
+    "Defense Logistics Management System",
+    "Defense Logistics Management Standards"
+  ],
+  "DTRA": [
+    "Defense Threat Reduction Agency"
+  ],
+  "ETD": [
+    "effective transfer date",
+    "estimated time of departure"
+  ],
+  "FAA": [
+    "Federal Aviation Administration",
+    "Federal Aviation Agency",
+    " Foreign Assistance Act",
+    "Federal Aviation Administration (DOT)"
+  ],
+  "FLIS": [
+    "Federal Logistics Information System"
+  ],
+  "GIM": [
+    "gaining inventory manager"
+  ],
+  "GSA": [
+    "General Services Administration"
+  ],
+  "ICP": [
+    "inventory control point",
+    "intertheater communications security package"
+  ],
+  "IMC": [
+    "item management coding",
+    "item management code",
+    "instrument meteorological conditions"
+  ],
+  "IMM": [
+    "integrated materiel management",
+    "integrated materiel manager",
+    "immunizations",
+    " intelligence mission management"
+  ],
+  "IMMC": [
+    "Integrated Materiel Management Committee"
+  ],
+  "LIM": [
+    "losing inventory manager"
+  ],
+  "LR": [
+    "logistics reassignment",
+    "lower range"
+  ],
+  "MILSTRAP": [
+    "Military Standard Transaction Reporting and Accounting Procedures",
+    "Military Standard Transaction Reporting and Accountability Procedures",
+    "military standard transaction reporting and accounting procedure"
+  ],
+  "NSN": [
+    "national stock number"
+  ],
+  "NWS": [
+    "National Weather Service"
+  ],
+  "ABA": [
+    "American Bankers Association"
+  ],
+  "ASC": [
+    "Accredited Standards Committee",
+    "Army Sustainment Command"
+  ],
+  "BIC": [
+    "bank identifying code"
+  ],
+  "BPN": [
+    "Business Partner Network"
+  ],
+  "CAGE": [
+    "commercial and government entity",
+    "Commercial and Government Entity"
+  ],
+  "CIN": [
+    "company identification number"
+  ],
+  "DCMO": [
+    "Deputy Chief Management Officer of the Department of Defense"
+  ],
+  "DoDAAC": [
+    "DoD activity address code"
+  ],
+  "DPAP": [
+    "Defense Procurement and Acquisition Policy"
+  ],
+  "DUNS": [
+    "Data Universal Numbering System"
+  ],
+  "EDIFICE": [
+    "electronic data interchange for companies with interest in computing and electronics"
+  ],
+  "EIC": [
+    "employer identification number"
+  ],
+  "FEIN": [
+    "Federal employer identification number"
+  ],
+  "GFM": [
+    "government-furnished material",
+    "global force management",
+    " global freight management"
+  ],
+  "HIBCC": [
+    "Health Industry Business Communications Council"
+  ],
+  "HIN": [
+    "health industry number"
+  ],
+  "IAC": [
+    "issuing agency code",
+    "Installation Advisory Committee",
+    "information analysis center"
+  ],
+  "ICQ": [
+    "identification code qualifier"
+  ],
+  "IEC": [
+    "International Electrotechnical Committee"
+  ],
+  "IIN": [
+    "issuer identifier number"
+  ],
+  "ISO": [
+    "information system owner",
+    "International Organization for Standardization",
+    " isolation"
+  ],
+  "IUID": [
+    "item unique identification"
+  ],
+  "LIC": [
+    "labeler identification code"
+  ],
+  "MIC": [
+    "manufacturer identification code",
+    "Multinational Interoperability Council"
+  ],
+  "MAPAC": [
+    "Military Assistance Program address code"
+  ],
+  "MAPAD": [
+    "Military Assistance Program Address Directory"
+  ],
+  "NCAGE": [
+    "NATO commercial and government entity"
+  ],
+  "OFSC": [
+    "Organizational and Force Structure Construct"
+  ],
+  "OUID": [
+    "organization unique identification",
+    "organization unique identifier"
+  ],
+  "RTN": [
+    "routing transit number"
+  ],
+  "TIN": [
+    "tax identification number",
+    "temporary ID number"
+  ],
+  "TPN": [
+    "trading partner network"
+  ],
+  "ADN": [
+    "agency disclosure notice"
+  ],
+  "AMSC": [
+    "acquisition management system control"
+  ],
+  "ASSIST": [
+    "Acquisition Streamlining and Standardization Information System"
+  ],
+  "CID": [
+    "commercial item description",
+    "combat identification"
+  ],
+  "CSE": [
+    "Component standardization executive",
+    "contingency support element"
+  ],
+  "CSI": [
+    "critical safety item",
+    "critical safety items"
+  ],
+  "DCA": [
+    "design control activity",
+    "defense cooperation agreement",
+    " defensive counterair"
+  ],
+  "DepSO": [
+    "Departmental Standardization Officer"
+  ],
+  "DID": [
+    "data item description",
+    "Defense Intelligence Digest"
+  ],
+  "DISR": [
+    "DoD Information-Technology Standards Registry",
+    "DoD Information Technology Standards Registry",
+    "Defense Information Technology Standards Registry",
+    "Department of Defense Information Technology Standards Registry"
+  ],
+  "DSA": [
+    "departmental standardization activity"
+  ],
+  "DSP": [
+    "Defense Standardization Program"
+  ],
+  "DSE": [
+    "Defense Standardization Executive",
+    "direct support element"
+  ],
+  "DSC": [
+    "Defense Standardization Council",
+    " dual-status commander",
+    "defensive space control"
+  ],
+  "DSPAO": [
+    "Defense Standardization Program Automation Office"
+  ],
+  "DSPO": [
+    "Defense Standardization Program Office"
+  ],
+  "FSC": [
+    "federal supply class",
+    "federal supply classification code",
+    "Federal Supply Classification",
+    "fire support cell",
+    " fire support coordinator (USMC)"
+  ],
+  "FSG": [
+    "federal supply group"
+  ],
+  "GIDEP": [
+    "Government-Industry Data Exchange Program"
+  ],
+  "IRA": [
+    "item reduction activity",
+    "Provisional Irish Republican Army"
+  ],
+  "ISA": [
+    "international standardization agreement",
+    "individual Service augmentee"
+  ],
+  "JSB": [
+    "Joint Standardization Board"
+  ],
+  "LSA": [
+    "lead standardization activity",
+    "logistics support analysis",
+    " logistics supportability analysis"
+  ],
+  "MIL-STD": [
+    "Military Standard"
+  ],
+  "NGS": [
+    "non-government standard"
+  ],
+  "NGSB": [
+    "Non-government Standards Body"
+  ],
+  "NQA": [
+    "National Qualification Authority"
+  ],
+  "OMB": [
+    "Office of Management and Budget"
+  ],
+  "OPR": [
+    "office of primary responsibility"
+  ],
+  "QML": [
+    "qualified manufacturers list"
+  ],
+  "QPD": [
+    "Qualified Products Database"
+  ],
+  "QPL": [
+    "qualified products list"
+  ],
+  "SD": [
+    "DSP Standardization Directory",
+    "severe damage",
+    " strategy division"
+  ],
+  "SMA": [
+    "standardization management activity"
+  ],
+  "STANAG": [
+    "NATO standardization agreement",
+    "standardization agreement (NATO)"
+  ],
+  "ATC": [
+    "air traffic controller",
+    "air traffic control"
+  ],
+  "CSRS": [
+    "Civil Service Retirement System"
+  ],
+  "FERS": [
+    "Federal Employees Retirement System"
+  ],
+  "OPF": [
+    "official personnel folder"
+  ],
+  "DIB": [
+    "Defense Industrial Base",
+    " defense institution building"
+  ],
+  "GCA": [
+    "Government Contracting Activities"
+  ],
+  "NISP": [
+    "National Industrial Security Program",
+    "national intelligence support plan"
+  ],
+  "NISPOM": [
+    "NISP Operating Manual"
+  ],
+  "C&A": [
+    "certification and accreditation"
+  ],
+  "CDRUSSTRATCOM": [
+    "Commander, United States Strategic Command",
+    "Commander, USSTRATCOM",
+    "Commander, U.S. Strategic Command"
+  ],
+  "CPMs": [
+    "capability portfolio managers"
+  ],
+  "CL": [
+    "confidentiality level",
+    "contingency location",
+    " coordination level"
+  ],
+  "DAA": [
+    "designated accrediting authority",
+    "Designated Approving Authority"
+  ],
+  "DIACAP": [
+    "DoD Information Assurance Certification and Accreditation Process"
+  ],
+  "DNI": [
+    "Director of National Intelligence",
+    " Director of Naval Intelligence"
+  ],
+  "GIG": [
+    "Global Information Grid"
+  ],
+  "IO": [
+    "information operations",
+    "information owner"
+  ],
+  "ISSE": [
+    "information system security engineering"
+  ],
+  "MAC": [
+    "mission assurance category",
+    "mobility assault company"
+  ],
+  "STAR": [
+    "system threat assessment report",
+    "sensitive target approval and review"
+  ],
+  "TRANSEC": [
+    "transmission security"
+  ],
+  "DCIPS": [
+    "Defense Civilian Intelligence Personnel System",
+    "DoD Civilian Intelligence Personnel System"
+  ],
+  "DISES": [
+    "Defense Intelligence Senior Executive Service",
+    "Defense Intelligence Senior Executive System"
+  ],
+  "EEO": [
+    "equal employment opportunity"
+  ],
+  "NICCP": [
+    "National Intelligence Civilian Compensation Program",
+    "National Interdiction Command and Control Plan"
+  ],
+  "ODNI": [
+    "Office of the Director of National Intelligence"
+  ],
+  "PPP": [
+    "Priority Placement Program",
+    "program protection plan"
+  ],
+  "FYDP": [
+    "Future Years Defense Program"
+  ],
+  "NDAA": [
+    "National Defense Authorization Act"
+  ],
+  "PCS": [
+    "permanent change of station",
+    "purchased care system",
+    " primary control ship"
+  ],
+  "RIC": [
+    "Resource Identification Code"
+  ],
+  "TAD": [
+    "temporary assigned duty",
+    "tactical air direction",
+    " temporary additional duty (non-unit- related personnel)",
+    " theater air defense"
+  ],
+  "TDY": [
+    "temporary duty"
+  ],
+  "TF": [
+    "Total Force",
+    "task force"
+  ],
+  "DAC": [
+    "Disability Advisory Council",
+    "DIA Counterintelligence and Security Office",
+    "Defense Intelligence Agency (DIA) counterintelligence and security activity",
+    " Development Assistance"
+  ],
+  "DASD(WCP)": [
+    "Deputy Assistant Secretary of Defense for Warrior Care Policy"
+  ],
+  "DASD(HSP&O)": [
+    "Deputy Assistant Secretary of Defense for Health Services Policy and Oversight"
+  ],
+  "DES": [
+    "disability evaluation system",
+    "deception event schedule"
+  ],
+  "D-RAS": [
+    "disability rating activity site"
+  ],
+  "EDES": [
+    "Expedited Disability Evaluation System"
+  ],
+  "FPEB": [
+    "formal physical evaluation board"
+  ],
+  "GC DoD": [
+    "General Counsel of the Department of Defense"
+  ],
+  "IDES": [
+    "Integrated Disability Evaluation System"
+  ],
+  "IPEB": [
+    "informal physical evaluation board"
+  ],
+  "LDES": [
+    "Legacy Disability Evaluation System"
+  ],
+  "LOD": [
+    "line of duty",
+    "line of departure"
+  ],
+  "MEB": [
+    "medical evaluation board",
+    "maneuver enhancement brigade",
+    " Marine expeditionary brigade"
+  ],
+  "MTF": [
+    "military treatment facility",
+    "medical treatment facility",
+    "military treatment facilities",
+    " military information support operations task force"
+  ],
+  "PEB": [
+    "physical evaluation board"
+  ],
+  "TDRL": [
+    "temporary disability retired list"
+  ],
+  "VA": [
+    "Department of Veterans Affairs",
+    "U.S. Department of Veterans Affairs",
+    "Veterans Affairs",
+    " victim advocate",
+    " vulnerability assessment"
+  ],
+  "VASRD": [
+    "Department of Veterans Affairs Schedule for Rating Disabilities"
+  ],
+  "DD": [
+    "Department of Defense",
+    "dishonorable discharge",
+    "Department of Defense (form)",
+    " deputy director"
+  ],
+  "ILR": [
+    "Interagency Language Roundtable"
+  ],
+  "NLSC": [
+    "National Language Service Corps"
+  ],
+  "NSEB": [
+    "National Security Education Board"
+  ],
+  "SGE": [
+    "special government employee"
+  ],
+  "C2": [
+    "command and control"
+  ],
+  "CBRNE": [
+    "chemical, biological, radiological, nuclear, and high yield explosives",
+    "chemical, biological, radiological, nuclear, and high-yield explosive",
+    "chemical, biological, radiological, nuclear, and high-yield explosives (USA/NGB/USCG)"
+  ],
+  "CCDR": [
+    "Combatant Commander"
+  ],
+  "COG": [
+    "continuity of government",
+    "center of gravity"
+  ],
+  "COOP": [
+    "continuity of operations"
+  ],
+  "NMCS": [
+    "National Military Command System",
+    " not mission capable, supply"
+  ],
+  "USG": [
+    "U. S. Government",
+    "United States Government",
+    "Under-Secretary-General"
+  ],
+  "USSTRATCOM": [
+    "United States Strategic Command",
+    "U.S. Strategic Command"
+  ],
+  "DFAS": [
+    "Defense Finance and Accounting Service",
+    "Defense Finance Accounting Services",
+    "Defense Finance Accounting Service",
+    "Defense Accounting and Finance Service"
+  ],
+  "MGIB-SR": [
+    "Montgomery GI Bill-Selected Reserve"
+  ],
+  "REAP": [
+    "Reserve Educational Assistance Program"
+  ],
+  "VADIR": [
+    "Veterans Affairs/DoD Identity Repository"
+  ],
+  "DHM": [
+    "Defense Human Intelligence Manager"
+  ],
+  "KSA": [
+    "knowledge, skills, and abilities"
+  ],
+  "ACA": [
+    "American Correctional Association",
+    "airspace control authority",
+    " airspace coordination area"
+  ],
+  "BCD": [
+    "bad conduct discharge",
+    "battlefield coordination detachment (USA)"
+  ],
+  "C&PB": [
+    "clemency and parole board"
+  ],
+  "DIBRS": [
+    "Defense Incident-Based Reporting System"
+  ],
+  "DIS": [
+    "dismissal"
+  ],
+  "DNA": [
+    "deoxyribonucleic acid"
+  ],
+  "D&A": [
+    "discipline and adjustment"
+  ],
+  "FBOP": [
+    "Federal Bureau of Prisons"
+  ],
+  "GCT": [
+    "good conduct time"
+  ],
+  "GED": [
+    "general equivalency diploma",
+    "General Education Development",
+    "Graduation Equivalency Degree"
+  ],
+  "IAW": [
+    "in accordance with"
+  ],
+  "ICE": [
+    "Immigration and Customs Enforcement",
+    "Inventory Control Effectiveness",
+    "Immigration and Customs Enforcement (DHS)"
+  ],
+  "MCF": [
+    "military correctional facility"
+  ],
+  "MLif": [
+    "mandatory life sentence"
+  ],
+  "MOA": [
+    "memorandum of agreement"
+  ],
+  "MRD": [
+    "minimum release date",
+    "mandatory retirement or removal date",
+    "mandatory retirement date"
+  ],
+  "MSR": [
+    "mandatory supervised release",
+    "main supply route",
+    " mission support request"
+  ],
+  "SAA": [
+    "special acts abatement",
+    "senior airfield authority"
+  ],
+  "UCMJ": [
+    "Uniform Code of Military Justice"
+  ],
+  "USACIL": [
+    "U.S. Army Criminal Investigation Laboratory",
+    "United States Army Criminal Investigation Laboratory"
+  ],
+  "USDB": [
+    "U.S. Disciplinary Barracks"
+  ],
+  "USPO": [
+    "U.S. Probation Officer"
+  ],
+  "V/W": [
+    "victim or witness"
+  ],
+  "V/WAP": [
+    "Victim/Witness Assistance Program"
+  ],
+  "CONOPS": [
+    "concept of operations"
+  ],
+  "DSN": [
+    "Defense Secure Network",
+    "Defense Switched Network",
+    "Data Source Network"
+  ],
+  "FR&T": [
+    "Force Readiness and Training"
+  ],
+  "GPF": [
+    "general purpose forces"
+  ],
+  "JOC": [
+    "joint operations center"
+  ],
+  "N2C2": [
+    "North American Aerospace Defense Command United States Northern Command Command Center"
+  ],
+  "OPREP": [
+    "operational reporting",
+    "operational report"
+  ],
+  "OPSEC": [
+    "operations security",
+    "operational security"
+  ],
+  "OUSD(P&R)": [
+    "Office of the Under Secretary of Defense for Personnel and Readiness"
+  ],
+  "PAG": [
+    "public affairs guidance"
+  ],
+  "RMT": [
+    "realistic military training",
+    "response management team"
+  ],
+  "SOF": [
+    "special operations forces"
+  ],
+  "UAS": [
+    "unmanned aircraft system"
+  ],
+  "USNORTHCOM": [
+    "United States Northern Command",
+    "U.S. Northern Command"
+  ],
+  "USPACOM": [
+    "United States Pacific Command"
+  ],
+  "USSOCOM": [
+    "United States Special Operations Command",
+    "U.S. Special Operations Command"
+  ],
+  "HIV": [
+    "human immunodeficiency virus"
+  ],
+  "LE": [
+    "law enforcement",
+    " low-order explosives"
+  ],
+  "DISL": [
+    "Defense Intelligence Senior Level"
+  ],
+  "ESG": [
+    "Executive Steering Group",
+    " expeditionary strike group"
+  ],
+  "MSPB": [
+    "Merit Systems Protection Board"
+  ],
+  "CCAC": [
+    "Component Command Advisory Council"
+  ],
+  "DEC": [
+    "Dependents Education Council"
+  ],
+  "DoDEA": [
+    "Department of Defense Education Activity"
+  ],
+  "PTSA": [
+    "Parent Teacher Student Association"
+  ],
+  "SAC": [
+    "School Advisory Committee",
+    "school-age care",
+    "special actions cell",
+    " supporting arms coordinator"
+  ],
+  "TEC": [
+    "Theater Education Council",
+    "theater engineer command"
+  ],
+  "DDMS": [
+    "DoD Discovery Metadata Specification",
+    "Deputy Director for Military Support (NRO)"
+  ],
+  "M&S SC": [
+    "Modeling and Simulation Steering Committee"
+  ],
+  "M&SCO": [
+    "Modeling and Simulation Coordination Office"
+  ],
+  "MSSM": [
+    "M&S standards and methodologies"
+  ],
+  "DAEO": [
+    "Designated Agency Ethics Official"
+  ],
+  "DLSA": [
+    "Defense Legal Services Agency"
+  ],
+  "DTM": [
+    "directive-type memorandum"
+  ],
+  "E.O.": [
+    "Executive Order"
+  ],
+  "PL": [
+    "Public Law",
+    "phase line"
+  ],
+  "SOFA": [
+    "status-of-forces agreement"
+  ],
+  "C-IED": [
+    "counter-improvised explosive device"
+  ],
+  "DAS": [
+    "Defense Acquisition System",
+    "defense attach\u00e9 system",
+    "deep air support (USMC)"
+  ],
+  "G/FO": [
+    "general or flag officer"
+  ],
+  "IED": [
+    "improvised explosive device"
+  ],
+  "JEON": [
+    "joint emergent operational need"
+  ],
+  "JIEDDO": [
+    "Joint Improvised Explosive Device Defeat Organization"
+  ],
+  "JRAC": [
+    "Joint Rapid Acquisition Cell"
+  ],
+  "JUON": [
+    "joint urgent operational need"
+  ],
+  "PPBES": [
+    "Planning, Programming, Budgeting and Execution System"
+  ],
+  "RAA": [
+    "rapid acquisition authority"
+  ],
+  "SIG": [
+    "Senior Integration Group"
+  ],
+  "SES": [
+    "Senior Executive Service"
+  ],
+  "UON": [
+    "urgent operational need"
+  ],
+  "CCITT": [
+    "International Telegraph and Telephone Consultative Committee"
+  ],
+  "CHCSS": [
+    "Chief, Central Security Service"
+  ],
+  "CIM": [
+    "Common Information Model",
+    "civil information management"
+  ],
+  "CYBEX": [
+    "Cybersecurity Information Exchange"
+  ],
+  "DMTF": [
+    "Desktop Management Task Force"
+  ],
+  "GEM": [
+    "GIG Enterprise Management",
+    "Global Information Grid (GIG) Enterprise Management"
+  ],
+  "GTP": [
+    "GIG technical profile"
+  ],
+  "IEEE": [
+    "Institute of Electrical and Electronics Engineers"
+  ],
+  "IP": [
+    "Internet Protocol",
+    "incentive pay",
+    "initial point",
+    " initial position",
+    " integrated policy (USAF)",
+    " intelligence planning"
+  ],
+  "ITU-T": [
+    "International Telecommunications Union-Telecommunication"
+  ],
+  "JCIDS": [
+    "Joint Capabilities Integration and Development System"
+  ],
+  "MDR": [
+    "Metadata Registry",
+    "Mandatory Declassification Review"
+  ],
+  "MIB": [
+    "management information base",
+    "Military Intelligence Board"
+  ],
+  "NE": [
+    "network elements"
+  ],
+  "NETCONF": [
+    "Network Configuration Protocol"
+  ],
+  "NIST": [
+    "National Institute of Standards and Technology"
+  ],
+  "NM": [
+    "network management"
+  ],
+  "PBNM": [
+    "policy based network management"
+  ],
+  "POR": [
+    "programs of record"
+  ],
+  "RFC": [
+    "Request For Comment",
+    "request for capabilities",
+    " revision final coordination"
+  ],
+  "SA": [
+    "situational awareness",
+    "Secretary of Army",
+    "security assistance",
+    " staging area"
+  ],
+  "SLA": [
+    "service level agreement",
+    "Senior Language Authority",
+    "special leave accrual"
+  ],
+  "SM": [
+    "spectrum management",
+    "system manager",
+    " standard missile"
+  ],
+  "SNMP": [
+    "Simple Network Management Protocol"
+  ],
+  "STIG": [
+    "Security Technical Implementation Guide"
+  ],
+  "TM": [
+    "TeleManagement",
+    "technical manual",
+    "target materials"
+  ],
+  "A/D": [
+    "abandonment or destruction"
+  ],
+  "AFJM": [
+    "Air Force Joint Manual"
+  ],
+  "AIT": [
+    "automatic identification technology",
+    "Advanced Individual Training",
+    "automated identification technology"
+  ],
+  "ANSI": [
+    "American National Standards Institute"
+  ],
+  "AR": [
+    "Army Regulation",
+    "air refueling"
+  ],
+  "ASD(S)": [
+    "Assistant Secretary of Defense for Sustainment"
+  ],
+  "CAT 3": [
+    "Category 3"
+  ],
+  "CBRN": [
+    "chemical, biological, radiological, and nuclear",
+    "chemical, biological, radiological, nuclear"
+  ],
+  "CBRN-D": [
+    "chemical, biological, radiological, nuclear \u2013 defense"
+  ],
+  "CCL": [
+    "commerce control list"
+  ],
+  "CFR": [
+    "Code of Federal Regulations"
+  ],
+  "CIIC": [
+    "controlled inventory item code"
+  ],
+  "CLIN": [
+    "contract line item number"
+  ],
+  "COMSEC": [
+    "communications security"
+  ],
+  "COTS": [
+    "commercial off-the-shelf"
+  ],
+  "CRYPTO": [
+    "cryptological"
+  ],
+  "DEMIL": [
+    "demilitarization",
+    "demilitarize"
+  ],
+  "DI": [
+    "document identifier",
+    "Data Initiative",
+    "Defense Intelligence Agency (DIA) Directorate for Analysis",
+    " DIA Directorate for Intelligence Production"
+  ],
+  "DLM": [
+    "Defense Logistics Manual"
+  ],
+  "DLAI": [
+    "DLA Instruction",
+    "Defense Logistics Agency Instruction"
+  ],
+  "DPWG": [
+    "Disposal Policy Working Group"
+  ],
+  "DTID": [
+    "disposal turn-in document"
+  ],
+  "EAR": [
+    "Export Administration Regulations"
+  ],
+  "EPA": [
+    "Environmental Protection Agency",
+    " evasion plan of action"
+  ],
+  "ESD": [
+    "end-of-screening date",
+    "expeditionary transfer dock"
+  ],
+  "ETID": [
+    "electronic turn-in document"
+  ],
+  "FCA": [
+    "federal civilian agency",
+    "Foreign Claims Act"
+  ],
+  "FEDLOG": [
+    "Federal Logistics Data"
+  ],
+  "FEPP": [
+    "foreign excess personal property"
+  ],
+  "FMR": [
+    "Federal Management Regulation"
+  ],
+  "FPMR": [
+    "Federal Property Management Regulation"
+  ],
+  "FSCAP": [
+    "flight safety critical air parts"
+  ],
+  "GFM XSD": [
+    "Global Force Management Extensible Markup Language Schema Definition"
+  ],
+  "HM": [
+    "hazardous material"
+  ],
+  "HP": [
+    "hazardous property"
+  ],
+  "HW": [
+    "hazardous waste"
+  ],
+  "ICS": [
+    "in-transit control system",
+    "Intelligence Community Standard",
+    "incident command system",
+    " integrated country strategy",
+    " interim contractor"
+  ],
+  "ISSA": [
+    "inter-service support agreement"
+  ],
+  "ITAR": [
+    "International Traffic in Arms Regulations"
+  ],
+  "JROTC": [
+    "Junior Reserve Officer Training Corps",
+    "Junior Reserve Officers\u2019 Training Corps"
+  ],
+  "LSN": [
+    "local stock number"
+  ],
+  "MARS": [
+    "Military Affiliate Radio System",
+    "Military Auxiliary Radio System"
+  ],
+  "MCO": [
+    "Marine Corps Order",
+    "major combat operation",
+    " Mapping Customer Operations (Defense Logistics Agency)"
+  ],
+  "MILSBILLS": [
+    "Military Standard Billing System"
+  ],
+  "MLI": [
+    "munitions list items",
+    "munitions list item"
+  ],
+  "MOU": [
+    "memorandum of understanding"
+  ],
+  "MPPEH": [
+    "material potentially presenting an explosive hazard"
+  ],
+  "MRO": [
+    "materiel release order",
+    "mass rescue operation",
+    " medical regulating office",
+    " medical regulating officer"
+  ],
+  "NAVSUPINST": [
+    "Navy Supply Systems Command Instruction",
+    "Navy Supply System Command Instruction"
+  ],
+  "PC&H": [
+    "packing, crating, and handling"
+  ],
+  "PCH&T": [
+    "packing, crating, handling, and transportation"
+  ],
+  "PMRP": [
+    "precious metals recovery program"
+  ],
+  "QRP": [
+    "qualified recycling program",
+    "quick response posture"
+  ],
+  "RCP": [
+    "recycling control point",
+    "recovery coordination program"
+  ],
+  "RI": [
+    "record indicator"
+  ],
+  "RTD": [
+    "reutilization, transfer, or donation",
+    "returned to duty"
+  ],
+  "RTDS": [
+    "reutilization, transfer, donation, or sale"
+  ],
+  "SALD": [
+    "safe alert or latent defect"
+  ],
+  "SASP": [
+    "State agencies for surplus property"
+  ],
+  "SCC": [
+    "supply condition code",
+    "Service Component Command",
+    "service cryptologic component",
+    " Service cyberspace component",
+    " shipping coordination center"
+  ],
+  "SCL": [
+    "scrap classification code",
+    "scrap classification list",
+    "standard conventional load"
+  ],
+  "SEA": [
+    "service educational activities",
+    "senior enlisted advisor",
+    " Southeast Asia",
+    "ships\u2019 bunkers easy acquisition"
+  ],
+  "SECNAVINST": [
+    "Secretary of the Navy Instruction"
+  ],
+  "TSC": [
+    "trade security control",
+    "theater security cooperation",
+    " theater support command",
+    " theater sustainment command (USA)"
+  ],
+  "UII": [
+    "unique item identifier"
+  ],
+  "UMMIPS": [
+    "Uniform Materiel Movement and Issue Priority System",
+    "Uniform Material Movement and Issue Priority System"
+  ],
+  "USML": [
+    "United States munitions list"
+  ],
+  "XML": [
+    "extensible markup language"
+  ],
+  "ZI": [
+    "zone of interior"
+  ],
+  "ATSD(IO)": [
+    "Assistant to the Secretary of Defense for Intelligence Oversight"
+  ],
+  "FRA": [
+    "funded reimbursable authority",
+    "Federal Railroad Administration (DOT)"
+  ],
+  "JRIC": [
+    "joint reserve intelligence center"
+  ],
+  "JRIP": [
+    "Joint Reserve Intelligence Program"
+  ],
+  "MIP": [
+    "Military Intelligence Program"
+  ],
+  "NIP": [
+    "National Intelligence Program"
+  ],
+  "O&M": [
+    "operations and maintenance",
+    "operation and maintenance"
+  ],
+  "PMO": [
+    "Program Management Office",
+    "production management office(r)"
+  ],
+  "RCIE": [
+    "Reserve Component Intelligence Enterprise"
+  ],
+  "RMI": [
+    "Reserve Military Intelligence"
+  ],
+  "DTIC": [
+    "Defense Technical Information Center"
+  ],
+  "R&E": [
+    "research and engineering"
+  ],
+  "STI": [
+    "scientific and technical information"
+  ],
+  "STIP": [
+    "Scientific and Technical Information Program"
+  ],
+  "CDC": [
+    "cleared defense contractor",
+    "child development center",
+    "Centers for Disease Control and Prevention (DHHS)"
+  ],
+  "CIAPC": [
+    "CI Analysis and Production Council"
+  ],
+  "COLISEUM": [
+    "Community On-Line Intelligence System for End-Users and Managers"
+  ],
+  "DDI(I&S)": [
+    "Director for Defense Intelligence (Intelligence and Security)"
+  ],
+  "DIAP": [
+    "Defense Intelligence Analysis Program"
+  ],
+  "FIE": [
+    "foreign intelligence entity",
+    "fly-in echelon"
+  ],
+  "ICD": [
+    "Intelligence Community Directive",
+    "International Classification of Disease",
+    "initial capabilities document"
+  ],
+  "IIR": [
+    "intelligence information report"
+  ],
+  "DITF-CT": [
+    "Defense Intelligence Task Force-Combating Terrorism"
+  ],
+  "OFCO": [
+    "offensive counterintelligence operation(s)",
+    "offensive counterintelligence operation"
+  ],
+  "CSPD": [
+    "comprehensive system of personnel development"
+  ],
+  "DOHA": [
+    "Defense Office of Hearings and Appeals"
+  ],
+  "EDIS": [
+    "educational and developmental intervention services"
+  ],
+  "EIS": [
+    "early intervention services",
+    "Environmental Impact Statement"
+  ],
+  "FAPE": [
+    "free appropriate public education"
+  ],
+  "IDEA": [
+    "Individuals with Disabilities Education Act"
+  ],
+  "IEP": [
+    "individualized education program"
+  ],
+  "IFSP": [
+    "individualized family service plan"
+  ],
+  "CSRB": [
+    "critical skills retention bonus"
+  ],
+  "DASD(MPP)": [
+    "Deputy Assistant Secretary of Defense for Military Personnel Policy",
+    "Deputy Under Secretary of Defense for Military Personnel Policy"
+  ],
+  "EBP": [
+    "enlisted bonus program"
+  ],
+  "SRB": [
+    "selective retention bonus"
+  ],
+  "ASD(HD&GS)": [
+    "Assistant Secretary of Defense for Homeland Defense and Global Security",
+    "Assistant Secretary of Defense (Homeland Defense and Global Security)"
+  ],
+  "DCE": [
+    "defense coordinating element"
+  ],
+  "DDASS": [
+    "DoD DSCA Automated Support System"
+  ],
+  "EOC": [
+    "emergency operations center",
+    "emergency operating center"
+  ],
+  "ESF": [
+    "emergency support function",
+    "Economic Support Fund"
+  ],
+  "FCO": [
+    "federal coordinating officer"
+  ],
+  "JFHQ-S": [
+    "one joint force headquarters-State"
+  ],
+  "JFHQs-S": [
+    "more than one joint force headquarters-State"
+  ],
+  "JFO": [
+    "joint field office",
+    " joint fires observer"
+  ],
+  "JRMPO": [
+    "joint regional medical plans and operations officer"
+  ],
+  "LFA": [
+    "lead Federal agency"
+  ],
+  "NDMS": [
+    "National Disaster Medical System",
+    "National Disaster Medical System (DHHS)"
+  ],
+  "NSSE": [
+    "national special security event"
+  ],
+  "SEAR": [
+    "special event assessment rating"
+  ],
+  "ASD(A&PSA)": [
+    "Assistant Secretary of Defense for Asian and Pacific Security"
+  ],
+  "ASD(ISA)": [
+    "Assistant Secretary of Defense for International Security Affairs"
+  ],
+  "C4ISR": [
+    "command, control, communications, computers, intelligence, surveillance, and reconnaissance"
+  ],
+  "CDF": [
+    "contractors deploying with the force"
+  ],
+  "CDRUSSOCOM": [
+    "Commander, United States Special Operations Command"
+  ],
+  "COM": [
+    "chief of mission",
+    " collection operations management"
+  ],
+  "DASD(POW/MPA)": [
+    "Deputy Assistant Secretary of Defense for Prisoner of War/Missing Personnel Affairs"
+  ],
+  "IG DoD": [
+    "Inspector General of the Department of Defense"
+  ],
+  "JPRA": [
+    "Joint Personnel Recovery Agency"
+  ],
+  "NSS": [
+    "National Security System",
+    "National Security Systems",
+    "National Search and Rescue Supplement",
+    " national security strategy"
+  ],
+  "DMDC": [
+    "Defense Manpower Data Center",
+    "defense management data center"
+  ],
+  "ICB": [
+    "information collection budget"
+  ],
+  "ICO": [
+    "Information Collections Officer",
+    "Installation Commanding Officer"
+  ],
+  "IMCO": [
+    "information management control officer"
+  ],
+  "IMD": [
+    "Information Management Division"
+  ],
+  "IRM": [
+    "information resources management"
+  ],
+  "NPRM": [
+    "notice of proposed rulemaking"
+  ],
+  "PIA": [
+    "Privacy Impact Assessment"
+  ],
+  "PRA": [
+    "The Paperwork Reduction Act of 1995",
+    "probabilistic risk assessment",
+    "patient reception area",
+    " primary review authority"
+  ],
+  "ROCIS": [
+    "Regulatory Information Service Center and Office of Information and Regulatory Affairs Combined Information System"
+  ],
+  "SSN": [
+    "social security number"
+  ],
+  "BMF": [
+    "Building Maintenance Fund"
+  ],
+  "MIPR": [
+    "military interdepartmental purchase request"
+  ],
+  "NCR": [
+    "National Capital Region",
+    " naval",
+    "National Capital Region (US)",
+    " National Security Agency/Central Security Service representative"
+  ],
+  "PFPA": [
+    "Pentagon Force Protection Agency"
+  ],
+  "PRMRF": [
+    "Pentagon Reservation Maintenance Revolving Fund"
+  ],
+  "RPW": [
+    "Reimbursable Project Worksheet"
+  ],
+  "CTO": [
+    "commercial travel office"
+  ],
+  "DTMO": [
+    "Defense Travel Management Office"
+  ],
+  "GO/FO": [
+    "general or flag officer",
+    "general officer/flag officer"
+  ],
+  "GTCC": [
+    "Government Travel Charge Card"
+  ],
+  "IBA": [
+    "individually billed account"
+  ],
+  "ASD(NCB)": [
+    "Assistant Secretary of Defense for Nuclear, Chemical, and Biological Defense Programs"
+  ],
+  "DOE": [
+    "Department of Energy"
+  ],
+  "MC": [
+    "military characteristics",
+    "Marine Corps",
+    "Military Committee (NATO)",
+    " mission-critical",
+    " mobile communications"
+  ],
+  "NC2": [
+    "nuclear command and control"
+  ],
+  "NWC": [
+    "Nuclear Weapons Council"
+  ],
+  "NWTI": [
+    "nuclear weapons technical inspection"
+  ],
+  "PRAP": [
+    "Personnel Reliability Assurance Program"
+  ],
+  "STS": [
+    "stockpile-to-target sequence",
+    "special tactics squadron"
+  ],
+  "ASD(A)": [
+    "Assistant Secretary of Defense for Acquisition"
+  ],
+  "CJCSI": [
+    "Chairman of the Joint Chiefs of Staff Instruction"
+  ],
+  "DCIP": [
+    "Defense Critical Infrastructure Program"
+  ],
+  "FSD": [
+    "Facility Services Directorate"
+  ],
+  "GM": [
+    "General Management"
+  ],
+  "LFD": [
+    "Leased Facilities Division"
+  ],
+  "RWA": [
+    "reimbursable work authorization"
+  ],
+  "SPMD": [
+    "Space Portfolio Management Division"
+  ],
+  "TAR": [
+    "tenant agency representative",
+    "tactical air request"
+  ],
+  "TI": [
+    "tenant improvement",
+    "threat identification"
+  ],
+  "USP": [
+    "Universal Space Plan"
+  ],
+  "AA&E": [
+    "arms, ammunition, and explosives"
+  ],
+  "COCO": [
+    "contractor-owned, contractor-operated"
+  ],
+  "GOCO": [
+    "Government-owned contractor operated"
+  ],
+  "HAC": [
+    "House Appropriations Committee",
+    "human intelligence analysis cell"
+  ],
+  "S&I": [
+    "Surveys and Investigations"
+  ],
+  "DoD": [
+    "CIO DoD Chief Information Officer"
+  ],
+  "IICO": [
+    "Internal Information Collections Officer"
+  ],
+  "PICO": [
+    "Public Information Collections Officer"
+  ],
+  "PII": [
+    "personally identifiable information",
+    "pre-incident indicators"
+  ],
+  "RCS": [
+    "Report Control Symbol",
+    "Report Control Symbols"
+  ],
+  "CRP": [
+    "Comprehensive Recovery Plan"
+  ],
+  "FRC": [
+    "federal recovery coordinator",
+    "forward resuscitative care"
+  ],
+  "FRCP": [
+    "Federal Recovery Coordination Program"
+  ],
+  "MCCM": [
+    "medical care case manager"
+  ],
+  "NMCM": [
+    "non-medical care manager"
+  ],
+  "RSM": [
+    "recovering Service member",
+    "recovering Service members"
+  ],
+  "RT": [
+    "recovery team",
+    " rough terrain"
+  ],
+  "TAP": [
+    "Transition Assistance Program"
+  ],
+  "WWCTP": [
+    "Office of Wounded Warrior Care and Transition Policy"
+  ],
+  "FGI": [
+    "Foreign Government Information"
+  ],
+  "FOIA": [
+    "Freedom of Information Act"
+  ],
+  "ISCAP": [
+    "Interagency Security Classification Appeals Panel"
+  ],
+  "ARD": [
+    "Acquisition Risk Directorate"
+  ],
+  "CIA": [
+    "Central Intelligence Agency"
+  ],
+  "CIPA": [
+    "Classified Information Procedures Act"
+  ],
+  "CO": [
+    "contracting officer",
+    "cyberspace operations"
+  ],
+  "COMINT": [
+    "communications intelligence"
+  ],
+  "COR": [
+    "contracting officer\u2019s representative",
+    "contracting officer representative"
+  ],
+  "CSA": [
+    "cognizant security authority",
+    "combat support agency"
+  ],
+  "CSSO": [
+    "contractor special security officer"
+  ],
+  "DAO": [
+    "defense attach\u00e9 office"
+  ],
+  "DCI": [
+    "Director of Central Intelligence",
+    "defense critical infrastructure"
+  ],
+  "DCID": [
+    "Director of Central Intelligence Directive"
+  ],
+  "DCS": [
+    "Defense Courier Service",
+    "Direct Care System",
+    "Defense Collaboration Services",
+    " deputy chief of staff"
+  ],
+  "DOJ": [
+    "Department of Justice",
+    "U.S. Department of Justice"
+  ],
+  "DSSCS": [
+    "Defense Special Security Communications System"
+  ],
+  "EAP": [
+    "emergency action plan"
+  ],
+  "EO": [
+    "Executive order",
+    "electro-optical"
+  ],
+  "FCL": [
+    "facility clearance"
+  ],
+  "FFC": [
+    "fixed facility checklist",
+    "fact-finding conference",
+    "force fires coordinator"
+  ],
+  "FIS": [
+    "Foreign Intelligence Service"
+  ],
+  "GENSER": [
+    "general service"
+  ],
+  "HICE": [
+    "Head of an Intelligence Community Element"
+  ],
+  "HPSCI": [
+    "House Permanent Select Committee on Intelligence"
+  ],
+  "IAM": [
+    "Information Assurance Manager",
+    "inertially aided munition"
+  ],
+  "IAR": [
+    "Information Assurance Representative"
+  ],
+  "ICPG": [
+    "Intelligence Community Policy Guide"
+  ],
+  "IPA": [
+    "intergovernmental personnel agreement",
+    "intelligence production agency"
+  ],
+  "ISS": [
+    "industrial security specialist",
+    "initial safety study",
+    "in-system select"
+  ],
+  "JPAS": [
+    "Joint Personnel Adjudication System (or successor system)"
+  ],
+  "JSO": [
+    "judicial security officer",
+    "joint security operations"
+  ],
+  "JWICS": [
+    "Joint Worldwide Intelligence Communication System",
+    "Joint Worldwide Intelligence Communications System"
+  ],
+  "MOBDES": [
+    "mobilization designee"
+  ],
+  "NdA": [
+    "Nondisclosure Agreement"
+  ],
+  "NdS": [
+    "Nondisclosure Statement"
+  ],
+  "NFIB": [
+    "National Foreign Intelligence Board"
+  ],
+  "ORCON": [
+    "Dissemination and Extraction of Information Controlled by Originator"
+  ],
+  "PCL": [
+    "personnel security clearance"
+  ],
+  "POC": [
+    "point of contact"
+  ],
+  "PR": [
+    "periodic reinvestigation",
+    "purchase request",
+    " production requirement",
+    "personnel recovery",
+    " Phoenix Raven",
+    " program review"
+  ],
+  "PROPIN": [
+    "proprietary information"
+  ],
+  "SCIF": [
+    "sensitive compartmented information facility"
+  ],
+  "SETA": [
+    "Security Education, Training and Awareness"
+  ],
+  "SI": [
+    "special intelligence",
+    "Skill Identifier",
+    "United States Strategic Command strategic instruction"
+  ],
+  "SIO": [
+    "senior intelligence officer"
+  ],
+  "SOIC": [
+    "senior official to the Intelligence Community",
+    "senior officer of the intelligence community"
+  ],
+  "SPA": [
+    "Special Purpose Access"
+  ],
+  "SSAN": [
+    "Social Security account number"
+  ],
+  "SSC": [
+    "Special Security Center",
+    "small scale contingency"
+  ],
+  "SSCI": [
+    "Senate Select Committee on Intelligence"
+  ],
+  "SSO": [
+    "special security officer",
+    "special security office(r)"
+  ],
+  "TK": [
+    "talent keyhole"
+  ],
+  "TSCM": [
+    "Technical Surveillance Countermeasures",
+    "technical security countermeasure"
+  ],
+  "DUSD(CPP)": [
+    "Deputy Under Secretary of Defense for Civilian Personnel Policy"
+  ],
+  "MTB": [
+    "mass transportation benefit"
+  ],
+  "MTBP": [
+    "Mass Transportation Benefit Program"
+  ],
+  "NAFI": [
+    "nonappropriated fund instrumentality",
+    "nonappropriated funds instrumentalities",
+    "nonappropriated funds instrumentality",
+    "non-appropriated funds instrumentality"
+  ],
+  "ONCR": [
+    "outside the National Capital Region"
+  ],
+  "POV": [
+    "privately owned vehicle"
+  ],
+  "QMOT": [
+    "qualified means of transportation"
+  ],
+  "RO": [
+    "Reviewing Official"
+  ],
+  "CDRUSJFCOM": [
+    "Commander, U.S. Joint Forces Command"
+  ],
+  "COI": [
+    "community of interest"
+  ],
+  "EA": [
+    "enterprise architecture",
+    "Executive Agent",
+    "electromagnetic attack",
+    " emergency action"
+  ],
+  "GCM": [
+    "GIG Content Management",
+    "global container manager",
+    " Global Information Grid (GIG) Content Management"
+  ],
+  "GNA": [
+    "GIG Net Assurance",
+    "Global Information Grid (GIG) Network Assurance"
+  ],
+  "DHRA": [
+    "Defense Human Resource Activity",
+    "DoD Human Resources Activity",
+    "Defense Human Resources Activity"
+  ],
+  "GFE": [
+    "Government furnished equipment"
+  ],
+  "TMO": [
+    "Telework Managing Officer",
+    "target mensuration only",
+    " traffic management office",
+    " transportation management office"
+  ],
+  "GAO": [
+    "Government Accountability Office"
+  ],
+  "AAR": [
+    "after action report",
+    " after action review",
+    " air-to-air refueling area"
+  ],
+  "HA": [
+    "humanitarian assistance",
+    "holding area"
+  ],
+  "HCA": [
+    "humanitarian and civic assistance",
+    "head of a contracting activity"
+  ],
+  "HN": [
+    "host nation",
+    "host nation"
+  ],
+  "J5 DDPS": [
+    "Joint Staff Strategic Plans and Policy Directorate, Partnership Strategy Deputy Directorate"
+  ],
+  "OHASIS": [
+    "Overseas Humanitarian Assistance Shared Information System"
+  ],
+  "SC": [
+    "security cooperation",
+    "Steering Committee"
+  ],
+  "SECSTATE": [
+    "Secretary of State"
+  ],
+  "TCP": [
+    "theater campaign plan"
+  ],
+  "USAID": [
+    "United States Agency for International Development"
+  ],
+  "ARC": [
+    "American National Red Cross",
+    " American Red Cross",
+    "air Reserve Components"
+  ],
+  "ASYMCA": [
+    "Armed Services Young Men\u2019s Christian Association"
+  ],
+  "BRAC": [
+    "Base Realignment and Closure"
+  ],
+  "COLA": [
+    "cost of living allowance"
+  ],
+  "DRS": [
+    "data request system",
+    "detainee reporting system"
+  ],
+  "ERB": [
+    "Executive Resale Board",
+    "Executive Resources Board"
+  ],
+  "FF&E": [
+    "furniture, fixtures, and equipment"
+  ],
+  "MILCON": [
+    "military construction"
+  ],
+  "NOAA": [
+    "National Oceanic and Atmospheric Administration",
+    "National Oceanic and Atmospheric Administration (DOC)"
+  ],
+  "OCONUS": [
+    "outside the continental United States",
+    "outside of the continental United States"
+  ],
+  "PAS": [
+    "Presidentially appointed, Senate-confirmed",
+    "Personnel Accounting Symbol"
+  ],
+  "PDTATAC": [
+    "Per Diem, Travel and Transportation Allowance Committee"
+  ],
+  "USO": [
+    "United Service Organizations"
+  ],
+  "USPHS": [
+    "U.S. Public Health Service",
+    "United States Public Health Service (DHHS)"
+  ],
+  "USS": [
+    "United Seamen\u2019s Service"
+  ],
+  "PEBLO": [
+    "physical evaluation board liaison officer"
+  ],
+  "QAP": [
+    "quality assurance program"
+  ],
+  "ACAT": [
+    "acquisition category"
+  ],
+  "AFLCR": [
+    "Air Force Logistics Command Regulation"
+  ],
+  "AMC-R": [
+    "Army Materiel Command Regulation"
+  ],
+  "BOM": [
+    "bills-of-material"
+  ],
+  "CLS": [
+    "contractor logistics support"
+  ],
+  "DVD": [
+    "direct vendor delivery",
+    "digital video disk",
+    "digital videodisc",
+    "digital video device"
+  ],
+  "PBL": [
+    "performance-based logistics"
+  ],
+  "PICA": [
+    "primary inventory control activity"
+  ],
+  "SICA": [
+    "secondary inventory control activity"
+  ],
+  "AFME": [
+    "Armed Forces Medical Examiner"
+  ],
+  "AFRSSIR": [
+    "Armed Forces Repository of Specimen Samples for the Identification of Remains"
+  ],
+  "CAAF": [
+    "contractors authorized to accompany the force"
+  ],
+  "CAC": [
+    "common access card"
+  ],
+  "CDRUSTRANSCOM": [
+    "Commander, United States Transportation Command",
+    "Commander, USTRANSCOM"
+  ],
+  "CMP": [
+    "contractor management plan",
+    "Compliance Management Plan"
+  ],
+  "CONPLAN": [
+    "concept plan",
+    " operation plan in concept format"
+  ],
+  "CRC": [
+    "CONUS replacement center",
+    "coastal riverine company",
+    " control and reporting center",
+    " crisis reaction center"
+  ],
+  "CSIP": [
+    "contract support integration plan"
+  ],
+  "DASD(PS)": [
+    "Deputy Assistant Secretary of Defense for Program Support"
+  ],
+  "DASD(Readiness)": [
+    "Deputy Assistant Secretary of Defense for Readiness"
+  ],
+  "DCMA": [
+    "Defense Contract Management Agency"
+  ],
+  "DMSS": [
+    "Defense Medical Surveillance System"
+  ],
+  "FCIB": [
+    "functional capability integration board"
+  ],
+  "FEV-1": [
+    "forced expiratory volume-1"
+  ],
+  "FHPPP": [
+    "force health protection prescription product"
+  ],
+  "IGE": [
+    "independent Government estimate"
+  ],
+  "IPE": [
+    "individual protective equipment"
+  ],
+  "JCASO": [
+    "Joint Contingency Acquisition Support Office",
+    "Joint Contingency Acquisition Support Office (DLA)"
+  ],
+  "JFC": [
+    "joint force commander"
+  ],
+  "JOA": [
+    "joint operations area"
+  ],
+  "JP": [
+    "Joint Publication"
+  ],
+  "JTSCC": [
+    "Joint Theater Support Contracting Command"
+  ],
+  "LN": [
+    "local national",
+    "lead nation"
+  ],
+  "LOA": [
+    "letter of authorization",
+    "letter of assist",
+    " letter of offer and acceptance",
+    " logistics over-the-shore operation area"
+  ],
+  "MEJA": [
+    "Military Extraterritorial Jurisdiction Act"
+  ],
+  "OCS": [
+    "operational contract support",
+    "Officer Candidate School"
+  ],
+  "OPLAN": [
+    "operation plan"
+  ],
+  "OPORD": [
+    "operation order"
+  ],
+  "P.L.": [
+    "Public Law"
+  ],
+  "SARIR": [
+    "search and rescue incident report"
+  ],
+  "SJA": [
+    "staff judge advocate"
+  ],
+  "SPOT": [
+    "Synchronized Predeployment and Operational Tracker"
+  ],
+  "TB": [
+    "tuberculin"
+  ],
+  "TCN": [
+    "third country national",
+    "transportation control number"
+  ],
+  "TPFDD": [
+    "time-phased force and deployment data"
+  ],
+  "TSOC": [
+    "Theater Special Operations Command",
+    "tactical special operations command"
+  ],
+  "VDJ4": [
+    "Vice Director, Director of Logistics, Joint Staff"
+  ],
+  "JROC": [
+    "Joint Requirements Oversight Council"
+  ],
+  "RAM": [
+    "reliability, availability, maintainability",
+    " random antiterrorism measure",
+    "raised angle marker",
+    " rockets, artillery, and mortars"
+  ],
+  "SAE": [
+    "Service Acquisition Executive"
+  ],
+  "SEP": [
+    "Systems Engineering Plan"
+  ],
+  "SPRDE": [
+    "Systems Planning, Research, Development, and Engineering"
+  ],
+  "AMT": [
+    "American Medical Technologists",
+    "aerial mail terminal"
+  ],
+  "ASCP": [
+    "American Society of Clinical Pathologists"
+  ],
+  "CAP": [
+    "College of American Pathologists",
+    "Computer/Electronic Accommodations Program",
+    "Civil Air Patrol",
+    " civil assistance plan",
+    " civil augmentation program",
+    " combat air patrol"
+  ],
+  "CCLM": [
+    "Center for Clinical Laboratory Medicine"
+  ],
+  "CLIA": [
+    "Clinical Laboratory Improvement Amendments of 1988"
+  ],
+  "CLIAC": [
+    "Clinical Laboratory Improvement Advisory Committee"
+  ],
+  "CLIP": [
+    "Clinical Laboratory Improvement Program"
+  ],
+  "CMS": [
+    "Centers for Medicare & Medicaid Services"
+  ],
+  "DHA": [
+    "Defense Health Agency",
+    " detainee holding area"
+  ],
+  "DLN": [
+    "DoD Laboratory Network"
+  ],
+  "FDA": [
+    "Food and Drug Administration",
+    "Food and Drug Administration (DHHS)"
+  ],
+  "HHS": [
+    "Department of Health and Human Services"
+  ],
+  "LJWG": [
+    "Laboratory Joint Working Group"
+  ],
+  "LRN": [
+    "Laboratory Response Network",
+    "Laboratory Response Network (DHHS)"
+  ],
+  "MLS": [
+    "medical laboratory scientist",
+    "multilevel security"
+  ],
+  "NLCP": [
+    "National Laboratory Certification Program"
+  ],
+  "OASD(HA)": [
+    "Office of the Assistant Secretary of Defense for Health Affairs"
+  ],
+  "PPM": [
+    "provider performed microscopy"
+  ],
+  "PT": [
+    "proficiency testing"
+  ],
+  "TJC": [
+    "The Joint Commission"
+  ],
+  "AB": [
+    "accession bonus",
+    "air base"
+  ],
+  "ADHPLRP": [
+    "Active Duty Health Professions Loan Repayment Program"
+  ],
+  "ADO": [
+    "active duty obligation"
+  ],
+  "BCP": [
+    "board certified pay"
+  ],
+  "D.D.S.": [
+    "doctor of dental surgery"
+  ],
+  "D.M.D.": [
+    "doctor of dental medicine"
+  ],
+  "D.O.": [
+    "doctor of osteopathic medicine"
+  ],
+  "D.V.M.": [
+    "doctor of veterinary medicine"
+  ],
+  "GPE": [
+    "graduate professional education",
+    "geospatial intelligence preparation of the environment"
+  ],
+  "HCP": [
+    "health care provider"
+  ],
+  "HMPDS": [
+    "Health Manpower and Personnel Data System"
+  ],
+  "HPLRP": [
+    "health professions loan repayment programs"
+  ],
+  "HPO": [
+    "health professions officer"
+  ],
+  "HPS&I": [
+    "health professions special and incentive"
+  ],
+  "M.D.": [
+    "doctor of medicine"
+  ],
+  "MGIB": [
+    "Montgomery GI Bill"
+  ],
+  "MTAS": [
+    "minimum term of active service"
+  ],
+  "RCHPLRP": [
+    "Reserve Component Health Professions Loan Repayment Program"
+  ],
+  "V.M.D.": [
+    "Veterinariae Medicinae Doctoris"
+  ],
+  "AAC": [
+    "acquisition advice code",
+    "activity address code"
+  ],
+  "AMC": [
+    "acquisition method code",
+    " Air Mobility Command",
+    "airborne mission coordinator"
+  ],
+  "DIC": [
+    "document identifier code"
+  ],
+  "DMSMS": [
+    "diminishing manufacturing sources and material shortages"
+  ],
+  "HMIC": [
+    "Hazardous Materiel Indicator Code"
+  ],
+  "HMIRS": [
+    "Hazardous Materiel Information Resource System",
+    "Hazardous Material Information Resource System",
+    "Hazardous Materials Information Resource System"
+  ],
+  "I&S": [
+    "interchangeable and substitutable"
+  ],
+  "NIIN": [
+    "National Item Identification Number"
+  ],
+  "PQDR": [
+    "Product Qualification Deficiency Report"
+  ],
+  "SDR": [
+    "Supply Discrepancy Report"
+  ],
+  "SVC": [
+    "Service",
+    "stored value card"
+  ],
+  "WSSP": [
+    "Weapon System Support Program"
+  ],
+  "BASOPS": [
+    "base operations support"
+  ],
+  "CUA": [
+    "co-utilization agreements"
+  ],
+  "SIOO": [
+    "Senior Intelligence Oversight Official"
+  ],
+  "PTSD": [
+    "post-traumatic stress disorder"
+  ],
+  "ASD(PA)": [
+    "Assistant Secretary of Defense for Public Affairs"
+  ],
+  "DHS": [
+    "Department of Homeland Security",
+    "Defense Human Intelligence (HUMINT) Service"
+  ],
+  "EDD": [
+    "explosive detection dog"
+  ],
+  "EOD": [
+    "explosive ordnance disposal"
+  ],
+  "JEOD": [
+    "joint explosive ordnance disposal"
+  ],
+  "MWD": [
+    "military working dogs",
+    "military working dog"
+  ],
+  "RFA": [
+    "request for assistance",
+    " restrictive fire area"
+  ],
+  "RFI": [
+    "request for information",
+    "radio frequency interference"
+  ],
+  "USSS": [
+    "United States Secret Service",
+    "United States Secret Service (DHS)"
+  ],
+  "VIPPSA": [
+    "Very Important Persons Protection Support Activity",
+    "very important personnel protection support activity"
+  ],
+  "D&F": [
+    "determination and findings",
+    "determinations and findings"
+  ],
+  "DWCF": [
+    "Defense Working Capital Fund"
+  ],
+  "SAM": [
+    "support agreements manager",
+    "Special Air Mission",
+    "surface-to-air missile"
+  ],
+  "UH": [
+    "unaccompanied housing",
+    "utility helicopter"
+  ],
+  "APF": [
+    "appropriated fund",
+    "appropriated funds",
+    "afloat pre-positioning force"
+  ],
+  "CEW": [
+    "civilian expeditionary workforce"
+  ],
+  "FLSA": [
+    "Fair Labor Standards Act"
+  ],
+  "RAT": [
+    "renewal agreement travel"
+  ],
+  "AFQT": [
+    "Armed Forces Qualification Test"
+  ],
+  "CPM": [
+    "Civilian Personnel Manual"
+  ],
+  "DASD(R)": [
+    "Deputy Assistant Secretary of Defense for Readiness"
+  ],
+  "DLAB": [
+    "Defense Language Aptitude Battery"
+  ],
+  "DLAP": [
+    "Defense Language Action Panel"
+  ],
+  "DLIELC": [
+    "Defense Language Institute English Language Center"
+  ],
+  "DLIFLC": [
+    "Defense Language Institute Foreign Language Center"
+  ],
+  "DLNSEO": [
+    "Defense Language and National Security Education Office"
+  ],
+  "DLP": [
+    "Defense Language Program"
+  ],
+  "DLPT": [
+    "Defense Language Proficiency Test"
+  ],
+  "DLSC": [
+    "Defense Language Steering Committee"
+  ],
+  "ECL": [
+    "English Comprehension Level Test"
+  ],
+  "ELPT": [
+    "English Language Proficiency Test"
+  ],
+  "FLPB": [
+    "Foreign Language Proficiency Bonus"
+  ],
+  "FLPP": [
+    "Foreign Language Proficiency Pay"
+  ],
+  "NSA/CSS": [
+    "National Security Agency/Central Security Service"
+  ],
+  "OPI": [
+    "Oral Proficiency Interview"
+  ],
+  "OPI-E": [
+    "Oral Proficiency Interview (English)"
+  ],
+  "UR": [
+    "upper range",
+    "utilization review",
+    "user representative"
+  ],
+  "USMEPCOM": [
+    "US Military Entrance Processing Command"
+  ],
+  "DIRNSA/CHSS": [
+    "Director, NSA/Chief, CSS"
+  ],
+  "CIC": [
+    "card item code"
+  ],
+  "HQ": [
+    "headquarters"
+  ],
+  "IMCA": [
+    "Item Management Coding Activity"
+  ],
+  "MOE": [
+    "major organizational entity",
+    "measure of effectiveness"
+  ],
+  "SSR": [
+    "supply support request",
+    "security sector reform"
+  ],
+  "TOCC": [
+    "type of change code"
+  ],
+  "DoDD": [
+    "DoD Directive"
+  ],
+  "OCA": [
+    "original classification authority",
+    "offensive counterair",
+    " operational control authority"
+  ],
+  "DA": [
+    "Director of Administration",
+    "Department of the Army",
+    " direct action",
+    " Directorate for Mission Services (DIA)",
+    " double agent"
+  ],
+  "JS": [
+    "Joint Staff"
+  ],
+  "SOH": [
+    "Spirit of Hope"
+  ],
+  "R&D": [
+    "research and development"
+  ],
+  "TTCP": [
+    "The Technical Cooperation Program"
+  ],
+  "SECDEFREPEUR": [
+    "Secretary of Defense  Senior Civilian Representative of the Secretary of Defense in Europe"
+  ],
+  "USNATO": [
+    "United States Mission to the North Atlantic Treaty Organization"
+  ],
+  "BBA": [
+    "business based action"
+  ],
+  "CTP": [
+    "Civilian Transition Program",
+    "common tactical picture"
+  ],
+  "DSR": [
+    "discontinued service retirement",
+    "defense strategy review"
+  ],
+  "HAP": [
+    "Homeowners Assistance Program",
+    "humanitarian assistance program"
+  ],
+  "HBP": [
+    "Health Benefits Program"
+  ],
+  "RPL": [
+    "reemployment priority list"
+  ],
+  "VSIP": [
+    "voluntary separation incentive pay"
+  ],
+  "WIA": [
+    "Workforce Investment Act",
+    "wounded in action"
+  ],
+  "DCFW": [
+    "Data Call Financial Workbook"
+  ],
+  "DIFMS": [
+    "Defense Industrial Financial Management System"
+  ],
+  "DLA/SS&D": [
+    "Defense Logistics Agency/Supply Storage and Distribution"
+  ],
+  "DLH": [
+    "Direct Labor Hours"
+  ],
+  "DSOR": [
+    "Depot Source of Repair"
+  ],
+  "ESOH": [
+    "Environment, Safety, and Occupational Health",
+    "environmental, safety, and occupational health"
+  ],
+  "G&A": [
+    "general and administrative"
+  ],
+  "MCCW": [
+    "Master Cost Comparability Workbook"
+  ],
+  "POH": [
+    "Production Overhead"
+  ],
+  "SOR": [
+    "Source of Repair"
+  ],
+  "AFSC": [
+    "Air Force Specialty Code"
+  ],
+  "AOC": [
+    "area of concentration",
+    "air operations center"
+  ],
+  "AOCS": [
+    "Aviation Officer Candidate School"
+  ],
+  "APO": [
+    "Army Post Office"
+  ],
+  "AQD": [
+    "Additional Qualification Designator"
+  ],
+  "AS": [
+    "active service"
+  ],
+  "ASI": [
+    "Additional Skill Identifier"
+  ],
+  "CEI": [
+    "Civilian Employment Information"
+  ],
+  "CSB": [
+    "Career Status Bonus"
+  ],
+  "DEERS": [
+    "Defense Enrollment Eligibility Reporting System",
+    "Defense Enrollment Eligibility Reporting Sytems"
+  ],
+  "DLI": [
+    "Defense Language Institute"
+  ],
+  "DOB": [
+    "date of birth"
+  ],
+  "EDI-PI": [
+    "electronic data interchange person identifier",
+    "Electronic Data Interchange Personal Identifier"
+  ],
+  "E-ID": [
+    "Early Identification (of members called up in support of a named contingency)"
+  ],
+  "EMPLID": [
+    "Employer Identification"
+  ],
+  "EPTS": [
+    "existed prior to Service"
+  ],
+  "FIPS": [
+    "Federal Information Processing Standards"
+  ],
+  "FPO": [
+    "Fleet Post Office"
+  ],
+  "HTTPS": [
+    "Hypertext Transfer Protocol Secure"
+  ],
+  "ISP": [
+    "Involuntary Separation Pay",
+    "Internet service provider"
+  ],
+  "JPME": [
+    "joint professional military education"
+  ],
+  "MCC": [
+    "Monitored Command Code",
+    "military coordinating committee",
+    " military counterintelligence collections",
+    " mission control center"
+  ],
+  "MILTECH": [
+    "military technician"
+  ],
+  "MOS": [
+    "Military Occupational Specialty",
+    "Military OneSource",
+    "Military Occupational Skill"
+  ],
+  "MPA": [
+    "Military Personnel Appropriations",
+    "maritime patrol aircraft",
+    " mission planning agent"
+  ],
+  "NCS": [
+    "National Call to Service",
+    " National Communications System",
+    "National Clandestine Service",
+    " net control station"
+  ],
+  "NEC": [
+    "Navy Enlisted Classification",
+    "National Economic Council"
+  ],
+  "NIPRNET": [
+    "Non-Secure Internet Protocol Router Network",
+    "Non-classified Internet Protocol Router Network"
+  ],
+  "NOBC": [
+    "Navy Officer Billet Classification",
+    "Navy Officer Billet Code"
+  ],
+  "OPFAC": [
+    "operating facilities"
+  ],
+  "OSC": [
+    "officer specialty code",
+    "offensive space control",
+    " on-scene commander",
+    " on-site commander",
+    " Open Source Center (CIA)"
+  ],
+  "OTS": [
+    "Officer Training School"
+  ],
+  "PEBD": [
+    "Pay Entry Base Date"
+  ],
+  "PEC": [
+    "program element code"
+  ],
+  "PLC": [
+    "Platoon Leader Course",
+    "Platoon Leaders Course"
+  ],
+  "PME": [
+    "professional military education"
+  ],
+  "RC-IAD": [
+    "Newly Commissioned Reserve Officers \u2013 Initial Active Duty"
+  ],
+  "RCSBP": [
+    "Reserve Component Survivor Benefit Plan"
+  ],
+  "RPA": [
+    "Reserve Personnel Appropriations"
+  ],
+  "RUC": [
+    "Reporting Unit Code"
+  ],
+  "SOAP": [
+    "Simple Object Access Protocol"
+  ],
+  "SOC": [
+    "Standard Occupational Classification",
+    "standard of care",
+    "Servicemembers Opportunity Colleges",
+    "special operations commander"
+  ],
+  "SPD": [
+    "Separation Program Designator",
+    "surge protective devices"
+  ],
+  "SQI": [
+    "Special Qualification Identifier",
+    "Skill Qualification Identifier"
+  ],
+  "SSA": [
+    "Social Security Administration",
+    "space situational awareness",
+    "special safety assessment",
+    "security sector assistance",
+    " software support activity",
+    " special support activity (NSA)"
+  ],
+  "SSB": [
+    "Special Separation Benefits",
+    "Special Separation Bonus",
+    "special selection board",
+    "single side band"
+  ],
+  "UIC": [
+    "Unit Identification Code"
+  ],
+  "USA": [
+    "United States Army"
+  ],
+  "USAF": [
+    "United States Air Force"
+  ],
+  "USAFA": [
+    "United States Air Force Academy"
+  ],
+  "USAFR": [
+    "United States Air Force Reserve"
+  ],
+  "USAR": [
+    "United States Army Reserve"
+  ],
+  "USCGA": [
+    "United States Coast Guard Academy"
+  ],
+  "USCGR": [
+    "United States Coast Guard Reserve"
+  ],
+  "USMA": [
+    "United States Military Academy"
+  ],
+  "USMC": [
+    "United States Marine Corps"
+  ],
+  "USMCR": [
+    "United States Marine Corps Reserve"
+  ],
+  "USMMA": [
+    "United States Merchant Marine Academy"
+  ],
+  "USN": [
+    "United States Navy"
+  ],
+  "USNA": [
+    "United States Naval Academy"
+  ],
+  "USNR": [
+    "United States Navy Reserve"
+  ],
+  "USPS": [
+    "United States Postal Service"
+  ],
+  "VSI": [
+    "Voluntary Separation Incentive "
+  ],
+  "WII": [
+    "wounded, ill, or injured",
+    "wounded, ill, and injured"
+  ],
+  "HRO": [
+    "Human Resources Office",
+    "human resource office",
+    "humanitarian relief organizations"
+  ],
+  "DASD(MC&FP)": [
+    "Deputy Assistant Secretary of Defense for Military Community and Family Policy"
+  ],
+  "FCC": [
+    "family child care",
+    "Federal Catalog Committee",
+    "Federal Communications Commission",
+    " federal coordinating center",
+    " functional combatant commander"
+  ],
+  "IRC": [
+    "installations records check",
+    "information related capability",
+    " Internet relay chat"
+  ],
+  "LOSS": [
+    "line-of-sight supervision"
+  ],
+  "SCHR": [
+    "state criminal history repository"
+  ],
+  "AF": [
+    "Air Force",
+    " Air Force (form)",
+    " amphibious force"
+  ],
+  "AHLTA": [
+    "Armed Forces Health Longitudinal Technology Application"
+  ],
+  "CHCS": [
+    "Composite Health Care System"
+  ],
+  "CPG": [
+    "clinical practice guidelines"
+  ],
+  "DM": [
+    "disease management",
+    "docking module"
+  ],
+  "E&M": [
+    "evaluation and management"
+  ],
+  "EFMP": [
+    "Exceptional Family Member Program"
+  ],
+  "HCPCS": [
+    "Healthcare Common Procedure Coding System"
+  ],
+  "HEDIS": [
+    "Healthcare Effectiveness Data and Information Set"
+  ],
+  "HIPAA": [
+    "Health Insurance Portability and Accountability Act"
+  ],
+  "JTFCapMed": [
+    "Joint Task Force National Capital Region Medical"
+  ],
+  "MCSC": [
+    "Managed Care Support Contractors"
+  ],
+  "MEPRS": [
+    "Medical Expense and Performance Reporting System"
+  ],
+  "MM": [
+    "medical management"
+  ],
+  "OEF/OIF/OND": [
+    "Operation Operation ENDURING FREEDOM/Operation IRAQI  FREEDOM/Operation NEW DAWN"
+  ],
+  "PCMH": [
+    "Patient Centered Medical Home"
+  ],
+  "RN": [
+    "registered nurses"
+  ],
+  "SW": [
+    "social workers",
+    "shallow water"
+  ],
+  "TMA": [
+    "TRICARE Management Activity"
+  ],
+  "UM": [
+    "utilization management"
+  ],
+  "VHA": [
+    "Veterans Health Administration"
+  ],
+  "CLDF&C": [
+    "Civilian Leader Development Framework and Continuum"
+  ],
+  "CPMS": [
+    "Civilian Personnel Management Service"
+  ],
+  "DEAB": [
+    "DoD Executive Advisory Board"
+  ],
+  "DLAMP": [
+    "Defense Leadership and Management Program"
+  ],
+  "DSLDP": [
+    "Defense Senior Leader Development Program"
+  ],
+  "ELDP": [
+    "Executive Leadership Development Program"
+  ],
+  "PDUSD(P&R)": [
+    "Principal Deputy Under Secretary of Defense for Personnel and Readiness",
+    "Principal Deputy Under Secretary of Defense (Personnel and Readiness)"
+  ],
+  "JMPA": [
+    "Joint Military Postal Activities",
+    "joint military postal activity"
+  ],
+  "IG, DOD": [
+    "Inspector General of the Department of Defense"
+  ],
+  "MPO": [
+    "military post office"
+  ],
+  "MPS": [
+    "Military Postal Service",
+    "maritime pre-positioning ship",
+    " Military Planning Service (UN)"
+  ],
+  "MPSA": [
+    "Military Postal Service Agency"
+  ],
+  "OGA": [
+    "other government agency"
+  ],
+  "OMP": [
+    "Official Mail Program"
+  ],
+  "CIS": [
+    "computerized information system"
+  ],
+  "DASD(WWCTP)": [
+    "Deputy Assistant Secretary of Defense for Wounded Warrior Care and Transition Policy"
+  ],
+  "EFA": [
+    "emergency family assistance"
+  ],
+  "EFAC": [
+    "Emergency Family Assistance Center"
+  ],
+  "FRCC": [
+    "Family Readiness Coordinating Committee"
+  ],
+  "FRS": [
+    "family readiness system"
+  ],
+  "I&R": [
+    "information and referral"
+  ],
+  "JFSAP": [
+    "Joint Family Support Assistance Program"
+  ],
+  "MFLC": [
+    "Military and Family Life Counselor"
+  ],
+  "MFSC": [
+    "Military and Family Support Center"
+  ],
+  "MHS": [
+    "Military Health System",
+    "maritime homeland security"
+  ],
+  "ODASD(MC&FP)": [
+    "Office of the Deputy Assistant Secretary of Defense for Military Community and Family Policy",
+    "Office of the Deputy Assistant Secretary of Defense for Military Community & Family Policy"
+  ],
+  "PFM": [
+    "personal financial management"
+  ],
+  "SECO": [
+    "Spouse Education and Career Opportunities"
+  ],
+  "ADUSD(ESOH)": [
+    "Assistant Deputy Under Secretary of Defense for Environment, Safety, and Occupational Health"
+  ],
+  "EMS": [
+    "Environmental Management System(s)",
+    " emergency medical services",
+    "electromagnetic spectrum"
+  ],
+  "NEPA": [
+    "National Environmental Policy Act"
+  ],
+  "AE": [
+    "ammunition and explosives",
+    "aeromedical evacuation",
+    " assault echelon"
+  ],
+  "AFMC": [
+    "Air Force Materiel Command"
+  ],
+  "AMARG": [
+    "Aerospace Maintenance and Regeneration Group"
+  ],
+  "BOL": [
+    "bill of lading"
+  ],
+  "CD": [
+    "compact disk",
+    "cross-domain",
+    "counterdrug",
+    " customer direct"
+  ],
+  "CERCLA": [
+    "Comprehensive Environmental Response Compensation and Liability Act"
+  ],
+  "DLAD": [
+    "DLA Directive",
+    "Defense Logistics Agency Directive"
+  ],
+  "DRWG": [
+    "DoD reclamation working group"
+  ],
+  "DST": [
+    "DLA support team",
+    " district",
+    "decision support template",
+    " Defense Logistics Agency support team",
+    " deployment support team"
+  ],
+  "DRMS": [
+    "Defense Reutilization and Marketing Service"
+  ],
+  "FGS": [
+    "final governing standards",
+    "Fire Unit and Combat Support/General Support",
+    "final governing standard",
+    " Force Generation Service (UN)"
+  ],
+  "HTIS": [
+    "Hazardous Technical Information Service"
+  ],
+  "HWPS": [
+    "Hazards Waste Profile Sheet"
+  ],
+  "IMDG": [
+    "international maritime dangerous goods",
+    "international maritime dangerous goods (UN)"
+  ],
+  "MIDI": [
+    "military item disposal instruction"
+  ],
+  "MILSTRIP": [
+    "military standard ordering and issue procedures",
+    "Military Standard Requisitioning and Issue Procedures",
+    "military standard requisitioning and issue procedure"
+  ],
+  "OEBGD": [
+    "overseas environmental baseline guidance document"
+  ],
+  "PMIC": [
+    "precious metals identification code"
+  ],
+  "RCRA": [
+    "Resource Conservation and Recovery Act"
+  ],
+  "RTM": [
+    "return to manufacturer"
+  ],
+  "S&D": [
+    "storage and distribution"
+  ],
+  "SDS": [
+    "safety data sheet",
+    "safety data sheets"
+  ],
+  "UN": [
+    "United Nations"
+  ],
+  "USD(A&S)": [
+    "Under Secretary of Defense for Acquisition and Sustainment"
+  ],
+  "AG": [
+    "Attorney General of the United States"
+  ],
+  "CDO": [
+    "civil disturbance operations",
+    "commander, detainee operations"
+  ],
+  "ECM": [
+    "electronic counter measures",
+    "electromagnetic countermeasures",
+    " electronic countermeasures"
+  ],
+  "MOUT": [
+    "military operations in urban terrain"
+  ],
+  "NJOIC": [
+    "National Joint Operations and Intelligence Center"
+  ],
+  "NTIA": [
+    "National Telecommunications and Information Administration",
+    "National Telecommunications and Information Administration (DOC)"
+  ],
+  "USINDOPACOM": [
+    "United States Indo-Pacific Command"
+  ],
+  "UXO": [
+    "unexploded explosive ordnance",
+    " unexploded ordnance"
+  ],
+  "OATSD(PA)": [
+    "Office of the Assistant to the Secretary of Defense for Public Affairs"
+  ],
+  "CWO": [
+    "Commissioned Warrant Officer"
+  ],
+  "MGIB-AD": [
+    "Montgomery GI Bill \u2013 Active Duty"
+  ],
+  "NROTC": [
+    "Naval Reserve Officer Training Corps"
+  ],
+  "QC": [
+    "quality control"
+  ],
+  "RPSUID": [
+    "Real Property Site Unique Identifier"
+  ],
+  "DOPSR": [
+    "Defense Office of Prepublication and Security Review"
+  ],
+  "DCIS": [
+    "Defense Criminal Investigative Service"
+  ],
+  "OIG": [
+    "DoD Office of the Inspector General of the Department of Defense"
+  ],
+  "IR&D": [
+    "independent research and development"
+  ],
+  "S&T": [
+    "science and technology",
+    " scientific and technical"
+  ],
+  "AF/CVAM": [
+    "Assistant Vice Chief of Staff of the Air Force, Special Air Missions"
+  ],
+  "CCSA": [
+    "Combatant Command support aircraft"
+  ],
+  "DV": [
+    "distinguished visitor"
+  ],
+  "EASA": [
+    "Executive Airlift Scheduling Activity"
+  ],
+  "ITA": [
+    "invitational travel authorization",
+    "International Trade Administration (DOC)"
+  ],
+  "OSA": [
+    "Operational Support Airlift"
+  ],
+  "TWCF": [
+    "Transportation Working Capital Fund"
+  ],
+  "USTRANSCOM": [
+    "U.S. Transportation Command",
+    "United States Transportation Command"
+  ],
+  "ACSS": [
+    "Africa Center for Strategic Studies"
+  ],
+  "APCSS": [
+    "Daniel K. Inouye Asia Pacific Center for Security Studies"
+  ],
+  "ASD": [
+    "Assistant Secretary of Defense"
+  ],
+  "ASD(SPC)": [
+    "Assistant Secretary of Defense for Strategy, Plans, and Capabilities"
+  ],
+  "DASD": [
+    "Deputy Assistant Secretary of Defense"
+  ],
+  "GCC": [
+    "geographic Combatant Commander",
+    " global contingency construction"
+  ],
+  "GCMC": [
+    "George C. Marshall European Center for Security Studies"
+  ],
+  "NESA": [
+    "Near-East South Asia Center for Strategic Studies"
+  ],
+  "OUSD(P)": [
+    "Office of the Under Secretary of Defense for Policy"
+  ],
+  "WJPC": [
+    "William J. Perry Center for Hemispheric Defense Studies"
+  ],
+  "AIS": [
+    "automated information system",
+    "adverse information summary"
+  ],
+  "CBM+": [
+    "condition-based maintenance plus"
+  ],
+  "LCIM": [
+    "life-cycle item management"
+  ],
+  "SIM": [
+    "serialized item management",
+    "system impact message"
+  ],
+  "SNT": [
+    "serial number tracking"
+  ],
+  "AO": [
+    "authorizing official",
+    "accountable officer",
+    "action officer",
+    " air officer",
+    " area of operations"
+  ],
+  "ASD(NII)": [
+    "Assistant Secretary of Defense for Networks and Information Integration",
+    "Assistant Secretary of Defense (Networks and Information Integration)"
+  ],
+  "ATO": [
+    "authorization to operate",
+    " antiterrorism officer",
+    "air tasking order"
+  ],
+  "BIOS": [
+    "basic input and output system"
+  ],
+  "BMA": [
+    "business mission area"
+  ],
+  "CCI": [
+    "control correlation identifier"
+  ],
+  "CDS": [
+    "cross domain solution",
+    "Chief of Defence Staff (Canada)",
+    " command disablement system",
+    " container delivery system"
+  ],
+  "CNSS": [
+    "Committee on National Security Systems"
+  ],
+  "CNSSI": [
+    "Committee on National Security Systems Instruction"
+  ],
+  "CNSSP": [
+    "Committee on National Security Systems Policy"
+  ],
+  "DIMA": [
+    "DoD portion of the intelligence mission area"
+  ],
+  "DISN": [
+    "Defense Information Systems Network"
+  ],
+  "ISRMC": [
+    "Information Security Risk Management Committee"
+  ],
+  "DODIN": [
+    "DoD information network",
+    "Department of Defense information networks",
+    "Department of Defense information network"
+  ],
+  "DSAWG": [
+    "Defense Information Assurance Security Accreditation Working Gro",
+    "Defense Security/Cybersecurity Authorization Working Group"
+  ],
+  "DCSA": [
+    "Defense Counterintelligence and Security Agency"
+  ],
+  "EIEMA": [
+    "enterprise information environment mission area"
+  ],
+  "eMASS": [
+    "Enterprise Mission Assurance Support Service"
+  ],
+  "ERS": [
+    "Enterprise Reporting System"
+  ],
+  "ESSG": [
+    "Enterprise-wide Cybersecurity Solutions Steering Group"
+  ],
+  "IS": [
+    "information system",
+    "information superiority"
+  ],
+  "ISSM": [
+    "information system security manager"
+  ],
+  "ISSO": [
+    "information system security officer"
+  ],
+  "KS": [
+    "Knowledge Service",
+    "knowledge sharing"
+  ],
+  "LE/CI": [
+    "law enforcement and counterintelligence"
+  ],
+  "NIPRNet": [
+    "Non-Classified Internet Protocol Router Network"
+  ],
+  "OT&E": [
+    "operational test and evaluation"
+  ],
+  "PIT": [
+    "platform information technology"
+  ],
+  "PKI": [
+    "public key infrastructure"
+  ],
+  "RMF": [
+    "risk management framework"
+  ],
+  "SCAP": [
+    "security content automation protocol"
+  ],
+  "SISO": [
+    "senior information security officer"
+  ],
+  "SP": [
+    "Special Publication",
+    "security police"
+  ],
+  "SRG": [
+    "security requirements guide",
+    "Seabee readiness group"
+  ],
+  "SSE": [
+    "system security engineering",
+    "space support element"
+  ],
+  "TPM": [
+    "trusted platform module"
+  ],
+  "TSN": [
+    "trusted systems and networks"
+  ],
+  "USCYBERCOM": [
+    "United States Cyber Command"
+  ],
+  "EMD": [
+    "engineering and manufacturing development",
+    "expeditionary military information support detachment"
+  ],
+  "GI&S": [
+    "geospatial information and services"
+  ],
+  "NSG": [
+    "National System for Geospatial Intelligence"
+  ],
+  "IRB": [
+    "institutional review board"
+  ],
+  "ISSCC": [
+    "Inter-Service Survey Coordinating Committee"
+  ],
+  "OPA": [
+    "Office of People Analytics"
+  ],
+  "CAPE": [
+    "Cost Assessment and Program Evaluation"
+  ],
+  "IE": [
+    "information environment",
+    "Information Enterprise"
+  ],
+  "JEMSO": [
+    "Joint Electromagnetic Spectrum Operations"
+  ],
+  "MILDEC": [
+    "military deception"
+  ],
+  "MISO": [
+    "military information support operations"
+  ],
+  "PSYOP": [
+    "psychological operations",
+    "psychological operations (forces)"
+  ],
+  "TTP": [
+    "tactics, techniques, and procedures",
+    " trailer transfer point"
+  ],
+  "BCMR": [
+    "Board for Correction of Military Records"
+  ],
+  "BCNR": [
+    "Board for Correction of Naval Records"
+  ],
+  "CAB": [
+    "Correspondence and Analysis Branch",
+    "commander\u2019s assessment board"
+  ],
+  "DepSecDef": [
+    "Deputy Secretary of Defense"
+  ],
+  "CMD": [
+    "Correspondence Management Division"
+  ],
+  "FRB": [
+    "federal recognition board"
+  ],
+  "HASC": [
+    "House Armed Services Committee"
+  ],
+  "JQO": [
+    "joint qualified officer"
+  ],
+  "O6B": [
+    "O6 and below"
+  ],
+  "e-QIP": [
+    "Electronic Questionnaires for Investigations Processing"
+  ],
+  "OASD(RA)": [
+    "Office of the Assistant Secretary of Defense for Reserve Affairs",
+    "Office of the Assistant Secretary of Defense (Reserve Affairs)"
+  ],
+  "OASD(R&FM)": [
+    "Office of the Assistant Secretary of Defense for Readiness and Force Management"
+  ],
+  "OEPM": [
+    "Officer and Enlisted Personnel Management"
+  ],
+  "PDOA": [
+    "projected date of assignment"
+  ],
+  "PDOP": [
+    "projected date of promotion"
+  ],
+  "PRB": [
+    "promotion review board",
+    "performance review board"
+  ],
+  "PSB": [
+    "promotion selection board"
+  ],
+  "RIS": [
+    "reportable information summary"
+  ],
+  "ROI": [
+    "report of investigation"
+  ],
+  "SASC": [
+    "Senate Armed Services Committee"
+  ],
+  "WHMO": [
+    "White House Military Office"
+  ],
+  "DIHRB": [
+    "Defense Intelligence Human Resource Board"
+  ],
+  "JDA": [
+    "joint duty assignment"
+  ],
+  "PP PRA": [
+    "Pay Pool Performance Review Authority"
+  ],
+  "SOP": [
+    "standard operating procedure"
+  ],
+  "ADL": [
+    "active-duty list",
+    "activities of daily living"
+  ],
+  "COPR": [
+    "Commissioned Officer Promotion Report"
+  ],
+  "PDF": [
+    "portable document format",
+    "portable data file"
+  ],
+  "RASL": [
+    "reserve active-status list"
+  ],
+  "IM": [
+    "inventory manager",
+    "information management",
+    " intermediate module"
+  ],
+  "RNCC": [
+    "reference number category code"
+  ],
+  "SM&R": [
+    "source, maintenance and recoverability"
+  ],
+  "TCTO": [
+    "time compliance technical order"
+  ],
+  "ASIC": [
+    "application-specific integrated circuits",
+    "Air and Space Interoperability Council"
+  ],
+  "DMEA": [
+    "Defense Microelectronics Activity"
+  ],
+  "FPGA": [
+    "field-programmable gate arrays"
+  ],
+  "ICT": [
+    "information and communications technology"
+  ],
+  "JFAC": [
+    "Joint Federated Assurance Center"
+  ],
+  "SCRM": [
+    "supply chain risk management"
+  ],
+  "E2I": [
+    "Education and Employment Initiative"
+  ],
+  "OWF": [
+    "Operation WARFIGHTER"
+  ],
+  "AIF": [
+    "adjustment-in-force"
+  ],
+  "LMS": [
+    "local market supplement"
+  ],
+  "NSPS": [
+    "National Security Personnel System"
+  ],
+  "TLMS": [
+    "targeted local market supplement"
+  ],
+  "WGI": [
+    "within-grade increase"
+  ],
+  "CCQAS": [
+    "Centralized Credentials Quality Assurance System"
+  ],
+  "HIPDB": [
+    "Healthcare Integrity and Protection Data Bank"
+  ],
+  "MQA": [
+    "medical quality assurance"
+  ],
+  "NPDB": [
+    "National Practitioner Data Bank"
+  ],
+  "PCE": [
+    "potential compensable event"
+  ],
+  "PSP": [
+    "patient safety program"
+  ],
+  "RM": [
+    "risk management",
+    " resource",
+    "ramp module",
+    "records management",
+    "recovery mechanism",
+    "resource management"
+  ],
+  "AIP": [
+    "assignment incentive pay",
+    "aeronautical information publication"
+  ],
+  "COT": [
+    "consecutive overseas tour"
+  ],
+  "CZTE": [
+    "combat zone tax exclusion"
+  ],
+  "DIMHRS": [
+    "Defense Integrated Military Human Resources System"
+  ],
+  "EML": [
+    "environmental morale leave"
+  ],
+  "ETS": [
+    "expiration term of service",
+    "Education and Training Section"
+  ],
+  "FEML": [
+    "funded environmental morale leave"
+  ],
+  "NAVADMIN": [
+    "Naval Administrative (Message)"
+  ],
+  "MARADMIN": [
+    "Marine Administrative (Message)"
+  ],
+  "PDMRA": [
+    "post deployment/mobilization respite absence"
+  ],
+  "R&R": [
+    "rest and recuperation"
+  ],
+  "SLB": [
+    "saved leave balance"
+  ],
+  "SR&R": [
+    "special rest and recuperation"
+  ],
+  "USCENTCOM": [
+    "United States Central Command"
+  ],
+  "MDE": [
+    "major defense equipment"
+  ],
+  "FSLMRS": [
+    "Federal Service Labor-Management Relations Statute"
+  ],
+  "DAVA": [
+    "domestic abuse victim advocate"
+  ],
+  "MCIO": [
+    "military criminal investigative organization"
+  ],
+  "SAPR VA": [
+    "sexual assault prevention and response victim advocate"
+  ],
+  "SARC": [
+    "sexual assault response coordinator"
+  ],
+  "SVIP": [
+    "special victim investigation and prosecution"
+  ],
+  "VTC": [
+    "video teleconference",
+    "video teleconferencing"
+  ],
+  "AA": [
+    "Associate of Arts Degree",
+    "avenue of approach"
+  ],
+  "AAP": [
+    "American Academy of Pediatrics"
+  ],
+  "ACIP": [
+    "Advisory Committee on Immunization Practices"
+  ],
+  "BA": [
+    "Bachelor\u2019s Degree",
+    "budget activity"
+  ],
+  "BAC": [
+    "background check/child abuse prevention"
+  ],
+  "BAH": [
+    "basic allowance for housing"
+  ],
+  "BUMEDINST": [
+    "Navy Bureau of Medicine and Surgery Instruction"
+  ],
+  "CDP": [
+    "child development program"
+  ],
+  "COMDTINST": [
+    "Coast Guard Commandant Instruction",
+    "Commandant instruction (USCG)"
+  ],
+  "CPR": [
+    "cardiopulmonary resuscitation"
+  ],
+  "CPSC": [
+    "Consumer Product Safety Commission"
+  ],
+  "DEV": [
+    "developmentally appropriate environment and materials"
+  ],
+  "DRL": [
+    "evacuation and fire drills",
+    "Bureau of Democracy, Human Rights, and Labor (DOS)"
+  ],
+  "ECE": [
+    "early childhood education"
+  ],
+  "EMG": [
+    "emergency plan/contact information"
+  ],
+  "ERIS": [
+    "Effectiveness Rating and Improvement System"
+  ],
+  "HAZ": [
+    "hazardous materials and general safety"
+  ],
+  "HWD": [
+    "hand washing and diapering"
+  ],
+  "MED": [
+    "medication and health"
+  ],
+  "NACI": [
+    "National Agency Check Investigation"
+  ],
+  "OFP/OCY": [
+    "Office of Family Policy/Children and Youth"
+  ],
+  "OSHA": [
+    "Occupational Safety and Health Administration"
+  ],
+  "OUT": [
+    "outdoor play area"
+  ],
+  "SCR": [
+    "staff-child ratio/group size"
+  ],
+  "SIDS": [
+    "Sudden Infant Death Syndrome"
+  ],
+  "SR": [
+    "staff requirements",
+    "special reconnaissance"
+  ],
+  "SUP": [
+    "supervision/guidance"
+  ],
+  "TFI": [
+    "total family income",
+    "threat finance intelligence"
+  ],
+  "TRG": [
+    "training requirements"
+  ],
+  "TPA": [
+    "third party administrator"
+  ],
+  "UFC": [
+    "Unified Facilities Criteria"
+  ],
+  "USDA": [
+    "United States Department of Agriculture"
+  ],
+  "CACFP": [
+    "Child and Adult Care Food Program"
+  ],
+  "ORF": [
+    "Official Representation Fund"
+  ],
+  "RRMC": [
+    "Raven Rock Mountain Complex"
+  ],
+  "HRD": [
+    "Human Resources Directorate"
+  ],
+  "ACE": [
+    "American Council on Education",
+    "Air Combat Element",
+    "aviation combat element (USMC)"
+  ],
+  "ACES": [
+    "Army Continuing Education System"
+  ],
+  "AI": [
+    "academic institution",
+    "administrative instruction",
+    "acquisition instruction",
+    " air interdiction"
+  ],
+  "AARTS": [
+    "Army/ACE Registry Transcript System"
+  ],
+  "RC/T": [
+    "Reserve Component/Transit"
+  ],
+  "ROM": [
+    "Read Only Memory",
+    " rough order of magnitude",
+    "restriction of movement"
+  ],
+  "ODCMO": [
+    "Office of the Deputy Chief Management Officer of the Department of Defense"
+  ],
+  "ExecSec": [
+    "Executive Secretary of the Department of Defense"
+  ],
+  "CCAF": [
+    "Community College of the Air Force"
+  ],
+  "CDR": [
+    "cohort default rate"
+  ],
+  "CD-ROM": [
+    "compact disc read-only memory"
+  ],
+  "CFPB": [
+    "Consumer Financial Protection Bureau"
+  ],
+  "DANTES": [
+    "Defense Activity for Non-Traditional Education Support"
+  ],
+  "DASD(MCFP)": [
+    "Deputy Assistant Secretary of Defense for Military Community and Family Policy"
+  ],
+  "DL": [
+    "distance learning"
+  ],
+  "ED": [
+    "U.S. Department of Education"
+  ],
+  "ESO": [
+    "Education Services Officer",
+    "environmental science officer",
+    " Expeditionary Support Organization (DFAS)"
+  ],
+  "FERPA": [
+    "Family Educational Rights and Privacy Act"
+  ],
+  "FTC": [
+    "Federal Trade Commission"
+  ],
+  "JST": [
+    "joint services transcript"
+  ],
+  "LOI": [
+    "Letter of Instruction"
+  ],
+  "TA": [
+    "tuition assistance",
+    "tuition assistance",
+    " threat assessment",
+    "target acquisition",
+    " target audience",
+    " technical arrangement",
+    " theater Army"
+  ],
+  "NCPDLP": [
+    "Navy College Program Distance Learning Partnership"
+  ],
+  "SMARTS": [
+    "Sailor/Marine ACE Registry Transcript System"
+  ],
+  "TTT": [
+    "Troops-to-Teachers",
+    "time to target"
+  ],
+  "VEMIS": [
+    "Voluntary Education Management Information System"
+  ],
+  "BLS": [
+    "Bureau of Labor Statistics"
+  ],
+  "SCAADL": [
+    "special compensation for assistance with activities of daily living"
+  ],
+  "EHR-M": [
+    "Electronic Health Record Modernization"
+  ],
+  "FIN": [
+    "Foreign ID Number"
+  ],
+  "IPI": [
+    "interim person identifier",
+    "indigenous populations and institutions"
+  ],
+  "JUSPAC": [
+    "Joint Uniformed Services Personnel Advisory Committee"
+  ],
+  "PIP": [
+    "personnel identity protection"
+  ],
+  "PIV": [
+    "personnel identity verification"
+  ],
+  "RAPIDS": [
+    "Real-time Automated Personnel Identification System"
+  ],
+  "TASS": [
+    "Trusted Associate Sponsorship System"
+  ],
+  "VLER": [
+    "Virtual Lifetime Electronic Record"
+  ],
+  "DOL": [
+    "Department of Labor"
+  ],
+  "DVOP": [
+    "Disabled Veterans\u2019 Outreach Program"
+  ],
+  "LVER": [
+    "Local Veterans' Employment Representative"
+  ],
+  "VRC": [
+    "VA Vocational Rehabilitation Counselor"
+  ],
+  "WTO": [
+    "Warrior Transition Organization"
+  ],
+  "DSDA": [
+    "Department Spectrum Data Administrator"
+  ],
+  "E3": [
+    "electromagnetic environmental effects"
+  ],
+  "EMC": [
+    "electromagnetic compatibility"
+  ],
+  "EME": [
+    "electromagnetic environment"
+  ],
+  "JSDR": [
+    "Joint Spectrum Data Repository"
+  ],
+  "MC4EB": [
+    "Military Command, Control, Communications,and Computers Executive Board"
+  ],
+  "SSRF": [
+    "Standard Spectrum Resource Format"
+  ],
+  "FEHB": [
+    "Federal Employees Health Benefits"
+  ],
+  "DATT": [
+    "defense attach\u00e9"
+  ],
+  "SMIv2": [
+    "Structure of Management Information Version 2"
+  ],
+  "DOS": [
+    "Department of State",
+    "days of supply",
+    " denial of service"
+  ],
+  "DoS": [
+    "Department of State"
+  ],
+  "FAO": [
+    "foreign area officer",
+    "Food and Agriculture Organization (UN)"
+  ],
+  "CDE": [
+    "command directed evaluation",
+    "collateral damage estimation"
+  ],
+  "MHE": [
+    "mental health evaluation",
+    "materials handling equipment"
+  ],
+  "MHP": [
+    "mental healthcare provider"
+  ],
+  "B&P": [
+    "bid and proposal"
+  ],
+  "FFRDC": [
+    "Federally Funded Research and Development Center"
+  ],
+  "NISO": [
+    "National Information Standards Organization"
+  ],
+  "SBIR": [
+    "Small Business Innovation Research"
+  ],
+  "SIPRNET": [
+    "SECRET Internet Protocol Router Network"
+  ],
+  "STTR": [
+    "Small Business Technology Transfer"
+  ],
+  "URED": [
+    "Unified Research and Engineering Database"
+  ],
+  "DASD(NM)": [
+    "Deputy Assistant Secretary of Defense for Nuclear Matters"
+  ],
+  "FOUO": [
+    "For Official Use Only"
+  ],
+  "FRD": [
+    "Formerly Restricted Data"
+  ],
+  "IOC": [
+    "initial operational capability"
+  ],
+  "N/A": [
+    "not applicable"
+  ],
+  "NLT": [
+    "not later than"
+  ],
+  "NOFORN": [
+    "Not Releasable to Foreign Nationals"
+  ],
+  "NSI": [
+    "National Security Information"
+  ],
+  "RD": [
+    "Restricted Data"
+  ],
+  "REL TO": [
+    "Releasable To"
+  ],
+  "TS": [
+    "Top Secret",
+    "time-sensitive"
+  ],
+  "APSR": [
+    "accountable property system of record"
+  ],
+  "DPC": [
+    "Defense Pricing and Contracting",
+    "deception planning cell",
+    " Defense Planning Committee (NATO)"
+  ],
+  "GFP": [
+    "government furnished property"
+  ],
+  "CNWDI": [
+    "Critical Nuclear Weapons Design Information"
+  ],
+  "NASA": [
+    "National Aeronautics and Space Administration"
+  ],
+  "NNSA": [
+    "National Nuclear Security Administration",
+    "National Nuclear Security Administration (DOE)"
+  ],
+  "NRC": [
+    "Nuclear Regulatory Commission",
+    "National Response Center (USCG)",
+    " non-unit-related cargo"
+  ],
+  "NWD": [
+    "Nuclear Weapon Data"
+  ],
+  "ODASD(NM)": [
+    "Office of the Deputy Assistant Secretary of Defense for Nuclear Matters"
+  ],
+  "SNM": [
+    "special nuclear material"
+  ],
+  "UCPC": [
+    "Use Control Program Coordinator"
+  ],
+  "UCSC": [
+    "Use Control Site Coordinator"
+  ],
+  "DTS": [
+    "Defense Travel System",
+    "Defense Transportation System",
+    "Defense Telecommunications System"
+  ],
+  "ADS": [
+    "authoritative data source",
+    "air defense sector"
+  ],
+  "AMETL": [
+    "agency mission-essential task list"
+  ],
+  "JMETL": [
+    "joint mission-essential task list"
+  ],
+  "METL": [
+    "mission-essential task list"
+  ],
+  "UJTL": [
+    "universal joint task list"
+  ],
+  "CIAR": [
+    "CI awareness and reporting"
+  ],
+  "CIARC": [
+    "CIAR Council"
+  ],
+  "DUSD(I&S)": [
+    "Deputy Under Secretary of Defense for Intelligence and Security"
+  ],
+  "SNS": [
+    "social networking services"
+  ],
+  "BEI": [
+    "biometric enabled intelligence",
+    "biometrics-enabled intelligence"
+  ],
+  "EXCOM": [
+    "Executive Committee"
+  ],
+  "HSPD": [
+    "Homeland Security Presidential Directive"
+  ],
+  "AFI": [
+    "Air Force Instruction"
+  ],
+  "AFJMAN": [
+    "Air Force Joint Manual"
+  ],
+  "COSIS": [
+    "care of supplies in storage"
+  ],
+  "CWT": [
+    "customer wait time"
+  ],
+  "DASD(SCI)": [
+    "Deputy Assistant Secretary of Defense for Supply Chain Integration"
+  ],
+  "DLAR": [
+    "Defense Logistics Agency Regulation"
+  ],
+  "F/AD": [
+    "force or activity designator",
+    "force/activity designator"
+  ],
+  "FDP": [
+    "forward distribution point"
+  ],
+  "FED-STD": [
+    "Federal Standard"
+  ],
+  "ITV": [
+    "in-transit visibility"
+  ],
+  "JPIWG": [
+    "Joint Physical Inventory Working Group"
+  ],
+  "MSDS": [
+    "material safety data sheets"
+  ],
+  "NWRM": [
+    "nuclear weapons-related materiel"
+  ],
+  "PICP": [
+    "Physical Inventory Control Program"
+  ],
+  "RDD": [
+    "required delivery date",
+    "radiological dispersal device"
+  ],
+  "RF-ITV": [
+    "radio frequency in-transit visibility"
+  ],
+  "SDP": [
+    "strategic distribution point",
+    "strategic distribution plan"
+  ],
+  "SLES": [
+    "Shelf-Life Extension System"
+  ],
+  "TCSP": [
+    "theater consolidation and shipping points",
+    "theater consolidation and shipping point"
+  ],
+  "TDD": [
+    "time definite delivery"
+  ],
+  "UND": [
+    "urgency of need designator"
+  ],
+  "CCP": [
+    "consolidation and containerization point",
+    " consolidation",
+    "combatant command campaign plan"
+  ],
+  "DAAS": [
+    "Defense Automatic Addressing System"
+  ],
+  "DDM": [
+    "DLMS Data Manager",
+    "Defense Logistics Agency Distribution Mapping"
+  ],
+  "DLSS": [
+    "Defense Logistics Standard Systems"
+  ],
+  "DoDAAD": [
+    "DoD Activity Address Directory"
+  ],
+  "DTEB": [
+    "Defense Transportation Electronic Business"
+  ],
+  "DX": [
+    "Priority Rating Symbol (Highest National Defense Urgency)"
+  ],
+  "EDI": [
+    "electronic data interchange"
+  ],
+  "FCP": [
+    "Federal Catalog Program",
+    "functional campaign plan"
+  ],
+  "FCS": [
+    "Federal Catalog System"
+  ],
+  "JMPAB": [
+    "Joint Materiel Priorities and Allocation Board"
+  ],
+  "JOPES": [
+    "Joint Operation Planning and Execution System"
+  ],
+  "LMARS": [
+    "Logistics Metric Analysis Reporting System",
+    "Logistics Metrics Analysis Reporting System"
+  ],
+  "NCA": [
+    "National Command Authority"
+  ],
+  "ODASD(SCI)": [
+    "Office of the Deputy Assistant Secretary of Defense for Supply Chain Integration"
+  ],
+  "PRC": [
+    "process review committee",
+    "populace and resources control",
+    " Presidential Reserve Call- up",
+    " primary receiving center"
+  ],
+  "POD": [
+    "port of debarkation",
+    "plan of the day",
+    " probability of detection"
+  ],
+  "POE": [
+    "port of embarkation",
+    " port of entry"
+  ],
+  "SIOP": [
+    "single integrated operational plan"
+  ],
+  "SO-P": [
+    "Special Operations-Peculiar"
+  ],
+  "PDSA": [
+    "Principal DoD Space Advisor"
+  ],
+  "DDLD": [
+    "direct dial long distance"
+  ],
+  "NII": [
+    "Networks and Information Integration"
+  ],
+  "PBX": [
+    "private exchange branches"
+  ],
+  "TSCO": [
+    "Telecommunications Services Control Officer"
+  ],
+  "USAITA": [
+    "United States Army Information Technology Agency"
+  ],
+  "CAL": [
+    "Category Assurance List",
+    "critical asset list"
+  ],
+  "CCB": [
+    "Configuration Control Board"
+  ],
+  "DREN": [
+    "Defense Research and Engineering Network"
+  ],
+  "IASE": [
+    "Information Assurance Support Environment"
+  ],
+  "JIE": [
+    "joint information environment"
+  ],
+  "NSU": [
+    "non-standard usage"
+  ],
+  "PPS": [
+    "Internet protocol suite and associated ports"
+  ],
+  "PPSM": [
+    "ports, protocols, and services management"
+  ],
+  "RT&E": [
+    "research, test, and evaluation"
+  ],
+  "SCG": [
+    "Security Configuration Guide",
+    "Security Cooperation Guidance"
+  ],
+  "ACMC": [
+    "Assistant Commandant of the Marine Corps"
+  ],
+  "ADCON": [
+    "administrative control"
+  ],
+  "ADMIN": [
+    "administrative default"
+  ],
+  "ARSTAFF": [
+    "The Army Staff"
+  ],
+  "AWACS": [
+    "Airborne Warning and Control System"
+  ],
+  "C2DEF": [
+    "command and control default"
+  ],
+  "CCD": [
+    "command and control default",
+    "camouflage, concealment, and deception"
+  ],
+  "CCO": [
+    "command and control/operational control",
+    "central control officer",
+    " container control officer"
+  ],
+  "CCT": [
+    "command and control/tactical control"
+  ],
+  "CDR, MARFORSTRAT": [
+    "Commander, Marine Corps Forces Strategic Command"
+  ],
+  "CDRUSNORTHCOM": [
+    "Commander, USNORTHCOM",
+    "Commander, United States Northern Command"
+  ],
+  "CG, MCI-NCR": [
+    "Commanding General, Marine Corps Installations National Capital Region"
+  ],
+  "CMC": [
+    "Commandant of the Marine Corps",
+    " Office of Civilian- Military Cooperation (USAID)"
+  ],
+  "CME": [
+    "contract man-year equivalents",
+    "civil-military engagement"
+  ],
+  "CNO": [
+    "Chief Naval Operations",
+    "Chief of Naval Operations"
+  ],
+  "COA": [
+    "COCOM Assign",
+    "course of action"
+  ],
+  "COCOM": [
+    "combatant command",
+    "combatant command (command authority)"
+  ],
+  "COU": [
+    "COCOM Unassign"
+  ],
+  "DC, CD&I": [
+    "Deputy Commandant, Combat Development and Integration"
+  ],
+  "DIRLAUTH": [
+    "direct liaison authorized"
+  ],
+  "DON": [
+    "Department of the Navy"
+  ],
+  "DOO": [
+    "Default Operational Organization"
+  ],
+  "DS": [
+    "direct support",
+    "Directorate for Management and Chief Information Officer (DIA)"
+  ],
+  "FDS": [
+    "Fire Unit and Combat Support/Direct Support"
+  ],
+  "FOL": [
+    "first-order logic"
+  ],
+  "FTE": [
+    "full-time equivalent"
+  ],
+  "FUCS": [
+    "Fire Unit and Combat Support"
+  ],
+  "GCE": [
+    "Ground Combat Element",
+    "ground combat element (USMC)"
+  ],
+  "GFMIG": [
+    "Global Force Management Implementation Guidance"
+  ],
+  "HAD": [
+    "Has-Admin Default"
+  ],
+  "HQDA": [
+    "Headquarters, Department of the Army"
+  ],
+  "HQMC": [
+    "Headquarters Marine Corps",
+    "Headquarters, United States Marine Corps"
+  ],
+  "HSADMI": [
+    "has under command for admin"
+  ],
+  "ILC": [
+    "is-led-by, command conditional"
+  ],
+  "ILD": [
+    "is-led-default, default"
+  ],
+  "IOSA": [
+    "Immediate Office of the Secretary of the Army"
+  ],
+  "JCS": [
+    "Joint Chiefs of Staff"
+  ],
+  "JFCC": [
+    "Joint Functional Component Commands",
+    "joint functional component command"
+  ],
+  "JFCC-NW": [
+    "Joint Functional Component Command for Network Warfare"
+  ],
+  "JFHQ-NCR": [
+    "Joint Force Headquarters - National Capital Region"
+  ],
+  "JTF-NCR": [
+    "Joint Task Force - National Capital Region"
+  ],
+  "LTC": [
+    "lieutenant colonel"
+  ],
+  "MAJCOM": [
+    "Major Command",
+    "major command (USAF)"
+  ],
+  "MARFORSTRAT": [
+    "Marine Forces Strategic Command"
+  ],
+  "MCCDC": [
+    "Marine Corps Combat Development Command"
+  ],
+  "MCI-NCR": [
+    "Marine Corps Installations National Capital Region"
+  ],
+  "MEU": [
+    "Marine Expeditionary Unit"
+  ],
+  "MLG": [
+    "Marine Logistics Group"
+  ],
+  "NORAD": [
+    "North American Aerospace Defense Command"
+  ],
+  "NPP": [
+    "non-permanent party"
+  ],
+  "OCJCS": [
+    "Office of the Chairman of the Joint Chiefs of Staff"
+  ],
+  "OE": [
+    "organizational element",
+    "operational environment"
+  ],
+  "OOD": [
+    "Officer of the Deck"
+  ],
+  "OPCON": [
+    "operational control"
+  ],
+  "OPNAV": [
+    "Office of the Chief of Naval Operations"
+  ],
+  "ORSA": [
+    "operations research and systems analysis"
+  ],
+  "ROK-US": [
+    "Republic of Korea-United States"
+  ],
+  "SAF": [
+    "Secretary of the Air Force"
+  ],
+  "SECDEF": [
+    "Secretary of Defense"
+  ],
+  "SECNAV": [
+    "Secretary of the Navy"
+  ],
+  "T2P2": [
+    "training, transients, patients, prisoners"
+  ],
+  "TACON": [
+    "tactical control"
+  ],
+  "TAG": [
+    "the Adjutant General",
+    "Technical Advisory Group",
+    "technical assistance group"
+  ],
+  "TDA": [
+    "Army Tables of Distribution and Allowances"
+  ],
+  "TPP&H": [
+    "transient, patient, prisoner, and holdees"
+  ],
+  "TPU": [
+    "troop program unit"
+  ],
+  "TTHS": [
+    "trainee, transient, holding, and student"
+  ],
+  "UC": [
+    "Unified Command",
+    "unified capabilities"
+  ],
+  "UCP": [
+    "Unified Command Plan"
+  ],
+  "UNC": [
+    "United Nations Command"
+  ],
+  "WSO": [
+    "weapon systems officer"
+  ],
+  "XSD": [
+    "extensible markup language schema definition"
+  ],
+  "DA&OP": [
+    "Director of Administration and Organizational Policy"
+  ],
+  "EM": [
+    "emergency management",
+    "electromagnetic"
+  ],
+  "HRP": [
+    "high-risk personnel",
+    " human remains pouch"
+  ],
+  "PSAG": [
+    "Pentagon Security Advisory Group"
+  ],
+  "IEA": [
+    "DoD Information Enterprise Architecture"
+  ],
+  "AFMAN": [
+    "Air Force Manual"
+  ],
+  "OPNAVINST": [
+    "Office of the Chief of Naval Operations Instruction",
+    "Chief of Naval Operations instruction"
+  ],
+  "SDDC": [
+    "Surface Deployment and Distribution Command",
+    "Military Surface Deployment and Distribution Command"
+  ],
+  "SDDCTEA": [
+    "Surface Deployment and Distribution Command Transportation Engineering Agency",
+    "Military Surface Deployment and Distribution Command Transportation Engineering Agency"
+  ],
+  "IOB": [
+    "Intelligence Oversight Board"
+  ],
+  "PIAB": [
+    "President\u2019s Intelligence Advisory Board"
+  ],
+  "QIA": [
+    "questionable intelligence activity"
+  ],
+  "S/HS": [
+    "significant or highly sensitive"
+  ],
+  "EMF": [
+    "electromagnetic field",
+    "radiation protection",
+    "expeditionary medical facility"
+  ],
+  "ER&S": [
+    "Environmental Readiness and Safety"
+  ],
+  "MPE": [
+    "maximum permissible exposure"
+  ],
+  "PPE": [
+    "personal protective equipment"
+  ],
+  "TERP": [
+    "transmitted EMF radiation protection"
+  ],
+  "DITPR": [
+    "DoD Information Technology Portfolio Repository"
+  ],
+  "DPCLO": [
+    "Defense Privacy and Civil Liberties Office"
+  ],
+  "FISMA": [
+    "Federal Information Security Management Act"
+  ],
+  "NCIC": [
+    "National Crime Information Center"
+  ],
+  "NEO": [
+    "Noncombatant Evacuation Operations",
+    "noncombatant evacuation operation"
+  ],
+  "PIN": [
+    "Personal Identification Number"
+  ],
+  "SORN": [
+    "System of Records Notice"
+  ],
+  "JSPB": [
+    "Joint Subsistence Policy Board"
+  ],
+  "FSH": [
+    "family separation housing"
+  ],
+  "LPS": [
+    "Living Pattern Survey",
+    "lightning protection system"
+  ],
+  "MHA": [
+    "military housing area"
+  ],
+  "MIHA": [
+    "move-in housing allowance"
+  ],
+  "OHA": [
+    "overseas housing allowance"
+  ],
+  "RPS": [
+    "retail price schedule"
+  ],
+  "D/DLSA": [
+    "Director, Defense Legal Services Agency"
+  ],
+  "DD/DLSA": [
+    "Deputy Director, Defense Legal Services Agency"
+  ],
+  "DGC, DOD": [
+    "Deputy General Counsel of the Department of Defense"
+  ],
+  "DGC(A&L)": [
+    "Deputy General Counsel (Acquisition and Logistics)"
+  ],
+  "DGC(P&HP)": [
+    "Deputy General Counsel (Personnel and Health Policy)"
+  ],
+  "GC/D/DLSA": [
+    "General Counsel of the Department of Defense/Director, Defense Legal Services Agency"
+  ],
+  "GG": [
+    "General Grade"
+  ],
+  "HQE": [
+    "highly qualified expert"
+  ],
+  "IDA ERB": [
+    "Inter-Defense Agency Executive Resources Board"
+  ],
+  "J.D.": [
+    "Juris Doctor"
+  ],
+  "LL.B.": [
+    "Bachelor of Laws"
+  ],
+  "LL.M.": [
+    "Master of Laws"
+  ],
+  "OGC": [
+    "Office of General Counsel"
+  ],
+  "OGC/DLSA": [
+    "Office of the General Counsel of the Department of Defense/Defense Legal Services Agency"
+  ],
+  "PDGC": [
+    "Principal Deputy General Counsel"
+  ],
+  "RIF": [
+    "reduction-in-force"
+  ],
+  "SL": [
+    "Senior Level"
+  ],
+  "TOF": [
+    "transfer of function"
+  ],
+  "YA": [
+    "NSPS Standard Career Group Professional and Administrative Occupations"
+  ],
+  "YC": [
+    "NSPS Standard Career Group-Related Supervisory Positions"
+  ],
+  "AODR": [
+    "authorizing official designated representative"
+  ],
+  "ATD": [
+    "authorization termination date"
+  ],
+  "CNDSP": [
+    "CSSP computer network defense cybersecurity service provider"
+  ],
+  "DATO": [
+    "denial of authorization to operate"
+  ],
+  "IATT": [
+    "interim authorization to test"
+  ],
+  "MA": [
+    "mission area",
+    "mission assurance",
+    " mortuary affairs"
+  ],
+  "NA": [
+    "not applicable"
+  ],
+  "PM/SM": [
+    "program manager/system manager"
+  ],
+  "POA&M": [
+    "plan of action and milestones"
+  ],
+  "SAR": [
+    "security assessment report",
+    " search and rescue",
+    "satellite access request",
+    " special access requirement",
+    " suspicious activity report",
+    " synthetic"
+  ],
+  "SCA": [
+    "security control assessor",
+    "sociocultural analysis",
+    " space coordinating authority",
+    " support to civil administration"
+  ],
+  "WMA": [
+    "warfighting mission area"
+  ],
+  "FPCA": [
+    "Federal Post Card Application"
+  ],
+  "FVAP": [
+    "Federal Voting Assistance Program"
+  ],
+  "FWAB": [
+    "Federal Write-In Absentee Ballot"
+  ],
+  "IVAO": [
+    "installation voting assistance officer"
+  ],
+  "IVA": [
+    "installation voter assistance"
+  ],
+  "NVRA": [
+    "National Voter Registration Act"
+  ],
+  "PHS": [
+    "Public Health Service"
+  ],
+  "SSVR": [
+    "senior service voting representative"
+  ],
+  "SVAO": [
+    "service voting action officer"
+  ],
+  "UOCAVA": [
+    "Uniformed and Overseas Citizens Absentee Voting Act"
+  ],
+  "UVAO": [
+    "unit voting assistance officer"
+  ],
+  "VAO": [
+    "voting assistance officer"
+  ],
+  "U.S.C": [
+    "United States Code"
+  ],
+  "USPTO": [
+    "United States Patent and Trademark Office"
+  ],
+  "CGIS": [
+    "Coast Guard Investigative Service",
+    "United States Coast Guard Investigative Service"
+  ],
+  "CODIS": [
+    "Combined Deoxyribonucleic Acid Index System"
+  ],
+  "DCIO": [
+    "Defense Criminal Investigative Organization"
+  ],
+  "EHR": [
+    "electronic health record"
+  ],
+  "G6PD": [
+    "glucose-6-phosphate dehydrogenase"
+  ],
+  "CoS": [
+    "Chief of Staff"
+  ],
+  "AGSAG": [
+    "activity group/sub-activity group"
+  ],
+  "BAS": [
+    "basic allowance for subsistence"
+  ],
+  "FEGLI": [
+    "Federal Employees Group Life Insurance"
+  ],
+  "FEHBP": [
+    "Federal Employees Health Benefits Plan"
+  ],
+  "MERHCF": [
+    "Medicare-Eligible Retiree Health Care Fund"
+  ],
+  "OASDI": [
+    "Old Age, Survivors, and Disability Insurance"
+  ],
+  "OC": [
+    "object class",
+    "operations center"
+  ],
+  "SAG": [
+    "sub-activity group",
+    "surface action group"
+  ],
+  "OMPF": [
+    "official military personnel file"
+  ],
+  "DCNI": [
+    "DoD UCNI"
+  ],
+  "UCNI": [
+    "unclassified controlled nuclear information"
+  ],
+  "ADR": [
+    "alternative dispute resolution",
+    "airfield damage repair"
+  ],
+  "CLG": [
+    "change to lower grade"
+  ],
+  "HR": [
+    "human resources",
+    "helicopter request",
+    " hostage rescue"
+  ],
+  "IRD": [
+    "Investigations and Resolutions Directorate"
+  ],
+  "LAN": [
+    "local area network"
+  ],
+  "LQA": [
+    "living quarters allowance"
+  ],
+  "POQ": [
+    "personally owned quarters"
+  ],
+  "TQSA": [
+    "temporary quarters subsistence allowance"
+  ],
+  "UTAP": [
+    "Utility Tax Avoidance Program"
+  ],
+  "VAT": [
+    "value added tax"
+  ],
+  "DRAAG": [
+    "Design Review and Acceptance Group"
+  ],
+  "EC": [
+    "emergency capability",
+    "electronic combat"
+  ],
+  "FAD": [
+    "first assets delivered"
+  ],
+  "HE": [
+    "high explosive",
+    "high explosives"
+  ],
+  "ILA": [
+    "inadvertent launch analysis"
+  ],
+  "INSS": [
+    "interim safety study"
+  ],
+  "JNWPS": [
+    "Joint Nuclear Weapons Publication System"
+  ],
+  "JTA": [
+    "joint test assembly",
+    "joint technical architecture"
+  ],
+  "LPO": [
+    "lead project officer"
+  ],
+  "LWS": [
+    "lightning warning system"
+  ],
+  "NNAP": [
+    "Non-Nuclear Assurance Program"
+  ],
+  "NWCSSC": [
+    "Nuclear Weapons Council Standing and Safety Committee"
+  ],
+  "NWSSG": [
+    "Nuclear Weapons System Surety Group"
+  ],
+  "OSR": [
+    "operational safety review",
+    "on-station report"
+  ],
+  "POG": [
+    "Project Officers Group",
+    "port operations group",
+    " psychological operations group"
+  ],
+  "POSS": [
+    "pre-operational safety study"
+  ],
+  "PRP": [
+    "Personnel Reliability Program",
+    "Personnel Retrieval and Processing"
+  ],
+  "PSS": [
+    "preliminary safety study",
+    "personnel services support"
+  ],
+  "TNT": [
+    "trinitrotoluene"
+  ],
+  "ULA": [
+    "unauthorized launch analysis"
+  ],
+  "WSSA": [
+    "weapon system safety assessment"
+  ],
+  "ID": [
+    "inactive duty",
+    "identification",
+    "identification number",
+    " identifier",
+    " initiating directive"
+  ],
+  "GC": [
+    "General Counsel",
+    " Geneva Convention Relative to the Protection of Civilian Persons in Time of War"
+  ],
+  "M&S": [
+    "modeling and simulation"
+  ],
+  "U.S.": [
+    "United States"
+  ],
+  "CAT": [
+    "category",
+    " civil affairs team",
+    " crisis action team"
+  ],
+  "IG": [
+    "inherently governmental",
+    "Inspector General"
+  ],
+  "SAPR": [
+    "sexual assault prevention and response"
+  ],
+  "CG": [
+    "Commanding General",
+    "Coast Guard"
+  ]
+}

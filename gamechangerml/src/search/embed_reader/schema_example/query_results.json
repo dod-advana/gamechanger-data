@@ -1,0 +1,13 @@
+{
+  "query": "Telework Policy",
+  "documents": [
+    {
+      "text": "blah, blah, telework",
+      "id": "DoDI 1234 All about Telework"
+    },
+    {
+      "text": "and more about work from home",
+      "id": "DoDD 8484 What's up with telework"
+    }
+  ]
+}

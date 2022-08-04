@@ -1,0 +1,24 @@
+version: '3'
+services:
+  gc-api-test:
+    container_name: gc-api-test
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - ENV_TYPE=TEST
+      - GC_ML_HOST=${GC_ML_HOST}
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
+      - PULL_MODELS=${PULL_MODELS}
+      - MLFLOW_TRACKING_URI=${MLFLOW_TRACKING_URI}
+      - GC_USER=${USER}
+      - DOCKER_BUILDKIT=1
+      - DOCKER=true
+    volumes:
+      - ./api_test.log:/api_test.log
+      - ./test_results.xml:/test_results.xml
+networks:
+  default:
+    external:
+      name: api_default

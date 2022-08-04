@@ -1,0 +1,30 @@
+version: '3'
+services:
+  gamechanger-ml-train:
+    container_name: gc-ml-train
+    build:
+      context: ../../.
+      dockerfile: Dockerfile
+    environment:
+      - DOCKER=true
+      - ENV_TYPE=dev
+      - "MLFLOW_TRACKING_URI=http://${MLFLOW_HOST}:5050"
+    volumes:
+      #### CHANGE local corpus location
+      - ../../test/small_corpus:/corpus
+      - ./models:/gamechangerml/models
+      - ../mlruns:/mlruns
+    #### CHANGE to False if you do not want to save
+    command: -s False -v True -x experiment1
+  mlflow-server:
+    container_name: mlflow-server
+    build:
+      context: ../../.
+      dockerfile: gamechangerml/mlflow/mlflow.Dockerfile
+    environment:
+      - AWS_DEFAULT_REGION=us-east-1
+      - FILE_DIR=/mlflow
+    volumes:
+      - ../../mlruns:/mlflow
+    ports:
+      - 5050:5050

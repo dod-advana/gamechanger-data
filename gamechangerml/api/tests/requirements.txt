@@ -1,0 +1,7 @@
+requests==2.23.0
+pytest==6.2.5
+numpy~=1.19.5
+gensim==4.1.2
+transformers==4.11.3
+spacy==3.0.7
+numpy==1.19.5

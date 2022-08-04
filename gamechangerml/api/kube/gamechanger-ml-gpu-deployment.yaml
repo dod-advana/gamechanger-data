@@ -1,0 +1,80 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.22.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: gamechanger-ml-gpu
+  name: gamechanger-ml-gpu
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: gamechanger-ml-gpu
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.22.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: gamechanger-ml-gpu
+    spec:
+      containers:
+        - env:
+            - name: AWS_DEFAULT_PROFILE
+              value: "awsaml-092912502985-BAHSSO_POCDEV_Role"
+            - name: AWS_PROFILE
+              value: "awsaml-092912502985-BAHSSO_POCDEV_Role"
+            - name: DOCKER
+              value: "true"
+            - name: DOCKER_BUILDKIT
+              value: "1"
+            - name: DOWNLOAD_DEP
+              value: "true"
+            - name: GC_ML_API_MODEL_NAME
+            - name: GC_ML_HOST
+            - name: GC_USER
+              value: robertha
+            - name: LD_LIBRARY_PATH
+              value: /usr/local/cuda/lib64/
+            - name: MLFLOW_TRACKING_URI
+            - name: NVIDIA_VISIBLE_DEVICES
+            - name: PULL_MODELS
+            - name: REDIS_HOST
+            - name: REDIS_PORT
+            - name: S3_QEXP_PATH
+            - name: S3_SENT_INDEX_PATH
+            - name: S3_TRANS_MODEL_PATH
+            - name: WEB_CONCURRENCY
+              value: "1"
+            - name: WORKERS_PER_CORE
+              value: "1"
+          image: gamechanger-ml-gpu
+          workingDir: /gamechangerml
+          name: gc-ml-gpu
+          ports:
+            - containerPort: 5000
+          resources: {}
+          volumeMounts:
+            - mountPath: /gamechangerml/gamechangerml/models/
+              #subPath: models
+              name: gc-models
+            - mountPath: /root/.aws
+              name: gamechanger-ml-gpu-claim1
+          imagePullPolicy: Never
+      restartPolicy: Always
+      volumes:
+        - name: gc-models
+          hostPath:
+            path: /Users/robertha/Documents/gamechanger-project/gamechanger-ml/gamechangerml/models/
+              #persistentVolumeClaim:
+              #claimName: task-pv-claim
+        - name: gamechanger-ml-gpu-claim1
+          persistentVolumeClaim:
+            claimName: gamechanger-ml-gpu-claim1
+status: {}

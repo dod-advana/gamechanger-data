@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.22.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: gc-redis
+  name: gc-redis
+spec:
+  ports:
+    - name: "6380"
+      port: 6380
+      targetPort: 6380
+  selector:
+    io.kompose.service: gc-redis
+status:
+  loadBalancer: {}

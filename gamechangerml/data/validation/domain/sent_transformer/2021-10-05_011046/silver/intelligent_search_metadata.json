@@ -1,0 +1,1 @@
+{"date_created": "2021-10-05", "level": "silver", "number_queries": 3814, "number_documents": 3709, "number_correct": 270, "number_incorrect": 5, "start_date": "2020-12-01", "end_date": "2025-12-01", "exclude_searches": ["pizza", "shark"], "min_correct_matches": 2, "max_results": 10}

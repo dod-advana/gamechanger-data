@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.22.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: gc-redis
+  name: gc-redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: gc-redis
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.22.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: gc-redis
+    spec:
+      containers:
+        - args:
+            - --port
+            - "6380"
+          image: redis
+          name: gc-redis
+          ports:
+            - containerPort: 6380
+          resources: {}
+      hostname: gc-redis
+      restartPolicy: Always
+status: {}
