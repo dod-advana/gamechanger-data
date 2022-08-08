@@ -119,12 +119,20 @@ def post_process(doc_dict):
         "crawler_used",
         "source_fqdn",
         "source_page_url",
+        "display_title",
+        "source_title",
         "cac_login_required",
         "download_url",
         "version_hash",
         "ingest_date",
         "orgs",
-        "f_name"
+        "f_name",
+        "file_ext",
+        "display_org",
+        "display_source",
+        "data_source",
+        "source_title",
+        "is_revoked"
     ]
 
     for key in to_delete:
