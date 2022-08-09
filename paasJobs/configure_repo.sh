@@ -78,7 +78,7 @@ function install_app_config() {
 }
 
 function install_topic_models() {
-  # Downloads the topic model .tar file and extracts it into the gamchanger-ml repo
+  # Downloads the topic model .tar file and extracts it into the gamechanger-ml repo
   if [ -d "$TOPIC_MODEL_LOCAL_DIR" ]; then
     >&2 echo "[INFO] Removing old topic model directory and contents"
     rm -rf "$TOPIC_MODEL_LOCAL_DIR"
