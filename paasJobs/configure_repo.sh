@@ -11,8 +11,12 @@ readonly REPO_DIR="$( cd "$SCRIPT_PARENT_DIR/../"  >/dev/null 2>&1 && pwd )"
 export PYTHONPATH="$REPO_DIR"
 
 DEPLOYMENT_ENV="${DEPLOYMENT_ENV:-prod}"
+if [[ "${DEPLOYMENT_ENV}" != "local" ]]; then
+  PYTHON_CMD="${PYTHON_CMD:-/opt/gc-venv-current/bin/python}"
+else
+  PYTHON_CMD="${PYTHON_CMD:-python}"
+fi
 AWS_CMD="${AWS_CMD:-aws}"
-PYTHON_CMD="${PYTHON_CMD:-/opt/gc-venv-current/bin/python}"
 S3_BUCKET_NAME="${S3_BUCKET_NAME:-advana-data-zone}"
 APP_CONFIG_NAME="${APP_CONFIG_NAME:-$DEPLOYMENT_ENV}"
 ES_CONFIG_NAME="${ES_CONFIG_NAME:-$DEPLOYMENT_ENV}"
@@ -29,15 +33,11 @@ case $DEPLOYMENT_ENV in
     TOPIC_MODEL_S3_PATH="${TOPIC_MODEL_S3_PATH:-s3://${S3_BUCKET_NAME}/bronze/gamechanger/models/topic_model/v2/topic_model_20220125163613.tar.gz}"
     TOPIC_MODEL_SCRIPT_S3_PATH="${TOPIC_MODEL_SCRIPT_S3_PATH:-s3://${S3_BUCKET_NAME}/bronze/gamechanger/models/topic_model/tfidf.py}"
     ;;
-  dev)
+  dev | local)
     AWS_DEFAULT_REGION="${AWS_DEFAULT_REGION:-us-east-1}"
     APP_CONFIG_S3_PATH="${APP_CONFIG_S3_PATH:-s3://${S3_BUCKET_NAME}/bronze/gamechanger/configuration/app-config/dev.20220419.json}"
     TOPIC_MODEL_S3_PATH="${TOPIC_MODEL_S3_PATH:-s3://${S3_BUCKET_NAME}/bronze/gamechanger/models/topic_model/v2/topic_model_20220125163613.tar.gz}"
     TOPIC_MODEL_SCRIPT_S3_PATH="${TOPIC_MODEL_SCRIPT_S3_PATH:-s3://${S3_BUCKET_NAME}/bronze/gamechanger/models/topic_model/tfidf.py}"
-    ;;
-  local)
-    >&2 echo "[INFO] LOCAL SETUP: Skipping app config install and topic model install."
-    >&2 echo "[INFO] Please copy topic model over manually."
     ;;
   *)
     >&2 echo "[ERROR] Incorrect DEPLOYMENT_ENV specified: $DEPLOYMENT_ENV"
@@ -72,27 +72,23 @@ function install_app_config() {
 }
 
 function install_topic_models() {
-   if [[ "${DEPLOYMENT_ENV}" != "local" ]]; then
-      if [ -d "$TOPIC_MODEL_LOCAL_DIR" ]; then
-        >&2 echo "[INFO] Removing old topic model directory and contents"
-        rm -rf "$TOPIC_MODEL_LOCAL_DIR"
-      fi
+    if [ -d "$TOPIC_MODEL_LOCAL_DIR" ]; then
+      >&2 echo "[INFO] Removing old topic model directory and contents"
+      rm -rf "$TOPIC_MODEL_LOCAL_DIR"
+    fi
 
-      mkdir -p "$TOPIC_MODEL_LOCAL_DIR"
+    mkdir -p "$TOPIC_MODEL_LOCAL_DIR"
 
-      >&2 echo "[INFO] Fetching new topic model"
-      # TODO: Dynamically handle tar files that tar root directory (dealing with strip-components), or communicate with the data science team for clarity
-      $AWS_CMD s3 cp "$TOPIC_MODEL_S3_PATH" - | tar -xzf - -C "$TOPIC_MODEL_LOCAL_DIR" --strip-components=1
-   fi
+    >&2 echo "[INFO] Fetching new topic model"
+    # TODO: Dynamically handle tar files that tar root directory (dealing with strip-components), or communicate with the data science team for clarity
+    $AWS_CMD s3 cp "$TOPIC_MODEL_S3_PATH" - | tar -xzf - -C "$TOPIC_MODEL_LOCAL_DIR" --strip-components=1
 }
 
 function install_topic_model_script() {
-  if [[ "${DEPLOYMENT_ENV}" != "local" ]]; then
-      mkdir -p "$TOPIC_MODEL_SCRIPT_LOCAL_DIR"
+    mkdir -p "$TOPIC_MODEL_SCRIPT_LOCAL_DIR"
 
-      >&2 echo "[INFO] Inserting topic model script into gamechangerml"
-      $AWS_CMD s3 cp "$TOPIC_MODEL_SCRIPT_S3_PATH" "$TOPIC_MODEL_SCRIPT_LOCAL_DIR"
-  fi
+    >&2 echo "[INFO] Inserting topic model script into gamechangerml"
+    $AWS_CMD s3 cp "$TOPIC_MODEL_SCRIPT_S3_PATH" "$TOPIC_MODEL_SCRIPT_LOCAL_DIR"
 }
 
 function configure_repo() {
@@ -104,10 +100,14 @@ function configure_repo() {
 }
 
 function post_checks() {
-  >&2 echo "[INFO] Running post-deploy checks.../"
+  if [[ "${DEPLOYMENT_ENV}" != "local" ]]; then
+    >&2 echo "[INFO] Running post-deploy checks.../"
 
-  >&2 echo "[INFO] Checking connections.../"
-  $PYTHON_CMD -m configuration check-connections
+    >&2 echo "[INFO] Checking connections.../"
+    $PYTHON_CMD -m configuration check-connections
+  else
+    >&2 echo "[INFO] Please manually check that the configurations are working properly."
+  fi
 }
 
 if [[ "${CHECK_ONLY:-no}" == "yes" ]]; then
