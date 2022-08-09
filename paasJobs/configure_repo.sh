@@ -10,19 +10,19 @@ readonly REPO_DIR="$( cd "$SCRIPT_PARENT_DIR/../"  >/dev/null 2>&1 && pwd )"
 
 export PYTHONPATH="$REPO_DIR"
 
-SCRIPT_ENV="${SCRIPT_ENV:-prod}"
+DEPLOYMENT_ENV="${DEPLOYMENT_ENV:-prod}"
 AWS_CMD="${AWS_CMD:-aws}"
 PYTHON_CMD="${PYTHON_CMD:-/opt/gc-venv-current/bin/python}"
 S3_BUCKET_NAME="${S3_BUCKET_NAME:-advana-data-zone}"
-APP_CONFIG_NAME="${APP_CONFIG_NAME:-$SCRIPT_ENV}"
-ES_CONFIG_NAME="${ES_CONFIG_NAME:-$SCRIPT_ENV}"
+APP_CONFIG_NAME="${APP_CONFIG_NAME:-$DEPLOYMENT_ENV}"
+ES_CONFIG_NAME="${ES_CONFIG_NAME:-$DEPLOYMENT_ENV}"
 APP_CONFIG_LOCAL_PATH="${REPO_DIR}/configuration/app-config/${APP_CONFIG_NAME}.json"
 GAMECHANGERML_PKG_DIR="${GAMECHANGERML_PKG_DIR:-${REPO_DIR}/var/gamechanger-ml}"
 TOPIC_MODEL_LOCAL_DIR="${GAMECHANGERML_PKG_DIR}/gamechangerml/models/topic_model_20220125163613/models"
 TOPIC_MODEL_SCRIPT_LOCAL_DIR="${GAMECHANGERML_PKG_DIR}/gamechangerml/models/topic_model_20220125163613/"
 
 
-case $SCRIPT_ENV in
+case $DEPLOYMENT_ENV in
   prod)
     AWS_DEFAULT_REGION="${AWS_DEFAULT_REGION:-us-gov-west-1}"
     APP_CONFIG_S3_PATH="${APP_CONFIG_S3_PATH:-s3://${S3_BUCKET_NAME}/bronze/gamechanger/configuration/app-config/prod.20210416.json}"
@@ -40,7 +40,7 @@ case $SCRIPT_ENV in
     >&2 echo "[INFO] Please copy topic model over manually."
     ;;
   *)
-    >&2 echo "[ERROR] Incorrect SCRIPT_ENV specified: $SCRIPT_ENV"
+    >&2 echo "[ERROR] Incorrect DEPLOYMENT_ENV specified: $DEPLOYMENT_ENV"
     exit 1
     ;;
 esac
@@ -60,7 +60,7 @@ function ensure_gamechangerml_is_installed() {
 
 
 function install_app_config() {
-  if [[ "${SCRIPT_ENV}" != "local" ]]; then
+  if [[ "${DEPLOYMENT_ENV}" != "local" ]]; then
     if [[ -f "$APP_CONFIG_LOCAL_PATH" ]]; then
         >&2 echo "[INFO] Removing old App Config"
         rm -f "$APP_CONFIG_LOCAL_PATH"
@@ -72,7 +72,7 @@ function install_app_config() {
 }
 
 function install_topic_models() {
-   if [[ "${SCRIPT_ENV}" != "local" ]]; then
+   if [[ "${DEPLOYMENT_ENV}" != "local" ]]; then
       if [ -d "$TOPIC_MODEL_LOCAL_DIR" ]; then
         >&2 echo "[INFO] Removing old topic model directory and contents"
         rm -rf "$TOPIC_MODEL_LOCAL_DIR"
@@ -87,7 +87,7 @@ function install_topic_models() {
 }
 
 function install_topic_model_script() {
-  if [[ "${SCRIPT_ENV}" != "local" ]]; then
+  if [[ "${DEPLOYMENT_ENV}" != "local" ]]; then
       mkdir -p "$TOPIC_MODEL_SCRIPT_LOCAL_DIR"
 
       >&2 echo "[INFO] Inserting topic model script into gamechangerml"
@@ -97,8 +97,8 @@ function install_topic_model_script() {
 
 function configure_repo() {
   >&2 echo "[INFO] Initializing default config files"
-  >&2 echo "$PYTHON_CMD -m configuration init $SCRIPT_ENV --app-config $APP_CONFIG_NAME --elasticsearch-config $ES_CONFIG_NAME"
-  $PYTHON_CMD -m configuration init "$SCRIPT_ENV" \
+  >&2 echo "$PYTHON_CMD -m configuration init $DEPLOYMENT_ENV --app-config $APP_CONFIG_NAME --elasticsearch-config $ES_CONFIG_NAME"
+  $PYTHON_CMD -m configuration init "$DEPLOYMENT_ENV" \
   	--app-config "$APP_CONFIG_NAME" \
   	--elasticsearch-config "$ES_CONFIG_NAME"
 }
