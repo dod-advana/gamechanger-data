@@ -11,7 +11,7 @@ readonly REPO_DIR="$( cd "$SCRIPT_PARENT_DIR/../"  >/dev/null 2>&1 && pwd )"
 
 export PYTHONPATH="$REPO_DIR"
 
-# Check for the case that we're running this configuration in local to assign pyton path
+# Check for the case that we're running this configuration in local to assign python path
 DEPLOYMENT_ENV="${DEPLOYMENT_ENV:-prod}"
 if [[ "${DEPLOYMENT_ENV}" != "local" ]]; then
   PYTHON_CMD="${PYTHON_CMD:-/opt/gc-venv-current/bin/python}"  # path to python executable
@@ -133,6 +133,7 @@ fi
 
 EOF
 
+## Running the configuration functions ##
 install_app_config
 ensure_gamechangerml_is_installed
 install_topic_models
