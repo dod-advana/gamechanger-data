@@ -49,15 +49,15 @@ readonly APP_CONFIG_NAME="${APP_CONFIG_NAME:-$SCRIPT_ENV}"
 readonly ES_CONFIG_NAME="${ES_CONFIG_NAME:-$SCRIPT_ENV}"
 
 # Data repo setup vars
-readonly DATA_REPO_DIR="/home/melkiga/code/gamechanger-data"
+readonly DATA_REPO_DIR="$HOME/code/gamechanger-data"
 readonly APP_CONFIG_LOCAL_PATH="${DATA_REPO_DIR}/configuration/app-config/${APP_CONFIG_NAME}.json"
 
 # Crawler repo setup vars
-readonly CRAWL_REPO_DIR="/home/melkiga/code/gamechanger-crawlers"
+readonly CRAWL_REPO_DIR="$HOME/code/gamechanger-crawlers"
 readonly SPIDER_PATH="${CRAWL_REPO_DIR}/dataPipelines/gc_scrapy/gc_scrapy/spiders"
 
 # ML repo setup vars
-readonly ML_REPO_DIR="/home/melkiga/code/gamechanger-ml"
+readonly ML_REPO_DIR="$HOME/code/gamechanger-ml"
 readonly TOPIC_MODEL_LOCAL_DIR="${ML_REPO_DIR}/gamechangerml/models/topic_models/models/"
 
 # Script setup vars
@@ -94,14 +94,14 @@ if [[ $CRAWLER ]]; then readonly DO_CRAWL=$CRAWLER; fi
 if [[ $DO_CRAWL ]]; then
     inflog "\t Crawler specified, creating crawler output directory ${CRAWLER_OUTPUT_DIR}"
     rm -rf $JOB_DIR
-    mkdir --parents $CRAWLER_OUTPUT_DIR
-    mkdir --parents $PARSED_OUTPUT_DIR
+    mkdir -p $CRAWLER_OUTPUT_DIR
+    mkdir -p $PARSED_OUTPUT_DIR
 else 
     inflog "\t No crawler specified, keeping previous crawler output"
     inflog "\t Deleting parsed outputs from ${PARSED_OUTPUT_DIR}"
     if [[ ! -d $CRAWLER_OUTPUT_DIR ]]; then err "No crawler output found at ${CRAWLER_OUTPUT_DIR}. Exiting."; usage; fi
     rm -rf $PARSED_OUTPUT_DIR
-    mkdir $PARSED_OUTPUT_DIR
+    mkdir -p $PARSED_OUTPUT_DIR
 fi
 
 ############# Configure Data Repo ###############################################
