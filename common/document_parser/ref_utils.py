@@ -1,6 +1,10 @@
 import re
 
 
+def pattern(raw_string, flags=re.IGNORECASE | re.VERBOSE):
+    return re.compile(raw_string, flags=flags)
+
+
 def preprocess_text(text):
     """Preprocess text to extract references from.
 
@@ -90,9 +94,9 @@ def make_dict():
                 (?:[-\.][0-9]{1,3}){0,3}        # 0-3 iterations of: hyphen or period, 1-3 digits
             )
         """,
-        re.VERBOSE|re.IGNORECASE,
+        re.VERBOSE | re.IGNORECASE,
     )
-    
+
     ref_dict["DCID"] = re.compile(
         r"\b(?:Director ?of ?Central ?Intelligence ?Directives|DCID) ?([0-9]\/[0-9]{1,2}P?)",
         re.IGNORECASE,
@@ -300,7 +304,7 @@ def make_dict():
                 [0-9A-Z]{0,3}                   # 0-3 digits or letters
             )
         """,
-        re.VERBOSE|re.IGNORECASE,
+        re.VERBOSE | re.IGNORECASE,
     )
     ref_dict["MCDP"] = re.compile(
         r"\b(?:MCDP|MARINE ?CORPS ?Doctrinal ?Publication) ?([0-9](?: ?- ?[0-9])?)",
@@ -340,7 +344,7 @@ def make_dict():
             -?
             ([0-9]{1,4})
         """,
-        re.VERBOSE|re.IGNORECASE
+        re.VERBOSE | re.IGNORECASE
     )
 
     ref_dict["JAGINST"] = re.compile(
@@ -495,7 +499,7 @@ def make_dict():
             [A-Z]?
         )
         """,
-        re.VERBOSE|re.IGNORECASE
+        re.VERBOSE | re.IGNORECASE
     )
 
     # Coast Guard Technical Order
@@ -510,7 +514,7 @@ def make_dict():
                 [0-9]{0,4}[A-Z]{0,1}                 # 0-4 digits, 0-1 letters
             )
         """,
-        re.VERBOSE|re.IGNORECASE
+        re.VERBOSE | re.IGNORECASE
     )
 
     # Code of Federal Regulations
@@ -522,7 +526,7 @@ def make_dict():
             [ ,]{1,2}
             (?:CFR|Code\sof\sFederal\sRegulations)
         """,
-        re.VERBOSE|re.IGNORECASE
+        re.VERBOSE | re.IGNORECASE
     )
 
     # Public Law
@@ -547,8 +551,18 @@ def make_dict():
                 [0-9]{1,4}
             )
         """,
-        re.VERBOSE|re.IGNORECASE
+        re.VERBOSE | re.IGNORECASE
     )
-    
+
+    # DHA Procedural Instruction
+    ref_dict["DHA Procedural Instruction"] = pattern(
+        r"""
+            DHA\sProcedural\sInstruction
+            \s
+            (
+                \d*\.\d*\b          # any number of digits with a dot between
+            )
+        """
+    )
 
     return ref_dict

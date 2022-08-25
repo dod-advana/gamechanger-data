@@ -591,3 +591,10 @@ def test_pl():
     ]
 
     check(string, "PL", exp_result)
+
+
+def test_dha_procedural_inst():
+    string = "(c)      DHA Procedural Instruction 5025.01, “Publication System,” August 21, 2015 "
+    exp_result = "DHA Procedural Instruction 5025.01"
+
+    check(string, "DHA Procedural Instruction", exp_result)
