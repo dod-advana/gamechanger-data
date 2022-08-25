@@ -1,5 +1,6 @@
 import re
 
+
 def preprocess_text(text):
     """Preprocess text to extract references from.
 
@@ -78,10 +79,20 @@ def make_dict():
         r"\b(?:cjcs ?notice|cjcsn) ?((?:[A-Z]+-)?[0-9]{4}(?:\. ?[0-9]{0,3}[A-Z]?)?)",
         re.IGNORECASE,
     )
+
+    # Joint Publication
     ref_dict["JP"] = re.compile(
-        r"\b(?:joint ?publication|jp) ?((?:[A-Z]+-)?[0-9]{1,2}-[0-9]{1,3}[A-Z]?)",
-        re.IGNORECASE,
+        r"""
+            (?:Joint\s?Publication|\bJ[ \.]?P[ \.]?)  
+            \s?
+            (
+                [0-9]{1,3}
+                (?:[-\.][0-9]{1,3}){0,3}        # 0-3 iterations of: hyphen or period, 1-3 digits
+            )
+        """,
+        re.VERBOSE|re.IGNORECASE,
     )
+    
     ref_dict["DCID"] = re.compile(
         r"\b(?:Director ?of ?Central ?Intelligence ?Directives|DCID) ?([0-9]\/[0-9]{1,2}P?)",
         re.IGNORECASE,
@@ -129,10 +140,21 @@ def make_dict():
         r"\b(?:DA ?MEMO|DA ?MEMORANDUMS?) ?([0-9]{1,3} ?- ?[0-9]{1,3}(?: ?- ?[0-9]{2})?)",
         re.IGNORECASE,
     )
+
+    # Army Field Manual
     ref_dict["FM"] = re.compile(
-        r"\b(?:FM|Field ?Manual) ?([0-9]{1,3} ?- ?[0-9]{1,3}(?: ?(?:\.|-) ?[0-9]{1,2}(?: ?- ?[A-Z]{2})?)?)",
-        re.IGNORECASE,
+        r"""
+            (?:\bFM|Field\s?Manual)
+            \s?
+            (
+                (?:[0-9]{1,3}[-\.]){1,3}        # 1-3 iterations of: 1-3 digits, hyphen or period
+                [0-9A-Z]{0,3}                   # 0-3 digits or letters
+            )
+
+        """,
+        re.VERBOSE | re.IGNORECASE,
     )
+
     ref_dict["GTA"] = re.compile(
         r"\b(?:GTA|Graphic ?Training ?Aid) ?([0-9]{2} ?- ?[0-9]{2}(?: ?- ?[0-9]{3})?[A-Z]?)",
         re.IGNORECASE,
@@ -267,9 +289,18 @@ def make_dict():
         r"\b(?:MCTP|MARINE ?CORPS ?Tactical ?Publication) ?([0-9]{1,2} ?- ?[0-9]{2}[A-Z])",
         re.IGNORECASE,
     )
+
+    # Marine Corps Warfighting Publication
     ref_dict["MCWP"] = re.compile(
-        r"\b(?:MCWP|MARINE ?CORPS ?Warfighting ?Publication) ?([0-9]{1,2} ?- ?[0-9]{1,2}(?:\.[0-9])?)",
-        re.IGNORECASE,
+        r"""
+            (?:MCWP|Marine\s?Corps\s?Warfighting\s?Publication)
+            \s?
+            (
+                (?:[0-9]{1,3}[-\.]){1,3}        # 1-3 iterations of: 1-3 digits, hyphen or period
+                [0-9A-Z]{0,3}                   # 0-3 digits or letters
+            )
+        """,
+        re.VERBOSE|re.IGNORECASE,
     )
     ref_dict["MCDP"] = re.compile(
         r"\b(?:MCDP|MARINE ?CORPS ?Doctrinal ?Publication) ?([0-9](?: ?- ?[0-9])?)",
@@ -298,9 +329,20 @@ def make_dict():
     ref_dict["SECNAV"] = re.compile(
         r"\bSECNAV ?(M ?- ?[0-9]{4}\.[0-9]{1,2})", re.IGNORECASE
     )
+
+    # Naval Supply Systems Command
     ref_dict["NAVSUP"] = re.compile(
-        r"\bNAVSUP ?((?:P ?- ?|Publication ?)[0-9]{3})", re.IGNORECASE
+        r"""
+            NAVSUP
+            \s
+            P(?:ub(?:lication)?)?       # P or Pub or Publication
+            \s?
+            -?
+            ([0-9]{1,4})
+        """,
+        re.VERBOSE|re.IGNORECASE
     )
+
     ref_dict["JAGINST"] = re.compile(
         r"\b(?:JAGINST|JAG ?Instruction) ?([0-9]{4,5}(?:\.[0-9]{1,2}[A-Z]?)?)",
         re.IGNORECASE,
@@ -430,5 +472,83 @@ def make_dict():
         """,
         re.VERBOSE | re.IGNORECASE,
     )
+
+    # Homeland Security Presidential Directive
+    ref_dict["HSPD"] = re.compile(
+        r"""
+            (?:HSPD|Homeland\sSecurity\sPresidential\sDirective)
+            [ -]?
+            ([0-9]{1,3})
+        """,
+        re.VERBOSE | re.IGNORECASE,
+    )
+
+    # Office of the Chief of Naval Operations Instruction
+    ref_dict["OPNAVINST"] = re.compile(
+        r"""
+        (?:OPNAVINST|OPNAV\sInstruction)
+        \s?
+        (
+            [0-9]{1,6}
+            \.
+            [0-9]{1,3}
+            [A-Z]?
+        )
+        """,
+        re.VERBOSE|re.IGNORECASE
+    )
+
+    # Coast Guard Technical Order
+    ref_dict["CGTO"] = re.compile(
+        r"""
+            CGTO
+            \s
+            (
+                (?:PG)?                              # optional PG
+                [- ]?                                # optional hyphen or space
+                (?:[0-9]{1,4}[A-Z]{0,1}-){1,3}       # 1-3 iterations of: 1-4 digits, 0-1 letters, hyphen
+                [0-9]{0,4}[A-Z]{0,1}                 # 0-4 digits, 0-1 letters
+            )
+        """,
+        re.VERBOSE|re.IGNORECASE
+    )
+
+    # Code of Federal Regulations
+    ref_dict["CFR"] = re.compile(
+        r"""
+            (?:title)?
+            ([0-9]{1,3})
+            (?:of\sthe)?
+            [ ,]{1,2}
+            (?:CFR|Code\sof\sFederal\sRegulations)
+        """,
+        re.VERBOSE|re.IGNORECASE
+    )
+
+    # Public Law
+    ref_dict["PL"] = re.compile(
+        r"""
+            (?:                     
+                P\.?                # P, optional period
+                |Pub\.?             # or Pub, optional period
+                |Public             # or Public
+            )
+            \s?
+            (?:
+                L\.?                # L, optional period
+                |Law                # or Law
+            )
+            \s
+            (?:No\.?)?               # optional group: No, optional period
+            \s?
+            (
+                [0-9]{1,4}
+                -
+                [0-9]{1,4}
+            )
+        """,
+        re.VERBOSE|re.IGNORECASE
+    )
+    
 
     return ref_dict

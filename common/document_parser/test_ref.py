@@ -127,9 +127,9 @@ def test_cjcsn():
 
 
 def test_jp():
-    check_str = "reference DoD 4160.28-M JP 1-02 DoDD 5134.12 JP 4140.01 JP   3-12 DoDM 4100.39 JP"
-    ref_type = "JP"
-    assert check(check_str, ref_type, 2)
+    string = "JP 1-02 J P 1-02 Joint Publication 5-0 JP 1 JP 3-07.1 J.P. 3"
+    exp_result = ["JP 1-02", "JP 1-02", "JP 5-0", "JP 1", "JP 3-07.1", "JP 3"]
+    assert check(string, "JP", exp_result)
 
 
 def test_dcid():
@@ -411,9 +411,9 @@ def test_mcrp():
 
 
 def test_mcwp():
-    check_str = "MCWP 3-15.7 MCWP 11-10"
-    ref_type = "MCWP"
-    assert check(check_str, ref_type, 2)
+    check_str = "MCWP 3-15.7 MCWP 11-10 MCWP 3-41.1A MCWP 0-1"
+    exp_result = ["MCWP 3-15.7", "MCWP 11-10", "MCWP 3-41.1A", "MCWP 0-1"]
+    assert check(check_str, "MCWP", exp_result)
 
 
 def test_mctp():
@@ -465,9 +465,16 @@ def test_secnav():
 
 
 def test_navsup():
-    check_str = "NAVSUP P-486 NAVSUP Publication 727"
-    ref_type = "NAVSUP"
-    assert check(check_str, ref_type, 2)
+    check_str = (
+        "NAVSUP P-486 NAVSUP Publication 727 NAVSUP PUB 572 NAVSUP P 486"
+    )
+    exp_result = [
+        "NAVSUP 486",
+        "NAVSUP 727",
+        "NAVSUP 572",
+        "NAVSUP 486",
+    ]
+    assert check(check_str, "NAVSUP", exp_result)
 
 
 def test_jaginst():
@@ -540,3 +547,45 @@ def test_dhs_directive():
     string = "DHS Directive No. 066-05 DHS Directive 254-02"
     exp_result = ["DHS Directive 066-05", "DHS Directive 254-02"]
     assert check(string, "DHS Directive", exp_result)
+
+
+def test_hspd():
+    string = "HSPD-5 Homeland Security Presidential Directive-9 Homeland Security Presidential Directive 12"
+    exp_result = ["HSPD 5", "HSPD 9", "HSPD 12"]
+    assert check(string, "HSPD", exp_result)
+
+
+def test_opnavinst():
+    string = "OPNAVINST 1100.4B OPNAVINST 3500.38B"
+    exp_result = ["OPNAVINST 1100.4B", "OPNAVINST 3500.38B"]
+    assert check(string, "OPNAVINST", exp_result)
+
+def test_cgto():
+    string = "CGTO 1-1B-50 CGTO PG85-00-1490-A CGTO PG 85-00-70-A CGTO PG-85-00-110 CGTO 1H-60T-1 CGTO PG-85-00-310 CGTO PG-85-00-290-A CGTO 33-1"
+    exp_result = [
+        "CGTO 1-1B-50",
+        "CGTO PG85-00-1490-A",
+        "CGTO PG 85-00-70-A",
+        "CGTO PG-85-00-110",
+        "CGTO 1H-60T-1",
+        "CGTO PG-85-00-310",
+        "CGTO PG-85-00-290-A",
+        "CGTO 33-1",
+    ]
+    assert check(string, "CGTO", exp_result)
+
+def test_cfr():
+    string = "title 50, Code of Federal Regulations 5 CFR Title 46 CFR"
+    exp_result = [
+        "CFR 50",
+        "CFR 5",
+        "CFR 46"
+    ]
+    assert check(string, "CFR", exp_result)
+
+def test_pl():
+    string = "Public Law 98-615 Pub. L. No. 107-296 Pub. L. No 11-845 P.L. 109-13"
+    exp_result = [
+        "PL 98-615", "PL 107-296", "PL 11-845", "PL 109-13"
+    ]
+    assert check(string, "PL", exp_result)
