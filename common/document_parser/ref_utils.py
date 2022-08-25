@@ -285,4 +285,130 @@ def make_dict():
     )
     ref_dict["OMBM"] = re.compile(r"(M-[0-9]{2}-[0-9]{2})", re.IGNORECASE)
 
+    # Commandant Instruction (Coast Guard)
+    ref_dict["COMDTINST"] = re.compile(
+        r"""
+            COMDTINST
+            \s?
+            (
+                [A-Z]?
+                [0-9]{3,6}
+                (?:\.[0-9]{1,4}[A-Z]?)?     # optional group: period, 1-4 digits, letter (optional)
+            )
+        """,
+        re.VERBOSE | re.IGNORECASE,
+    )
+
+    # Deputy Commandant for Mission Support (Coast Guard)
+    ref_dict["DCMS"] = re.compile(
+        r"""
+            (?:
+                Deputy\sCommandant\sfor\sMission\sSupport
+                |\(?DCMS\)?                         # opening parenthesis (optional), "DCMS", closing parenthesis (optional)
+            )
+            ,?
+            \s?
+            (?:Contingency\sSupport\sPlan,?\s?)?    # optional group
+            (
+                [0-9]{2,6}
+                -
+                [0-9]{1,4}
+            )
+        """,
+        re.VERBOSE | re.IGNORECASE,
+    )
+
+    # Personnel Service Center Notice (Coast Guard)
+    ref_dict["PSCNOTE"] = re.compile(
+        r"""
+            PSCNOTE
+            \s?
+            (
+                [0-9]{1,6}
+                (?:\.[0-9]{1,4})?                   # optional group: period, 1-4 digits
+            )
+        """,
+        re.VERBOSE | re.IGNORECASE,
+    )
+
+    # Department of Defense Financial Management Regulation
+    ref_dict["DoDFMR"] = re.compile(
+        r"""
+            (?:
+                Department\sof\sDefense\sFinancial\sManagement\sRegulation
+                |\(?DoD\s?FMR\)?                    # opening parenthesis (optional), "DoD", whitespace, "FMR", closing parenthesis (optional)
+            )
+            ,?
+            \s?
+            (
+                Volume
+                \s?
+                [0-9]{1,3}
+                [A-Z]?
+            )
+        """,
+        re.VERBOSE | re.IGNORECASE,
+    )
+
+    # TODO: find out what PSCINST stands for (Coast Guard)
+    ref_dict["PSCINST"] = re.compile(
+        r"""
+            PSCINST
+            \s?
+            (
+                [A-Z]?
+                [0-9]{2,6}
+                (?:\.?[0-9]{1,3})?                  # optional group: period, 1-3 digits
+            )
+        """,
+        re.VERBOSE | re.IGNORECASE,
+    )
+
+    # Coast Guard Tactics, Techniques, and Procedures
+    ref_dict["CGTTP"] = re.compile(
+        r"""
+            CGTTP
+            \)?
+            \s?
+            (
+                (?:[0-9]{1,2}-[0-9]{1,2}){1,3}      # 1-3 iterations of: 1-2 digits, hyphen, 1-2 digits
+                (?:-[0-9]{1,2})?                    # optional group: hyphen, 1-2 digits
+                [A-Z]?
+                (?:\.[0-9]{1,2}[A-Z]?)?             # optional group: period, 1-2 digits, letter (optional)
+            )
+        """,
+        re.VERBOSE | re.IGNORECASE,
+    )
+
+    # Navy Tactics, Techniques, and Procedures
+    ref_dict["NTTP"] = re.compile(
+        r"""
+            NTTP
+            \)?
+            \s?
+            (
+                (?:[0-9]{1,2}-[0-9]{1,2}){1,3}      # 1-3 iterations of: 1-2 digits, hyphen, 1-2 digits
+                (?:-[0-9]{1,2})?                    # optional group: hyphen, 1-2 digits
+                [A-Z]?
+                (?:\.[0-9]{1,2}[A-Z]?)?             # optional group: period, 1-2 digits, letter (optional)
+            )
+        """,
+        re.VERBOSE | re.IGNORECASE,
+    )
+
+    # Department of Homeland Security Directive
+    ref_dict["DHS Directive"] = re.compile(
+        r"""
+            DHS\sDirective
+            (?:\sNo\.?)?
+            \s?
+            (
+                [0-9]{1,3}
+                -
+                [0-9]{1,3}
+            )
+        """,
+        re.VERBOSE | re.IGNORECASE,
+    )
+
     return ref_dict

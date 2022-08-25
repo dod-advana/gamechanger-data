@@ -10,7 +10,7 @@ def check(check_str, ref_type, exp_result):
     Args:
         check_str (str): The string to extract references from.
         ref_type (str): Reference type. A key from ref_regex.
-        exp_result (int or list of str): Use int to verify the expected number 
+        exp_result (int or list of str): Use int to verify the expected number
             of results. Use list of str to verify the values of the results.
     Returns:
         bool: True if the check passed, False otherwise.
@@ -27,7 +27,7 @@ def check(check_str, ref_type, exp_result):
             )
             continue
         if match != "":
-            result.append(match)
+            result.append(ref_type + " " + match)
 
     if type(exp_result) == int:
         return exp_result == len(result)
@@ -36,6 +36,7 @@ def check(check_str, ref_type, exp_result):
     else:
         print("ERR: Type of `exp_result` param is not supported. Failing.")
         return False
+
 
 def test_dod():
     check_str = "reference DoD 4160.28-M DoD 7000.14-R DoDD 5134.12 DoDI 4140.01 DoDI 3110.06 DoD"
@@ -479,3 +480,72 @@ def test_ombm():
     check_str = "M-00-02 M-07-16 m 18  19"
     ref_type = "OMBM"
     assert check(check_str, ref_type, 2)
+
+
+def test_comdtinst():
+    string = "COMDTINST M1100.2 COMDTINST M10550.25 COMDTINST M7220.29 COMDTINST M1000.3A COMDTINST 1560.3 COMDTINST 7220.39 COMDTINST 12430.6B"
+    exp_result = [
+        "COMDTINST M1100.2",
+        "COMDTINST M10550.25",
+        "COMDTINST M7220.29",
+        "COMDTINST M1000.3A",
+        "COMDTINST 1560.3",
+        "COMDTINST 7220.39",
+        "COMDTINST 12430.6B",
+    ]
+    assert check(string, "COMDTINST", exp_result)
+
+
+def test_dcms():
+    string = "(DCMS), Contingency Support Plan, 9930-17 U. S. Coast Guard Deputy Commandant for Mission Support (DCMS) Contingency Support Plan 9930-17"
+    exp_result = ["DCMS 9930-17", "DCMS 9930-17"]
+    assert check(string, "DCMS", exp_result)
+
+
+def test_pscnote():
+    string = "PSCNOTE 1401.5"
+    exp_result = ["PSCNOTE 1401.5"]
+    assert check(string, "PSCNOTE", exp_result)
+
+
+def test_dodfmr():
+    string = "Department of Defense Financial Management Regulation (DoD FMR), Volume 7A"
+    exp_result = ["DoDFMR Volume 7A"]
+    assert check(string, "DoDFMR", exp_result)
+
+
+def test_pscinst():
+    string = "PSCINST M1000.2 PSCINST 1401.2 PSCINST M1910.1"
+    exp_result = [
+        "PSCINST M1000.2",
+        "PSCINST 1401.2",
+        "PSCINST M1910.1",
+    ]
+    assert check(string, "PSCINST", exp_result)
+
+
+def test_cgttp():
+    string = "CGTTP 1-16.5 CGTTP 4-11.14 CGTTP 4-11-15"
+    exp_result = ["CGTTP 1-16.5", "CGTTP 4-11.14", "CGTTP 4-11-15"]
+    assert check(string, "CGTTP", exp_result)
+
+
+def test_nttp():
+    string = "NTTP 4-01.4 NTTP 3-04.11 NTTP 3-13.3M NTTP 3-54M"
+    exp_result = ["NTTP 4-01.4", "NTTP 3-04.11", "NTTP 3-13.3M", "NTTP 3-54M"]
+    assert check(string, "NTTP", exp_result)
+
+
+def test_dhs_directive():
+    string = "DHS Directive No. 066-05 DHS Directive 254-02"
+    exp_result = ["DHS Directive 066-05", "DHS Directive 254-02"]
+    assert check(string, "DHS Directive", exp_result)
+
+def test_():
+    string = ""
+    exp_result = []
+    check(string, "", exp_result)
+
+
+if __name__ == "__main__":
+    test_cgttp()
