@@ -78,12 +78,6 @@ def test_ai():
     check(check_str, ref_type, 2)
 
 
-def test_title():
-    check_str = "reference Title 10 Title bla bla 12 Title 41"
-    ref_type = "Title"
-    check(check_str, ref_type, 2)
-
-
 def test_icd():
     check_str = "reference ICPG 704.4 ICPM 2006-700-8 ICD 501 ICPG 710.1 Intelligence Community Directive 204 ICD"
     ref_type = "ICD"
@@ -602,3 +596,17 @@ def test_dha_procedural_inst():
     exp_result = "DHA Procedural Instruction 5025.01"
 
     check(string, "DHA Procedural Instruction", exp_result)
+
+
+def test_usc():
+    string = "Title 1, U. S. Code - Title 2 U.S.C. - Title 3, United States Code - 4 United States Code - 5 U.S.C. - U.S.C. Title 6 - United States Code Title 7"
+    exp_result = [
+        "USC 1",
+        "USC 2",
+        "USC 3",
+        "USC 4",
+        "USC 5",
+        "USC 6",
+        "USC 7",
+    ]
+    check(string, "USC", exp_result)

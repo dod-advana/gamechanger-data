@@ -25,11 +25,14 @@ def look_for_general(text, ref_dict, pattern, doc_type):
 
     for match in matches:
         if type(match) == tuple:
-            print(
-                f"ERR: Patterns in `ref_regex` should only have 1 capture "
-                f"group each. Check the pattern for {doc_type}"
-            )
-            continue
+            values = [x for x in match if x != ""]
+            if len(values) != 1:
+                print(
+                    f"ERR: Patterns in `ref_regex` should only have exactly 1 "
+                    f"non-empty capture group each. Check the pattern for {doc_type}"
+                )
+                continue
+            match = values[0]
         elif match == "":
             continue
         ref = (doc_type + " " + match).strip()

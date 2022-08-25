@@ -55,7 +55,34 @@ def make_dict():
     ref_dict["AI"] = re.compile(
         r"\b(?:administrative ?instruction|ai) ?([0-9]+)", re.IGNORECASE
     )
-    ref_dict["Title"] = re.compile(r"\bTitle ?([0-9]{1,2})", re.IGNORECASE)
+
+    # United States Code
+    ref_dict["USC"] = re.compile(
+        r"""
+            (?:
+                ([0-9]{1,3})
+                ,?
+                \s
+                (?:
+                    U\.?\s?S\.\s??C\.?\s?   # USC with optional period and/ or space between letters
+                    |United\sStates\sCode
+                    |U\.?\s?S\.?\s?Code
+                )
+            )
+            |(?:
+                (?:
+                    U\.?\s?S\.?\s?C\.?
+                    |United\sStates\sCode
+                    |U\.?\s?S\.?\s?Code     # USC with optional period and/ or space between letters
+                )
+                (?:,?\s?Title)?             # optional group: optional comma, optional space, Title
+                \s
+                ([0-9]{1,3})
+            )
+        """,
+        re.VERBOSE|re.IGNORECASE
+    )
+
     ref_dict["ICD"] = re.compile(
         r"\b(?:Intelligence ?Community ?Directive|ICD) ?([0-9]{1,3})",
         re.IGNORECASE,
