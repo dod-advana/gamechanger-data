@@ -3,10 +3,21 @@ from common.document_parser.ref_utils import make_dict
 
 ref_regex = make_dict()
 
+
 def check(check_str, ref_type, exp_result):
-    count = 0
+    """Verify reference regex.
+
+    Args:
+        check_str (str): The string to extract references from.
+        ref_type (str): Reference type. A key from ref_regex.
+        exp_result (int or list of str): Use int to verify the expected number 
+            of results. Use list of str to verify the values of the results.
+    Returns:
+        bool: True if the check passed, False otherwise.
+    """
     check_str = " ".join(check_str.split())
     matches = ref_regex[ref_type].findall(check_str)
+    result = []
 
     for match in matches:
         if type(match) == tuple:
@@ -15,12 +26,16 @@ def check(check_str, ref_type, exp_result):
                 f"group each. Check the pattern for `{ref_type}`."
             )
             continue
-        elif match == "":
-            continue
-        count += 1
+        if match != "":
+            result.append(match)
 
-    return count == exp_result
-
+    if type(exp_result) == int:
+        return exp_result == len(result)
+    elif type(exp_result) == list and all(type(i) == str for i in exp_result):
+        return exp_result == result
+    else:
+        print("ERR: Type of `exp_result` param is not supported. Failing.")
+        return False
 
 def test_dod():
     check_str = "reference DoD 4160.28-M DoD 7000.14-R DoDD 5134.12 DoDI 4140.01 DoDI 3110.06 DoD"
