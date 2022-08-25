@@ -1,5 +1,7 @@
 from typing import Union, List
+from collections import Counter, defaultdict
 from common.document_parser.ref_utils import make_dict, preprocess_text
+from common.document_parser.lib.ref_list import look_for_general
 
 
 ref_regex = make_dict()
@@ -11,29 +13,31 @@ def check(check_str, ref_type, exp_result: Union[int, str, List[str]]):
     Args:
         check_str (str): The string to extract references from.
         ref_type (str): Reference type. A key from ref_regex.
-        exp_result (int or list of str): Use int to verify the expected number
-            of results. Use list of str to verify the values of the results.
+        exp_result (int or str or list of str): Use int to verify the expected 
+            number of results. Use str or list of str to verify the value(s) of 
+            the results.
     Returns:
         bool: True if the check passed, False otherwise.
     """
     check_str = preprocess_text(check_str)
-    matches = ref_regex[ref_type].findall(check_str)
-    result = []
-
-    for match in matches:
-        if type(match) == tuple:
-            assert False, f"ERR: Patterns in `ref_regex` should only have 1 capture group each. Check the pattern for `{ref_type}`."
-        if match != "":
-            result.append(ref_type + " " + match)
+    ref_dict = look_for_general(
+        check_str,
+        defaultdict(int),
+        ref_regex[ref_type],
+        ref_type
+    )
+    num_results = sum(ref_dict.values())
 
     if type(exp_result) == int:
-        assert exp_result == len(result)
+        assert exp_result == num_results
     elif type(exp_result) == str:
-        assert [exp_result] == result
+        assert num_results == 1 and ref_dict.get(exp_result) is not None
     elif type(exp_result) == list and all(type(i) == str for i in exp_result):
-        assert exp_result == result
+        assert Counter(exp_result) == ref_dict
     else:
-        assert False, f"ERR: Type of `exp_result` param <{type(exp_result)}> is not supported. Failing."
+        assert (
+            False
+        ), f"ERR: Type of `exp_result` param <{type(exp_result)}> is not supported. Failing."
 
 
 def test_dod():
