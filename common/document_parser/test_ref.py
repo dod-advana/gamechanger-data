@@ -1,4 +1,4 @@
-from common.document_parser.ref_utils import make_dict
+from common.document_parser.ref_utils import make_dict, preprocess_text
 
 
 ref_regex = make_dict()
@@ -15,7 +15,7 @@ def check(check_str, ref_type, exp_result):
     Returns:
         bool: True if the check passed, False otherwise.
     """
-    check_str = " ".join(check_str.split())
+    check_str = preprocess_text(check_str)
     matches = ref_regex[ref_type].findall(check_str)
     result = []
 
@@ -540,12 +540,3 @@ def test_dhs_directive():
     string = "DHS Directive No. 066-05 DHS Directive 254-02"
     exp_result = ["DHS Directive 066-05", "DHS Directive 254-02"]
     assert check(string, "DHS Directive", exp_result)
-
-def test_():
-    string = ""
-    exp_result = []
-    check(string, "", exp_result)
-
-
-if __name__ == "__main__":
-    test_cgttp()

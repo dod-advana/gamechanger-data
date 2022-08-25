@@ -1,7 +1,7 @@
 import re
 from collections import defaultdict
 
-from common.document_parser.ref_utils import make_dict
+from common.document_parser.ref_utils import make_dict, preprocess_text
 
 
 ref_regex = make_dict()
@@ -49,11 +49,7 @@ def collect_ref_list(text: str) -> defaultdict:
         ref_dict with all references and their counts
     """
     ref_dict = defaultdict(int)
-    # Interpret the unicode as a -
-    text = text.replace("\u2013", "-")
-    text = re.sub(r"[()]", " ", text)
-    # Normalize whitespace here so regex search is simpler
-    text = " ".join(text.split())
+    text = preprocess_text(text)
 
     for ref_type, pattern in ref_regex.items():
         ref_dict = look_for_general(text, ref_dict, pattern, ref_type)

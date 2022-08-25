@@ -1,5 +1,27 @@
 import re
 
+def preprocess_text(text):
+    """Preprocess text to extract references from.
+
+    1. Replace unicode characters with "-"
+    2. Remove parenthesis
+    3. Normalize all whitespace to be single space.
+
+    Args:
+        text (str)
+
+    Returns:
+        str
+    """
+    # Interpret the unicode as a -
+    text = text.replace("\u2013", "-")
+    # Remove parenthesis
+    text = re.sub(r"[()]", "", text)
+    # Normalize whitespace to make regex simpler
+    text = " ".join(text.split())
+
+    return text
+
 
 def make_dict():
     # Each pattern should have only 1 capturing group that is the numerical
