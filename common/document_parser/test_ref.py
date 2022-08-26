@@ -7,6 +7,20 @@ from common.document_parser.lib.ref_list import look_for_general
 ref_regex = make_dict()
 
 
+def bookend(_):
+    """Add complex surrouding text to emulate real docs environment
+       For use if you know a doc name exists but don't have it used as a real reference
+       Trying to make the regex robust
+    """
+    return f"1-2.3a-b.c {_} 7-8.9x.y-z"
+
+
+def check_bookends(needs_bookend: List[str], ref_type: str):
+    for expected in needs_bookend:
+        text = bookend(expected)
+        check(text, ref_type, expected)
+
+
 def check(check_str, ref_type, exp_result: Union[int, str, List[str]]):
     """Verify reference regex.
 
@@ -608,6 +622,23 @@ def test_dha_procedural_inst():
     exp_result = "DHA Procedural Instruction 5025.01"
 
     check(string, "DHA Procedural Instruction", exp_result)
+
+
+def test_bupers_inst():
+    kind = "BUPERSINST"
+
+    text = "BUPERSINST  1750.10 Compliance  with  this  Publication  is  Mandatory"
+    expected = "BUPERSINST 1750.10"
+    check(text, kind, expected)
+
+    needs_bookend = [
+        "BUPERSINST BUPERSNOTE 5215",
+        "BUPERSINST 1750.10D Vol 2",
+        "BUPERSINST 5230.11A CH1",
+        "BUPERSINST 12600.4CH1",
+    ]
+
+    check_bookends(needs_bookend, kind)
 
 
 def test_usc():
