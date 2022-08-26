@@ -80,7 +80,7 @@ def make_dict():
                 ([0-9]{1,3})
             )
         """,
-        re.VERBOSE|re.IGNORECASE
+        re.VERBOSE | re.IGNORECASE
     )
 
     ref_dict["ICD"] = re.compile(
@@ -582,12 +582,91 @@ def make_dict():
     )
 
     # DHA Procedural Instruction
-    ref_dict["DHA Procedural Instruction"] = pattern(
+    # note the DHA crawlers have it pluralized, so the key should be plural so it can be found
+    ref_dict["DHA Procedural Instructions"] = pattern(
         r"""
-            DHA\sProcedural\sInstruction
+            DHA
+            \s
+            Procedural
+            \s
+            Instructions?
             \s
             (
-                \d*\.\d*\b          # any number of digits with a dot between
+                [0-9]{1,6}
+                (?:\.[0-9]{1,4})?
+            )
+        """
+    )
+
+    # note the DHA crawlers have it pluralized, so the key should be plural so it can be found
+    ref_dict["DHA Procedures Manuals"] = pattern(
+        r"""
+            DHA
+            \s
+            Procedures?
+            \s
+            Manuals?
+            \s
+            (
+                [0-9]{1,6}
+                (?:\.[0-9]{1,4})?
+                (?:
+                    \,?
+                    \s{1,3} # account for too many spaces `,  Volumes 1-7` 
+                    (:?
+                        Vol\.?
+                        |Volumes?\,? # yes this exists for some reason `Volume, 7`
+                    )
+                    \s?
+                    [0-9]{1,3}
+                    (?:\-[0-9]{1-3})?
+                )?
+            )
+        """
+    )
+
+# TODO pretty much the same as procedures manuals
+    # # note the DHA crawlers have it pluralized, so the key should be plural so it can be found
+    # ref_dict["DHA Technical Manuals"] = pattern(
+    #     r"""
+    #         DHA
+    #         \s
+    #         Technical
+    #         \s
+    #         Manuals?
+    #         \s
+    #         (
+    #             [0-9]{1,6}
+    #             \.?
+    #             (?:[0-9]{1,4})?
+    #             (?:
+    #                 \,?
+    #                 \s{1,3}
+    #                 (:?
+    #                     Vol\.?
+    #                     |Volumes?\,? # yes this exists for some reason `Volume, 7`
+    #                 )?
+    #                 \s?
+    #                 [0-9]{1,3}
+    #                 (?:\-[0-9]{1-3})?
+    #             )?
+    #         )
+    #     """
+    # )
+
+    # note the DHA crawlers have it pluralized, so the key should be plural so it can be found
+    ref_dict["DHA Administrative Instructions"] = pattern(
+        r"""
+            DHA
+            \s
+            Administrative
+            \s
+            Instructions?
+            \s
+            (
+                [0-9]{1,6}
+                (?:\.[0-9]{1,4})?
+                (?:\,\sChange\s[0-9]{1,3})?
             )
         """
     )
@@ -596,9 +675,15 @@ def make_dict():
     ref_dict["BUPERSINST"] = pattern(
         r"""
             BUPERSINST
-            \s{1,3}
+            \s
             (
-                \d*\.\d*\b
+                (?:BUPERSNOTE)?
+                \s?
+                [0-9]{1,6}
+                (?:\.[0-9]{1,4}[A-Z]?)?
+                \s?
+                (?:CH)?
+                (?:Vol [0-9]{1-3})?
             )
         """
     )
