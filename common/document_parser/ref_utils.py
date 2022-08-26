@@ -648,7 +648,8 @@ def make_dict():
         """
     )
 
-    # note the DHA crawlers have it pluralized, so the key should be plural so it can be found
+    # NOTE: the DHA crawlers have "manuals" (plural), so the key should be 
+    # plural so it can be found
     ref_dict["DHA Procedures Manuals"] = pattern(
         r"""
             DHA
@@ -661,15 +662,12 @@ def make_dict():
                 [0-9]{1,6}
                 (?:\.[0-9]{1,4})?
                 (?:
-                    \,?
-                    \s{1,3} # account for too many spaces `,  Volumes 1-7` 
-                    (:?
-                        Vol\.?
-                        |Volumes?\,? # yes this exists for some reason `Volume, 7`
-                    )
+                    ,?
                     \s?
+                    (?:Vol|Volumes?)
+                    [,. ]?
                     [0-9]{1,3}
-                    (?:\-[0-9]{1-3})?
+                    (?:-[0-9]{1,3})?
                 )?
             )
         """
@@ -738,6 +736,7 @@ def make_dict():
                 )?
             )
         """
+    )
 
     # Naval Air Systems Command
     ref_dict["NAVAIR"] = pattern(
