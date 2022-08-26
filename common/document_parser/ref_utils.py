@@ -648,7 +648,7 @@ def make_dict():
         """
     )
 
-    # NOTE: the DHA crawlers have "manuals" (plural), so the key should be 
+    # NOTE: the DHA crawlers have "manuals" (plural), so the key should be
     # plural so it can be found
     ref_dict["DHA Procedures Manuals"] = pattern(
         r"""
@@ -753,6 +753,73 @@ def make_dict():
             (?:\bNFPA|National\s?Fire\s?Protection\s?Association)
             \s?
             ([0-9]{1,5})
+        """
+    )
+
+    # DoD Military Standard
+    ref_dict["MIL-STD"] = pattern(
+        r"""
+        (?:
+            Mil(?:itary)?
+            \s?
+            -?
+            \s?
+            (?:Standard|STD)
+        )
+        \s?
+        -?
+        ( 
+            [0-9]{1,5}
+            [A-Z]?
+        )
+        """
+    )
+
+    # Naval Education and Training Command
+    ref_dict["NAVEDTRA"] = pattern(
+        r"""
+             NAVEDTRA
+             \s
+             (
+                [0-9]
+                [A-Z0-9]{0,6}
+                (?:-[A-Z0-9]{1,6}){0,2}       # optional group: hyphen, 1-6 digits/ letters
+            )
+        """
+    )
+
+    # Navy Medicine
+    ref_dict["NAVMED"] = pattern(
+        rf"""
+            (?:
+                NAVMED|Navy\s?Medicine
+            )
+            \s?
+            (
+                (?:P-)?
+                [0-9]{{1,4}}
+                (?:[/-][0-9]{{1,4}}){{0,3}}         # 0-3 iterations of: / or -, 1-4 digits
+            )
+        """
+    )
+
+    # Navy Environmental Health Center Technical Manual
+    ref_dict["NEHC Technical Manual"] = pattern(
+        r"""
+        (?:
+            NEHC|Navy\sEnvironmental\sHealth\sCenter
+        )
+        [ -]?
+        (?:
+            Technical\sManual
+            |T[ \.]?M\.?
+        )
+        \s?
+        (
+            (?:[A-Z]{2}\s?)?                # optional group: 2 letters, optional space
+            [0-9]{2,5}
+            (?:[\.-][0-9A-Z]{1,3}){0,2}     # 0-2 iterations of: period or hyphen, 1-3 digits/ letters
+        )
         """
     )
 

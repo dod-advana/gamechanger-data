@@ -52,7 +52,7 @@ def check(check_str, ref_type, exp_result: Union[int, str, List[str]]):
     if type(exp_result) == int:
         assert exp_result == num_results
     elif type(exp_result) == str:
-        assert num_results == 1, f"num results isn't 1  : found {num_results}"
+        assert num_results == 1, f"num results isn't 1  : found {num_results}. expected result: {exp_result}"
         res = ref_dict.get(exp_result)
         assert res is not None, f"no ref_dict value for: {exp_result}"
     elif type(exp_result) == list and all(type(i) == str for i in exp_result):
@@ -734,3 +734,55 @@ def test_ombc():
     string = "OMB Circular A-4 OMB Circular A-130 OMB Circular No. A-123"
     exp_result = ["OMBC A-4", "OMBC A-130", "OMBC A-123"]
     check(string, "OMBC", exp_result)
+
+def test_milstd():
+    needs_bookend = [
+        "(DOD) Military Standard (MIL-STD) 2525D",
+        "DoD Military Standard 882D",
+        "DOD Military Standard 1472F",
+        "MIL-STD-235(D)",
+    ]
+    exp_result = [
+        "MIL-STD 2525D", "MIL-STD 882D", "MIL-STD 1472F", "MIL-STD 235D"
+    ]
+    check_bookends(needs_bookend, "MIL-STD", exp_result)
+
+def test_navedtra():
+    exp_result = [
+        "NAVEDTRA 10076A",
+        "NAVEDTRA 14043",
+        "NAVEDTRA 43100-1M",
+        "NAVEDTRA 14167F",
+        "NAVEDTRA 130-140",
+        "NAVEDTRA 14295B2",
+    ]
+    check_bookends(exp_result, "NAVEDTRA")
+
+def test_navmed():
+    exp_result = [
+        "NAVMED P-5010-4",
+        "NAVMED P-117",
+        "NAVMED 1300/1",
+        "NAVMED 6150/50",
+    ]
+    check_bookends(exp_result, "NAVMED")
+
+def test_nehc_technical_manual():
+    needs_bookend = [
+        "NEHC Technical Manual 601",
+        "NEHC Technical Manual OM 500",
+        "NEHC-TM IH 6290.91-2B",
+        "NEHC TM OM 6260",
+        "(NEHC) TM 6290.91-2",
+        "NEHC TM96-2",
+    ]
+    exp_result = [
+        "NEHC Technical Manual 601",
+        "NEHC Technical Manual OM 500",
+        "NEHC Technical Manual IH 6290.91-2B",
+        "NEHC Technical Manual OM 6260",
+        "NEHC Technical Manual 6290.91-2",
+        "NEHC Technical Manual 96-2",
+    ]
+    check_bookends(needs_bookend, "NEHC Technical Manual", exp_result)
+
