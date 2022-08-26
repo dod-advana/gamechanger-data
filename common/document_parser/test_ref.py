@@ -8,7 +8,7 @@ ref_regex = make_dict()
 
 
 def bookend(_):
-    """Add complex surrouding text to emulate real docs environment
+    """Add complex surrounding text to emulate real docs environment
        For use if you know a doc name exists but don't have it used as a real reference
        Trying to make the regex robust
     """
@@ -27,18 +27,15 @@ def check(check_str, ref_type, exp_result: Union[int, str, List[str]]):
     Args:
         check_str (str): The string to extract references from.
         ref_type (str): Reference type. A key from ref_regex.
-        exp_result (int or str or list of str): Use int to verify the expected 
-            number of results. Use str or list of str to verify the value(s) of 
+        exp_result (int or str or list of str): Use int to verify the expected
+            number of results. Use str or list of str to verify the value(s) of
             the results.
     Returns:
         bool: True if the check passed, False otherwise.
     """
     check_str = preprocess_text(check_str)
     ref_dict = look_for_general(
-        check_str,
-        defaultdict(int),
-        ref_regex[ref_type],
-        ref_type
+        check_str, defaultdict(int), ref_regex[ref_type], ref_type
     )
     num_results = sum(ref_dict.values())
 
@@ -157,9 +154,28 @@ def test_eo():
 
 
 def test_ar():
-    check_str = "AR 1-1 AR 1-15 AR 1-202 AR 10-89 AR 11-2 Army Regulations 11-18 AR 25-400-2 AR 380-67 AR 380-381 AR 381-47 AR 381-141 Army Regulation 525-21 Army Regulations (AR) 600-8-3 AR 600-8-10 AR 600-8-101 AR 600-9 AR 601-210"
-    ref_type = "AR"
-    check(check_str, ref_type, 17)
+    check_str = "AR 1-1 AR 1-15 AR 1-202 AR 10-89 AR 11-2 Army Regulations 11-18 AR 25-400-2 AR 380-67 AR 380-381 AR 381-47 AR 381-141 Army Regulation 525-21 Army Regulations (AR) 600-8-3 AR 600-8-10 AR 600-8-101 AR 600-9 AR 601-210 AR 5"
+    exp_output = [
+        "AR 1-1",
+        "AR 1-15",
+        "AR 1-202",
+        "AR 10-89",
+        "AR 11-2",
+        "AR 11-18",
+        "AR 25-400-2",
+        "AR 380-67",
+        "AR 380-381",
+        "AR 381-47",
+        "AR 381-141",
+        "AR 525-21",
+        "AR 600-8-3",
+        "AR 600-8-10",
+        "AR 600-8-101",
+        "AR 600-9",
+        "AR 601-210",
+        "AR 5",
+    ]
+    check(check_str, "AR", exp_output)
 
 
 def test_ago():
@@ -590,19 +606,15 @@ def test_cgto():
 
 def test_cfr():
     string = "title 50, Code of Federal Regulations 5 CFR Title 46 CFR"
-    exp_result = [
-        "CFR 50",
-        "CFR 5",
-        "CFR 46"
-    ]
+    exp_result = ["CFR 50", "CFR 5", "CFR 46"]
     check(string, "CFR", exp_result)
 
 
 def test_pl():
-    string = "Public Law 98-615 Pub. L. No. 107-296 Pub. L. No 11-845 P.L. 109-13"
-    exp_result = [
-        "PL 98-615", "PL 107-296", "PL 11-845", "PL 109-13"
-    ]
+    string = (
+        "Public Law 98-615 Pub. L. No. 107-296 Pub. L. No 11-845 P.L. 109-13"
+    )
+    exp_result = ["PL 98-615", "PL 107-296", "PL 11-845", "PL 109-13"]
 
     check(string, "PL", exp_result)
 
@@ -675,3 +687,37 @@ def test_usc():
         "USC 7",
     ]
     check(string, "USC", exp_result)
+
+
+def test_navair():
+    exp_result = [
+        "NAVAIR 01-1B-50",
+        "NAVAIR 00-80T-106",
+        "NAVAIR 01-75GAJ-1",
+        "NAVAIR 01-1a-505-1",
+        'NAVAIR 16-1-529',
+        'NAVAIR 01-75GAA-9',
+    ]
+    check_bookends(exp_result, "NAVAIR")
+
+def test_comdtpub():
+    exp_result = [
+        "COMDTPUB P5090.1",
+        "COMDTPUB P16700.4",
+        "COMDTPUB P3120.17",
+        "COMDTPUB 5800.7A",
+        "COMDTPUB 16502.5",
+    ]
+    check_bookends(exp_result, "COMDTPUB")
+    
+def test_nfpa():
+    needs_bookend = ["NFPA 70", "NFPA 493"]
+    check_bookends(needs_bookend, "NFPA")
+    
+    string = "National Fire Protection Association (NFPA) 496"
+    check(string, "NFPA", "NFPA 496")
+
+def test_ombc():
+    string = "OMB Circular A-4 OMB Circular A-130 OMB Circular No. A-123"
+    exp_result = ["OMBC A-4", "OMBC A-130", "OMBC A-123"]
+    check(string, "OMBC", exp_result)
