@@ -108,9 +108,9 @@ def test_icpm():
 
 
 def test_cjcsi():
-    check_str = "reference CJCSI 1001.01  CJCSI 1100.01D DoDI 4140.01 CJCSI 12312321 CJCSM 3150.05D DoDM"
-    ref_type = "CJCSI"
-    check(check_str, ref_type, 2)
+    string = "Chairman of the Joint Chiefs of Staff Instruction 1330.05A CHAIRMAN OF THE JOINT CHIEFS OF STAFF INSTRUCTION J-6 CJCSI 8010.01C (CJCSI) 3150.25"
+    exp_result = ["CJCSI 1330.05A", "CJCSI J-6", "CJCSI 8010.01C", "CJCSI 3150.25"]
+    check(string, "CJCSI", exp_result)
 
 
 def test_cjcsm():

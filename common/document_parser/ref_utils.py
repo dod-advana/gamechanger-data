@@ -94,10 +94,22 @@ def make_dict():
     ref_dict["ICPM"] = re.compile(
         r"\bicpm ?([0-9]{4}- ?[0-9]{3}- ?[0-9]{1})", re.IGNORECASE
     )
-    ref_dict["CJCSI"] = re.compile(
-        r"\b(?:cjcs ?instruction|cjcsi) ?((?:[A-Z]+-)?[0-9]{4}\. ?[0-9]{1,3}[A-Z]?)",
-        re.IGNORECASE,
+
+    # Chairman of the Joint Chiefs of Staff (CJCS) Instruction
+    ref_dict["CJCSI"] = pattern(
+        r"""
+            (?:
+                \bCJCS\s?I(?:nstruction)?     # CJCSI or CJCS Instruction
+                |Chairman\sOf\s(?:The\s)?Joint\sChiefs?\sOf\sStaff\sInstruction
+            )
+            \s
+            (
+                [A-Z]-[0-9]
+                |[0-9]{1,6}\.(?:[0-9A-Z]{1,5}){1,2}     # 1-6 digits, period, then 1-2 iterations of: 1-5 digits/ letters
+            )
+        """
     )
+
     ref_dict["CJCSM"] = re.compile(
         r"\b(?:cjcs ?manual|cjcsm) ?((?:[A-Z]+-)?[0-9]{4}\. ?[0-9]{1,3}[A-Z]?)",
         re.IGNORECASE,
