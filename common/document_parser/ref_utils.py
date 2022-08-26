@@ -80,7 +80,7 @@ def make_dict():
                 ([0-9]{1,3})
             )
         """,
-        re.VERBOSE|re.IGNORECASE
+        re.VERBOSE | re.IGNORECASE,
     )
 
     ref_dict["ICD"] = re.compile(
@@ -131,7 +131,7 @@ def make_dict():
     ref_dict["EO"] = re.compile(
         r"\b(?:Executive ?Order|EO|E\. ?O\. ?) ?([0-9]{5})", re.IGNORECASE
     )
-    
+
     ref_dict["AR"] = re.compile(
         r"""
             (?:\bAR|Army\s?Regulations?)
@@ -141,9 +141,9 @@ def make_dict():
                 (?:\s?-\s?[0-9]{1,3}){0,2}      # 0-2 iterations of: optional space, hyphen, optional space, 1-3 digits
             )
         """,
-        re.VERBOSE|re.IGNORECASE
+        re.VERBOSE | re.IGNORECASE,
     )
-    
+
     ref_dict["AGO"] = re.compile(
         r"\b(?:AGO|Army ?General ?Orders?) ?((?:19|20)[0-9]{2} ?- ?[0-9]{2,3})",
         re.IGNORECASE,
@@ -380,7 +380,7 @@ def make_dict():
             -?
             ([0-9]{1,4})
         """,
-        re.VERBOSE | re.IGNORECASE
+        re.VERBOSE | re.IGNORECASE,
     )
 
     ref_dict["JAGINST"] = re.compile(
@@ -388,6 +388,22 @@ def make_dict():
         re.IGNORECASE,
     )
     ref_dict["OMBM"] = re.compile(r"(M-[0-9]{2}-[0-9]{2})", re.IGNORECASE)
+
+    # Office of Management and Budget (OMB) Circular
+    ref_dict["OMBC"] = pattern(
+        r"""
+            (?:\bOMB|Office\sOf\sManagement\sAnd\sBudget)
+            \s?
+            C(?:ircular)?
+            \s
+            (?:No\.?\s?)?           # optional group: No, optional period, optional space
+            (
+                [A-Z]
+                -
+                [0-9]{1,5}
+            )
+        """
+    )
 
     # Commandant Instruction (Coast Guard)
     ref_dict["COMDTINST"] = re.compile(
@@ -401,6 +417,19 @@ def make_dict():
             )
         """,
         re.VERBOSE | re.IGNORECASE,
+    )
+
+    # Commandant Publication (Coast Guard)
+    ref_dict["COMDTPUB"] = pattern(
+        r"""
+            COMDTPUB
+            \s
+            (
+                [A-Z]?
+                [0-9]{2,6}
+                (?:\.[0-9]{1,3}[A-Z]?)?     # optional group: period, 1-3 digits, optional letter
+            )
+        """
     )
 
     # Deputy Commandant for Mission Support (Coast Guard)
@@ -535,7 +564,7 @@ def make_dict():
             [A-Z]?
         )
         """,
-        re.VERBOSE | re.IGNORECASE
+        re.VERBOSE | re.IGNORECASE,
     )
 
     # Coast Guard Technical Order
@@ -550,7 +579,7 @@ def make_dict():
                 [0-9]{0,4}[A-Z]{0,1}                 # 0-4 digits, 0-1 letters
             )
         """,
-        re.VERBOSE | re.IGNORECASE
+        re.VERBOSE | re.IGNORECASE,
     )
 
     # Code of Federal Regulations
@@ -562,7 +591,7 @@ def make_dict():
             [ ,]{1,2}
             (?:CFR|Code\sof\sFederal\sRegulations)
         """,
-        re.VERBOSE | re.IGNORECASE
+        re.VERBOSE | re.IGNORECASE,
     )
 
     # Public Law
@@ -587,7 +616,7 @@ def make_dict():
                 [0-9]{1,4}
             )
         """,
-        re.VERBOSE | re.IGNORECASE
+        re.VERBOSE | re.IGNORECASE,
     )
 
     # DHA Procedural Instruction
@@ -612,6 +641,25 @@ def make_dict():
         """
     )
 
+    # Naval Air Systems Command
+    ref_dict["NAVAIR"] = pattern(
+        r"""
+            NAVAIR
+            \s
+            (
+                [0-9]{1,3}
+                (?:-[0-9A-Z]{1,5}){0,4}     # 0-4 iterations of: hyphen, 1-5 letters/ numbers
+            )
+        """
+    )
+
+    # National Fire Protection Association
+    ref_dict["NFPA"] = pattern(
+        r"""
+            (?:\bNFPA|National\s?Fire\s?Protection\s?Association)
+            \s?
+            ([0-9]{1,5})
+        """
+    )
+
     return ref_dict
-
-

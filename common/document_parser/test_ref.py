@@ -8,7 +8,7 @@ ref_regex = make_dict()
 
 
 def bookend(_):
-    """Add complex surrouding text to emulate real docs environment
+    """Add complex surrounding text to emulate real docs environment
        For use if you know a doc name exists but don't have it used as a real reference
        Trying to make the regex robust
     """
@@ -653,3 +653,37 @@ def test_usc():
         "USC 7",
     ]
     check(string, "USC", exp_result)
+
+
+def test_navair():
+    exp_result = [
+        "NAVAIR 01-1B-50",
+        "NAVAIR 00-80T-106",
+        "NAVAIR 01-75GAJ-1",
+        "NAVAIR 01-1a-505-1",
+        'NAVAIR 16-1-529',
+        'NAVAIR 01-75GAA-9',
+    ]
+    check_bookends(exp_result, "NAVAIR")
+
+def test_comdtpub():
+    exp_result = [
+        "COMDTPUB P5090.1",
+        "COMDTPUB P16700.4",
+        "COMDTPUB P3120.17",
+        "COMDTPUB 5800.7A",
+        "COMDTPUB 16502.5",
+    ]
+    check_bookends(exp_result, "COMDTPUB")
+    
+def test_nfpa():
+    needs_bookend = ["NFPA 70", "NFPA 493"]
+    check_bookends(needs_bookend, "NFPA")
+    
+    string = "National Fire Protection Association (NFPA) 496"
+    check(string, "NFPA", "NFPA 496")
+
+def test_ombc():
+    string = "OMB Circular A-4 OMB Circular A-130 OMB Circular No. A-123"
+    exp_result = ["OMBC A-4", "OMBC A-130", "OMBC A-123"]
+    check(string, "OMBC", exp_result)
