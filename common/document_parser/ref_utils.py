@@ -620,7 +620,7 @@ def make_dict():
                 |Law                # or Law
             )
             \s
-            (?:No\.?)?               # optional group: No, optional period
+            (?:No\.?|Number)?       # optional group: No, optional period OR Number
             \s?
             (
                 [0-9]{1,4}
