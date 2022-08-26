@@ -12,7 +12,7 @@ def bookend(_):
        For use if you know a doc name exists but don't have it used as a real reference
        Trying to make the regex robust
     """
-    return f"1-2.3a-b.c {_} 7-8.9x.y-z"
+    return f"fake text 1-2.3a-b.c {_} 7-8.9x.y-z blah blah"
 
 
 def check_bookends(needs_bookend: List[str], ref_type: str):
@@ -42,7 +42,9 @@ def check(check_str, ref_type, exp_result: Union[int, str, List[str]]):
     if type(exp_result) == int:
         assert exp_result == num_results
     elif type(exp_result) == str:
-        assert num_results == 1 and ref_dict.get(exp_result) is not None
+        assert num_results == 1, f"num results isn't 1  : found {num_results}"
+        res = ref_dict.get(exp_result)
+        assert res is not None, f"no ref_dict value for: {exp_result}"
     elif type(exp_result) == list and all(type(i) == str for i in exp_result):
         assert Counter(exp_result) == ref_dict
     else:
@@ -618,10 +620,42 @@ def test_pl():
 
 
 def test_dha_procedural_inst():
+    # note the crawlers have it pluralized, so the key should be plural so it can be found
+    kind = "DHA Procedural Instructions"
     string = "(c)      DHA Procedural Instruction 5025.01, “Publication System,” August 21, 2015 "
-    exp_result = "DHA Procedural Instruction 5025.01"
+    exp_result = "DHA Procedural Instructions 5025.01"
 
-    check(string, "DHA Procedural Instruction", exp_result)
+    check(string, kind, exp_result)
+
+
+def test_dha_procedures_manual():
+    kind = "DHA Procedures Manuals"
+    needs_bookend = [
+        "DHA Procedures Manuals 1025.01",
+        "DHA Procedures Manuals 6025.13, Volume 5",
+        "DHA Procedures Manuals 6025.13,  Volumes 1-7"
+    ]
+    check_bookends(needs_bookend, kind)
+
+# TODO pretty much the same as procedures manuals
+# def test_dha_tech_manual():
+#     kind = "DHA Technical Manuals"
+#     needs_bookend = [
+#         "DHA Technical Manuals 4165.01, Volume 7",
+#         "DHA Technical Manuals 4165.01 Volume, 7",  # 🥴
+#         "DHA Technical Manuals 3200.02"
+#     ]
+#     check_bookends(needs_bookend, kind)
+
+
+def test_dha_admin_inst():
+    kind = "DHA Administrative Instructions"
+    needs_bookend = [
+        "DHA Administrative Instructions 3020.01, Change 1",
+        "DHA Administrative Instructions 4000.01",
+        "DHA Administrative Instructions 034"
+    ]
+    check_bookends(needs_bookend, kind)
 
 
 def test_bupers_inst():
