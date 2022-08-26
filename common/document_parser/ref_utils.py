@@ -727,16 +727,17 @@ def make_dict():
             BUPERSINST
             \s
             (
-                (?:BUPERSNOTE)?
-                \s?
+                (?:BUPERSNOTE\s?)?
                 [0-9]{1,6}
-                (?:\.[0-9]{1,4}[A-Z]?)?
-                \s?
-                (?:CH)?
-                (?:Vol [0-9]{1-3})?
+                (?:\.[0-9]{1,4}[A-BD-UW-Z]?)?       # We don't use [A-Z] here b/c it could match C or V which would miss the CH|VOL pattern
+                (?:
+                    \s?
+                    (?:CH|VOL)
+                    \s?
+                    [0-9]{1,3}
+                )?
             )
         """
-    )
 
     # Naval Air Systems Command
     ref_dict["NAVAIR"] = pattern(
