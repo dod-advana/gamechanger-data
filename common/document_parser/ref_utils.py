@@ -131,10 +131,19 @@ def make_dict():
     ref_dict["EO"] = re.compile(
         r"\b(?:Executive ?Order|EO|E\. ?O\. ?) ?([0-9]{5})", re.IGNORECASE
     )
+    
     ref_dict["AR"] = re.compile(
-        r"\b(?:AR|Army ?regulations?) ?([0-9]{1,3} ?- ?[0-9]{1,3}(?: ?- ?[0-9]{1,3})?)",
-        re.IGNORECASE,
+        r"""
+            (?:\bAR|Army\s?Regulations?)
+            \s?
+            (
+                [0-9]{1,3}
+                (?:\s?-\s?[0-9]{1,3}){0,2}      # 0-2 iterations of: optional space, hyphen, optional space, 1-3 digits
+            )
+        """,
+        re.VERBOSE|re.IGNORECASE
     )
+    
     ref_dict["AGO"] = re.compile(
         r"\b(?:AGO|Army ?General ?Orders?) ?((?:19|20)[0-9]{2} ?- ?[0-9]{2,3})",
         re.IGNORECASE,
@@ -593,3 +602,5 @@ def make_dict():
     )
 
     return ref_dict
+
+

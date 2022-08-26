@@ -13,18 +13,15 @@ def check(check_str, ref_type, exp_result: Union[int, str, List[str]]):
     Args:
         check_str (str): The string to extract references from.
         ref_type (str): Reference type. A key from ref_regex.
-        exp_result (int or str or list of str): Use int to verify the expected 
-            number of results. Use str or list of str to verify the value(s) of 
+        exp_result (int or str or list of str): Use int to verify the expected
+            number of results. Use str or list of str to verify the value(s) of
             the results.
     Returns:
         bool: True if the check passed, False otherwise.
     """
     check_str = preprocess_text(check_str)
     ref_dict = look_for_general(
-        check_str,
-        defaultdict(int),
-        ref_regex[ref_type],
-        ref_type
+        check_str, defaultdict(int), ref_regex[ref_type], ref_type
     )
     num_results = sum(ref_dict.values())
 
@@ -141,9 +138,28 @@ def test_eo():
 
 
 def test_ar():
-    check_str = "AR 1-1 AR 1-15 AR 1-202 AR 10-89 AR 11-2 Army Regulations 11-18 AR 25-400-2 AR 380-67 AR 380-381 AR 381-47 AR 381-141 Army Regulation 525-21 Army Regulations (AR) 600-8-3 AR 600-8-10 AR 600-8-101 AR 600-9 AR 601-210"
-    ref_type = "AR"
-    check(check_str, ref_type, 17)
+    check_str = "AR 1-1 AR 1-15 AR 1-202 AR 10-89 AR 11-2 Army Regulations 11-18 AR 25-400-2 AR 380-67 AR 380-381 AR 381-47 AR 381-141 Army Regulation 525-21 Army Regulations (AR) 600-8-3 AR 600-8-10 AR 600-8-101 AR 600-9 AR 601-210 AR 5"
+    exp_output = [
+        "AR 1-1",
+        "AR 1-15",
+        "AR 1-202",
+        "AR 10-89",
+        "AR 11-2",
+        "AR 11-18",
+        "AR 25-400-2",
+        "AR 380-67",
+        "AR 380-381",
+        "AR 381-47",
+        "AR 381-141",
+        "AR 525-21",
+        "AR 600-8-3",
+        "AR 600-8-10",
+        "AR 600-8-101",
+        "AR 600-9",
+        "AR 601-210",
+        "AR 5",
+    ]
+    check(check_str, "AR", exp_output)
 
 
 def test_ago():
@@ -574,19 +590,15 @@ def test_cgto():
 
 def test_cfr():
     string = "title 50, Code of Federal Regulations 5 CFR Title 46 CFR"
-    exp_result = [
-        "CFR 50",
-        "CFR 5",
-        "CFR 46"
-    ]
+    exp_result = ["CFR 50", "CFR 5", "CFR 46"]
     check(string, "CFR", exp_result)
 
 
 def test_pl():
-    string = "Public Law 98-615 Pub. L. No. 107-296 Pub. L. No 11-845 P.L. 109-13"
-    exp_result = [
-        "PL 98-615", "PL 107-296", "PL 11-845", "PL 109-13"
-    ]
+    string = (
+        "Public Law 98-615 Pub. L. No. 107-296 Pub. L. No 11-845 P.L. 109-13"
+    )
+    exp_result = ["PL 98-615", "PL 107-296", "PL 11-845", "PL 109-13"]
 
     check(string, "PL", exp_result)
 
