@@ -665,7 +665,8 @@ def make_dict():
                     ,?
                     \s?
                     (?:Vol|Volumes?)
-                    [,. ]?
+                    [,.]?
+                    \s?
                     [0-9]{1,3}
                     (?:-[0-9]{1,3})?
                 )?
@@ -673,34 +674,30 @@ def make_dict():
         """
     )
 
-# TODO pretty much the same as procedures manuals
-    # # note the DHA crawlers have it pluralized, so the key should be plural so it can be found
-    # ref_dict["DHA Technical Manuals"] = pattern(
-    #     r"""
-    #         DHA
-    #         \s
-    #         Technical
-    #         \s
-    #         Manuals?
-    #         \s
-    #         (
-    #             [0-9]{1,6}
-    #             \.?
-    #             (?:[0-9]{1,4})?
-    #             (?:
-    #                 \,?
-    #                 \s{1,3}
-    #                 (:?
-    #                     Vol\.?
-    #                     |Volumes?\,? # yes this exists for some reason `Volume, 7`
-    #                 )?
-    #                 \s?
-    #                 [0-9]{1,3}
-    #                 (?:\-[0-9]{1-3})?
-    #             )?
-    #         )
-    #     """
-    # )
+    # note the DHA crawlers have "manuals" plural, so the key should be plural so it can be found
+    ref_dict["DHA Technical Manuals"] = pattern(
+        r"""
+            DHA
+            \s
+            Technical
+            \s
+            Manuals?
+            \s
+            (
+                [0-9]{1,6}
+                (?:\.[0-9]{1,4})?
+                (?:
+                    ,?
+                    \s?
+                    (?:Vol|Volumes?)
+                    [,.]?
+                    \s?
+                    [0-9]{1,3}
+                    (?:-[0-9]{1,3})?
+                )?
+            )
+        """
+    )
 
     # note the DHA crawlers have it pluralized, so the key should be plural so it can be found
     ref_dict["DHA Administrative Instructions"] = pattern(
