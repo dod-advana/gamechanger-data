@@ -565,4 +565,15 @@ def make_dict():
         """
     )
 
+    # BUPERS
+    ref_dict["BUPERSINST"] = pattern(
+        r"""
+            BUPERSINST
+            \s{1,3}
+            (
+                \d*\.\d*\b
+            )
+        """
+    )
+
     return ref_dict
