@@ -15,10 +15,20 @@ def bookend(_):
     return f"fake text 1-2.3a-b.c {_} 7-8.9x.y-z blah blah"
 
 
-def check_bookends(needs_bookend: List[str], ref_type: str):
-    for expected in needs_bookend:
-        text = bookend(expected)
-        check(text, ref_type, expected)
+def check_bookends(needs_bookend: List[str], ref_type: str, exp_result=None):
+    # If exp_result is None, uses needs_bookend as exp_result
+
+    if exp_result is None:
+        exp_result = needs_bookend
+    else:
+        if len(needs_bookend) != len(exp_result):
+            assert (
+                False
+            ),  f"ERR: for ref type `{ref_type}`: exp_result len is {len(exp_result)} and needs_bookend len is {len(needs_bookend)}"
+
+    for i in range(len(needs_bookend)):
+        text = bookend(needs_bookend[i])
+        check(text, ref_type, exp_result[i])
 
 
 def check(check_str, ref_type, exp_result: Union[int, str, List[str]]):
@@ -635,17 +645,20 @@ def test_dha_procedures_manual():
         "DHA Procedures Manuals 6025.13, Volume 5",
         "DHA Procedures Manuals 6025.13,  Volumes 1-7"
     ]
-    check_bookends(needs_bookend, kind)
+    check_bookends(
+        needs_bookend,
+        kind,
+        [" ".join(x.split()) for x in needs_bookend]
+    )
 
-# TODO pretty much the same as procedures manuals
-# def test_dha_tech_manual():
-#     kind = "DHA Technical Manuals"
-#     needs_bookend = [
-#         "DHA Technical Manuals 4165.01, Volume 7",
-#         "DHA Technical Manuals 4165.01 Volume, 7",  # 🥴
-#         "DHA Technical Manuals 3200.02"
-#     ]
-#     check_bookends(needs_bookend, kind)
+def test_dha_tech_manual():
+    kind = "DHA Technical Manuals"
+    needs_bookend = [
+        "DHA Technical Manuals 4165.01, Volume 7",
+        "DHA Technical Manuals 4165.01 Volume, 7",  # 🥴
+        "DHA Technical Manuals 3200.02"
+    ]
+    check_bookends(needs_bookend, kind)
 
 
 def test_dha_admin_inst():
