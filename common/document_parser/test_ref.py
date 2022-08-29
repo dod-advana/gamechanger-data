@@ -161,7 +161,7 @@ def test_cjcsm():
 
 def test_cjcsg():
     check_str = "reference CJCSM 3105.01 CJCS GDE 3401D CJCSI 1100.01D CJCS GDE 5260 CJCSM"
-    ref_type = "CJCSG"
+    ref_type = "CJCS GDE"
     check(check_str, ref_type, 2)
 
 
@@ -636,10 +636,10 @@ def test_cgto():
     check(string, "CGTO", exp_result)
 
 
-def test_cfr():
+def test_cfr_title():
     string = "title 50, Code of Federal Regulations 5 CFR Title 46 CFR"
-    exp_result = ["CFR 50", "CFR 5", "CFR 46"]
-    check(string, "CFR", exp_result)
+    exp_result = ["CFR Title 50", "CFR Title 5", "CFR Title 46"]
+    check(string, "CFR Title", exp_result)
 
 
 def test_pl():
@@ -709,18 +709,18 @@ def test_bupers_inst():
     check_bookends(needs_bookend, kind)
 
 
-def test_usc():
+def test_usc_title():
     string = "Title 1, U. S. Code - Title 2 U.S.C. - Title 3, United States Code - 4 United States Code - 5 U.S.C. - U.S.C. Title 6 - United States Code Title 7"
     exp_result = [
-        "USC 1",
-        "USC 2",
-        "USC 3",
-        "USC 4",
-        "USC 5",
-        "USC 6",
-        "USC 7",
+        "Title 1",
+        "Title 2",
+        "Title 3",
+        "Title 4",
+        "Title 5",
+        "Title 6",
+        "Title 7",
     ]
-    check(string, "USC", exp_result)
+    check(string, "Title", exp_result)
 
 
 def test_navair():
