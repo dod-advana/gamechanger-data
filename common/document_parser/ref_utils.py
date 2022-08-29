@@ -399,7 +399,22 @@ def make_dict():
         r"\b(?:JAGINST|JAG ?Instruction) ?([0-9]{4,5}(?:\.[0-9]{1,2}[A-Z]?)?)",
         re.IGNORECASE,
     )
-    ref_dict["OMBM"] = re.compile(r"(M-[0-9]{2}-[0-9]{2})", re.IGNORECASE)
+
+    # Office of Management and Budget (OMBM)
+    ref_dict["OMBM"] = pattern(
+        r"""
+            \b
+            OMBM?
+            \s?
+            (
+                (?:M-)?
+                [0-9]{1,3}
+                -
+                [0-9]{1,3}
+            )
+            \b
+        """
+    )
 
     # Office of Management and Budget (OMB) Circular
     ref_dict["OMBC"] = pattern(
