@@ -864,3 +864,11 @@ def test_stanag():
     needs_bookend = ["STANAG 4170", "[STANAG 4554]"]
     exp_result = ["STANAG 4170", "STANAG 4554"]
     check_bookends(needs_bookend, "STANAG", exp_result)
+
+
+def test_comnavresforcominst():
+    needs_bookend = [
+        "COMNAVRESFORCOMINST 1700.1F CH-1",
+        "COMNAVRESFORCOMINST 3440.1E",
+    ]
+    check_bookends(needs_bookend, "COMNAVRESFORCOMINST")

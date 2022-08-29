@@ -956,4 +956,18 @@ def make_dict():
         """
     )
 
+    ref_dict["COMNAVRESFORCOMINST"] = pattern(
+        r"""
+            \b
+            COMNAVRESFORCOMINST
+            \s?
+            (
+                [0-9]{3,6}
+                (?:\.[0-9]{1,3}[A-Z]?)?             # optional group: period, 1-3 digits, optional letter
+                (?:\s?CH[ -]?[0-9]{1,2})?           # optional group: optional space, CH, optional space or hyphen, 1-2 digits    
+            )
+            \b
+        """
+    )
+
     return ref_dict
