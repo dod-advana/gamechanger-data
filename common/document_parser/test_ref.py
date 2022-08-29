@@ -2,9 +2,30 @@ from typing import Union, List
 from collections import Counter, defaultdict
 from common.document_parser.ref_utils import make_dict, preprocess_text
 from common.document_parser.lib.ref_list import look_for_general
-
+import json
+from common import PACKAGE_DOCUMENT_PARSER_PATH
+import os
 
 ref_regex = make_dict()
+
+
+def check_ref_regex():
+    doc_types_path = os.path.join(
+        PACKAGE_DOCUMENT_PARSER_PATH, 'doc_types_list.json'
+    )
+
+    with open(doc_types_path) as f:
+        doc_types = json.load(f)
+
+    print("Listing regex keys that are not found in doc_types list")
+    for key in ref_regex:
+        # print("checking", key)
+        if not key in doc_types:
+            print(f"{key}")
+
+
+if __name__ == "__main__":
+    check_ref_regex()
 
 
 def bookend(_):
@@ -700,6 +721,7 @@ def test_navair():
     ]
     check_bookends(exp_result, "NAVAIR")
 
+
 def test_comdtpub():
     exp_result = [
         "COMDTPUB P5090.1",
@@ -709,13 +731,15 @@ def test_comdtpub():
         "COMDTPUB 16502.5",
     ]
     check_bookends(exp_result, "COMDTPUB")
-    
+
+
 def test_nfpa():
     needs_bookend = ["NFPA 70", "NFPA 493"]
     check_bookends(needs_bookend, "NFPA")
-    
+
     string = "National Fire Protection Association (NFPA) 496"
     check(string, "NFPA", "NFPA 496")
+
 
 def test_ombc():
     string = "OMB Circular A-4 OMB Circular A-130 OMB Circular No. A-123"
