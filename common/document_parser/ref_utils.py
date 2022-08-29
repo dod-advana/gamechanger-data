@@ -864,4 +864,17 @@ def make_dict():
         """
     )
 
+    ref_dict["NAVADMIN"] = pattern(
+        r"""
+            \b
+            NAVADMIN
+            \s?
+            (
+                [0-9]{2,7}
+                (?:/[0-9]{2,7})?                # optional group: forward slash, 2-7 digits
+            )
+            \b
+        """
+    )
+
     return ref_dict
