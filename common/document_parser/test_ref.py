@@ -9,8 +9,8 @@ ref_regex = make_dict()
 
 def bookend(_):
     """Add complex surrounding text to emulate real docs environment
-       For use if you know a doc name exists but don't have it used as a real reference
-       Trying to make the regex robust
+    For use if you know a doc name exists but don't have it used as a real reference
+    Trying to make the regex robust
     """
     return f"fake text 1-2.3a-b.c {_} 7-8.9x.y-z blah blah"
 
@@ -24,7 +24,7 @@ def check_bookends(needs_bookend: List[str], ref_type: str, exp_result=None):
         if len(needs_bookend) != len(exp_result):
             assert (
                 False
-            ),  f"ERR: for ref type `{ref_type}`: exp_result len is {len(exp_result)} and needs_bookend len is {len(needs_bookend)}"
+            ), f"ERR: for ref type `{ref_type}`: exp_result len is {len(exp_result)} and needs_bookend len is {len(needs_bookend)}"
 
     for i in range(len(needs_bookend)):
         text = bookend(needs_bookend[i])
@@ -52,7 +52,9 @@ def check(check_str, ref_type, exp_result: Union[int, str, List[str]]):
     if type(exp_result) == int:
         assert exp_result == num_results
     elif type(exp_result) == str:
-        assert num_results == 1, f"num results isn't 1  : found {num_results}. expected result: {exp_result}"
+        assert (
+            num_results == 1
+        ), f"num results isn't 1  : found {num_results}. expected result: {exp_result}"
         res = ref_dict.get(exp_result)
         assert res is not None, f"no ref_dict value for: {exp_result}"
     elif type(exp_result) == list and all(type(i) == str for i in exp_result):
@@ -121,7 +123,12 @@ def test_icpm():
 
 def test_cjcsi():
     string = "Chairman of the Joint Chiefs of Staff Instruction 1330.05A CHAIRMAN OF THE JOINT CHIEFS OF STAFF INSTRUCTION J-6 CJCSI 8010.01C (CJCSI) 3150.25"
-    exp_result = ["CJCSI 1330.05A", "CJCSI J-6", "CJCSI 8010.01C", "CJCSI 3150.25"]
+    exp_result = [
+        "CJCSI 1330.05A",
+        "CJCSI J-6",
+        "CJCSI 8010.01C",
+        "CJCSI 3150.25",
+    ]
     check(string, "CJCSI", exp_result)
 
 
@@ -643,20 +650,19 @@ def test_dha_procedures_manual():
     needs_bookend = [
         "DHA Procedures Manuals 1025.01",
         "DHA Procedures Manuals 6025.13, Volume 5",
-        "DHA Procedures Manuals 6025.13,  Volumes 1-7"
+        "DHA Procedures Manuals 6025.13,  Volumes 1-7",
     ]
     check_bookends(
-        needs_bookend,
-        kind,
-        [" ".join(x.split()) for x in needs_bookend]
+        needs_bookend, kind, [" ".join(x.split()) for x in needs_bookend]
     )
+
 
 def test_dha_tech_manual():
     kind = "DHA Technical Manuals"
     needs_bookend = [
         "DHA Technical Manuals 4165.01, Volume 7",
         "DHA Technical Manuals 4165.01 Volume, 7",  # 🥴
-        "DHA Technical Manuals 3200.02"
+        "DHA Technical Manuals 3200.02",
     ]
     check_bookends(needs_bookend, kind)
 
@@ -666,7 +672,7 @@ def test_dha_admin_inst():
     needs_bookend = [
         "DHA Administrative Instructions 3020.01, Change 1",
         "DHA Administrative Instructions 4000.01",
-        "DHA Administrative Instructions 034"
+        "DHA Administrative Instructions 034",
     ]
     check_bookends(needs_bookend, kind)
 
@@ -708,10 +714,11 @@ def test_navair():
         "NAVAIR 00-80T-106",
         "NAVAIR 01-75GAJ-1",
         "NAVAIR 01-1a-505-1",
-        'NAVAIR 16-1-529',
-        'NAVAIR 01-75GAA-9',
+        "NAVAIR 16-1-529",
+        "NAVAIR 01-75GAA-9",
     ]
     check_bookends(exp_result, "NAVAIR")
+
 
 def test_comdtpub():
     exp_result = [
@@ -722,18 +729,21 @@ def test_comdtpub():
         "COMDTPUB 16502.5",
     ]
     check_bookends(exp_result, "COMDTPUB")
-    
+
+
 def test_nfpa():
     needs_bookend = ["NFPA 70", "NFPA 493"]
     check_bookends(needs_bookend, "NFPA")
-    
+
     string = "National Fire Protection Association (NFPA) 496"
     check(string, "NFPA", "NFPA 496")
+
 
 def test_ombc():
     string = "OMB Circular A-4 OMB Circular A-130 OMB Circular No. A-123"
     exp_result = ["OMBC A-4", "OMBC A-130", "OMBC A-123"]
     check(string, "OMBC", exp_result)
+
 
 def test_milstd():
     needs_bookend = [
@@ -743,9 +753,13 @@ def test_milstd():
         "MIL-STD-235(D)",
     ]
     exp_result = [
-        "MIL-STD 2525D", "MIL-STD 882D", "MIL-STD 1472F", "MIL-STD 235D"
+        "MIL-STD 2525D",
+        "MIL-STD 882D",
+        "MIL-STD 1472F",
+        "MIL-STD 235D",
     ]
     check_bookends(needs_bookend, "MIL-STD", exp_result)
+
 
 def test_navedtra():
     exp_result = [
@@ -758,6 +772,7 @@ def test_navedtra():
     ]
     check_bookends(exp_result, "NAVEDTRA")
 
+
 def test_navmed():
     exp_result = [
         "NAVMED P-5010-4",
@@ -766,6 +781,7 @@ def test_navmed():
         "NAVMED 6150/50",
     ]
     check_bookends(exp_result, "NAVMED")
+
 
 def test_nehc_technical_manual():
     needs_bookend = [
@@ -786,6 +802,7 @@ def test_nehc_technical_manual():
     ]
     check_bookends(needs_bookend, "NEHC Technical Manual", exp_result)
 
+
 def test_navsea():
     needs_bookend = [
         "NAVSEA SS400-ABMMO-010",
@@ -796,7 +813,13 @@ def test_navsea():
     ]
     check_bookends(needs_bookend, "NAVSEA")
 
+
 def test_maradmin():
     needs_bookend = ["MARADMIN 391/07", "MARADMIN 213-16"]
     check_bookends(needs_bookend, "MARADMIN")
 
+
+def test_hr():
+    needs_bookend = ["H.R. 1234", "HR 567", "H. R. 78"]
+    exp_result = ["H.R. 1234", "H.R. 567", "H.R. 78"]
+    check_bookends(needs_bookend, "H.R.", exp_result)

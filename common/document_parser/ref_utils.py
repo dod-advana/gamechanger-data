@@ -854,7 +854,14 @@ def make_dict():
         """
     )
 
-
-
+    ref_dict["H.R."] = pattern(
+        r"""
+            \b
+            H\s?\.?\s?R\.?
+            \s?
+            ([0-9]{1,6})
+            \b
+        """
+    )
 
     return ref_dict
