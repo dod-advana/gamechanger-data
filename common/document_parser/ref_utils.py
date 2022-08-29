@@ -945,4 +945,15 @@ def make_dict():
         """
     )
 
+    # Standardization Agreement (STANAG) 
+    ref_dict["STANAG"] = pattern(
+        r"""
+            \b
+            STANAG
+            \s?
+            ([0-9]{3,6})
+            \b
+        """
+    )
+
     return ref_dict

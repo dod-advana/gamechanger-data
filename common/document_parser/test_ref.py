@@ -858,3 +858,9 @@ def test_cfetp():
         "CFETP 2M0X2",
     ]
     check_bookends(needs_bookend, "CFETP")
+
+
+def test_stanag():
+    needs_bookend = ["STANAG 4170", "[STANAG 4554]"]
+    exp_result = ["STANAG 4170", "STANAG 4554"]
+    check_bookends(needs_bookend, "STANAG", exp_result)
