@@ -931,4 +931,18 @@ def make_dict():
         """
     )
 
+    # Career Field Education and Training Plan (CFETP)
+    ref_dict["CFETP"] = pattern(
+        r"""
+            \b
+            CFETP
+            \s?
+            (
+                (?:[0-9][A-Z]){2}               # 2 iterations of: digit, letter
+                [0-9]                           # digit    
+            )
+            \b
+        """
+    )
+
     return ref_dict

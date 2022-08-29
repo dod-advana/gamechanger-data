@@ -848,3 +848,13 @@ def test_bumedinst():
         "BUMEDINST 12550.1",
     ]
     check_bookends(needs_bookend, "BUMEDINST")
+
+
+def test_cfetp():
+    needs_bookend = [
+        "CFETP 2A6X4",
+        "CFETP 2A6X4",
+        "CFETP 3E9X1",
+        "CFETP 2M0X2",
+    ]
+    check_bookends(needs_bookend, "CFETP")
