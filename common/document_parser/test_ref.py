@@ -12,7 +12,7 @@ ref_regex = make_dict()
 def check_ref_regex():
     """Check which ref dict keys are not known document types."""
     doc_types_path = os.path.join(
-        PACKAGE_DOCUMENT_PARSER_PATH, 'doc_types_list.json'
+        PACKAGE_DOCUMENT_PARSER_PATH, "doc_types_list.json"
     )
 
     with open(doc_types_path) as f:
@@ -22,6 +22,7 @@ def check_ref_regex():
     for key in ref_regex:
         if not key in doc_types:
             print(f"{key}")
+
 
 def bookend(_):
     """Add complex surrounding text to emulate real docs environment
@@ -889,17 +890,45 @@ def test_comnavresforcominst():
     ]
     check_bookends(needs_bookend, "COMNAVRESFORCOMINST")
 
+
 def test_opnavnote():
     needs_bookend = ["OPNAVNOTE 5450", "OPNAV notice (OPNAVNOTE) 9201"]
     exp_result = ["OPNAVNOTE 5450", "OPNAVNOTE 9201"]
     check_bookends(needs_bookend, "OPNAVNOTE", exp_result)
 
+
 def test_s_res():
     needs_bookend = [
-        "S. Res. 158", "S. Res. 4", "S.Res. 30", "S. Res. No. 30", "S Res 12"
+        "S. Res. 158",
+        "S. Res. 4",
+        "S.Res. 30",
+        "S. Res. No. 30",
+        "S Res 12",
     ]
     exp_result = [
-        "S. Res. 158", "S. Res. 4", "S. Res. 30", "S. Res. 30", "S. Res. 12"
+        "S. Res. 158",
+        "S. Res. 4",
+        "S. Res. 30",
+        "S. Res. 30",
+        "S. Res. 12",
     ]
     check_bookends(needs_bookend, "S. Res.", exp_result)
-    
+
+
+def test_pgi():
+    needs_bookend = [
+        "PGI 208.70",
+        "PGI 217",
+        "PGI 204.201",
+        "PGI Subpart 217.76",
+        "PGI 217.7405",
+    ]
+
+    exp_result = [
+        "PGI 208.70",
+        "PGI 217",
+        "PGI 204.201",
+        "PGI 217.76",
+        "PGI 217.7405",
+    ]
+    check_bookends(needs_bookend, "PGI", exp_result)
