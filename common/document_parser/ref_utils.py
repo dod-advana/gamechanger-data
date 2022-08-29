@@ -56,8 +56,8 @@ def make_dict():
         r"\b(?:administrative ?instruction|ai) ?([0-9]+)", re.IGNORECASE
     )
 
-    # United States Code
-    ref_dict["USC"] = re.compile(
+    # United States Code Title
+    ref_dict["Title"] = re.compile(
         r"""
             (?:
                 ([0-9]{1,3})
@@ -114,7 +114,7 @@ def make_dict():
         r"\b(?:cjcs ?manual|cjcsm) ?((?:[A-Z]+-)?[0-9]{4}\. ?[0-9]{1,3}[A-Z]?)",
         re.IGNORECASE,
     )
-    ref_dict["CJCSG"] = re.compile(
+    ref_dict["CJCS GDE"] = re.compile(
         r"\b(?:cjcs ?gde|cjcsg) ?((?:[A-Z]+-)?[0-9]{4} ?[A-Z]?)",
         re.IGNORECASE,
     )
@@ -610,7 +610,7 @@ def make_dict():
     )
 
     # Code of Federal Regulations
-    ref_dict["CFR"] = re.compile(
+    ref_dict["CFR Title"] = re.compile(
         r"""
             (?:title)?
             ([0-9]{1,3})
