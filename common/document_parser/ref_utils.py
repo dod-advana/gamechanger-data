@@ -970,4 +970,17 @@ def make_dict():
         """
     )
 
+    # OPNAV Notice (OPNAVNOTE)
+    ref_dict["OPNAVNOTE"] = pattern(
+        r"""
+            \b
+            OPNAV
+            \s?
+            NOTE
+            \s?
+            ([0-9]{3,6})
+            \b
+        """
+    )
+
     return ref_dict

@@ -872,3 +872,8 @@ def test_comnavresforcominst():
         "COMNAVRESFORCOMINST 3440.1E",
     ]
     check_bookends(needs_bookend, "COMNAVRESFORCOMINST")
+
+def test_opnavnote():
+    needs_bookend = ["OPNAVNOTE 5450", "OPNAV notice (OPNAVNOTE) 9201"]
+    exp_result = ["OPNAVNOTE 5450", "OPNAVNOTE 9201"]
+    check_bookends(needs_bookend, "OPNAVNOTE", exp_result)
