@@ -983,4 +983,15 @@ def make_dict():
         """
     )
 
+    # Resolution of the United States Senate
+    ref_dict["S. Res."] = pattern(
+        r"""
+            \b
+            S\s?\.?\s?
+            Res\s?\.?\s?
+            (?:No\.?\s?)?               # optional group: No, optional period, optional space
+            ([0-9]{1,5})
+        """
+    )
+
     return ref_dict
