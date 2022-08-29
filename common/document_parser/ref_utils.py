@@ -903,4 +903,19 @@ def make_dict():
         """
     )
 
+    # All Navy (ALNAV)
+    ref_dict["ALNAV"] = pattern(
+        r"""
+            \b
+            ALNAV
+            \s?
+            (
+                [0-9]{2,4}
+                /
+                [0-9]{2,4}
+            )
+            \b
+        """
+    )
+
     return ref_dict

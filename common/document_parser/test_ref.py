@@ -830,3 +830,7 @@ def test_ombm():
     needs_bookend = ["OMBM M-09-15", "OMB M-06-19"]
     exp_result = ["OMBM M-09-15", "OMBM M-06-19"]
     check_bookends(needs_bookend, "OMBM", exp_result)
+
+def test_alnav():
+    needs_bookend = ["ALNAV 044/20"]
+    check_bookends(needs_bookend, "ALNAV")
