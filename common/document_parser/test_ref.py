@@ -527,6 +527,7 @@ def test_jaginst():
     ref_type = "JAGINST"
     check(check_str, ref_type, 2)
 
+
 def test_comdtinst():
     string = "COMDTINST M1100.2 COMDTINST M10550.25 COMDTINST M7220.29 COMDTINST M1000.3A COMDTINST 1560.3 COMDTINST 7220.39 COMDTINST 12430.6B"
     exp_result = [
@@ -822,15 +823,28 @@ def test_navadmin():
     needs_bookend = ["NAVADMIN 367/10", "NAVADMIN 17117"]
     check_bookends(needs_bookend, "NAVADMIN")
 
+
 def test_milpersman():
     needs_bookend = ["MILPERSMAN 1220-410", "MILPERSMAN 1306-3000"]
     check_bookends(needs_bookend, "MILPERSMAN")
+
 
 def test_ombm():
     needs_bookend = ["OMBM M-09-15", "OMB M-06-19"]
     exp_result = ["OMBM M-09-15", "OMBM M-06-19"]
     check_bookends(needs_bookend, "OMBM", exp_result)
 
+
 def test_alnav():
     needs_bookend = ["ALNAV 044/20"]
     check_bookends(needs_bookend, "ALNAV")
+
+
+def test_bumedinst():
+    needs_bookend = [
+        "BUMEDINST 3440.10B",
+        "BUMEDINST 5510.10",
+        "BUMEDINST 12550.1C",
+        "BUMEDINST 12550.1",
+    ]
+    check_bookends(needs_bookend, "BUMEDINST")

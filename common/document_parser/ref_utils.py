@@ -918,4 +918,17 @@ def make_dict():
         """
     )
 
+    # US Navy Bureau of Medicine and Surgery Instruction (BUMEDINST)
+    ref_dict["BUMEDINST"] = pattern(
+        r"""
+            \b
+            BUMEDINST
+            \s?
+            (
+                [0-9]{3,6}
+                (?:\.[0-9]{1,4}[A-Z]?)?         # optional group: period, 1-4 digits, optional letter          
+            )
+        """
+    )
+
     return ref_dict
