@@ -877,4 +877,15 @@ def make_dict():
         """
     )
 
+    # Naval Personnel Manual
+    ref_dict["MILPERSMAN"] = pattern(
+        r"""
+            \b
+            MILPERSMAN
+            \s?
+            ([0-9]{2,5}-[0-9]{2,6})
+            \b
+        """
+    )
+
     return ref_dict

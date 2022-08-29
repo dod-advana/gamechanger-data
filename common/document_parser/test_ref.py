@@ -828,3 +828,7 @@ def test_hr():
 def test_navadmin():
     needs_bookend = ["NAVADMIN 367/10", "NAVADMIN 17117"]
     check_bookends(needs_bookend, "NAVADMIN")
+
+def test_milpersman():
+    needs_bookend = ["MILPERSMAN 1220-410", "MILPERSMAN 1306-3000"]
+    check_bookends(needs_bookend, "MILPERSMAN")
