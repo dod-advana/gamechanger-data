@@ -94,10 +94,22 @@ def make_dict():
     ref_dict["ICPM"] = re.compile(
         r"\bicpm ?([0-9]{4}- ?[0-9]{3}- ?[0-9]{1})", re.IGNORECASE
     )
-    ref_dict["CJCSI"] = re.compile(
-        r"\b(?:cjcs ?instruction|cjcsi) ?((?:[A-Z]+-)?[0-9]{4}\. ?[0-9]{1,3}[A-Z]?)",
-        re.IGNORECASE,
+
+    # Chairman of the Joint Chiefs of Staff (CJCS) Instruction
+    ref_dict["CJCSI"] = pattern(
+        r"""
+            (?:
+                \bCJCS\s?I(?:nstruction)?     # CJCSI or CJCS Instruction
+                |Chairman\sOf\s(?:The\s)?Joint\sChiefs?\sOf\sStaff\sInstruction
+            )
+            \s
+            (
+                [A-Z]-[0-9]
+                |[0-9]{1,6}\.(?:[0-9A-Z]{1,5}){1,2}     # 1-6 digits, period, then 1-2 iterations of: 1-5 digits/ letters
+            )
+        """
     )
+
     ref_dict["CJCSM"] = re.compile(
         r"\b(?:cjcs ?manual|cjcsm) ?((?:[A-Z]+-)?[0-9]{4}\. ?[0-9]{1,3}[A-Z]?)",
         re.IGNORECASE,
@@ -387,7 +399,22 @@ def make_dict():
         r"\b(?:JAGINST|JAG ?Instruction) ?([0-9]{4,5}(?:\.[0-9]{1,2}[A-Z]?)?)",
         re.IGNORECASE,
     )
-    ref_dict["OMBM"] = re.compile(r"(M-[0-9]{2}-[0-9]{2})", re.IGNORECASE)
+
+    # Office of Management and Budget (OMBM)
+    ref_dict["OMBM"] = pattern(
+        r"""
+            \b
+            OMBM?
+            \s?
+            (
+                (?:M-)?
+                [0-9]{1,3}
+                -
+                [0-9]{1,3}
+            )
+            \b
+        """
+    )
 
     # Office of Management and Budget (OMB) Circular
     ref_dict["OMBC"] = pattern(
@@ -608,7 +635,7 @@ def make_dict():
                 |Law                # or Law
             )
             \s
-            (?:No\.?)?               # optional group: No, optional period
+            (?:No\.?|Number)?       # optional group: No, optional period OR Number
             \s?
             (
                 [0-9]{1,4}
@@ -636,7 +663,8 @@ def make_dict():
         """
     )
 
-    # note the DHA crawlers have it pluralized, so the key should be plural so it can be found
+    # NOTE: the DHA crawlers have "manuals" (plural), so the key should be
+    # plural so it can be found
     ref_dict["DHA Procedures Manuals"] = pattern(
         r"""
             DHA
@@ -649,48 +677,42 @@ def make_dict():
                 [0-9]{1,6}
                 (?:\.[0-9]{1,4})?
                 (?:
-                    \,?
-                    \s{1,3} # account for too many spaces `,  Volumes 1-7` 
-                    (:?
-                        Vol\.?
-                        |Volumes?\,? # yes this exists for some reason `Volume, 7`
-                    )
+                    ,?
+                    \s?
+                    (?:Vol|Volumes?)
+                    [,.]?
                     \s?
                     [0-9]{1,3}
-                    (?:\-[0-9]{1-3})?
+                    (?:-[0-9]{1,3})?
                 )?
             )
         """
     )
 
-# TODO pretty much the same as procedures manuals
-    # # note the DHA crawlers have it pluralized, so the key should be plural so it can be found
-    # ref_dict["DHA Technical Manuals"] = pattern(
-    #     r"""
-    #         DHA
-    #         \s
-    #         Technical
-    #         \s
-    #         Manuals?
-    #         \s
-    #         (
-    #             [0-9]{1,6}
-    #             \.?
-    #             (?:[0-9]{1,4})?
-    #             (?:
-    #                 \,?
-    #                 \s{1,3}
-    #                 (:?
-    #                     Vol\.?
-    #                     |Volumes?\,? # yes this exists for some reason `Volume, 7`
-    #                 )?
-    #                 \s?
-    #                 [0-9]{1,3}
-    #                 (?:\-[0-9]{1-3})?
-    #             )?
-    #         )
-    #     """
-    # )
+    # note the DHA crawlers have "manuals" plural, so the key should be plural so it can be found
+    ref_dict["DHA Technical Manuals"] = pattern(
+        r"""
+            DHA
+            \s
+            Technical
+            \s
+            Manuals?
+            \s
+            (
+                [0-9]{1,6}
+                (?:\.[0-9]{1,4})?
+                (?:
+                    ,?
+                    \s?
+                    (?:Vol|Volumes?)
+                    [,.]?
+                    \s?
+                    [0-9]{1,3}
+                    (?:-[0-9]{1,3})?
+                )?
+            )
+        """
+    )
 
     # note the DHA crawlers have it pluralized, so the key should be plural so it can be found
     ref_dict["DHA Administrative Instructions"] = pattern(
@@ -715,13 +737,15 @@ def make_dict():
             BUPERSINST
             \s
             (
-                (?:BUPERSNOTE)?
-                \s?
+                (?:BUPERSNOTE\s?)?
                 [0-9]{1,6}
-                (?:\.[0-9]{1,4}[A-Z]?)?
-                \s?
-                (?:CH)?
-                (?:Vol [0-9]{1-3})?
+                (?:\.[0-9]{1,4}[A-BD-UW-Z]?)?       # We don't use [A-Z] here b/c it could match C or V which would miss the CH|VOL pattern
+                (?:
+                    \s?
+                    (?:CH|VOL)
+                    \s?
+                    [0-9]{1,3}
+                )?
             )
         """
     )
@@ -744,6 +768,218 @@ def make_dict():
             (?:\bNFPA|National\s?Fire\s?Protection\s?Association)
             \s?
             ([0-9]{1,5})
+        """
+    )
+
+    # DoD Military Standard
+    ref_dict["MIL-STD"] = pattern(
+        r"""
+        (?:
+            Mil(?:itary)?
+            \s?
+            -?
+            \s?
+            (?:Standard|STD)
+        )
+        \s?
+        -?
+        ( 
+            [0-9]{1,5}
+            [A-Z]?
+        )
+        """
+    )
+
+    # Naval Education and Training Command
+    ref_dict["NAVEDTRA"] = pattern(
+        r"""
+             NAVEDTRA
+             \s
+             (
+                [0-9]
+                [A-Z0-9]{0,6}
+                (?:-[A-Z0-9]{1,6}){0,2}       # optional group: hyphen, 1-6 digits/ letters
+            )
+        """
+    )
+
+    # Navy Medicine
+    ref_dict["NAVMED"] = pattern(
+        rf"""
+            (?:
+                NAVMED|Navy\s?Medicine
+            )
+            \s?
+            (
+                (?:P-)?
+                [0-9]{{1,4}}
+                (?:[/-][0-9]{{1,4}}){{0,3}}         # 0-3 iterations of: / or -, 1-4 digits
+            )
+        """
+    )
+
+    # Navy Environmental Health Center Technical Manual
+    ref_dict["NEHC Technical Manual"] = pattern(
+        r"""
+        (?:
+            NEHC|Navy\sEnvironmental\sHealth\sCenter
+        )
+        [ -]?
+        (?:
+            Technical\sManual
+            |T[ \.]?M\.?
+        )
+        \s?
+        (
+            (?:[A-Z]{2}\s?)?                # optional group: 2 letters, optional space
+            [0-9]{2,5}
+            (?:[\.-][0-9A-Z]{1,3}){0,2}     # 0-2 iterations of: period or hyphen, 1-3 digits/ letters
+        )
+        """
+    )
+
+    # Naval Sea Systems Command (NAVSEA)
+    ref_dict["NAVSEA"] = pattern(
+        r"""
+            NAVSEA
+            \s
+            (
+                (?:[A-Z]{1,2}[ -]?)?                # optional group: 1-2 letters, optional hyphen or space
+                [0-9]{1,4}
+                (?:-[0-9]{1,6}|-[A-Z]{1,6}){1,4}    # 1-4 iterations of: hyphen & 1-6 digits or hyphen & 1-6 letters
+                (?:                                 # optional group:
+                    \s?REV\s?[0-9]{1,2}                 # optional space, REV, optional space, 1-2 digits
+                    |\s?Vol{(?:ume)\s?[0-9]{1,2}}       # or: optional space, Vol or Volume, optional space, 1-2 digits
+                )?
+            )
+        """
+    )
+
+    # Marine Administrative Message
+    ref_dict["MARADMIN"] = pattern(
+        r"""
+            MARADMIN
+            \s
+            (
+                [0-9]{1,4}
+                [/-]
+                [0-9]{1,4}
+                \b
+            )
+        """
+    )
+
+    ref_dict["H.R."] = pattern(
+        r"""
+            \b
+            H\s?\.?\s?R\.?
+            \s?
+            ([0-9]{1,6})
+            \b
+        """
+    )
+
+    ref_dict["NAVADMIN"] = pattern(
+        r"""
+            \b
+            NAVADMIN
+            \s?
+            (
+                [0-9]{2,7}
+                (?:/[0-9]{2,7})?                # optional group: forward slash, 2-7 digits
+            )
+            \b
+        """
+    )
+
+    # Naval Personnel Manual
+    ref_dict["MILPERSMAN"] = pattern(
+        r"""
+            \b
+            MILPERSMAN
+            \s?
+            ([0-9]{2,5}-[0-9]{2,6})
+            \b
+        """
+    )
+
+    # All Navy (ALNAV)
+    ref_dict["ALNAV"] = pattern(
+        r"""
+            \b
+            ALNAV
+            \s?
+            (
+                [0-9]{2,4}
+                /
+                [0-9]{2,4}
+            )
+            \b
+        """
+    )
+
+    # US Navy Bureau of Medicine and Surgery Instruction (BUMEDINST)
+    ref_dict["BUMEDINST"] = pattern(
+        r"""
+            \b
+            BUMEDINST
+            \s?
+            (
+                [0-9]{3,6}
+                (?:\.[0-9]{1,4}[A-Z]?)?         # optional group: period, 1-4 digits, optional letter          
+            )
+        """
+    )
+
+    # Career Field Education and Training Plan (CFETP)
+    ref_dict["CFETP"] = pattern(
+        r"""
+            \b
+            CFETP
+            \s?
+            (
+                (?:[0-9][A-Z]){2}               # 2 iterations of: digit, letter
+                [0-9]                           # digit    
+            )
+            \b
+        """
+    )
+
+    # Standardization Agreement (STANAG) 
+    ref_dict["STANAG"] = pattern(
+        r"""
+            \b
+            STANAG
+            \s?
+            ([0-9]{3,6})
+            \b
+        """
+    )
+
+    ref_dict["COMNAVRESFORCOMINST"] = pattern(
+        r"""
+            \b
+            COMNAVRESFORCOMINST
+            \s?
+            (
+                [0-9]{3,6}
+                (?:\.[0-9]{1,3}[A-Z]?)?             # optional group: period, 1-3 digits, optional letter
+                (?:\s?CH[ -]?[0-9]{1,2})?           # optional group: optional space, CH, optional space or hyphen, 1-2 digits    
+            )
+            \b
+        """
+    )
+
+    # OPNAV Notice (OPNAVNOTE)
+    ref_dict["OPNAVNOTE"] = pattern(
+        r"""
+            \b
+            OPNAV
+            \s?
+            NOTE
+            \s?
+            ([0-9]{3,6})
+            \b
         """
     )
 
