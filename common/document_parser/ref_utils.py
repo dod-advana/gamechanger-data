@@ -823,4 +823,38 @@ def make_dict():
         """
     )
 
+    # Naval Sea Systems Command (NAVSEA)
+    ref_dict["NAVSEA"] = pattern(
+        r"""
+            NAVSEA
+            \s
+            (
+                (?:[A-Z]{1,2}[ -]?)?                # optional group: 1-2 letters, optional hyphen or space
+                [0-9]{1,4}
+                (?:-[0-9]{1,6}|-[A-Z]{1,6}){1,4}    # 1-4 iterations of: hyphen & 1-6 digits or hyphen & 1-6 letters
+                (?:                                 # optional group:
+                    \s?REV\s?[0-9]{1,2}                 # optional space, REV, optional space, 1-2 digits
+                    |\s?Vol{(?:ume)\s?[0-9]{1,2}}       # or: optional space, Vol or Volume, optional space, 1-2 digits
+                )?
+            )
+        """
+    )
+
+    # Marine Administrative Message
+    ref_dict["MARADMIN"] = pattern(
+        r"""
+            MARADMIN
+            \s
+            (
+                [0-9]{1,4}
+                [/-]
+                [0-9]{1,4}
+                \b
+            )
+        """
+    )
+
+
+
+
     return ref_dict

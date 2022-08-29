@@ -786,3 +786,17 @@ def test_nehc_technical_manual():
     ]
     check_bookends(needs_bookend, "NEHC Technical Manual", exp_result)
 
+def test_navsea():
+    needs_bookend = [
+        "NAVSEA SS400-ABMMO-010",
+        "NAVSEA SS400-AB-MMO-010 REV 1",
+        "NAVSEA SS400-AD-MMO-010",
+        "NAVSEA 389-0288",
+        "NAVSEA SS521-AG-PRO-010",
+    ]
+    check_bookends(needs_bookend, "NAVSEA")
+
+def test_maradmin():
+    needs_bookend = ["MARADMIN 391/07", "MARADMIN 213-16"]
+    check_bookends(needs_bookend, "MARADMIN")
+
