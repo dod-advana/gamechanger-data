@@ -449,7 +449,7 @@ def make_dict():
     )
 
     # Commandant Instruction (Coast Guard)
-    ref_dict["COMDTINST"] = re.compile(
+    ref_dict["CI"] = re.compile(
         r"""
             COMDTINST
             \s?

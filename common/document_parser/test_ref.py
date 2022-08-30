@@ -23,6 +23,13 @@ def check_ref_regex():
         if not key in doc_types:
             print(f"{key}")
 
+    print()
+
+    print("Listing doc_types from ES that are not handled in regex dict")
+    for d in doc_types:
+        if d not in ref_regex.keys():
+            print(d)
+
 
 def bookend(_):
     """Add complex surrounding text to emulate real docs environment
@@ -519,6 +526,10 @@ def test_secnavinst():
     ref_type = "SECNAVINST"
     check(check_str, ref_type, 2)
 
+    text = "436 SECNAVINST 5430.27C, supra note 15, ¶ 8.f., at 6."
+    exp = "SECNAVINST 5430.27C"
+    check(text, ref_type, exp)
+
 
 def test_secnav():
     check_str = "SECNAV M-1650.1 SECNAV M-5210.2"
@@ -546,17 +557,23 @@ def test_jaginst():
 
 
 def test_comdtinst():
+    kind = "CI"
+    text = "a. Operational Risk Management, COMDTINST 3500.3 (series).  This instruction standardizes the Coast Guard's Operational Risk Management policy and outlines procedures and responsibilities to implement it."
+    exp = "CI 3500.3"
+
+    check(text, kind, exp)
+
     string = "COMDTINST M1100.2 COMDTINST M10550.25 COMDTINST M7220.29 COMDTINST M1000.3A COMDTINST 1560.3 COMDTINST 7220.39 COMDTINST 12430.6B"
     exp_result = [
-        "COMDTINST M1100.2",
-        "COMDTINST M10550.25",
-        "COMDTINST M7220.29",
-        "COMDTINST M1000.3A",
-        "COMDTINST 1560.3",
-        "COMDTINST 7220.39",
-        "COMDTINST 12430.6B",
+        "CI M1100.2",
+        "CI M10550.25",
+        "CI M7220.29",
+        "CI M1000.3A",
+        "CI 1560.3",
+        "CI 7220.39",
+        "CI 12430.6B",
     ]
-    check(string, "COMDTINST", exp_result)
+    check(string, kind, exp_result)
 
 
 def test_dcms():
@@ -826,11 +843,25 @@ def test_navsea():
 
 
 def test_maradmin():
+    kind = "MARADMIN"
+    text = "(n) MARADMIN 488/11 FY12 Commandant's Career-Level Education Board"
+    exp = "MARADMIN 488/11"
+    check(text, kind, exp)
+
+    text = "435 Message 142126Z MAY 10, MARADMIN 276/10, Subj: Implementation of Command Inspections of SJA Offices, Law Centers and Legal Service Support Section (stating that SJA offices, Law Centers, and LSSSs had not previously been subject to inspection within the CGIP). "
+    exp = "MARADMIN 276/10"
+    check(text, kind, exp)
+
     needs_bookend = ["MARADMIN 391/07", "MARADMIN 213-16"]
     check_bookends(needs_bookend, "MARADMIN")
 
 
 def test_hr():
+    kind = "H.R."
+    text = "32 H.R. 12910, 90th Cong. (1st Sess. 1967) at 113 Cong. Rec. 27483, 27485 (daily ed. Oct. 2, 1967) (statements of Rep. Philbin and Rep. Bennett)."
+    exp = "H.R. 12910"
+    check(text, kind, exp)
+
     needs_bookend = ["H.R. 1234", "HR 567", "H. R. 78"]
     exp_result = ["H.R. 1234", "H.R. 567", "H.R. 78"]
     check_bookends(needs_bookend, "H.R.", exp_result)
@@ -1002,9 +1033,10 @@ def test_dcma_manual():
         "DCMA Manual 2303",
         "DCMA Manual 2303-01",
         "DCMA Manual 501-01",
-        "DCMA Manual 2501-12",        
+        "DCMA Manual 2501-12",
     ]
     check_bookends(needs_bookend, "DCMA Manual", exp_result)
+
 
 def test_cngbi():
     needs_bookend = [
