@@ -922,6 +922,7 @@ def test_pgi():
         "PGI 204.201",
         "PGI Subpart 217.76",
         "PGI 217.7405",
+        "PGI 242-7000(b)",
     ]
 
     exp_result = [
@@ -930,5 +931,6 @@ def test_pgi():
         "PGI 204.201",
         "PGI 217.76",
         "PGI 217.7405",
+        "PGI 242-7000b",
     ]
     check_bookends(needs_bookend, "PGI", exp_result)

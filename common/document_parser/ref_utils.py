@@ -994,15 +994,16 @@ def make_dict():
         """
     )
 
+    # Procedures, Guidance, and Information (PGI)
     ref_dict["PGI"] = pattern(
         r"""
             \b
             PGI
             \s?
-            (?:Subpart\s?)?             # optional group: Subpart, optional space
+            (?:Subpart\s?)?                       # optional group: Subpart, optional space
             (
                 [0-9]{2,5}
-                (?:\.[0-9]{1,5})?       # optional group: period, 1-5 digits
+                (?:[\.-][0-9]{1,5}[A-Z]?\b)?        # optional group: period or hyphen, 1-5 digits, optional letter, word boundary
             )
         """
     )
