@@ -1118,3 +1118,19 @@ def test_sffas():
     exp_result = ["SFFAS 4", "SFFAS 6", "SFFAS 35", "SFFAS 47", "SFFAS 46"]
     check_bookends(needs_bookend, "SFFAS", exp_result)
 
+def test_tradoc_regulations():
+    needs_bookend = [
+        "TRADOC Regulation 350-13",
+        "TRADOC Regulation 350-6",
+        "TR 10-5",
+        "TRADOC regulation 25-36", 
+        "TRADOC Regulation TR 350-70",
+    ]
+    exp_result = [
+        "TRADOC Regulations (TRs) 350-13",
+        "TRADOC Regulations (TRs) 350-6",
+        "TRADOC Regulations (TRs) 10-5",
+        "TRADOC Regulations (TRs) 25-36", 
+        "TRADOC Regulations (TRs) 350-70",
+    ]
+    check_bookends(needs_bookend, "TRADOC Regulations (TRs)", exp_result)

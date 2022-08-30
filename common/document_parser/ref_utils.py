@@ -1156,4 +1156,20 @@ def make_dict():
         """
     )
 
+    # TRADOC Regulations (TRs)
+    ref_dict["TRADOC Regulations (TRs)"] = pattern(
+        r"""
+            \b
+            (?:TR|TRADOC\sRegulations?)
+            \s?
+            (
+                [0-9]{1,4}
+                -
+                [0-9]{1,4}
+            )
+            \b
+        """
+    )
+
     return ref_dict
+
