@@ -318,9 +318,25 @@ def make_dict():
         re.IGNORECASE,
     )
     ref_dict["MCO"] = re.compile(
-        r"\b(?:MCO|Marine ?Corps ?Orders?) ?(P?[0-9]{4,5}[A-Z]?\.[0-9]{1,3}[A-Z]?)",
+        r"\b(?:MCO|Marine ?Corps ?Orders?) ?([0-9]{4,5}[A-Z]?\.[0-9]{1,3}[A-Z]?)",
         re.IGNORECASE,
     )
+
+    # Marine Corps Orders "P" Directives (MCO P)
+    ref_dict["MCO P"] = pattern(
+        r"""
+            \b
+            MCO[\s-]P
+            [\s-]?
+            (
+                [0-9]{2,6}
+                [A-Z]?
+                (?:\.[0-9]{1,3}[A-Z]?)      # optional group: period, 1-3 digits, optional letter
+            )
+            \b
+        """
+    )
+
     ref_dict["MCBUL"] = re.compile(
         r"\b(?:MCBUL|MARINE ?CORPS ?BULLETIN) ?([0-9]{4,5})",
         re.IGNORECASE,

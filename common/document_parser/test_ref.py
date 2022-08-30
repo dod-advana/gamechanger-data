@@ -443,7 +443,7 @@ def test_dafpd():
 
 
 def test_mco():
-    check_str = "MCO 4200.34 MCO P12000.11A MCO 7220R.39"
+    check_str = "MCO 4200.34 MCO 12000.11A MCO 7220R.39"
     ref_type = "MCO"
     check(check_str, ref_type, 3)
 
@@ -1046,3 +1046,15 @@ def test_amedp():
         "AMedP 7D",
     ]
     check_bookends(needs_bookend, "AMedP", exp_result)
+
+def test_mco_p():
+    needs_bookend = [
+        "MCO P 1200.7",
+        "MCO P 1200.7",
+        "MCO P 4030.19D",
+    ]
+    check_bookends(needs_bookend, "MCO P")
+
+    needs_bookend = ["Mco P 10110.31", "MCO P-5102.1B"]
+    exp_result = ["MCO P 10110.31", "MCO P 5102.1B"]
+    check_bookends(needs_bookend, "MCO P", exp_result)
