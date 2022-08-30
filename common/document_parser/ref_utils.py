@@ -1055,5 +1055,19 @@ def make_dict():
             ([0-9]{1,4})
         """
     )
+    
+    # Defense Contract Management Agency (DCMA) Manual
+    ref_dict["DCMA Manual"] = pattern(
+        r"""
+            DCMA
+            [\s-]?
+            Man(?:ual)?
+            [\s-]?
+            (
+                [0-9]{2,6}
+                (?:-[0-9]{2,6})?
+            )
+        """
+    )
 
     return ref_dict

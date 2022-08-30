@@ -968,6 +968,7 @@ def test_far():
         ["FAR 52.232-32", "FAR part 31"],
     )
 
+
 def test_hjres():
     needs_bookend = [
         "H.J. Res. 1234",
@@ -984,3 +985,23 @@ def test_hjres():
         "H.J.Res. 214",
     ]
     check_bookends(needs_bookend, "H.J.Res.", exp_result)
+
+
+def test_dcma_manual():
+    needs_bookend = [
+        "DCMA Manual 4201-26",
+        "DCMA-MAN 2101-01",
+        "DCMA-MAN 2303",
+        "DCMA Manual (DCMA-MAN) 2303-01",
+        "DCMA Manual 501-01",
+        "DCMA-Manual 2501-12",
+    ]
+    exp_result = [
+        "DCMA Manual 4201-26",
+        "DCMA Manual 2101-01",
+        "DCMA Manual 2303",
+        "DCMA Manual 2303-01",
+        "DCMA Manual 501-01",
+        "DCMA Manual 2501-12",        
+    ]
+    check_bookends(needs_bookend, "DCMA Manual", exp_result)
