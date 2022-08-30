@@ -967,3 +967,20 @@ def test_far():
         "FAR",
         ["FAR 52.232-32", "FAR part 31"],
     )
+
+def test_hjres():
+    needs_bookend = [
+        "H.J. Res. 1234",
+        "H.J. Res. 59",
+        "H.J, Res. 465",
+        "H.J. Res 148",
+        "HJ Res 214",
+    ]
+    exp_result = [
+        "H.J.Res. 1234",
+        "H.J.Res. 59",
+        "H.J.Res. 465",
+        "H.J.Res. 148",
+        "H.J.Res. 214",
+    ]
+    check_bookends(needs_bookend, "H.J.Res.", exp_result)

@@ -945,7 +945,7 @@ def make_dict():
         """
     )
 
-    # Standardization Agreement (STANAG) 
+    # Standardization Agreement (STANAG)
     ref_dict["STANAG"] = pattern(
         r"""
             \b
@@ -1025,7 +1025,7 @@ def make_dict():
         """
     )
 
-    # Federal Acquisition Regulation (FAR) 
+    # Federal Acquisition Regulation (FAR)
     ref_dict["FAR"] = pattern(
         r"""
             \b
@@ -1039,6 +1039,20 @@ def make_dict():
                 |
                 Appendix\s?[A-Z]
             )
+        """
+    )
+
+    # Joint Resolution Originating in the House of Representatives (H.J.Res)
+    ref_dict["H.J.Res."] = pattern(
+        r"""
+            \b
+            H
+            \s?[,\.]?\s?            # allow commas b/c of OCR errors   
+            J
+            \s?[,\.]?\s?            # allow commas b/c of OCR errors
+            Res
+            \.?\s?
+            ([0-9]{1,4})
         """
     )
 
