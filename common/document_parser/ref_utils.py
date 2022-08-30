@@ -945,7 +945,7 @@ def make_dict():
         """
     )
 
-    # Standardization Agreement (STANAG) 
+    # Standardization Agreement (STANAG)
     ref_dict["STANAG"] = pattern(
         r"""
             \b
@@ -980,6 +980,93 @@ def make_dict():
             \s?
             ([0-9]{3,6})
             \b
+        """
+    )
+
+    # Resolution of the United States Senate
+    ref_dict["S. Res."] = pattern(
+        r"""
+            \b
+            S\s?\.?\s?
+            Res\s?\.?\s?
+            (?:No\.?\s?)?               # optional group: No, optional period, optional space
+            ([0-9]{1,5})
+        """
+    )
+
+    # Procedures, Guidance, and Information (PGI)
+    ref_dict["PGI"] = pattern(
+        r"""
+            \b
+            PGI
+            \s?
+            (?:Subpart\s?)?                       # optional group: Subpart, optional space
+            (
+                [0-9]{2,5}
+                (?:[\.-][0-9]{1,5}[A-Z]?\b)?      # optional group: period or hyphen, 1-5 digits, optional letter, word boundary
+            )
+        """
+    )
+
+    # Defense Federal Acquisition Regulation Supplement (DFARS)
+    ref_dict["DFARS"] = pattern(
+        r"""
+            \b
+            (?:DFARS|Defense\sFederal\sAcquisition\sRegulation\sSupplement)
+            \s?
+            (                                       # 2 types of doc nums: (part/ subpart) digits, or appendix with letter
+                (?:(?:Sub)?Part|Clauses?)?          # optional group: Part or Subpart or Clause or Clauses
+                \s?
+                [0-9]{1,5}
+                (?:[-\.][0-9]{1,5}){0,3}            # 0-3 iterations of: hyphen or period, 1-5 digits    
+                |
+                Appendix\s?[A-Z]
+            )
+        """
+    )
+
+    # Federal Acquisition Regulation (FAR)
+    ref_dict["FAR"] = pattern(
+        r"""
+            \b
+            (?:FAR|Federal\sAcquisition\sRegulation)
+            \s?
+            (                                       # 2 types of doc nums: (part/ subpart) digits, or appendix with letter
+                (?:(?:Sub)?Part|Clauses?)?          # optional group: Part or Subpart or Clause or Clauses
+                \s?
+                [0-9]{1,5}
+                (?:[-\.][0-9]{1,5}){0,3}            # 0-3 iterations of: hyphen or period, 1-5 digits    
+                |
+                Appendix\s?[A-Z]
+            )
+        """
+    )
+
+    # Joint Resolution Originating in the House of Representatives (H.J.Res)
+    ref_dict["H.J.Res."] = pattern(
+        r"""
+            \b
+            H
+            \s?[,\.]?\s?            # allow commas b/c of OCR errors   
+            J
+            \s?[,\.]?\s?            # allow commas b/c of OCR errors
+            Res
+            \.?\s?
+            ([0-9]{1,4})
+        """
+    )
+    
+    # Defense Contract Management Agency (DCMA) Manual
+    ref_dict["DCMA Manual"] = pattern(
+        r"""
+            DCMA
+            [\s-]?
+            Man(?:ual)?
+            [\s-]?
+            (
+                [0-9]{2,6}
+                (?:-[0-9]{2,6})?
+            )
         """
     )
 
