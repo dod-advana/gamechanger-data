@@ -349,9 +349,18 @@ def make_dict():
         r"\b(?:NAVMC ?DIR|NAVMC ?Directive) ?([0-9]{4}.[0-9]{1,3}[A-Z]?)",
         re.IGNORECASE,
     )
-    ref_dict["MCRP"] = re.compile(
-        r"\b(?:MCRP|MARINE ?CORPS ?Reference ?Publication) ?([0-9]{1,2} ?- ?[0-9]{1,2}[A-Z]?(?:\.[0-9]{1-2}[A-Z]?)?)",
-        re.IGNORECASE,
+    ref_dict["MCRP"] = pattern(
+        r"""
+            (?:MCRP|Marine\s?Corps\s?Reference\s?Publication)
+            \s?
+            (
+                [0-9]{1,2}
+                \s?-\s?
+                [0-9]{1,2}
+                [A-Z]?
+                (?:\.[0-9]{1,2}[A-Z]?)?
+            )
+        """
     )
     ref_dict["MCTP"] = re.compile(
         r"\b(?:MCTP|MARINE ?CORPS ?Tactical ?Publication) ?([0-9]{1,2} ?- ?[0-9]{2}[A-Z])",
