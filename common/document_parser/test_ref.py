@@ -1057,3 +1057,24 @@ def test_s_con_res():
     needs_bookend = ["S. Con. Res. 5", "S Con Res 14", "S.Con.Res 12"]
     exp_result = ["S.Con.Res. 5", "S.Con.Res. 14", "S.Con.Res. 12"]
     check_bookends(needs_bookend, "S.Con.Res.", exp_result)
+
+def test_amedp():
+    needs_bookend = [
+        "Allied   MedicalPublication [AMedP]-7.5",
+        "Allied Medical Publication (AMedP-6)",
+        "AMedP-1.10, Edition A, Version 1",
+        "AMedP-7[D]",
+        "Allied Medical Publication (AMedP)-8(C)",
+        "AMedP-7.3, Edition A, Version 1",
+        "Nuclear Environments—AMedP-7(D)",
+    ]
+    exp_result = [
+        "AMedP 7.5", 
+        "AMedP 6",
+        "AMedP 1.10, Edition A, Version 1",
+        "AMedP 7[D]",
+        "AMedP 8C",
+        "AMedP 7.3, Edition A, Version 1",
+        "AMedP 7D",
+    ]
+    check_bookends(needs_bookend, "AMedP", exp_result)
