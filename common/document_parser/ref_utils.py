@@ -1003,7 +1003,23 @@ def make_dict():
             (?:Subpart\s?)?                       # optional group: Subpart, optional space
             (
                 [0-9]{2,5}
-                (?:[\.-][0-9]{1,5}[A-Z]?\b)?        # optional group: period or hyphen, 1-5 digits, optional letter, word boundary
+                (?:[\.-][0-9]{1,5}[A-Z]?\b)?      # optional group: period or hyphen, 1-5 digits, optional letter, word boundary
+            )
+        """
+    )
+
+    # Defense Federal Acquisition Regulation Supplement (DFARS)
+    ref_dict["DFARS"] = pattern(
+        r"""
+            \b
+            (?:DFARS|Defense\sFederal\sAcquisition\sRegulation\sSupplement)
+            \s?
+            (                                       # 2 types of doc nums: (part/ subpart) digits, or appendix with letter
+                (?:(?:Sub)?Part\s?)?                # optional group: Part or Subpart, optional space
+                [0-9]{1,5}
+                (?:[-\.][0-9]{1,5}){0,3}            # 0-3 iterations of: hyphen or period, 1-5 digits    
+                |
+                Appendix\s?[A-Z]
             )
         """
     )

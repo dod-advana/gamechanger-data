@@ -924,7 +924,6 @@ def test_pgi():
         "PGI 217.7405",
         "PGI 242-7000(b)",
     ]
-
     exp_result = [
         "PGI 208.70",
         "PGI 217",
@@ -934,3 +933,20 @@ def test_pgi():
         "PGI 242-7000b",
     ]
     check_bookends(needs_bookend, "PGI", exp_result)
+
+
+def test_dfars():
+    needs_bookend = [
+        "DFARS Subpart 227.3",
+        "DFARS Part 6",
+        "DFARS Part 209",
+        "DFARS 232.10",
+        "DFARS 232.7002",
+        "DFARS 232.1003-70",
+        "DFARS 252.232-7008",
+        "DFARS 208.7003-1",
+        "DFARS 252.242-7005",
+        "DFARS Appendix F",
+    ]
+    check_bookends(needs_bookend, "DFARS")
+    check_bookends(["DFARS232.501-1"], "DFARS", ["DFARS 232.501-1"])
