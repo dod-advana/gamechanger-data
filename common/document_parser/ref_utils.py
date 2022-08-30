@@ -1208,6 +1208,20 @@ def make_dict():
         """
     )
 
+    # Reserve Personnel Manual (RESPERSMAN)
+    ref_dict["RESPERSMAN"] = pattern(
+        r"""
+            (?:RESPERS|Reserve\sPersonnel)
+            \s?
+            M(?:an(?:ual)?)?        # M or Man or Manual
+            [\s-]
+            (
+                [0-9]{3,5}
+                (?:[\.-][0-9]{1,4})?
+            )
+        """
+    )
+
 
 
     return ref_dict

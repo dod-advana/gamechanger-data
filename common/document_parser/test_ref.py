@@ -1199,5 +1199,11 @@ def test_bumed_note():
     check_bookends(needs_bookend, "BUMEDNOTE", exp_result)
 
 
+def test_respersman():
+    needs_bookend = ["RESPERSMAN 1570-010", "RESPERS M-1001.5"]
+    exp_result = ["RESPERSMAN 1570-010", "RESPERSMAN 1001.5"]
+    check_bookends(needs_bookend, "RESPERSMAN", exp_result)
+
+
 if __name__ == "__main__":
     run_all_tests(sys.modules[__name__])
