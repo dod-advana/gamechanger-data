@@ -1005,3 +1005,17 @@ def test_dcma_manual():
         "DCMA Manual 2501-12",        
     ]
     check_bookends(needs_bookend, "DCMA Manual", exp_result)
+
+def test_cngbi():
+    needs_bookend = [
+        "CNGBI 1400.25, Vol. 630",
+        "CNGBI 1400.25, Volume 303",
+    ]
+    check_bookends(needs_bookend, "CNGBI")
+
+    needs_bookend = [
+        "CNGBI  1002.01A",
+        "Chief  National  Guard  Bureau  Instruction  (CNGBI) 0402.01"
+    ]
+    exp_result = ["CNGBI 1002.01A", "CNGBI 0402.01"]
+    check_bookends(needs_bookend, "CNGBI", exp_result)

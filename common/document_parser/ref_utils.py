@@ -1070,4 +1070,19 @@ def make_dict():
         """
     )
 
+    # Chief National Guard Bureau Instructions (CNGBI)
+    ref_dict["CNGBI"] = pattern(
+        r"""
+            (?:CNGBI|Chief\sNational\sGuard\sBureau\sInstructions?)
+            \s?
+            (
+                [0-9]{3,5}
+                \.
+                [0-9]{1,5}
+                [A-Z]?
+                (?:,?\s?Vol(?:ume|\.)?\s?[0-9]{1,4})?   # optional group: optional comma, optional space, Vol or Vol. or Volume, optional space, 1-4 digits
+            )
+        """
+    )
+
     return ref_dict
