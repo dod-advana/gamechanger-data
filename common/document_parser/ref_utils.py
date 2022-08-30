@@ -1015,7 +1015,8 @@ def make_dict():
             (?:DFARS|Defense\sFederal\sAcquisition\sRegulation\sSupplement)
             \s?
             (                                       # 2 types of doc nums: (part/ subpart) digits, or appendix with letter
-                (?:(?:Sub)?Part\s?)?                # optional group: Part or Subpart, optional space
+                (?:(?:Sub)?Part|Clauses?)?          # optional group: Part or Subpart or Clause or Clauses
+                \s?
                 [0-9]{1,5}
                 (?:[-\.][0-9]{1,5}){0,3}            # 0-3 iterations of: hyphen or period, 1-5 digits    
                 |
@@ -1023,5 +1024,5 @@ def make_dict():
             )
         """
     )
-
+    
     return ref_dict

@@ -947,6 +947,8 @@ def test_dfars():
         "DFARS 208.7003-1",
         "DFARS 252.242-7005",
         "DFARS Appendix F",
+        "DFARS clause 252.232-7012"
     ]
     check_bookends(needs_bookend, "DFARS")
     check_bookends(["DFARS232.501-1"], "DFARS", ["DFARS 232.501-1"])
+
