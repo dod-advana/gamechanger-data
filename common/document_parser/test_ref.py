@@ -80,7 +80,7 @@ def check(check_str, ref_type, exp_result: Union[int, str, List[str]]):
             num_results == 1
         ), f"num results isn't 1  : found {num_results}. expected result: {exp_result}"
         res = ref_dict.get(exp_result)
-        assert res is not None, f"no ref_dict value for: {exp_result}"
+        assert res is not None, f"no ref_dict value for: {exp_result}, num results was {num_results}, keys: {ref_dict.keys()}"
     elif type(exp_result) == list and all(type(i) == str for i in exp_result):
         assert Counter(exp_result) == ref_dict
     else:
