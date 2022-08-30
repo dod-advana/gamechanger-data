@@ -557,17 +557,23 @@ def test_jaginst():
 
 
 def test_comdtinst():
+    kind = "CI"
+    text = "a. Operational Risk Management, COMDTINST 3500.3 (series).  This instruction standardizes the Coast Guard's Operational Risk Management policy and outlines procedures and responsibilities to implement it."
+    exp = "CI 3500.3"
+
+    check(text, kind, exp)
+
     string = "COMDTINST M1100.2 COMDTINST M10550.25 COMDTINST M7220.29 COMDTINST M1000.3A COMDTINST 1560.3 COMDTINST 7220.39 COMDTINST 12430.6B"
     exp_result = [
-        "COMDTINST M1100.2",
-        "COMDTINST M10550.25",
-        "COMDTINST M7220.29",
-        "COMDTINST M1000.3A",
-        "COMDTINST 1560.3",
-        "COMDTINST 7220.39",
-        "COMDTINST 12430.6B",
+        "CI M1100.2",
+        "CI M10550.25",
+        "CI M7220.29",
+        "CI M1000.3A",
+        "CI 1560.3",
+        "CI 7220.39",
+        "CI 12430.6B",
     ]
-    check(string, "COMDTINST", exp_result)
+    check(string, kind, exp_result)
 
 
 def test_dcms():
@@ -1027,9 +1033,10 @@ def test_dcma_manual():
         "DCMA Manual 2303",
         "DCMA Manual 2303-01",
         "DCMA Manual 501-01",
-        "DCMA Manual 2501-12",        
+        "DCMA Manual 2501-12",
     ]
     check_bookends(needs_bookend, "DCMA Manual", exp_result)
+
 
 def test_cngbi():
     needs_bookend = [
