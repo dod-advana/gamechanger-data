@@ -1055,7 +1055,7 @@ def make_dict():
             ([0-9]{1,4})
         """
     )
-    
+
     # Defense Contract Management Agency (DCMA) Manual
     ref_dict["DCMA Manual"] = pattern(
         r"""
@@ -1082,6 +1082,20 @@ def make_dict():
                 [A-Z]?
                 (?:,?\s?Vol(?:ume|\.)?\s?[0-9]{1,4})?   # optional group: optional comma, optional space, Vol or Vol. or Volume, optional space, 1-4 digits
             )
+        """
+    )
+
+    # Concurrent Resolution introduced by the Senate
+    ref_dict["S.Con.Res."] = pattern(
+        r"""
+            \b
+            S
+            \.?\s?
+            Con
+            \.?\s?
+            Res
+            \.?\s?
+            ([0-9]{1,3})
         """
     )
 

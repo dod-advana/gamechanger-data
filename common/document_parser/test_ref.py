@@ -1044,3 +1044,9 @@ def test_cngbi():
     ]
     exp_result = ["CNGBI 1002.01A", "CNGBI 0402.01"]
     check_bookends(needs_bookend, "CNGBI", exp_result)
+
+
+def test_s_con_res():
+    needs_bookend = ["S. Con. Res. 5", "S Con Res 14", "S.Con.Res 12"]
+    exp_result = ["S.Con.Res. 5", "S.Con.Res. 14", "S.Con.Res. 12"]
+    check_bookends(needs_bookend, "S.Con.Res.", exp_result)
