@@ -438,7 +438,6 @@ def make_dict():
             COMDTINST
             \s?
             (
-                [A-Z]?
                 [0-9]{3,6}
                 (?:\.[0-9]{1,4}[A-Z]?)?     # optional group: period, 1-4 digits, letter (optional)
             )
@@ -455,6 +454,19 @@ def make_dict():
                 [A-Z]?
                 [0-9]{2,6}
                 (?:\.[0-9]{1,3}[A-Z]?)?     # optional group: period, 1-3 digits, optional letter
+            )
+        """
+    )
+
+    # Commandant Instruction Manual (Coast Guard)
+    ref_dict["CIM"] = pattern(
+        r"""
+            COMDTINST
+            \s?
+            M
+            (
+                [0-9]{3,6}
+                (?:\.[0-9]{1,4}[A-Z]?)?     # optional group: period, 1-4 digits, letter (optional)
             )
         """
     )

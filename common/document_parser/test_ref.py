@@ -560,20 +560,34 @@ def test_comdtinst():
     kind = "CI"
     text = "a. Operational Risk Management, COMDTINST 3500.3 (series).  This instruction standardizes the Coast Guard's Operational Risk Management policy and outlines procedures and responsibilities to implement it."
     exp = "CI 3500.3"
+    check(text, kind, exp)
 
+    text = "h.Coastal Zone Management, Federal Consistency Procedures, COMDTINST 16004.2 (series).  This instruction establishes policy, responsibilities, and procedures for Coast Guard implementation of the Coastal Zone Management Act and other related laws and regulations. "
+    exp = "CI 16004.2"
+    check(text, kind, exp)
+
+    text = "i.Aids to Navigation (ATON) Battery Release Reporting Requirements, COMDTINST 16478.10 (series).  This instruction addresses the Coast Guard’s responsibilities associated with reporting the discovery of ATON battery sites and sets policy for internal and external reporting."
+    exp = "CI 16478.10"
     check(text, kind, exp)
 
     string = "COMDTINST M1100.2 COMDTINST M10550.25 COMDTINST M7220.29 COMDTINST M1000.3A COMDTINST 1560.3 COMDTINST 7220.39 COMDTINST 12430.6B"
     exp_result = [
-        "CI M1100.2",
-        "CI M10550.25",
-        "CI M7220.29",
-        "CI M1000.3A",
         "CI 1560.3",
         "CI 7220.39",
         "CI 12430.6B",
     ]
     check(string, kind, exp_result)
+
+
+def test_comdinst_manual():
+    kind = "CIM"
+    text = "Casualty Reporting (CASREP) Procedures (Materiel), COMDTINST M3501.3 (series).  This instruction establishes policy and prescribes procedures for all Coast Guard units to follow when submitting materiel casualty reports (CASREPs)."
+    exp = "CIM 3501.3"
+    check(text, kind, exp)
+
+    text = "Tower Manual, COMDTINST M11000.4 (series).  This manual defines Coast Guard policy and criteria for the preservation, inspection, and maintenance of towers (other than ATON structures). "
+    exp = "CIM 11000.4"
+    check(text, kind, exp)
 
 
 def test_dcms():
@@ -1058,6 +1072,7 @@ def test_s_con_res():
     exp_result = ["S.Con.Res. 5", "S.Con.Res. 14", "S.Con.Res. 12"]
     check_bookends(needs_bookend, "S.Con.Res.", exp_result)
 
+
 def test_amedp():
     needs_bookend = [
         "Allied   MedicalPublication [AMedP]-7.5",
@@ -1069,7 +1084,7 @@ def test_amedp():
         "Nuclear Environments—AMedP-7(D)",
     ]
     exp_result = [
-        "AMedP 7.5", 
+        "AMedP 7.5",
         "AMedP 6",
         "AMedP 1.10, Edition A, Version 1",
         "AMedP 7[D]",
