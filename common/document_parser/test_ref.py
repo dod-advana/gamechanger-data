@@ -478,6 +478,10 @@ def test_mcrp():
     ref_type = "MCRP"
     check(check_str, ref_type, 3)
 
+    text = "MCRP 3-20F.7, Marine Air Traffic Control Detachment Handbook, 8 May 2019"
+    exp = "MCRP 3-20F.7"
+    check(text, ref_type, exp)
+
 
 def test_mcwp():
     check_str = "MCWP 3-15.7 MCWP 11-10 MCWP 3-41.1A MCWP 0-1"
@@ -1093,6 +1097,7 @@ def test_amedp():
         "AMedP 7D",
     ]
     check_bookends(needs_bookend, "AMedP", exp_result)
+
 
 def test_mco_p():
     needs_bookend = [
