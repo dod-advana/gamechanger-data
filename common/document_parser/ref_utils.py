@@ -1196,5 +1196,19 @@ def make_dict():
         """
     )
 
+    # Bureau of Medicine and Surgery (BUMED) Notice (BUMEDNOTE)
+    ref_dict["BUMEDNOTE"] = pattern(
+        r"""
+            \b
+            (?:BUMED|Bureau\sOf\sMedicine\sAnd\sSurgery)
+            \s?
+            Not(?:e|ice)            # Note or Notice
+            \s?
+            ([0-9]{2,6})
+        """
+    )
+
+
+
     return ref_dict
 

@@ -29,6 +29,7 @@ def run_all_tests(mod):
         if name.startswith("test_") and str(inspect.signature(value) == "()"):
             value()
 
+
 def check_ref_regex():
     """Check which ref dict keys are not known document types."""
     doc_types_path = os.path.join(
@@ -100,7 +101,9 @@ def check(check_str, ref_type, exp_result: Union[int, str, List[str]]):
             num_results == 1
         ), f"num results isn't 1  : found {num_results}. expected result: {exp_result}"
         res = ref_dict.get(exp_result)
-        assert res is not None, f"no ref_dict value for: {exp_result}, num results was {num_results}, keys: {ref_dict.keys()}"
+        assert (
+            res is not None
+        ), f"no ref_dict value for: {exp_result}, num results was {num_results}, keys: {ref_dict.keys()}"
     elif type(exp_result) == list and all(type(i) == str for i in exp_result):
         assert Counter(exp_result) == ref_dict
     else:
@@ -1085,7 +1088,7 @@ def test_cngbi():
 
     needs_bookend = [
         "CNGBI  1002.01A",
-        "Chief  National  Guard  Bureau  Instruction  (CNGBI) 0402.01"
+        "Chief  National  Guard  Bureau  Instruction  (CNGBI) 0402.01",
     ]
     exp_result = ["CNGBI 1002.01A", "CNGBI 0402.01"]
     check_bookends(needs_bookend, "CNGBI", exp_result)
@@ -1143,22 +1146,24 @@ def test_sffas():
     exp_result = ["SFFAS 4", "SFFAS 6", "SFFAS 35", "SFFAS 47", "SFFAS 46"]
     check_bookends(needs_bookend, "SFFAS", exp_result)
 
+
 def test_tradoc_regulations():
     needs_bookend = [
         "TRADOC Regulation 350-13",
         "TRADOC Regulation 350-6",
         "TR 10-5",
-        "TRADOC regulation 25-36", 
+        "TRADOC regulation 25-36",
         "TRADOC Regulation TR 350-70",
     ]
     exp_result = [
         "TRADOC Regulations (TRs) 350-13",
         "TRADOC Regulations (TRs) 350-6",
         "TRADOC Regulations (TRs) 10-5",
-        "TRADOC Regulations (TRs) 25-36", 
+        "TRADOC Regulations (TRs) 25-36",
         "TRADOC Regulations (TRs) 350-70",
     ]
     check_bookends(needs_bookend, "TRADOC Regulations (TRs)", exp_result)
+
 
 def test_dcma_instruction():
     needs_bookend = [
@@ -1166,17 +1171,33 @@ def test_dcma_instruction():
         "DCMA Instruction (DCMA-INST) 709",
         "Defense Contract Management Agency ( DCMA ) Instruction 8210.1",
         "DCMA-INST 815",
-        "DCMA INST 8210.1C"
+        "DCMA INST 8210.1C",
     ]
     exp_result = [
         "DCMA Instruction 8210.1C",
         "DCMA Instruction 709",
         "DCMA Instruction 8210.1",
         "DCMA Instruction 815",
-        "DCMA Instruction 8210.1C"
+        "DCMA Instruction 8210.1C",
     ]
     check_bookends(needs_bookend, "DCMA Instruction", exp_result)
 
 
-if __name__ == '__main__':
+def test_bumed_note():
+    needs_bookend = [
+        "BUMEDNOTE 1520",
+        "Bureau of Medicine and Surgery (BUMED) Notice 1524",
+        "BUMED Note 6110",
+        "BUMED Notice 1562",
+    ]
+    exp_result = [
+        "BUMEDNOTE 1520",
+        "BUMEDNOTE 1524",
+        "BUMEDNOTE 6110",
+        "BUMEDNOTE 1562",
+    ]
+    check_bookends(needs_bookend, "BUMEDNOTE", exp_result)
+
+
+if __name__ == "__main__":
     run_all_tests(sys.modules[__name__])
