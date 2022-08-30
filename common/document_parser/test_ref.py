@@ -1,13 +1,33 @@
+"""Test reference regex patterns from ref_utils.py
+
+When used as a script, all functions starting with "test_" will run.
+If there are no errors, the tests passed.
+"""
+
+import json
+import os
 from typing import Union, List
 from collections import Counter, defaultdict
+import inspect
+import sys
 from common.document_parser.ref_utils import make_dict, preprocess_text
 from common.document_parser.lib.ref_list import look_for_general
-import json
 from common import PACKAGE_DOCUMENT_PARSER_PATH
-import os
+
 
 ref_regex = make_dict()
 
+
+def run_all_tests(mod):
+    """Run all functions in this file that start with "test_".
+
+    Args:
+        mod (module): Use sys.modules[__name__]
+    """
+    all_functions = inspect.getmembers(mod, inspect.isfunction)
+    for name, value in all_functions:
+        if name.startswith("test_") and str(inspect.signature(value) == "()"):
+            value()
 
 def check_ref_regex():
     """Check which ref dict keys are not known document types."""
@@ -1156,3 +1176,7 @@ def test_dcma_instruction():
         "DCMA Instruction 8210.1C"
     ]
     check_bookends(needs_bookend, "DCMA Instruction", exp_result)
+
+
+if __name__ == '__main__':
+    run_all_tests(sys.modules[__name__])
