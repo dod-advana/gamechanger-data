@@ -19,9 +19,15 @@ def check_ref_regex():
 
     print("Listing regex keys that are not found in doc_types list")
     for key in ref_regex:
-        # print("checking", key)
         if not key in doc_types:
             print(f"{key}")
+
+    print()
+
+    print("Listing doc_types from ES that are not handled in regex dict")
+    for d in doc_types:
+        if d not in ref_regex.keys():
+            print(d)
 
 
 if __name__ == "__main__":
@@ -523,6 +529,10 @@ def test_secnavinst():
     ref_type = "SECNAVINST"
     check(check_str, ref_type, 2)
 
+    text = "436 SECNAVINST 5430.27C, supra note 15, ¶ 8.f., at 6."
+    exp = "SECNAVINST 5430.27C"
+    check(text, ref_type, exp)
+
 
 def test_secnav():
     check_str = "SECNAV M-1650.1 SECNAV M-5210.2"
@@ -830,11 +840,25 @@ def test_navsea():
 
 
 def test_maradmin():
+    kind = "MARADMIN"
+    text = "(n) MARADMIN 488/11 FY12 Commandant's Career-Level Education Board"
+    exp = "MARADMIN 488/11"
+    check(text, kind, exp)
+
+    text = "435 Message 142126Z MAY 10, MARADMIN 276/10, Subj: Implementation of Command Inspections of SJA Offices, Law Centers and Legal Service Support Section (stating that SJA offices, Law Centers, and LSSSs had not previously been subject to inspection within the CGIP). "
+    exp = "MARADMIN 276/10"
+    check(text, kind, exp)
+
     needs_bookend = ["MARADMIN 391/07", "MARADMIN 213-16"]
     check_bookends(needs_bookend, "MARADMIN")
 
 
 def test_hr():
+    kind = "H.R."
+    text = "32 H.R. 12910, 90th Cong. (1st Sess. 1967) at 113 Cong. Rec. 27483, 27485 (daily ed. Oct. 2, 1967) (statements of Rep. Philbin and Rep. Bennett)."
+    exp = "H.R. 12910"
+    check(text, kind, exp)
+
     needs_bookend = ["H.R. 1234", "HR 567", "H. R. 78"]
     exp_result = ["H.R. 1234", "H.R. 567", "H.R. 78"]
     check_bookends(needs_bookend, "H.R.", exp_result)
@@ -893,6 +917,7 @@ def test_comnavresforcominst():
         "COMNAVRESFORCOMINST 3440.1E",
     ]
     check_bookends(needs_bookend, "COMNAVRESFORCOMINST")
+
 
 def test_opnavnote():
     needs_bookend = ["OPNAVNOTE 5450", "OPNAV notice (OPNAVNOTE) 9201"]
