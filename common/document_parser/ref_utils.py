@@ -1179,6 +1179,22 @@ def make_dict():
             \b
         """
     )
+    
+    # Defense Contract Management Agency (DCMA) Instruction
+    ref_dict["DCMA Instruction"] = pattern(
+        r"""
+            \b
+            (?:DCMA|Defense\sContract\sManagement\sAgency)
+            [\s-]?
+            Inst(?:ruction)?                    # Inst or Instruction
+            \s?
+            (
+                [0-9]{3,5}
+                (?:\.[0-9]{1,3}[A-Z]?)?         # optional group: period, 1-3 digits, optional letter
+            )
+            \b
+        """
+    )
 
     return ref_dict
 

@@ -1139,3 +1139,20 @@ def test_tradoc_regulations():
         "TRADOC Regulations (TRs) 350-70",
     ]
     check_bookends(needs_bookend, "TRADOC Regulations (TRs)", exp_result)
+
+def test_dcma_instruction():
+    needs_bookend = [
+        "DCMA Instruction 8210.1C",
+        "DCMA Instruction (DCMA-INST) 709",
+        "Defense Contract Management Agency ( DCMA ) Instruction 8210.1",
+        "DCMA-INST 815",
+        "DCMA INST 8210.1C"
+    ]
+    exp_result = [
+        "DCMA Instruction 8210.1C",
+        "DCMA Instruction 709",
+        "DCMA Instruction 8210.1",
+        "DCMA Instruction 815",
+        "DCMA Instruction 8210.1C"
+    ]
+    check_bookends(needs_bookend, "DCMA Instruction", exp_result)
