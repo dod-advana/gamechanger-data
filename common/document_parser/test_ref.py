@@ -1105,3 +1105,16 @@ def test_mco_p():
     needs_bookend = ["Mco P 10110.31", "MCO P-5102.1B"]
     exp_result = ["MCO P 10110.31", "MCO P 5102.1B"]
     check_bookends(needs_bookend, "MCO P", exp_result)
+
+
+def test_sffas():
+    needs_bookend = [
+        "Statement of Federal Financial Accounting Standards (SFFAS) No. 4",
+        "SFFAS No. 6",
+        "SFFAS) No. 35",
+        "SFFAS 47",
+        "Statement of Federal Financial Accounting Standards 46",
+    ]
+    exp_result = ["SFFAS 4", "SFFAS 6", "SFFAS 35", "SFFAS 47", "SFFAS 46"]
+    check_bookends(needs_bookend, "SFFAS", exp_result)
+

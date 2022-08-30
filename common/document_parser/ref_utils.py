@@ -1144,4 +1144,16 @@ def make_dict():
         """
     )
 
+    # Statement of Federal Financial Accounting Standards (SFFAS)
+    ref_dict["SFFAS"] = pattern(
+        r"""
+            \b
+            (?:SFFAS|Statement\sOf\sFederal\sFinancial\sAccounting\sStandards?)
+            \s?
+            (?:No\.?\s?)?
+            ([0-9]{1,3})
+            \b
+        """
+    )
+
     return ref_dict
