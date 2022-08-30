@@ -1099,4 +1099,21 @@ def make_dict():
         """
     )
 
+    # Allied Medical Publication (AMedP)
+    ref_dict["AMedP"] = pattern(
+        r"""
+            \b
+            (?:AMedP|Allied\sMedical\sPublications?)
+            \]?
+            [-\s]?
+            (
+                [0-9]{1,3}
+                (?:\[[A-Z]\]|[A-Z])?                
+                (?:\.[0-9]{1,3}[A-Z]?)?             # optional group: period, 1-3 digits, optional letter
+                (?:,?\s?Edition\s?[A-Z]{1,2},?)?    # optional group: optional comma, optional space, Edition, optional space, 1-2 letters, optional comma
+                (?:\s?Version\s?[0-9]{1,2})?        # optional group: optional space, Version, optional space, 1-2 digits
+            )
+        """
+    )
+
     return ref_dict
