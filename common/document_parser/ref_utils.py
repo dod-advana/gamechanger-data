@@ -1024,5 +1024,22 @@ def make_dict():
             )
         """
     )
-    
+
+    # Federal Acquisition Regulation (FAR) 
+    ref_dict["FAR"] = pattern(
+        r"""
+            \b
+            (?:FAR|Federal\sAcquisition\sRegulation)
+            \s?
+            (                                       # 2 types of doc nums: (part/ subpart) digits, or appendix with letter
+                (?:(?:Sub)?Part|Clauses?)?          # optional group: Part or Subpart or Clause or Clauses
+                \s?
+                [0-9]{1,5}
+                (?:[-\.][0-9]{1,5}){0,3}            # 0-3 iterations of: hyphen or period, 1-5 digits    
+                |
+                Appendix\s?[A-Z]
+            )
+        """
+    )
+
     return ref_dict

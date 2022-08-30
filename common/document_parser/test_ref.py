@@ -947,8 +947,23 @@ def test_dfars():
         "DFARS 208.7003-1",
         "DFARS 252.242-7005",
         "DFARS Appendix F",
-        "DFARS clause 252.232-7012"
+        "DFARS clause 252.232-7012",
     ]
     check_bookends(needs_bookend, "DFARS")
     check_bookends(["DFARS232.501-1"], "DFARS", ["DFARS 232.501-1"])
 
+
+def test_far():
+    needs_bookend = [
+        "FAR Subpart 27.3",
+        "FAR Part 9",
+        "FAR 1.105-2",
+        "FAR 19.501",
+        "FAR clause 52.204-2",
+    ]
+    check_bookends(needs_bookend, "FAR")
+    check_bookends(
+        ["FAR 52.232-32(f)", "FAR part  31"],
+        "FAR",
+        ["FAR 52.232-32", "FAR part 31"],
+    )
