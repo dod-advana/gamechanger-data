@@ -17,9 +17,7 @@ from common.document_parser.lib import (
 )
 from . import post_process, init_doc
 from common.document_parser.lib.ml_features import (
-    add_pagerank_r,
-    add_popscore_r,
-)
+    add_pagerank_r, add_popscore_r)
 
 
 def parse(
@@ -30,7 +28,7 @@ def parse(
     force_ocr=False,
     out_dir="./",
 ):
-    print("running policy_analyics.parse on", f_name)
+    print("running eucom.parse on", f_name)
     try:
         meta_dict = read_meta.read_metadata(meta_data)
         doc_dict = init_doc.create_doc_dict_with_meta(meta_dict)
@@ -43,23 +41,14 @@ def parse(
         if not str(f_name).endswith(".pdf"):
             f_name = file_utils.coerce_file_to_pdf(f_name)
             should_delete = True
-        funcs = [
-            ref_list.add_ref_list,
-            entities.extract_entities,
-            topics.extract_topics,
-            keywords.add_keyw_5,
-            abbreviations.add_abbreviations_n,
-            summary.add_summary,
-            add_pagerank_r,
-            add_popscore_r,
-            text_length.add_word_count,
-        ]
+        funcs = [ref_list.add_ref_list, entities.extract_entities, topics.extract_topics, keywords.add_keyw_5, abbreviations.add_abbreviations_n, summary.add_summary, add_pagerank_r, add_popscore_r,
+                 text_length.add_word_count]
 
         doc_obj = pdf_reader.get_fitz_doc_obj(f_name)
         pages.handle_pages(doc_obj, doc_dict)
         doc_obj.close()
 
-        paragraphs.add_paragraphs(doc_dict)
+        paragraphs.handle_paragraphs(doc_dict)
 
         for func in funcs:
             try:
@@ -75,7 +64,7 @@ def parse(
 
         write_doc_dict_to_json.write(out_dir=out_dir, ex_dict=doc_dict)
     except Exception as e:
-        print("ERROR in policy_analytics.parse:", e)
+        print("ERROR in eucom.parse:", e)
     finally:
         if should_delete:
             os.remove(f_name)
