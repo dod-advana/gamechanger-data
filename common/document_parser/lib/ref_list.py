@@ -1,7 +1,7 @@
 import re
 from collections import defaultdict
 
-from common.document_parser.ref_utils import make_dict
+from common.document_parser.ref_utils import make_dict, preprocess_text
 
 
 ref_regex = make_dict()
@@ -25,11 +25,16 @@ def look_for_general(text, ref_dict, pattern, doc_type):
 
     for match in matches:
         if type(match) == tuple:
-            print(
-                f"ERR: Patterns in `ref_regex` should only have 1 capture "
-                f"group each. Check the pattern for {doc_type}"
-            )
-            continue
+            values = [x for x in match if x != ""]
+            if len(values) != 1:
+                print(
+                    f"ERR: Patterns in `ref_regex` should only have exactly 1 "
+                    f"non-empty capture group each. Check the pattern for {doc_type}"
+                )
+                print('text was:', text)
+                print('match was:', match)
+                continue
+            match = values[0]
         elif match == "":
             continue
         ref = (doc_type + " " + match).strip()
@@ -49,11 +54,7 @@ def collect_ref_list(text: str) -> defaultdict:
         ref_dict with all references and their counts
     """
     ref_dict = defaultdict(int)
-    # Interpret the unicode as a -
-    text = text.replace("\u2013", "-")
-    text = re.sub(r"[()]", " ", text)
-    # Normalize whitespace here so regex search is simpler
-    text = " ".join(text.split())
+    text = preprocess_text(text)
 
     for ref_type, pattern in ref_regex.items():
         ref_dict = look_for_general(text, ref_dict, pattern, ref_type)
