@@ -44,7 +44,7 @@ def look_for_general(text, ref_dict, pattern, doc_type):
             except:
                 continue
             else:
-                if num > 53:
+                if num > 53 or num == 0:
                     continue
         elif doc_type == "CFR Title":
             try:
@@ -52,7 +52,7 @@ def look_for_general(text, ref_dict, pattern, doc_type):
             except:
                 continue
             else:
-                if num > 50:
+                if num > 50 or num == 0:
                     continue
 
         ref = (doc_type + " " + match).strip()
