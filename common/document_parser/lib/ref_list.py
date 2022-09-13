@@ -31,12 +31,30 @@ def look_for_general(text, ref_dict, pattern, doc_type):
                     f"ERR: Patterns in `ref_regex` should only have exactly 1 "
                     f"non-empty capture group each. Check the pattern for {doc_type}"
                 )
-                print('text was:', text)
-                print('match was:', match)
+                print("text was:", text)
+                print("match was:", match)
                 continue
             match = values[0]
         elif match == "":
             continue
+
+        if doc_type == "Title":
+            try:
+                num = int(match.strip())
+            except:
+                continue
+            else:
+                if num > 53:
+                    continue
+        elif doc_type == "CFR Title":
+            try:
+                num = int(match.strip())
+            except:
+                continue
+            else:
+                if num > 50:
+                    continue
+
         ref = (doc_type + " " + match).strip()
         ref_dict[ref] += 1
 
