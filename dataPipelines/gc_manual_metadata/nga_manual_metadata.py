@@ -7,6 +7,7 @@ import json
 from datetime import datetime
 from hashlib import sha256
 from functools import reduce
+import shutil
 
 
 def str_to_sha256_hex_digest(_str: str) -> str:
@@ -36,7 +37,15 @@ class NGAManualMetadata:
         self.metadata_filename = metadata_filename
         self.all_processed_files = []
 
-    def create_metadata_files(self, input_directory):
+    def create_metadata_files(self, input_directory, output_directory = None):
+        # if output_directory was passed in, create the directory if doesn't currently exist
+        if output_directory:
+            if not os.path.exists(output_directory):
+                print(f"Output directory {output_directory} doesn't exist, creating directory")
+                os.makedirs(output_directory,exist_ok=True)
+            # copy over the metadata file to the output directory
+            shutil.copy(os.path.join(input_directory,self.metadata_filename), os.path.join(output_directory,self.metadata_filename))
+
 
         try:
             metadata_records = pd.read_csv(os.path.join(input_directory,self.metadata_filename)).to_dict(orient="records")
@@ -50,13 +59,12 @@ class NGAManualMetadata:
         existing_metadata_files = [Path(x).stem for x in all_input_filepaths if x.is_file() and filetype.guess(str(x)) is not None and (
                 filetype.guess(str(x)).mime == "metadata")]
 
-
-
-
         for metadata_record in metadata_records:
             # print(metadata_record["file_name"])
             filepath = os.path.join(input_directory,metadata_record["file_name"])
-            if Path(filepath).stem not in existing_metadata_files and Path(filepath) in existing_files:
+            if Path(filepath).stem not in existing_metadata_files \
+                    and Path(filepath) in existing_files \
+                    and metadata_record['mod_type']=="Addition":
                 before, part, after = Path(filepath).stem.partition("(")
 
                 doc_title = metadata_record.get('title') if metadata_record.get('title') else (before.split("_")[5] if not after else before)
@@ -88,8 +96,12 @@ class NGAManualMetadata:
                     source_fqdn="manual.ingest",
                     version_hash=dict_to_sha256_hex_digest(version_hash_fields)
                 )
-
-                metadata_outfile = str(filepath) + '.metadata'
+                if output_directory:
+                    orig_copy_filepath = os.path.join(str(output_directory),metadata_record["file_name"])
+                    shutil.copy(filepath, orig_copy_filepath)
+                    metadata_outfile = orig_copy_filepath + '.metadata'
+                else:
+                    metadata_outfile = str(filepath) + '.metadata'
                 # print(metadata_outfile)
                 if doc:
                     with open(metadata_outfile, "w") as f:
@@ -98,10 +110,10 @@ class NGAManualMetadata:
                         self.all_processed_files.append(metadata_outfile)
 
 
-#
+
 # if __name__=="__main__":
-#     input_directory = "/Users/austinmishoe/bah/advana_data/gc_pdfs/"
+#     input_directory = "/Users/austinmishoe/bah/advana_data/nga_test/"
 #     nga_mm = NGAManualMetadata()
-#     nga_mm.create_metadata_files(input_directory)
+#     nga_mm.create_metadata_files(input_directory,output_directory="/Users/austinmishoe/Downloads/nga_files")
 #     print(nga_mm.all_processed_files)
 
