@@ -15,7 +15,6 @@ from gamechangerml.src.featurization.responsibilities import get_responsibilitie
 from dataPipelines.gc_neo4j_publisher.config import Config
 from dataPipelines.gc_neo4j_publisher import wiki_utils as wu
 from neo4j import exceptions
-import flatdict
 import common.utils.text_utils as tu
 import re
 from .config import Config as MainConfig
@@ -36,39 +35,43 @@ def get_agency_names() -> t.List[str]:
     agencies = [x.lower() for x in agencies]
     return agencies
 
+
 @lru_cache(maxsize=None)
 def get_all_entities_and_aliases() -> t.List[str]:
-    orgs_df = pd.read_excel(Config.graph_relations_xls_path,"Orgs")
+    orgs_df = pd.read_excel(Config.graph_relations_xls_path, "Orgs")
     roles_df = pd.read_excel(Config.graph_relations_xls_path, "Roles")
     all_entities = list(orgs_df['Name']) + list(roles_df['Name'])
     alias_mapping_dict = {}
-    for name, aliases in orgs_df[["Name","Aliases"]].itertuples(index=False):
+    for name, aliases in orgs_df[["Name", "Aliases"]].itertuples(index=False):
         if pd.isna(aliases):
             continue
         alias_keys = aliases.split(";")
-        alias_mapping_dict.update({alias_key:name for alias_key in alias_keys})
-    for name, aliases in roles_df[["Name","Aliases"]].itertuples(index=False):
+        alias_mapping_dict.update({alias_key: name for alias_key in alias_keys})
+    for name, aliases in roles_df[["Name", "Aliases"]].itertuples(index=False):
         if pd.isna(aliases):
             continue
         alias_keys = aliases.split(";")
-        alias_mapping_dict.update({alias_key:name for alias_key in alias_keys})
+        alias_mapping_dict.update({alias_key: name for alias_key in alias_keys})
     return all_entities, alias_mapping_dict
+
 
 @lru_cache(maxsize=None)
 def get_orgs_df() -> pd.DataFrame:
-    orgs_df = pd.read_excel(Config.graph_relations_xls_path,"Orgs")
+    orgs_df = pd.read_excel(Config.graph_relations_xls_path, "Orgs")
     orgs_df = orgs_df.drop([col for col in orgs_df.columns if "Unnamed" in col], axis=1)
     orgs_df = orgs_df.fillna("")
     orgs_df = orgs_df.applymap(lambda x: x.strip() if isinstance(x, str) else x)
     return orgs_df
 
+
 @lru_cache(maxsize=None)
 def get_roles_df() -> pd.DataFrame:
-    roles_df = pd.read_excel(Config.graph_relations_xls_path,"Roles")
+    roles_df = pd.read_excel(Config.graph_relations_xls_path, "Roles")
     roles_df = roles_df.drop([col for col in roles_df.columns if "Unnamed" in col], axis=1)
     roles_df = roles_df.fillna("")
     roles_df = roles_df.applymap(lambda x: x.strip() if isinstance(x, str) else x)
     return roles_df
+
 
 @lru_cache(maxsize=None)
 def get_hierarchy_json() -> dict:
@@ -225,7 +228,7 @@ class Neo4jPublisher:
         entity_count: t.Dict[str, int] = {}
         try:
             for p in j["paragraphs"]:
-                entities = p.get(entity_type_key,{})
+                entities = p.get(entity_type_key, {})
                 types = list(entities.keys())
                 for type in types:
                     entity_list = entities[type]
@@ -277,6 +280,31 @@ class Neo4jPublisher:
         process_query('CALL policy.createRoleNodesFromJson(' + json.dumps(roles_json) + ')')
         return
 
+    @staticmethod
+    def _get_nodes_and_relations(hierarchy_dict: dict) -> t.Tuple[t.List[str], t.List[t.Tuple[str, str]]]:
+        """
+            traverse dict level by level to grab parent:child keys
+            returns unique node list and relation list
+        """
+        hierarchy_nodes = set()
+        relations = set()
+        dict_queue = [hierarchy_dict]
+
+        # iteratively check each depth of the dict like a tree
+        # enqueue smaller subset of tree as each level has been added until the empty dict leaf nodes
+        while dict_queue:
+            d = dict_queue.pop(0)
+
+            for parent_str, child_dict in d.items():
+                dict_queue.append(child_dict)
+                hierarchy_nodes.add(parent_str)
+
+                for child_str in child_dict.keys():
+                    rel_tup = (parent_str, child_str)
+                    relations.add(rel_tup)
+
+        return (list(hierarchy_nodes), list(relations))
+
     def ingest_hierarchy_information(self) -> None:
         """
         This function pulls in the hierarchy json and generates an authority tree in the graph
@@ -289,19 +317,17 @@ class Neo4jPublisher:
         print("Inserting Hierarchy Relationships ...")
         hierarchy_dict = get_hierarchy_json()
 
-        # creates a flattened dictionary where the keys capture the hierarchy
-        # e.g., Constitution.United States Code.President of the United States.Executive Branch.Secretary of Defense...
-        # which can be unraveled by doing a str.split('.') to extract out the chain of hierarchy
-        flat_hierarchy_dict = dict(flatdict.FlatDict(hierarchy_dict, delimiter='.'))
-        all_hierarchy_nodes = []
-        for key in flat_hierarchy_dict.keys():
-            all_hierarchy_nodes.extend(key.split("."))
-        all_hier_nodes = list(set(all_hierarchy_nodes))
+        all_hierarchy_nodes, authority_relationships = self._get_nodes_and_relations(hierarchy_dict)
+
+        print("\n\nALL nodes")
+        print(all_hierarchy_nodes)
+        print('\n\n all rels')
+        print(authority_relationships)
 
         # check to see if the nodes are currently in the graph, for those that aren't (e.g., `United States Constitution`)
         # create a new node for those
         hierarchy_nodes_created = 0
-        for hierarchy_node in all_hier_nodes:
+        for hierarchy_node in all_hierarchy_nodes:
             match_cypher = "OPTIONAL MATCH (n:Entity) " \
                            "WHERE n.name='" + hierarchy_node + "' OR '" + hierarchy_node + "' in split(n.aliases,';') "\
                            "RETURN n IS NOT NULL AS Exists"
@@ -311,31 +337,22 @@ class Neo4jPublisher:
             if not process_query(match_cypher)[0]['Exists']:
                 create_cypher = "CREATE (n:Entity {name: '" + hierarchy_node + "'})"
                 process_query(create_cypher)
-                hierarchy_nodes_created+=1
+                hierarchy_nodes_created += 1
         print(f"Inserted {hierarchy_nodes_created} hierarchy nodes (entity node type)")
 
         cypher_list = []
-        # flat_hierarchy_dict.keys() looks similar to below:
-        # Constitution.United States Code.President of the United States.Executive Branch.Secretary of Defense...
-        # split('.') on this to create a list and iterate over tuples to create `HAS_AUTHORITY_OVER` relationships
-        for key in flat_hierarchy_dict.keys():
-            hierarchy_nodes = key.split(".")
-            if len(hierarchy_nodes) > 1:
-                hierarchy_relationships = [(hierarchy_nodes[i], hierarchy_nodes[i + 1]) for i in range(len(hierarchy_nodes) - 1)]
-                for hierarchy_relationship in hierarchy_relationships:
-                    # Example of the cypher generated:
-                    # MATCH (a:Entity), (b:Entity)
-                    # WHERE (a.name = 'Constitution' OR 'Constitution' in split(a.aliases, ';'))
-                    # AND (b.name = 'United States Code' OR 'United States Code' in split(b.aliases, ';'))
-                    # MERGE (a)-[r:HAS_AUTHORITY_OVER]->(b)
-                    cypher_list.append("MATCH (a:Entity), (b:Entity) " +
-                                       "WHERE (a.name = '" + hierarchy_relationship[0] + "' OR '" +
-                                       hierarchy_relationship[0] + "' in split(a.aliases, ';')) " +
-                                       "AND (b.name = '" + hierarchy_relationship[1] + "' OR '" +
-                                       hierarchy_relationship[1] + "' in split(b.aliases, ';')) " +
-                                       "MERGE (a)-[r:HAS_AUTHORITY_OVER]->(b)")
-        cypher_list = list(set(cypher_list))
+        for authority, subordinate in authority_relationships:
+            # list join is to trying to find a way to make it more readable in code
+            cypher_parts = [
+                "MATCH (a:Entity), (b:Entity)",
+                f"WHERE (a.name = '{authority}' OR '{authority}' in split(a.aliases, ';')) AND (b.name = '{subordinate}' OR '{subordinate}' in split(b.aliases, ';'))",
+                "MERGE (a)-[r:HAS_AUTHORITY_OVER]->(b)"]
+
+            cypher_string = " ".join(cypher_parts)
+            cypher_list.append(cypher_string)
+
         print(f"Inserting {len(cypher_list)} hierarchy relationships ...")
+
         # Execute all of the `HAS_AUTHORITY_OVER` cypher commands
         for cypher in cypher_list:
             process_query(cypher)
