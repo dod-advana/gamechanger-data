@@ -54,6 +54,8 @@ def is_enclosure_continuation(text: str, prev_section: List[str]) -> bool:
 
         if prev_enclosure:
             curr_enclosure = match_enclosure_num(text)
+            # If `text` references an Enclosure number that is not the same 
+            # Enclosure number referenced in `prev_section`, return False.
             if (
                 curr_enclosure is not None
                 and curr_enclosure != prev_enclosure.groups()[0]
@@ -66,10 +68,10 @@ def is_enclosure_continuation(text: str, prev_section: List[str]) -> bool:
 
 
 def should_skip(text: str, fn: str) -> bool:
-    """Returns whether or not the text should be skipped when determining to
+    """Returns whether or not the text should be skipped when adding to
     document sections.
 
-    This is used to eliminate noise from document sections.
+    This is used to eliminate noise.
 
     Args:
         text (str): Determine if this text should be added to sections or
@@ -83,10 +85,15 @@ def should_skip(text: str, fn: str) -> bool:
             otherwise.
     """
     if (
+        # Usually a page number
         text.isdigit()
+        # File name in text and text is short -> probably a header or footer
         or (match(fn, text, flags=IGNORECASE) and len(text) < 40)
+        # Another header/ footer presentation
         or (match(r"change [0-9]", text, flags=IGNORECASE) and len(text) < 30)
-        or search(r"[\t][0-9]{1,3}$", text)  # Page num
+        # Page number/ footer
+        or search(r"[\t][0-9]{1,3}$", text)  
+        # Page number/ footer of an Enclosure 
         or fullmatch(
             r"[0-9]{1,3}\s?[\t]ENCLOSURE(?:\s[0-9]{1,2})?",
             text,
@@ -140,7 +147,8 @@ def is_known_section_start(text: str) -> bool:
         )
         if m:
             groups = m.groups()
-            # If not uppercase, then must be followed by a colon or period.
+            # If not all uppercase, then must be followed by a colon or period 
+            # to be a section start.
             if groups[0].isupper() or groups[1] is not None:
                 return True
 
@@ -148,6 +156,7 @@ def is_known_section_start(text: str) -> bool:
     # a colon or period if not uppercase.
     if match(r"Glossary", text, flags=IGNORECASE):
         return True
+        
     # Note: Don't use IGNORECASE flag here because "Section" is commonly referred to
     # within section bodies.
     # Starts with "SECTION <number>" and does not end with tab & 1-3 digits.
@@ -180,6 +189,7 @@ def is_child(par: Paragraph, prev_section: List[str], space_mode: int) -> bool:
     last_sub_stripped = " ".join(last_sub.split()).strip()
     first_sub = " ".join(get_subsection(prev_section).split()).strip()
 
+    # Check if the paragraph is part of a Table of Contents.
     if is_toc(text):
         if is_toc(first_sub):
             return True
@@ -238,7 +248,6 @@ def is_same_section_num(text: str, section: List[str]) -> bool:
     first_subsection = " ".join(get_subsection(section).split()).strip()
     text = text.strip()
 
-    # Look for a section number within the first item of `section`.
     section_num = match(
         r"""
             section\s([0-9]{1,2})             # "section", space, 1-2 digits
@@ -252,7 +261,6 @@ def is_same_section_num(text: str, section: List[str]) -> bool:
         section_num = next(
             num for num in section_num.groups() if num is not None
         )
-        # Look for:
         if match(
             rf"""
                 {section_num}\.[0-9]{{1,2}}     # The section number, period, 1-2 digits.

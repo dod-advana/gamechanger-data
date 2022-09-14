@@ -140,12 +140,13 @@ class Sections:
         self._prev_spaces[0] = is_a_space
 
     def last_section(self, n: int = 1) -> List[str]:
-        """_summary_
+        """Get a section from the end of the object's `sections` list.
 
         Args:
             n (int, optional): Use 1 to get the last section, use 2 to get the
                 second to last section, and so on. This value should be an
-                integer greater than 0. Defaults to 1.
+                integer greater than 0. If an invalid value is passed, 
+                returns []. Defaults to 1.
 
         Returns:
             List[str]
@@ -186,16 +187,19 @@ class Sections:
         Args:
             start (int): First index of the sections to combine.
             end (int): Last index of the sections to combine.
+
+        Raises:
+            ValueError: If an invalid start or end is passed.
         """
         if start < 0:
-            raise Exception(f"bad start: {start}")
+            raise ValueError(f"Bad start: {start}")
 
         if end >= len(self._sections):
-            raise Exception(f"bad end: {end}")
+            raise ValueError(f"Bad end: {end}")
 
         if start > end:
-            raise Exception(
-                f"start cannot be greater than end. start: {start}, end: {end}"
+            raise ValueError(
+                f"Start cannot be greater than end. start: {start}, end: {end}"
             )
 
         self._sections[start : end + 1] = [

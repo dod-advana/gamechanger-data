@@ -19,7 +19,8 @@ def match_section_num(
         text (str): Text to look for a section number in. Should have no
             leading whitespace.
         num (int or None, optional): If int, looks for this section number.
-            If None, looks for any section number. Defaults to None.
+            If None, looks for any section number (with 0-2 letters and 
+            1-2  digits). Defaults to None.
 
     Returns:
         str or None: If a section number is found, returns it as a str. If no
@@ -79,7 +80,8 @@ def match_enclosure_num(
     Args:
         text (str)
         num (int or None, optional): To match a specific Enclosure number, pass
-            an int. To match any Enclosure number, pass None. Defaults to None.
+            an int. To match any Enclosure number (1-2 digits), pass None. 
+            Defaults to None.
         return_type ("str", "match", or "bool", optional): The type to return.
             Use "str" to return the Enclosure number match as a str (if no
             match is found, returns None). Use "match" to return re.Match.
@@ -94,7 +96,7 @@ def match_enclosure_num(
     pattern = rf"""
              (?:
                 E?
-                [0-9]{{1,3}}
+                [0-9]{{1,2}}
                 \.?
                 \s+
             )?
@@ -122,7 +124,7 @@ def match_enclosure_num(
 
 def match_num_list_item(text: str) -> Union[str, None]:
     """If the text starts with number list formatting, returns the number as a
-    string. Otherwise, returns None.
+    string. Otherwise, returns None. Supports up to 2 digits.
     """
     # Ex: "1.", "2)"
     num = match(r"\(?([0-9]{1,2})[\.\)]", text)
