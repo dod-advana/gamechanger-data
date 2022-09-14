@@ -319,11 +319,6 @@ class Neo4jPublisher:
 
         all_hierarchy_nodes, authority_relationships = self._get_nodes_and_relations(hierarchy_dict)
 
-        print("\n\nALL nodes")
-        print(all_hierarchy_nodes)
-        print('\n\n all rels')
-        print(authority_relationships)
-
         # check to see if the nodes are currently in the graph, for those that aren't (e.g., `United States Constitution`)
         # create a new node for those
         hierarchy_nodes_created = 0
