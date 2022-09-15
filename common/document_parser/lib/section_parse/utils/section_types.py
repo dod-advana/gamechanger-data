@@ -54,7 +54,7 @@ def is_enclosure_continuation(text: str, prev_section: List[str]) -> bool:
 
         if prev_enclosure:
             curr_enclosure = match_enclosure_num(text)
-            # If `text` references an Enclosure number that is not the same 
+            # If `text` references an Enclosure number that is not the same
             # Enclosure number referenced in `prev_section`, return False.
             if (
                 curr_enclosure is not None
@@ -90,10 +90,10 @@ def should_skip(text: str, fn: str) -> bool:
         # File name in text and text is short -> probably a header or footer
         or (match(fn, text, flags=IGNORECASE) and len(text) < 40)
         # Another header/ footer presentation
-        or (match(r"change [0-9]", text, flags=IGNORECASE) and len(text) < 30)
+        or (match(r"change [0-9]", text, flags=IGNORECASE) and len(text) < 40)
         # Page number/ footer
-        or search(r"[\t][0-9]{1,3}$", text)  
-        # Page number/ footer of an Enclosure 
+        or search(r"[\t][0-9]{1,3}$", text)
+        # Page number/ footer of an Enclosure
         or fullmatch(
             r"[0-9]{1,3}\s?[\t]ENCLOSURE(?:\s[0-9]{1,2})?",
             text,
@@ -147,7 +147,7 @@ def is_known_section_start(text: str) -> bool:
         )
         if m:
             groups = m.groups()
-            # If not all uppercase, then must be followed by a colon or period 
+            # If not all uppercase, then must be followed by a colon or period
             # to be a section start.
             if groups[0].isupper() or groups[1] is not None:
                 return True
@@ -156,7 +156,7 @@ def is_known_section_start(text: str) -> bool:
     # a colon or period if not uppercase.
     if match(r"Glossary", text, flags=IGNORECASE):
         return True
-        
+
     # Note: Don't use IGNORECASE flag here because "Section" is commonly referred to
     # within section bodies.
     # Starts with "SECTION <number>" and does not end with tab & 1-3 digits.

@@ -256,6 +256,17 @@ class Sections:
                     go = self._combine_by_section_num(i, curr_num)
             i += 1
 
+    def remove_noise(self) -> None:
+        for i in range(len(self._sections)):
+            first_subsection = get_subsection(self._sections[i])
+            enclosure_num = match_enclosure_num(first_subsection)
+            self._sections[i][1:] = [
+                subsection
+                for subsection in self._sections[i][1:]
+                if subsection.strip() != first_subsection
+                and not match_enclosure_num(subsection.strip(), enclosure_num)
+            ]
+
     def _combine_by_section_num(
         self, i: int, curr_num: str, max_steps: int = 2
     ) -> bool:
@@ -341,5 +352,7 @@ class Sections:
         pattern += r"\b"
 
         return [
-            section for section in self.sections if search(pattern, section[0])
+            section
+            for section in self._sections
+            if search(pattern, section[0])
         ]

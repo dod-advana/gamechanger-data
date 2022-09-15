@@ -81,6 +81,7 @@ class DocxParser:
         self.sections.combine_by_section_num()
         self.sections.combine_enclosures()
         self.sections.combine_glossary()
+        self.sections.remove_noise()
 
         return self.sections
 
