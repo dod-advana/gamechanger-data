@@ -311,7 +311,7 @@ def ends_with_colon(text: str) -> bool:
     return search(":\s?$", text) is not None
 
 
-def get_subsection(section: List[str], ind: int = 0) -> str:
+def get_subsection(section: List[str], ind: int = 0, strip: bool = True) -> str:
     """Get a subsection from `section`.
 
     If no item exists at `ind`, returns an empty string.
@@ -319,11 +319,15 @@ def get_subsection(section: List[str], ind: int = 0) -> str:
     Args:
         section (List[str])
         ind (int, optional): Index of the subsection to get. Defaults to 0.
+        strip (bool, optional): True to strip leading and trailing whitespace 
+            from the result, False otherwise.
 
     Returns:
         str
     """
     try:
-        return section[ind]
+        sect = section[ind]
     except:
         return ""
+    else:
+       return sect.strip() if strip else sect

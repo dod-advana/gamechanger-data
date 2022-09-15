@@ -185,9 +185,9 @@ def is_child(par: Paragraph, prev_section: List[str], space_mode: int) -> bool:
     """
     text = par.text
     text_stripped = text.strip()
-    last_sub = get_subsection(prev_section, -1)
+    last_sub = get_subsection(prev_section, -1, False)
     last_sub_stripped = " ".join(last_sub.split()).strip()
-    first_sub = " ".join(get_subsection(prev_section).split()).strip()
+    first_sub = " ".join(get_subsection(prev_section).split())
 
     # Check if the paragraph is part of a Table of Contents.
     if is_toc(text):
@@ -245,7 +245,7 @@ def is_same_section_num(text: str, section: List[str]) -> bool:
         if is_toc(s):
             return False
 
-    first_subsection = " ".join(get_subsection(section).split()).strip()
+    first_subsection = " ".join(get_subsection(section).split())
     text = text.strip()
 
     section_num = match(
