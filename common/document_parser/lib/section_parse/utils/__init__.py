@@ -3,7 +3,7 @@ from .utils import (
     match_enclosure_num,
     match_roman_numerals,
     get_subsection,
-    has_next_section_num,
+    next_section_num,
     is_list_child,
     is_space,
     is_first_line_indented,

@@ -19,7 +19,7 @@ def match_section_num(
         text (str): Text to look for a section number in. Should have no
             leading whitespace.
         num (int or None, optional): If int, looks for this section number.
-            If None, looks for any section number (with 0-2 letters and 
+            If None, looks for any section number (with 0-2 letters and
             1-2  digits). Defaults to None.
 
     Returns:
@@ -80,7 +80,7 @@ def match_enclosure_num(
     Args:
         text (str)
         num (int or None, optional): To match a specific Enclosure number, pass
-            an int. To match any Enclosure number (1-2 digits), pass None. 
+            an int. To match any Enclosure number (1-2 digits), pass None.
             Defaults to None.
         return_type ("str", "match", or "bool", optional): The type to return.
             Use "str" to return the Enclosure number match as a str (if no
@@ -273,22 +273,14 @@ def is_space(text: str) -> bool:
     return not text or text.isspace()
 
 
-def has_next_section_num(text: str, num: str) -> bool:
-    """Check if `text` contains a reference to a section number that logically
-    appears after section {num}.
+def next_section_num(text: str) -> str:
+    alpha_chars = "".join([char for char in text if char.isalpha()])
+    digit_chars = "".join([char for char in text if char.isdigit()])
 
-    Ex: If num = 2, looks for a reference to section 3, 3., 3.1, etc. in text.
-
-    Note:
-    """
-    alpha_chars = "".join([char for char in num if char.isalpha()])
-    digit_chars = "".join([char for char in num if char.isdigit()])
     if not digit_chars:
-        return False
+        return ""
 
-    next_num = str(int(digit_chars) + 1)
-
-    return match_section_num(text, alpha_chars + next_num) is not None
+    return alpha_chars + str(int(digit_chars) + 1)
 
 
 def starts_with_part(text: str) -> bool:
@@ -311,7 +303,9 @@ def ends_with_colon(text: str) -> bool:
     return search(":\s?$", text) is not None
 
 
-def get_subsection(section: List[str], ind: int = 0, strip: bool = True) -> str:
+def get_subsection(
+    section: List[str], ind: int = 0, strip: bool = True
+) -> str:
     """Get a subsection from `section`.
 
     If no item exists at `ind`, returns an empty string.
@@ -319,7 +313,7 @@ def get_subsection(section: List[str], ind: int = 0, strip: bool = True) -> str:
     Args:
         section (List[str])
         ind (int, optional): Index of the subsection to get. Defaults to 0.
-        strip (bool, optional): True to strip leading and trailing whitespace 
+        strip (bool, optional): True to strip leading and trailing whitespace
             from the result, False otherwise.
 
     Returns:
@@ -330,4 +324,4 @@ def get_subsection(section: List[str], ind: int = 0, strip: bool = True) -> str:
     except:
         return ""
     else:
-       return sect.strip() if strip else sect
+        return sect.strip() if strip else sect

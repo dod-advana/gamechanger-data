@@ -4,10 +4,10 @@ from docx.text.paragraph import Paragraph
 from typing import List
 from .utils import (
     get_subsection,
+    next_section_num,
     is_next_num_list_item,
     match_enclosure_num,
     match_section_num,
-    has_next_section_num,
 )
 from .section_types import (
     should_skip,
@@ -248,30 +248,43 @@ class Sections:
             ] --> combine indices 1 and 2
         """
         i = 0
-        while i < len(self._sections) - 3 and len(self._sections) > 2:
-            curr = get_subsection(self._sections[i])
-            curr_num = match_section_num(curr)
-
-            while (
-                len(self._sections) > 2
-                and curr_num is not None
-                and has_next_section_num(
-                    get_subsection(self._sections[i + 2]),
-                    curr_num,
-                )
-            ):
-                self.combine_sections(i, i + 1)
-
-            while (
-                len(self._sections) > 2
-                and curr_num is not None
-                and match_section_num(
-                    get_subsection(self._sections[i + 2]),
-                    curr_num,
-                )
-            ):
-                self.combine_sections(i, i + 2)
+        while i < len(self._sections):
+            curr_num = match_section_num(get_subsection(self._sections[i]))
+            if curr_num:
+                go = self._combine_by_section_num(i, curr_num)
+                while go:
+                    go = self._combine_by_section_num(i, curr_num)
             i += 1
+
+    def _combine_by_section_num(
+        self, i: int, curr_num: str, max_steps: int = 2
+    ) -> bool:
+        next_num = next_section_num(curr_num)
+        found_next = False
+        end = None
+
+        for j in range(i + 1, i + max_steps + 1):
+            if j >= len(self._sections):
+                return False
+            num_j = match_section_num(get_subsection(self._sections[j]))
+            if num_j is not None:
+                if num_j == curr_num:
+                    end = j
+                    break
+                elif num_j == next_num:
+                    if j == i + 1:
+                        break
+                    end = j - 1
+                    found_next = True
+                    break
+
+        if end is not None:
+            self.combine_sections(i, end)
+            if found_next:
+                return False
+            return True
+
+        return False
 
     def _combine_by_enclosure_num(
         self, i: int, curr_num: str, max_steps: int = 5
