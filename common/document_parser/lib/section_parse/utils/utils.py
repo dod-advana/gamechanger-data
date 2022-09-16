@@ -166,7 +166,10 @@ def is_sentence_continuation(text: str, prev_text: str) -> bool:
 
     Note: do NOT strip leading/ trailing whitespace from the params.
     """
-    return search(r"[^\.] $", prev_text) and match(r"[a-z]", text) is not None
+    result = (search(r"[^\.] $", prev_text) and match(r"[a-z]", text) is not None)
+    if result is None:
+        return False
+    return result
 
 
 def is_alpha_list_item(text: str) -> bool:
