@@ -8,6 +8,7 @@ from .utils import (
     is_next_num_list_item,
     match_enclosure_num,
     match_section_num,
+    is_space,
 )
 from .section_types import (
     should_skip,
@@ -16,7 +17,6 @@ from .section_types import (
     is_enclosure_continuation,
     is_child,
 )
-from .utils import is_space
 
 
 class Sections:
@@ -24,8 +24,10 @@ class Sections:
 
     def __init__(self):
         self._sections = []
-        # Flags for whether or not the last 3 sections were only whitespace.
-        self._prev_spaces = [False, False, False]
+
+        # Track the number of previous, consecutive sections that are only
+        # whitespace. This is used in add() to inform about section breaks.
+        self._prev_space_count = 0
 
     @property
     def sections(self) -> List[List[str]]:
@@ -122,22 +124,24 @@ class Sections:
             pass
         elif should_skip(text_stripped, fn):
             pass
-        elif all(self._prev_spaces):
+        # If 3 previous paragraphs are only space, the text is probably a new
+        # section because it's probably on a new page.
+        elif self._prev_space_count >= 3:
             self.add_parent(section_texts)
         elif is_same_section_num(text_stripped, last_section):
             self.add_child(section_texts)
         elif is_enclosure_continuation(text_stripped, last_section):
             self.add_continuation(section_texts[0])
-        elif is_known_section_start(text_stripped):
+        elif is_known_section_start(text_stripped, par):
             self.add_parent(section_texts)
+        # This can have false positives if the other conditions aren't checked
+        # first.
         elif is_child(par, last_section, space_mode):
             self.add_child(section_texts)
         else:
             self.add_parent(section_texts)
 
-        self._prev_spaces[2] = self._prev_spaces[1]
-        self._prev_spaces[1] = self._prev_spaces[0]
-        self._prev_spaces[0] = is_a_space
+        self._update_prev_space_count(is_a_space)
 
     def add_parent(self, texts: List[str]) -> None:
         """Add a new parent section to the object's `sections` list."""
@@ -167,8 +171,6 @@ class Sections:
 
     def combine_sections(self, start: int, end: int) -> None:
         """Combine sections together.
-
-        Updates the object's `sections` attribute.
 
         Args:
             start (int): First index of the sections to combine.
@@ -256,7 +258,15 @@ class Sections:
                     go = self._combine_by_section_num(i, curr_num)
             i += 1
 
-    def remove_noise(self) -> None:
+    def remove_repeated_section_titles(self) -> None:
+        """Remove repeated section titles from within section bodies.
+
+        Section titles are often repeated when a section spans over multiple
+        pages, since the title is restated on each page.
+
+        This function makes each title only appear once, as the first item in
+        each section.
+        """
         for i in range(len(self._sections)):
             first_subsection = get_subsection(self._sections[i])
             enclosure_num = match_enclosure_num(first_subsection)
@@ -356,3 +366,9 @@ class Sections:
             for section in self._sections
             if search(pattern, section[0])
         ]
+
+    def _update_prev_space_count(self, is_space: bool) -> None:
+        if is_space:
+            self._prev_space_count += 1
+        else:
+            self._prev_space_count = 0

@@ -15,6 +15,7 @@ from .utils import (
     starts_with_part,
     ends_with_colon,
     is_next_num_list_item,
+    is_bold,
 )
 
 
@@ -105,14 +106,15 @@ def should_skip(text: str, fn: str) -> bool:
     return False
 
 
-def is_known_section_start(text: str) -> bool:
+def is_known_section_start(text: str, par: Paragraph) -> bool:
     """Returns whether or not the text is a known section starting point.
 
     Args:
         text (str): Determine if this text is the start of a section.
 
     Returns:
-        bool: True if the text is a known section starting point, False otherwise.
+        bool: True if the text is a known section starting point, False 
+            otherwise.
     """
     # Don't split up the table of contents.
     if is_toc(text):
@@ -147,9 +149,9 @@ def is_known_section_start(text: str) -> bool:
         )
         if m:
             groups = m.groups()
-            # If not all uppercase, then must be followed by a colon or period
-            # to be a section start.
-            if groups[0].isupper() or groups[1] is not None:
+            # Must be all uppercase, end with colon/ period, or be bold to be 
+            # a section start
+            if groups[0].isupper() or groups[1] is not None or is_bold(par):
                 return True
 
     # Separate match for "Glossary" because it does not need to be followed by

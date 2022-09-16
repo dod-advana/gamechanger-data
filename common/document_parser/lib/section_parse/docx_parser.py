@@ -9,7 +9,6 @@ from itertools import chain
 from re import search
 from typing import Iterator, List, Union
 from os import PathLike
-
 from .utils import (
     Sections,
     is_alpha_list_item,
@@ -46,14 +45,14 @@ class DocxParser:
         self.blocks = list(self.iter_block_items())
         self.space_mode = self.calculate_space_mode(self.blocks)
 
-    def parse(self, fn) -> Sections:
+    def parse(self, pagebreak_text: str) -> Sections:
         """Parse a docx document into sections.
 
         Populates the objects `sections` attribute.
 
         Args:
-            fn (str): File name of the document.
-                Use `{doc_type} + " " + {doc_num}`.
+            pagebreak_text (str): Text that indicates a page break. For DoD
+                documents, use `{doc_type} + " " + {doc_num}`.
 
         Returns:
             list of lists of str
@@ -67,7 +66,7 @@ class DocxParser:
                     for par in self.flatten_table(block)
                     if par.text
                     and not is_space(par.text)
-                    and not should_skip(par.text.strip(), fn)
+                    and not should_skip(par.text.strip(), pagebreak_text)
                 ]
                 if not table_pars:
                     continue
@@ -76,12 +75,14 @@ class DocxParser:
             else:
                 block_texts = [block.text]
 
-            self.sections.add(block, block_texts, fn, self.space_mode)
+            self.sections.add(
+                block, block_texts, pagebreak_text, self.space_mode
+            )
 
         self.sections.combine_by_section_num()
         self.sections.combine_enclosures()
         self.sections.combine_glossary()
-        self.sections.remove_noise()
+        self.sections.remove_repeated_section_titles()
 
         return self.sections
 
