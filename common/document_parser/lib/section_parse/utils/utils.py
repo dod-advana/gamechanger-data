@@ -60,9 +60,9 @@ def match_roman_numerals(text: str) -> Union[int, None]:
     m = match(r"([IVXLCDM]){1,5}\b", text)
     if m:
         try:
-            m = fromRoman(m)
+            m = fromRoman(m.group())
         except:
-            pass
+            m = None
 
     return m
 
