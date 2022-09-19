@@ -4,10 +4,11 @@ from docx.text.paragraph import Paragraph
 from typing import List
 from .utils import (
     get_subsection,
+    next_section_num,
     is_next_num_list_item,
     match_enclosure_num,
     match_section_num,
-    has_next_section_num,
+    is_space,
 )
 from .section_types import (
     should_skip,
@@ -16,7 +17,6 @@ from .section_types import (
     is_enclosure_continuation,
     is_child,
 )
-from .utils import is_space
 
 
 class Sections:
@@ -24,8 +24,10 @@ class Sections:
 
     def __init__(self):
         self._sections = []
-        # Flags for whether or not the last 3 sections were only whitespace.
-        self._prev_spaces = [False, False, False]
+
+        # Track the number of previous, consecutive sections that are only
+        # whitespace. This is used in add() to inform about section breaks.
+        self._prev_space_count = 0
 
     @property
     def sections(self) -> List[List[str]]:
@@ -115,43 +117,31 @@ class Sections:
         """
         text_stripped = par.text.strip()
         is_a_space = is_space(par.text)
-        last_section = self.last_section()
+        last_section = self._sections[-1] if self._sections else []
 
         # The order of this is purposeful. Be careful about changing it.
         if is_a_space:
             pass
         elif should_skip(text_stripped, fn):
             pass
-        elif all(self._prev_spaces):
+        # If 3 previous paragraphs are only space, the text is probably a new
+        # section because it's probably on a new page.
+        elif self._prev_space_count >= 3:
             self.add_parent(section_texts)
         elif is_same_section_num(text_stripped, last_section):
             self.add_child(section_texts)
         elif is_enclosure_continuation(text_stripped, last_section):
             self.add_continuation(section_texts[0])
-        elif is_known_section_start(text_stripped):
+        elif is_known_section_start(text_stripped, par):
             self.add_parent(section_texts)
+        # This can have false positives if the other conditions aren't checked
+        # first.
         elif is_child(par, last_section, space_mode):
             self.add_child(section_texts)
         else:
             self.add_parent(section_texts)
 
-        self._prev_spaces[2] = self._prev_spaces[1]
-        self._prev_spaces[1] = self._prev_spaces[0]
-        self._prev_spaces[0] = is_a_space
-
-    def last_section(self, n: int = 1) -> List[str]:
-        """Get a section from the end of the object's `sections` list.
-
-        Args:
-            n (int, optional): Use 1 to get the last section, use 2 to get the
-                second to last section, and so on. This value should be an
-                integer greater than 0. If an invalid value is passed, 
-                returns []. Defaults to 1.
-
-        Returns:
-            List[str]
-        """
-        return self._sections[-1 * n] if n <= len(self._sections) else []
+        self._update_prev_space_count(is_a_space)
 
     def add_parent(self, texts: List[str]) -> None:
         """Add a new parent section to the object's `sections` list."""
@@ -181,8 +171,6 @@ class Sections:
 
     def combine_sections(self, start: int, end: int) -> None:
         """Combine sections together.
-
-        Updates the object's `sections` attribute.
 
         Args:
             start (int): First index of the sections to combine.
@@ -234,20 +222,12 @@ class Sections:
 
     def combine_enclosures(self) -> None:
         i = 0
-        while i < len(self._sections) - 3 and len(self._sections) > 2:
-            curr = get_subsection(self._sections[i]).strip()
-            enclosure_num = match_enclosure_num(curr)
-
-            if enclosure_num:
-                while self._is_next_list_item(i, 1, enclosure_num):
-                    self.combine_sections(i, i + 1)
-                for j in [1, 2, 3, 4, 5, 6]:
-                    while self._has_same_enclosure(i, j, enclosure_num):
-                        self.combine_sections(i, i + j)
-                for j in [2, 3, 4]:
-                    while self._has_next_enclosure(i, j, enclosure_num):
-                        self.combine_sections(i, i + j - 1)
-
+        while i < len(self._sections):
+            encl_num = match_enclosure_num(get_subsection(self._sections[i]))
+            if encl_num:
+                combined_same = self._combine_by_enclosure_num(i, encl_num)
+                while combined_same:
+                    combined_same = self._combine_by_enclosure_num(i, encl_num)
             i += 1
 
     def combine_by_section_num(self) -> None:
@@ -270,71 +250,103 @@ class Sections:
             ] --> combine indices 1 and 2
         """
         i = 0
-        while i < len(self._sections) - 3 and len(self._sections) > 2:
-            curr = get_subsection(self._sections[i]).strip()
-            curr_num = match_section_num(curr.strip())
-
-            while (
-                len(self._sections) > 2
-                and curr_num is not None
-                and has_next_section_num(
-                    get_subsection(self._sections[i + 2]).strip(),
-                    curr_num,
-                )
-            ):
-                self.combine_sections(i, i + 1)
-
-            while (
-                len(self._sections) > 2
-                and curr_num is not None
-                and match_section_num(
-                    get_subsection(self._sections[i + 2]).strip(),
-                    curr_num,
-                )
-            ):
-                self.combine_sections(i, i + 2)
+        while i < len(self._sections):
+            curr_num = match_section_num(get_subsection(self._sections[i]))
+            if curr_num:
+                go = self._combine_by_section_num(i, curr_num)
+                while go:
+                    go = self._combine_by_section_num(i, curr_num)
             i += 1
 
-    def _has_next_enclosure(self, i, j, enclosure_num) -> bool:
-        has_next = i + j < len(self._sections) and len(self._sections) > j
-        if not has_next:
-            return has_next
+    def remove_repeated_section_titles(self) -> None:
+        """Remove repeated section titles from within section bodies.
 
-        for x in range(i + 1, i + j):
-            if match_enclosure_num(
-                get_subsection(self._sections[x]).strip(),
-                str(int(enclosure_num) + 1),
-                "bool",
-            ):
+        Section titles are often repeated when a section spans over multiple
+        pages, since the title is restated on each page.
+
+        This function makes each title only appear once, as the first item in
+        each section.
+        """
+        for i in range(len(self._sections)):
+            first_subsection = get_subsection(self._sections[i])
+            enclosure_num = match_enclosure_num(first_subsection)
+            self._sections[i][1:] = [
+                subsection
+                for subsection in self._sections[i][1:]
+                if subsection.strip() != first_subsection
+                and not match_enclosure_num(subsection.strip(), enclosure_num)
+            ]
+
+    def _combine_by_section_num(
+        self, i: int, curr_num: str, max_steps: int = 2
+    ) -> bool:
+        next_num = next_section_num(curr_num)
+        found_next = False
+        end = None
+
+        for j in range(i + 1, i + max_steps + 1):
+            if j >= len(self._sections):
                 return False
-        return match_enclosure_num(
-            get_subsection(self._sections[i + j]).strip(),
-            str(int(enclosure_num) + 1),
-            "bool",
-        )
+            num_j = match_section_num(get_subsection(self._sections[j]))
+            if num_j is not None:
+                if num_j == curr_num:
+                    end = j
+                    break
+                elif num_j == next_num:
+                    if j == i + 1:
+                        break
+                    end = j - 1
+                    found_next = True
+                    break
 
-    def _has_same_enclosure(self, i, j, enclosure_num) -> bool:
-        return (
-            i + j < len(self._sections)
-            and len(self._sections) > j
-            and match_enclosure_num(
-                get_subsection(self._sections[i + j]).strip(),
-                enclosure_num,
-                "bool",
-            )
-        )
-
-    def _is_next_list_item(self, i, j, enclosure_num):
-        text = get_subsection(self._sections[i + j])
-        text_match = match_enclosure_num(text, return_type="match")
-        if text_match and text_match.groups()[0] == enclosure_num:
-            text = text[len(text_match.group()) :].strip()
-            if not text:
-                del self._sections[i + j]
+        if end is not None:
+            self.combine_sections(i, end)
+            if found_next:
                 return False
-            self._sections[i + j][0] = text
-        prev_section = self._sections[i]
-        return is_next_num_list_item(text, prev_section)
+            return True
+
+        return False
+
+    def _combine_by_enclosure_num(
+        self, i: int, curr_num: str, max_steps: int = 5
+    ) -> bool:
+        next_enclosure = str(int(curr_num) + 1)
+        found_next = False
+        end = None
+
+        for j in range(i + 1, i + max_steps + 1):
+            if j >= len(self._sections):
+                return False
+            subsection_j = get_subsection(self._sections[j])
+            enclosure_j = match_enclosure_num(subsection_j)
+
+            if enclosure_j:
+                if enclosure_j == curr_num:
+                    end = j
+                    break
+                elif enclosure_j == next_enclosure:
+                    if j == i + 1:
+                        break
+                    else:
+                        end = j - 1
+                        found_next = True
+                        break
+                else:
+                    break
+            else:
+                if is_next_num_list_item(subsection_j, self._sections[i]):
+                    end = j
+                    break
+
+        if end is not None:
+            self.combine_sections(i, end)
+            # Return False if the next enclosure number was found so that we
+            # move on to the next index.
+            if found_next:
+                return False
+            return True
+
+        return False
 
     def _get_section_by_title(self, words: str) -> List[List[str]]:
         # Note: don't include special regex chars in words
@@ -350,5 +362,13 @@ class Sections:
         pattern += r"\b"
 
         return [
-            section for section in self.sections if search(pattern, section[0])
+            section
+            for section in self._sections
+            if search(pattern, section[0])
         ]
+
+    def _update_prev_space_count(self, is_space: bool) -> None:
+        if is_space:
+            self._prev_space_count += 1
+        else:
+            self._prev_space_count = 0

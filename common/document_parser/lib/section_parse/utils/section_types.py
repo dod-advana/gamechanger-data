@@ -15,6 +15,7 @@ from .utils import (
     starts_with_part,
     ends_with_colon,
     is_next_num_list_item,
+    is_bold,
 )
 
 
@@ -54,7 +55,7 @@ def is_enclosure_continuation(text: str, prev_section: List[str]) -> bool:
 
         if prev_enclosure:
             curr_enclosure = match_enclosure_num(text)
-            # If `text` references an Enclosure number that is not the same 
+            # If `text` references an Enclosure number that is not the same
             # Enclosure number referenced in `prev_section`, return False.
             if (
                 curr_enclosure is not None
@@ -90,10 +91,10 @@ def should_skip(text: str, fn: str) -> bool:
         # File name in text and text is short -> probably a header or footer
         or (match(fn, text, flags=IGNORECASE) and len(text) < 40)
         # Another header/ footer presentation
-        or (match(r"change [0-9]", text, flags=IGNORECASE) and len(text) < 30)
+        or (match(r"change [0-9]", text, flags=IGNORECASE) and len(text) < 40)
         # Page number/ footer
-        or search(r"[\t][0-9]{1,3}$", text)  
-        # Page number/ footer of an Enclosure 
+        or search(r"[\t][0-9]{1,3}$", text)
+        # Page number/ footer of an Enclosure
         or fullmatch(
             r"[0-9]{1,3}\s?[\t]ENCLOSURE(?:\s[0-9]{1,2})?",
             text,
@@ -105,14 +106,15 @@ def should_skip(text: str, fn: str) -> bool:
     return False
 
 
-def is_known_section_start(text: str) -> bool:
+def is_known_section_start(text: str, par: Paragraph) -> bool:
     """Returns whether or not the text is a known section starting point.
 
     Args:
         text (str): Determine if this text is the start of a section.
 
     Returns:
-        bool: True if the text is a known section starting point, False otherwise.
+        bool: True if the text is a known section starting point, False 
+            otherwise.
     """
     # Don't split up the table of contents.
     if is_toc(text):
@@ -147,16 +149,16 @@ def is_known_section_start(text: str) -> bool:
         )
         if m:
             groups = m.groups()
-            # If not all uppercase, then must be followed by a colon or period 
-            # to be a section start.
-            if groups[0].isupper() or groups[1] is not None:
+            # Must be all uppercase, end with colon/ period, or be bold to be 
+            # a section start
+            if groups[0].isupper() or groups[1] is not None or is_bold(par):
                 return True
 
     # Separate match for "Glossary" because it does not need to be followed by
     # a colon or period if not uppercase.
     if match(r"Glossary", text, flags=IGNORECASE):
         return True
-        
+
     # Note: Don't use IGNORECASE flag here because "Section" is commonly referred to
     # within section bodies.
     # Starts with "SECTION <number>" and does not end with tab & 1-3 digits.
@@ -185,9 +187,9 @@ def is_child(par: Paragraph, prev_section: List[str], space_mode: int) -> bool:
     """
     text = par.text
     text_stripped = text.strip()
-    last_sub = get_subsection(prev_section, -1)
+    last_sub = get_subsection(prev_section, -1, False)
     last_sub_stripped = " ".join(last_sub.split()).strip()
-    first_sub = " ".join(get_subsection(prev_section).split()).strip()
+    first_sub = " ".join(get_subsection(prev_section).split())
 
     # Check if the paragraph is part of a Table of Contents.
     if is_toc(text):
@@ -245,7 +247,7 @@ def is_same_section_num(text: str, section: List[str]) -> bool:
         if is_toc(s):
             return False
 
-    first_subsection = " ".join(get_subsection(section).split()).strip()
+    first_subsection = " ".join(get_subsection(section).split())
     text = text.strip()
 
     section_num = match(

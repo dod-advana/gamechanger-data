@@ -3,7 +3,7 @@ from .utils import (
     match_enclosure_num,
     match_roman_numerals,
     get_subsection,
-    has_next_section_num,
+    next_section_num,
     is_list_child,
     is_space,
     is_first_line_indented,
@@ -19,6 +19,7 @@ from .utils import (
     starts_with_part,
     match_section_num,
     remove_strikethrough_text,
+    is_bold,
 )
 from .section_types import (
     is_enclosure_continuation,
