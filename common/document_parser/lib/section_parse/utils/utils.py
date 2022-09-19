@@ -327,3 +327,11 @@ def get_subsection(section: List[str], ind: int = 0) -> str:
         return section[ind]
     except:
         return ""
+
+
+def remove_strikethrough_text(paragraph: Paragraph) -> None:
+    """Mutably alter Paragraph to remove text that has strikethrough applied"""
+    if paragraph.runs:
+        paragraph.text = "".join(
+            [run.text for run in paragraph.runs if not run.font.strike]
+        )

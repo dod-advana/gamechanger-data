@@ -18,6 +18,7 @@ from .utils import (
     is_glossary_continuation,
     starts_with_part,
     match_section_num,
+    remove_strikethrough_text,
 )
 from .section_types import (
     is_enclosure_continuation,

@@ -16,6 +16,7 @@ from .utils import (
     match_num_list_item,
     is_space,
     should_skip,
+    remove_strikethrough_text
 )
 
 
@@ -46,7 +47,7 @@ class DocxParser:
         self.blocks = list(self.iter_block_items())
         self.space_mode = self.calculate_space_mode(self.blocks)
 
-    def parse(self, fn) -> Sections:
+    def parse(self, fn, should_remove_striken_text=False) -> Sections:
         """Parse a docx document into sections.
 
         Populates the objects `sections` attribute.
@@ -74,6 +75,8 @@ class DocxParser:
                 block = table_pars[0]
                 block_texts = [par.text for par in table_pars]
             else:
+                if should_remove_striken_text:
+                    remove_strikethrough_text(block)
                 block_texts = [block.text]
 
             self.sections.add(block, block_texts, fn, self.space_mode)
