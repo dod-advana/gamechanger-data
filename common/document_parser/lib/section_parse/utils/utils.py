@@ -150,7 +150,7 @@ def match_num_parentheses(text: str) -> Union[str, None]:
 
 def is_bold(par: Paragraph) -> bool:
     """Check if all text in the paragraph is bold."""
-    return all([run.bold for run in par.runs])
+    return all([run.bold for run in par.runs]) and len(par.runs) > 0
 
 
 def is_first_line_indented(par: Paragraph) -> bool:
