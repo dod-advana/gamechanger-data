@@ -6,7 +6,7 @@ from docx import Document
 from typing import List, Callable
 import sys
 sys.path.append(
-    dirname(__file__).replace("/section_parse/tests/unit_tests", "")
+    dirname(__file__).replace("/section_parse/tests/unit", "")
 )
 from section_parse.tests import TestItem
 from section_parse.utils import (
@@ -31,7 +31,7 @@ class UtilsTest(TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.test_doc = Document(
-            join(dirname(__file__).replace("unit_tests", "data"), "test.docx")
+            join(dirname(__file__).replace("unit", "data"), "test_utils.docx")
         )
 
     def _run(self, func: Callable, test_cases: List[TestItem]):
