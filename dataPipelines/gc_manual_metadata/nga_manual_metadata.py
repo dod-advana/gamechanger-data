@@ -45,18 +45,22 @@ class NGAManualMetadata:
                 os.makedirs(output_directory,exist_ok=True)
             # copy over the metadata file to the output directory
             shutil.copy(os.path.join(input_directory,self.metadata_filename), os.path.join(output_directory,self.metadata_filename))
+        else:
+            # if no output directory specified, make new files in the input directory
+            output_directory=input_directory
 
 
         try:
-            metadata_records = pd.read_csv(os.path.join(input_directory,self.metadata_filename)).to_dict(orient="records")
+            metadata_records = pd.read_csv(os.path.join(input_directory,self.metadata_filename), dtype=str,keep_default_na=False).to_dict(orient="records")
         except Exception as e:
             raise e
 
         all_input_filepaths = Path(input_directory).glob("**/*")
+        all_output_filepaths = Path(output_directory).glob("**/*")
         existing_files = [x for x in all_input_filepaths if x.is_file() and (x.suffix.lower() in (".pdf", ".html", ".txt")
                                                        or (filetype.guess(str(x)) is not None and (
                         filetype.guess(str(x)).mime == "pdf" or filetype.guess(str(x)).mime == "application/pdf")))]
-        existing_metadata_files = [Path(x).stem for x in all_input_filepaths if x.is_file() and filetype.guess(str(x)) is not None and (
+        existing_metadata_files = [Path(x).stem for x in all_output_filepaths if x.is_file() and filetype.guess(str(x)) is not None and (
                 filetype.guess(str(x)).mime == "metadata")]
 
         for metadata_record in metadata_records:
@@ -67,9 +71,9 @@ class NGAManualMetadata:
                     and metadata_record['mod_type']=="Addition":
                 before, part, after = Path(filepath).stem.partition("(")
 
-                doc_title = metadata_record.get('title') if metadata_record.get('title') else (before.split("_")[5] if not after else before)
-                doc_type = metadata_record.get('doc_type') if metadata_record.get('doc_type') else (doc_title.split(" ", 1)[0])
-                doc_num = metadata_record.get('doc_num') if metadata_record.get('doc_num') else (doc_title.split(" ", 1)[1])
+                doc_title = metadata_record.get('title', "")# if metadata_record.get('title') else (before.split("_")[5] if not after else before)
+                doc_type = metadata_record.get('doc_type', "")# if metadata_record.get('doc_type') else (doc_title.split(" ", 1)[0])
+                doc_num = metadata_record.get('doc_num', "")# if metadata_record.get('doc_num') else (doc_title.split(" ", 1)[1])
 
                 pdi = dict(doc_type=Path(filepath).suffix[1:],
                            web_url="manual.ingest")
@@ -96,13 +100,14 @@ class NGAManualMetadata:
                     source_fqdn="manual.ingest",
                     version_hash=dict_to_sha256_hex_digest(version_hash_fields)
                 )
-                if output_directory:
+
+                # copy over the .pdf file to the output directory if the output directory was specified
+                if output_directory!=input_directory:
                     orig_copy_filepath = os.path.join(str(output_directory),metadata_record["file_name"])
                     shutil.copy(filepath, orig_copy_filepath)
                     metadata_outfile = orig_copy_filepath + '.metadata'
                 else:
                     metadata_outfile = str(filepath) + '.metadata'
-                # print(metadata_outfile)
                 if doc:
                     with open(metadata_outfile, "w") as f:
                         f.write(json.dumps(doc))
@@ -111,9 +116,9 @@ class NGAManualMetadata:
 
 
 
-# if __name__=="__main__":
-#     input_directory = "/Users/austinmishoe/bah/advana_data/nga_test/"
-#     nga_mm = NGAManualMetadata()
-#     nga_mm.create_metadata_files(input_directory,output_directory="/Users/austinmishoe/Downloads/nga_files")
-#     print(nga_mm.all_processed_files)
+if __name__=="__main__":
+    input_directory = "/Users/austinmishoe/bah/advana_data/nga_test/"
+    nga_mm = NGAManualMetadata()
+    nga_mm.create_metadata_files(input_directory,output_directory="/Users/austinmishoe/Downloads/nga_files")
+    print(nga_mm.all_processed_files)
 
