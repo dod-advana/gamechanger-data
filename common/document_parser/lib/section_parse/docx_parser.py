@@ -15,7 +15,7 @@ from .utils import (
     match_num_list_item,
     is_space,
     should_skip,
-    remove_strikethrough_text
+    remove_strikethrough_text,
 )
 
 
@@ -46,7 +46,9 @@ class DocxParser:
         self.blocks = list(self.iter_block_items())
         self.space_mode = self.calculate_space_mode(self.blocks)
 
-    def parse(self, pagebreak_text: str, should_remove_striken_text: bool = False) -> Sections:
+    def parse(
+        self, pagebreak_text: str, should_remove_striken_text: bool = False
+    ) -> Sections:
         """Parse a docx document into sections.
 
         Populates the objects `sections` attribute.
@@ -54,7 +56,8 @@ class DocxParser:
         Args:
             pagebreak_text (str): Text that indicates a page break. For DoD
                 documents, use `{doc_type} + " " + {doc_num}`.
-            should_remove_striken_text (bool): Flag to remove text that has strikethrough applied to it
+            should_remove_striken_text (bool): Flag to remove text that has
+                strikethrough applied to it
 
         Returns:
             list of lists of str

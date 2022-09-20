@@ -1,3 +1,5 @@
+"""Verify outputs of DocxParser.parse()"""
+
 from os.path import dirname, join, basename, isfile, abspath, isdir
 from os import makedirs
 from shutil import rmtree
@@ -16,6 +18,8 @@ ACTUAL_OUTPUT_DIR = join(DATA_DIR, "actual_outputs")
 
 
 def test_parse_all_sections(docx_path, pagebreak_text):
+    """Returns True if all sections of the actual output are the same as the
+    expected output. Otherwise, returns False."""
     filename = basename(docx_path).replace(".docx", "")
     expected_output = _load_expected_output(filename)
 
@@ -41,6 +45,9 @@ def test_parse_all_sections(docx_path, pagebreak_text):
 
 
 def test_parse_specific_sections(docx_path, pagebreak_text):
+    """Checks that specific sections are the same in the expected and actual
+    outputs. Returns True if they are the same for all sections. Otherwise,
+    returns False."""
     filename = basename(docx_path).replace(".docx", "")
     expected_output = _load_expected_output(filename)
 

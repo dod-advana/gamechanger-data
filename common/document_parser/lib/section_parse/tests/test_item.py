@@ -53,6 +53,4 @@ class TestItem:
         if not hasattr(self, "actual_output"):
             self.actual_output = self.func(*self.inputs)
 
-        if not hasattr(self, "actual_output"):
-            self.actual_output = self.func(*self.inputs)
         return self.actual_output
