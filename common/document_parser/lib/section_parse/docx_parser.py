@@ -119,7 +119,9 @@ class DocxParser:
                 yield Table(child, parent)
 
     @staticmethod
-    def flatten_table(table: Table) -> List[Paragraph]:
+    def flatten_table(
+        table: Table, should_fix_order: bool = True
+    ) -> List[Paragraph]:
         """Flatten a Table into Paragraphs."""
         pars = []
         for row in table.rows:
@@ -127,7 +129,9 @@ class DocxParser:
                 for paragraph in cell.paragraphs:
                     pars.append(paragraph)
 
-        pars = DocxParser.fix_table_order(pars)
+        if should_fix_order:
+            pars = DocxParser.fix_table_order(pars)
+
         return pars
 
     @staticmethod
