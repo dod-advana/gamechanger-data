@@ -19,7 +19,8 @@ This module supports parsing DoD documents into sections. Note: the document mus
 │   │   ├── data/*
 │   │   ├── unit                    Unit Tests
 │   │   │   ├── __init__.py
-│   │   │   ├── test_utils.py
+│   │   │   ├── test_sections.py    Unit Tests for sections_parser.utils.sections
+│   │   │   ├── test_utils.py       Unit Tests for section_parser.utils.utils
 │   │   ├── integration             Integration Tests
 │   │   │   ├── __init__.py
 │   │   │   ├── test_parse.py       Tests the main `parse()` function for this module.
