@@ -7,23 +7,24 @@ This module supports parsing DoD documents into sections. Note: the document mus
 ```
 ├── gamechanger-data/common/document_parser/lib/section_parse
 │   ├── __init__.py
-│   ├── docx_parser.py              DocxParser class
+│   ├── docx_parser.py                 DocxParser class
 │   ├── utils
 │   │   ├── __init__.py
-│   │   ├── sections.py             Sections class
-│   │   ├── section_types.py        Helper functions for types of sections that can be added to a Sections object
+│   │   ├── sections.py                Sections class
+│   │   ├── section_types.py           Helper functions for types of sections that can be added to a Sections object
 │   │   └── utils.py
 │   ├── tests
 │   │   ├── __init__.py
 │   │   ├── test_item.py
 │   │   ├── data/*
-│   │   ├── unit                    Unit Tests
+│   │   ├── unit                       Unit Tests
 │   │   │   ├── __init__.py
-│   │   │   ├── test_sections.py    Unit Tests for sections_parser.utils.sections
-│   │   │   ├── test_utils.py       Unit Tests for section_parser.utils.utils
-│   │   ├── integration             Integration Tests
+│   │   │   ├── test_sections.py       Unit Tests for sections_parser.utils.sections
+│   │   │   ├── test_utils.py          Unit Tests for section_parser.utils.utils
+│   │   │   ├── test_docx_parser.py    Unit Tests for section_parser.docx_parser
+│   │   ├── integration                Integrated Tests
 │   │   │   ├── __init__.py
-│   │   │   ├── test_parse.py       Tests the main `parse()` function for this module.
+│   │   │   ├── test_parse.py          Tests for the main function (`DocxParser.parse()`) of this module.
 ```
 
 ## Example Usage

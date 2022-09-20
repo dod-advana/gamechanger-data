@@ -3,11 +3,12 @@
 from unittest import TestCase, main
 from os.path import dirname, join
 from docx import Document
+from collections import defaultdict
+from copy import deepcopy
 from typing import List, Callable
 import sys
-sys.path.append(
-    dirname(__file__).replace("/section_parse/tests/unit", "")
-)
+
+sys.path.append(dirname(__file__).replace("/section_parse/tests/unit", ""))
 from section_parse.tests import TestItem
 from section_parse.utils import (
     match_section_num,
@@ -24,15 +25,35 @@ from section_parse.utils import (
     is_list_child,
     is_bold,
     is_first_line_indented,
+    remove_strikethrough_text,
 )
 
 
 class UtilsTest(TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        cls.test_doc = Document(
-            join(dirname(__file__).replace("unit", "data"), "test_utils.docx")
+        test_doc_path = join(
+            dirname(__file__).replace("unit", "data"), "test_utils.docx"
         )
+        cls.test_doc = Document(test_doc_path)
+
+        # Set up for test_remove_strikethrough_text().
+        paragraphs = list(cls.test_doc.paragraphs)
+        # Keys are paragraph index, values are list of text with strikethrough
+        # in that paragraph.
+        cls.paragraphs_with_strike = defaultdict(list)
+        for i in range(len(paragraphs)):
+            paragraph = paragraphs[i]
+            for run in paragraph.runs:
+                if run.font.strike:
+                    cls.paragraphs_with_strike[i].append(run.text)
+
+        if len(cls.paragraphs_with_strike) == 0:
+            raise Exception(
+                f"ERROR: Cannot run `test_remove_strikethrough_text()` because "
+                f"no strikethrough text was detected in the test file: "
+                f"`{test_doc_path}`."
+            )
 
     def _run(self, func: Callable, test_cases: List[TestItem]):
         for test in test_cases:
@@ -228,6 +249,32 @@ class UtilsTest(TestCase):
             ),
         ]
         self._run(is_list_child, test_cases)
+
+    def test_remove_strikethrough_text(self):
+        """Verifies remove_strikethrough_text()."""
+        fail_msg = "FAILURE: test_remove_strikethrough_text()."
+
+        paragraphs = deepcopy(list(self.test_doc.paragraphs))
+        for i in range(len(paragraphs)):
+            text_before = paragraphs[i].text
+            remove_strikethrough_text(paragraphs[i])
+            text_after = paragraphs[i].text
+
+            if i in self.paragraphs_with_strike.keys():
+                for strike_text in self.paragraphs_with_strike[i]:
+                    self.assertTrue(
+                        strike_text not in text_after,
+                        fail_msg + f"Strikethrough text was detected in the "
+                        f"paragraph after calling `remove_strikethrough_text().`",
+                    )
+            else:
+                self.assertEqual(
+                    text_before,
+                    text_after,
+                    fail_msg + f"No strikethrough was detected in the text, "
+                    f"but the text was somehow altered. Text before was: "
+                    f"`{text_before}`. Text after was: `{text_after}`.",
+                )
 
 
 if __name__ == "__main__":
