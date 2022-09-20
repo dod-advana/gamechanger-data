@@ -17,9 +17,12 @@ This module supports parsing DoD documents into sections. Note: the document mus
 │   │   ├── __init__.py
 │   │   ├── test_item.py
 │   │   ├── data/*
-│   │   ├── unit_tests
+│   │   ├── unit                    Unit Tests
 │   │   │   ├── __init__.py
 │   │   │   ├── test_utils.py
+│   │   ├── integration             Integration Tests
+│   │   │   ├── __init__.py
+│   │   │   ├── test_parse.py       Tests the main `parse()` function for this module.
 ```
 
 ## Example Usage
@@ -57,9 +60,27 @@ print("References sections:", sections.references)
 
 ### Unit Tests
 
-1. `cd` into the [`unit_tests`](tests/unit_tests/) directory.
+Use the unit tests to verify that individual, independent units work as expected.
+
+1. `cd` into the [`unit`](tests/unit/) directory.
 2. Run:
    ```
    python -m unittest <test module>
    ```
    where _\<test module>_ is the name of the test file to run, without the _.py_ extension.
+
+### Integration Tests
+
+Use the integration tests to verify that multiple units work together as expected.
+
+1. `cd` into the [`integration`](tests/integration/) directory.
+2. Run:
+
+   ```
+   python <test file name>
+   ```
+
+   where _\<test file name>_ is the name of the test file you want to run.
+
+   - The number of successes and failures will print to the terminal.
+   - For any failures, the results will be saved [here](tests/data/actual_outputs/).

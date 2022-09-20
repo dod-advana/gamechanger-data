@@ -89,7 +89,7 @@ def should_skip(text: str, fn: str) -> bool:
         # Usually a page number
         text.isdigit()
         # File name in text and text is short -> probably a header or footer
-        or (match(fn, text, flags=IGNORECASE) and len(text) < 40)
+        or (len(fn) > 0 and (match(fn, text, flags=IGNORECASE) and len(text) < 40))
         # Another header/ footer presentation
         or (match(r"change [0-9]", text, flags=IGNORECASE) and len(text) < 40)
         # Page number/ footer
