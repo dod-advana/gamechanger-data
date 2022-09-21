@@ -1,5 +1,3 @@
-# TODO later: move this & utils.py to a utils folder
-# TODO at end: docstrings
 from typing import Callable
 from unittest import TestCase
 

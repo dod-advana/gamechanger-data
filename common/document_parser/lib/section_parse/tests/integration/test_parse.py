@@ -49,12 +49,11 @@ def test_parse_specific_sections(docx_path, pagebreak_text):
     outputs. Returns True if they are the same for all sections. Otherwise,
     returns False."""
     filename = basename(docx_path).replace(".docx", "")
-    expected_output = _load_expected_output(filename)
+    expected_outputs = _load_expected_output(filename)
 
     parser = DocxParser(docx_path)
     parser.parse(pagebreak_text).sections
 
-    results = {}
     fields = [
         "purpose",
         "responsibilities",
@@ -69,24 +68,24 @@ def test_parse_specific_sections(docx_path, pagebreak_text):
         "policy",
         "procedures",
     ]
+    bad_results = {}
     for field in fields:
-        results[field] = _check_section(parser, expected_output, field)
+        actual_output = getattr(parser.sections, field)
+        expected_output = expected_outputs[field]
+        if actual_output != expected_output:
+            bad_results[field] = {
+                "actual_output": actual_output,
+                "expected_output": expected_output,
+            }
 
-    passed = all(results.values())
+    passed = len(bad_results) == 0
     if not passed:
-        _save_actual_output(results, filename)
+        _save_actual_output(bad_results, filename)
+        fail_msg = f"FAILURE: `{filename}`. The following sections do not appear as expected: {list(bad_results.keys())}."
 
-    assert (
-        passed
-    ), f"FAILURE: `{filename}`. The following sections do not appear as expected: {[k for k, v in results.items() if not v]}"
+    assert passed, fail_msg
 
     return passed
-
-
-def _check_section(parser, expected_outputs, field):
-    sections = parser.sections
-    section = getattr(sections, field)
-    return section == expected_outputs[field]
 
 
 def _save_actual_output(actual_output, filename):
@@ -145,23 +144,27 @@ if __name__ == "__main__":
         rmtree(ACTUAL_OUTPUT_DIR)
     makedirs(ACTUAL_OUTPUT_DIR, exist_ok=True)
 
-    results = [
-        test_parse_all_sections(
-            join(DATA_DIR, "DoDD 1350.2 CH 2.docx"), "DoDD 1350.2"
-        ),
-        test_parse_all_sections(
-            join(DATA_DIR, "DoDI 8320.03 CH 3.docx"), "DoDI 8320.03"
-        ),
-        test_parse_all_sections(
-            join(DATA_DIR, "DoDI 8910.01 CH 1.docx"), "DoDI 8910.01"
-        ),
-        test_parse_specific_sections(
-            join(DATA_DIR, "DoDM 6025.18.docx"), "DoDM 6025.18"
-        ),
-        test_parse_specific_sections(
-            join(DATA_DIR, "DoDM 5120.20 CH 1.docx"), "DoDM 5120.20"
-        ),
-    ]
+    docs_test_all_sections = {
+        "DoDD 1350.2 CH 2": "DoDD 1350.2",
+        "DoDI 8320.03 CH 3": "DoDI 8320.03",
+        "DoDI 8910.01 CH 1": "DoDI 8910.01",
+    }
+    docs_test_specific_sections = {
+        "DoDM 6025.18": "DoDM 6025.18",
+        "DoDM 5120.20 CH 1": "DoDM 5120.20",
+        "DTM-12-006 CH 9": "DTM-12-006",
+        "DTM-15-002 CH 6": "DTM-15-002",
+        "DTM-19-001": "DTM-19-001",
+    }
+
+    results = []
+    for filename, pagebreak_text in docs_test_all_sections.items():
+        docx_path = join(DATA_DIR, f"{filename}.docx")
+        results.append(test_parse_all_sections(docx_path, pagebreak_text))
+
+    for filename, pagebreak_text in docs_test_specific_sections.items():
+        docx_path = join(DATA_DIR, f"{filename}.docx")
+        results.append(test_parse_specific_sections(docx_path, pagebreak_text))
 
     print(f"FINISHED {len(results)} PARSE TESTS.")
     print("Number of successes:", len([res for res in results if res]))

@@ -26,6 +26,9 @@ from section_parse.utils import (
     is_bold,
     is_first_line_indented,
     remove_strikethrough_text,
+    starts_with_bullet,
+    match_attachment_num,
+    is_attachment_start,
 )
 
 
@@ -275,6 +278,33 @@ class UtilsTest(TestCase):
                     f"but the text was somehow altered. Text before was: "
                     f"`{text_before}`. Text after was: `{text_after}`.",
                 )
+
+    def test_starts_with_bullet(self):
+        """Verifies starts_with_bullet()."""
+        test_cases = [
+            TestItem(("•First",), True),
+            TestItem(("oNext",), True),
+        ]
+        self._run(starts_with_bullet, test_cases)
+
+    def test_match_attachment_num(self):
+        """Verifies match_attachment_num()."""
+        test_cases = [
+            TestItem(("ATTACHMENT 1 RESPONSIBILITIES",), "1"),
+            TestItem(("ATTACHMENT REFERENCES",), None),
+            TestItem(("Attachment 22",), "22"),
+            TestItem(("This attachment 12",), None),
+        ]
+        self._run(match_attachment_num, test_cases)
+
+    def test_is_attachment_start(self):
+        """Verifies is_attachment_start()."""
+        test_cases = [
+            TestItem(("ATTACHMENT ",), True),
+            TestItem(("See Attachment 12",), False),
+            TestItem(("ATTACHMENT 4 PROCEDURES",), True),
+        ]
+        self._run(is_attachment_start, test_cases)
 
 
 if __name__ == "__main__":
