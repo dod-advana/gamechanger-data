@@ -20,6 +20,10 @@ from .utils import (
     match_section_num,
     remove_strikethrough_text,
     is_bold,
+    starts_with_bullet,
+    is_attachment_start,
+    starts_with_glossary,
+    match_attachment_num,
 )
 from .section_types import (
     is_enclosure_continuation,

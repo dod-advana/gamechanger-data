@@ -16,12 +16,14 @@ from .utils import (
     ends_with_colon,
     is_next_num_list_item,
     is_bold,
+    starts_with_bullet,
+    is_attachment_start,
 )
 
 
 def is_enclosure_continuation(text: str, prev_section: List[str]) -> bool:
-    """Determine if `prev_section` is an Enclosure section title and if `text`
-    is part of that title.
+    """Determine if `prev_section` is an Enclosure (or Attachment) section
+    title and if `text` is part of that title.
 
     Returns True if:
         - `prev_section` contains only 1 item.
@@ -34,6 +36,10 @@ def is_enclosure_continuation(text: str, prev_section: List[str]) -> bool:
     Example:
         text = "ENCLOSURE 4 "
         prev_section = ["RESPONSIBILITIES"]
+        --> Returns True
+
+        text = "ATTACHMENT"
+        prev_section = ["REFERENCES"]
         --> Returns True
 
         text = "ENCLOSURE 5 is the best."
@@ -50,6 +56,12 @@ def is_enclosure_continuation(text: str, prev_section: List[str]) -> bool:
     if len(prev_section) == 1 and not match(
         "GLOSSARY", text, flags=IGNORECASE
     ):
+        if (
+            is_attachment_start(get_subsection(prev_section))
+            and text.isupper()
+        ):
+            return True
+
         prev_section = prev_section[0].strip()
         prev_enclosure = match_enclosure_num(prev_section, return_type="match")
 
@@ -89,14 +101,17 @@ def should_skip(text: str, fn: str) -> bool:
         # Usually a page number
         text.isdigit()
         # File name in text and text is short -> probably a header or footer
-        or (len(fn) > 0 and (match(fn, text, flags=IGNORECASE) and len(text) < 40))
+        or (
+            len(fn) > 0
+            and (match(fn, text, flags=IGNORECASE) and len(text) < 40)
+        )
         # Another header/ footer presentation
         or (match(r"change [0-9]", text, flags=IGNORECASE) and len(text) < 40)
         # Page number/ footer
         or search(r"[\t][0-9]{1,3}$", text)
         # Page number/ footer of an Enclosure
         or fullmatch(
-            r"[0-9]{1,3}\s?[\t]ENCLOSURE(?:\s[0-9]{1,2})?",
+            r"[0-9]{1,3}\s?[\t](?:ENCLOSURE|ATTACHMENT|GLOSSARY)(?:\s[0-9]{1,2})?",
             text,
             flags=IGNORECASE,
         )  # Page num of enclosure
@@ -113,7 +128,7 @@ def is_known_section_start(text: str, par: Paragraph) -> bool:
         text (str): Determine if this text is the start of a section.
 
     Returns:
-        bool: True if the text is a known section starting point, False 
+        bool: True if the text is a known section starting point, False
             otherwise.
     """
     # Don't split up the table of contents.
@@ -149,7 +164,7 @@ def is_known_section_start(text: str, par: Paragraph) -> bool:
         )
         if m:
             groups = m.groups()
-            # Must be all uppercase, end with colon/ period, or be bold to be 
+            # Must be all uppercase, end with colon/ period, or be bold to be
             # a section start
             if groups[0].isupper() or groups[1] is not None or is_bold(par):
                 return True
@@ -201,6 +216,7 @@ def is_child(par: Paragraph, prev_section: List[str], space_mode: int) -> bool:
     if (
         is_first_line_indented(par)
         or text_stripped.startswith("Table")
+        or starts_with_bullet(text_stripped)
         or is_sentence_continuation(text, last_sub)
         or par.paragraph_format.space_before < space_mode
         or is_alpha_list_item(text_stripped)

@@ -4,11 +4,14 @@ from docx.text.paragraph import Paragraph
 from typing import List
 from .utils import (
     get_subsection,
+    match_attachment_num,
     next_section_num,
     is_next_num_list_item,
     match_enclosure_num,
     match_section_num,
     is_space,
+    is_toc,
+    starts_with_glossary,
 )
 from .section_types import (
     should_skip,
@@ -195,30 +198,51 @@ class Sections:
         ]
 
     def combine_glossary(self) -> None:
-        """Combine all Glossary sections into 1 section."""
+        """Combine all Glossary parts into 1 section.
+
+        According to the DoD Issuance Style Guide, "A glossary is mandatory for
+        all issuances over two pages that define terms and/or establish acronyms.
+        It is always the second to last section in an issuance, followed only
+        by the Reference section. It is broken up into two parts, 'G1. Acronyms'
+        and 'G2. Definitions'... If you define terms but don't use any acronyms
+        (or vice versa), delete the part you don't need from the template.
+        Remove 'G.1.' or 'G.2.' and the paragraph title, so the Glossary is
+        only listed as 'Glossary' followed by the acronym or definition terms,
+        as appropriate".
+        """
         n_sections = len(self._sections)
-        inds = [
+        glossary_inds = [
             i
             for i in range(n_sections)
-            if self._sections[i][0].strip().startswith("GLOSSARY")
+            if starts_with_glossary(get_subsection(self._sections[i]))
         ]
-        if not inds:
+        if not glossary_inds:
             return
 
-        if len(inds) == 1:
-            end = next(
-                (
-                    i
-                    for i in range(inds[0] + 1, n_sections)
-                    if self._sections[i][0].isupper()
-                ),
-                None,
-            )
+        if len(glossary_inds) == 1:
+            end = None
+            ref_inds = [
+                i
+                for i in range(n_sections)
+                if get_subsection(self._sections[i]).startswith("REFERENCES")
+            ]
+
+            # If a References section comes after the Glossary, then the end
+            # of the Glossary is before the start of that References section.
+            if ref_inds:
+                last_ref_ind = ref_inds[-1]
+                if last_ref_ind > glossary_inds[0] + 1:
+                    end = last_ref_ind - 1
+            # If there is no References section after the Glossary section,
+            # then the end of the Glossary section is the end of the document.
+            else:
+                end = len(self._sections)
+
             if end is None:
                 return
-            self.combine_sections(min(inds), end - 1)
+            self.combine_sections(min(glossary_inds), end - 1)
         else:
-            self.combine_sections(min(inds), max(inds))
+            self.combine_sections(min(glossary_inds), max(glossary_inds))
 
     def combine_enclosures(self) -> None:
         i = 0
@@ -228,6 +252,20 @@ class Sections:
                 combined_same = self._combine_by_enclosure_num(i, encl_num)
                 while combined_same:
                     combined_same = self._combine_by_enclosure_num(i, encl_num)
+            i += 1
+
+    def combine_attachments(self) -> None:
+        i = 0
+        while i < len(self._sections):
+            encl_num = match_attachment_num(get_subsection(self._sections[i]))
+            if encl_num:
+                combined_same = self._combine_by_enclosure_num(
+                    i, encl_num, enclosure_as_attachment=True
+                )
+                while combined_same:
+                    combined_same = self._combine_by_enclosure_num(
+                        i, encl_num, enclosure_as_attachment=True
+                    )
             i += 1
 
     def combine_by_section_num(self) -> None:
@@ -269,12 +307,31 @@ class Sections:
         """
         for i in range(len(self._sections)):
             first_subsection = get_subsection(self._sections[i])
+            toc = is_toc(first_subsection)
+
+            if not toc and starts_with_glossary(first_subsection):
+                self._sections[i][1:] = [
+                    subsection
+                    for subsection in self._sections[i][1:]
+                    if not starts_with_glossary(subsection.strip())
+                ]
+                continue
+
             enclosure_num = match_enclosure_num(first_subsection)
+            if not toc and enclosure_num:
+                self._sections[i][1:] = [
+                    subsection
+                    for subsection in self._sections[i][1:]
+                    if not match_enclosure_num(
+                        subsection.strip(), enclosure_num
+                    )
+                ]
+                continue
+
             self._sections[i][1:] = [
                 subsection
                 for subsection in self._sections[i][1:]
-                if subsection.strip() != first_subsection
-                and not match_enclosure_num(subsection.strip(), enclosure_num)
+                if subsection.strip().lower() != first_subsection.lower()
             ]
 
     def _combine_by_section_num(
@@ -308,7 +365,11 @@ class Sections:
         return False
 
     def _combine_by_enclosure_num(
-        self, i: int, curr_num: str, max_steps: int = 5
+        self,
+        i: int,
+        curr_num: str,
+        max_steps: int = 5,
+        enclosure_as_attachment: bool = False,
     ) -> bool:
         next_enclosure = str(int(curr_num) + 1)
         found_next = False
@@ -318,7 +379,11 @@ class Sections:
             if j >= len(self._sections):
                 return False
             subsection_j = get_subsection(self._sections[j])
-            enclosure_j = match_enclosure_num(subsection_j)
+
+            if enclosure_as_attachment:
+                enclosure_j = match_attachment_num(subsection_j)
+            else:
+                enclosure_j = match_enclosure_num(subsection_j)
 
             if enclosure_j:
                 if enclosure_j == curr_num:

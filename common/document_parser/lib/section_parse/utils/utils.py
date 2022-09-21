@@ -50,6 +50,32 @@ def match_section_num(
     return None
 
 
+def match_attachment_num(text: str) -> Union[str, None]:
+    """Match an Attachment number in the text.
+
+    Args:
+        text (str): Text to look for an attachment number in. Should have 
+            leading whitespace removed.
+
+    Returns:
+        str or None: If a match is found, returns the Attachment number as a string. Otherwise, 
+            returns None.
+    """
+    num = match(
+        r"""
+            A(?:TTACHMENT|ttachment)
+            \s
+            (
+                [1-9]
+                [0-9]{0,2}
+            )
+        """,
+        text,
+        flags=VERBOSE,
+    )
+    return num.groups()[0] if num else None
+
+
 def match_roman_numerals(text: str) -> Union[int, None]:
     """Get roman numerals at the start of `text` as an integer.
 
@@ -166,7 +192,9 @@ def is_sentence_continuation(text: str, prev_text: str) -> bool:
 
     Note: do NOT strip leading/ trailing whitespace from the params.
     """
-    result = (search(r"[^\.] $", prev_text) and match(r"[a-z]", text) is not None)
+    result = (
+        search(r"[^\.] $", prev_text) and match(r"[a-z]", text) is not None
+    )
     if result is None:
         return False
     return result
@@ -273,12 +301,27 @@ def is_list_child(text: str, prev_section: List[str]) -> bool:
             if prev_encl and prev_encl.groups()[0] == curr_encl:
                 return True
 
+    # Check if the text is a continuation of a numbered (ex: "1.") list in an
+    # Attachment.
+    curr_num_dot = match_num_dot(text)
+    if curr_num_dot and get_subsection(prev_section).startswith("ATTACHMENT"):
+        for sub in reversed(prev_section):
+            prev_num_dot = match_num_dot(sub.strip())
+            if prev_num_dot and int(prev_num_dot) + 1 == int(curr_num_dot):
+                return True
+
     return False
 
 
 def is_space(text: str) -> bool:
     """Check if the text is empty or contains only whitespace."""
     return not text or text.isspace()
+
+
+def is_attachment_start(text: str) -> bool:
+    """Check if the text is the start of a document Attachment."""
+    text = " ".join(text.split())
+    return match(r"ATTACHMENT(?: [1-9][0-9]?)?", text) is not None
 
 
 def next_section_num(text: str) -> str:
@@ -289,6 +332,22 @@ def next_section_num(text: str) -> str:
         return ""
 
     return alpha_chars + str(int(digit_chars) + 1)
+
+
+def starts_with_bullet(text: str) -> bool:
+    """Check if the text starts with a bullet point.
+
+    Note: strip leading whitespace from `text`.
+    """
+    return text[:1] == "•" or text[:1] == "o"
+
+
+def starts_with_glossary(text: str) -> bool:
+    """Check if the text starts with "Glossary" or "GLOSSARY".
+
+    Note: strip leading whitespace from `text`.
+    """
+    return match(r"G(?:LOSSARY|lossary)", text) is not None
 
 
 def starts_with_part(text: str) -> bool:
