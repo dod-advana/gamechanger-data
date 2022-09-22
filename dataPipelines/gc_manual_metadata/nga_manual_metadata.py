@@ -33,8 +33,13 @@ def dict_to_sha256_hex_digest(_dict: t.Dict[t.Any, t.Any]) -> str:
 
 
 class NGAManualMetadata:
-    def __init__(self, metadata_filename="metadata.csv"):
+    def __init__(self, metadata_filename="metadata.csv", xlsx_data_sheet = "Metadata Template"):
         self.metadata_filename = metadata_filename
+        self.xlsx_data_sheet = xlsx_data_sheet
+        if ".xls" in self.metadata_filename:
+            print(f"An excel file has been passed in for the 'metadata_filename', please verify that the sheet containing"
+                  f"the metadata to be parsed is {self.xlsx_data_sheet}. If it is not, set this value when instantiating"
+                  f"from the class or by manually overwriting the 'xlsx_data_sheet' attribute")
         self.all_processed_files = []
 
     def create_metadata_files(self, input_directory, output_directory = None):
@@ -51,7 +56,15 @@ class NGAManualMetadata:
 
 
         try:
-            metadata_records = pd.read_csv(os.path.join(input_directory,self.metadata_filename), dtype=str,keep_default_na=False).to_dict(orient="records")
+            if self.metadata_filename.endswith(".csv"):
+                metadata_records = pd.read_csv(os.path.join(input_directory,self.metadata_filename), dtype=str,
+                                               keep_default_na=False).to_dict(orient="records")
+            elif ".xls" in self.metadata_filename:
+                metadata_records = pd.read_excel(os.path.join(input_directory,self.metadata_filename),
+                                                 sheet_name=self.xlsx_data_sheet,dtype=str,keep_default_na=False
+                                                 ).to_dict(orient="records")
+            else:
+                raise f"Unknown file extension on 'metadata_filename': {self.metadata_filename.split('.')[-1]}"
         except Exception as e:
             raise e
 
@@ -116,9 +129,9 @@ class NGAManualMetadata:
 
 
 
-if __name__=="__main__":
-    input_directory = "/Users/austinmishoe/bah/advana_data/nga_test/"
-    nga_mm = NGAManualMetadata()
-    nga_mm.create_metadata_files(input_directory,output_directory="/Users/austinmishoe/Downloads/nga_files")
-    print(nga_mm.all_processed_files)
+# if __name__=="__main__":
+#     input_directory = "/Users/austinmishoe/bah/advana_data/nga_test/"
+#     nga_mm = NGAManualMetadata()
+#     nga_mm.create_metadata_files(input_directory,output_directory="/Users/austinmishoe/Downloads/nga_files")
+#     print(nga_mm.all_processed_files)
 
