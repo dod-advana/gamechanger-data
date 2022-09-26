@@ -1,5 +1,6 @@
 Jinja2~=3.0.2
 Mako~=1.1.5
+pdf2docx~=0.5.5
 PyMuPDF~=1.19.0
 PyPDF2~=1.26.0
 PyYAML~=5.4.1
