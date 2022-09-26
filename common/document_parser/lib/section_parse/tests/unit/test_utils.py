@@ -29,6 +29,8 @@ from section_parse.utils import (
     starts_with_bullet,
     match_attachment_num,
     is_attachment_start,
+    is_subsection_start_for_section_1,
+    get_subsection_of_section_1,
 )
 
 
@@ -305,6 +307,51 @@ class UtilsTest(TestCase):
             TestItem(("ATTACHMENT 4 PROCEDURES",), True),
         ]
         self._run(is_attachment_start, test_cases)
+
+    def test_is_subsection_start_for_section_1(self):
+        """Verifies is_subsection_start_for_section_1()."""
+        test_cases = [
+            TestItem(("1.1   Reissues reference", ""), True),
+            TestItem(("APPLICABILITY. ", ""), True),
+            TestItem(("POLICY", ""), True),
+            TestItem(("Information Collections", ""), True),
+            TestItem(("applicability", ""), False),
+            TestItem(("1.14. Award Resources", ""), True),
+            TestItem(("1.2. POLICY", "policy"), True),
+            TestItem(("1.6 Awards", "Awards"), True),
+            TestItem(("BREAKING NEWS", ""), False),
+            TestItem(("1.2 RESOURCES", "Policy"), False),
+        ]
+
+        self._run(is_subsection_start_for_section_1, test_cases)
+
+    def test_get_subsection_of_section_1(self):
+        """Verifies get_subsection_of_section_1()."""
+        section_1 = [
+            "SECTION 1:GENERAL INFORMATION",
+            "1.1.  APPLICABILITY.  This issuance applies to OSD, the Military Departments, the Office of the Chairman of the Joint Chiefs of Staff and the Joint Staff, the Combatant Commands, the Office of the Inspector General of the Department of Defense (IG DoD), the Defense Agencies, the DoD Field Activities, and all other organizational entities within the DoD (referred to collectively in this issuance as the “DoD Components”). ",
+            "1.2.  POLICY.",
+            "a.  In accordance with Volume 451 of DoD Instruction 1400.25: ",
+            "(1)  Secretary of Defense Honorary Awards are granted consistent with equal employment opportunity and policies, laws, regulations, and Executive orders that prohibit unlawful discrimination based on race, color, religion, sex, national origin, age, disability, genetic information, reprisal for protected activity, marital status, political affiliation, or any other unlawful factor. ",
+            "(2)  Requests by non-DoD personnel either to nominate themselves or others or to endorse nominations for themselves or others for awards or decorations sponsored by the DoD, other federal agencies, or private organizations, will not be honored. ",
+            "b.  Secretary of Defense Honorary Award nominations must be endorsed as follows: ",
+            "\t(1)  The OSD Principal Staff Assistants must endorse award nominations originating within their respective OSD Components. ",
+            "\t(2)  The Chairman of the Joint Chiefs of Staff must endorse award nominations originating within a Combatant Command and the Joint Staff. ",
+            "(3)  Award nominations originating within a Defense Agency or DoD Field Activity must be endorsed by the OSD Principal Staff Assistant who has authority, direction, and control over the Defense Agency, DoD Field Activity, or other organizational entity concerned. ",
+            "\t(4)  Secretaries of the Military Departments must endorse award nominations originating within their respective departments. ",
+            "\t(5)  The Chief of the National Guard Bureau must endorse award nominations originating within the National Guard Bureau. ",
+            "1.3.  INFORMATION COLLECTIONS.  Secretary of Defense Honorary Awards for DoD civilian employees referred to in this issuance do not require licensing with a report control symbol in accordance with Paragraph 2.b.(2) of Volume 1 of DoD Manual 8910.01. ",
+            "DoDM 1432.04, August 10, 2018",
+            "1.4.  AWARD RESOURCES.  ",
+            "Nomination templates for awards covered under this issuance may be obtained by contacting the Washington Headquarters Services (WHS), Human Resources Directorate (HRD), Performance Management and Awards Division (PM&AD). ",
+        ]
+        test_cases = [
+            TestItem((section_1, "Applicability"), [section_1[1]]),
+            TestItem((section_1, "Policy"), section_1[2:12]),
+            TestItem((section_1, "Information Collections"), section_1[12:14]),
+            TestItem((section_1, "award resources"), section_1[14:]),
+        ]
+        self._run(get_subsection_of_section_1, test_cases)
 
 
 if __name__ == "__main__":

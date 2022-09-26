@@ -54,11 +54,11 @@ def match_attachment_num(text: str) -> Union[str, None]:
     """Match an Attachment number in the text.
 
     Args:
-        text (str): Text to look for an attachment number in. Should have 
+        text (str): Text to look for an attachment number in. Should have
             leading whitespace removed.
 
     Returns:
-        str or None: If a match is found, returns the Attachment number as a string. Otherwise, 
+        str or None: If a match is found, returns the Attachment number as a string. Otherwise,
             returns None.
     """
     num = match(
@@ -322,6 +322,83 @@ def is_attachment_start(text: str) -> bool:
     """Check if the text is the start of a document Attachment."""
     text = " ".join(text.split())
     return match(r"ATTACHMENT(?: [1-9][0-9]?)?", text) is not None
+
+
+def is_subsection_start_for_section_1(text: str, subsection_name: str) -> bool:
+    """Check if `text` is the start of a subsection within a document's Section 1.
+
+    Args:
+        text (str): The text to check. Should have leading whitespaces removed.
+        subsection_name (str): If "", will check for a generic subsection start.
+            Otherwise, will look for this specific subsection name.
+
+    Returns:
+        bool
+    """
+    # "1", period, 1-2 digits, optional period, 1 or more whitespaces
+    name_pattern = rf"(?:1\.[0-9]{{1,2}}\.?\s+)"
+
+    if subsection_name == "":
+        if match(rf"{name_pattern}", text):
+            return True
+        known_subsection_names = [
+            x
+            for x in ["Applicability", "Policy", "Information Collections"]
+            if x.lower() != subsection_name.lower()
+        ]
+        for name in known_subsection_names:
+            if text.lower().startswith(name.lower()) and text[:1].isupper():
+                return True
+    else:
+        # If no subsection name is specified, make the number pattern optional.
+        name_pattern += r"?"
+
+        for word in subsection_name.split(" "):
+            name_pattern += rf"{word[:1].upper()}(?:{word[1:].lower()}|{word[1:].upper()})\s+"
+        name_pattern = name_pattern.rstrip(r"\s+")
+        name_pattern += r"\b"
+        return match(rf"{name_pattern}", text) is not None
+
+    return False
+
+
+def get_subsection_of_section_1(
+    section_1: List[str], subsection_name: str
+) -> List[str]:
+    """Get a subsection from Section 1 of a document.
+
+    Sometimes, sections such as "Applicability" and "Policy" are subsections of
+    Section 1 instead of being standalone sections. This function is used to
+    extract those subsections from Section 1.
+
+    Args:
+        section_1 (List[str]): Texts from Section 1 of a document.
+        subsection_name (str): The name of the subsection to get.
+
+    Returns:
+        List[str]
+    """
+    start_index = None
+    end_index = None
+
+    for i in range(len(section_1)):
+        text = section_1[i].strip()
+        if start_index is None:
+            if is_subsection_start_for_section_1(text, subsection_name):
+                start_index = i
+        elif end_index is None:
+            if is_subsection_start_for_section_1(text, ""):
+                end_index = i
+                break
+        else:
+            break
+
+    if start_index is None:
+        return []
+
+    end_index = end_index if end_index is not None else len(section_1)
+
+    return section_1[start_index:end_index]
 
 
 def next_section_num(text: str) -> str:

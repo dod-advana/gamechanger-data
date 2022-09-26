@@ -24,6 +24,8 @@ from .utils import (
     is_attachment_start,
     starts_with_glossary,
     match_attachment_num,
+    is_subsection_start_for_section_1,
+    get_subsection_of_section_1,
 )
 from .section_types import (
     is_enclosure_continuation,

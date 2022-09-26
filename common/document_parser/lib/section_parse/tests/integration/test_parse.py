@@ -152,6 +152,7 @@ if __name__ == "__main__":
     docs_test_specific_sections = {
         "DoDM 6025.18": "DoDM 6025.18",
         "DoDM 5120.20 CH 1": "DoDM 5120.20",
+        "DoDD 5105.02": "DoDD 5105.02",
         "DTM-12-006 CH 9": "DTM-12-006",
         "DTM-15-002 CH 6": "DTM-15-002",
         "DTM-19-001": "DTM-19-001",

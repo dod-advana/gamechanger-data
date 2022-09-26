@@ -4,6 +4,8 @@ from docx.text.paragraph import Paragraph
 from typing import List
 from .utils import (
     get_subsection,
+    get_subsection_of_section_1,
+    is_subsection_start_for_section_1,
     match_attachment_num,
     next_section_num,
     is_next_num_list_item,
@@ -62,11 +64,27 @@ class Sections:
 
     @property
     def applicability(self):
-        return self._get_section_by_title("applicability")
+        applicability_section = self._get_section_by_title("applicability")
+
+        # Sometimes the Applicability section is a subsection of Section 1.
+        if not applicability_section:
+            section_1 = self._get_section_by_num(1)
+            applicability_section = get_subsection_of_section_1(
+                section_1, "applicability"
+            )
+
+        return applicability_section
 
     @property
     def policy(self):
-        return self._get_section_by_title("policy")
+        policy_section = self._get_section_by_title("policy")
+
+        # Sometimes the Policy section is a subsection of Section 1.
+        if not policy_section:
+            section_1 = self._get_section_by_num(1)
+            policy_section = get_subsection_of_section_1(section_1, "policy")
+
+        return policy_section
 
     @property
     def organizations(self):
@@ -431,6 +449,18 @@ class Sections:
             for section in self._sections
             if search(pattern, section[0])
         ]
+
+    def _get_section_by_num(self, section_num: int) -> List[List[str]]:
+        section_num = str(section_num)
+
+        return next(
+            (
+                s
+                for s in self._sections
+                if match_section_num(s[0], section_num)
+            ),
+            [],
+        )
 
     def _update_prev_space_count(self, is_space: bool) -> None:
         if is_space:
