@@ -8,6 +8,7 @@ This module supports parsing DoD documents into sections. Note: the document mus
 ├── gamechanger-data/common/document_parser/lib/section_parse
 │   ├── __init__.py
 │   ├── docx_parser.py                 DocxParser class
+│   ├── add_sections.py                Add document sections to a doc dict. Used in the policy analytics parser pipeline
 │   ├── utils
 │   │   ├── __init__.py
 │   │   ├── sections.py                Sections class

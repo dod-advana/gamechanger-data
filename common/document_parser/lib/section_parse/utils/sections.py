@@ -5,7 +5,6 @@ from typing import List
 from .utils import (
     get_subsection,
     get_subsection_of_section_1,
-    is_subsection_start_for_section_1,
     match_attachment_num,
     next_section_num,
     is_next_num_list_item,
