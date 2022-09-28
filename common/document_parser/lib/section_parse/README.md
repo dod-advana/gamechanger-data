@@ -34,8 +34,8 @@ This module supports parsing DoD documents into sections. Note: the document mus
 from section_parse import DocxParser
 
 doc = DocxParser(<docx path>)
-# file name should be doc type + " " + doc number
-sections = doc.parse(<file name>)
+# pagebreak text should be doc type + " " + doc number
+sections = doc.parse(<pagebreak text>)
 
 for section in sections.sections:
     print(section)
