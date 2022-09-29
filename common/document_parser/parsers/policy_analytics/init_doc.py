@@ -1,13 +1,18 @@
 from pathlib import Path
-from datetime import datetime
+from os.path import splitext
+from ...lib.document import FieldNames
 
 
 def assign_f_name_fields(f_name, doc_dict):
-    filename = (
-        f_name.absolute().name
-        if isinstance(f_name, Path)
-        else Path(str(f_name)).name
-    )
+    if isinstance(f_name, Path):
+        filename = f_name.absolute().name
+        abs_path = str(f_name.absolute())
+        pdf_path = abs_path if abs_path.endswith(".pdf") else splitext(str(f_name))[1] + ".pdf"
+    else:
+        pdf_path = f_name
+        filename = Path(str(f_name)).name
+
+    doc_dict[FieldNames.PDF_PATH] = pdf_path
     doc_dict['filename'] = filename
     doc_dict['f_name'] = filename
     doc_dict["id"] = filename + "_0"

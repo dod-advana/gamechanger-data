@@ -1,12 +1,12 @@
 from datetime import datetime
 
+from common.document_parser.lib.document import FieldNames
 from common.document_parser.parsers.policy_analytics.display_mappings import (
     DISPLAY_TYPE_LOOKUP,
     CRAWLER_TO_DISPLAY_ORG_LOOKUP,
     CRAWLER_TO_DATA_SOURCE_LOOKUP,
     CRAWLER_TO_SOURCE_TITLE_LOOKUP
 )
-
 from common.utils.parsers import parse_timestamp
 from gamechangerml.src.utilities.text_utils import utf8_pass, clean_text
 
@@ -174,7 +174,8 @@ def rename_and_format(doc_dict):
         "version_hash",
         "ingest_date",
         "orgs",
-        "f_name"
+        "f_name",
+        FieldNames.PDF_PATH,
     ]
 
     for key in to_delete:

@@ -37,8 +37,8 @@ class ThumbnailsCreator:
 
     def generate_thumbnails(self, file_path):
         doc = fitz.open(str(file_path))
-        page = doc.loadPage(0)  # number of page
-        pix = page.getPixmap()
+        page = doc.load_page(0)  # number of page
+        pix = page.get_pixmap()
         pix.shrink(self.shrink_factor)   # reduces image size
         output = Path(self.output_directory, file_path.with_suffix('.png').name)
         pix.writePNG(str(output))
