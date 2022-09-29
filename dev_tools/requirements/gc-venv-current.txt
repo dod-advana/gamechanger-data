@@ -161,7 +161,7 @@ pydotplus==2.0.2
 Pygments==2.3.1
 PyHamcrest==2.0.2
 pymagnitude-lite==0.1.143
-PyMuPDF==1.17.2
+PyMuPDF==1.20.2
 pyOpenSSL==19.1.0
 pyparsing==2.4.7
 PyPDF2==1.26.0
