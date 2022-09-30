@@ -1,63 +1,94 @@
 # Section Parsing
 
-This module supports parsing DoD documents into sections. Note: the document must be in docx form.
+Parse documents into sections.
 
 ## Directory Structure
 
 ```
-├── gamechanger-data/common/document_parser/lib/section_parse
+gamechanger-data/common/document_parser/lib/section_parse/
+
+├── __init__.py
+├── add_sections.py                Add document sections to a doc dict. Used in the policy analytics pipeline
+├── parsers
 │   ├── __init__.py
-│   ├── docx_parser.py                 DocxParser class
-│   ├── add_sections.py                Add document sections to a doc dict. Used in the policy analytics parser pipeline
-│   ├── utils
-│   │   ├── __init__.py
-│   │   ├── sections.py                Sections class
-│   │   ├── section_types.py           Helper functions for types of sections that can be added to a Sections object
-│   │   └── utils.py
-│   ├── tests
-│   │   ├── __init__.py
-│   │   ├── test_item.py
-│   │   ├── data/*
-│   │   ├── unit                       Unit Tests
-│   │   │   ├── __init__.py
-│   │   │   ├── test_sections.py       Unit Tests for sections_parser.utils.sections
-│   │   │   ├── test_utils.py          Unit Tests for section_parser.utils.utils
-│   │   │   ├── test_docx_parser.py    Unit Tests for section_parser.docx_parser
-│   │   ├── integration                Integrated Tests
-│   │   │   ├── __init__.py
-│   │   │   ├── test_parse.py          Tests for the main function (`DocxParser.parse()`) of this module.
+│   ├── parser_factory.py          ParserFactory class. Determines the parser to create for a given document
+│   ├── parser_definition.py       ParserDefinition class. The base class for all *_parser.py files in this module
+│   ├── dod_parser
+│   │   ├── __init__.py
+│   │   ├── dod_parser.py          DoDParser class
+│   │   └── utils
+│   │       ├── __init__.py
+│   │       ├── section_types.py
+│   │       └── utils.py
+│   └── navy_parser.py             NavyParser class
+├── utils
+│   ├── __init__.py
+│   ├── docx_parser.py             DocxParser class. Parse a docx file into paragraphs
+│   └── utils.py                   Miscellaneous, shared utilities
+├── tests
+│   ├── __init__.py
+│   ├── test_item.py
+│   ├── data/*
+│   ├── unit                       Unit tests
+│   │   ├── __init__.py
+│   │   ├── test_docx_parser.py
+│   │   ├── test_utils.py
+│   │   └── test_dod_parser.py
+│   ├── integration                Integrated tests
+│   │   ├── __init__.py
+│   │   ├── test_dod_parser.py
+│   │   ├── test_navy_parser.py
 ```
 
 ## Example Usage
 
+### `add_sections()`
+
+The main function of this module. Used in the Policy Analytics pipeline.
+
 ```python
-from section_parse import DocxParser
+from section_parse import add_sections
 
-doc = DocxParser(<docx path>)
-# pagebreak text should be doc type + " " + doc number
-sections = doc.parse(<pagebreak text>)
+doc_dict = {
+   "doc_type": "DoDD",
+   "doc_num": "1801.04",
+   "pdf_path": "./data/DoDD 1801.04.pdf",
+   "text": "hello hi"
+}
+add_sections(doc_dict)
 
-for section in sections.sections:
-    print(section)
+print("All sections:", doc_dict["sections"]["all_sections"])
+print("References sections:", doc_dict["sections"]["references_section"])
+print("Responsibilities sections:", doc_dict["sections"]["responsibilities_section"])
+print("Purpose sections:", doc_dict["sections"]["purpose_section"])
 
-print("Purpose sections:", sections.purpose)
-print("Responsibilities sections:", sections.responsibilities)
-print("References sections:", sections.references)
+# See add_sections for all new keys added to doc_dict.
 ```
 
-## How to Convert PDF to Docx
+### `ParserFactory`
 
-1. Install `pdf2docx`
-   ```
-   pip install pdf2docx==0.5.5
-   ```
-2. Use the `parse()` function.
+Returns the correct parser to use for a document.
 
-   ```python
-    from pdf2docx import parse
+```python
+from section_parse import ParserFactory
 
-    parse(<pdf path>, <docx path>)
-   ```
+# Example 1
+doc_dict = {
+   "doc_type": "DoDD",
+   "doc_num": "1801.04",
+   "pdf_path": "./data/DoDD 1801.04.pdf", # pdf_path needed for DoD docs.
+   "text": "hello hi"
+}
+parser = ParserFactory.create(doc_dict)  # Returns a DoDParser object for doc_dict.
+
+# Example 2
+doc_dict = {
+   "doc_type": "OPNAVINST",
+   "doc_num": "1253.1",
+   "text": "document text"
+}
+parser = ParserFactory.create(doc_dict)  # Returns a NavyParser object for doc_dict.
+```
 
 ## How to Run Tests
 

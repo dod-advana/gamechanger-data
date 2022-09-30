@@ -1,21 +1,20 @@
-"""Tests for the Sections class in 
-`common.document_parser.lib.section_parse.utils.sections`.
-"""
+"""Unit tests for the DoDParser class."""
 
 from unittest import TestCase, main
 from os.path import dirname
 from itertools import chain
 import sys
-
 sys.path.append(dirname(__file__).replace("/section_parse/tests/unit", ""))
-from section_parse import Sections
+from section_parse.parsers import DoDParser
 
 
 class SectionsTest(TestCase):
     @classmethod
     def setUpClass(cls) -> None:
+        doc_dict = {"doc_type": "DoDI", "doc_num": "472"}
+
         # Set up for test_combine_glossary().
-        cls.glossary = Sections()
+        cls.glossary = DoDParser(doc_dict, test_mode=True)
         cls.glossary._sections = [
             ["GLOSSARY"],
             [
@@ -32,7 +31,7 @@ class SectionsTest(TestCase):
         ]
 
         # Set up for test_combine_by_section_num_1().
-        cls.section_nums_1 = Sections()
+        cls.section_nums_1 = DoDParser(doc_dict, test_mode=True)
         cls.section_nums_1._sections = [
             ["SECTION 4.USES AND DISCLOSURES OF PHI "],
             [
@@ -54,7 +53,7 @@ class SectionsTest(TestCase):
         ]
 
         # Set up for test_combine_by_section_num_2().
-        cls.section_nums_2 = Sections()
+        cls.section_nums_2 = DoDParser(doc_dict, test_mode=True)
         cls.section_nums_2._sections = [
             ["1.  PURPOSE.  This instruction: "],
             [
@@ -73,7 +72,7 @@ class SectionsTest(TestCase):
         ]
 
         # Set up for test_combine_enclosures().
-        cls.enclosures = Sections()
+        cls.enclosures = DoDParser(doc_dict, test_mode=True)
         cls.enclosures._sections = [
             ["ENCLOSURE 1 REFERENCES "],
             [
@@ -92,7 +91,7 @@ class SectionsTest(TestCase):
         ]
 
         # Set up for test_remove_repeated_section_titles().
-        cls.repeated_titles = Sections()
+        cls.repeated_titles = DoDParser(doc_dict, test_mode=True)
         cls.repeated_titles._sections = [
             [
                 "SECTION 3",
@@ -110,10 +109,10 @@ class SectionsTest(TestCase):
         ]
 
     def test_combine_glossary(self):
-        """Verifies combine_glossary()."""
-        expected_output = [list(chain.from_iterable(self.glossary.sections))]
-        self.glossary.combine_glossary()
-        actual_output = self.glossary.sections
+        """Verifies _combine_glossary()."""
+        expected_output = [list(chain.from_iterable(self.glossary.all_sections))]
+        self.glossary._combine_glossary()
+        actual_output = self.glossary.all_sections
         self.assertEqual(
             actual_output,
             expected_output,
@@ -122,8 +121,8 @@ class SectionsTest(TestCase):
             ),
         )
 
-    def test_combine_by_section_num_1(self):
-        """Verifies combine_by_section_num()."""
+    def test_combine_section_nums_1(self):
+        """Verifies _combine_section_nums()."""
         expected_output = [
             [
                 "SECTION 4.USES AND DISCLOSURES OF PHI ",
@@ -139,8 +138,8 @@ class SectionsTest(TestCase):
                 "a.  Standard:  NoPP. ",
             ],
         ]
-        self.section_nums_1.combine_by_section_num()
-        actual_output = self.section_nums_1.sections
+        self.section_nums_1._combine_section_nums()
+        actual_output = self.section_nums_1.all_sections
         self.assertEqual(
             actual_output,
             expected_output,
@@ -151,8 +150,8 @@ class SectionsTest(TestCase):
             ),
         )
 
-    def test_combine_by_section_num_2(self):
-        """Verifies combine_by_section_num()."""
+    def test_combine_section_nums_2(self):
+        """Verifies _combine_section_nums()."""
         expected_output = [
             [
                 "1.  PURPOSE.  This instruction: ",
@@ -165,8 +164,8 @@ class SectionsTest(TestCase):
             ],
             [" 3.  POLICY.  It is DoD policy to: "],
         ]
-        self.section_nums_2.combine_by_section_num()
-        actual_output = self.section_nums_2.sections
+        self.section_nums_2._combine_section_nums()
+        actual_output = self.section_nums_2.all_sections
         self.assertEqual(
             actual_output,
             expected_output,
@@ -176,7 +175,7 @@ class SectionsTest(TestCase):
         )
 
     def test_combine_enclosures(self):
-        """Verifies combine_enclosures()."""
+        """Verifies _combine_enclosures()."""
         expected_output = [
             [
                 "ENCLOSURE 1 REFERENCES ",
@@ -193,8 +192,8 @@ class SectionsTest(TestCase):
                 "E3.  ENCLOSURE 3 \nMEO REPORTING REQUIREMENTS ",
             ],
         ]
-        self.enclosures.combine_enclosures()
-        actual_output = self.enclosures.sections
+        self.enclosures._combine_enclosures()
+        actual_output = self.enclosures.all_sections
         self.assertEqual(
             actual_output,
             expected_output,
@@ -204,7 +203,7 @@ class SectionsTest(TestCase):
         )
 
     def test_remove_repeated_section_titles(self):
-        """Verifies remove_repeated_section_titles()."""
+        """Verifies _remove_repeated_section_titles()."""
         expected_output = [
             [
                 "SECTION 3",
@@ -218,8 +217,8 @@ class SectionsTest(TestCase):
                 "(b) DoD Directive 5144.02, “DoD Chief Information Officer (DoD CIO),” April 22, 2013 (c) Chapter 35 of Title 44, United States Code ",
             ],
         ]
-        self.repeated_titles.remove_repeated_section_titles()
-        actual_output = self.repeated_titles.sections
+        self.repeated_titles._remove_repeated_section_titles()
+        actual_output = self.repeated_titles.all_sections
         self.assertEqual(
             actual_output,
             expected_output,

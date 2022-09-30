@@ -9,24 +9,16 @@ from itertools import chain
 from re import search
 from typing import Iterator, List, Union
 from os import PathLike
-from .utils import (
-    Sections,
-    is_alpha_list_item,
-    match_num_list_item,
-    is_space,
-    should_skip,
-    remove_strikethrough_text,
-)
+
+from .utils import is_alpha_list_item, match_num_list_item
 
 
 class DocxParser:
-    """Parse a docx document into sections.
+    """Helper class used to parse a docx document into sections.
 
     Attributes:
     ----------
         doc (docx.Document): The docx document.
-
-        sections (Sections): Sections of the document. Use parse() to populate.
 
         blocks (List[docx.text.paragraph.Paragraph|docx.table.Table]): The
             document's paragraphs and tables in order.
@@ -36,63 +28,14 @@ class DocxParser:
     """
 
     def __init__(self, path: Union[str, PathLike]):
-        """Parse a docx document into sections.
+        """Helper class used to parse a docx document into sections.
 
         Args:
             path (Union[str, PathLike]): Path to the docx document.
         """
         self.doc = Document(path)
-        self.sections = Sections()
         self.blocks = list(self.iter_block_items())
         self.space_mode = self.calculate_space_mode(self.blocks)
-
-    def parse(
-        self, pagebreak_text: str, should_remove_striken_text: bool = False
-    ) -> Sections:
-        """Parse a docx document into sections.
-
-        Populates the objects `sections` attribute.
-
-        Args:
-            pagebreak_text (str): Text that indicates a page break. For DoD
-                documents, use `{doc_type} + " " + {doc_num}`.
-            should_remove_striken_text (bool): Flag to remove text that has
-                strikethrough applied to it
-
-        Returns:
-            list of lists of str
-        """
-        self.sections = Sections()
-
-        for block in self.blocks:
-            if isinstance(block, Table):
-                table_pars = [
-                    par
-                    for par in self.flatten_table(block)
-                    if par.text
-                    and not is_space(par.text)
-                    and not should_skip(par.text.strip(), pagebreak_text)
-                ]
-                if not table_pars:
-                    continue
-                block = table_pars[0]
-                block_texts = [par.text for par in table_pars]
-            else:
-                if should_remove_striken_text:
-                    remove_strikethrough_text(block)
-                block_texts = [block.text]
-
-            self.sections.add(
-                block, block_texts, pagebreak_text, self.space_mode
-            )
-
-        self.sections.combine_by_section_num()
-        self.sections.combine_enclosures()
-        self.sections.combine_attachments()
-        self.sections.combine_glossary()
-        self.sections.remove_repeated_section_titles()
-
-        return self.sections
 
     def iter_block_items(self) -> Iterator[Union[Paragraph, Table]]:
         """Returns an Iterator for the document's paragraphs and tables.

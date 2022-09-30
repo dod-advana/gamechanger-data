@@ -1,6 +1,7 @@
 from re import match, search, fullmatch, VERBOSE, IGNORECASE
 from typing import List
 from docx.text.paragraph import Paragraph
+from common.document_parser.lib.section_parse.utils import is_alpha_list_item
 from .utils import (
     get_subsection,
     is_glossary_continuation,
@@ -10,7 +11,6 @@ from .utils import (
     get_subsection,
     is_first_line_indented,
     is_sentence_continuation,
-    is_alpha_list_item,
     ends_with_continued,
     starts_with_part,
     ends_with_colon,

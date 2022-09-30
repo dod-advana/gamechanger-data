@@ -1,7 +1,11 @@
-from itertools import chain
 from re import search
+from os.path import split, splitext
+from pdf2docx import parse as convert_pdf_to_docx
 from docx.text.paragraph import Paragraph
+from docx.table import Table
 from typing import List
+from common.document_parser.lib.section_parse.utils import DocxParser
+from common.document_parser.lib.document import FieldNames
 from .utils import (
     get_subsection,
     get_subsection_of_section_1,
@@ -13,29 +17,34 @@ from .utils import (
     is_space,
     is_toc,
     starts_with_glossary,
-)
-from .section_types import (
     should_skip,
     is_same_section_num,
     is_known_section_start,
     is_enclosure_continuation,
     is_child,
+    remove_strikethrough_text,
 )
+from ..parser_definition import ParserDefinition
 
 
-class Sections:
-    """Build and extract document sections."""
+class DoDParser(ParserDefinition):
+    """Parse sections of DoD documents."""
 
-    def __init__(self):
-        self._sections = []
+    SUPPORTED_DOC_TYPES = ["dodd", "dodi", "dodm"]
 
+    def __init__(self, doc_dict: dict, test_mode: bool = False):
+        super().__init__(doc_dict, test_mode)
+        self._doc_type = split(self.doc_dict[FieldNames.DOC_TYPE])[1]
+        self._doc_num = splitext(self.doc_dict.get(FieldNames.DOC_NUM, ""))[0]
+        self._pagebreak_text = " ".join([self._doc_type, self._doc_num])
         # Track the number of previous, consecutive sections that are only
-        # whitespace. This is used in add() to inform about section breaks.
+        # whitespace. This is used in _add() to inform about section breaks.
         self._prev_space_count = 0
 
-    @property
-    def sections(self) -> List[List[str]]:
-        return self._sections
+        if not test_mode:
+            self._pdf_path = self.doc_dict.get(FieldNames.PDF_PATH)
+            self._docx_path = splitext(self._pdf_path)[0] + ".docx"
+            self._parse()
 
     @property
     def purpose(self):
@@ -113,14 +122,68 @@ class Sections:
     def summary_of_change(self):
         return self._get_section_by_title("summary of change")
 
-    def add(
+    def _parse(self, should_remove_strikethrough_text: bool = False) -> None:
+        # Convert pdf to docx.
+        if not self._test_mode:
+            try:
+                convert_pdf_to_docx(self._pdf_path, self._docx_path)
+            except:
+                self._logger.exception(
+                    f"Failed to convert pdf to docx: {self._pdf_path}"
+                )
+                return
+
+        # Create a DocxParser.
+        docx_parser = None
+        try:
+            docx_parser = DocxParser(self._docx_path)
+        except:
+            self._logger.exception(
+                f"Failed to initialize DocxParser: {self._docx_path}"
+            )
+            return
+
+        # Parse the docx file.
+        try:
+            for block in docx_parser.blocks:
+                if isinstance(block, Table):
+                    table_paragraphs = [
+                        remove_strikethrough_text(par)
+                        if should_remove_strikethrough_text
+                        else par
+                        for par in docx_parser.flatten_table(block)
+                        if par.text
+                        and not is_space(par.text)
+                        and not should_skip(
+                            par.text.strip(), self._pagebreak_text
+                        )
+                    ]
+                    if not table_paragraphs:
+                        continue
+                    block = table_paragraphs[0]
+                    block_texts = [par.text for par in table_paragraphs]
+                else:
+                    if should_remove_strikethrough_text:
+                        remove_strikethrough_text(block)
+                    block_texts = [block.text]
+                self._add(block, block_texts, docx_parser.space_mode)
+            self._combine_section_nums()
+            self._combine_enclosures()
+            self._combine_attachments()
+            self._combine_glossary()
+            self._remove_repeated_section_titles()
+        except:
+            self._logger.exception(
+                f"Failed to parse sections of docx document: {self._docx_path}."
+            )
+
+    def _add(
         self,
         par: Paragraph,
         section_texts: List[str],
-        fn: str,
         space_mode: int,
     ) -> None:
-        """Add a section to the object's `sections`.
+        """Add a section.
 
         Uses paragraph formatting and text properties to determine if the
         section is a new section, child/ continuation of the last section,
@@ -130,8 +193,6 @@ class Sections:
             par (Paragraph): Paragraph representation of the section to add.
             section_texts (List[str]): String representations of the section's
                 text.
-            fn (str): File name of the document section being added.
-                Use `{doc_type} + " " + {doc_num}`.
             space_mode (int): Mode value of space before a block.
                 See DocxParser.calculate_space_mode().
         """
@@ -142,7 +203,7 @@ class Sections:
         # The order of this is purposeful. Be careful about changing it.
         if is_a_space:
             pass
-        elif should_skip(text_stripped, fn):
+        elif should_skip(text_stripped, self._pagebreak_text):
             pass
         # If 3 previous paragraphs are only space, the text is probably a new
         # section because it's probably on a new page.
@@ -163,58 +224,7 @@ class Sections:
 
         self._update_prev_space_count(is_a_space)
 
-    def add_parent(self, texts: List[str]) -> None:
-        """Add a new parent section to the object's `sections` list."""
-        self._sections.append(texts)
-
-    def add_child(self, texts: List[str]) -> None:
-        """Add a new child section to the object's `sections` list.
-
-        This section will be added to the end of the last item in the object's
-        `sections` list.
-        """
-        if self._sections:
-            self._sections[-1] += texts
-        else:
-            self._sections.append(texts)
-
-    def add_continuation(self, text: str) -> None:
-        """Add the text to the last subsection of the object's `sections` list.
-
-        For example, if a sentence is cut off prematurely, you can add the
-        remainder of the sentence with this function.
-        """
-        if self._sections:
-            self._sections[-1][-1] += text
-        else:
-            self._sections.append([text])
-
-    def combine_sections(self, start: int, end: int) -> None:
-        """Combine sections together.
-
-        Args:
-            start (int): First index of the sections to combine.
-            end (int): Last index of the sections to combine.
-
-        Raises:
-            ValueError: If an invalid start or end is passed.
-        """
-        if start < 0:
-            raise ValueError(f"Bad start: {start}")
-
-        if end >= len(self._sections):
-            raise ValueError(f"Bad end: {end}")
-
-        if start > end:
-            raise ValueError(
-                f"Start cannot be greater than end. start: {start}, end: {end}"
-            )
-
-        self._sections[start : end + 1] = [
-            list(chain.from_iterable(self._sections[start : end + 1]))
-        ]
-
-    def combine_glossary(self) -> None:
+    def _combine_glossary(self) -> None:
         """Combine all Glossary parts into 1 section.
 
         According to the DoD Issuance Style Guide, "A glossary is mandatory for
@@ -261,7 +271,7 @@ class Sections:
         else:
             self.combine_sections(min(glossary_inds), max(glossary_inds))
 
-    def combine_enclosures(self) -> None:
+    def _combine_enclosures(self) -> None:
         i = 0
         while i < len(self._sections):
             encl_num = match_enclosure_num(get_subsection(self._sections[i]))
@@ -271,7 +281,7 @@ class Sections:
                     combined_same = self._combine_by_enclosure_num(i, encl_num)
             i += 1
 
-    def combine_attachments(self) -> None:
+    def _combine_attachments(self) -> None:
         i = 0
         while i < len(self._sections):
             encl_num = match_attachment_num(get_subsection(self._sections[i]))
@@ -285,19 +295,19 @@ class Sections:
                     )
             i += 1
 
-    def combine_by_section_num(self) -> None:
+    def _combine_section_nums(self) -> None:
         """After all sections are added to the object's `sections` list, use
         this function to further combine sections and subsections.
 
         Examples:
-            self.sections = [
+            self.all_sections = [
                 "SECTION 1: blah".
                 "some text that should be part of section 1 but wasn't added as
                 a child",
                 "SECTION 2: hello"
             ] --> combine indices 0 and 1
 
-            self.sections = [
+            self.all_sections = [
                 "SECTION 3: hi",
                 "SECTION 4: blah",
                 "SECTION 4: blah blah",
@@ -313,7 +323,7 @@ class Sections:
                     go = self._combine_by_section_num(i, curr_num)
             i += 1
 
-    def remove_repeated_section_titles(self) -> None:
+    def _remove_repeated_section_titles(self) -> None:
         """Remove repeated section titles from within section bodies.
 
         Section titles are often repeated when a section spans over multiple
@@ -351,9 +361,41 @@ class Sections:
                 if subsection.strip().lower() != first_subsection.lower()
             ]
 
+    def _get_section_by_title(self, words: str) -> List[List[str]]:
+        # Note: don't include special regex chars in words
+        if len(words) == 0:
+            raise ValueError("word arg cannot be an empty string.")
+
+        words = words.split(" ")
+
+        pattern = r"\b"
+        for word in words:
+            pattern += rf"{word[:1].upper()}(?:{word[1:].lower()}|{word[1:].upper()})\s+"
+        pattern = pattern.rstrip(r"\s+")
+        pattern += r"\b"
+
+        return [
+            section
+            for section in self._sections
+            if search(pattern, section[0])
+        ]
+
+    def _get_section_by_num(self, section_num: int) -> List[List[str]]:
+        section_num = str(section_num)
+
+        return next(
+            (
+                s
+                for s in self._sections
+                if match_section_num(s[0], section_num)
+            ),
+            [],
+        )
+
     def _combine_by_section_num(
         self, i: int, curr_num: str, max_steps: int = 2
     ) -> bool:
+        """Helper for combine_section_nums()."""
         next_num = next_section_num(curr_num)
         found_next = False
         end = None
@@ -388,6 +430,7 @@ class Sections:
         max_steps: int = 5,
         enclosure_as_attachment: bool = False,
     ) -> bool:
+        """Helper for _combine_enclosures()"""
         next_enclosure = str(int(curr_num) + 1)
         found_next = False
         end = None
@@ -429,37 +472,6 @@ class Sections:
             return True
 
         return False
-
-    def _get_section_by_title(self, words: str) -> List[List[str]]:
-        # Note: don't include special regex chars in words
-        if len(words) == 0:
-            raise ValueError("word arg cannot be an empty string.")
-
-        words = words.split(" ")
-
-        pattern = r"\b"
-        for word in words:
-            pattern += rf"{word[:1].upper()}(?:{word[1:].lower()}|{word[1:].upper()})\s+"
-        pattern = pattern.rstrip(r"\s+")
-        pattern += r"\b"
-
-        return [
-            section
-            for section in self._sections
-            if search(pattern, section[0])
-        ]
-
-    def _get_section_by_num(self, section_num: int) -> List[List[str]]:
-        section_num = str(section_num)
-
-        return next(
-            (
-                s
-                for s in self._sections
-                if match_section_num(s[0], section_num)
-            ),
-            [],
-        )
 
     def _update_prev_space_count(self, is_space: bool) -> None:
         if is_space:

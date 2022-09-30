@@ -1,4 +1,7 @@
-"""Tests for common.document_parser.lib.section_parse.utils.utils"""
+"""Tests for utility functions in:
+    - section_parse/parsers/dod_parser/utils/utils.py
+    - section_parse/utils/utils.py
+"""
 
 from unittest import TestCase, main
 from os.path import dirname, join
@@ -10,14 +13,12 @@ import sys
 
 sys.path.append(dirname(__file__).replace("/section_parse/tests/unit", ""))
 from section_parse.tests import TestItem
-from section_parse.utils import (
+from section_parse.parsers.dod_parser.utils import (
     match_section_num,
     match_roman_numerals,
     match_enclosure_num,
-    match_num_list_item,
     match_num_dot,
     match_num_parentheses,
-    is_alpha_list_item,
     is_sentence_continuation,
     is_toc,
     is_glossary_continuation,
@@ -32,6 +33,7 @@ from section_parse.utils import (
     is_subsection_start_for_section_1,
     get_subsection_of_section_1,
 )
+from section_parse.utils import is_alpha_list_item, match_num_list_item
 
 
 class UtilsTest(TestCase):

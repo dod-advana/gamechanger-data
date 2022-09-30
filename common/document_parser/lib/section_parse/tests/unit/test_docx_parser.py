@@ -11,14 +11,17 @@ from os.path import dirname, join
 from docx.text.paragraph import Paragraph
 from docx.table import Table
 import sys
+
+print("\n---------\n", dirname(__file__))
 sys.path.append(dirname(__file__).replace("/section_parse/tests/unit", ""))
-from section_parse import DocxParser, Sections
+from section_parse import DocxParser
 
 
 class DocxParserTest(TestCase):
-    """Unit tests for the DocxParser class in 
+    """Unit tests for the DocxParser class in
     common.document_parser.lib.section_parse.docx_parser.
     """
+
     @classmethod
     def setUpClass(cls) -> None:
         cls.parser = DocxParser(
@@ -52,7 +55,6 @@ class DocxParserTest(TestCase):
     def test_attributes(self):
         """Verify that the DocxParser was initialized with expected attributes."""
         self._check_parser_attr("doc", None, False)
-        self._check_parser_attr("sections", Sections)
         self._check_parser_attr("blocks", list)
         self._check_parser_attr("space_mode", int)
         self.assertGreater(
