@@ -391,6 +391,171 @@
                   "analyzer": "gc_english"
                 }
               }
+            },
+            "sections": {
+              "type": "text",
+              "store": true,
+              "analyzer": "standard",
+              "fields": {
+                "gc_english": {
+                  "type": "text",
+                  "analyzer": "gc_english"
+                }
+              }
+            },
+            "all_sections": {
+              "type": "text",
+              "store": true,
+              "analyzer": "standard",
+              "fields": {
+                "gc_english": {
+                  "type": "text",
+                  "analyzer": "gc_english"
+                }
+              }
+            },
+            "responsibilities_section": {
+              "type": "text",
+              "store": true,
+              "analyzer": "standard",
+              "fields": {
+                "gc_english": {
+                  "type": "text",
+                  "analyzer": "gc_english"
+                }
+              }
+            },
+            "references_section": {
+              "type": "text",
+              "store": true,
+              "analyzer": "standard",
+              "fields": {
+                "gc_english": {
+                  "type": "text",
+                  "analyzer": "gc_english"
+                }
+              }
+            },
+            "purpose_section": {
+              "type": "text",
+              "store": true,
+              "analyzer": "standard",
+              "fields": {
+                "gc_english": {
+                  "type": "text",
+                  "analyzer": "gc_english"
+                }
+              }
+            },
+            "subject_section": {
+              "type": "text",
+              "store": true,
+              "analyzer": "standard",
+              "fields": {
+                "gc_english": {
+                  "type": "text",
+                  "analyzer": "gc_english"
+                }
+              }
+            },
+            "procedures_section": {
+              "type": "text",
+              "store": true,
+              "analyzer": "standard",
+              "fields": {
+                "gc_english": {
+                  "type": "text",
+                  "analyzer": "gc_english"
+                }
+              }
+            },
+            "effective_date": {
+              "type": "text",
+              "store": true,
+              "analyzer": "standard",
+              "fields": {
+                "gc_english": {
+                  "type": "text",
+                  "analyzer": "gc_english"
+                }
+              }
+            },
+            "applicability_section": {
+              "type": "text",
+              "store": true,
+              "analyzer": "standard",
+              "fields": {
+                "gc_english": {
+                  "type": "text",
+                  "analyzer": "gc_english"
+                }
+              }
+            },
+            "policy_section": {
+              "type": "text",
+              "store": true,
+              "analyzer": "standard",
+              "fields": {
+                "gc_english": {
+                  "type": "text",
+                  "analyzer": "gc_english"
+                }
+              }
+            },
+            "organizations_section": {
+              "type": "text",
+              "store": true,
+              "analyzer": "standard",
+              "fields": {
+                "gc_english": {
+                  "type": "text",
+                  "analyzer": "gc_english"
+                }
+              }
+            },
+            "definitions_section": {
+              "type": "text",
+              "store": true,
+              "analyzer": "standard",
+              "fields": {
+                "gc_english": {
+                  "type": "text",
+                  "analyzer": "gc_english"
+                }
+              }
+            },
+            "table_of_contents": {
+              "type": "text",
+              "store": true,
+              "analyzer": "standard",
+              "fields": {
+                "gc_english": {
+                  "type": "text",
+                  "analyzer": "gc_english"
+                }
+              }
+            },
+            "glossary_section": {
+              "type": "text",
+              "store": true,
+              "analyzer": "standard",
+              "fields": {
+                "gc_english": {
+                  "type": "text",
+                  "analyzer": "gc_english"
+                }
+              }
+            },
+            "summary_of_change_section": {
+              "type": "text",
+              "store": true,
+              "analyzer": "standard",
+              "fields": {
+                "gc_english": {
+                  "type": "text",
+                  "analyzer": "gc_english"
+                }
+              }
             }
           }
         }
