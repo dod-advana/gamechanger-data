@@ -11,8 +11,6 @@ from os.path import dirname, join
 from docx.text.paragraph import Paragraph
 from docx.table import Table
 import sys
-
-print("\n---------\n", dirname(__file__))
 sys.path.append(dirname(__file__).replace("/section_parse/tests/unit", ""))
 from section_parse import DocxParser
 

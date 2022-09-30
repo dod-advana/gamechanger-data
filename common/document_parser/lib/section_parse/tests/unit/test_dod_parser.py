@@ -8,7 +8,7 @@ sys.path.append(dirname(__file__).replace("/section_parse/tests/unit", ""))
 from section_parse.parsers import DoDParser
 
 
-class SectionsTest(TestCase):
+class DoDParserTest(TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         doc_dict = {"doc_type": "DoDI", "doc_num": "472"}
