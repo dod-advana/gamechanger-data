@@ -351,6 +351,53 @@
           "type": "keyword",
           "store": true
         },
+        "sections": {
+          "type": "object",
+          "properties": {
+            "all_sections": {
+              "type": "text"
+            },
+            "responsibilities_section": {
+              "type": "text"
+            },
+            "references_section": {
+              "type": "text"
+            },
+            "purpose_section": {
+              "type": "text"
+            },
+            "subject_section": {
+              "type": "text"
+            },
+            "procedures_section": {
+              "type": "text"
+            },
+            "effective_date": {
+              "type": "text"
+            },
+            "applicability_section": {
+              "type": "text"
+            },
+            "policy_section": {
+              "type": "text"
+            },
+            "organizations_section": {
+              "type": "text"
+            },
+            "definitions_section": {
+              "type": "text"
+            },
+            "table_of_contents": {
+              "type": "text"
+            },
+            "glossary_section": {
+              "type": "text"
+            },
+            "summary_of_change_section": {
+              "type": "text"
+            }
+          }
+        },
         "paragraphs": {
           "dynamic": "true",
           "type": "nested",
@@ -382,171 +429,6 @@
               "store": true
             },
             "par_raw_text_t": {
-              "type": "text",
-              "store": true,
-              "analyzer": "standard",
-              "fields": {
-                "gc_english": {
-                  "type": "text",
-                  "analyzer": "gc_english"
-                }
-              }
-            },
-            "sections": {
-              "type": "text",
-              "store": true,
-              "analyzer": "standard",
-              "fields": {
-                "gc_english": {
-                  "type": "text",
-                  "analyzer": "gc_english"
-                }
-              }
-            },
-            "all_sections": {
-              "type": "text",
-              "store": true,
-              "analyzer": "standard",
-              "fields": {
-                "gc_english": {
-                  "type": "text",
-                  "analyzer": "gc_english"
-                }
-              }
-            },
-            "responsibilities_section": {
-              "type": "text",
-              "store": true,
-              "analyzer": "standard",
-              "fields": {
-                "gc_english": {
-                  "type": "text",
-                  "analyzer": "gc_english"
-                }
-              }
-            },
-            "references_section": {
-              "type": "text",
-              "store": true,
-              "analyzer": "standard",
-              "fields": {
-                "gc_english": {
-                  "type": "text",
-                  "analyzer": "gc_english"
-                }
-              }
-            },
-            "purpose_section": {
-              "type": "text",
-              "store": true,
-              "analyzer": "standard",
-              "fields": {
-                "gc_english": {
-                  "type": "text",
-                  "analyzer": "gc_english"
-                }
-              }
-            },
-            "subject_section": {
-              "type": "text",
-              "store": true,
-              "analyzer": "standard",
-              "fields": {
-                "gc_english": {
-                  "type": "text",
-                  "analyzer": "gc_english"
-                }
-              }
-            },
-            "procedures_section": {
-              "type": "text",
-              "store": true,
-              "analyzer": "standard",
-              "fields": {
-                "gc_english": {
-                  "type": "text",
-                  "analyzer": "gc_english"
-                }
-              }
-            },
-            "effective_date": {
-              "type": "text",
-              "store": true,
-              "analyzer": "standard",
-              "fields": {
-                "gc_english": {
-                  "type": "text",
-                  "analyzer": "gc_english"
-                }
-              }
-            },
-            "applicability_section": {
-              "type": "text",
-              "store": true,
-              "analyzer": "standard",
-              "fields": {
-                "gc_english": {
-                  "type": "text",
-                  "analyzer": "gc_english"
-                }
-              }
-            },
-            "policy_section": {
-              "type": "text",
-              "store": true,
-              "analyzer": "standard",
-              "fields": {
-                "gc_english": {
-                  "type": "text",
-                  "analyzer": "gc_english"
-                }
-              }
-            },
-            "organizations_section": {
-              "type": "text",
-              "store": true,
-              "analyzer": "standard",
-              "fields": {
-                "gc_english": {
-                  "type": "text",
-                  "analyzer": "gc_english"
-                }
-              }
-            },
-            "definitions_section": {
-              "type": "text",
-              "store": true,
-              "analyzer": "standard",
-              "fields": {
-                "gc_english": {
-                  "type": "text",
-                  "analyzer": "gc_english"
-                }
-              }
-            },
-            "table_of_contents": {
-              "type": "text",
-              "store": true,
-              "analyzer": "standard",
-              "fields": {
-                "gc_english": {
-                  "type": "text",
-                  "analyzer": "gc_english"
-                }
-              }
-            },
-            "glossary_section": {
-              "type": "text",
-              "store": true,
-              "analyzer": "standard",
-              "fields": {
-                "gc_english": {
-                  "type": "text",
-                  "analyzer": "gc_english"
-                }
-              }
-            },
-            "summary_of_change_section": {
               "type": "text",
               "store": true,
               "analyzer": "standard",
