@@ -1,3 +1,3 @@
-from .test_utils import UtilsTest
-from .test_sections import SectionsTest
 from .test_docx_parser import DocxParserTest
+from .test_dod_parser import DoDParserTest
+from .test_utils import UtilsTest

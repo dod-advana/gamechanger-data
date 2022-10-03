@@ -2,6 +2,7 @@ class FieldNames:
     """Field names for dictionary representations of documents."""
 
     FILENAME = "filename"
+    TEXT = "text"
     PAGES = "pages"
     PAGE_RAW_TEXT = "p_raw_text"
 
