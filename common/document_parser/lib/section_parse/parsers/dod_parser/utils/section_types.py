@@ -18,6 +18,7 @@ from .utils import (
     is_bold,
     starts_with_bullet,
     is_attachment_start,
+    clean_pagebreak_from_text,
 )
 
 
@@ -121,7 +122,7 @@ def should_skip(text: str, fn: str) -> bool:
     return False
 
 
-def is_known_section_start(text: str, par: Paragraph) -> bool:
+def is_known_section_start(text: str, par: Paragraph, pagebreak_text: str) -> bool:
     """Returns whether or not the text is a known section starting point.
 
     Args:
@@ -135,10 +136,15 @@ def is_known_section_start(text: str, par: Paragraph) -> bool:
     if is_toc(text):
         return False
 
-    if text[:1].isupper():
+    text = clean_pagebreak_from_text(text, pagebreak_text)
+
+
+    # Check if first letter is uppercase.
+    first_letter_match = search(r"[a-zA-Z]", text)
+    if first_letter_match and first_letter_match.group().isupper():
         m = match(
             r"""
-                (?:[0-9]{1,2}[\.\)\s]?\s)?      # Optional group: 1-2 digits, optional period/ closing parenthesis/ whitespace, whitespace.
+                (?:[0-9]{1,2}[\.\)\s]?\s+)?      # Optional group: 1-2 digits, optional period/ closing parenthesis/ whitespace, whitespace.
                 (
                     Ref(?:erence)?s?            # "Ref" or "Refs" or "Reference" or "References"
                     |Sub(?:j(?:ect)?)?          # "Sub" or "Subj" or "Subject"

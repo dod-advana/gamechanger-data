@@ -1,4 +1,4 @@
-from re import search
+from re import search, match
 from os.path import split, splitext
 from os import remove
 from pdf2docx import parse as convert_pdf_to_docx
@@ -36,7 +36,7 @@ class DoDParser(ParserDefinition):
     def __init__(self, doc_dict: dict, test_mode: bool = False):
         super().__init__(doc_dict, test_mode)
         self._doc_type = split(self.doc_dict[FieldNames.DOC_TYPE])[1]
-        self._doc_num = splitext(self.doc_dict.get(FieldNames.DOC_NUM, ""))[0]
+        self._doc_num = self._get_doc_num()
         self._pagebreak_text = " ".join([self._doc_type, self._doc_num])
         # Track the number of previous, consecutive sections that are only
         # whitespace. This is used in _add() to inform about section breaks.
@@ -123,6 +123,25 @@ class DoDParser(ParserDefinition):
     def summary_of_change(self):
         return self._get_section_by_title("summary of change")
 
+    def _get_doc_num(self) -> str:
+        filename = self.doc_dict.get(FieldNames.FILENAME, "")
+        doc_num = match(
+            r"DoD[IMD] ((?:[A-Z]-)?[1-9][0-9]{3}(?:\.[0-9]{1,2}))",
+            filename,
+        )
+        if doc_num:
+            doc_num = doc_num.groups()[0]
+        else:
+            doc_num = splitext(self.doc_dict.get(FieldNames.DOC_NUM))[0]
+            if not doc_num:
+                self._logger.warning(
+                    f"Missing `{FieldNames.DOC_NUM}` field. Section parsing "
+                    f"results may be adversely affected."
+                )
+                doc_num = splitext(filename)[0]
+
+        return doc_num
+
     def _parse(self, should_remove_strikethrough_text: bool = False) -> None:
         # Convert pdf to docx.
         if not self._test_mode:
@@ -155,12 +174,14 @@ class DoDParser(ParserDefinition):
                         for par in docx_parser.flatten_table(block)
                         if par.text
                         and not is_space(par.text)
-                        and not should_skip(
+                        and not should_skip( 
                             par.text.strip(), self._pagebreak_text
                         )
                     ]
+
                     if not table_paragraphs:
                         continue
+
                     block = table_paragraphs[0]
                     block_texts = [par.text for par in table_paragraphs]
                 else:
@@ -178,7 +199,8 @@ class DoDParser(ParserDefinition):
                 f"Failed to parse sections of docx document: {self._docx_path}."
             )
         else:
-            remove(self._docx_path)
+            if not self._test_mode:
+                remove(self._docx_path)
 
     def _add(
         self,
@@ -202,7 +224,7 @@ class DoDParser(ParserDefinition):
         text_stripped = par.text.strip()
         is_a_space = is_space(par.text)
         last_section = self._sections[-1] if self._sections else []
-
+        
         # The order of this is purposeful. Be careful about changing it.
         if is_a_space:
             pass
@@ -216,7 +238,7 @@ class DoDParser(ParserDefinition):
             self.add_child(section_texts)
         elif is_enclosure_continuation(text_stripped, last_section):
             self.add_continuation(section_texts[0])
-        elif is_known_section_start(text_stripped, par):
+        elif is_known_section_start(text_stripped, par, self._pagebreak_text):
             self.add_parent(section_texts)
         # This can have false positives if the other conditions aren't checked
         # first.

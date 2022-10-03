@@ -4,10 +4,16 @@ These functions are meant to be small units that make the Sections class easier
 to read and test.
 """
 
-from re import search, match, VERBOSE, IGNORECASE, Match
+from re import search, match, VERBOSE, IGNORECASE, Match, compile
 from docx.text.paragraph import Paragraph
 from roman import fromRoman
-from typing import Union, List
+from calendar import month_name
+from typing import Union, List, Tuple
+
+MONTHS = [m for m in month_name[1:]]
+PAGEBREAK_DATE_PATTERN = compile(
+    r"(?:" + r"|".join(MONTHS)  + r") [0-9]{1,2},? (?:19[0-9]{2}|2[0-9]{3})"
+)
 
 
 def match_section_num(
@@ -458,3 +464,40 @@ def remove_strikethrough_text(paragraph: Paragraph) -> None:
         paragraph.text = "".join(
             [run.text for run in paragraph.runs if not run.font.strike]
         )
+
+def find_pagebreak_date(text: str) -> Union[Tuple[int, int], None]:
+    """Find the start and end of a pagebreak date within the text. 
+    
+    Most documents have one date of the following format in each pagebreak:
+        <month> <1-2 digit day> <optional comma> <4-digit year>
+        Example: `March 12, 2004`.
+
+    Args:
+        text (str)
+
+    Returns:
+        Union[Tuple[int, int], None]: If a date is found, returns a Tuple of 
+            ints (date start index, date end index). Otherwise, returns None.
+    """
+    date_match = search(PAGEBREAK_DATE_PATTERN, text)
+    if date_match:
+        return (date_match.start(), date_match.end())
+    else:
+        return None
+    
+
+def clean_pagebreak_from_text(text: str, pagebreak_text: str) -> str:
+    """Remove pagebreak noise from the text.
+
+    Example:
+        `text` = "DoDD 4124.01E December 12, 1994 ENCLOSURE 1 RESPONSIBILITIES"
+        `pagebreak_text` = "DoDD 4124.01"
+        returns: "ENCLOSURE 1 RESPONSIBILITIES"
+    """
+    if text.startswith(pagebreak_text):
+        text = text.lstrip(pagebreak_text).lstrip()
+        date_span = find_pagebreak_date(text)
+        if date_span is not None and date_span[0] < 5:
+            text = text[date_span[1]:].strip()
+
+    return text

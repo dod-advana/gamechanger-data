@@ -134,6 +134,8 @@ class ParserDefinition:
         remainder of the sentence with this function.
         """
         if self._sections:
+            if not self._sections[-1][-1].endswith(" "):
+                text = " " + text
             self._sections[-1][-1] += text
         else:
             self._sections.append([text])

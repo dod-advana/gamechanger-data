@@ -24,6 +24,10 @@ from .utils import (
     match_attachment_num,
     is_subsection_start_for_section_1,
     get_subsection_of_section_1,
+    MONTHS,
+    PAGEBREAK_DATE_PATTERN,
+    find_pagebreak_date,
+    clean_pagebreak_from_text,
 )
 from .section_types import (
     is_enclosure_continuation,

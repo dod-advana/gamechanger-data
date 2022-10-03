@@ -32,6 +32,7 @@ from section_parse.parsers.dod_parser.utils import (
     is_attachment_start,
     is_subsection_start_for_section_1,
     get_subsection_of_section_1,
+    find_pagebreak_date,
 )
 from section_parse.utils import is_alpha_list_item, match_num_list_item
 
@@ -354,6 +355,17 @@ class UtilsTest(TestCase):
             TestItem((section_1, "award resources"), section_1[14:]),
         ]
         self._run(get_subsection_of_section_1, test_cases)
+
+
+    def test_find_pagebreak_date(self):
+        """Verifies find_pagebreak_date()."""
+        test_cases = [
+            TestItem(
+                ("DoDD 4124.01E December 12, 1994 ENCLOSURE 1 RESPONSIBILITIES",), 
+                (14,31)
+            )
+        ]
+        self._run(find_pagebreak_date, test_cases)
 
 
 if __name__ == "__main__":
