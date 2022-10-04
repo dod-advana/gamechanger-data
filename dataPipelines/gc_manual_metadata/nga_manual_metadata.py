@@ -80,8 +80,8 @@ class NGAManualMetadata:
             # print(metadata_record["file_name"])
             filepath = os.path.join(input_directory,metadata_record["file_name"])
             if Path(filepath).stem not in existing_metadata_files \
-                    and metadata_record['mod_type']=="Addition":# \
-                    # and Path(filepath) in existing_files \:
+                    and metadata_record['mod_type']=="Addition" \
+                    and Path(filepath) in existing_files:
                 # before, part, after = Path(filepath).stem.partition("(")
 
                 doc_title = metadata_record.get('title', "")# if metadata_record.get('title') else (before.split("_")[5] if not after else before)
