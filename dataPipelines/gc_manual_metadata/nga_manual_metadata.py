@@ -80,8 +80,8 @@ class NGAManualMetadata:
             # print(metadata_record["file_name"])
             filepath = os.path.join(input_directory,metadata_record["file_name"])
             if Path(filepath).stem not in existing_metadata_files \
-                    and metadata_record['mod_type']=="Addition" \
-                    and Path(filepath) in existing_files:
+                    and metadata_record['mod_type']=="Addition":# \
+                    # and Path(filepath) in existing_files:
                 # before, part, after = Path(filepath).stem.partition("(")
 
                 doc_title = metadata_record.get('title', "")# if metadata_record.get('title') else (before.split("_")[5] if not after else before)
@@ -90,7 +90,7 @@ class NGAManualMetadata:
                 doc_type = metadata_record.get('display_doc_type', "")
 
                 pdi = dict(doc_type=Path(filepath).suffix[1:],
-                           web_url="manual.ingest")
+                           web_url="Not Applicable")
                 version_hash_fields = {"filename": Path(filepath).name,
                                        "doc_title": doc_title,
                                        "doc_num": doc_num,
@@ -105,14 +105,14 @@ class NGAManualMetadata:
                     access_timestamp=datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f'),
                     cac_login_required=True,
                     crawler_used="NGA",
-                    source_page_url="manual.ingest",
+                    source_page_url="Not Applicable",
                     version_hash_raw_data=version_hash_fields,
                     downloadable_items=[pdi],
                     display_doc_type=display_doc_type,
 
                     display_org="NGA",
                     display_source="NGA Publications",
-                    source_fqdn="manual.ingest",
+                    source_fqdn="Not Applicable",
                     version_hash=dict_to_sha256_hex_digest(version_hash_fields)
                 )
 
@@ -130,10 +130,10 @@ class NGAManualMetadata:
                         self.all_processed_files.append(metadata_outfile)
 
 
-#
-# if __name__=="__main__":
-#     input_directory = "/Users/austinmishoe/Downloads/nga_files"
-#     nga_mm = NGAManualMetadata()
-#     nga_mm.create_metadata_files(input_directory,output_directory="/Users/austinmishoe/Downloads/nga_files2")
-#     print(nga_mm.all_processed_files)
-#
+
+if __name__=="__main__":
+    input_directory = "/Users/austinmishoe/Downloads/nga_files"
+    nga_mm = NGAManualMetadata()
+    nga_mm.create_metadata_files(input_directory,output_directory="/Users/austinmishoe/Downloads/nga_files2")
+    print(nga_mm.all_processed_files)
+
