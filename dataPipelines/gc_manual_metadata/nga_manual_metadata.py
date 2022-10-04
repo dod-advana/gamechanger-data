@@ -33,7 +33,7 @@ def dict_to_sha256_hex_digest(_dict: t.Dict[t.Any, t.Any]) -> str:
 
 
 class NGAManualMetadata:
-    def __init__(self, metadata_filename="metadata.csv", xlsx_data_sheet = "Metadata Template"):
+    def __init__(self, metadata_filename="metadata.xlsx", xlsx_data_sheet = "Metadata Template"):
         self.metadata_filename = metadata_filename
         self.xlsx_data_sheet = xlsx_data_sheet
         if ".xls" in self.metadata_filename:
@@ -61,8 +61,8 @@ class NGAManualMetadata:
                                                keep_default_na=False).to_dict(orient="records")
             elif ".xls" in self.metadata_filename:
                 metadata_records = pd.read_excel(os.path.join(input_directory,self.metadata_filename),
-                                                 sheet_name=self.xlsx_data_sheet,dtype=str,keep_default_na=False
-                                                 ).to_dict(orient="records")
+                                                 sheet_name=self.xlsx_data_sheet,dtype=str,keep_default_na=False,
+                                                 engine='openpyxl').to_dict(orient="records")
             else:
                 raise f"Unknown file extension on 'metadata_filename': {self.metadata_filename.split('.')[-1]}"
         except Exception as e:
@@ -80,13 +80,14 @@ class NGAManualMetadata:
             # print(metadata_record["file_name"])
             filepath = os.path.join(input_directory,metadata_record["file_name"])
             if Path(filepath).stem not in existing_metadata_files \
-                    and Path(filepath) in existing_files \
-                    and metadata_record['mod_type']=="Addition":
-                before, part, after = Path(filepath).stem.partition("(")
+                    and metadata_record['mod_type']=="Addition":# \
+                    # and Path(filepath) in existing_files \:
+                # before, part, after = Path(filepath).stem.partition("(")
 
                 doc_title = metadata_record.get('title', "")# if metadata_record.get('title') else (before.split("_")[5] if not after else before)
-                doc_type = metadata_record.get('doc_type', "")# if metadata_record.get('doc_type') else (doc_title.split(" ", 1)[0])
+                display_doc_type = metadata_record.get('doc_type', "")# if metadata_record.get('doc_type') else (doc_title.split(" ", 1)[0])
                 doc_num = metadata_record.get('doc_num', "")# if metadata_record.get('doc_num') else (doc_title.split(" ", 1)[1])
+                doc_type = metadata_record.get('display_doc_type', "")
 
                 pdi = dict(doc_type=Path(filepath).suffix[1:],
                            web_url="manual.ingest")
@@ -100,14 +101,15 @@ class NGAManualMetadata:
                     doc_title=doc_title,
                     doc_num=doc_num,
                     doc_type=doc_type,
-                    publication_date="N/A",
+                    publication_date=metadata_record.get("publication_date","N/A"),
                     access_timestamp=datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f'),
                     cac_login_required=True,
                     crawler_used="NGA",
                     source_page_url="manual.ingest",
                     version_hash_raw_data=version_hash_fields,
                     downloadable_items=[pdi],
-                    display_doc_type="Document",
+                    display_doc_type=display_doc_type,
+
                     display_org="NGA",
                     display_source="NGA Publications",
                     source_fqdn="manual.ingest",
@@ -128,10 +130,10 @@ class NGAManualMetadata:
                         self.all_processed_files.append(metadata_outfile)
 
 
-
+#
 # if __name__=="__main__":
-#     input_directory = "/Users/austinmishoe/bah/advana_data/nga_test/"
+#     input_directory = "/Users/austinmishoe/Downloads/nga_files"
 #     nga_mm = NGAManualMetadata()
-#     nga_mm.create_metadata_files(input_directory,output_directory="/Users/austinmishoe/Downloads/nga_files")
+#     nga_mm.create_metadata_files(input_directory,output_directory="/Users/austinmishoe/Downloads/nga_files2")
 #     print(nga_mm.all_processed_files)
-
+#
