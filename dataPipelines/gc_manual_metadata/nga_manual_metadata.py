@@ -101,7 +101,7 @@ class NGAManualMetadata:
                     doc_title=doc_title,
                     doc_num=doc_num,
                     doc_type=doc_type,
-                    publication_date=metadata_record.get("publication_date","N/A"),
+                    publication_date=metadata_record.get("publication_date","Not Available"),
                     access_timestamp=datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f'),
                     cac_login_required=True,
                     crawler_used="NGA",
