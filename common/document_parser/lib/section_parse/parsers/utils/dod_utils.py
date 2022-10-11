@@ -35,7 +35,7 @@ def find_pagebreak_date(text: str) -> Union[Tuple[int, int], None]:
 def match_alpha_list_item(
     text: str,
 ) -> Union[Tuple[str, Callable], Tuple[None, None]]:
-    """Match an alphabetical list item.
+    """Match an alphabetical (lowercase only) list item.
 
     Args:
         text (str)
@@ -86,7 +86,7 @@ def is_sentence_continuation(text: str, prev_text: str) -> bool:
     """
     if search(r"[a-z] ?[^\.] $", prev_text) and match(r"[a-z]", text):
         return True
-    elif search(r"(?:[a-z]\-|,.{0,2}\s+)$", prev_text) and match(
+    elif search(r"(?:[a-zA-Z]\-|,.{0,2}\s+)$", prev_text) and match(
         r"[a-zA-Z]", text
     ):
         return True
@@ -135,7 +135,6 @@ def is_known_section_start(text: str) -> bool:
                     |Reissuance
                     |Procedures
                     |Table\sOf\sContents
-                    |Relationships
                 )
                 ([:\.])?
             """,
