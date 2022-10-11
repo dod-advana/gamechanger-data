@@ -51,13 +51,15 @@ class ParserDefinition:
     # Document types supported by the parser.
     SUPPORTED_DOC_TYPES = []
 
-    def __init__(self, doc_dict: dict):
+    def __init__(self, doc_dict: dict, test_mode: bool = False):
         """Base class for section parsers.
 
         Args:
             doc_dict (dict): The document as a dictionary.
+            test_mode (bool, optional): Defaults to False.
         """
         self.doc_dict = doc_dict
+        self.test_mode = test_mode
         self._sections = []
         self._logger = get_default_logger()
 

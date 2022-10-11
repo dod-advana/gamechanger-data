@@ -24,11 +24,12 @@ class DoDParser(ParserDefinition):
 
     SUPPORTED_DOC_TYPES = ["dodd", "dodi", "dodm"]
 
-    def __init__(self, doc_dict: dict):
-        super().__init__(doc_dict)
+    def __init__(self, doc_dict: dict, test_mode: bool = False):
+        super().__init__(doc_dict, test_mode)
         self._filename = basename(self.doc_dict[FieldNames.FILENAME])
         self._set_pagebreak_text()
-        self._parse()
+        if not self.test_mode:
+            self._parse()
 
     @property
     def purpose(self):
