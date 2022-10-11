@@ -47,4 +47,5 @@ mlruns/
 # Don't ignore .gitkeep files
 !**/.gitkeep
 
-
+# Project specific
+common/document_parser/lib/section_parse/tests/data/actual_output
