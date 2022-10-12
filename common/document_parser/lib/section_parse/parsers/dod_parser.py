@@ -1,7 +1,6 @@
 from os.path import splitext, split, basename
 from re import match, search, fullmatch, IGNORECASE
 from typing import List
-from gamechangerml.src.utilities.text_utils import utf8_pass
 from common.document_parser.lib.document import FieldNames
 from .parser_definition import ParserDefinition
 from .utils import (
@@ -126,14 +125,13 @@ class DoDParser(ParserDefinition):
         self._combine_enclosures_list()
 
     def _set_pagebreak_text(self):
-        doc_type = split(self.doc_dict[FieldNames.DOC_TYPE])[1]
         doc_num = match(
             r"DoD[IMD] ((?:[A-Z]-)?[1-9][0-9]{3}(?:\.[0-9]{1,2}))",
             self._filename,
         )
 
         if doc_num:
-            self._pagebreak_text = " ".join([doc_type, doc_num.groups()[0]])
+            self._pagebreak_text = " ".join([self._doc_type, doc_num.groups()[0]])
         else:
             self._logger.warning(
                 f"Document number not found in filename: `{self._filename}`. "

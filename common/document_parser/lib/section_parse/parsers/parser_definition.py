@@ -1,5 +1,5 @@
 from itertools import chain
-from os.path import basename
+from os.path import basename, split
 from typing import List
 from gamechangerml.src.utilities.text_utils import utf8_pass
 from common.document_parser.cli import get_default_logger
@@ -63,6 +63,7 @@ class ParserDefinition:
         """
         self.doc_dict = doc_dict.copy()
         self._filename = basename(self.doc_dict[FieldNames.FILENAME])
+        self._doc_type = split(self.doc_dict[FieldNames.DOC_TYPE])[1]
         self.test_mode = test_mode
         self._sections = []
         self._logger = get_default_logger()
