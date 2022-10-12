@@ -108,7 +108,7 @@ class DoDParser(ParserDefinition):
         return self._get_section_by_title("summary of change")
 
     def _parse(self) -> None:
-        raw_text = self._get_raw_text()
+        raw_text = self.get_raw_text()
         if not raw_text:
             return
 
@@ -171,26 +171,6 @@ class DoDParser(ParserDefinition):
             ),
             [],
         )
-
-    def _get_raw_text(self) -> str:
-        field = FieldNames.TEXT
-
-        try:
-            raw_text = self.doc_dict[field]
-        except KeyError:
-            self._logger.exception(
-                f"Document `{self._filename}` is missing field `{field}`. "
-                "Cannot parse sections."
-            )
-            raw_text = ""
-        else:
-            if raw_text == "":
-                self._logger.warning(
-                    f"Document `{self._filename}` has empty value for field "
-                    f"`{field}`. Cannot parse sections. "
-                )
-    
-        return utf8_pass(raw_text)
 
     def _combine_toc(self) -> None:
         first_toc_ind = next(
