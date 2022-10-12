@@ -351,6 +351,53 @@
           "type": "keyword",
           "store": true
         },
+        "sections": {
+          "type": "object",
+          "properties": {
+            "all_sections": {
+              "type": "text"
+            },
+            "responsibilities_section": {
+              "type": "text"
+            },
+            "references_section": {
+              "type": "text"
+            },
+            "purpose_section": {
+              "type": "text"
+            },
+            "subject_section": {
+              "type": "text"
+            },
+            "procedures_section": {
+              "type": "text"
+            },
+            "effective_date": {
+              "type": "text"
+            },
+            "applicability_section": {
+              "type": "text"
+            },
+            "policy_section": {
+              "type": "text"
+            },
+            "organizations_section": {
+              "type": "text"
+            },
+            "definitions_section": {
+              "type": "text"
+            },
+            "table_of_contents": {
+              "type": "text"
+            },
+            "glossary_section": {
+              "type": "text"
+            },
+            "summary_of_change_section": {
+              "type": "text"
+            }
+          }
+        },
         "paragraphs": {
           "dynamic": "true",
           "type": "nested",
