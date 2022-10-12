@@ -86,7 +86,26 @@ def run(staging_folder: str, s3_covd_dataset: str,
         Conf.s3_utils.download_file(file=staging_folder + "/pdf_json.tar.gz", bucket="advana-data-zone",
                                     object_path="bronze/gamechanger/projects/" + gc_project + "/raw_jsons/pdf_json.tar.gz")
         with tarfile.open(staging_folder + "/pdf_json.tar.gz", "r:gz") as pdf_json_archive:
-            pdf_json_archive.extractall(staging_folder)
+            def is_within_directory(directory, target):
+                
+                abs_directory = os.path.abspath(directory)
+                abs_target = os.path.abspath(target)
+            
+                prefix = os.path.commonprefix([abs_directory, abs_target])
+                
+                return prefix == abs_directory
+            
+            def safe_extract(tar, path=".", members=None, *, numeric_owner=False):
+            
+                for member in tar.getmembers():
+                    member_path = os.path.join(path, member.name)
+                    if not is_within_directory(path, member_path):
+                        raise Exception("Attempted Path Traversal in Tar File")
+            
+                tar.extractall(path, members, numeric_owner=numeric_owner) 
+                
+            
+            safe_extract(pdf_json_archive, staging_folder)
     else:
         if not os.path.exists(staging_folder + "/pdf_json/"):
             os.makedirs(staging_folder + "/pdf_json/")
@@ -96,7 +115,26 @@ def run(staging_folder: str, s3_covd_dataset: str,
         Conf.s3_utils.download_file(file=staging_folder + "/pmc_json.tar.gz", bucket="advana-data-zone",
                                     object_path="bronze/gamechanger/projects/" + gc_project + "/raw_jsons/pmc_json.tar.gz")
         with tarfile.open(staging_folder + "/pmc_json.tar.gz", "r:gz") as pmc_json_archive:
-            pmc_json_archive.extractall(staging_folder)
+            def is_within_directory(directory, target):
+                
+                abs_directory = os.path.abspath(directory)
+                abs_target = os.path.abspath(target)
+            
+                prefix = os.path.commonprefix([abs_directory, abs_target])
+                
+                return prefix == abs_directory
+            
+            def safe_extract(tar, path=".", members=None, *, numeric_owner=False):
+            
+                for member in tar.getmembers():
+                    member_path = os.path.join(path, member.name)
+                    if not is_within_directory(path, member_path):
+                        raise Exception("Attempted Path Traversal in Tar File")
+            
+                tar.extractall(path, members, numeric_owner=numeric_owner) 
+                
+            
+            safe_extract(pmc_json_archive, staging_folder)
     else:
         if not os.path.exists(staging_folder + "/pmc_json/"):
             os.makedirs(staging_folder + "/pmc_json/")
@@ -185,14 +223,52 @@ def extract_cord_19_raw_file(raw_cord_file: Union[str, Path], tmp_folder: Union[
 
     with tarfile.open(local_cord_dir_path, "r:gz") as archive:
         archive.list(verbose=True)
-        archive.extractall(local_tmp_path)
+        def is_within_directory(directory, target):
+            
+            abs_directory = os.path.abspath(directory)
+            abs_target = os.path.abspath(target)
+        
+            prefix = os.path.commonprefix([abs_directory, abs_target])
+            
+            return prefix == abs_directory
+        
+        def safe_extract(tar, path=".", members=None, *, numeric_owner=False):
+        
+            for member in tar.getmembers():
+                member_path = os.path.join(path, member.name)
+                if not is_within_directory(path, member_path):
+                    raise Exception("Attempted Path Traversal in Tar File")
+        
+            tar.extractall(path, members, numeric_owner=numeric_owner) 
+            
+        
+        safe_extract(archive, local_tmp_path)
 
         for file in os.listdir(str(local_tmp_path.absolute()) + "/" + os.path.commonprefix(archive.getnames())):
             if "document_parses.tar.gz" == file:
                 local_doc_files = Path(str(local_tmp_path.absolute()) + "/" + os.path.commonprefix(
                     archive.getnames()) + "document_parses.tar.gz").resolve()
                 with tarfile.open(local_doc_files) as archive_docs:
-                    archive_docs.extractall(local_tmp_path)
+                    def is_within_directory(directory, target):
+                        
+                        abs_directory = os.path.abspath(directory)
+                        abs_target = os.path.abspath(target)
+                    
+                        prefix = os.path.commonprefix([abs_directory, abs_target])
+                        
+                        return prefix == abs_directory
+                    
+                    def safe_extract(tar, path=".", members=None, *, numeric_owner=False):
+                    
+                        for member in tar.getmembers():
+                            member_path = os.path.join(path, member.name)
+                            if not is_within_directory(path, member_path):
+                                raise Exception("Attempted Path Traversal in Tar File")
+                    
+                        tar.extractall(path, members, numeric_owner=numeric_owner) 
+                        
+                    
+                    safe_extract(archive_docs, local_tmp_path)
             elif "metadata.csv" == file:
                 local_metadata_path = Path(str(local_tmp_path.absolute()) + "/" + os.path.commonprefix(
                     archive.getnames()) + "metadata.csv").resolve()
