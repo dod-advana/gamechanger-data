@@ -554,7 +554,10 @@ class DeleteConfig(CoreIngestConfig):
                         j_dict = json.loads(json_str)
                     except json.decoder.JSONDecodeError:
                         continue
+                    # NOTE: Hardcoded to remove files of <input_json>.metadata
+                    # e.g DHA 29321.pdf.metadata -> will remove file DHA 29321.pdf
                     filename = Path(j_dict.get("filename",
+                                               input_json.stem,
                                           j_dict["doc_name"] +
                                           "." +
                                           j_dict["downloadable_items"].pop()["doc_type"]))
