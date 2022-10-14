@@ -2,6 +2,7 @@ from os.path import split
 from common.document_parser.lib.document import FieldNames
 from .parser_definition import ParserDefinition
 from .dod_parser import DoDParser
+from .navy_parser import NavyParser
 
 
 class ParserFactory:
@@ -21,5 +22,7 @@ class ParserFactory:
         doc_type = split(doc_dict[FieldNames.DOC_TYPE])[1].lower()
         if doc_type in DoDParser.SUPPORTED_DOC_TYPES:
             return DoDParser(doc_dict)
+        elif doc_type in NavyParser.SUPPORTED_DOC_TYPES:
+            return NavyParser(doc_dict)
         else:
             return ParserDefinition(doc_dict)

@@ -17,3 +17,9 @@ from .dod_utils import (
     match_alpha_list_item,
     match_ref_start,
 )
+from .navy_utils import (
+    next_letter,
+    get_letter_dot_section,
+    match_number_hyphenated_section,
+    match_number_dot_section,
+)
