@@ -5,8 +5,8 @@
 
 import jsonlines
 
-manifest_path = '/Users/alexanderdemouy/workspace/manifest_deletes/cumulative-manifest.json'
-crawler_output_path = '/Users/alexanderdemouy/workspace/manifest_deletes/crawler_output.json'
+manifest_path = '<path/to/manifest/file>'
+crawler_output_path = '<path/to/crawler/output/file>'
 
 data = []
 
