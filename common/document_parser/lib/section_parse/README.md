@@ -30,8 +30,8 @@ gamechanger-data/common/document_parser/lib/section_parse/
 │   │   └── test_navy_utils.py          Tests for navy_utils.py
 │   ├── integrated                      Integrated tests
 │   │   ├── __init__.py
-│   │   └── test_dod_parser.py
-
+│   │   ├── test_dod_parser.py
+│   │   └── test_navy_parser.py
 ```
 
 ## Example Usage
