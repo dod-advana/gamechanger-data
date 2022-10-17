@@ -137,20 +137,25 @@ class ParserDefinition:
         Args:
             start (int): First index of the sections to combine.
             end (int): Last index of the sections to combine.
-
-        Raises:
-            ValueError: If an invalid start or end is passed.
         """
+        info = f"Inputs: start={start}, end={end}. len of _sections: {self.num_of_sections}."
+        warning_msg = lambda x: print(f"WARNING for combine_sections(): {x}. {info}")
+        
         if start < 0:
-            raise ValueError(f"Bad start: {start}")
+            warning_msg("negative start value")
+            return
 
-        if end >= len(self._sections):
-            raise ValueError(f"Bad end: {end}")
+        if end > len(self._sections):
+            warning_msg("end > number of sections")
+            return
+
+        if start == end:
+            warning_msg("start and end are equal")
+            return
 
         if start > end:
-            raise ValueError(
-                f"Start cannot be greater than end. start: {start}, end: {end}"
-            )
+            warning_msg("start is greater than end")
+            return
 
         self._sections[start : end + 1] = [
             list(chain.from_iterable(self._sections[start : end + 1]))

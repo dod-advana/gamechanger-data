@@ -252,16 +252,18 @@ class DoDParser(ParserDefinition):
                 section_1_enclosure = match_enclosure_num(section_1_sub)
                 section_2_enclosure = match_enclosure_num(section_2_sub)
 
-                if section_1_enclosure and section_2_sub.isupper():
-                    if section_1_sub == section_2_sub:
-                        self._sections[i + 1] = self._sections[i + 1][1:]
-                        self.combine_sections(i, i + 1)
-                        continue
+                if section_1_enclosure:
                     if section_2_enclosure:
-                        if section_2_enclosure == section_1_enclosure:
+                        if section_1_sub == section_2_sub:
+                            del self._sections[i]
+                            continue
+                        elif section_1_enclosure == section_2_enclosure:
                             self.combine_sections(i, i + 1)
-                    else:
-                        self.combine_sections(i, i + 1)
+                    elif section_2_sub.isupper():
+                        self._sections[i][0] = section_1[0] +  section_2[0]
+                        self._sections[i] += section_2[1:]
+                        del self._sections[i + 1]
+                        continue
 
             i += 1
 
