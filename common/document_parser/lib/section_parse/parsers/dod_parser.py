@@ -189,7 +189,7 @@ class DoDParser(ParserDefinition):
                     f"Document `{self._filename}` has empty value for field "
                     f"`{field}`. Cannot parse sections. "
                 )
-    
+
         return utf8_pass(raw_text)
 
     def _combine_toc(self) -> None:
@@ -298,9 +298,11 @@ class DoDParser(ParserDefinition):
                         j = i + 1
                     else:
                         break
-                elif match(
-                    r"[1-9][0-9]?\.\s", next_subsection
-                ) or is_known_section_start(next_subsection):
+                elif (
+                    match(r"[1-9][0-9]?\.\s", next_subsection)
+                    or is_known_section_start(next_subsection)
+                    or match_section_num(next_subsection) is not None
+                ):
                     break
                 else:
                     j += 1
@@ -352,8 +354,12 @@ class DoDParser(ParserDefinition):
                         break
 
                     subsection_j = self._remove_pagebreak(subsection_j)
-                    if not is_toc(subsection_j) and is_known_section_start(
-                        subsection_j
+                    if (
+                        not is_toc(subsection_j)
+                        and is_known_section_start(subsection_j)
+                        # Sometimes the Responsibilities section has a Policy 
+                        # subsection.
+                        and match(r"P(?:olicy|OLICY)", subsection_j) is None
                     ):
                         self.combine_sections(i, j - 1)
                         break
@@ -463,11 +469,11 @@ class DoDParser(ParserDefinition):
             self.combine_sections(start_ind, end_ind)
 
     def _combine_glossary_then_references(self):
-        """Combine the Glossary into 1 section, then the References into 1 
+        """Combine the Glossary into 1 section, then the References into 1
         section.
 
         According to the DoD Issuance Style Guide:
-            "It [the glossary] is always the second to last section in an 
+            "It [the glossary] is always the second to last section in an
             issuance, followed only by the References section."
         """
         glossary_start = next(

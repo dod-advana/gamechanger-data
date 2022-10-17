@@ -80,6 +80,13 @@ class DoDUtilsTest(TestCase):
                 ),
                 False,
             ),
+            TestItem(("Section 4. ", "In accordance with "), True),
+            TestItem(("Section 12 ", "As stated in "), True),
+            TestItem(("Section 8 of Title 10. ", "The policy is under "), True),
+            TestItem(("Section 3,", "With provision to "), True),
+            TestItem(("Glossary,", "As stated in the "), True),
+            TestItem(("SECTION 4. ", "In accordance with section 1."), False),
+            TestItem(("GLOSSARY.", "as stated."), False),
         ]
         self._run(is_sentence_continuation, test_cases)
 

@@ -90,6 +90,12 @@ def is_sentence_continuation(text: str, prev_text: str) -> bool:
         r"[a-zA-Z]", text
     ):
         return True
+    elif search(r"(?:under|in|with|to) +$", prev_text) and match(
+        r"Section [0-9]", text
+    ):
+        return True
+    elif search(r"in +the +$", prev_text) and match("Glossary", text):
+        return True
 
     return False
 
@@ -151,6 +157,9 @@ def is_known_section_start(text: str) -> bool:
         # Separate match for "Glossary" and "Enclosures" because they don't need
         #  to be followed by a colon or period if they're not uppercase.
         if match(r"(?:Glossary|Enclosures)", text, flags=IGNORECASE):
+            return True
+
+        if match(r"Appendix +[A-Z0-9]", text, flags=IGNORECASE):
             return True
 
     return False
@@ -218,7 +227,7 @@ def match_section_num(
             r"""
                 section\s([0-9]{1,2})         
                 |([A-Z]{0,2}\.?[0-9]{1,2})\.\s   
-                |([0-9]{1,2})\.[0-9]
+                |([0-9]{1,2})\.[0-9](?:(?!\.[a-zA-Z]))
             """,
             text,
             flags=VERBOSE | IGNORECASE,
