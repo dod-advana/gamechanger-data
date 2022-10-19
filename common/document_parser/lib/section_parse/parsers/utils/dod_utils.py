@@ -320,7 +320,7 @@ def get_subsection_of_section_1(
 
     end_index = end_index if end_index is not None else len(section_1)
 
-    return section_1[start_index:end_index]
+    return ["\n".join(section_1[start_index:end_index])]
 
 
 def is_subsection_start_for_section_1(text: str, subsection_name: str) -> bool:

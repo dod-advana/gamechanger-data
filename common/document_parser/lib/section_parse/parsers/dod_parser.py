@@ -32,6 +32,10 @@ class DoDParser(ParserDefinition):
             self._parse()
 
     @property
+    def all_sections(self) -> List[str]:
+        return ["\n".join(s) for s in self._sections]
+
+    @property
     def purpose(self):
         return self._get_section_by_title("purpose")
 
@@ -57,7 +61,10 @@ class DoDParser(ParserDefinition):
 
     @property
     def applicability(self):
-        applicability_section = self._get_section_by_title("applicability")
+        applicability_section = [
+            section.split("\n")
+            for section in self._get_section_by_title("applicability")
+        ]
 
         # Sometimes the Applicability section is a subsection of Section 1.
         if not applicability_section:
@@ -141,7 +148,7 @@ class DoDParser(ParserDefinition):
             )
             self._pagebreak_text = splitext(self._filename)[0]
 
-    def _get_section_by_title(self, title_words: str) -> List[List[str]]:
+    def _get_section_by_title(self, title_words: str) -> List[str]:
         # Note: don't include special regex chars in title_words
         if len(title_words) == 0:
             raise ValueError("title_word arg cannot be an empty string.")
@@ -155,7 +162,7 @@ class DoDParser(ParserDefinition):
         pattern += r"\b"
 
         return [
-            section
+            "\n".join(section)
             for section in self._sections
             if search(pattern, section[0])
         ]
@@ -260,7 +267,7 @@ class DoDParser(ParserDefinition):
                         elif section_1_enclosure == section_2_enclosure:
                             self.combine_sections(i, i + 1)
                     elif section_2_sub.isupper():
-                        self._sections[i][0] = section_1[0] +  section_2[0]
+                        self._sections[i][0] = section_1[0] + section_2[0]
                         self._sections[i] += section_2[1:]
                         del self._sections[i + 1]
                         continue
@@ -359,7 +366,7 @@ class DoDParser(ParserDefinition):
                     if (
                         not is_toc(subsection_j)
                         and is_known_section_start(subsection_j)
-                        # Sometimes the Responsibilities section has a Policy 
+                        # Sometimes the Responsibilities section has a Policy
                         # subsection.
                         and match(r"P(?:olicy|OLICY)", subsection_j) is None
                     ):

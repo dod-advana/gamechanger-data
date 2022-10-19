@@ -64,9 +64,9 @@ class ParserDefinition:
         self._logger = get_default_logger()
 
     @property
-    def all_sections(self) -> List[List[str]]:
-        return self._sections
-
+    def all_sections(self) -> List[str]:
+        return []
+        
     @property
     def num_of_sections(self) -> int:
         return len(self._sections)
