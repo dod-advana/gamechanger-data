@@ -12,9 +12,11 @@ gamechanger-data/common/document_parser/lib/section_parse/
 │   ├── parser_factory.py               ParserFactory class. Determines the parser to create for a given document
 │   ├── parser_definition.py            ParserDefinition class. Base class for all section parsers
 │   ├── dod_parser.py                   DoDParser class
-│   └── navy_parser.py                  NavyParser class
+│   ├── navy_parser.py                  NavyParser class
+│   └── cjcs_parser.py                  CJCSParser class
 ├── utils
 │   ├── __init__.py
+│   ├── shared_utils.py
 │   ├── dod_utils.py                    Utils for DoDParser
 │   └── navy_utils.py                   Utils for NavyParser
 ├── tests
