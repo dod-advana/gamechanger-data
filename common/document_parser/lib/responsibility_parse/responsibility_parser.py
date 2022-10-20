@@ -240,9 +240,5 @@ class ResponsibilityParser:
         self._logger.info(f"{len(self.error_files)} total files errored out/skipped")
         self._logger.info(f"{len(self.files_missing_responsibility_section)} total files missing responsibility_section")
 
-# if __name__=="__main__":
-#     resp_parser = ResponsibilityParser()
-#     resp_parser.main(files_input_directory="/Users/austinmishoe/bah/advana_data/gc_jsons_dod",
-#                      excel_save_filepath="/Users/austinmishoe/bah/advana_data/responsibility_results.xlsx")
 
 
