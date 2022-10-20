@@ -1,4 +1,4 @@
-from os.path import splitext, split, basename
+from os.path import splitext, basename
 from re import match, search, fullmatch, IGNORECASE
 from typing import List
 from common.document_parser.lib.document import FieldNames

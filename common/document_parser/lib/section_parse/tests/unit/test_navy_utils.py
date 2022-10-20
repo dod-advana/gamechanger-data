@@ -44,17 +44,6 @@ class NavyUtilsTest(TestCase):
                     f"`{test.actual_output.group()}`.",
                 )
 
-    def _get_input_from_file(self, func_name: str):
-        try:
-            result = self.input_file[func_name]
-        except KeyError:
-            self.fail(
-                f"Cannot load test input. Key `{func_name}` does not exist in "
-                "input file."
-            )
-        else:
-            return result
-
     def test_get_letter_dot_section(self):
         """Verifies get_letter_dot_section()."""
         text = "\n1.  Situation \n \n    a.  Purpose.  In accordance with the references (a) through (l), this \nMarine Corps Bulletin (MCBUL) provides guidance to standardize a Marine Corps \ncapability executed from garrison that seamlessly provides uninterrupted Full \nMotion Video (FMV) Processing, Exploitation, and Dissemination (PED) support \nto MAGTF, Naval, Joint, and Coalition operations. \n \n    b.  Background.  In September 2014, the Marine Corps Director of \nIntelligence (DIRINT) published MCISRE Plan 2015-2020, reference (a), calling \nfor “Marine Corps participation in Joint PED centers and the provision for \nJoint PED from within the MCISRE, beginning with Marine Corps Intelligence \nActivity (MCIA).”  PED is a Marine Corps capability that supports the MAGTF, \nNaval, Joint Force, and Coalition partners.  This capability will be employed \nto meet mission requirements outlined by the Global Force Management process \nto include unique organic mission requirements across the MAGTF.  MCIA and \nMARSOC nodes are currently operational and train to standards outlined in \nUSSOCOM Manual 350-16 reference (b).  USSOCOM PED standards are universally \nrecognized as the Joint Force standard.  Marine Corps PED training is being \ndeveloped and implemented, and will continue to adhere to USSOCOM training \nMCBUL 3800 \n6 AUG 2020 \n \n2 \nstandards to ensure interoperability across the Joint Force.  In accordance \nwith references (c) and (d), the establishment of Marine Corps PED nodes are \ndefined at MCIA, MARSOC, I MEF (Camp Pendleton and MCAS Yuma), II MEF (Camp \nLejeune), and III MEF (Camp Hansen).  As Marine Corps PED nodes achieve \nInitial Operating Capacity (IOC), the Service must standardize and codify \nmanpower implementation and training requirements for the Marines responsible \nfor PED execution.   \n \n2.  Mission. "
@@ -138,6 +127,7 @@ class NavyUtilsTest(TestCase):
         ]
         self._run_matches(match_number_dot_section, test_cases)
 
+    # TODO: move to test_shared_utils.py
     def test_next_letter(self):
         """Verifies next_letter()."""
         inputs_should_raise = ["abc", "3"]

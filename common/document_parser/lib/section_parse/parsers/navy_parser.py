@@ -1,7 +1,5 @@
 from re import search, IGNORECASE, finditer, compile, finditer, RegexFlag
-from os.path import basename
 from typing import List
-from common.document_parser.lib.document import FieldNames
 from .parser_definition import ParserDefinition
 from .utils import (
     match_number_hyphenated_section,
@@ -34,7 +32,6 @@ class NavyParser(ParserDefinition):
 
     def __init__(self, doc_dict: dict, test_mode: bool = False):
         super().__init__(doc_dict, test_mode)
-        self._filename = basename(self.doc_dict[FieldNames.FILENAME])
         self._text = self.get_raw_text()
 
     @property
@@ -59,7 +56,7 @@ class NavyParser(ParserDefinition):
 
     @property
     def responsibilities(self):
-        resp = self._get_numbered_section_with_name("responsibilit(?:y|ies)")
+        resp = self._get_numbered_section_with_name("responsibilit(?:y|ies)", False)
         if not resp:
             # Examples of unique responsibilities sections:
             #    "\n3.  Records Responsibilities. "
