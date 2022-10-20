@@ -1,1 +1,1 @@
-from .parse_responsibilties import ResponsibilityParser
+from .responsibility_parser import ResponsibilityParser
