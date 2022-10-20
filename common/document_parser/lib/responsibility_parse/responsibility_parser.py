@@ -2,7 +2,6 @@ from common.document_parser.lib.section_parse import add_sections
 import re
 from string import punctuation
 from common.document_parser.lib import entities
-## need "roman"
 from glob import glob
 from tqdm import tqdm
 import json
@@ -230,8 +229,8 @@ class ResponsibilityParser:
                 doc_results[filename] = file_responsibility_sections
 
         self.results_df = pd.DataFrame(
-            [record for file_records in list(doc_results.values()) for record_list in file_records for record in
-             record_list])
+            [record for file_records in list(doc_results.values()) for record in
+             file_records])
 
         if excel_save_filepath:
             self.save_results_to_excel(excel_save_filepath)
@@ -239,6 +238,3 @@ class ResponsibilityParser:
         self._logger.info(f"{len(parse_files)} total files processed")
         self._logger.info(f"{len(self.error_files)} total files errored out/skipped")
         self._logger.info(f"{len(self.files_missing_responsibility_section)} total files missing responsibility_section")
-
-
-
