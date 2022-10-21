@@ -69,7 +69,9 @@ class ResponsibilityParser:
             entities.ENTITIES_LOOKUP_DICT[e[0]]["ent_type"])
             for e in entities.PROCESSOR.extract_keywords(text, span_info=True)
         ]
-        return list(set([ent_info[2] for ent_info in entities.remove_overlapping_ents(ent_info_list)]))
+        unique_entites_list = list(set([ent_info[2] for ent_info in entities.remove_overlapping_ents(ent_info_list)]))
+        unique_entites_list.sort()
+        return unique_entites_list
 
     def format_responsibility_results(self, resp_list, file_name, title):
         """
@@ -100,10 +102,10 @@ class ResponsibilityParser:
                         "documentTitle": title,
                         "organizationPersonnelNumbering": resp_intro_numbering,
                         "organizationPersonnelText": resp_intro_text,
-                        "organizationPersonnelEntities": ",".join(resp_intro_entities),
+                        "organizationPersonnelEntities": ";".join(resp_intro_entities),
                         "responsibilityNumbering": resp_body_numbering,
                         "responsibilityText": resp_body_text,
-                        "responsibilityEntities": ",".join(self.parse_entities(resp_body_text))
+                        "responsibilityEntities": ";".join(self.parse_entities(resp_body_text))
                     }
                 )
         else:
@@ -113,7 +115,7 @@ class ResponsibilityParser:
                     "documentTitle": title,
                     "organizationPersonnelNumbering": resp_intro_numbering,
                     "organizationPersonnelText": resp_intro_text,
-                    "organizationPersonnelEntities": ",".join(resp_intro_entities),
+                    "organizationPersonnelEntities": ";".join(resp_intro_entities),
                     "responsibilityNumbering": "",
                     "responsibilityText": "",
                     "responsibilityEntities": ""
@@ -141,7 +143,7 @@ class ResponsibilityParser:
         for i in range(len(split_text) - 1):
             numbering, text_no_numbering = self.extract_numbering(split_text[i + 1].strip())
             if numbering:
-                return self.new_role_find_character.join(split_text[:i + 1]), self.new_role_find_character.join(
+                return self.new_role_find_character.join(split_text[:i + 1])+":", self.new_role_find_character.join(
                     split_text[i + 1:])
         return text, ""
 
@@ -276,26 +278,28 @@ class ResponsibilityParser:
 
         return responsibility_section_list
 
-    def extract_responsibilities_from_json(self, json_dict, filename, title):
+    def extract_responsibilities_from_json(self, json_filepath):
         """
         Takes a JSON dict and parses the responsibility section(s)
         Args:
-            json_dict: (dict) GC JSON object which will have responsibility parsing applied to it
-            filename: (str) Filename (PDF) associated with the JSON record
-            title: (str) Title associated with the JSON record
+            json_filepath: (dict) GC JSON filepath that will have responsibility sections parsed from it
 
         Returns:
 
         """
+        json_file_name = json_filepath.split("/")[-1]
         try:
-            resp_sections = json_dict['sections']["responsibilities_section"]
+            json_dict = json.load(open(json_filepath, "r"))
+            title = json_dict.get("title")
+            filename = json_dict.get("filename")
+            resp_sections = json_dict.get('sections',{}).get("responsibilities_section",[])
             if not resp_sections:
                 self._logger.debug(
-                    f"File: {filename} does not have necessary responsibilities_section field, skipping file from results")
-                self.files_missing_responsibility_section.add(filename)
+                    f"File: {json_file_name} does not have necessary responsibilities_section field, skipping file from results")
+                self.files_missing_responsibility_section.add(json_file_name)
         except Exception as e:
-            self._logger.error(f"{filename} is missing a necessary field for responsibility parsing and threw Exception: {e}, skipping file from results")
-            self.error_files.add(filename)
+            self._logger.error(f"{json_file_name} is missing a necessary field for responsibility parsing and threw Exception: {e}, skipping file from results")
+            self.error_files.add(json_file_name)
             return []
 
         file_responsibility_sections = []
@@ -319,10 +323,7 @@ class ResponsibilityParser:
         parse_files = glob(os.path.join(files_input_directory,"*.json"))
         all_results_list = []
         for parse_file in tqdm(parse_files):
-            json_dict = json.load(open(parse_file, "r"))
-            title = json_dict["title"]
-            filename = json_dict["filename"]
-            all_results_list.extend(self.extract_responsibilities_from_json(json_dict, filename,title))
+            all_results_list.extend(self.extract_responsibilities_from_json(parse_file))
         self.results_df = pd.DataFrame(all_results_list)
 
         if excel_save_filepath:
