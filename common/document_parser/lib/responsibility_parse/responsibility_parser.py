@@ -1,6 +1,4 @@
 from common.document_parser.lib.section_parse import add_sections
-import re
-from string import punctuation
 from common.document_parser.lib import entities
 from glob import glob
 from tqdm import tqdm
@@ -69,9 +67,9 @@ class ResponsibilityParser:
             entities.ENTITIES_LOOKUP_DICT[e[0]]["ent_type"])
             for e in entities.PROCESSOR.extract_keywords(text, span_info=True)
         ]
-        unique_entites_list = list(set([ent_info[2] for ent_info in entities.remove_overlapping_ents(ent_info_list)]))
-        unique_entites_list.sort()
-        return unique_entites_list
+        unique_entities_list = list(set([ent_info[2] for ent_info in entities.remove_overlapping_ents(ent_info_list)]))
+        unique_entities_list.sort()
+        return unique_entities_list
 
     def format_responsibility_results(self, resp_list, file_name, title):
         """
@@ -168,7 +166,7 @@ class ResponsibilityParser:
         which performs the parsing of the responsibility section of text
 
         Args:
-            resp_section: (str) Containing the responsibility lines as newline (\n) delmited chunks within a single block
+            resp_section: (str) Containing the responsibility lines as newline (\n) delimited chunks within a single block
             of text
 
         Returns:
@@ -180,8 +178,8 @@ class ResponsibilityParser:
         resp_section = resp_section.split("\n")
         section_resp_lines = []
         multiple_roles_present = True
-        ## This metadata is used to find the characterists of numbering which denotes a new role. I.e., these are special
-        ## numbering in each doc where another role will begin being assigned responsbilities. e.g.,
+        ## This metadata is used to find the characteristics of numbering which denotes a new role. I.e., these are special
+        ## numbering in each doc where another role will begin being assigned responsibilities. e.g.,
         ## 2. Director, DIA shall:
         ## ...
         ## 3. Director, DLA shall:
@@ -207,11 +205,11 @@ class ResponsibilityParser:
             numbering, line_text = self.extract_numbering(resp_line)
             entities_found_list = self.parse_entities(line_text)
             if numbering:
-                ### sometimes the next line is an extension of the previous line that needs to be appended to previouse.g.
+                ### sometimes the next line is an extension of the previous line that needs to be appended to previous e.g.
                 # ... section 139 of Reference
                 # (b).
                 # for lines such as 5. RESPONSIBILITIES AND FUNCTIONS.  The Director, PFPA: - there is only one role being
-                # assigned responsibilties in this document, and we need to capture out the `The Director, PFPA:` part
+                # assigned responsibilities in this document, and we need to capture out the `The Director, PFPA:` part
                 if section_resp_lines == []:
                     if resp_line.endswith(self.new_role_find_character) and entities_found_list:
 
@@ -310,8 +308,8 @@ class ResponsibilityParser:
 
     def main(self, files_input_directory, excel_save_filepath=None):
         """
-        Main class function that is a wrapper around the repsonsibility parsing logic. Based on the input directory passed in
-        identifies all json's in that directory and iterates over them, extracting responsibilties, and writes the results
+        Main class function that is a wrapper around the responsibility parsing logic. Based on the input directory passed in
+        identifies all json's in that directory and iterates over them, extracting responsibilities, and writes the results
         out to excel_save_filepath if supplied
         Args:
             files_input_directory: (str) Directory to the GC JSON's that have had section parsing applied

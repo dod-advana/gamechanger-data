@@ -1,5 +1,4 @@
 import unittest
-import random
 import sys
 import os
 from common.document_parser.lib.responsibility_parse import ResponsibilityParser
@@ -205,4 +204,4 @@ class TestResponsibilityParser(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    main()
+    unittest.main()
