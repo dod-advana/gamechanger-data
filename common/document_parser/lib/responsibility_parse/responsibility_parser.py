@@ -1,12 +1,14 @@
-from common.document_parser.lib.section_parse import add_sections
 from common.document_parser.lib import entities
 from glob import glob
 from tqdm import tqdm
 import json
-from common.document_parser.cli import get_default_logger
-import pandas as pd
 import os
 import pandas as pd
+
+# gamechanger-data imports
+from common.document_parser.cli import get_default_logger
+from common.document_parser.lib.document import FieldNames
+
 
 
 class ResponsibilityParser:
@@ -51,7 +53,7 @@ class ResponsibilityParser:
     @staticmethod
     def parse_entities(text):
         """
-        Utility function used to extract extract out entities found within the responsibility line and return those as a
+        Utility function used to extract out entities found within the responsibility line and return those as a
         list.
         Args:
             text: (str) Text that the entity extraction should be applied to
@@ -64,7 +66,7 @@ class ResponsibilityParser:
         text = entities.replace_nonalpha_chars(text, "")
         ent_info_list = [
             (e[1], e[2], entities.ENTITIES_LOOKUP_DICT[e[0]]["raw_ent"],
-            entities.ENTITIES_LOOKUP_DICT[e[0]]["ent_type"])
+             entities.ENTITIES_LOOKUP_DICT[e[0]]["ent_type"])
             for e in entities.PROCESSOR.extract_keywords(text, span_info=True)
         ]
         unique_entities_list = list(set([ent_info[2] for ent_info in entities.remove_overlapping_ents(ent_info_list)]))
@@ -141,7 +143,7 @@ class ResponsibilityParser:
         for i in range(len(split_text) - 1):
             numbering, text_no_numbering = self.extract_numbering(split_text[i + 1].strip())
             if numbering:
-                return self.new_role_find_character.join(split_text[:i + 1])+":", self.new_role_find_character.join(
+                return self.new_role_find_character.join(split_text[:i + 1]) + ":", self.new_role_find_character.join(
                     split_text[i + 1:])
         return text, ""
 
@@ -156,7 +158,7 @@ class ResponsibilityParser:
 
         """
         try:
-            self.results_df.to_excel(output_filepath, index=False)
+            self.results_df.to_excel(output_filepath, index=False, engine='openpyxl')
         except Exception as e:
             self._logger.error(f"Error saving results dataframe to Excel with exception: {e}")
 
@@ -170,7 +172,7 @@ class ResponsibilityParser:
             of text
 
         Returns:
-            (List of Lists) Containing all of the responsibility lines (inner most list) for each role being assigned
+            (List of Lists) Containing all the responsibility lines (inner most list) for each role being assigned
             responsibilities in the document
 
         """
@@ -178,13 +180,13 @@ class ResponsibilityParser:
         resp_section = resp_section.split("\n")
         section_resp_lines = []
         multiple_roles_present = True
-        ## This metadata is used to find the characteristics of numbering which denotes a new role. I.e., these are special
-        ## numbering in each doc where another role will begin being assigned responsibilities. e.g.,
-        ## 2. Director, DIA shall:
-        ## ...
-        ## 3. Director, DLA shall:
-        ## the 2. and 3. numbering is "profiled" using this variable so that the algorithm is able to identify that anytime
-        ## numbering comes up with 1 digit and 1 period, a new role is being assigned the responsibility
+        # This metadata is used to find the characteristics of numbering which denotes a new role. I.e., these are special
+        # numbering in each doc where another role will begin being assigned responsibilities. e.g.,
+        # 2. Director, DIA shall:
+        # ...
+        # 3. Director, DLA shall:
+        # the 2. and 3. numbering is "profiled" using this variable so that the algorithm is able to identify that anytime
+        # numbering comes up with 1 digit and 1 period, a new role is being assigned the responsibility
         new_role_start_metadata = {
             "n_periods": 0,
             "n_parenthesis": 0,
@@ -205,9 +207,6 @@ class ResponsibilityParser:
             numbering, line_text = self.extract_numbering(resp_line)
             entities_found_list = self.parse_entities(line_text)
             if numbering:
-                ### sometimes the next line is an extension of the previous line that needs to be appended to previous e.g.
-                # ... section 139 of Reference
-                # (b).
                 # for lines such as 5. RESPONSIBILITIES AND FUNCTIONS.  The Director, PFPA: - there is only one role being
                 # assigned responsibilities in this document, and we need to capture out the `The Director, PFPA:` part
                 if section_resp_lines == []:
@@ -235,30 +234,33 @@ class ResponsibilityParser:
                         section_resp_lines.append(resp_line)
 
                 else:
-                    ## A new role is being assigned a set of responsibilities, so capture this as a new grouping
+                    # A new role is being assigned a set of responsibilities, so capture this as a new grouping
                     if multiple_roles_present and \
                             new_role_start_metadata["n_periods"] == numbering.count(".") and \
                             new_role_start_metadata["n_parenthesis"] == numbering.count(")") and \
                             new_role_start_metadata["n_numbers"] <= sum(c.isdigit() for c in numbering) and \
-                            new_role_start_metadata["n_letters"] <= sum(
-                        c.isalpha() for c in numbering):  # and \
-                        # resp_line.endswith(self.new_role_find_character):
+                            new_role_start_metadata["n_letters"] <= sum(c.isalpha() for c in numbering):  # and \
+                        # If section_resp_lines already has information in it (i.e., a prior role has responsibility lines,
+                        # then append this to responsibility_section_list and start fresh with a new section_resp_lines list.
                         if section_resp_lines:
                             responsibility_section_list.append(section_resp_lines)
                             section_resp_lines = []
                     section_resp_lines.append(resp_line)
 
-            ## determine whether the current line (w/o any numbering/punctuation) is a continuation of an existing line
+            # determine whether the current line (w/o any numbering/punctuation) is a continuation of an existing line
             # or a new line that should be captured as a new line
-            elif section_resp_lines != []:
-                ## if the previous line ended in punctuation, then add this text as a new line
+            elif not section_resp_lines == []:
+                # if the previous line ended in punctuation, then add this text as a new line
                 if section_resp_lines[-1].strip().endswith(self.new_role_find_character):
                     section_resp_lines.append(resp_line)
                 # no punctuation at end of previous line, so this line is a continuation of the previous line of text
                 else:
                     section_resp_lines[-1] += f" {resp_line}"
-            ## determine whether there is a free text line/paragraph at the beginning of the responsibility section to add
+            # determine whether there is a free text line/paragraph at the beginning of the responsibility section to add
             else:
+                # It is infrequently the case that the first role looks something like:
+                # RESPONSIBILITIES 1. DIRECTOR, DIA. In this case the numbering is not captured out using the numbering
+                # logic, and this is edge case logic to find these instances
                 if " 1. " in resp_line:
                     section_resp_lines.append(f"1.{resp_line.split('1.')[-1]}")
                     new_role_start_metadata = {
@@ -280,30 +282,46 @@ class ResponsibilityParser:
         """
         Takes a JSON dict and parses the responsibility section(s)
         Args:
-            json_filepath: (dict) GC JSON filepath that will have responsibility sections parsed from it
+            json_filepath: (str) GC JSON filepath that will have responsibility sections parsed from it
 
         Returns:
+            (List of Dicts) Containing all the responsibility records (each dict is a unique record) for the JSON file
+            that has been parsed. e.g.:
+            file_responsibility_sections = [
+                                            {'filename': 'DoDI 5000.94.pdf',
+                                            'documentTitle': 'Use of Robotic Systems for Manufacturing and Sustainment in the DoD',
+                                            'organizationPersonnelNumbering': '2.1.',
+                                            'organizationPersonnelText': ' UNDER SECRETARY OF DEFENSE FOR ACQUISITION AND SUSTAINMENT (USD(A&S)). The USD(A&S):',
+                                            'organizationPersonnelEntities': 'USD(A&S);Under Secretary of Defense for Acquisition and Sustainment',
+                                            'responsibilityNumbering': 'a.',
+                                            'responsibilityText': ' Establishes, maintains, and monitors the implementation of policy for the use of robotic systems for manufacturing and sustainment in the DoD.',
+                                            'responsibilityEntities': 'DoD'},
+                                            ...
+                                            ]
 
         """
         json_file_name = json_filepath.split("/")[-1]
         try:
             json_dict = json.load(open(json_filepath, "r"))
-            title = json_dict.get("title")
-            filename = json_dict.get("filename")
-            resp_sections = json_dict.get('sections',{}).get("responsibilities_section",[])
+            title = json_dict.get(FieldNames.TITLE)
+            filename = json_dict.get(FieldNames.FILENAME)
+            resp_sections = json_dict.get(FieldNames.SECTIONS, {}).get(FieldNames.RESPONSIBILITIES_SECTION, [])
             if not resp_sections:
                 self._logger.debug(
                     f"File: {json_file_name} does not have necessary responsibilities_section field, skipping file from results")
                 self.files_missing_responsibility_section.add(json_file_name)
         except Exception as e:
-            self._logger.error(f"{json_file_name} is missing a necessary field for responsibility parsing and threw Exception: {e}, skipping file from results")
+            self._logger.error(
+                f"{json_file_name} is missing a necessary field for responsibility parsing and threw Exception: {e}, skipping file from results")
             self.error_files.add(json_file_name)
             return []
 
         file_responsibility_sections = []
         for resp_section in resp_sections:
             responsibility_section_list = self.parse_responsibility_section(resp_section)
-            file_responsibility_sections.extend([resp_line for responsibility_section in responsibility_section_list for resp_line in self.format_responsibility_results(responsibility_section, filename, title)])
+            file_responsibility_sections.extend(
+                [resp_line for responsibility_section in responsibility_section_list for resp_line in
+                 self.format_responsibility_results(responsibility_section, filename, title)])
         return file_responsibility_sections
 
     def main(self, files_input_directory, excel_save_filepath=None):
@@ -318,7 +336,7 @@ class ResponsibilityParser:
         Returns:
 
         """
-        parse_files = glob(os.path.join(files_input_directory,"*.json"))
+        parse_files = glob(os.path.join(files_input_directory, "*.json"))
         all_results_list = []
         for parse_file in tqdm(parse_files):
             all_results_list.extend(self.extract_responsibilities_from_json(parse_file))
