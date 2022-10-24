@@ -21,14 +21,15 @@ class CJCSParser(ParserDefinition):
     # enclosure.
     ENCLOSURE_RESPONSIBILITIES_START_PATTERN = compile(
         r"""
-        \b
-        E(?:nclosure|NCLOSURE)
-        [ ]
-        ([A-Z])
-        [ \n]*
-        [a-zA-Z0-9,:'/";\(\)]*?
-        R(?:esponsibilities|ESPONSIBILITIES)
-        \b
+            \b                                      
+            E(?:nclosure|NCLOSURE)                  
+            [ ]                                     
+            ([A-Z])                                 # Capture group: 1 capital letter 
+                                                    # (the letter of the enclosure)
+            [ \n]*                                  
+            [a-zA-Z0-9,:'/";\(\)]*?
+            R(?:esponsibilities|ESPONSIBILITIES)    
+            \b
         """,
         flags=VERBOSE,
     )
@@ -37,10 +38,11 @@ class CJCSParser(ParserDefinition):
     # of a numbered list.
     NUMBERED_RESPONSIBILITIES_START_PATTERN = compile(
         r"""
-            [\n]\s*
-            ([0-9]+)                                # First capture group: 1 or more digits.
-                                                    # The number that this item is in the list.
-            \.\s*
+            [\n]
+            \s*                                
+            ([0-9]+)                                # First capture group: 1 or more digits
+                                                    # (number list formatting).
+            \.\s*                                  
             .*?                                     # Non-greedy match for any characters. 
                                                     # Note: we don't need to specify the maximum
                                                     # number of characters b/c the DOTALL flag
@@ -57,7 +59,12 @@ class CJCSParser(ParserDefinition):
     # numbered list.
     NUMBERED_PURPOSE_START_PATTERN = compile(
         rf"""
-            [\n][\s]*([0-9])+[ ]?\.[ ]+             # Numbered list formatting
+            [\n]                                    # Match formatting of a numbered list item.
+            [\s]*                                   
+            ([0-9])+                                
+            [ ]?
+            \.
+            [ ]+
             P(?:urpose|URPOSE)
             [ ]?
             \.?
@@ -76,7 +83,7 @@ class CJCSParser(ParserDefinition):
         self._filename_without_extension = splitext(self._filename)[0]
 
         # Keys are (str) enclosure letter, values are (Tuple[int|None, int|None])
-        # start and end indices of the corresponding enclosures.
+        # start and end indices of the corresponding enclosures within `self._text`.
         self._enclosure_spans = {}
 
     @property
@@ -120,19 +127,24 @@ class CJCSParser(ParserDefinition):
     def _get_numbered_section(
         self, section_name: Union[str, Pattern], first_only: bool = False
     ) -> List[str]:
-        """
+        """Get a numbered section, with the given section name, from
+        `self._text`.
 
         Args:
             section_name (Union[str, Pattern]): The name of the section to
-                extract as a string (case sensitive), or a pre-compiled regex
-                pattern.
+                extract as a string (case sensitive). Or, a pre-compiled regex
+                Pattern. If it is a Pattern, the number list formatting
+                should be included in it.
             first_only (bool, optional): True to only extract the first
-                instance of the section, False to extract all instances.
+                instance of this section, False to extract all instances.
                 Defaults to False.
 
         Returns:
             List[str]: Each item in the list is a section of the document.
         """
+        # If section_name is a str, create a pattern with number list formatting.
+        # If section_name is a Pattern, we expect that formatting to already
+        # exist in the pattern.
         number_pattern = rf"\n\s*([0-9])+[ ]?\.[ ]+"
         if isinstance(section_name, str):
             section_start_pattern = compile(
@@ -141,28 +153,26 @@ class CJCSParser(ParserDefinition):
         else:
             section_start_pattern = section_name
 
+        if first_only:
+            section_start_matches = [search(section_start_pattern, self._text)]
+        else:
+            section_start_matches = finditer(section_start_pattern, self._text)
+
+        result = []
+        patterns = [
+            number_pattern,  # Numbered list item
+            r"\n\s*G(?:lossary|LOSSARY)\s*\n",  # Glossary section title
+            r"\n\s*[0-9]+\s*\n",  # Page number
+            r"\n\s*E(?:nclosures|NCLOSURES)\s*\n",  # Enclosure table of contents
+        ]
         enclosure_title_pattern = compile(
             self._make_enclosure_title_pattern(r"[A-Z]+")
         )
 
-        if first_only:
-            matches = [search(section_start_pattern, self._text)]
-        else:
-            matches = finditer(section_start_pattern, self._text)
-
-        result = []
-        patterns = [
-            number_pattern,
-            r"\n\s*G(?:lossary|LOSSARY)\s*\n",
-            r"\n\s*[0-9]+\s*\n",
-            r"\s*E(?:nclosures|NCLOSURES)\s*\n",
-        ]
-
-
-        for match_ in matches:
+        for match_ in section_start_matches:
             start = match_.start()
             search_start = match_.end()
-            next_match = None
+            section_end_match = None
             end = None
 
             for pattern in patterns:
@@ -170,14 +180,17 @@ class CJCSParser(ParserDefinition):
                 if m:
                     if end is None or m.start() < end:
                         end = m.start()
-                        next_match = m
+                        section_end_match = m
 
-            if next_match:
+            if section_end_match:
                 text = self._text[start : search_start + end]
-                # If the next list item is number 1, it could be part of the next
-                # enclosure. If it is, then cut off the text before the next
-                # enclosure title.
-                if next_match.groups() and next_match.groups()[0] == "1":
+                # If the next list item is numbered 1, it could be part of the
+                # next enclosure. If it is, then cut off the text before the
+                # next enclosure title.
+                if (
+                    section_end_match.groups()
+                    and section_end_match.groups()[0] == "1"
+                ):
                     enclosure_titles = list(
                         finditer(enclosure_title_pattern, text)
                     )
@@ -201,7 +214,7 @@ class CJCSParser(ParserDefinition):
     ) -> Union[int, None]:
         """Find the end index of an enclosure within `_text`.
 
-        Adds the span to object's `_enclosure_spans` if it does not exist yet.
+        Adds the span to `self._enclosure_spans` if it does not exist yet.
 
         Args:
             enclosure_letter (str): Letter of the enclosure (e.g., "A" for
