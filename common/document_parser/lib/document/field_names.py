@@ -2,6 +2,7 @@ class FieldNames:
     """Field names for dictionary representations of documents."""
 
     FILENAME = "filename"
+    TITLE = "title"
     DOC_TYPE = "doc_type"
     DOC_NUM = "doc_num"
     ID = "id"
