@@ -47,7 +47,7 @@ class ParserDefinition:
 
         summary of change (list of str): Summary of Change sections of the document.
     """
-    
+
     # Document types supported by the parser.
     SUPPORTED_DOC_TYPES = []
 
@@ -66,7 +66,7 @@ class ParserDefinition:
     @property
     def all_sections(self) -> List[str]:
         return []
-        
+
     @property
     def num_of_sections(self) -> int:
         return len(self._sections)
@@ -138,23 +138,25 @@ class ParserDefinition:
             start (int): First index of the sections to combine.
             end (int): Last index of the sections to combine.
         """
-        info = f"Inputs: start={start}, end={end}. len of _sections: {self.num_of_sections}."
-        warning_msg = lambda x: print(f"WARNING for combine_sections(): {x}. {info}")
-        
+        debug_msg = lambda x: self._logger.debug(
+            f"combine_sections(): {x}. Inputs: start={start}, end={end}. "
+            f"len of _sections: {self.num_of_sections}."
+        )
+
         if start < 0:
-            warning_msg("negative start value")
+            debug_msg("negative start value")
             return
 
         if end > len(self._sections):
-            warning_msg("end > number of sections")
+            debug_msg("end > number of sections")
             return
 
         if start == end:
-            warning_msg("start and end are equal")
+            debug_msg("start and end are equal")
             return
 
         if start > end:
-            warning_msg("start is greater than end")
+            debug_msg("start is greater than end")
             return
 
         self._sections[start : end + 1] = [
