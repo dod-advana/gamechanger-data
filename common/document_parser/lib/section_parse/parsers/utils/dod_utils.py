@@ -127,6 +127,10 @@ def is_sentence_continuation(text: str, prev_text: str) -> bool:
     elif search(r"in +the +$", prev_text) and match("Glossary", text):
         return True
 
+    # Edge case: Deputy Secretary of Defense
+    elif prev_text.endswith("Deputy ") and text.startswith("Secretary of Defense"):
+        return True
+
     return False
 
 
