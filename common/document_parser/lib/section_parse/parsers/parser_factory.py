@@ -4,6 +4,8 @@ from .parser_definition import ParserDefinition
 from .dod_parser import DoDParser
 from .navy_parser import NavyParser
 from .cjcs_parser import CJCSParser
+from .eo_parser import EOParser
+from .uscode_parser import USCodeParser
 
 class ParserFactory:
     """Create a parser for a specific document type."""
@@ -26,5 +28,9 @@ class ParserFactory:
             return NavyParser(doc_dict)
         elif doc_type in CJCSParser.SUPPORTED_DOC_TYPES:
             return CJCSParser(doc_dict)
+        elif doc_type in EOParser.SUPPORTED_DOC_TYPES:
+            return EOParser(doc_dict)
+        elif doc_type in USCodeParser.SUPPORTED_DOC_TYPES:
+            return USCodeParser(doc_dict)
         else:
             return ParserDefinition(doc_dict)
