@@ -1,13 +1,12 @@
 """Utilities for DoDParser."""
 
 from re import compile, search, match, IGNORECASE, VERBOSE, Match
-from calendar import month_name
 from typing import Union, Tuple, List, Callable
+from .shared_utils import MONTH_LIST
 
 
-MONTHS = [m for m in month_name[1:]]
 PAGEBREAK_DATE_PATTERN = compile(
-    r"(?:" + r"|".join(MONTHS) + r") [0-9]{1,2},? (?:19[0-9]{2}|2[0-9]{3})"
+    r"(?:" + r"|".join(MONTH_LIST) + r") [0-9]{1,2},? (?:19[0-9]{2}|2[0-9]{3})"
 )
 
 

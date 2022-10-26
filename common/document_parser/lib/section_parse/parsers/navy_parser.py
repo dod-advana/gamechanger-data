@@ -2,6 +2,7 @@ from re import search, IGNORECASE, finditer, compile, finditer, RegexFlag
 from os.path import basename
 from typing import List
 from common.document_parser.lib.document import FieldNames
+from typing import List
 from .parser_definition import ParserDefinition
 from .utils import (
     match_number_hyphenated_section,
@@ -59,7 +60,7 @@ class NavyParser(ParserDefinition):
 
     @property
     def responsibilities(self):
-        resp = self._get_numbered_section_with_name("responsibilit(?:y|ies)")
+        resp = self._get_numbered_section_with_name("responsibilit(?:y|ies)", False)
         if not resp:
             # Examples of unique responsibilities sections:
             #    "\n3.  Records Responsibilities. "

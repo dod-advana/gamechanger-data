@@ -1,7 +1,9 @@
 from os.path import splitext, split, basename
 from re import match, search, fullmatch, IGNORECASE
 from typing import List
-from gamechangerml.src.utilities.text_utils import utf8_pass
+from os.path import splitext, basename
+from re import match, search, fullmatch, IGNORECASE
+from typing import List
 from common.document_parser.lib.document import FieldNames
 from .parser_definition import ParserDefinition
 from .utils import (

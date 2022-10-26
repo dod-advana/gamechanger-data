@@ -1,5 +1,10 @@
+from .shared_utils import (
+    next_letter,
+    MONTH_LIST,
+    CAPITAL_ENCLOSURE, 
+    DD_MONTHNAME_YYYY,
+)
 from .dod_utils import (
-    MONTHS,
     PAGEBREAK_DATE_PATTERN,
     find_pagebreak_date,
     is_sentence_continuation,
@@ -18,7 +23,6 @@ from .dod_utils import (
     match_ref_start,
 )
 from .navy_utils import (
-    next_letter,
     get_letter_dot_section,
     match_number_hyphenated_section,
     match_number_dot_section,
