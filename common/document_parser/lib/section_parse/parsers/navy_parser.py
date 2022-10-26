@@ -1,7 +1,4 @@
 from re import search, IGNORECASE, finditer, compile, finditer, RegexFlag
-from os.path import basename
-from typing import List
-from common.document_parser.lib.document import FieldNames
 from typing import List
 from .parser_definition import ParserDefinition
 from .utils import (
@@ -35,7 +32,6 @@ class NavyParser(ParserDefinition):
 
     def __init__(self, doc_dict: dict, test_mode: bool = False):
         super().__init__(doc_dict, test_mode)
-        self._filename = basename(self.doc_dict[FieldNames.FILENAME])
         self._text = self.get_raw_text()
 
     @property

@@ -1,10 +1,6 @@
-from os.path import splitext, split, basename
+from os.path import splitext
 from re import match, search, fullmatch, IGNORECASE
 from typing import List
-from os.path import splitext, basename
-from re import match, search, fullmatch, IGNORECASE
-from typing import List
-from common.document_parser.lib.document import FieldNames
 from .parser_definition import ParserDefinition
 from .utils import (
     find_pagebreak_date,
@@ -28,7 +24,6 @@ class DoDParser(ParserDefinition):
 
     def __init__(self, doc_dict: dict, test_mode: bool = False):
         super().__init__(doc_dict, test_mode)
-        self._filename = basename(self.doc_dict[FieldNames.FILENAME])
         self._set_pagebreak_text()
         if not self.test_mode:
             self._parse()

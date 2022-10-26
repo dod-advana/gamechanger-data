@@ -20,7 +20,7 @@ class ParserDefinition:
         all_sections (list of list of str): All sections of the document.
 
         num_of_sections (int): The length of `all_sections`.
-˚∑
+        
         purpose (list of str): Purpose sections of the document.
 
         responsibilities (list of str): Responsibilities (list of str): sections
