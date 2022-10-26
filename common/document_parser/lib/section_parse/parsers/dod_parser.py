@@ -115,7 +115,7 @@ class DoDParser(ParserDefinition):
         return self._get_section_by_title("summary of change")
 
     def _parse(self) -> None:
-        raw_text = self._get_raw_text()
+        raw_text = self.get_raw_text()
         if not raw_text:
             return
 
@@ -133,14 +133,13 @@ class DoDParser(ParserDefinition):
         self._combine_enclosures_list()
 
     def _set_pagebreak_text(self):
-        doc_type = split(self.doc_dict[FieldNames.DOC_TYPE])[1]
         doc_num = match(
             r"DoD[IMD] ((?:[A-Z]-)?[1-9][0-9]{3}(?:\.[0-9]{1,2}))",
             self._filename,
         )
 
         if doc_num:
-            self._pagebreak_text = " ".join([doc_type, doc_num.groups()[0]])
+            self._pagebreak_text = " ".join([self._doc_type, doc_num.groups()[0]])
         else:
             self._logger.warning(
                 f"Document number not found in filename: `{self._filename}`. "
@@ -178,26 +177,6 @@ class DoDParser(ParserDefinition):
             ),
             [],
         )
-
-    def _get_raw_text(self) -> str:
-        field = FieldNames.TEXT
-
-        try:
-            raw_text = self.doc_dict[field]
-        except KeyError:
-            self._logger.exception(
-                f"Document `{self._filename}` is missing field `{field}`. "
-                "Cannot parse sections."
-            )
-            raw_text = ""
-        else:
-            if raw_text == "":
-                self._logger.warning(
-                    f"Document `{self._filename}` has empty value for field "
-                    f"`{field}`. Cannot parse sections. "
-                )
-
-        return utf8_pass(raw_text)
 
     def _combine_toc(self) -> None:
         """Updates self._sections so that all lines of the Table of Contents 
