@@ -84,7 +84,8 @@ class TestResponsibilityParser(unittest.TestCase):
                         "organizationPersonnelEntities": "Director, DIA;USD(P)",
                         "responsibilityNumbering": "",
                         "responsibilityText": "",
-                        "responsibilityEntities": ""
+                        "responsibilityEntities": "",
+                        "status":"active"
                     }
                 ]
             },
@@ -104,7 +105,8 @@ class TestResponsibilityParser(unittest.TestCase):
                         "organizationPersonnelEntities": "Director, DIA",
                         "responsibilityNumbering": "1.1.",
                         "responsibilityText": "Perform X responsibility",
-                        "responsibilityEntities": ""
+                        "responsibilityEntities": "",
+                        "status":"active"
                     },
                     {
                         "filename": file_name,
@@ -114,7 +116,8 @@ class TestResponsibilityParser(unittest.TestCase):
                         "organizationPersonnelEntities": "Director, DIA",
                         "responsibilityNumbering": "1.2.",
                         "responsibilityText": "Perform Y responsibility with the Director, DLA.",
-                        "responsibilityEntities": "Director, DLA"
+                        "responsibilityEntities": "Director, DLA",
+                        "status":"active"
                     }
                 ]
             }
