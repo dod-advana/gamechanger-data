@@ -105,7 +105,8 @@ class ResponsibilityParser:
                         "organizationPersonnelEntities": ";".join(resp_intro_entities),
                         "responsibilityNumbering": resp_body_numbering,
                         "responsibilityText": resp_body_text,
-                        "responsibilityEntities": ";".join(self.parse_entities(resp_body_text))
+                        "responsibilityEntities": ";".join(self.parse_entities(resp_body_text)),
+                        "status": "active"
                     }
                 )
         else:
@@ -118,7 +119,8 @@ class ResponsibilityParser:
                     "organizationPersonnelEntities": ";".join(resp_intro_entities),
                     "responsibilityNumbering": "",
                     "responsibilityText": "",
-                    "responsibilityEntities": ""
+                    "responsibilityEntities": "",
+                    "status": "active"
                 }
             )
         return resp_results_list
