@@ -6,7 +6,6 @@ import sys
 
 sys.path.append(dirname(__file__).replace("/section_parse/tests/unit", ""))
 from section_parse import (
-    next_letter,
     get_letter_dot_section,
     match_number_hyphenated_section,
     match_number_dot_section,
