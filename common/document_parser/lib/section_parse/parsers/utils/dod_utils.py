@@ -91,7 +91,7 @@ def is_sentence_continuation(text: str, prev_text: str) -> bool:
     #   prev_text = "to execute DSCA plans as directed."
     #   text = "Ensure the appropriate personnel are trained "
     #   --> "Ensure the appropriate personnel are trained to execute DSCA plans as directed."
-    if search(r"[a-z] ?[^\.a-zA-Z] $", prev_text) and match(r"[a-z]", text):
+    if search(r"[a-z] ?[^\.] $", prev_text) and match(r"[a-z]", text):
         return True
 
     # prev_text: ends with either:
