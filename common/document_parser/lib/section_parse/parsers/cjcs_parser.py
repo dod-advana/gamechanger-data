@@ -10,7 +10,7 @@ from .utils import (
 
 
 class CJCSParser(ParserDefinition):
-    """Section parser for CJCS document types.
+    """Section parser for CJCS document types (see SUPPORTED_DOC_TYPES).
 
     Child of ParserDefinition.
     """
@@ -19,6 +19,7 @@ class CJCSParser(ParserDefinition):
 
     # Pattern to identify the start of a responsibilities section that is an
     # enclosure.
+    # Example:  "\n \nENCLOSURE A \n \nRESPONSIBILITIES\n"
     ENCLOSURE_RESPONSIBILITIES_START_PATTERN = compile(
         r"""
             \b                                      
@@ -27,7 +28,8 @@ class CJCSParser(ParserDefinition):
             ([A-Z])                                 # Capture group: 1 capital letter 
                                                     # (the letter of the enclosure)
             [ \n]*                                  
-            [a-zA-Z0-9,:'/";\(\)]*?
+            [a-zA-Z0-9,:'/";\(\)]*?                 # Non-greedy match for any of the
+                                                    # characters between the brackets.
             R(?:esponsibilities|ESPONSIBILITIES)    
             \b
         """,
@@ -36,12 +38,13 @@ class CJCSParser(ParserDefinition):
 
     # Pattern to identify the start of a responsibilities section that is part
     # of a numbered list.
+    # Example:  "\n \n 4.  RESPONSIBILITIES\n"
     NUMBERED_RESPONSIBILITIES_START_PATTERN = compile(
         r"""
             [\n]
             \s*                                
             ([0-9]+)                                # First capture group: 1 or more digits
-                                                    # (number list formatting).
+                                                    # (numbered list formatting).
             \.\s*                                  
             .*?                                     # Non-greedy match for any characters. 
                                                     # Note: we don't need to specify the maximum
@@ -57,11 +60,13 @@ class CJCSParser(ParserDefinition):
 
     # Pattern to identify the start of a purpose section that is part of a
     # numbered list.
+    # Example:  "\n1.  PURPOSE."
     NUMBERED_PURPOSE_START_PATTERN = compile(
         rf"""
-            [\n]                                    # Match formatting of a numbered list item.
+            [\n]                                    
             [\s]*                                   
-            ([0-9])+                                
+            ([0-9])+                                # First capture group: 1 or more digits 
+                                                    # (numbered list formatting)
             [ ]?
             \.
             [ ]+
@@ -127,7 +132,7 @@ class CJCSParser(ParserDefinition):
     def _get_numbered_section(
         self, section_name: Union[str, Pattern], first_only: bool = False
     ) -> List[str]:
-        """Get a numbered section, with the given section name, from
+        """Get a numbered section, with the given section name or pattern, from
         `self._text`.
 
         Args:
@@ -147,19 +152,17 @@ class CJCSParser(ParserDefinition):
         # exist in the pattern.
         number_pattern = rf"\n\s*([0-9])+[ ]?\.[ ]+"
         if isinstance(section_name, str):
-            section_start_pattern = compile(
-                rf"{number_pattern}{section_name}\b"
-            )
+            start_pattern = compile(rf"{number_pattern}{section_name}\b")
         else:
-            section_start_pattern = section_name
+            start_pattern = section_name
 
         if first_only:
-            section_start_matches = [search(section_start_pattern, self._text)]
+            start_matches = [search(start_pattern, self._text)]
         else:
-            section_start_matches = finditer(section_start_pattern, self._text)
+            start_matches = finditer(start_pattern, self._text)
 
-        result = []
-        patterns = [
+        # Patterns for the start of the next section.
+        next_section_patterns = [ 
             number_pattern,  # Numbered list item
             r"\n\s*G(?:lossary|LOSSARY)\s*\n",  # Glossary section title
             r"\n\s*[0-9]+\s*\n",  # Page number
@@ -168,28 +171,31 @@ class CJCSParser(ParserDefinition):
         enclosure_title_pattern = compile(
             self._make_enclosure_title_pattern(r"[A-Z]+")
         )
+        result = []
 
-        for match_ in section_start_matches:
-            start = match_.start()
-            search_start = match_.end()
-            section_end_match = None
-            end = None
+        for start_match in start_matches:
+            # Find the end of the current section by finding the start of the 
+            # next section.
+            start_idx = start_match.start()
+            search_start_idx = start_match.end()  
+            end_match = None
+            end_idx = None
 
-            for pattern in patterns:
-                m = search(pattern, self._text[search_start:])
-                if m:
-                    if end is None or m.start() < end:
-                        end = m.start()
-                        section_end_match = m
+            for pattern in next_section_patterns:
+                next_match = search(pattern, self._text[search_start_idx:])
+                if next_match:
+                    if end_idx is None or next_match.start() < end_idx:
+                        end_idx = search_start_idx + next_match.start()
+                        end_match = next_match
 
-            if section_end_match:
-                text = self._text[start : search_start + end]
+            if end_match:
+                text = self._text[start_idx : end_idx]
                 # If the next list item is numbered 1, it could be part of the
                 # next enclosure. If it is, then cut off the text before the
                 # next enclosure title.
                 if (
-                    section_end_match.groups()
-                    and section_end_match.groups()[0] == "1"
+                    end_match.groups()
+                    and end_match.groups()[0] == "1"
                 ):
                     enclosure_titles = list(
                         finditer(enclosure_title_pattern, text)
@@ -204,7 +210,7 @@ class CJCSParser(ParserDefinition):
             else:
                 self._logger.warning(
                     "Could not find next numbered section. Current num: "
-                    f"{match_.groups()[0]}. Start index: {start}."
+                    f"{start_match.groups()[0]}. Start index: {start_idx}."
                 )
 
         return [self._remove_pagebreaks_and_noise(x) for x in result]
@@ -214,22 +220,26 @@ class CJCSParser(ParserDefinition):
     ) -> Union[int, None]:
         """Find the end index of an enclosure within `_text`.
 
-        Adds the span to `self._enclosure_spans` if it does not exist yet.
+        If enclosure_letter is not yet in self._enclosure_spans, its span 
+        (int start, int end) will be added.
 
         Args:
             enclosure_letter (str): Letter of the enclosure (e.g., "A" for
                 Enclosure A).
-            start (int): Start index of the enclosure within `_text`.
+            start (int): Start index of the enclosure within self._text.
 
         Returns:
             Union[int, None]: If the end index is found, returns it as an int.
                 Otherwise, returns None.
         """
+        # If enclosure_letter already exists in self._enclosure_spans, return
+        # its value.
         enclosure_letter = enclosure_letter.upper()
-
         if enclosure_letter in self._enclosure_spans:
             return self._enclosure_spans[enclosure_letter][1]
 
+        # First, try to find the end of the enclosure by finding the start of 
+        # the next enclosure.
         try:
             end_letter = next_letter(enclosure_letter)
         except ValueError as e:
@@ -238,6 +248,8 @@ class CJCSParser(ParserDefinition):
             )
             return None
 
+        # If the next enclosure wasn't found, find the end of the enclosure by
+        # finding the start of the Glossary section.
         end = search(
             self._make_enclosure_title_pattern(end_letter), self._text[start:]
         )

@@ -9,6 +9,10 @@ from .utils import (
 
 
 class NavyParser(ParserDefinition):
+    """Section parser for Navy document types (see SUPPORTED_DOC_TYPES).
+    
+    Child of ParserDefinition.
+    """
 
     SUPPORTED_DOC_TYPES = [
         "opnavinst",
@@ -74,7 +78,7 @@ class NavyParser(ParserDefinition):
         first_only: bool = True,
         regex_flags: List[RegexFlag] = [IGNORECASE],
     ) -> List[str]:
-        """Get a numbered section with the given section name.
+        """Get a numbered section with the given section name or pattern.
 
         Args:
             section_name (str): Name of the section to get
