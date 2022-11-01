@@ -184,8 +184,9 @@ class CJCSParser(ParserDefinition):
             for pattern in next_section_patterns:
                 next_match = search(pattern, self._text[search_start_idx:])
                 if next_match:
-                    if end_idx is None or next_match.start() < end_idx:
-                        end_idx = search_start_idx + next_match.start()
+                    tmp = search_start_idx + next_match.start()
+                    if end_idx is None or tmp < end_idx:
+                        end_idx = tmp
                         end_match = next_match
 
             if end_match:
