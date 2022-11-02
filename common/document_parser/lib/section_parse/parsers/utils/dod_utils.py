@@ -1,13 +1,12 @@
 """Utilities for DoDParser."""
 
 from re import compile, search, match, IGNORECASE, VERBOSE, Match
-from calendar import month_name
 from typing import Union, Tuple, List, Callable
+from .shared_utils import MONTH_LIST
 
 
-MONTHS = [m for m in month_name[1:]]
 PAGEBREAK_DATE_PATTERN = compile(
-    r"(?:" + r"|".join(MONTHS) + r") [0-9]{1,2},? (?:19[0-9]{2}|2[0-9]{3})"
+    r"(?:" + r"|".join(MONTH_LIST) + r") [0-9]{1,2},? (?:19[0-9]{2}|2[0-9]{3})"
 )
 
 
@@ -84,17 +83,51 @@ def is_sentence_continuation(text: str, prev_text: str) -> bool:
 
     Note: do NOT strip leading/ trailing whitespace from the params.
     """
+    # prev_text: ends with lowercase letter, optional single space, and 
+    #   anything other than a period or letter. 
+    # text: starts with a lowercase letter.
+    # Example:
+    #   prev_text = "to execute DSCA plans as directed."
+    #   text = "Ensure the appropriate personnel are trained "
+    #   --> "Ensure the appropriate personnel are trained to execute DSCA plans as directed."
     if search(r"[a-z] ?[^\.] $", prev_text) and match(r"[a-z]", text):
         return True
+
+    # prev_text: ends with either:
+    #       - letter, hyphen
+    #       - comma, any 2 characters, 1 or more spaces
+    # text: starts with any letter
+    # Example:
+    #   prev_text = "ASSISTANT SECRETARY OF DEFENSE FOR SPECIAL OPERATIONS AND LOW-"
+    #   text = "INTENSITY CONFLICT"
+    #   --> "ASSISTANT SECRETARY OF DEFENSE FOR SPECIAL OPERATIONS AND LOW-INTENSITY CONFLICT"
     elif search(r"(?:[a-zA-Z]\-|,.{0,2}\s+)$", prev_text) and match(
         r"[a-zA-Z]", text
     ):
         return True
+
+    # prev_text: ends with "under", "in", "with", or "to"
+    # text: starts with "Section", single space, number
+    # Example:
+    #   prev_text = "This provision is stated under "
+    #   text = "Section 8 of Title 10. "
+    #   --> "This provision is stated under Section 8 of Title 10."
     elif search(r"(?:under|in|with|to) +$", prev_text) and match(
         r"Section [0-9]", text
     ):
         return True
+
+    # prev_text: ends with "in", 1 or more spaces, "the", 1 or more spaces
+    # text: starts with "Glossary"
+    # Example:
+    #   prev_text = "Definitions can be found in the "
+    #   text = "Glossary."
+    #   --> "Definitions can be found in the Glossary."
     elif search(r"in +the +$", prev_text) and match("Glossary", text):
+        return True
+
+    # Edge case: Deputy Secretary of Defense
+    elif prev_text.endswith("Deputy ") and text.startswith("Secretary of Defense"):
         return True
 
     return False

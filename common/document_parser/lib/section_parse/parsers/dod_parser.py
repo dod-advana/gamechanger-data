@@ -1,8 +1,6 @@
-from os.path import splitext, split, basename
+from os.path import splitext
 from re import match, search, fullmatch, IGNORECASE
 from typing import List
-from gamechangerml.src.utilities.text_utils import utf8_pass
-from common.document_parser.lib.document import FieldNames
 from .parser_definition import ParserDefinition
 from .utils import (
     find_pagebreak_date,
@@ -26,7 +24,6 @@ class DoDParser(ParserDefinition):
 
     def __init__(self, doc_dict: dict, test_mode: bool = False):
         super().__init__(doc_dict, test_mode)
-        self._filename = basename(self.doc_dict[FieldNames.FILENAME])
         self._set_pagebreak_text()
         if not self.test_mode:
             self._parse()
@@ -115,7 +112,7 @@ class DoDParser(ParserDefinition):
         return self._get_section_by_title("summary of change")
 
     def _parse(self) -> None:
-        raw_text = self._get_raw_text()
+        raw_text = self.get_raw_text()
         if not raw_text:
             return
 
@@ -133,14 +130,13 @@ class DoDParser(ParserDefinition):
         self._combine_enclosures_list()
 
     def _set_pagebreak_text(self):
-        doc_type = split(self.doc_dict[FieldNames.DOC_TYPE])[1]
         doc_num = match(
             r"DoD[IMD] ((?:[A-Z]-)?[1-9][0-9]{3}(?:\.[0-9]{1,2}))",
             self._filename,
         )
 
         if doc_num:
-            self._pagebreak_text = " ".join([doc_type, doc_num.groups()[0]])
+            self._pagebreak_text = " ".join([self._doc_type, doc_num.groups()[0]])
         else:
             self._logger.warning(
                 f"Document number not found in filename: `{self._filename}`. "
@@ -179,27 +175,43 @@ class DoDParser(ParserDefinition):
             [],
         )
 
-    def _get_raw_text(self) -> str:
-        field = FieldNames.TEXT
-
-        try:
-            raw_text = self.doc_dict[field]
-        except KeyError:
-            self._logger.exception(
-                f"Document `{self._filename}` is missing field `{field}`. "
-                "Cannot parse sections."
-            )
-            raw_text = ""
-        else:
-            if raw_text == "":
-                self._logger.warning(
-                    f"Document `{self._filename}` has empty value for field "
-                    f"`{field}`. Cannot parse sections. "
-                )
-
-        return utf8_pass(raw_text)
-
     def _combine_toc(self) -> None:
+        """Updates self._sections so that all lines of the Table of Contents 
+        are combined.
+
+        Example:
+        [
+            ["TABLE OF CONTENTS "],
+            ["SECTION 1:  GENERAL ISSUANCE INFORMATION ............... 3 "],
+            ["1.1.  Applicability. ............... 3 "],
+            ["1.2.  Policy. ............... 3 "],
+            ["1.3.  Information Collections. ............... 3 "],
+            ["SECTION 2:  RESPONSIBILITIES ............... 4 "],
+            ["2.1.  Assistant Secretary of Defense for Health Affairs (ASD(HA)). ............... 4 "],
+            ["2.2.  DASD(HSP&O). ............... 4 "],
+            ["2.3.  ATSD(PA). ............... 5 "],
+            ["2.4.  Secretaries of the Military Departments. ............... 5 "],
+            ["SECTION 3:  SCAADL PROGRAM IMPLEMENTATION GUIDANCE ............... 6 "],
+            ["SECTION 1:  GENERAL ISSUANCE INFORMATION "]
+        ]
+        -->
+        [
+            [
+                "TABLE OF CONTENTS ",
+                "SECTION 1:  GENERAL ISSUANCE INFORMATION ............... 3 ",
+                "1.1.  Applicability. ............... 3 ",
+                "1.2.  Policy. ............... 3 ",
+                "1.3.  Information Collections. ............... 3 ",
+                "SECTION 2:  RESPONSIBILITIES ............... 4 ",
+                "2.1.  Assistant Secretary of Defense for Health Affairs ............... 4 ",
+                "2.2.  DASD(HSP&O). ............... 4 ",
+                "2.3.  ATSD(PA). ............... 5 ",
+                "2.4.  Secretaries of the Military Departments. ............... 5 ",
+                "SECTION 3:  SCAADL PROGRAM IMPLEMENTATION GUIDANCE ............... 6 "
+            ],
+            ["SECTION 1:  GENERAL ISSUANCE INFORMATION "]
+        ]
+        """
         first_toc_ind = next(
             (
                 i
@@ -221,6 +233,9 @@ class DoDParser(ParserDefinition):
                 self.combine_sections(first_toc_ind, last_toc_ind)
 
     def _remove_pagebreaks_and_noise(self):
+        """Updates self._sections so headers, footers, and other pagebreak texts 
+        are removed.
+        """
         all_sections = []
 
         for section in self._sections:
@@ -235,6 +250,19 @@ class DoDParser(ParserDefinition):
         self._sections = all_sections
 
     def _combine_enclosure_titles(self):
+        """Updates self._sections so that individual lines of an Enclosure title 
+        are combined.
+
+        Example:
+            [
+                ["ENCLOSURE 1 "],
+                ["RESPONSIBILITIES]
+            ]
+            -->
+            [
+                ["ENCLOSURE 1 RESPONSIBILITIES"]
+            ]
+        """
         i = 0
         while i < self.num_of_sections - 1:
             section_1 = self._sections[i]
@@ -275,6 +303,11 @@ class DoDParser(ParserDefinition):
             i += 1
 
     def _combine_sentence_continuations(self):
+        """Updates self._sections so that improperly split sentences are 
+        combined.
+
+        See comments in is_sentence_continuation() for examples.
+        """
         i = 1
         while i < self.num_of_sections:
             if is_sentence_continuation(
@@ -287,6 +320,32 @@ class DoDParser(ParserDefinition):
                 i += 1
 
     def _combine_alpha_list_items(self):
+        """Updates self._sections so that lines of alphabetical lists are 
+        combined.
+
+        Example:
+            [ 
+                ["This Directive: "],
+                ["a.  Establishes policy and assigns responsibilities for DSCA. "],
+                ["b.  Incorporates and cancels DoD Directive (DoDD) 3025.1 and DoDD 3025.15. "],
+                ["c.  Provides guidance for implementing the regulations "],
+                ["(in DoD Instruction (DoDI) 3025.21) "],
+                ["d.  Provides guidance for the execution and oversight of DSCA"]
+                ["REFERENCES:"]
+            ]
+            -->
+            [
+                ["This Directive: "],
+                [
+                    "a.  Establishes policy and assigns responsibilities for DSCA. ",
+                    "b.  Incorporates and cancels DoD Directive (DoDD) 3025.1 and DoDD 3025.15. ",
+                    "c.  Provides guidance for implementing the regulations ",
+                    "(in DoD Instruction (DoDI) 3025.21) ",
+                    "d.  Provides guidance for the execution and oversight of DSCA"
+                ],
+                ["REFERENCES:]
+            ]
+        """
         i = 0
 
         while i < self.num_of_sections:
@@ -319,6 +378,9 @@ class DoDParser(ParserDefinition):
             i += 1
 
     def _combine_reference_list(self):
+        """Updates self._sections so that lines of the References section are
+        combined.
+        """
         # Combine the References section title with the References list.
         i = 0
         while i < self.num_of_sections - 1:
@@ -347,6 +409,38 @@ class DoDParser(ParserDefinition):
             i += 1
 
     def _combine_by_section_nums(self):
+        """Updates self._sections so that each numbered section's lines are 
+        combined.
+
+        Example:
+        [
+            ["SECTION 1:  GENERAL ISSUANCE INFORMATION "],
+            ["1.1.  APPLICABILITY.  This issuance..."],
+            ["1.2.  POLICY.  It is DoD policy that..."],
+            ["In accordance with..."],
+            ["SECTION 2:  RESPONSIBILITIES "],
+            ["2.1.  ASSISTANT SECRETARY OF.."],
+            ["Under the authority, direction..."],
+            ["Readiness, the ASD(HA)..."],
+            ["SECTION 3: PROGRAM IMPLEMENTATION GUIDANCE "],
+        ]
+        -->
+        [
+            [
+                "SECTION 1:  GENERAL ISSUANCE INFORMATION ",
+                "1.1.  APPLICABILITY.  This issuance...",
+                "1.2.  POLICY.  It is DoD policy that...",
+                "1.3.  GUIDELINES.  Each..."
+            ]
+            [
+                "SECTION 2:  RESPONSIBILITIES ",
+                "2.1.  ASSISTANT SECRETARY OF..",
+            ],  
+            [
+                "SECTION 3: PROGRAM IMPLEMENTATION GUIDANCE"
+            ]
+        ]
+        """
         i = 0
         while i < self.num_of_sections:
             curr_num = match_section_num(self._get_subsection(i))
@@ -378,7 +472,41 @@ class DoDParser(ParserDefinition):
             i += 1
 
     def _combine_enclosures(self):
-        """Make each Enclosure into its own section."""
+        """Updates self._sections so that each Enclosure's lines are combined.
+
+        Example:
+            [
+                ["6.  EFFECTIVE DATE..."],
+                ["E1.  ENCLOSURE 1 "],
+                ["REFERENCES, continued "],
+                ["(e) DoD Directive 8100.1"],
+                ["(f) Chairman of the Joint..."],
+                ["E2.  ENCLOSURE 2 "],
+                ["DEFINITIONS"],
+                ["E2.1.1.  Capability Area...."],
+                ["capability delegation, and analysis. "],
+                ["E2.1.2.  Enterprise...."],
+                ["GLOSSARY"],
+            ]
+            -->
+            [
+                ["6.  EFFECTIVE DATE..."],
+                [
+                    "E1.  ENCLOSURE 1 ",
+                    "REFERENCES, continued ",
+                    "(e) DoD Directive 8100.1",
+                    "(f) Chairman of the Joint..."
+                ],
+                [
+                    "E2.  ENCLOSURE 2 ",
+                    "DEFINITIONS",
+                    "E2.1.1.  Capability Area....",
+                    "capability delegation, and analysis. ",
+                    "E2.1.2.  Enterprise...."
+                ],
+                ["GLOSSARY"],
+            ]
+        """
         i = 0
         while i < self.num_of_sections:
             curr_subsection = self._get_subsection(i)
@@ -411,20 +539,31 @@ class DoDParser(ParserDefinition):
             i += 1
 
     def _combine_enclosures_list(self):
-        """Combine the Enclosure titles list into a single section.
+        """Updates self._sections so that the lines of an Enclosures list are 
+        combined.
 
         Some documents have a list of all Enclosure that they contain.
+
         Example:
-            ["Enclosures - 2"],
-            ["E1. Enclosure 1 REFERENCES, continued"],
-            ["E2. Enclosure 2 DEFINITIONS"]
-        Example:
-            ["Enclosures"]
-            ["1.  References"]
-            ["2.  Procedures"]
-            ["3.  Record Format:  Master and Regular Transaction Files"]
-            ["4.  Workforce Transaction File"]
-        This combines those lines into a single section.
+        [
+            ["Enclosures "],
+            ["1.  References "],
+            ["2.  Responsibilities "],
+            ["3.  Procedures "],
+            ["Glossary "],
+            ["ENCLOSURE 1"],
+        ]
+        -->
+        [
+            [
+                "Enclosures ",
+                "1.  References ",
+                "2.  Responsibilities ",
+                "3.  Procedures ",
+                "Glossary "
+            ],
+            ["ENCLOSURE 1"]
+        ]
         """
         start_ind = next(
             (
@@ -478,8 +617,9 @@ class DoDParser(ParserDefinition):
             self.combine_sections(start_ind, end_ind)
 
     def _combine_glossary_then_references(self):
-        """Combine the Glossary into 1 section, then the References into 1
-        section.
+        """Updates self._sections so that lines of the Glossary are combined 
+        into a single section, and lines of the References section are combined
+        into a single section.
 
         According to the DoD Issuance Style Guide:
             "It [the glossary] is always the second to last section in an
@@ -520,6 +660,12 @@ class DoDParser(ParserDefinition):
                 self.combine_sections(glossary_start, self.num_of_sections - 1)
 
     def _remove_repeated_section_titles(self):
+        """Updates self._sections so that section titles only appear once, at 
+        the beginning of each section.
+        
+        This is necessary because section titles are repeated when a section 
+        spans more thn 1 page.
+        """
         for i in range(self.num_of_sections):
             first_subsection = self._get_subsection(i)
             is_first_toc = is_toc(first_subsection)

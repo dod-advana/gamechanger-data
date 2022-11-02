@@ -1,6 +1,11 @@
 from itertools import chain
 from typing import List
 from common.document_parser.cli import get_default_logger
+from os.path import basename, split
+from typing import List
+from gamechangerml.src.utilities.text_utils import utf8_pass
+from common.document_parser.cli import get_default_logger
+from common.document_parser.lib.document import FieldNames
 
 
 class ParserDefinition:
@@ -15,7 +20,7 @@ class ParserDefinition:
         all_sections (list of list of str): All sections of the document.
 
         num_of_sections (int): The length of `all_sections`.
-
+        
         purpose (list of str): Purpose sections of the document.
 
         responsibilities (list of str): Responsibilities (list of str): sections
@@ -47,7 +52,6 @@ class ParserDefinition:
 
         summary of change (list of str): Summary of Change sections of the document.
     """
-    
     # Document types supported by the parser.
     SUPPORTED_DOC_TYPES = []
 
@@ -58,7 +62,9 @@ class ParserDefinition:
             doc_dict (dict): The document as a dictionary.
             test_mode (bool, optional): Defaults to False.
         """
-        self.doc_dict = doc_dict
+        self.doc_dict = doc_dict.copy()
+        self._filename = basename(self.doc_dict[FieldNames.FILENAME])
+        self._doc_type = split(self.doc_dict[FieldNames.DOC_TYPE])[1]
         self.test_mode = test_mode
         self._sections = []
         self._logger = get_default_logger()
@@ -66,7 +72,7 @@ class ParserDefinition:
     @property
     def all_sections(self) -> List[str]:
         return []
-        
+
     @property
     def num_of_sections(self) -> int:
         return len(self._sections)
@@ -138,25 +144,47 @@ class ParserDefinition:
             start (int): First index of the sections to combine.
             end (int): Last index of the sections to combine.
         """
-        info = f"Inputs: start={start}, end={end}. len of _sections: {self.num_of_sections}."
-        warning_msg = lambda x: print(f"WARNING for combine_sections(): {x}. {info}")
-        
+        debug_msg = lambda x: self._logger.debug(
+            f"combine_sections(): {x}. Inputs: start={start}, end={end}. "
+            f"len of _sections: {self.num_of_sections}."
+        )
+
         if start < 0:
-            warning_msg("negative start value")
+            debug_msg("negative start value")
             return
 
         if end > len(self._sections):
-            warning_msg("end > number of sections")
+            debug_msg("end > number of sections")
             return
 
         if start == end:
-            warning_msg("start and end are equal")
+            debug_msg("start and end are equal")
             return
 
         if start > end:
-            warning_msg("start is greater than end")
+            debug_msg("start is greater than end")
             return
 
         self._sections[start : end + 1] = [
             list(chain.from_iterable(self._sections[start : end + 1]))
         ]
+
+    def get_raw_text(self) -> str:
+        field = FieldNames.TEXT
+
+        try:
+            raw_text = self.doc_dict[field]
+        except KeyError:
+            self._logger.exception(
+                f"Document `{self._filename}` is missing field `{field}`. "
+                "Cannot parse sections."
+            )
+            raw_text = ""
+        else:
+            if raw_text == "":
+                self._logger.warning(
+                    f"Document `{self._filename}` has empty value for field "
+                    f"`{field}`. Cannot parse sections. "
+                )
+
+        return utf8_pass(raw_text)
