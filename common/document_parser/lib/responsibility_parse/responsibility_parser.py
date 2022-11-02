@@ -4,11 +4,14 @@ from tqdm import tqdm
 import json
 import os
 import pandas as pd
+import re
+from nltk.corpus import stopwords
+import string
 
+stopwords = stopwords.words('english')
 # gamechanger-data imports
 from common.document_parser.cli import get_default_logger
 from common.document_parser.lib.document import FieldNames
-
 
 
 class ResponsibilityParser:
@@ -17,8 +20,10 @@ class ResponsibilityParser:
         # this is a character that is (sometimes) used at the end of the responsibility role line and is used as part of
         # the inclusion criteria logic
         self.new_role_find_character = ":"
-        self.new_role_key_words = ["shall", "establish", "provide"]
-        self.break_words = ["GLOSSARY", "Glossary", "ACRONYMS", "REFERENCES", "SUMMARY OF CHANGE"]
+        self.pre_new_role_find_character_words = ["shall", "will", "must", "responsible for",
+                                                  "responsible for the following"]
+        self.new_role_key_words = ["shall", "establish", "provide", "responsible for"]
+        self.break_words = ["GLOSSARY", "Glossary", "ACRONYMS", "REFERENCES", "SUMMARY OF CHANGE", "Summary of Change"]
         self.results_df = None
         self.error_files = set()
         self.files_missing_responsibility_section = set()
@@ -37,12 +42,13 @@ class ResponsibilityParser:
             where numbering is missing from the text returns an empty string for the numbering portion
 
         """
-        # the formats of the numbering are either 1./a. or (1)/(a)
+        # the formats of the numbering are either 1./a. or (1)/(a). Any text with uppercase (such as U.S., or JS.)
+        # should not be considered numbering
         if "." in text[:3] or set(["(", ")"]).difference(text[:4]) == set():
             try:
                 numbering, text_no_numbering = text.split(" ", 1)
                 # items such as "(b), blah bla" are an edge case here (and is connected to the previous line such as "reference (b), bla bla"
-                if not numbering.endswith(","):
+                if not numbering.endswith(",") and not numbering.isupper():
                     return numbering, text_no_numbering
             # if there is no spaces/text other than the numbering (such as (b).) usually means that this is a continuation
             # of a previous line
@@ -125,6 +131,52 @@ class ResponsibilityParser:
             )
         return resp_results_list
 
+    @staticmethod
+    def is_role_acronym_defined(text):
+        if re.search("[^\(]*(\([A-Z\w\s\&\)]{2,10}\))", text):
+            return True
+        else:
+            return False
+
+    @staticmethod
+    def is_larger_numbering(curr_numbering, new_numbering):
+        """
+        Returns True if new_numbering is "larger" than current numbering.
+        e.g.
+        Args:
+            curr_numbering:
+            new_numbering:
+
+        Returns:
+
+        """
+        if curr_numbering==new_numbering:
+            return False
+        curr_numbering = curr_numbering.translate(str.maketrans('', '', string.punctuation))
+        new_numbering = new_numbering.translate(str.maketrans('', '', string.punctuation))
+        if curr_numbering.isdigit() and new_numbering.isdigit():
+            curr_numbering = int(curr_numbering)
+            new_numbering = int(new_numbering)
+        return True if max(new_numbering, curr_numbering)==new_numbering else False
+
+    @staticmethod
+    def is_camelcase_without_stopwords(text):
+        """
+        This is used for identifying if a line is of a role, if the role doesn't have an acronmyn and if the role is
+        not already in the GraphRelations.xlsx spreadsheet.
+        e.g., `'Joint Staff Director for Joint Force Development'`
+        Args:
+            text:
+
+        Returns:
+
+        """
+        text = " ".join([token for token in text.split(" ") if token not in stopwords])
+        if text.istitle():
+            return True
+        else:
+            return False
+
     def split_text_with_role_midline(self, text):
         """
         This function is a utility function used to identify cases where responsibilities begin mid-line, such as if
@@ -195,7 +247,7 @@ class ResponsibilityParser:
             "n_numbers": 0,
             "n_letters": 0,
         }
-
+        current_role_numbering = ""
         for i, resp_line in enumerate(resp_section):
             if any(term in resp_line for term in self.break_words):
                 break
@@ -206,38 +258,68 @@ class ResponsibilityParser:
                     resp_section.insert(i + 1, next_line)
 
             resp_line = resp_line.replace("\t", "").strip()
+            ## if the resp_line is empty
+            if not resp_line:
+                continue
             numbering, line_text = self.extract_numbering(resp_line)
             entities_found_list = self.parse_entities(line_text)
-            if numbering:
-                # for lines such as 5. RESPONSIBILITIES AND FUNCTIONS.  The Director, PFPA: - there is only one role being
-                # assigned responsibilities in this document, and we need to capture out the `The Director, PFPA:` part
-                if section_resp_lines == []:
-                    if resp_line.endswith(self.new_role_find_character) and entities_found_list:
+            # Some entities are not within our entities gold standard list, so this is a way of identifying roles that
+            # are being mentioned (if they have an acronym defined) and are being assigned responsibilities
+            role_acronym_found = self.is_role_acronym_defined(line_text)
+            role_is_present = self.is_camelcase_without_stopwords(line_text)
+            if section_resp_lines == []:
+                if "RESPONSIBILITIES" in line_text.upper():
+                    if entities_found_list:
+                        multiple_roles_present = False
+                        section_resp_lines.append(re.split("RESPONSIBILITIES\.*",line_text,flags=re.IGNORECASE)[-1].strip())
+                    continue
+                if numbering:
+                    # for lines such as 5. RESPONSIBILITIES AND FUNCTIONS.  The Director, PFPA: - there is only one role being
+                    # assigned responsibilities in this document, and we need to capture out the `The Director, PFPA:` part
 
-                        if "RESPONSIBILITIES" in resp_line:
-                            multiple_roles_present = False
-                            section_resp_lines.append(line_text.strip())
-                        else:
-                            new_role_start_metadata = {
-                                "n_periods": numbering.count("."),
-                                "n_parenthesis": numbering.count(")"),
-                                "n_numbers": sum(c.isdigit() for c in numbering),
-                                "n_letters": sum(c.isalpha() for c in numbering),
-                            }
-                            section_resp_lines.append(resp_line)
-                            # if there are any entities found or if any new role keywords are present in the line
-                    elif any(word in resp_line for word in self.new_role_key_words) or entities_found_list:
+                    # look for lines like `... shall:` or `... is responsible for:`
+                    if any(line_text.endswith(pre_new_role_find_character_word + self.new_role_find_character) for
+                           pre_new_role_find_character_word in self.pre_new_role_find_character_words) or \
+                            (
+                                    entities_found_list or role_acronym_found or role_is_present or any(word in resp_line for word in self.new_role_key_words)
+                            ):
                         new_role_start_metadata = {
                             "n_periods": numbering.count("."),
                             "n_parenthesis": numbering.count(")"),
                             "n_numbers": sum(c.isdigit() for c in numbering),
                             "n_letters": sum(c.isalpha() for c in numbering),
                         }
+                        current_role_numbering = numbering
                         section_resp_lines.append(resp_line)
-
+                        # if there are any entities found or if any new role keywords are present in the line
                 else:
+                    # determine whether there is a free text line/paragraph at the beginning of the responsibility section to add
+                    # It is infrequently the case that the first role looks something like:
+                    # RESPONSIBILITIES 1. DIRECTOR, DIA. In this case the numbering is not captured out using the numbering
+                    # logic, and this is edge case logic to find these instances
+                    if " 1. " in resp_line:
+                        numbering = "1."
+                        section_resp_lines.append(f"{numbering}{resp_line.split(numbering)[-1]}")
+                        new_role_start_metadata = {
+                            "n_periods": 1,
+                            "n_parenthesis": 0,
+                            "n_numbers": 1,
+                            "n_letters": 0,
+                        }
+                        current_role_numbering=numbering
+
+                    # elif (entities_found_list and resp_line.strip().endswith(self.new_role_find_character)) or any(
+                    #         word in resp_line for word in self.new_role_key_words):
+                    #     section_resp_lines.append(resp_line)
+
+            # determine whether the current line (w/o any numbering/punctuation) is a continuation of an existing line
+            # or a new line that should be captured as a new line
+            else:
+                if numbering:
+
                     # A new role is being assigned a set of responsibilities, so capture this as a new grouping
                     if multiple_roles_present and \
+                            self.is_larger_numbering(current_role_numbering,numbering) and \
                             new_role_start_metadata["n_periods"] == numbering.count(".") and \
                             new_role_start_metadata["n_parenthesis"] == numbering.count(")") and \
                             new_role_start_metadata["n_numbers"] <= sum(c.isdigit() for c in numbering) and \
@@ -247,34 +329,16 @@ class ResponsibilityParser:
                         if section_resp_lines:
                             responsibility_section_list.append(section_resp_lines)
                             section_resp_lines = []
+                        current_role_numbering=numbering
                     section_resp_lines.append(resp_line)
-
-            # determine whether the current line (w/o any numbering/punctuation) is a continuation of an existing line
-            # or a new line that should be captured as a new line
-            elif not section_resp_lines == []:
-                # if the previous line ended in punctuation, then add this text as a new line
-                if section_resp_lines[-1].strip().endswith(self.new_role_find_character):
-                    section_resp_lines.append(resp_line)
-                # no punctuation at end of previous line, so this line is a continuation of the previous line of text
                 else:
-                    section_resp_lines[-1] += f" {resp_line}"
-            # determine whether there is a free text line/paragraph at the beginning of the responsibility section to add
-            else:
-                # It is infrequently the case that the first role looks something like:
-                # RESPONSIBILITIES 1. DIRECTOR, DIA. In this case the numbering is not captured out using the numbering
-                # logic, and this is edge case logic to find these instances
-                if " 1. " in resp_line:
-                    section_resp_lines.append(f"1.{resp_line.split('1.')[-1]}")
-                    new_role_start_metadata = {
-                        "n_periods": 1,
-                        "n_parenthesis": 0,
-                        "n_numbers": 1,
-                        "n_letters": 0,
-                    }
+                    # if the previous line ended in punctuation, then add this text as a new line
+                    if section_resp_lines[-1].strip().endswith(self.new_role_find_character):
+                        section_resp_lines.append(resp_line)
+                    # no punctuation at end of previous line, so this line is a continuation of the previous line of text
+                    else:
+                        section_resp_lines[-1] += f" {resp_line}"
 
-                elif (entities_found_list and resp_line.strip().endswith(self.new_role_find_character)) or any(
-                        word in resp_line for word in self.new_role_key_words):
-                    section_resp_lines.append(resp_line)
         if section_resp_lines:
             responsibility_section_list.append(section_resp_lines)
 
@@ -350,4 +414,5 @@ class ResponsibilityParser:
 
         self._logger.info(f"{len(parse_files)} total files processed")
         self._logger.info(f"{len(self.error_files)} total files errored out/skipped")
-        self._logger.info(f"{len(self.files_missing_responsibility_section)} total files missing responsibility_section")
+        self._logger.info(
+            f"{len(self.files_missing_responsibility_section)} total files missing responsibility_section")
