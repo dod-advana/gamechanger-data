@@ -12,22 +12,34 @@ stopwords = stopwords.words('english')
 # gamechanger-data imports
 from common.document_parser.cli import get_default_logger
 from common.document_parser.lib.document import FieldNames
+punctuation_less_period_parentheses = set(string.punctuation).difference({".","(",")"})
 
+numbering_regex = "^([a-z]{1,2}\.|" \
+                          "\([a-z]{1,2}\)|" \
+                          "\(\d{1,2}\)|" \
+                          "\d{1,2}\.*|" \
+                          "\d{1,2}\.\d{1,2}\.*|" \
+                          "\d{1,2}\.\d{1,2}\.\d{1,2}\.*|" \
+                          "\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,2}\.*|" \
+                          "\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,2}\.*|" \
+                          "\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,2}\.*|" \
+                          "\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,2}\.*)$"
 
 class ResponsibilityParser:
     def __init__(self):
         self._logger = get_default_logger()
+        self.results_df = pd.DataFrame()
+        self.error_files = set()
+        self.files_missing_responsibility_section = set()
         # this is a character that is (sometimes) used at the end of the responsibility role line and is used as part of
         # the inclusion criteria logic
         self.new_role_find_character = ":"
+        self.role_title_words = ["director","manager","secretar", "head","chairman","chairperson","commander"]
         self.pre_new_role_find_character_words = ["shall", "will", "must", "responsible for",
-                                                  "responsible for the following"]
+                                                  "responsible for the following","ensure"]
         self.new_role_key_words = ["shall", "establish", "provide", "responsible for"]
-        self.break_words = ["GLOSSARY", "Glossary", "ACRONYMS", "REFERENCES", "SUMMARY OF CHANGE", "Summary of Change"]
-        self.results_df = None
-        self.error_files = set()
-        self.files_missing_responsibility_section = set()
-
+        self.break_strings = ["GLOSSARY", "Glossary", "ACRONYMS", "REFERENCES", "SUMMARY OF CHANGE", "Summary of Change",
+                            "Abbreviations and Acronyms", "............................"]
     @staticmethod
     def extract_numbering(text):
         """
@@ -44,16 +56,26 @@ class ResponsibilityParser:
         """
         # the formats of the numbering are either 1./a. or (1)/(a). Any text with uppercase (such as U.S., or JS.)
         # should not be considered numbering
-        if "." in text[:3] or set(["(", ")"]).difference(text[:4]) == set():
+
+        space_count = text.count(" ")
+        if space_count==0:
+            numbering = text
+            text_no_numbering = ""
+        elif space_count==1:
             try:
                 numbering, text_no_numbering = text.split(" ", 1)
+            except:
+                numbering = text
+                text_no_numbering = ""
+        else:
+            numbering, text_no_numbering = text.split(" ", 1)
+
+        if re.match(numbering_regex, numbering):
                 # items such as "(b), blah bla" are an edge case here (and is connected to the previous line such as "reference (b), bla bla"
-                if not numbering.endswith(",") and not numbering.isupper():
-                    return numbering, text_no_numbering
+            if not numbering.endswith(","):
+                return numbering.strip(), text_no_numbering.strip()
             # if there is no spaces/text other than the numbering (such as (b).) usually means that this is a continuation
             # of a previous line
-            except:
-                pass
         return "", text
 
     @staticmethod
@@ -138,26 +160,6 @@ class ResponsibilityParser:
         else:
             return False
 
-    @staticmethod
-    def is_larger_numbering(curr_numbering, new_numbering):
-        """
-        Returns True if new_numbering is "larger" than current numbering.
-        e.g.
-        Args:
-            curr_numbering:
-            new_numbering:
-
-        Returns:
-
-        """
-        if curr_numbering==new_numbering:
-            return False
-        curr_numbering = curr_numbering.translate(str.maketrans('', '', string.punctuation))
-        new_numbering = new_numbering.translate(str.maketrans('', '', string.punctuation))
-        if curr_numbering.isdigit() and new_numbering.isdigit():
-            curr_numbering = int(curr_numbering)
-            new_numbering = int(new_numbering)
-        return True if max(new_numbering, curr_numbering)==new_numbering else False
 
     @staticmethod
     def is_camelcase_without_stopwords(text):
@@ -171,6 +173,7 @@ class ResponsibilityParser:
         Returns:
 
         """
+        return False
         text = " ".join([token for token in text.split(" ") if token not in stopwords])
         if text.istitle():
             return True
@@ -248,8 +251,9 @@ class ResponsibilityParser:
             "n_letters": 0,
         }
         current_role_numbering = ""
+        next_numbering_is_role = False
         for i, resp_line in enumerate(resp_section):
-            if any(term in resp_line for term in self.break_words):
+            if any(term in resp_line for term in self.break_strings):
                 break
 
             if self.new_role_find_character in resp_line:
@@ -262,24 +266,68 @@ class ResponsibilityParser:
             if not resp_line:
                 continue
             numbering, line_text = self.extract_numbering(resp_line)
-            entities_found_list = self.parse_entities(line_text)
             # Some entities are not within our entities gold standard list, so this is a way of identifying roles that
             # are being mentioned (if they have an acronym defined) and are being assigned responsibilities
-            role_acronym_found = self.is_role_acronym_defined(line_text)
-            role_is_present = self.is_camelcase_without_stopwords(line_text)
             if section_resp_lines == []:
-                if "RESPONSIBILITIES" in line_text.upper():
-                    if entities_found_list:
-                        multiple_roles_present = False
-                        section_resp_lines.append(re.split("RESPONSIBILITIES\.*",line_text,flags=re.IGNORECASE)[-1].strip())
+                try:
+                    while True:
+                        lookahead_line = resp_section[i+1].replace("\t", "").strip()
+                        lookahead_numbering, lookahead_text = self.extract_numbering(lookahead_line)
+                        if not lookahead_numbering:
+                            line_text += f" {lookahead_text}"
+                            resp_section.pop(i+1)
+                        else:
+                            break
+                except:
+                    pass
+
+
+                resp_line = f"{numbering} {line_text}"
+
+                if any(term in resp_line for term in self.break_strings):
+                    break
+
+                if self.new_role_find_character in resp_line:
+                    resp_line, next_line = self.split_text_with_role_midline(resp_line)
+                    if next_line:
+                        resp_section.insert(i + 1, next_line)
+
+                entities_found_list = self.parse_entities(resp_line)
+                role_acronym_found = self.is_role_acronym_defined(resp_line)
+                role_is_present = self.is_camelcase_without_stopwords(resp_line)
+
+                # capture any cases where the intro text for the responsibitlies section incorporates a role's responsibilites
+                # but skip examples such as `and in addition to the responsibilities in Paragraph 2..` (all lowercase)
+                if any(word in resp_line for word in ["RESPONSIBILITIES","Responsibilities"]):
+                    # if there is a line with new role numbering in the middle of the sentence and it is not something like
+                    # `Table 1.`, a break should be made and the new role should be added as a new line in resp_section
+                    if " 1. " in resp_line and re.search("^((?!Table\s1\.\s).)*$",resp_line):
+                        resp_section.insert(i + 1, " 1. " + resp_line.split(" 1. ", 1)[1])
+                        # some sections have `1. Overview to start the responsibilties section, and these need to be bypassed
+                        if "1. Overview" not in resp_line:
+                            next_numbering_is_role = True
+                    elif " a. " in resp_line:
+                        resp_section.insert(i + 1, " a. " + resp_line.split(" a. ", 1)[1])
+                        next_numbering_is_role = True
+                    elif entities_found_list:
+                        # multiple_roles_present = False
+                        current_role_numbering = numbering
+                        section_resp_lines.append(resp_line)
+                        new_role_start_metadata = {
+                            "n_periods": numbering.count("."),
+                            "n_parenthesis": numbering.count(")"),
+                            "n_numbers": sum(c.isdigit() for c in numbering),
+                            "n_letters": sum(c.isalpha() for c in numbering),
+                        }
                     continue
                 if numbering:
                     # for lines such as 5. RESPONSIBILITIES AND FUNCTIONS.  The Director, PFPA: - there is only one role being
                     # assigned responsibilities in this document, and we need to capture out the `The Director, PFPA:` part
 
                     # look for lines like `... shall:` or `... is responsible for:`
-                    if any(line_text.endswith(pre_new_role_find_character_word + self.new_role_find_character) for
-                           pre_new_role_find_character_word in self.pre_new_role_find_character_words) or \
+                    if next_numbering_is_role or \
+                            any(resp_line.endswith(pre_new_role_find_character_word + self.new_role_find_character) for
+                                pre_new_role_find_character_word in self.pre_new_role_find_character_words) or \
                             (
                                     entities_found_list or role_acronym_found or role_is_present or any(word in resp_line for word in self.new_role_key_words)
                             ):
@@ -316,14 +364,50 @@ class ResponsibilityParser:
             # or a new line that should be captured as a new line
             else:
                 if numbering:
+                    # in some cases, there are junk sections before (inside the overall responsibiltiy section) which have
+                    # matched the logic above and acted like responsibilties, however we want to clear out the cache and start
+                    # assigning responsibilities from the current line
+                    if line_text.upper().strip()=="RESPONSIBILITIES":
+                        section_resp_lines = []
+                        new_role_start_metadata = {
+                            "n_periods": 0,
+                            "n_parenthesis": 0,
+                            "n_numbers": 0,
+                            "n_letters": 0,
+                        }
+                        next_numbering_is_role = True
+                        continue
+
+                    # example of this edge case (the l. acts as a new numbering)
+                    # (9) Conduct inquiries, inspections, and investigations as directed by
+                    # the DJS or CJCS using the procedures and guidance IAW references a through
+                    # l.
+                    # (10) Provide assistance to the CCMD IG offices as requested.
+                    #
+                    # if there is no "text" for the line, and the next line has numbering, this is a continuation of the last
+                    # line
+                    if not line_text.strip():
+                        try:
+                            next_line_numbering, next_line_text = self.extract_numbering(resp_section[i+1])
+                            if next_line_numbering:
+                                section_resp_lines[-1] += f" {resp_line}"
+                                continue
+                        except:
+                            section_resp_lines[-1] += f" {resp_line}"
+                            continue
 
                     # A new role is being assigned a set of responsibilities, so capture this as a new grouping
-                    if multiple_roles_present and \
-                            self.is_larger_numbering(current_role_numbering,numbering) and \
-                            new_role_start_metadata["n_periods"] == numbering.count(".") and \
+                    if new_role_start_metadata["n_periods"] == numbering.count(".") and \
                             new_role_start_metadata["n_parenthesis"] == numbering.count(")") and \
-                            new_role_start_metadata["n_numbers"] <= sum(c.isdigit() for c in numbering) and \
+                            new_role_start_metadata["n_numbers"] in [sum(c.isdigit() for c in numbering)-1, sum(c.isdigit() for c in numbering)] and \
                             new_role_start_metadata["n_letters"] <= sum(c.isalpha() for c in numbering):  # and \
+
+                        # if multiple different roles are not present, but we have a numbering that is similar to the
+                        # numbering that assigned the role, this means there is typically an issue with the section parser
+                        # and we should break (rather than continue adding "roles" that are not actually roles)
+                        if not multiple_roles_present:
+                            break
+
                         # If section_resp_lines already has information in it (i.e., a prior role has responsibility lines,
                         # then append this to responsibility_section_list and start fresh with a new section_resp_lines list.
                         if section_resp_lines:
@@ -402,11 +486,14 @@ class ResponsibilityParser:
         Returns:
 
         """
+        self._logger.info(f"Attempting to parse files_input_directory")
         parse_files = glob(os.path.join(files_input_directory, "*.json"))
+        self._logger.info(f"{len(parse_files)} total files found in directory")
         all_results_list = []
+
         for parse_file in tqdm(parse_files):
             all_results_list.extend(self.extract_responsibilities_from_json(parse_file))
-        self.results_df = pd.DataFrame(all_results_list)
+        self.results_df = pd.concat([self.results_df, pd.DataFrame(all_results_list)])
 
         if excel_save_filepath:
             self._logger.info(f"Saving responsibility data to filepath: {excel_save_filepath}")

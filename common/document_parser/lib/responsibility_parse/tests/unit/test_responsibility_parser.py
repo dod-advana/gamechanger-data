@@ -41,8 +41,8 @@ class TestResponsibilityParser(unittest.TestCase):
             "(11) Here is some text": ("(11)", "Here is some text"),
             "a. Here is some text": ("a.", "Here is some text"),
             "zz. Here is some text": ("zz.", "Here is some text"),
-            "(a). Here is some text": ("(a).", "Here is some text"),
-            "(zz). Here is some text": ("(zz).", "Here is some text"),
+            "(a). Here is some text": ("", "(a). Here is some text"),
+            "(zz). Here is some text": ("", "(zz). Here is some text"),
         }
         for input, expected_output in numbering_input_output_dict.items():
             self.assertEqual(self.responsibility_parser.extract_numbering(input), expected_output,

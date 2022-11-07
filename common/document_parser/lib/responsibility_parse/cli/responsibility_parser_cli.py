@@ -18,7 +18,7 @@ if __name__ == "__main__":
         "--json-files-input-directory", "-i",
         dest="json_files_input_directory",
         required=True,
-        help="Directory to the input directory for Gamechanger JSONs"
+        help="Directory to the input directory for Gamechanger JSONs. For multiple directories, semi-colon delimit the paths"
     )
 
     parser.add_argument(
@@ -83,8 +83,10 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     responsibility_parser = ResponsibilityParser()
-    responsibility_parser.main(files_input_directory=args.json_files_input_directory,
-                               excel_save_filepath=args.excel_save_filepath)
+    for directory in args.json_files_input_directory.split(";"):
+        directory = directory.strip()
+        responsibility_parser.main(files_input_directory=directory)
+    responsibility_parser.save_results_to_excel(args.excel_save_filepath)
 
 
     if args.save_to_rds:
