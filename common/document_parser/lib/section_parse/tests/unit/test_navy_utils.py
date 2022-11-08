@@ -9,6 +9,7 @@ from section_parse import (
     get_letter_dot_section,
     match_number_hyphenated_section,
     match_number_dot_section,
+    match_first_appendix_title,
 )
 from section_parse.tests import TestItem
 
@@ -125,7 +126,24 @@ class NavyUtilsTest(TestCase):
             (TestItem(("NAVMC 3500.100C I",), None), None),
         ]
         self._run_matches(match_number_dot_section, test_cases)
-        
+
+    def test_match_first_appendix_title(self):
+        """Verifies match_first_appendix_title() (and therefore also verifies
+        APPENDIX_TITLE_PATTERN).
+        """
+        test_cases = [
+            (
+                TestItem(("OPNAVINST\nA-1 Appendix A \nREFERENCES",), Match),
+                "\nA-1 Appendix A \n",
+            ),
+            (TestItem(("\nRef: \nSee appendix A \n \n1.",), None), None),
+            (
+                TestItem((" END.\nAppendix B \n- \nForms",), Match),
+                "\nAppendix B \n",
+            ),
+        ]
+        self._run_matches(match_first_appendix_title, test_cases)
+
 
 if __name__ == "__main__":
     main(failfast=True)

@@ -1,16 +1,20 @@
-from re import search, IGNORECASE, finditer, compile, finditer, RegexFlag
+from re import search, IGNORECASE, VERBOSE, compile, finditer, RegexFlag
+from os.path import splitext
 from typing import List
 from .parser_definition import ParserDefinition
 from .utils import (
     match_number_hyphenated_section,
     get_letter_dot_section,
     match_number_dot_section,
+    match_first_appendix_title,
+    remove_pagebreaks,
+    DD_MONTHNAME_YYYY,
 )
 
 
 class NavyParser(ParserDefinition):
     """Section parser for Navy document types (see SUPPORTED_DOC_TYPES).
-    
+
     Child of ParserDefinition.
     """
 
@@ -37,6 +41,7 @@ class NavyParser(ParserDefinition):
     def __init__(self, doc_dict: dict, test_mode: bool = False):
         super().__init__(doc_dict, test_mode)
         self._text = self.get_raw_text()
+        self._filename_without_extension = splitext(self._filename)[0]
 
     @property
     def purpose(self):
@@ -48,9 +53,7 @@ class NavyParser(ParserDefinition):
             # the situation section.
             situation = self._get_numbered_section_with_name("situation")
             if situation:
-                purposes = [
-                    get_letter_dot_section(situation[0], "purpose")
-                ]
+                purposes = [get_letter_dot_section(situation[0], "purpose")]
 
         return purposes
 
@@ -60,7 +63,10 @@ class NavyParser(ParserDefinition):
 
     @property
     def responsibilities(self):
-        resp = self._get_numbered_section_with_name("responsibilit(?:y|ies)", False)
+        resp = self._get_numbered_section_with_name(
+            "responsibilit(?:y|ies)", False
+        )
+
         if not resp:
             # Examples of unique responsibilities sections:
             #    "\n3.  Records Responsibilities. "
@@ -110,6 +116,7 @@ class NavyParser(ParserDefinition):
             return sections
 
         for start_match in matches:
+            end_match = None
             first_num = start_match.groups()[0]
             second_num = "".join(
                 char for char in start_match.groups()[1] if char.isdigit()
@@ -118,20 +125,41 @@ class NavyParser(ParserDefinition):
 
             if second_num:
                 end_match = match_number_hyphenated_section(
-                    cropped_text, first_num, str(int(second_num) + 1)
+                    cropped_text, first_num, {str(int(second_num) + 1)}
                 )
                 if not end_match:
                     end_match = match_number_hyphenated_section(
-                        cropped_text, str(int(first_num) + 1)
+                        cropped_text, rf"0?{str(int(first_num) + 1)}"
                     )
             else:
                 end_match = match_number_dot_section(
-                    cropped_text, str(int(first_num) + 1)
+                    cropped_text, rf"0?{str(int(first_num) + 1)}"
                 )
+
+            appendix_match = match_first_appendix_title(cropped_text)
+            if appendix_match:
+                # Use the appendix title match as the end match if it comes
+                # before the current end match.
+                if end_match and appendix_match.start() < end_match.start():
+                    end_match = appendix_match
+                # Use the appendix title match as the end match if no other end
+                # match was found.
+                elif not end_match:
+                    end_match = appendix_match
 
             if end_match:
                 sections.append(cropped_text[: end_match.start()])
             else:
                 sections.append(cropped_text)
 
+        sections = [self._remove_pagebreaks(section) for section in sections]
+
         return sections
+
+    def _remove_pagebreaks(self, text: str) -> str:
+        text = remove_pagebreaks(
+            text, self._filename_without_extension.replace(" ", r"[ ]")
+        )
+        text = remove_pagebreaks(text, DD_MONTHNAME_YYYY, [VERBOSE])
+        text = remove_pagebreaks(text, r"[0-9]{1,3}")  # Page numbers
+        return text

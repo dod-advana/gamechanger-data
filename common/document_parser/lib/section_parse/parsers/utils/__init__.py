@@ -1,8 +1,11 @@
 from .shared_utils import (
     next_letter,
+    make_pattern_for_uppercase_or_titlecase,
     MONTH_LIST,
+    MONTH_ABBREVIATIONS_LIST,
     CAPITAL_ENCLOSURE, 
     DD_MONTHNAME_YYYY,
+    remove_pagebreaks,
 )
 from .dod_utils import (
     PAGEBREAK_DATE_PATTERN,
@@ -26,4 +29,6 @@ from .navy_utils import (
     get_letter_dot_section,
     match_number_hyphenated_section,
     match_number_dot_section,
+    APPENDIX_TITLE_PATTERN,
+    match_first_appendix_title,
 )
