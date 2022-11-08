@@ -677,6 +677,14 @@ class DoDParser(ParserDefinition):
                     if not starts_with_glossary(subsection.strip())
                 ]
                 continue
+            
+            enclosure_num = match_enclosure_num(first_subsection)
+            if enclosure_num:
+                self._sections[i][1:] = [
+                    subsection
+                    for subsection in self._sections[i][1:]
+                    if not match_enclosure_num(subsection.strip(), enclosure_num)
+                ]
 
             self._sections[i][1:] = [
                 subsection
