@@ -107,10 +107,10 @@ def remove_pagebreaks(
 
     return sub(
         rf"""
-            [ ]*                # Any number of spaces (including 0)
             (?:^|[\n])          # Either match at the start of the text, or match a newline.
+            [ ]*                # Any number (including 0) of spaces 
             {pagebreak}
-            [ ]*                # Any number of spaces (including 0)
+            [ ]*                # Any number (including 0) of spaces
             (?:(?=[\n])|$)      # Either match at the end of the text, or match a newline.
         """,
         "",

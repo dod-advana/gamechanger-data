@@ -6,7 +6,7 @@ from .shared_utils import MONTH_LIST
 
 
 PAGEBREAK_DATE_PATTERN = compile(
-    r"(?:" + r"|".join(MONTH_LIST) + r") [0-9]{1,2},? (?:19[0-9]{2}|2[0-9]{3})"
+    r"(?:" + r"|".join(MONTH_LIST) + r") [0-9]{1,2}[,\.]? (?:19[0-9]{2}|2[0-9]{3})"
 )
 
 

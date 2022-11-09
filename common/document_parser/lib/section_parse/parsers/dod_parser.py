@@ -714,9 +714,13 @@ class DoDParser(ParserDefinition):
             `pagebreak_text` = "DoDD 4124.01"
             returns: "ENCLOSURE 1 RESPONSIBILITIES"
         """
+        pagebreak_match = match(
+            rf"{self._pagebreak_text}(?:[-,]? ?V(?:olume|OLUME)? ?[0-9]{{1,3}})?,?",  # optional volume number
+            text
+        )
 
-        if self._pagebreak_text and text.startswith(self._pagebreak_text):
-            text = text.lstrip(self._pagebreak_text).lstrip()
+        if self._pagebreak_text and pagebreak_match:
+            text = text[pagebreak_match.end():].lstrip()
             date_span = find_pagebreak_date(text)
             if date_span is not None and date_span[0] < 5:
                 text = text[date_span[1] :].strip()
