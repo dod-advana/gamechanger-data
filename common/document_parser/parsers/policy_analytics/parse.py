@@ -13,6 +13,7 @@ from common.document_parser.lib import (
     pdf_reader,
     write_doc_dict_to_json,
     ocr,
+    datetime_utils,
     file_utils,
 )
 from . import init_doc
@@ -84,8 +85,9 @@ def post_process(doc_dict):
         doc_dict["source_title_s"] = doc_dict["meta_data"]["source_title"]
         doc_dict["display_source_s"] = doc_dict["meta_data"]["display_source"]
         doc_dict["access_timestamp_dt"] = doc_dict["meta_data"]["access_timestamp"]
-        doc_dict["publication_date_dt"] = doc_dict["meta_data"]["publication_date"]
         doc_dict["is_revoked_b"] = doc_dict["meta_data"]["is_revoked"]
+        # special case to handle improper publication_date formatting
+        doc_dict["publication_date_dt"] = datetime_utils.get_publication_date(doc_dict["meta_data"])
     else:
         doc_dict["is_revoked_b"] = False
 
