@@ -92,7 +92,7 @@ def post_process(doc_dict):
         doc_dict["data_source_s"] = doc_dict["meta_data"]["data_source"]
         doc_dict["source_title_s"] = doc_dict["meta_data"]["source_title"]
         doc_dict["display_source_s"] = doc_dict["meta_data"]["display_source"]
-        doc_dict["access_timestamp_dt"] = doc_dict["meta_data"]["access_timestamp"]
+        doc_dict["access_timestamp_dt"] = datetime_utils.get_access_timestamp(doc_dict["meta_data"])
         doc_dict["publication_date_dt"] = datetime_utils.get_publication_date(doc_dict["meta_data"])
         doc_dict["is_revoked_b"] = doc_dict["meta_data"]["is_revoked"]
     else:
