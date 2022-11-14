@@ -86,6 +86,7 @@ class CJCSParser(ParserDefinition):
         super().__init__(doc_dict, test_mode)
         self._text = self.get_raw_text()
         self._filename_without_extension = splitext(self._filename)[0]
+        self._filename_pattern = self._make_filename_pattern()
 
         # Keys are (str) enclosure letter, values are (Tuple[int|None, int|None])
         # start and end indices of the corresponding enclosures within `self._text`.
@@ -162,7 +163,7 @@ class CJCSParser(ParserDefinition):
             start_matches = finditer(start_pattern, self._text)
 
         # Patterns for the start of the next section.
-        next_section_patterns = [ 
+        next_section_patterns = [
             number_pattern,  # Numbered list item
             r"\n\s*G(?:lossary|LOSSARY)\s*\n",  # Glossary section title
             r"\n\s*[0-9]+\s*\n",  # Page number
@@ -174,10 +175,10 @@ class CJCSParser(ParserDefinition):
         result = []
 
         for start_match in start_matches:
-            # Find the end of the current section by finding the start of the 
+            # Find the end of the current section by finding the start of the
             # next section.
             start_idx = start_match.start()
-            search_start_idx = start_match.end()  
+            search_start_idx = start_match.end()
             end_match = None
             end_idx = None
 
@@ -190,14 +191,11 @@ class CJCSParser(ParserDefinition):
                         end_match = next_match
 
             if end_match:
-                text = self._text[start_idx : end_idx]
+                text = self._text[start_idx:end_idx]
                 # If the next list item is numbered 1, it could be part of the
                 # next enclosure. If it is, then cut off the text before the
                 # next enclosure title.
-                if (
-                    end_match.groups()
-                    and end_match.groups()[0] == "1"
-                ):
+                if end_match.groups() and end_match.groups()[0] == "1":
                     enclosure_titles = list(
                         finditer(enclosure_title_pattern, text)
                     )
@@ -221,7 +219,7 @@ class CJCSParser(ParserDefinition):
     ) -> Union[int, None]:
         """Find the end index of an enclosure within `_text`.
 
-        If enclosure_letter is not yet in self._enclosure_spans, its span 
+        If enclosure_letter is not yet in self._enclosure_spans, its span
         (int start, int end) will be added.
 
         Args:
@@ -239,7 +237,7 @@ class CJCSParser(ParserDefinition):
         if enclosure_letter in self._enclosure_spans:
             return self._enclosure_spans[enclosure_letter][1]
 
-        # First, try to find the end of the enclosure by finding the start of 
+        # First, try to find the end of the enclosure by finding the start of
         # the next enclosure.
         try:
             end_letter = next_letter(enclosure_letter)
@@ -280,16 +278,11 @@ class CJCSParser(ParserDefinition):
         Returns:
             str: The cleaned text.
         """
-        start_pattern = r"\s*?\n"
+        start_pattern = r"\s*?\n[ ]*"
         end_pattern = r"(?:\s*?(?=\n)|[ ]?$)"  # ?=\n allows matches to overlap on newline
 
-        if "GDE" in self._filename_without_extension:
-            filename_pattern = rf"(?:{self._filename_without_extension}|{self._filename_without_extension.replace('GDE', r'G(?:uide|UIDE)')})"
-        else:
-            filename_pattern = self._filename_without_extension
-
         for pattern in [
-            filename_pattern,
+            self._filename_pattern,
             rf"{CAPITAL_ENCLOSURE} [A-Z]",
             r"[A-Z]{1,2}-[0-9]+",
             "UNCLASSIFIED",
@@ -298,7 +291,7 @@ class CJCSParser(ParserDefinition):
             text = sub(rf"{start_pattern}{pattern}{end_pattern}", "", text)
 
         text = sub(
-            rf"{start_pattern}{DD_MONTHNAME_YYYY}{end_pattern}",
+            rf"{start_pattern}(?:ch(?:ange)?[ -]{{0,2}}[0-9]{{1,3}},?[ ])?{DD_MONTHNAME_YYYY}{end_pattern}",
             "",
             text,
             flags=IGNORECASE | VERBOSE,
@@ -307,5 +300,37 @@ class CJCSParser(ParserDefinition):
 
         return text.strip()
 
-    def _make_enclosure_title_pattern(self, enclosure_letter: str):
+    def _make_enclosure_title_pattern(self, enclosure_letter: str) -> str:
         return rf"\n\s*{CAPITAL_ENCLOSURE} ({enclosure_letter})\.?\s*\n"
+
+    def _make_filename_pattern(self) -> str:
+        if "GDE" in self._filename_without_extension:
+            filename_pattern = rf"(?:{self._filename_without_extension}|{self._filename_without_extension.replace('GDE', r'G(?:uide|UIDE)')})"
+        else:
+            filename_pattern = self._filename_without_extension
+
+        # If a volume number and/ or change number are in the filename, add an
+        # optional comma and space before them.
+        words = [
+            r"v(?:ol(?:ume)?)?",  # "v" or "vol" or "volume"
+            r"ch(?:ange)?",  # "ch" or "change"
+        ]
+        for word in words:
+            match_ = search(
+                rf"""
+                    [ ]?                    # Optional space
+                    {word}        
+                    [ -]?                   # Optional space or hyphen
+                    (?:[A-Z]|[0-9]{{1,3}})  # 1 uppercase letter or 1-3 digits
+                """,
+                filename_pattern,
+                flags=VERBOSE | IGNORECASE,
+            )
+            if match_:
+                filename_pattern = (
+                    filename_pattern[: match_.start()]
+                    + r",?[ ]?"
+                    + filename_pattern[match_.start() :]
+                )
+
+        return filename_pattern

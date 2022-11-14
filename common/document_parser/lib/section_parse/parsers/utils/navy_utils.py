@@ -1,6 +1,26 @@
-from re import search, Match, IGNORECASE, RegexFlag
+from re import compile, search, Match, RegexFlag, IGNORECASE, VERBOSE
 from typing import Union, List
 from .shared_utils import next_letter
+
+# Pattern to match the start of an Appendix section title.
+APPENDIX_TITLE_PATTERN = compile(
+    rf"""
+        \s*[\n]                 # Any number of whitespaces, then a newline
+        (?:                     # Start of an optional, non-capture group
+            [A-Z]                   # 1 uppercase letter
+            [ ]?                    # Optional space
+            -                       # Hyphen
+            [ ]?                    # Optional space
+            [1-9][0-9]?             # 1 digit in 1-9, then optional digit in 0-9
+            \s*                     # Any number of whitespace
+        )?
+        A(?:ppendix|PPENDIX)    # "Appendix" or "APPENDIX"
+        [ ]                     # 1 space
+        [A-Z]                   # 1 uppercase letter
+        \s*[\n]                 # Any number of whitespaces, then a newline
+    """,
+    flags=VERBOSE,
+)
 
 
 def get_letter_dot_section(
@@ -40,20 +60,25 @@ def get_letter_dot_section(
     start_index = start_match.start()
     crop_start_index = start_match.end()
     start_match_len = crop_start_index - start_index
-    cropped_text = text[crop_start_index : ]
+    cropped_text = text[crop_start_index:]
 
     end_patterns = [
-        rf"\n\s*({next_letter(letter)})\.\s*", r"\n\s*[0-9]+\.\s", r"\n\s*\n", "\n"
+        rf"\n\s*({next_letter(letter)})\.\s*",
+        r"\n\s*[0-9]+\.\s",
+        r"\n\s*\n",
+        "\n",
     ]
     end_match = None
     for pattern in end_patterns:
         end_match = search(pattern, cropped_text)
         if end_match:
-            break    
+            break
     if end_match:
-        return text[start_index : start_index + start_match_len + end_match.start()]
-    
-    return text[start_index : ]
+        return text[
+            start_index : start_index + start_match_len + end_match.start()
+        ]
+
+    return text[start_index:]
 
 
 def match_number_hyphenated_section(
@@ -82,3 +107,7 @@ def match_number_dot_section(
     text: str, num: str = "[0-9]+"
 ) -> Union[Match, None]:
     return search(rf"\n{num}\s*\.", text)
+
+
+def match_first_appendix_title(text: str) -> Union[Match, None]:
+    return search(APPENDIX_TITLE_PATTERN, text)

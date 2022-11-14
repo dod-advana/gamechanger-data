@@ -1,13 +1,14 @@
 from unittest import TestCase, main
 from typing import Callable, List
 from os.path import dirname
-from re import search, RegexFlag, VERBOSE, IGNORECASE
+from re import search, RegexFlag, VERBOSE
 import sys
 
 sys.path.append(dirname(__file__).replace("/section_parse/tests/unit", ""))
 from section_parse import (
     next_letter,
     DD_MONTHNAME_YYYY,
+    remove_pagebreaks,
 )
 from section_parse.tests import TestItem
 
@@ -50,19 +51,32 @@ class SharedUtilsTest(TestCase):
         """Verifies DD_MONTHNAME_YYYY."""
         test_cases = [
             TestItem(
-                (DD_MONTHNAME_YYYY, "\n7 MARCH 2016 \n", [VERBOSE, IGNORECASE]),
+                (DD_MONTHNAME_YYYY, "\n7 MARCH 2016 \n", [VERBOSE]),
                 "7 MARCH 2016"
             ),
             TestItem(
-                (DD_MONTHNAME_YYYY, "2 January 1998", [VERBOSE, IGNORECASE]),
+                (DD_MONTHNAME_YYYY, "2 January 1998", [VERBOSE]),
                 "2 January 1998"
             ),
             TestItem(
-                (DD_MONTHNAME_YYYY, "12 February 1", [VERBOSE, IGNORECASE]),
+                (DD_MONTHNAME_YYYY, "12 February 1", [VERBOSE]),
                 None
+            ), 
+            TestItem(
+                (DD_MONTHNAME_YYYY, "hey 17 Aug 1998 hello", [VERBOSE]),
+                "17 Aug 1998"
             )
         ]
         self._run(self._get_match_text, test_cases)
+
+    def test_remove_pagebreaks(self):
+        test_cases = [
+            TestItem(
+                ("DoDI 1235.12, June 7, 2016 \nChange 1, 02/27/2017 \n9 \nENCLOSURE 2 ", r"[0-9]", []),
+                "DoDI 1235.12, June 7, 2016 \nChange 1, 02/27/2017\nENCLOSURE 2 "
+            )
+        ]
+        self._run(remove_pagebreaks, test_cases)
 
 
 if __name__ == "__main__":
