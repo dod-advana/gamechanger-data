@@ -148,7 +148,7 @@ class TestResponsibilityParser(unittest.TestCase):
                 "The Director, DIA shall: perform responsibility X and Y", ""
             ),
             "The Director, DIA shall: (a) perform responsibility X": (
-                "The Director, DIA shall:", " (a) perform responsibility X"
+                "The Director, DIA shall:", "(a) perform responsibility X"
             ),
             "1. The Director, DIA:1.1 Work with X to perform responsibility Y": (
                 "1. The Director, DIA:", "1.1 Work with X to perform responsibility Y"

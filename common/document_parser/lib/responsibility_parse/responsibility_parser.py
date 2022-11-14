@@ -12,18 +12,20 @@ stopwords = stopwords.words('english')
 # gamechanger-data imports
 from common.document_parser.cli import get_default_logger
 from common.document_parser.lib.document import FieldNames
-punctuation_less_period_parentheses = set(string.punctuation).difference({".","(",")"})
+punctuation_less_period_parentheses = set(string.punctuation).difference({".", "(", ")"})
 
-numbering_regex = "^([a-z]{1,2}\.|" \
-                          "\([a-z]{1,2}\)|" \
-                          "\(\d{1,2}\)|" \
-                          "\d{1,2}\.*|" \
-                          "\d{1,2}\.\d{1,2}\.*|" \
-                          "\d{1,2}\.\d{1,2}\.\d{1,2}\.*|" \
-                          "\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,2}\.*|" \
-                          "\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,2}\.*|" \
-                          "\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,2}\.*|" \
-                          "\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,2}\.*)$"
+numbering_regex = re.compile("^([a-z]{1,2}\.|"
+                             "\([a-z]{1,2}\)|"
+                             "\(\d{1,2}\)|"
+                             "\d{1,2}\.*|"
+                             "\d{1,2}\.\d{1,2}\.*|"
+                             "\d{1,2}\.\d{1,2}\.\d{1,2}\.*|"
+                             "\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,2}\.*|"
+                             "\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,2}\.*|"
+                             "\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,2}\.*|"
+                             "\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,2}\.*)$",
+                             flags=re.VERBOSE)
+
 
 class ResponsibilityParser:
     def __init__(self):
@@ -34,12 +36,15 @@ class ResponsibilityParser:
         # this is a character that is (sometimes) used at the end of the responsibility role line and is used as part of
         # the inclusion criteria logic
         self.new_role_find_character = ":"
-        self.role_title_words = ["director","manager","secretar", "head","chairman","chairperson","commander"]
+        self.role_title_words = ["director", "manager", "secretar", "head", "chairman", "chairperson", "commander"]
         self.pre_new_role_find_character_words = ["shall", "will", "must", "responsible for",
-                                                  "responsible for the following","ensure"]
+                                                  "responsible for the following", "ensure"]
         self.new_role_key_words = ["shall", "establish", "provide", "responsible for"]
-        self.break_strings = ["GLOSSARY", "Glossary", "ACRONYMS", "REFERENCES", "SUMMARY OF CHANGE", "Summary of Change",
-                            "Abbreviations and Acronyms", "............................"]
+        self.break_strings = ["GLOSSARY", "Glossary", "ACRONYMS", "REFERENCES", "SUMMARY OF CHANGE",
+                              "Summary of Change",
+                              "Abbreviations and Acronyms", "............................"]
+        self.mid_line_num = re.compile("^((?!(Table|Figure|Tab\.|Fig\.)\s1\.\s).)*$", flags=re.VERBOSE)
+
     @staticmethod
     def extract_numbering(text):
         """
@@ -56,12 +61,12 @@ class ResponsibilityParser:
         """
         # the formats of the numbering are either 1./a. or (1)/(a). Any text with uppercase (such as U.S., or JS.)
         # should not be considered numbering
-
+        text = text.strip()
         space_count = text.count(" ")
-        if space_count==0:
+        if space_count == 0:
             numbering = text
             text_no_numbering = ""
-        elif space_count==1:
+        elif space_count == 1:
             try:
                 numbering, text_no_numbering = text.split(" ", 1)
             except:
@@ -70,8 +75,8 @@ class ResponsibilityParser:
         else:
             numbering, text_no_numbering = text.split(" ", 1)
 
-        if re.match(numbering_regex, numbering):
-                # items such as "(b), blah bla" are an edge case here (and is connected to the previous line such as "reference (b), bla bla"
+        if numbering_regex.match(numbering):
+            # items such as "(b), blah bla" are an edge case here (and is connected to the previous line such as "reference (b), bla bla"
             if not numbering.endswith(","):
                 return numbering.strip(), text_no_numbering.strip()
             # if there is no spaces/text other than the numbering (such as (b).) usually means that this is a continuation
@@ -160,25 +165,19 @@ class ResponsibilityParser:
         else:
             return False
 
-
-    @staticmethod
-    def is_camelcase_without_stopwords(text):
-        """
-        This is used for identifying if a line is of a role, if the role doesn't have an acronmyn and if the role is
-        not already in the GraphRelations.xlsx spreadsheet.
-        e.g., `'Joint Staff Director for Joint Force Development'`
-        Args:
-            text:
-
-        Returns:
-
-        """
-        return False
-        text = " ".join([token for token in text.split(" ") if token not in stopwords])
-        if text.istitle():
-            return True
-        else:
-            return False
+    def extract_lookahead_text(self, curr_ind, curr_line_text, resp_section):
+        try:
+            while True:
+                lookahead_line = resp_section[curr_ind + 1].replace("\t", "").strip()
+                lookahead_numbering, lookahead_text = self.extract_numbering(lookahead_line)
+                if not lookahead_numbering:
+                    curr_line_text += f" {lookahead_text}"
+                    resp_section.pop(curr_ind + 1)
+                else:
+                    break
+        except:
+            pass
+        return curr_line_text
 
     def split_text_with_role_midline(self, text):
         """
@@ -200,8 +199,9 @@ class ResponsibilityParser:
         for i in range(len(split_text) - 1):
             numbering, text_no_numbering = self.extract_numbering(split_text[i + 1].strip())
             if numbering:
-                return self.new_role_find_character.join(split_text[:i + 1]) + ":", self.new_role_find_character.join(
-                    split_text[i + 1:])
+                return self.new_role_find_character.join(
+                    split_text[:i + 1]).strip() + ":", self.new_role_find_character.join(
+                    split_text[i + 1:]).strip()
         return text, ""
 
     def save_results_to_excel(self, output_filepath):
@@ -234,7 +234,8 @@ class ResponsibilityParser:
 
         """
         responsibility_section_list = []
-        resp_section = resp_section.split("\n")
+        # remove all of the empty lines in the resp_section and split the text into lines
+        resp_section = [line.replace("\t", "").strip() for line in resp_section.split("\n") if line.strip()]
         section_resp_lines = []
         multiple_roles_present = True
         # This metadata is used to find the characteristics of numbering which denotes a new role. I.e., these are special
@@ -256,52 +257,28 @@ class ResponsibilityParser:
             if any(term in resp_line for term in self.break_strings):
                 break
 
+            ## looks ahead until next numbering occurs to pull all text for a given numbering into the "line_text" var
+            resp_line = self.extract_lookahead_text(curr_ind=i, curr_line_text=resp_line,
+                                                    resp_section=resp_section)
+            numbering, line_text = self.extract_numbering(resp_line)
             if self.new_role_find_character in resp_line:
                 resp_line, next_line = self.split_text_with_role_midline(resp_line)
                 if next_line:
                     resp_section.insert(i + 1, next_line)
-
-            resp_line = resp_line.replace("\t", "").strip()
-            ## if the resp_line is empty
-            if not resp_line:
-                continue
-            numbering, line_text = self.extract_numbering(resp_line)
             # Some entities are not within our entities gold standard list, so this is a way of identifying roles that
             # are being mentioned (if they have an acronym defined) and are being assigned responsibilities
             if section_resp_lines == []:
-                try:
-                    while True:
-                        lookahead_line = resp_section[i+1].replace("\t", "").strip()
-                        lookahead_numbering, lookahead_text = self.extract_numbering(lookahead_line)
-                        if not lookahead_numbering:
-                            line_text += f" {lookahead_text}"
-                            resp_section.pop(i+1)
-                        else:
-                            break
-                except:
-                    pass
-
-
-                resp_line = f"{numbering} {line_text}"
-
                 if any(term in resp_line for term in self.break_strings):
                     break
 
-                if self.new_role_find_character in resp_line:
-                    resp_line, next_line = self.split_text_with_role_midline(resp_line)
-                    if next_line:
-                        resp_section.insert(i + 1, next_line)
-
                 entities_found_list = self.parse_entities(resp_line)
                 role_acronym_found = self.is_role_acronym_defined(resp_line)
-                role_is_present = self.is_camelcase_without_stopwords(resp_line)
-
                 # capture any cases where the intro text for the responsibitlies section incorporates a role's responsibilites
                 # but skip examples such as `and in addition to the responsibilities in Paragraph 2..` (all lowercase)
-                if any(word in resp_line for word in ["RESPONSIBILITIES","Responsibilities"]):
+                if any(word in resp_line for word in ["RESPONSIBILITIES", "Responsibilities"]):
                     # if there is a line with new role numbering in the middle of the sentence and it is not something like
                     # `Table 1.`, a break should be made and the new role should be added as a new line in resp_section
-                    if " 1. " in resp_line and re.search("^((?!Table\s1\.\s).)*$",resp_line):
+                    if " 1. " in resp_line and self.regex1.search(resp_line):
                         resp_section.insert(i + 1, " 1. " + resp_line.split(" 1. ", 1)[1])
                         # some sections have `1. Overview to start the responsibilties section, and these need to be bypassed
                         if "1. Overview" not in resp_line:
@@ -310,8 +287,6 @@ class ResponsibilityParser:
                         resp_section.insert(i + 1, " a. " + resp_line.split(" a. ", 1)[1])
                         next_numbering_is_role = True
                     elif entities_found_list:
-                        # multiple_roles_present = False
-                        current_role_numbering = numbering
                         section_resp_lines.append(resp_line)
                         new_role_start_metadata = {
                             "n_periods": numbering.count("."),
@@ -329,7 +304,8 @@ class ResponsibilityParser:
                             any(resp_line.endswith(pre_new_role_find_character_word + self.new_role_find_character) for
                                 pre_new_role_find_character_word in self.pre_new_role_find_character_words) or \
                             (
-                                    entities_found_list or role_acronym_found or role_is_present or any(word in resp_line for word in self.new_role_key_words)
+                                    entities_found_list or role_acronym_found or any(
+                                word in resp_line for word in self.new_role_key_words)
                             ):
                         new_role_start_metadata = {
                             "n_periods": numbering.count("."),
@@ -337,7 +313,6 @@ class ResponsibilityParser:
                             "n_numbers": sum(c.isdigit() for c in numbering),
                             "n_letters": sum(c.isalpha() for c in numbering),
                         }
-                        current_role_numbering = numbering
                         section_resp_lines.append(resp_line)
                         # if there are any entities found or if any new role keywords are present in the line
                 else:
@@ -354,20 +329,15 @@ class ResponsibilityParser:
                             "n_numbers": 1,
                             "n_letters": 0,
                         }
-                        current_role_numbering=numbering
-
-                    # elif (entities_found_list and resp_line.strip().endswith(self.new_role_find_character)) or any(
-                    #         word in resp_line for word in self.new_role_key_words):
-                    #     section_resp_lines.append(resp_line)
 
             # determine whether the current line (w/o any numbering/punctuation) is a continuation of an existing line
             # or a new line that should be captured as a new line
             else:
                 if numbering:
-                    # in some cases, there are junk sections before (inside the overall responsibiltiy section) which have
-                    # matched the logic above and acted like responsibilties, however we want to clear out the cache and start
+                    # in some cases, there are junk sections before (inside the overall responsibility section) which have
+                    # matched the logic above and acted like responsibilities, however we want to clear out the cache and start
                     # assigning responsibilities from the current line
-                    if line_text.upper().strip()=="RESPONSIBILITIES":
+                    if line_text.upper().strip() == "RESPONSIBILITIES":
                         section_resp_lines = []
                         new_role_start_metadata = {
                             "n_periods": 0,
@@ -388,7 +358,7 @@ class ResponsibilityParser:
                     # line
                     if not line_text.strip():
                         try:
-                            next_line_numbering, next_line_text = self.extract_numbering(resp_section[i+1])
+                            next_line_numbering, next_line_text = self.extract_numbering(resp_section[i + 1])
                             if next_line_numbering:
                                 section_resp_lines[-1] += f" {resp_line}"
                                 continue
@@ -399,8 +369,9 @@ class ResponsibilityParser:
                     # A new role is being assigned a set of responsibilities, so capture this as a new grouping
                     if new_role_start_metadata["n_periods"] == numbering.count(".") and \
                             new_role_start_metadata["n_parenthesis"] == numbering.count(")") and \
-                            new_role_start_metadata["n_numbers"] in [sum(c.isdigit() for c in numbering)-1, sum(c.isdigit() for c in numbering)] and \
-                            new_role_start_metadata["n_letters"] <= sum(c.isalpha() for c in numbering):  # and \
+                            new_role_start_metadata["n_numbers"] in [sum(c.isdigit() for c in numbering) - 1,
+                                                                     sum(c.isdigit() for c in numbering)] and \
+                            new_role_start_metadata["n_letters"] <= sum(c.isalpha() for c in numbering):
 
                         # if multiple different roles are not present, but we have a numbering that is similar to the
                         # numbering that assigned the role, this means there is typically an issue with the section parser
@@ -413,7 +384,6 @@ class ResponsibilityParser:
                         if section_resp_lines:
                             responsibility_section_list.append(section_resp_lines)
                             section_resp_lines = []
-                        current_role_numbering=numbering
                     section_resp_lines.append(resp_line)
                 else:
                     # if the previous line ended in punctuation, then add this text as a new line
@@ -452,7 +422,8 @@ class ResponsibilityParser:
         """
         json_file_name = json_filepath.split("/")[-1]
         try:
-            json_dict = json.load(open(json_filepath, "r"))
+            with open(json_filepath, "r") as f:
+                json_dict = json.load(f)
             title = json_dict.get(FieldNames.TITLE)
             filename = json_dict.get(FieldNames.FILENAME)
             resp_sections = json_dict.get(FieldNames.SECTIONS, {}).get(FieldNames.RESPONSIBILITIES_SECTION, [])
