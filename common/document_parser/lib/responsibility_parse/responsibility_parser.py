@@ -14,17 +14,19 @@ from common.document_parser.cli import get_default_logger
 from common.document_parser.lib.document import FieldNames
 punctuation_less_period_parentheses = set(string.punctuation).difference({".", "(", ")"})
 
-numbering_regex = re.compile("^([a-z]{1,2}\.|"
-                             "\([a-z]{1,2}\)|"
-                             "\(\d{1,2}\)|"
-                             "\d{1,2}\.*|"
-                             "\d{1,2}\.\d{1,2}\.*|"
-                             "\d{1,2}\.\d{1,2}\.\d{1,2}\.*|"
-                             "\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,2}\.*|"
-                             "\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,2}\.*|"
-                             "\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,2}\.*|"
-                             "\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,2}\.*)$",
-                             flags=re.VERBOSE)
+mid_line_numbering_regex = re.compile("^((?!(Table|Figure|Tab\.|Fig\.)\s1\.\s).)*$", flags=re.VERBOSE)
+entity_acronym_regex = re.compile("[^\(]*(\([A-Z\w\s\&\)]{2,10}\))")
+start_line_numbering_regex = re.compile("^([a-z]{1,2}\.|"
+                                        "\([a-z]{1,2}\)|"
+                                        "\(\d{1,2}\)|"
+                                        "\d{1,2}\.*|"
+                                        "\d{1,2}\.\d{1,2}\.*|"
+                                        "\d{1,2}\.\d{1,2}\.\d{1,2}\.*|"
+                                        "\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,2}\.*|"
+                                        "\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,2}\.*|"
+                                        "\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,2}\.*|"
+                                        "\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,2}\.*)$",
+                                        flags=re.VERBOSE)
 
 
 class ResponsibilityParser:
@@ -43,7 +45,6 @@ class ResponsibilityParser:
         self.break_strings = ["GLOSSARY", "Glossary", "ACRONYMS", "REFERENCES", "SUMMARY OF CHANGE",
                               "Summary of Change",
                               "Abbreviations and Acronyms", "............................"]
-        self.mid_line_num = re.compile("^((?!(Table|Figure|Tab\.|Fig\.)\s1\.\s).)*$", flags=re.VERBOSE)
 
     @staticmethod
     def extract_numbering(text):
@@ -75,7 +76,7 @@ class ResponsibilityParser:
         else:
             numbering, text_no_numbering = text.split(" ", 1)
 
-        if numbering_regex.match(numbering):
+        if start_line_numbering_regex.search(numbering):
             # items such as "(b), blah bla" are an edge case here (and is connected to the previous line such as "reference (b), bla bla"
             if not numbering.endswith(","):
                 return numbering.strip(), text_no_numbering.strip()
@@ -160,7 +161,7 @@ class ResponsibilityParser:
 
     @staticmethod
     def is_role_acronym_defined(text):
-        if re.search("[^\(]*(\([A-Z\w\s\&\)]{2,10}\))", text):
+        if entity_acronym_regex.search(text):
             return True
         else:
             return False
@@ -278,7 +279,7 @@ class ResponsibilityParser:
                 if any(word in resp_line for word in ["RESPONSIBILITIES", "Responsibilities"]):
                     # if there is a line with new role numbering in the middle of the sentence and it is not something like
                     # `Table 1.`, a break should be made and the new role should be added as a new line in resp_section
-                    if " 1. " in resp_line and self.regex1.search(resp_line):
+                    if " 1. " in resp_line and mid_line_numbering_regex.search(resp_line):
                         resp_section.insert(i + 1, " 1. " + resp_line.split(" 1. ", 1)[1])
                         # some sections have `1. Overview to start the responsibilties section, and these need to be bypassed
                         if "1. Overview" not in resp_line:
