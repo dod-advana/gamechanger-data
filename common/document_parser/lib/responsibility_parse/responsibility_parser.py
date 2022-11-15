@@ -15,9 +15,9 @@ from common.document_parser.lib.document import FieldNames
 
 punctuation_less_period_parentheses = set(string.punctuation).difference({".", "(", ")"})
 
-mid_line_start_numbering_regex = re.compile("^((?!(Table|Figure|Tab\.|Fig\.)\s1\.\s).)*$", flags=re.VERBOSE)
-entity_acronym_regex = re.compile("[^\(]*(\([A-Z\w\s\&\)]{2,10}\))")
-start_line_numbering_regex = re.compile("^([a-z]{1,2}\.|"
+mid_line_start_numbering_regex = re.compile(r"^(?:(?!(?:Table|Figure|Tab\.|Fig\.)\s1\.\s).)*$")
+entity_acronym_regex = re.compile(r"[^\(]*(?:\([A-Z\w\s\&\)]{2,10}\))")
+start_line_numbering_regex = re.compile("^(?:[a-z]{1,2}\.|"
                                         "\([a-z]{1,2}\)|"
                                         "\(\d{1,2}\)|"
                                         "\d{1,2}\.*|"
@@ -325,6 +325,7 @@ class ResponsibilityParser:
                         next_numbering_is_role = True
                     elif entities_found_list:
                         outer_new_role_start_metadata = self.construct_numbering_metadata_dict(numbering)
+                        section_resp_lines.append(resp_line)
 
                 elif numbering:
                     # for lines such as 5. RESPONSIBILITIES AND FUNCTIONS.  The Director, PFPA: - there is only one
