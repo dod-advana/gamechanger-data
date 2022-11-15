@@ -192,7 +192,7 @@ class TestResponsibilityParser(unittest.TestCase):
 
         # the blank file should throw an error
         self.assertSetEqual(self.responsibility_parser.error_files, {"blank_file.json"})
-        # the "file_missing_responsibilties.json" should be logged as a file that doesn't contain any responsibilities
+        # the "file_missing_responsibilities.json" should be logged as a file that doesn't contain any responsibilities
         self.assertSetEqual(self.responsibility_parser.files_missing_responsibility_section,
                             {"file_missing_responsibilities.json"})
         # Verify out file was created
