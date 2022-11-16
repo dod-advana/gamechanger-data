@@ -136,6 +136,180 @@ class TestResponsibilityParser(unittest.TestCase):
             self.assertListEqual(actual_output, input_output_dict['output'],
                                  msg=f"Error: test_format_responsibility_results failed on test case: {test_description}")
 
+    def test_construct_numbering_metadata_dict(self):
+        metadata_input_output_dict = {
+            "Test empty numbering": {
+                "input": "",
+                "output":{
+                    "n_periods": 0,
+                    "n_parenthesis": 0,
+                    "n_numbers": 0,
+                    "n_letters": 0,
+                }
+            },
+            "Test numbering 1": {
+                "input": "1.",
+                "output":{
+                    "n_periods": 1,
+                    "n_parenthesis": 0,
+                    "n_numbers": 1,
+                    "n_letters": 0,
+                }
+            },
+            "Test numbering 2": {
+                "input": "1.1.1.",
+                "output": {
+                    "n_periods": 3,
+                    "n_parenthesis": 0,
+                    "n_numbers": 3,
+                    "n_letters": 0,
+                }
+            },
+            "Test numbering 3": {
+                "input": "(1)",
+                "output": {
+                    "n_periods": 0,
+                    "n_parenthesis": 1,
+                    "n_numbers": 1,
+                    "n_letters": 0,
+                }
+            },
+            "Test lettering 1": {
+                "input": "a.",
+                "output": {
+                    "n_periods": 1,
+                    "n_parenthesis": 0,
+                    "n_numbers": 0,
+                    "n_letters": 1,
+                }
+            }
+            ,
+            "Test lettering 2": {
+                "input": "aa.",
+                "output": {
+                    "n_periods": 1,
+                    "n_parenthesis": 0,
+                    "n_numbers": 0,
+                    "n_letters": 2,
+                }
+            }
+            ,
+            "Test lettering 3": {
+                "input": "(a)",
+                "output": {
+                    "n_periods": 0,
+                    "n_parenthesis": 1,
+                    "n_numbers": 0,
+                    "n_letters": 1,
+                }
+            }
+        }
+
+        for test_description, input_output_dict in metadata_input_output_dict.items():
+            actual_output = self.responsibility_parser.construct_numbering_metadata_dict(input_output_dict['input'])
+            self.assertDictEqual(actual_output, input_output_dict['output'],
+                                 msg=f"Error: test_construct_numbering_metadata_dict failed on test case: "
+                                     f"{test_description}")
+
+    def test_numbering_metadata_dict_matched(self):
+        metadata_input_output_dict = {
+            "Test 1": {
+                "input": {
+                    "metadata_dict":{
+                        "n_periods": 1,
+                        "n_parenthesis": 0,
+                        "n_numbers": 1,
+                        "n_letters": 0,
+                    },
+                    "numbering": "5." },
+                "output":True
+            },
+            "Test 2": {
+                "input": {
+                    "metadata_dict":{
+                        "n_periods": 4,
+                        "n_parenthesis": 0,
+                        "n_numbers": 4,
+                        "n_letters": 0,
+                    },
+                    "numbering": "5.1.2.4."},
+                "output":True
+            },
+            "Test 3": {
+                "input": {
+                    "metadata_dict":{
+                        "n_periods": 0,
+                        "n_parenthesis": 1,
+                        "n_numbers": 1,
+                        "n_letters": 0,
+                    },
+                    "numbering": "(5)"},
+                "output":True
+            },
+            "Test 4": {
+                "input": {
+                    "metadata_dict":{
+                        "n_periods": 1,
+                        "n_parenthesis": 0,
+                        "n_numbers": 1,
+                        "n_letters": 0,
+                    },
+                    "numbering": "5.5." },
+                "output":False
+            },
+            "Test 5": {
+                "input": {
+                    "metadata_dict":{
+                        "n_periods": 0,
+                        "n_parenthesis": 1,
+                        "n_numbers": 1,
+                        "n_letters": 0,
+                    },
+                    "numbering": "5." },
+                "output":False
+            },
+            "Test 6": {
+                "input": {
+                    "metadata_dict":{
+                        "n_periods": 0,
+                        "n_parenthesis": 1,
+                        "n_numbers": 1,
+                        "n_letters": 0,
+                    },
+                    "numbering": "(a)" },
+                "output":False
+            },
+            "Test 7": {
+                "input": {
+                    "metadata_dict":{
+                        "n_periods": 0,
+                        "n_parenthesis": 1,
+                        "n_numbers": 0,
+                        "n_letters": 1,
+                    },
+                    "numbering": "(4)" },
+                "output":False
+            },
+            "Test 8": {
+                "input": {
+                    "metadata_dict":{
+                        "n_periods": 0,
+                        "n_parenthesis": 1,
+                        "n_numbers": 0,
+                        "n_letters": 1,
+                    },
+                    "numbering": "(a)" },
+                "output":True
+            }
+        }
+
+        for test_description, input_output_dict in metadata_input_output_dict.items():
+            actual_output = self.responsibility_parser.numbering_metadata_dict_matched(input_output_dict['input']["metadata_dict"],
+                                                                                       input_output_dict['input']["numbering"])
+            self.assertEqual(actual_output, input_output_dict['output'],
+                                 msg=f"Error: test_numbering_metadata_dict_matched failed on test case: "
+                                     f"{test_description}")
+
     def test_split_text_with_role_midline(self):
         input_output_dict = {
             "Work with the Director, DIA to perform responsibility X": (

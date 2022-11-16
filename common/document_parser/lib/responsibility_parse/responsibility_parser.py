@@ -262,6 +262,25 @@ class ResponsibilityParser:
             "n_letters": sum(c.isalpha() for c in numbering),
         }
 
+    @staticmethod
+    def is_larger_numbering(curr_numbering, new_numbering):
+        """
+        Returns True if new_numbering is "larger" than current numbering.
+        e.g.
+        Args:
+            curr_numbering:
+            new_numbering:
+        Returns:
+        """
+        if curr_numbering==new_numbering:
+            return False
+        curr_numbering = curr_numbering.translate(str.maketrans('', '', string.punctuation))
+        new_numbering = new_numbering.translate(str.maketrans('', '', string.punctuation))
+        if curr_numbering.isdigit() and new_numbering.isdigit():
+            curr_numbering = int(curr_numbering)
+            new_numbering = int(new_numbering)
+        return True if max(new_numbering, curr_numbering)==new_numbering else False
+
     def parse_responsibility_section(self, resp_section):
         """
         For each document's responsibility section(s), this function is the main logic and wrapper around other
@@ -280,7 +299,6 @@ class ResponsibilityParser:
         # remove all the empty lines in the resp_section and split the text into lines
         resp_section = [line.replace("\t", "").strip() for line in resp_section.split("\n") if line.strip()]
         section_resp_lines = []
-        multiple_roles_present = True
         # This metadata is used to find the characteristics of numbering which denotes a new role. I.e., these are
         # special numbering in each doc where another role will begin being assigned responsibilities. e.g.,
         # 2. Director, DIA shall:
@@ -290,7 +308,8 @@ class ResponsibilityParser:
         # anytime numbering comes up with 1 digit and 1 period, a new role is being assigned the responsibility
         outer_new_role_start_metadata = self.construct_numbering_metadata_dict("")
         next_numbering_is_role = False
-        for i,resp_line in enumerate(resp_section):
+        current_role_numbering = ""
+        for i, resp_line in enumerate(resp_section):
             if any(term in resp_line for term in self.break_strings):
                 break
             # looks ahead until next numbering occurs to pull all text for a given numbering into the "line_text" var
@@ -326,6 +345,7 @@ class ResponsibilityParser:
                     elif entities_found_list:
                         outer_new_role_start_metadata = self.construct_numbering_metadata_dict(numbering)
                         section_resp_lines.append(resp_line)
+                        current_role_numbering = numbering
 
                 elif numbering:
                     # for lines such as 5. RESPONSIBILITIES AND FUNCTIONS.  The Director, PFPA: - there is only one
@@ -342,6 +362,7 @@ class ResponsibilityParser:
                             ):
                         outer_new_role_start_metadata = self.construct_numbering_metadata_dict(numbering)
                         section_resp_lines.append(resp_line)
+                        current_role_numbering = numbering
 
             # determine whether the current line (w/o any numbering/punctuation) is a continuation of an existing line
             # or a new line that should be captured as a new line
@@ -355,6 +376,7 @@ class ResponsibilityParser:
                         # start fresh with metadata
                         outer_new_role_start_metadata = self.construct_numbering_metadata_dict("")
                         next_numbering_is_role = True
+                        current_role_numbering = ""
                         continue
 
                     # example of this edge case (the l. acts as a new numbering)
@@ -377,13 +399,7 @@ class ResponsibilityParser:
 
                     # A new role is being assigned a set of responsibilities, so capture this as a new grouping
 
-                    if self.numbering_metadata_dict_matched(outer_new_role_start_metadata, numbering):
-
-                        # if multiple different roles are not present, but we have a numbering that is similar to the
-                        # numbering that assigned the role, this means there is typically an issue with the section
-                        # parser and we should break (rather than continue adding "roles" that are not actually roles)
-                        if not multiple_roles_present:
-                            break
+                    if self.is_larger_numbering(current_role_numbering,numbering) and self.numbering_metadata_dict_matched(outer_new_role_start_metadata, numbering):
 
                         # If section_resp_lines already has information in it (i.e., a prior role has responsibility
                         # lines, then append this to responsibility_section_list and start fresh with a new
@@ -391,6 +407,8 @@ class ResponsibilityParser:
                         if section_resp_lines:
                             responsibility_section_list.append(section_resp_lines)
                             section_resp_lines = []
+
+                        current_role_numbering=numbering
                     section_resp_lines.append(resp_line)
                 else:
                     # if the previous line ended in punctuation, then add this text as a new line
