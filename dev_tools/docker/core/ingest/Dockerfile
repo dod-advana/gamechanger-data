@@ -1,49 +1,58 @@
-FROM registry1.dso.mil/ironbank/opensource/python/python38
+# Initial build stage
+FROM 092912502985.dkr.ecr.us-east-1.amazonaws.com/registry1.dso.mil/ironbank/opensource/python/python38 as builder
 
 USER root
 
-# Copying requirements file
-COPY /ingest-requirements-min.txt .
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
 
 # Install RHEL tools
 RUN \
-    dnf -y update \
-    && dnf install -y glibc-locale-source.x86_64 \
-    &&  dnf -y install \
+    dnf -y -q update \
+    &&  dnf -y -q install \
         zip \
         unzip \
-        gzip \
-        zlib \
-        zlib-devel \
-        git \
-        git-lfs \
-        make \
-        automake \
-        autoconf \
-        libtool \
-        gcc \
-        gcc-c++ \
-        gcc-gfortran \
-        libpng \
-        libpng-devel \
-        libtiff \
-        libtiff-devel \
-        libjpeg-turbo \
-        libjpeg-turbo-devel \
-        python38 \
-        python38-devel \
-        python38-Cython \
-        openblas \
-        openblas-threads \
-        diffutils \
-        file \
     && dnf clean all \
-    && rm -rf /var/cache/yum
+    && rm -rf /var/cache/dnf
 
-# Install requirements
-RUN pip install --upgrade pip setuptools wheel \
-    && pip install -r ingest-requirements-min.txt
+# Create virtualenv
+RUN python -m venv /opt/venv
+
+ENV PATH="/opt/venv/bin:$PATH"
+
+# Install ingest dependencies
+COPY /dev_tools/requirements/ingest-requirements.txt .
+
+RUN /opt/venv/bin/python -m pip install --upgrade pip \
+    && pip install --no-deps --no-cache-dir -r ingest-requirements.txt
+
+# Install AWS CLI
+RUN curl -LfSo /tmp/awscliv2.zip "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" \
+    && unzip -q /tmp/awscliv2.zip -d /opt \
+    && /opt/aws/install --bin-dir /aws-cli-bin \
+    && rm -f /tmp/awscliv2.zip
+
+# Install gamechangerml module
+COPY var/gamechanger-ml/ .
+
+RUN pip install --no-deps --no-cache-dir .
+
+# Final build stage
+FROM 092912502985.dkr.ecr.us-east-1.amazonaws.com/registry1.dso.mil/ironbank/opensource/python/python38
+
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
+COPY --from=builder /opt/venv /opt/venv
+COPY --from=builder /aws-cli-bin /usr/local/bin
+COPY --from=builder /usr/local/aws-cli /usr/local/aws-cli
+
+ENV PATH="/opt/venv/bin:$PATH"
 
 WORKDIR /gamechanger-data
 
-ENTRYPOINT [ "bash" ]
+COPY . .
+
+USER 1001                                                                                                                                                                                                                                                     
+
+ENTRYPOINT ["/bin/bash", "./tmp/crawl_ingest.sh"]
