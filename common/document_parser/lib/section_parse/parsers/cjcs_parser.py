@@ -6,6 +6,8 @@ from .utils import (
     next_letter,
     CAPITAL_ENCLOSURE,
     DD_MONTHNAME_YYYY,
+    find_first_occurrence,
+    make_linebreak_pattern,
 )
 
 
@@ -94,12 +96,29 @@ class CJCSParser(ParserDefinition):
 
     @property
     def responsibilities(self):
-        return (
+        resp = (
             self._get_responsibilities_from_enclosures()
             + self._get_numbered_section(
                 self.NUMBERED_RESPONSIBILITIES_START_PATTERN
             )
         )
+
+        # Remove duplicate responsibilities sections.
+        # For example, a responsibilities enclosure may have a numbered
+        # responsibilities section within it. In this case, we only want to keep
+        # the enclosure, since it is the largest of the 2 sections.
+        i = 0
+        while i < len(resp):
+            deleted = False
+            for j in range(len(resp)):
+                if resp[i] in resp[j] and i != j:
+                    del resp[i]
+                    deleted = True
+                    break
+            if not deleted:
+                i += 1
+
+        return resp
 
     @property
     def purpose(self):
@@ -163,11 +182,16 @@ class CJCSParser(ParserDefinition):
             start_matches = finditer(start_pattern, self._text)
 
         # Patterns for the start of the next section.
-        next_section_patterns = [
-            number_pattern,  # Numbered list item
-            r"\n\s*G(?:lossary|LOSSARY)\s*\n",  # Glossary section title
-            r"\n\s*[0-9]+\s*\n",  # Page number
-            r"\n\s*E(?:nclosures|NCLOSURES)\s*\n",  # Enclosure table of contents
+        next_section_patterns = [number_pattern]
+        next_section_patterns += [
+            make_linebreak_pattern(words)
+            for words in [
+                r"G(?:lossary|LOSSARY)",
+                r"[0-9]+",  # page number
+                r"E(?:nclosures|NCLOSURES)",
+                r"R(?:eferences|EFERENCES)",
+                r"PART [A-Z]{1,2}(?: ?[–-] ?[A-Z]+)?",
+            ]
         ]
         enclosure_title_pattern = compile(
             self._make_enclosure_title_pattern(r"[A-Z]+")
@@ -179,19 +203,14 @@ class CJCSParser(ParserDefinition):
             # next section.
             start_idx = start_match.start()
             search_start_idx = start_match.end()
-            end_match = None
-            end_idx = None
-
-            for pattern in next_section_patterns:
-                next_match = search(pattern, self._text[search_start_idx:])
-                if next_match:
-                    tmp = search_start_idx + next_match.start()
-                    if end_idx is None or tmp < end_idx:
-                        end_idx = tmp
-                        end_match = next_match
+            end_match = find_first_occurrence(
+                self._text[search_start_idx:], next_section_patterns
+            )
 
             if end_match:
-                text = self._text[start_idx:end_idx]
+                text = self._text[
+                    start_idx : search_start_idx + end_match.start()
+                ]
                 # If the next list item is numbered 1, it could be part of the
                 # next enclosure. If it is, then cut off the text before the
                 # next enclosure title.
@@ -247,13 +266,16 @@ class CJCSParser(ParserDefinition):
             )
             return None
 
-        # If the next enclosure wasn't found, find the end of the enclosure by
-        # finding the start of the Glossary section.
-        end = search(
-            self._make_enclosure_title_pattern(end_letter), self._text[start:]
-        )
-        if not end:
-            end = search(r"\n\s*G(?:lossary|LOSSARY)\s*\n", self._text[start:])
+        patterns = [self._make_enclosure_title_pattern(end_letter)]
+        patterns += [
+            make_linebreak_pattern(words)
+            for words in [
+                r"G(?:lossary|LOSSARY)",
+                r"R(?:eferences|EFERENCES)",
+                r"PART [A-Z]{1,2}(?: ?[–-] ?[A-Z]+)?",
+            ]
+        ]
+        end = find_first_occurrence(self._text[start:], patterns)
 
         if end:
             end = end.end() + start
@@ -271,6 +293,8 @@ class CJCSParser(ParserDefinition):
             UNCLASSIFIED
             A-1
             ENCLOSURE 1
+            Appendix K
+            C-K-2
 
         Args:
             text (str): The text to clean.
@@ -283,10 +307,12 @@ class CJCSParser(ParserDefinition):
 
         for pattern in [
             self._filename_pattern,
-            rf"{CAPITAL_ENCLOSURE} [A-Z]",
+            rf"{CAPITAL_ENCLOSURE}[ ][A-Z]",
             r"[A-Z]{1,2}-[0-9]+",
             "UNCLASSIFIED",
             r"\(?INTENTIONALLY BLANK\)?",
+            r"Appendix[ ][A-Z](?:[ ]To[ ]Enclosure[ ][A-Z0-9])?",
+            r"[A-Z]-[A-Z]-[0-9]{1,2}",  # Ex: "C-K-2" (for Appendix K to Enclosure C, page/ part 2)
         ]:
             text = sub(rf"{start_pattern}{pattern}{end_pattern}", "", text)
 
@@ -301,7 +327,9 @@ class CJCSParser(ParserDefinition):
         return text.strip()
 
     def _make_enclosure_title_pattern(self, enclosure_letter: str) -> str:
-        return rf"\n\s*{CAPITAL_ENCLOSURE} ({enclosure_letter})\.?\s*\n"
+        return make_linebreak_pattern(
+            rf"{CAPITAL_ENCLOSURE} ({enclosure_letter})\.?"
+        )
 
     def _make_filename_pattern(self) -> str:
         if "GDE" in self._filename_without_extension:

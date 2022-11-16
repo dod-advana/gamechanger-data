@@ -6,6 +6,8 @@ from .shared_utils import (
     CAPITAL_ENCLOSURE, 
     DD_MONTHNAME_YYYY,
     remove_pagebreaks,
+    find_first_occurrence,
+    make_linebreak_pattern,
 )
 from .dod_utils import (
     PAGEBREAK_DATE_PATTERN,
