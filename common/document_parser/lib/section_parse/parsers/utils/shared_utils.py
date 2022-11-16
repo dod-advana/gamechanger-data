@@ -1,10 +1,10 @@
 from calendar import month_name
-from re import sub, RegexFlag, VERBOSE
-from typing import List
+from re import sub, search, RegexFlag, Match, VERBOSE
+from typing import List, Union
 
 
 def make_pattern_for_uppercase_or_titlecase(s: str) -> str:
-    """Returns a string that can be used in a regex pattern to match the `s` 
+    """Returns a string that can be used in a regex pattern to match the `s`
     in uppercase titlecase.
 
     Example: input = "january", output = r"J(?:ANUARY|anuary)"
@@ -117,3 +117,33 @@ def remove_pagebreaks(
         text,
         flags=flags,
     )
+
+
+def find_first_occurrence(text: str, patterns) -> Union[Match, None]:
+    """Find the first occurrence of a pattern match (lowest start index) within 
+    the text.
+
+    Note: If 2 matches have the same start index, the returned match is the one 
+    whose pattern is first in the `patterns` param.
+
+    Args:
+        text (str): Text to search in.
+        patterns (str or re.Pattern): Patterns to search for in the text.
+
+    Returns:
+        Union[Match, None]: If a match(es) found, returns the match with the 
+            lowest start index. If no match is found, returns None.
+    """
+    first_match = None
+
+    for pattern in patterns:
+        match_ = search(pattern, text)
+        if match_:
+            if first_match is None or match_.start() < first_match.start():
+                first_match = match_
+
+    return first_match
+
+
+def make_linebreak_pattern(text):
+    return rf"\n\s*{text}\s*\n"
