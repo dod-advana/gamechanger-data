@@ -1,52 +1,73 @@
 # Pull Tesseract 5..2.0 docker image from AWS Elastic Container Registry account: 092912502985
-FROM 092912502985.dkr.ecr.us-east-1.amazonaws.com/registry1.dso.mil/ironbank/opensource/tesseract-ocr/tesseract:5.2.0
+FROM 092912502985.dkr.ecr.us-east-1.amazonaws.com/registry1.dso.mil/ironbank/opensource/tesseract-ocr/tesseract:5.2.0 as builder
 
-# Set container as a root user:
+# Set container as a root user:                                                                                                                                                                       
 USER root
 
-# Copy the gamechanger-data parsing requirements file
-COPY /dev_tools/requirements/parse_requirements.txt .
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
 
-# Install RHEL tools:
-RUN dnf -y update \
-    && dnf install -y glibc-locale-source.x86_64 \
-    && dnf -y install \
+# Install RHEL tools
+RUN \
+    dnf -y -q update \
+    &&  dnf -y -q install \
         zip \
         unzip \
-        gzip \
-        zlib \
-        zlib-devel \
-        git \
-        git-lfs \
-        make \
-        automake \
-        autoconf \
-        libtool \
-        gcc \
-        gcc-c++ \
-        gcc-gfortran \
-        libpng \
-        libpng-devel \
-        libtiff \
-        libtiff-devel \
-        libjpeg-turbo \
-        libjpeg-turbo-devel \
         python38 \
-        python38-devel.x86_64 \
-        python38-Cython \
-        openblas \
-        openblas-threads \
-        diffutils \
-        file \
+        python38-pip \
     && dnf clean all \
-    && rm -rf /var/cache/yum
+    && rm -rf /var/cache/dnf
 
-RUN ln -s /usr/bin/python3 /usr/bin/python & ln -s /usr/bin/pip3 /usr/bin/pip
+# Configure unversioned python command to python38 and create virtualenv
+RUN alternatives --set python /usr/bin/python3.8 \
+    && python -m venv /opt/venv
 
-# Install requirements
-RUN pip install --upgrade pip setuptools wheel \
-    && pip install -r parse_requirements.txt --no-deps
+ENV PATH="/opt/venv/bin:$PATH"
+
+# Install parsing dependencies
+COPY /dev_tools/requirements/parse-requirements.txt .
+
+RUN pip install --upgrade pip \
+    && pip install --no-deps --no-cache-dir -r parse-requirements.txt
+
+# Install gamechangerml module
+COPY var/gamechanger-ml/ .
+
+RUN pip install --no-deps --no-cache-dir .
+
+# Install AWS CLI
+RUN curl -LfSo /tmp/awscliv2.zip "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" \
+    && unzip -q /tmp/awscliv2.zip -d /opt \
+    && /opt/aws/install --bin-dir /aws-cli-bin \
+    && rm -f /tmp/awscliv2.zip
+
+# Final build stage
+FROM 092912502985.dkr.ecr.us-east-1.amazonaws.com/registry1.dso.mil/ironbank/opensource/tesseract-ocr/tesseract:5.2.0
+
+USER root
+
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
+COPY --from=builder /opt/venv /opt/venv
+COPY --from=builder /aws-cli-bin /usr/local/bin
+COPY --from=builder /usr/local/aws-cli /usr/local/aws-cli
+
+RUN \
+    dnf -y -q install \
+        python38 \
+        python38-pip \
+    && dnf clean all \
+    && rm -rf /var/cache/dnf \
+    && alternatives --set python /usr/bin/python3.8 
+                                                                                                                                                                                                      
+ENV PATH="/opt/venv/bin:$PATH"
 
 WORKDIR /gamechanger-data
 
-ENTRYPOINT ["bash"]
+COPY . .
+
+USER 1001                                                                                                                                                                                                                                                     
+
+ENTRYPOINT ["/bin/bash", "./ad-container-scripts/ad-reparse.sh"]
+
