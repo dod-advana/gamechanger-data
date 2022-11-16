@@ -94,13 +94,30 @@ class CJCSParser(ParserDefinition):
 
     @property
     def responsibilities(self):
-        return (
+        resp =  (
             self._get_responsibilities_from_enclosures()
             + self._get_numbered_section(
                 self.NUMBERED_RESPONSIBILITIES_START_PATTERN
             )
         )
 
+        # Remove duplicate responsibilities sections. 
+        # For example, a responsibilities enclosure may have a numbered 
+        # responsibilities section within it. In this case, we only want to keep
+        # the enclosure, since it is the largest of the 2 sections.
+        i = 0
+        while i < len(resp):
+            deleted = False
+            for j in range(len(resp)):
+                if resp[i] in resp[j] and i != j:
+                    del resp[i]
+                    deleted = True
+                    break
+            if not deleted:
+                i += 1
+
+        return resp
+            
     @property
     def purpose(self):
         return self._get_numbered_section(self.NUMBERED_PURPOSE_START_PATTERN)
