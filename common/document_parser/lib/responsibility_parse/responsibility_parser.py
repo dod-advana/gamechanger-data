@@ -20,13 +20,13 @@ entity_acronym_regex = re.compile(r"[^\(]*(?:\([A-Z\w\s\&\)]{2,10}\))")
 start_line_numbering_regex = re.compile("^(?:[a-z]{1,2}\.|"
                                         "\([a-z]{1,2}\)|"
                                         "\(\d{1,2}\)|"
-                                        "\d{1,2}\.*|"
-                                        "\d{1,2}\.\d{1,2}\.*|"
-                                        "\d{1,2}\.\d{1,2}\.\d{1,2}\.*|"
-                                        "\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,2}\.*|"
-                                        "\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,2}\.*|"
-                                        "\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,2}\.*|"
-                                        "\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,2}\.*)$",
+                                        "\d{1,2}\.|"
+                                        "\d{1,2}\.\d{1,2}\.|"
+                                        "\d{1,2}\.\d{1,2}\.\d{1,2}\.|"
+                                        "\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,2}\.|"
+                                        "\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,2}\.|"
+                                        "\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,2}\.|"
+                                        "\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,2}\.)$",
                                         flags=re.VERBOSE)
 
 
@@ -371,13 +371,13 @@ class ResponsibilityParser:
                     # in some cases, there are junk sections before (inside the overall responsibility section) which
                     # have matched the logic above and acted like responsibilities, however we want to clear out the
                     # cache and start assigning responsibilities from the current line
-                    if line_text.upper().strip() == "RESPONSIBILITIES":
-                        section_resp_lines = []
-                        # start fresh with metadata
-                        outer_new_role_start_metadata = self.construct_numbering_metadata_dict("")
-                        next_numbering_is_role = True
-                        current_role_numbering = ""
-                        continue
+                    # if line_text.upper().strip() == "RESPONSIBILITIES":
+                    #     section_resp_lines = []
+                    #     # start fresh with metadata
+                    #     outer_new_role_start_metadata = self.construct_numbering_metadata_dict("")
+                    #     next_numbering_is_role = True
+                    #     current_role_numbering = ""
+                    #     continue
 
                     # example of this edge case (the l. acts as a new numbering)
                     # (9) Conduct inquiries, inspections, and investigations as directed by

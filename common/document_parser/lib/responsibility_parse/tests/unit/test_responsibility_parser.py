@@ -70,14 +70,14 @@ class TestResponsibilityParser(unittest.TestCase):
             ## TEST 1: Responsibility text that has the role and all of the responsibilties in a single block of text
             "Test Single Responsibility Line": {
                 "input": [
-                    "2.4 The Director, DIA, in accordance with the USD(P), shall do responsibility X. They are also "
+                    "2.4. The Director, DIA, in accordance with the USD(P), shall do responsibility X. They are also "
                     "responsible for performing responsibility Y and Z."
                 ],
                 "output": [
                     {
                         "filename": file_name,
                         "documentTitle": title,
-                        "organizationPersonnelNumbering": "2.4",
+                        "organizationPersonnelNumbering": "2.4.",
                         "organizationPersonnelText": "The Director, DIA, in accordance with the USD(P), shall do "
                                                      "responsibility X. They are also responsible for performing "
                                                      "responsibility Y and Z.",
@@ -324,8 +324,8 @@ class TestResponsibilityParser(unittest.TestCase):
             "The Director, DIA shall: (a) perform responsibility X": (
                 "The Director, DIA shall:", "(a) perform responsibility X"
             ),
-            "1. The Director, DIA:1.1 Work with X to perform responsibility Y": (
-                "1. The Director, DIA:", "1.1 Work with X to perform responsibility Y"
+            "1. The Director, DIA:1.1. Work with X to perform responsibility Y": (
+                "1. The Director, DIA:", "1.1. Work with X to perform responsibility Y"
             ),
         }
         for input, expected_output in input_output_dict.items():
