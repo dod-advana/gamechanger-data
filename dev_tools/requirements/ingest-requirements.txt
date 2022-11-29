@@ -15,6 +15,7 @@ MarkupSafe==1.1.1
 neo4j==4.1.1
 numpy==1.19.5
 pandas==1.0.4
+PyPDF2==1.26.0
 pyrsistent==0.16.0
 python-dateutil==2.8.1
 pytz==2020.1
@@ -34,3 +35,7 @@ PyMuPDF==1.17.2
 regex==2020.5.14
 soupsieve==2.0.1
 s3transfer==0.3.3
+ocrmypdf==11.3.2
+pluggy==0.13.1
+pikepdf==2.16.1
+reportlab==3.5.55
