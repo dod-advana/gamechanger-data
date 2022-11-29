@@ -9,6 +9,7 @@ class Config:
     abbcount_json_path = os.path.join(PACKAGE_PATH, "data/features/abbcounts.json")
     agencies_csv_path = os.path.join(PACKAGE_PATH, "data/features/agencies.csv")
     graph_relations_xls_path = os.path.join(PACKAGE_PATH, "data/features/GraphRelations.xls")
+    hierarchy_json_path = os.path.join(PACKAGE_PATH, "data/features/entity_hierarchy_info.json")
 
     @classmethod
     @lru_cache(maxsize=None)
