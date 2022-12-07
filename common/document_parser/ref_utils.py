@@ -215,7 +215,7 @@ def make_dict():
         r"\bHQDA ?POLICY ?NOTICE ?([0-9]{1,3} ?- ?[0-9]{1})", re.IGNORECASE
     )
     ref_dict["CTA"] = re.compile(
-        r"\b(?:CTA|Common ?Table ?of ?Allowances?) ?([[0-9]{1,2} ?- ?[0-9]{3})",
+        r"\b(?:CTA|Common ?Table ?of ?Allowances?) ?([0-9]{1,2} ?- ?[0-9]{3})",
         re.IGNORECASE,
     )
     ref_dict["ATTP"] = re.compile(
