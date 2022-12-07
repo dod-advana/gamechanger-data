@@ -202,7 +202,6 @@ def process_dir(
                 results = [executor.submit(check_ocr_status_job_type, data[1]) for data in item_process]
                 reocr_count = 0
                 index = 0
-                f_name = item_process[index][1]
                 for fut in concurrent.futures.as_completed(results):
                     if not isinstance(fut, type(None)):
                         if fut.result() is not None:
@@ -211,14 +210,14 @@ def process_dir(
                                 reocr_count+=1
                                 kwargs = {#"deskew": True if ocr_job_type == OCRJobType.FORCE_OCR else False,
                                     #"rotate_pages": True,
-                                    "use_threads":True,
+                                    #"use_threads":True,
                                     "bad_pages": fut.result().get('bad_page_nums')}
                                 try:
                                     print(f"[OCR] Attempt reOCR of pages {kwargs.get('bad_pages')}")
                                     # TODO: This is not multi threaded -- we want to multithread and batch process!!!!!
                                     ocr = PDFOCR(
-                                        input_file=f_name,
-                                        output_file=f_name,
+                                        input_file=item_process[index][1],
+                                        output_file=item_process[index][1],
                                         ocr_job_type=fut.result().get('ocr_job_type'),
                                         ignore_init_errors=True,
                                         num_threads=1#num_ocr_threads
