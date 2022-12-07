@@ -1,6 +1,6 @@
 try:
     # TODO: don't hardcode the topic model date in the import
-    from gamechangerml.models.topic_model_20220125163613.tfidf import bigrams, tfidf_model
+    from gamechangerml.models.topic_model_20221129162954.tfidf import bigrams, tfidf_model
     from gamechangerml.src.text_handling.process import topic_processing
 except ImportError:
     print("[IMPORT ERROR]: No Topic Models, skipping extract_topics")
