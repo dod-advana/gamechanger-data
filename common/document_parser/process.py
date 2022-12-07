@@ -192,14 +192,14 @@ def process_dir(
 
 
         # How many elements each list should have # work around with issue on queue being over filled
-        n = 1000 # loop_number -- will be CLI input with default of 50k
+        n = 100 # loop_number -- will be CLI input; bigger this number is, more RAM required
         # using list comprehension
         process_list = [data_inputs[i * n:(i + 1) * n] for i in range((len(data_inputs) + n - 1) // n)]
         
         total_num_files = len(data_inputs)
-        for item_process in process_list:
+        for item_process in tqdm(process_list):
             with concurrent.futures.ProcessPoolExecutor(max_workers=5) as executor:
-                results = [executor.submit(check_ocr_status_job_type, data[1]) for data in tqdm(item_process)]
+                results = [executor.submit(check_ocr_status_job_type, data[1]) for data in item_process]
                 reocr_count = 0
                 index = 0
                 f_name = item_process[index][1]
@@ -221,7 +221,7 @@ def process_dir(
                                         output_file=f_name,
                                         ocr_job_type=fut.result().get('ocr_job_type'),
                                         ignore_init_errors=True,
-                                        num_threads=8#num_ocr_threads
+                                        num_threads=1#num_ocr_threads
                                     )
                                     try:
                                         is_ocr = ocr.convert(**kwargs)
@@ -240,7 +240,7 @@ def process_dir(
         print("Total OCR Time:", total_ocr_time)
         print(f"Count of documents reOCRed / total: {reocr_count} / {total_num_files}")
         # Process files
-        pool.map(single_process, data_inputs, 5)
+        pool.map(single_process, data_inputs, 100)
         # diff = time.time() - begin
         # print('MP total: ', diff)
         # print('MP avg', diff / (len(data_inputs) + 0.0001))
