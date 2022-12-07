@@ -112,6 +112,9 @@ class PDFOCR:
         exit_code = ocrmypdf.ocr(
             input_file=self.input_file,
             output_file=self.output_file,
+            output_type="pdf", # default is pdfa
+            use_threads=kwargs.get("use_threads",False),
+            pages=kwargs.get("bad_pages", None),
             skip_text=True if self.job_type == OCRJobType.SKIP_TEXT else None,
             redo_ocr=True if self.job_type == OCRJobType.REDO_OCR else None,
             force_ocr=True if self.job_type == OCRJobType.FORCE_OCR else None,
