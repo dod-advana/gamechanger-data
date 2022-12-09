@@ -197,10 +197,10 @@ def process_dir(
         process_list = [data_inputs[i * batch_size:(i + 1) * batch_size] for i in range((len(data_inputs) + batch_size - 1) // batch_size)]
         
         total_num_files = len(data_inputs)
+        reocr_count = 0
         for item_process in tqdm(process_list):
             with concurrent.futures.ProcessPoolExecutor(max_workers=5) as executor:
                 results = [executor.submit(check_ocr_status_job_type, data[1]) for data in item_process]
-                reocr_count = 0
                 index = 0
                 for fut in concurrent.futures.as_completed(results):
                     if not isinstance(fut, type(None)):
