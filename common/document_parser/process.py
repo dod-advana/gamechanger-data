@@ -148,7 +148,8 @@ def process_dir(
         multiprocess: int = False,
         ocr_missing_doc: bool = False,
         force_ocr: bool = False,
-        num_ocr_threads: int = 2
+        num_ocr_threads: int = 2,
+        batch_size: int = 100
 ):
     """
     Processes a directory of pdf files, returns corresponding Json files
@@ -192,9 +193,8 @@ def process_dir(
 
 
         # How many elements each list should have # work around with issue on queue being over filled
-        n = 100 # loop_number -- will be CLI input; bigger this number is, more RAM required
         # using list comprehension
-        process_list = [data_inputs[i * n:(i + 1) * n] for i in range((len(data_inputs) + n - 1) // n)]
+        process_list = [data_inputs[i * batch_size:(i + 1) * batch_size] for i in range((len(data_inputs) + batch_size - 1) // batch_size)]
         
         total_num_files = len(data_inputs)
         for item_process in tqdm(process_list):
@@ -220,7 +220,7 @@ def process_dir(
                                         output_file=item_process[index][1],
                                         ocr_job_type=fut.result().get('ocr_job_type'),
                                         ignore_init_errors=True,
-                                        num_threads=1#num_ocr_threads
+                                        num_threads=num_ocr_threads # default=2
                                     )
                                     try:
                                         is_ocr = ocr.convert(**kwargs)
@@ -239,7 +239,7 @@ def process_dir(
         print("Total OCR Time:", total_ocr_time)
         print(f"Count of documents reOCRed / total: {reocr_count} / {total_num_files}")
         # Process files
-        pool.map(single_process, data_inputs, 100)
+        pool.map(single_process, data_inputs, batch_size)
         # diff = time.time() - begin
         # print('MP total: ', diff)
         # print('MP avg', diff / (len(data_inputs) + 0.0001))
