@@ -238,10 +238,11 @@ def get_previous_manifest_for_crawler(crawler_used) -> typing.Tuple[set, typing.
             'utf-8').splitlines()
         if lines:
             for line in lines:
-                jsondoc = json.loads(line)
-                version_hash = jsondoc.get('version_hash', None)
-                if version_hash:
-                    previous_hashes.add(version_hash)
+                if line:  # empty str causes error with json.loads()
+                    jsondoc = json.loads(line)            
+                    version_hash = jsondoc.get('version_hash', None)
+                    if version_hash:
+                        previous_hashes.add(version_hash)
 
             # only set it if it has lines, would still be an Object otherwise
             manifest_s3_obj = s3_obj
