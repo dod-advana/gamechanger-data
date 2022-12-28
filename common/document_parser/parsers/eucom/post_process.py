@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from common.document_parser.parsers.policy_analytics.display_mappings import (
+from common.document_parser.parsers.eucom.display_mappings import (
     DISPLAY_TYPE_LOOKUP,
     CRAWLER_TO_DISPLAY_ORG_LOOKUP,
     CRAWLER_TO_DATA_SOURCE_LOOKUP,

@@ -1,15 +1,13 @@
 import re
-import json
-import argparse
-from pathlib import Path
-from common.document_parser.ref_utils import make_dict
 from collections import defaultdict
-from typing import Pattern, List
-import typing as t
+
+from common.document_parser.ref_utils import make_dict, preprocess_text
+
+
 ref_regex = make_dict()
 
 
-def look_for_general(m_str: str, ref_dict: defaultdict, base_num: t.Pattern[str], full_num: t.Pattern[str], doc_type: str) -> defaultdict:
+def look_for_general(text, ref_dict, pattern, doc_type):
     """
     Reference Extraction by Regular Expression: For general use
 
@@ -23,21 +21,43 @@ def look_for_general(m_str: str, ref_dict: defaultdict, base_num: t.Pattern[str]
     Returns:
         updated ref_dict with the references found and their counts
     """
-    # Example for dodm
-    # base_num = re.compile(r"(([A-Z]+-)?[0-9]{4}\.\s*[0-9]{1,3}\s*(-[A-Z]+)?([E])?)",re.IGNORECASE) # Example: 5025.01 or 5025.01
+    matches = pattern.findall(text)
 
-    # Example DODM
-    # dodm_full_num = re.compile(r"(((dod manual)|(dodm))\s*[0-9]{4}\.\s*[0-9]{1,3}(\s*,*\s*Volume\s*[0-9]+)?)",re.IGNORECASE) #Example: dod directive 5025.01, Volume 1 or  case insensitive
-
-    directive = full_num.findall(m_str)
-
-    if directive is not None:
-        for match in directive:
-            num_match = base_num.search(match[0])
-            if not num_match:
+    for match in matches:
+        if type(match) == tuple:
+            values = [x for x in match if x != ""]
+            if len(values) != 1:
+                print(
+                    f"ERR: Patterns in `ref_regex` should only have exactly 1 "
+                    f"non-empty capture group each. Check the pattern for {doc_type}"
+                )
+                print("text was:", text)
+                print("match was:", match)
                 continue
-            ref = (str(doc_type) + " " + str(num_match[0])).strip()
-            ref_dict[ref] += 1
+            match = values[0]
+        elif match == "":
+            continue
+
+        if doc_type == "Title":
+            try:
+                num = int(match.strip())
+            except:
+                continue
+            else:
+                if num > 53 or num == 0:
+                    continue
+        elif doc_type == "CFR Title":
+            try:
+                num = int(match.strip())
+            except:
+                continue
+            else:
+                if num > 50 or num == 0:
+                    continue
+
+        ref = (doc_type + " " + match).strip()
+        ref_dict[ref] += 1
+
     return ref_dict
 
 
@@ -52,15 +72,11 @@ def collect_ref_list(text: str) -> defaultdict:
         ref_dict with all references and their counts
     """
     ref_dict = defaultdict(int)
-    text = text.replace("\n", "")
-    # allows regex to interpret the unicode as a -
-    text = text.replace("\u2013", "-")
-    text = re.sub(r"[()]", " ", text)
+    text = preprocess_text(text)
 
-    for key, value in ref_regex.items():
-        base = value[0]
-        full = value[1]
-        ref_dict = look_for_general(text, ref_dict, base, full, key)
+    for ref_type, pattern in ref_regex.items():
+        ref_dict = look_for_general(text, ref_dict, pattern, ref_type)
+
     return ref_dict
 
 
