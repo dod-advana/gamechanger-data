@@ -104,7 +104,7 @@ def post_process(doc_dict):
             if doc_dict["meta_data"]:
                 doc_dict["file_ext_s"] = doc_dict["meta_data"]["downloadable_items"][0]["doc_type"]
                 doc_dict["display_doc_type_s"] = doc_dict["meta_data"]["doc_type"]
-                doc_dict["display_title_s"] = doc_dict["meta_data"]["num"] + " " + doc_dict["meta_data"]["doc_type"] + ": " + doc_dict["meta_data"]["doc_title"]
+                doc_dict["display_title_s"] = doc_dict["meta_data"]["doc_num"] + " " + doc_dict["meta_data"]["doc_type"] + ": " + doc_dict["meta_data"]["doc_title"]
                 doc_dict["display_org_s"] = "N/A"
                 doc_dict["data_source_s"] = "N/A"
                 doc_dict["source_title_s"] = "N/A"
