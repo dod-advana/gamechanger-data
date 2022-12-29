@@ -16,7 +16,9 @@ from common.document_parser.lib import (
     datetime_utils,
     file_utils,
 )
-from . import init_doc
+
+from common.document_parser.lib.section_parse import add_sections
+from . import post_process, init_doc
 from common.document_parser.lib.ml_features import (
     add_pagerank_r,
     add_popscore_r,
@@ -55,6 +57,7 @@ def parse(
             add_pagerank_r,
             add_popscore_r,
             text_length.add_word_count,
+            add_sections,
         ]
 
         doc_obj = pdf_reader.get_fitz_doc_obj(f_name)

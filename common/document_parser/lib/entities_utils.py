@@ -100,6 +100,10 @@ def update_ents_dict(ents, ent_type, ents_dict, ent_standardized_name=None):
                 "raw_ent": ent if not ent_standardized_name else ent_standardized_name,
                 "ent_type": ent_type,
             }
+            ents_dict[ent_alphanum.upper()] = {
+                "raw_ent": ent,
+                "ent_type": ent_type,
+            }
 
 
 def remove_overlapping_ents(ents):
