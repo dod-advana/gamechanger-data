@@ -20,7 +20,10 @@ class TestItem:
     def verify_type(self):
         self._get_actual_output()
         actual_type = type(self.actual_output)
-        expected_type = type(self.expected_output)
+        if type(self.expected_output) == type:
+            expected_type = self.expected_output
+        else:
+            expected_type = type(self.expected_output)
         self.test_obj.assertEqual(
             actual_type,
             expected_type,

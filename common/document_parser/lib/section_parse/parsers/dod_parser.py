@@ -1,8 +1,6 @@
-from os.path import splitext, split, basename
+from os.path import splitext
 from re import match, search, fullmatch, IGNORECASE
 from typing import List
-from gamechangerml.src.utilities.text_utils import utf8_pass
-from common.document_parser.lib.document import FieldNames
 from .parser_definition import ParserDefinition
 from .utils import (
     find_pagebreak_date,
@@ -26,7 +24,6 @@ class DoDParser(ParserDefinition):
 
     def __init__(self, doc_dict: dict, test_mode: bool = False):
         super().__init__(doc_dict, test_mode)
-        self._filename = basename(self.doc_dict[FieldNames.FILENAME])
         self._set_pagebreak_text()
         if not self.test_mode:
             self._parse()
@@ -115,7 +112,7 @@ class DoDParser(ParserDefinition):
         return self._get_section_by_title("summary of change")
 
     def _parse(self) -> None:
-        raw_text = self._get_raw_text()
+        raw_text = self.get_raw_text()
         if not raw_text:
             return
 
@@ -133,14 +130,13 @@ class DoDParser(ParserDefinition):
         self._combine_enclosures_list()
 
     def _set_pagebreak_text(self):
-        doc_type = split(self.doc_dict[FieldNames.DOC_TYPE])[1]
         doc_num = match(
             r"DoD[IMD] ((?:[A-Z]-)?[1-9][0-9]{3}(?:\.[0-9]{1,2}))",
             self._filename,
         )
 
         if doc_num:
-            self._pagebreak_text = " ".join([doc_type, doc_num.groups()[0]])
+            self._pagebreak_text = " ".join([self._doc_type, doc_num.groups()[0]])
         else:
             self._logger.warning(
                 f"Document number not found in filename: `{self._filename}`. "
@@ -178,26 +174,6 @@ class DoDParser(ParserDefinition):
             ),
             [],
         )
-
-    def _get_raw_text(self) -> str:
-        field = FieldNames.TEXT
-
-        try:
-            raw_text = self.doc_dict[field]
-        except KeyError:
-            self._logger.exception(
-                f"Document `{self._filename}` is missing field `{field}`. "
-                "Cannot parse sections."
-            )
-            raw_text = ""
-        else:
-            if raw_text == "":
-                self._logger.warning(
-                    f"Document `{self._filename}` has empty value for field "
-                    f"`{field}`. Cannot parse sections. "
-                )
-
-        return utf8_pass(raw_text)
 
     def _combine_toc(self) -> None:
         """Updates self._sections so that all lines of the Table of Contents 
@@ -701,6 +677,14 @@ class DoDParser(ParserDefinition):
                     if not starts_with_glossary(subsection.strip())
                 ]
                 continue
+            
+            enclosure_num = match_enclosure_num(first_subsection)
+            if enclosure_num:
+                self._sections[i][1:] = [
+                    subsection
+                    for subsection in self._sections[i][1:]
+                    if not match_enclosure_num(subsection.strip(), enclosure_num)
+                ]
 
             self._sections[i][1:] = [
                 subsection
@@ -730,9 +714,13 @@ class DoDParser(ParserDefinition):
             `pagebreak_text` = "DoDD 4124.01"
             returns: "ENCLOSURE 1 RESPONSIBILITIES"
         """
+        pagebreak_match = match(
+            rf"{self._pagebreak_text}(?:[-,]? ?V(?:olume|OLUME)? ?[0-9]{{1,3}})?,?",  # optional volume number
+            text
+        )
 
-        if self._pagebreak_text and text.startswith(self._pagebreak_text):
-            text = text.lstrip(self._pagebreak_text).lstrip()
+        if self._pagebreak_text and pagebreak_match:
+            text = text[pagebreak_match.end():].lstrip()
             date_span = find_pagebreak_date(text)
             if date_span is not None and date_span[0] < 5:
                 text = text[date_span[1] :].strip()

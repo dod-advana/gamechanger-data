@@ -1,6 +1,11 @@
 from itertools import chain
 from typing import List
 from common.document_parser.cli import get_default_logger
+from os.path import basename, split
+from typing import List
+from gamechangerml.src.utilities.text_utils import utf8_pass
+from common.document_parser.cli import get_default_logger
+from common.document_parser.lib.document import FieldNames
 
 
 class ParserDefinition:
@@ -15,7 +20,7 @@ class ParserDefinition:
         all_sections (list of list of str): All sections of the document.
 
         num_of_sections (int): The length of `all_sections`.
-
+        
         purpose (list of str): Purpose sections of the document.
 
         responsibilities (list of str): Responsibilities (list of str): sections
@@ -58,7 +63,9 @@ class ParserDefinition:
             doc_dict (dict): The document as a dictionary.
             test_mode (bool, optional): Defaults to False.
         """
-        self.doc_dict = doc_dict
+        self.doc_dict = doc_dict.copy()
+        self._filename = basename(self.doc_dict[FieldNames.FILENAME])
+        self._doc_type = split(self.doc_dict[FieldNames.DOC_TYPE])[1]
         self.test_mode = test_mode
         self._sections = []
         self._logger = get_default_logger()
@@ -162,3 +169,23 @@ class ParserDefinition:
         self._sections[start : end + 1] = [
             list(chain.from_iterable(self._sections[start : end + 1]))
         ]
+
+    def get_raw_text(self) -> str:
+        field = FieldNames.TEXT
+
+        try:
+            raw_text = self.doc_dict[field]
+        except KeyError:
+            self._logger.exception(
+                f"Document `{self._filename}` is missing field `{field}`. "
+                "Cannot parse sections."
+            )
+            raw_text = ""
+        else:
+            if raw_text == "":
+                self._logger.warning(
+                    f"Document `{self._filename}` has empty value for field "
+                    f"`{field}`. Cannot parse sections. "
+                )
+
+        return utf8_pass(raw_text)

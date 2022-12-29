@@ -1,6 +1,7 @@
 from unittest import TestCase
 from os.path import join
 from json import load, dump
+from typing import Union, List
 
 
 class ParserTestItem:
@@ -54,10 +55,14 @@ class ParserTestItem:
         with open(self.actual_output_path, "w") as f:
             dump(actual_output, f)
 
-    def verify_num_of_sections(self, actual_output, key: str):
+    def verify_num_of_sections(self, actual_output, key: Union[str, None] = None):
         """Verify that the actual output has the same number of sections as the
         object's expected output."""
-        expected_output = self.expected_output[key]
+        if key is None:
+            expected_output = self.expected_output
+        else:
+            expected_output = self.expected_output[key]
+
         expected_len = len(expected_output)
         actual_len = len(actual_output)
 
@@ -71,10 +76,14 @@ class ParserTestItem:
             f"Actual number of sections: {actual_len}.",
         )
 
-    def verify_sections_content(self, actual_output, key: str):
+    def verify_sections_content(self, actual_output, key: Union[str, None] = None):
         """Verify that the content of each section in the actual output is the
         same as the expected output."""
-        expected = self.expected_output[key]
+        if key is None:
+            expected = self.expected_output
+        else:
+            expected = self.expected_output[key]
+
         incorrect_inds = [
             i for i in range(len(expected)) if expected[i] != actual_output[i]
         ]
