@@ -2,7 +2,8 @@ import boto3
 import tempfile
 from zipfile import ZipFile
 from io import BytesIO
-from notification import slack, notify_with_tb
+from notification import slack
+from notification.slack import notify_with_tb
 import json
 import typing
 import datetime
@@ -101,8 +102,6 @@ def filter_and_move():
                 # sorting through the version hashes and checking for new files
                 for name in zip_names:
                     if name.endswith('.metadata'):
-                        # clean the metadata in case of utf8 errors
-                        clean_metadata_utf8(name)
                         with zf.open(name) as metadata:
                             # we need to correct the metadata for utf-8 first, then read everything else
                             data = metadata.read()
@@ -304,15 +303,6 @@ def upload_jsonlines(lines: typing.List[dict], filename: str, prefix: str, bucke
             Key=key
         )
     new_file.close()  # extra close just to be safe
-
-
-def clean_metadata_utf8(name):
-    with open(name, 'r+') as f:
-        content = f.read()
-        decoded_data = codecs.decode(content.encode(), 'utf-8-sig')
-        f.seek(0)
-        json.dump(json.loads(decoded_data), f)
-        f.truncate()
 
 
 if __name__ == '__main__':
