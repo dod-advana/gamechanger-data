@@ -63,8 +63,8 @@ def make_entities_lookup_dict(
                 for i in df.index:
                     update_ents_dict(df.loc[i, "Parent"], "ORG", ents_dict)
             elif col == "Aliases":
-                for ents in df[col]:
-                    update_ents_dict(ents.split(";"), ent_type, ents_dict)
+                for ent_standardized_name, ents in df[["Name",col]].itertuples(index=False):
+                    update_ents_dict(ents.split(";"), ent_type, ents_dict, ent_standardized_name)
             else:
                 for ent in df[col]:
                     update_ents_dict(ent, ent_type, ents_dict)
@@ -78,7 +78,7 @@ def make_entities_lookup_dict(
     return ents_dict
 
 
-def update_ents_dict(ents, ent_type, ents_dict):
+def update_ents_dict(ents, ent_type, ents_dict, ent_standardized_name=None):
     """Helper function used in make_entities_lookup_dict(). Used to add values 
     to the entities lookup dictionary.
 
@@ -86,6 +86,8 @@ def update_ents_dict(ents, ent_type, ents_dict):
         ents (str or list of str): Entities to add to ents_dict.
         ent_type (str): The type of entity/ entities being added to ents_dict.
         ent_dict (dict): Dictionary such that keys (str) are
+        ent_standardized_name (str): Standardized name of the entity (specifically for aliases) that should be used
+                                     in the name mapping
     """
     if type(ents) == str:
         ents = [ents]
@@ -95,7 +97,7 @@ def update_ents_dict(ents, ent_type, ents_dict):
         ent_alphanum = replace_nonalpha_chars(ent, "")
         if ent_alphanum != "":
             ents_dict[ent_alphanum] = {
-                "raw_ent": ent,
+                "raw_ent": ent if not ent_standardized_name else ent_standardized_name,
                 "ent_type": ent_type,
             }
             ents_dict[ent_alphanum.upper()] = {

@@ -52,6 +52,7 @@ class ParserDefinition:
 
         summary of change (list of str): Summary of Change sections of the document.
     """
+
     # Document types supported by the parser.
     SUPPORTED_DOC_TYPES = []
 
