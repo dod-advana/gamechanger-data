@@ -1,4 +1,4 @@
-from gamechangerml.src.configs import BertSummConfig
+from gamechangerml.configs import BertSummConfig
 from gamechangerml.src.featurization.summary import GensimSumm
 
 
