@@ -2,7 +2,8 @@ import boto3
 import tempfile
 from zipfile import ZipFile
 from io import BytesIO
-from notification import slack, notify_with_tb
+from notification import slack
+from notification.slack import notify_with_tb
 import json
 import typing
 import datetime
