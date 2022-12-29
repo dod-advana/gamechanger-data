@@ -181,10 +181,12 @@ class CrawlerStatusTracker:
 
 
         for crawler in crawler_batched_filenames:
+            update_body['query']['bool']['must'][1]['term']['crawler_used_s'] = crawler
             revoked_filenames = crawler_batched_filenames[crawler]['revoked']
             unrevoked_filenames = crawler_batched_filenames[crawler]['unrevoked']
             # Update revoked files
             # If there are more than the max updates we can make in one update_by_query, loop through and batch process them
+            update_body['script']['params']['is_revoked_b'] = True
             if len(revoked_filenames) > max_updates:
                 for i in range(0, len(revoked_filenames), max_updates):
                     update_body['query']['bool']['must'][0]['terms']['filename'] = revoked_filenames[0+i:max_updates+i]
