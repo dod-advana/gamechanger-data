@@ -6,6 +6,7 @@ class FieldNames:
     DOC_NUM = "doc_num"
     ID = "id"
     TYPE = "type"
+    TITLE = "title"
 
     TEXT = "text"  # Text of the entire document.
 
