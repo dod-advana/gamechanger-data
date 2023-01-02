@@ -86,39 +86,26 @@ def parse(
 def post_process(doc_dict):
     doc_dict["raw_text"] = utf8_pass(doc_dict["text"])
     doc_dict["text"] = clean_text(doc_dict["text"])
-    try:
-        if doc_dict["meta_data"]:
-            doc_dict["file_ext_s"] = doc_dict["meta_data"]["file_ext"]
-            doc_dict["display_doc_type_s"] = doc_dict["meta_data"]["display_doc_type"]
-            doc_dict["display_title_s"] = doc_dict["meta_data"]["display_title"]
-            doc_dict["display_org_s"] = doc_dict["meta_data"]["display_org"]
-            doc_dict["data_source_s"] = doc_dict["meta_data"]["data_source"]
-            doc_dict["source_title_s"] = doc_dict["meta_data"]["source_title"]
-            doc_dict["display_source_s"] = doc_dict["meta_data"]["display_source"]
-            doc_dict["access_timestamp_dt"] = datetime_utils.get_access_timestamp(doc_dict["meta_data"])
-            doc_dict["publication_date_dt"] = datetime_utils.get_publication_date(doc_dict["meta_data"])
-            doc_dict["is_revoked_b"] = doc_dict["meta_data"]["is_revoked"]
-        else:
-            doc_dict["is_revoked_b"] = False
-    except:
-        # then we're using old data with just a doc_type.
-        print("USING OLD METADATA EXTRACTOR")
-        try:
-            if doc_dict["meta_data"]:
-                doc_dict["file_ext_s"] = doc_dict["meta_data"]["downloadable_items"][0]["doc_type"]
-                doc_dict["display_doc_type_s"] = doc_dict["meta_data"]["doc_type"]
-                doc_dict["display_title_s"] = doc_dict["meta_data"]["doc_type"] + " " + doc_dict["meta_data"]["doc_num"] + ": " + doc_dict["meta_data"]["doc_title"]
-                doc_dict["display_org_s"] = "N/A"
-                doc_dict["data_source_s"] = "N/A"
-                doc_dict["source_title_s"] = "N/A"
-                doc_dict["display_source_s"] = "N/A"
-                doc_dict["access_timestamp_dt"] = datetime_utils.get_access_timestamp(doc_dict["meta_data"])
-                doc_dict["publication_date_dt"] = datetime_utils.get_publication_date(doc_dict["meta_data"])
-                doc_dict["is_revoked_b"] = False
-            else:
-                doc_dict["is_revoked_b"] = False
-        except Exception as e:
-            raise e
+
+    # because an old format of the metadata could exist, we need to check if the entry exists in each assignment
+    if doc_dict["meta_data"]:
+        doc_dict["file_ext_s"] = doc_dict["meta_data"]["file_ext"] if "file_ext" in doc_dict["meta_data"] \
+            else doc_dict["meta_data"]["downloadable_items"][0]["doc_type"]
+        doc_dict["display_doc_type_s"] = doc_dict["meta_data"]["display_doc_type"] if "display_doc_type" in doc_dict["meta_data"] \
+            else doc_dict["meta_data"]["doc_type"]
+        doc_dict["display_title_s"] = doc_dict["meta_data"]["display_title"] if "display_title" in doc_dict["meta_data"] \
+            else doc_dict["meta_data"]["doc_type"] + " " + doc_dict["meta_data"]["doc_num"] + ": " + doc_dict["meta_data"]["doc_title"]
+        doc_dict["display_org_s"] = doc_dict["meta_data"]["display_org"] if "display_org" in doc_dict["meta_data"] \
+            else "N/A"
+        doc_dict["source_title_s"] = doc_dict["meta_data"]["source_title"] if "source_title" in doc_dict["meta_data"] \
+            else "N/A"
+        doc_dict["display_source_s"] = doc_dict["meta_data"]["display_source"] if "display_source" in doc_dict["meta_data"] \
+            else "N/A"
+        doc_dict["access_timestamp_dt"] = datetime_utils.get_access_timestamp(doc_dict["meta_data"])
+        doc_dict["publication_date_dt"] = datetime_utils.get_publication_date(doc_dict["meta_data"])
+        doc_dict["is_revoked_b"] = False
+    else:
+        doc_dict["is_revoked_b"] = False
 
     to_rename = [
         ("txt_length", "text_length_r"),
