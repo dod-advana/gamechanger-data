@@ -3,8 +3,8 @@
     "settings": {
       "index.mapping.nested_objects.limit": 100000,
       "index": {
-        "number_of_shards": 1,
-        "number_of_replicas": 0,
+        "number_of_shards": 3,
+        "number_of_replicas": 2,
         "mapping.nested_fields.limit": 20000
       },
       "analysis": {
@@ -17,33 +17,33 @@
             ]
           }
         },
-      "filter": {
-        "gc_stop": {
-          "type":       "stop",
-          "stopwords":  []
+        "filter": {
+          "gc_stop": {
+            "type": "stop",
+            "stopwords": []
+          },
+          "english_stemmer": {
+            "type": "stemmer",
+            "language": "english"
+          },
+          "english_possessive_stemmer": {
+            "type": "stemmer",
+            "language": "possessive_english"
+          }
         },
-        "english_stemmer": {
-          "type":       "stemmer",
-          "language":   "english"
-        },
-        "english_possessive_stemmer": {
-          "type":       "stemmer",
-          "language":   "possessive_english"
-        }
-      },
-      "analyzer": {
-        "gc_english": {
-          "tokenizer":  "standard",
-          "filter": [
-            "english_possessive_stemmer",
-            "lowercase",
-            "gc_stop",
-            "english_stemmer"
-          ]
+        "analyzer": {
+          "gc_english": {
+            "tokenizer": "standard",
+            "filter": [
+              "english_possessive_stemmer",
+              "lowercase",
+              "gc_stop",
+              "english_stemmer"
+            ]
+          }
         }
       }
-    }
-  },
+    },
     "mappings": {
       "dynamic_templates": [
         {
@@ -68,22 +68,22 @@
           }
         },
         {
-        "string_text": {
-          "match": "*_ks",
-          "match_mapping_type": "string",
-          "mapping": {
-            "type": "keyword",
-            "store": true,
-            "fields": {
-              "search": {
-                "type": "keyword",
-                "normalizer": "lowercase_normalizer"
+          "string_text": {
+            "match": "*_ks",
+            "match_mapping_type": "string",
+            "mapping": {
+              "type": "keyword",
+              "store": true,
+              "fields": {
+                "search": {
+                  "type": "keyword",
+                  "normalizer": "lowercase_normalizer"
+                }
               }
             }
           }
-        }
-      },
-      {
+        },
+        {
           "integer": {
             "match": "*_i",
             "match_mapping_type": "long",
@@ -147,8 +147,8 @@
           "rank_feature": {
             "match": "*_r",
             "mapping": {
-            "type": "rank_feature",
-            "store": true
+              "type": "rank_feature",
+              "store": true
             }
           }
         },
@@ -156,8 +156,8 @@
           "rank_features": {
             "match": "*_rs",
             "mapping": {
-            "type": "rank_features",
-            "store": true
+              "type": "rank_features",
+              "store": true
             }
           }
         },
@@ -168,29 +168,29 @@
               "type": "nested"
             }
           }
-      },
-      {
-        "default_type": {
-          "path_match": "*",
-          "mapping": {
-            "type": "text",
-            "store": true,
-            "fields": {
-              "keyword": {
-                "type": "keyword",
-                "store": true,
-                "ignore_above": 256,
-                "fields": {
-                  "search": {
-                    "type": "keyword",
-                    "normalizer": "lowercase_normalizer",
-                    "ignore_above": 256
+        },
+        {
+          "default_type": {
+            "path_match": "*",
+            "mapping": {
+              "type": "text",
+              "store": true,
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "store": true,
+                  "ignore_above": 256,
+                  "fields": {
+                    "search": {
+                      "type": "keyword",
+                      "normalizer": "lowercase_normalizer",
+                      "ignore_above": 256
+                    }
                   }
                 }
               }
             }
           }
-        }
         }
       ],
       "properties": {
@@ -332,7 +332,7 @@
         "title": {
           "type": "keyword",
           "store": true,
-          "fields" : {
+          "fields": {
             "search": {
               "type": "keyword",
               "normalizer": "lowercase_normalizer"
@@ -350,6 +350,53 @@
         "category_2": {
           "type": "keyword",
           "store": true
+        },
+        "sections": {
+          "type": "object",
+          "properties": {
+            "all_sections": {
+              "type": "text"
+            },
+            "responsibilities_section": {
+              "type": "text"
+            },
+            "references_section": {
+              "type": "text"
+            },
+            "purpose_section": {
+              "type": "text"
+            },
+            "subject_section": {
+              "type": "text"
+            },
+            "procedures_section": {
+              "type": "text"
+            },
+            "effective_date": {
+              "type": "text"
+            },
+            "applicability_section": {
+              "type": "text"
+            },
+            "policy_section": {
+              "type": "text"
+            },
+            "organizations_section": {
+              "type": "text"
+            },
+            "definitions_section": {
+              "type": "text"
+            },
+            "table_of_contents": {
+              "type": "text"
+            },
+            "glossary_section": {
+              "type": "text"
+            },
+            "summary_of_change_section": {
+              "type": "text"
+            }
+          }
         },
         "paragraphs": {
           "dynamic": "true",
