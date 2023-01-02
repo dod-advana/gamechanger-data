@@ -18,7 +18,7 @@ from common.document_parser.lib import (
 )
 
 from common.document_parser.lib.section_parse import add_sections
-from . import post_process, init_doc
+from . import init_doc
 from common.document_parser.lib.ml_features import (
     add_pagerank_r,
     add_popscore_r,
