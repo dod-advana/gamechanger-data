@@ -96,11 +96,11 @@ def post_process(doc_dict):
         doc_dict["display_title_s"] = doc_dict["meta_data"]["display_title"] if "display_title" in doc_dict["meta_data"] \
             else doc_dict["meta_data"]["doc_type"] + " " + doc_dict["meta_data"]["doc_num"] + ": " + doc_dict["meta_data"]["doc_title"]
         doc_dict["display_org_s"] = doc_dict["meta_data"]["display_org"] if "display_org" in doc_dict["meta_data"] \
-            else "N/A"
+            else "Uncategorized"
         doc_dict["source_title_s"] = doc_dict["meta_data"]["source_title"] if "source_title" in doc_dict["meta_data"] \
-            else "N/A"
+            else "Uncategorized"
         doc_dict["display_source_s"] = doc_dict["meta_data"]["display_source"] if "display_source" in doc_dict["meta_data"] \
-            else "N/A"
+            else "Uncategorized"
         doc_dict["access_timestamp_dt"] = datetime_utils.get_access_timestamp(doc_dict["meta_data"])
         doc_dict["publication_date_dt"] = datetime_utils.get_publication_date(doc_dict["meta_data"])
         doc_dict["is_revoked_b"] = False
