@@ -175,7 +175,7 @@ class Neo4jJobManager:
                 print("Creating node2vec properties ... ", file=sys.stderr)
 
                 session.run(
-                    "CALL gds.alpha.node2vec.write( " +
+                    "CALL gds.beta.node2vec.write( " +
                     "   { " +
                     "       nodeProjection: ['Document', 'Entity', 'Topic', 'UKN_Document'], " +
                     "       relationshipProjection: ['REFERENCES', 'REFERENCES_UKN', 'CHILD_OF', 'CONTAINS', 'MENTIONS', 'IS_IN', 'HAS_HEAD', 'HAS_ROLE', 'TYPE_OF'], " +
