@@ -149,6 +149,7 @@ class Neo4jJobManager:
         publisher.populate_crowdsourced_ents()
         publisher.process_orgs()
         publisher.process_roles()
+        publisher.ingest_hierarchy_information()
 
         q = mp.Queue()
         proc = mp.Process(target=self.listener, args=(q, len(files)))
@@ -174,10 +175,10 @@ class Neo4jJobManager:
                 print("Creating node2vec properties ... ", file=sys.stderr)
 
                 session.run(
-                    "CALL gds.alpha.node2vec.write( " +
+                    "CALL gds.beta.node2vec.write( " +
                     "   { " +
                     "       nodeProjection: ['Document', 'Entity', 'Topic', 'UKN_Document'], " +
-                    "       relationshipProjection: ['REFERENCES', 'REFERENCES_UKN', 'CHILD_OF', 'RELATED_TO', 'CONTAINS', 'MENTIONS', 'IS_IN', 'HAS_HEAD', 'HAS_ROLE', 'TYPE_OF'], " +
+                    "       relationshipProjection: ['REFERENCES', 'REFERENCES_UKN', 'CHILD_OF', 'CONTAINS', 'MENTIONS', 'IS_IN', 'HAS_HEAD', 'HAS_ROLE', 'TYPE_OF'], " +
                     "       relationshipProperties: ['count', 'relevancy'], " +
                     "       embeddingDimension: 64, " +
                     "       walkLength: 10, " +
