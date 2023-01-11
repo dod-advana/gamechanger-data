@@ -201,8 +201,7 @@ def process_dir(
         for item_process in tqdm(process_list):
             with concurrent.futures.ProcessPoolExecutor(max_workers=5) as executor:
                 results = [executor.submit(check_ocr_status_job_type, data[1]) for data in item_process]
-                index = 0
-                for fut in concurrent.futures.as_completed(results):
+                for index, fut in enumerate(concurrent.futures.as_completed(results)):
                     if not isinstance(fut, type(None)):
                         if fut.result() is not None:
                             ocrd_pdf = fut.result().get('successful_ocr')
@@ -230,7 +229,6 @@ def process_dir(
                                 except Exception as ex:
                                     print(ex)
                                     is_ocr = False
-                    index+=1
         
         end_ocr_time = datetime.now()
         end_ocr_time_dispaly = end_ocr_time.strftime("%H:%M:%S")
