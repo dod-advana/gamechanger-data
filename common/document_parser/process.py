@@ -14,6 +14,13 @@ from .lib.pdf_reader import PageCountParse
 import time
 import importlib
 
+# Added for missed page fix
+import concurrent.futures
+from tqdm import tqdm
+from common.utils.file_utils import is_pdf, is_ocr_pdf, is_encrypted_pdf, check_ocr_status_job_type
+from ocrmypdf import SubprocessOutputError
+from dataPipelines.gc_ocr.utils import PDFOCR, OCRJobType
+
 
 class UnparseableDocument(Exception):
     """Document was unsuitable for parsing, for some reason"""
@@ -94,7 +101,6 @@ def single_process(data_inputs: typing.Tuple[typing.Callable, str, str, bool, in
     )
 
     try:
-
         if not meta_data:
             parse_func(f_name=f_name, meta_data=meta_data, ocr_missing_doc=ocr_missing_doc,
                        num_ocr_threads=num_ocr_threads, force_ocr=force_ocr, out_dir=out_dir)
@@ -142,7 +148,8 @@ def process_dir(
         multiprocess: int = False,
         ocr_missing_doc: bool = False,
         force_ocr: bool = False,
-        num_ocr_threads: int = 2
+        num_ocr_threads: int = 2,
+        batch_size: int = 100
 ):
     """
     Processes a directory of pdf files, returns corresponding Json files
@@ -178,7 +185,59 @@ def process_dir(
             pool = multiprocessing.Pool(
                 processes=int(multiprocess), maxtasksperchild=1)
         doc_logger.info("Processing pool: %s", str(pool))
-        pool.map(single_process, data_inputs, 5)
+        
+        # ReOCR PDF if need (ex: page is missing)
+        start_ocr_time = datetime.now()
+        start_ocr_time_display = start_ocr_time.strftime("%H:%M:%S")
+        print("Start reOCR Time =", start_ocr_time_display)
+
+
+        # How many elements each list should have # work around with issue on queue being over filled
+        # using list comprehension
+        process_list = [data_inputs[i * batch_size:(i + 1) * batch_size] for i in range((len(data_inputs) + batch_size - 1) // batch_size)]
+        
+        total_num_files = len(data_inputs)
+        reocr_count = 0
+        for item_process in tqdm(process_list):
+            with concurrent.futures.ProcessPoolExecutor(max_workers=5) as executor:
+                results = [executor.submit(check_ocr_status_job_type, data[1]) for data in item_process]
+                for index, fut in enumerate(concurrent.futures.as_completed(results)):
+                    if not isinstance(fut, type(None)):
+                        if fut.result() is not None:
+                            ocrd_pdf = fut.result().get('successful_ocr')
+                            if is_pdf(str(item_process[index][1])) and not ocrd_pdf and not is_encrypted_pdf(str(item_process[index][1])):
+                                reocr_count+=1
+                                kwargs = {#"deskew": True if ocr_job_type == OCRJobType.FORCE_OCR else False,
+                                    #"rotate_pages": True,
+                                    #"use_threads":True,
+                                    "bad_pages": fut.result().get('bad_page_nums')}
+                                try:
+                                    print(f"[OCR] Attempt reOCR of pages {kwargs.get('bad_pages')}")
+                                    # TODO: This is not multi threaded -- we want to multithread and batch process!!!!!
+                                    ocr = PDFOCR(
+                                        input_file=item_process[index][1],
+                                        output_file=item_process[index][1],
+                                        ocr_job_type=fut.result().get('ocr_job_type'),
+                                        ignore_init_errors=True,
+                                        num_threads=num_ocr_threads # default=2
+                                    )
+                                    try:
+                                        is_ocr = ocr.convert(**kwargs)
+                                    except SubprocessOutputError as e:
+                                        print(e)
+                                        is_ocr = False
+                                except Exception as ex:
+                                    print(ex)
+                                    is_ocr = False
+        
+        end_ocr_time = datetime.now()
+        end_ocr_time_dispaly = end_ocr_time.strftime("%H:%M:%S")
+        total_ocr_time = end_ocr_time - start_ocr_time
+        print("End  reOCR  Time =", end_ocr_time_dispaly)
+        print("Total OCR Time:", total_ocr_time)
+        print(f"Count of documents reOCRed / total: {reocr_count} / {total_num_files}")
+        # Process files
+        pool.map(single_process, data_inputs, batch_size)
         # diff = time.time() - begin
         # print('MP total: ', diff)
         # print('MP avg', diff / (len(data_inputs) + 0.0001))
