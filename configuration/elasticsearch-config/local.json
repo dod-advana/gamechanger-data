@@ -273,15 +273,25 @@
             }
           }
         },
-        "display_title_s": {
-          "type": "keyword",
+        "display_title": {
+          "type": "text",
           "store": true,
           "fields": {
-            "search": {
+            "gc_english": {
+              "type": "text",
+              "term_vector": "with_positions_offsets",
+              "analyzer": "gc_english"
+            },
+            "raw": {
+              "type": "keyword"
+            },
+            "raw_lower": {
               "type": "keyword",
               "normalizer": "lowercase_normalizer"
             }
-          }
+          },
+          "term_vector": "with_positions_offsets",
+          "analyzer": "standard"
         },
         "doc_num": {
           "type": "keyword",
