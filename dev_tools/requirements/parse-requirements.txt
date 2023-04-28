@@ -1,4 +1,4 @@
-arabic-reshaper==2.1.0
+arabic-reshaper==3.0.0
 attrs==19.3.0
 beautifulsoup4==4.9.1
 blis==0.4.1

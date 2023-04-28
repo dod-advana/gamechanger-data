@@ -36,10 +36,7 @@ COPY var/gamechanger-ml/ .
 RUN pip install --no-deps --no-cache-dir .
 
 # Install AWS CLI
-RUN curl -LfSo /tmp/awscliv2.zip "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" \
-    && unzip -q /tmp/awscliv2.zip -d /opt \
-    && /opt/aws/install --bin-dir /aws-cli-bin \
-    && rm -f /tmp/awscliv2.zip
+RUN pip install awscli==1.27.32
 
 # Final build stage
 FROM 092912502985.dkr.ecr.us-east-1.amazonaws.com/registry1.dso.mil/ironbank/opensource/tesseract-ocr/tesseract:5.2.0
@@ -50,8 +47,6 @@ ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
 COPY --from=builder /opt/venv /opt/venv
-COPY --from=builder /aws-cli-bin /usr/local/bin
-COPY --from=builder /usr/local/aws-cli /usr/local/aws-cli
 
 RUN \
     dnf -y -q install \
@@ -59,15 +54,15 @@ RUN \
         python38-pip \
     && dnf clean all \
     && rm -rf /var/cache/dnf \
-    && alternatives --set python /usr/bin/python3.8 
-                                                                                                                                                                                                      
+    && alternatives --set python /usr/bin/python3.8
+
 ENV PATH="/opt/venv/bin:$PATH"
 
 WORKDIR /gamechanger-data
 
 COPY . .
 
-USER 1001                                                                                                                                                                                                                                                     
+USER 1001
 
 ENTRYPOINT ["/bin/bash", "./ad-container-scripts/ad-reparse.sh"]
 
