@@ -24,15 +24,15 @@ APP_CONFIG_NAME="${APP_CONFIG_NAME:-$DEPLOYMENT_ENV}"
 ES_CONFIG_NAME="${ES_CONFIG_NAME:-$DEPLOYMENT_ENV}"
 APP_CONFIG_LOCAL_PATH="${REPO_DIR}/configuration/app-config/${APP_CONFIG_NAME}.json"
 GAMECHANGERML_PKG_DIR="${GAMECHANGERML_PKG_DIR:-${REPO_DIR}/var/gamechanger-ml}"
-TOPIC_MODEL_LOCAL_DIR="${GAMECHANGERML_PKG_DIR}/gamechangerml/models/topic_model_20220125163613/models"
-TOPIC_MODEL_SCRIPT_LOCAL_DIR="${GAMECHANGERML_PKG_DIR}/gamechangerml/models/topic_model_20220125163613/"
+TOPIC_MODEL_LOCAL_DIR="${GAMECHANGERML_PKG_DIR}/gamechangerml/models/topic_model_20221129162954/models"
+TOPIC_MODEL_SCRIPT_LOCAL_DIR="${GAMECHANGERML_PKG_DIR}/gamechangerml/models/topic_model_20221129162954/"
 
 # Setting up s3 path variables depending on if running in prod or running in dev/local
 case $DEPLOYMENT_ENV in
   prod)
     AWS_DEFAULT_REGION="${AWS_DEFAULT_REGION:-us-gov-west-1}"
     APP_CONFIG_S3_PATH="${APP_CONFIG_S3_PATH:-s3://${S3_BUCKET_NAME}/bronze/gamechanger/configuration/app-config/prod.20210416.json}"
-    TOPIC_MODEL_S3_PATH="${TOPIC_MODEL_S3_PATH:-s3://${S3_BUCKET_NAME}/bronze/gamechanger/models/topic_model/v2/topic_model_20220125163613.tar.gz}"
+    TOPIC_MODEL_S3_PATH="${TOPIC_MODEL_S3_PATH:-s3://${S3_BUCKET_NAME}/bronze/gamechanger/models/topic_model/v2/topic_model_20221129162954.tar.gz}"
     TOPIC_MODEL_SCRIPT_S3_PATH="${TOPIC_MODEL_SCRIPT_S3_PATH:-s3://${S3_BUCKET_NAME}/bronze/gamechanger/models/topic_model/tfidf.py}"
     ;;
   dev | local)
