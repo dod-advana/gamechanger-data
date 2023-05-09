@@ -31,9 +31,11 @@
       "pagerank_r",
       "download_url_s",
       "cac_login_required_b",
+      "publication_date_dt",
       "version_hash_s",
       "source_fqdn_s",
       "crawler_used_s",
+      "access_timestamp_dt",
       "source_page_url_s",
       "is_revoked_b"
    ],
