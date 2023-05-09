@@ -157,31 +157,6 @@ def test_single_process_non_ocr_doc(input_dir_with_one_non_ocr_raw_doc,
     assert _assert_parsed_dir_has_what_i_expect()
 
 
-def test_single_process_non_ocr_doc_no_metadata(input_dir_with_one_non_ocr_raw_doc,
-                                                parsed_doc_output_dir):
-    parser_path = "common.document_parser.parsers.policy_analytics.parse::parse"
-    verify = True
-    ocr_missing_doc = True
-    num_ocr_threads = 2
-    pdf_to_json(
-        parser_path=parser_path,
-        source=ORIGINAL_TEST_FILES["non_ocr_pdf_file"],
-        destination=parsed_doc_output_dir,
-        verify=verify,
-        ocr_missing_doc=ocr_missing_doc,
-        num_ocr_threads=num_ocr_threads
-    )
-
-    f_name = EXPECTED_OUTPUT_FILES["non_ocr_json_file"]
-    json_fp = f"{parsed_doc_output_dir}/{f_name}"
-
-    out_dict = None
-    with open(json_fp) as f:
-        out_dict = json.load(f)
-
-    assert out_dict is not None
-
-
 def test_single_process_mixed_dir(input_dir_with_ocr_and_non_ocr_raw_doc,
                                   parsed_doc_output_dir):
     parser_path = "common.document_parser.parsers.policy_analytics.parse::parse"
