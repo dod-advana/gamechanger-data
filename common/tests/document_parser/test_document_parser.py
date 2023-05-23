@@ -11,18 +11,28 @@ from dev_tools import REPO_PATH
 
 ORIGINAL_TEST_FILES = dict(
     ocr_pdf_file=os.path.join(REPO_PATH,
-                              "dev_tools/universal_test_harness/data/crawler_output/2021-01-01T110000/Title 1.pdf"),
+                              "dev_tools/universal_test_harness/data/crawler_output/us_code_data/Title 1.pdf"),
     ocr_pdf_metadata_file=os.path.join(REPO_PATH,
-                                       "dev_tools/universal_test_harness/data/crawler_output/2021-01-01T110000/Title 1.pdf.metadata"),
+                                       "dev_tools/universal_test_harness/data/crawler_output/us_code_data/Title 1.pdf.metadata"),
     non_ocr_pdf_file=os.path.join(REPO_PATH,
-                                  "dev_tools/universal_test_harness/data/crawler_output/2021-01-01T110000/Title 2.pdf"),
+                                  "dev_tools/universal_test_harness/data/crawler_output/us_code_data/Title 2.pdf"),
     non_ocr_pdf_metadata_file=os.path.join(REPO_PATH,
-                                           "dev_tools/universal_test_harness/data/crawler_output/2021-01-01T110000/Title 2.pdf.metadata")
+                                           "dev_tools/universal_test_harness/data/crawler_output/us_code_data/Title 2.pdf.metadata"),
+    non_ocr_text_file=os.path.join(REPO_PATH,
+                                   "dev_tools/universal_test_harness/data/crawler_output/navy_personnel_messages/NAVADMIN 089_23.txt"),
+    non_ocr_text_metadata_file=os.path.join(REPO_PATH,
+                                   "dev_tools/universal_test_harness/data/crawler_output/navy_personnel_messages/NAVADMIN 089_23.txt.metadata"),
+    non_ocr_html_file=os.path.join(REPO_PATH,
+                                   "dev_tools/universal_test_harness/data/crawler_output/dfar_data/FAR Part 1.html"),
+    non_ocr_html_metadata_file=os.path.join(REPO_PATH,
+                                   "dev_tools/universal_test_harness/data/crawler_output/dfar_data/FAR Part 1.html.metadata"),
 )
 
 EXPECTED_OUTPUT_FILES = dict(
     ocr_json_file="Title 1.json",
     non_ocr_json_file="Title 2.json",
+    non_ocr_text_json_file="NAVADMIN 089_23.json",
+    non_ocr_html_json_file="FAR Part 1.json",
 )
 
 
@@ -52,6 +62,43 @@ def input_dir_with_ocr_and_non_ocr_raw_doc(tmpdir) -> str:
     shutil.copy(ORIGINAL_TEST_FILES['non_ocr_pdf_file'], tmpdir)
     shutil.copy(ORIGINAL_TEST_FILES['non_ocr_pdf_metadata_file'], tmpdir)
     yield str(tmpdir)
+
+
+@pytest.fixture(scope='function')
+def input_dir_with_html_text_non_ocr_raw_docs(tmpdir) -> str:
+    shutil.copy(ORIGINAL_TEST_FILES['non_ocr_text_file'], tmpdir)
+    shutil.copy(ORIGINAL_TEST_FILES['non_ocr_text_metadata_file'], tmpdir)
+    shutil.copy(ORIGINAL_TEST_FILES['non_ocr_html_file'], tmpdir)
+    shutil.copy(ORIGINAL_TEST_FILES['non_ocr_html_metadata_file'], tmpdir)
+    yield str(tmpdir)
+
+
+def test_single_process_html_text_dir(input_dir_with_html_text_non_ocr_raw_docs,
+                                  parsed_doc_output_dir):
+    parser_path = "common.document_parser.parsers.policy_analytics.parse::parse"
+    verify = True
+    ocr_missing_doc = True
+    num_ocr_threads = 2
+    pdf_to_json(
+        parser_path=parser_path,
+        source=input_dir_with_html_text_non_ocr_raw_docs,
+        metadata=input_dir_with_html_text_non_ocr_raw_docs,
+        destination=parsed_doc_output_dir,
+        verify=verify,
+        ocr_missing_doc=ocr_missing_doc,
+        num_ocr_threads=num_ocr_threads
+    )
+
+    out_dicts = []
+    for key_name in ["non_ocr_text_json_file", "non_ocr_html_json_file"]:
+        f_name = EXPECTED_OUTPUT_FILES.get(key_name)
+        json_fp = f"{parsed_doc_output_dir}/{f_name}"
+        out_dict = None
+        with open(json_fp) as f:
+            out_dict = json.load(f)
+            out_dicts.append(out_dict)
+
+    assert None not in out_dicts
 
 
 def test_single_process_ocr_doc(input_dir_with_one_ocr_raw_doc,
@@ -108,31 +155,6 @@ def test_single_process_non_ocr_doc(input_dir_with_one_non_ocr_raw_doc,
         return out_dict is not None
 
     assert _assert_parsed_dir_has_what_i_expect()
-
-
-def test_single_process_non_ocr_doc_no_metadata(input_dir_with_one_non_ocr_raw_doc,
-                                                parsed_doc_output_dir):
-    parser_path = "common.document_parser.parsers.policy_analytics.parse::parse"
-    verify = True
-    ocr_missing_doc = True
-    num_ocr_threads = 2
-    pdf_to_json(
-        parser_path=parser_path,
-        source=ORIGINAL_TEST_FILES["non_ocr_pdf_file"],
-        destination=parsed_doc_output_dir,
-        verify=verify,
-        ocr_missing_doc=ocr_missing_doc,
-        num_ocr_threads=num_ocr_threads
-    )
-
-    f_name = EXPECTED_OUTPUT_FILES["non_ocr_json_file"]
-    json_fp = f"{parsed_doc_output_dir}/{f_name}"
-
-    out_dict = None
-    with open(json_fp) as f:
-        out_dict = json.load(f)
-
-    assert out_dict is not None
 
 
 def test_single_process_mixed_dir(input_dir_with_ocr_and_non_ocr_raw_doc,
