@@ -1,6 +1,0 @@
-hypothesis
-mypy
-pylint
-pytest
-flake8
-typing_extensions

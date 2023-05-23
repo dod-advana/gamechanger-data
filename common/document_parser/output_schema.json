@@ -29,10 +29,7 @@
       "raw_text",
       "pages",
       "pagerank_r",
-      "kw_doc_score_r",
-      "orgs_rs",
       "download_url_s",
-      "topics_rs",
       "cac_login_required_b",
       "publication_date_dt",
       "version_hash_s",
@@ -226,7 +223,7 @@
             ]
         }
    },
-   "additionalProperties":false,
+   "additionalProperties":true,
    "definitions":{
       "paragraph":{
          "anyOf":[

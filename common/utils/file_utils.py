@@ -30,13 +30,12 @@ def is_pdf(file: t.Union[Path, str]) -> bool:
 
     try:
         doc = fitz.open(file_path)
+        doc.close()
     except RuntimeError as e:
         if 'no objects found' in e.args:
             return False
     except:
         return False
-    finally:
-        doc.close()
 
     return True
 
