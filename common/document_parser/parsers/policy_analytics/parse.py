@@ -137,7 +137,6 @@ def post_process(doc_dict):
         "crawler_used",
         "source_fqdn",
         "source_page_url",
-        "display_title",
         "source_title",
         "cac_login_required",
         "download_url",
