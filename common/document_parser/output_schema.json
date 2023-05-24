@@ -171,7 +171,7 @@
       "display_org_s": {
          "type": "string"
       },
-      "display_title_s": {
+      "display_title": {
          "type": "string"
       },
       "access_timestamp_dt": {
