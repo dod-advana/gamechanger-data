@@ -174,6 +174,9 @@
       "display_title": {
          "type": "string"
       },
+      "display_title_s": {
+         "type": "string"
+      },
       "access_timestamp_dt": {
          "type": "string"
       },

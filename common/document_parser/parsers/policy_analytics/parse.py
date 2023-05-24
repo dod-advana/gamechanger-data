@@ -95,6 +95,7 @@ def post_process(doc_dict):
             else "Uncategorized"
         doc_dict["display_title"] = doc_dict["meta_data"]["display_title"] if "display_title" in doc_dict["meta_data"] \
             else doc_dict["meta_data"]["doc_type"] + " " + doc_dict["meta_data"]["doc_num"] + ": " + doc_dict["meta_data"]["doc_title"]
+        doc_dict["display_title_s"] = doc_dict["display_title"]
         doc_dict["display_org_s"] = doc_dict["meta_data"]["display_org"] if "display_org" in doc_dict["meta_data"] \
             else "Uncategorized"
         doc_dict["source_title_s"] = doc_dict["meta_data"]["source_title"] if "source_title" in doc_dict["meta_data"] \
