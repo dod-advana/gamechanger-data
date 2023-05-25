@@ -284,12 +284,20 @@
           }
         },
         "display_title": {
-          "type": "keyword",
-          "store": true,
+          "type": "text",
+          "term_vector": "with_positions_offsets",
           "fields": {
-            "search": {
+            "raw": {
+              "type": "keyword"
+            },
+            "raw_lower": {
               "type": "keyword",
-              "normalizer": "lowercase_normalizer"
+              "analyzer": "lowercase_normalizer"
+            },
+            "gc_english": {
+              "type": "text",
+              "analyzer": "gc_english",
+              "term_vector": "with_positions_offsets"
             }
           }
         },
