@@ -288,11 +288,13 @@
           "term_vector": "with_positions_offsets",
           "fields": {
             "raw": {
-              "type": "keyword"
+              "type": "text",
+              "term_vector": "with_positions_offsets"
             },
             "raw_lower": {
-              "type": "keyword",
-              "analyzer": "lowercase_normalizer"
+              "type": "text",
+              "analyzer": "lowercase",
+              "term_vector": "with_positions_offsets"
             },
             "gc_english": {
               "type": "text",
