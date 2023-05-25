@@ -283,6 +283,16 @@
             }
           }
         },
+        "display_title": {
+          "type": "keyword",
+          "store": true,
+          "fields": {
+            "search": {
+              "type": "keyword",
+              "normalizer": "lowercase_normalizer"
+            }
+          }
+        },
         "doc_num": {
           "type": "keyword",
           "store": true,
