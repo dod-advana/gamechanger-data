@@ -32,6 +32,13 @@
           }
         },
         "analyzer": {
+          "lowercase_analyzer": {
+            "type": "custom",
+            "tokenizer": "standard",
+            "filter": [
+              "lowercase"
+            ]
+          },
           "gc_english": {
             "tokenizer": "standard",
             "filter": [
@@ -293,7 +300,7 @@
             },
             "raw_lower": {
               "type": "text",
-              "analyzer": "lowercase",
+              "analyzer": "lowercase_analyzer",
               "term_vector": "with_positions_offsets"
             },
             "gc_english": {
