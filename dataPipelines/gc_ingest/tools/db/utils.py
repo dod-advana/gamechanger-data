@@ -123,7 +123,9 @@ class CoreDBManager:
             pass
         elif db_type == DBType.WEB:
             self._refresh_web_db_snapshot()
-            seed_dafa_charter_map(engine=self.get_db_engine(db_type=db_type))
+
+            # we haven't used dafa_charter_map for a long time. commenting out unless it's needed
+            #seed_dafa_charter_map(engine=self.get_db_engine(db_type=db_type))
 
     def refresh_materialized_tables_for_all_dbs(self) -> None:
         """Refreshes materialized or seeded tables/views for all dbs"""
