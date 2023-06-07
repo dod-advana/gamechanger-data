@@ -32,6 +32,13 @@
           }
         },
         "analyzer": {
+          "lowercase_analyzer": {
+            "type": "custom",
+            "tokenizer": "standard",
+            "filter": [
+              "lowercase"
+            ]
+          },
           "gc_english": {
             "tokenizer": "standard",
             "filter": [
@@ -280,6 +287,26 @@
             "search": {
               "type": "keyword",
               "normalizer": "lowercase_normalizer"
+            }
+          }
+        },
+        "display_title": {
+          "type": "text",
+          "term_vector": "with_positions_offsets",
+          "fields": {
+            "raw": {
+              "type": "text",
+              "term_vector": "with_positions_offsets"
+            },
+            "raw_lower": {
+              "type": "text",
+              "analyzer": "lowercase_analyzer",
+              "term_vector": "with_positions_offsets"
+            },
+            "gc_english": {
+              "type": "text",
+              "analyzer": "gc_english",
+              "term_vector": "with_positions_offsets"
             }
           }
         },

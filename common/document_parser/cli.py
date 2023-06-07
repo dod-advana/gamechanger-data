@@ -27,6 +27,7 @@ def pdf_to_json(
         ocr_missing_doc: bool = False,
         force_ocr: bool = False,
         num_ocr_threads: int = 2,
+        batch_size: int = 100,
 ) -> None:
     """
     Converts input pdf file to json
@@ -68,7 +69,8 @@ def pdf_to_json(
             multiprocess=multiprocess,
             ocr_missing_doc=ocr_missing_doc,
             force_ocr=force_ocr,
-            num_ocr_threads=num_ocr_threads
+            num_ocr_threads=num_ocr_threads,
+            batch_size=batch_size
         )
     if verify:
         verified = validators.verify(destination)
@@ -153,6 +155,15 @@ def pdf_to_json(
     type=int,
     help="Number of threads to use for OCR (per file)"
 )
+@click.option(
+    '-b',
+    '--batch-size',
+    required=False,
+    default=100,
+    type=int,
+    help="Batch size. If using multiprocessing, controls the size of batches that \
+        will be processed at one time.",
+)
 def pdf_to_json_cmd_wrapper(
         parser_path: str,
         source: str,
@@ -164,6 +175,7 @@ def pdf_to_json_cmd_wrapper(
         ocr_missing_doc: bool,
         force_ocr: bool,
         num_ocr_threads: int,
+        batch_size: int,
 ) -> None:
     """Parse OCR'ed PDF files into JSON schema"""
     if platform.system() == "Linux":
@@ -178,7 +190,8 @@ def pdf_to_json_cmd_wrapper(
         multiprocess=multiprocess,
         ocr_missing_doc=ocr_missing_doc,
         force_ocr=force_ocr,
-        num_ocr_threads=num_ocr_threads
+        num_ocr_threads=num_ocr_threads,
+        batch_size=batch_size
     )
 
 

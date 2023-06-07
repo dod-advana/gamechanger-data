@@ -29,10 +29,7 @@
       "raw_text",
       "pages",
       "pagerank_r",
-      "kw_doc_score_r",
-      "orgs_rs",
       "download_url_s",
-      "topics_rs",
       "cac_login_required_b",
       "publication_date_dt",
       "version_hash_s",
@@ -174,6 +171,9 @@
       "display_org_s": {
          "type": "string"
       },
+      "display_title": {
+         "type": "string"
+      },
       "display_title_s": {
          "type": "string"
       },
@@ -226,7 +226,7 @@
             ]
         }
    },
-   "additionalProperties":false,
+   "additionalProperties":true,
    "definitions":{
       "paragraph":{
          "anyOf":[
