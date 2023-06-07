@@ -36,7 +36,7 @@ pandas==1.0.4
 pathy==0.5.2
 pdfminer.six==20201018
 pikepdf==2.16.1
-Pillow==8.0.1
+Pillow==9.3.0
 pluggy==0.13.1
 preshed==3.0.2
 psycopg2-binary==2.8.6
