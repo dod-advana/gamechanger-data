@@ -10,7 +10,7 @@ filetype==1.0.7
 idna==2.9
 Jinja2==2.11.2
 jmespath==0.9.5
-joblib==0.15.1
+joblib==1.1.1
 jsonschema==3.2.0
 MarkupSafe==1.1.1
 neo4j==4.1.1

@@ -28,7 +28,7 @@ pydantic==1.7.4
 psycopg2-binary==2.8.6
 filetype==1.0.7
 tqdm==4.46.1
-joblib==0.15.1
+joblib==1.1.1
 nltk==3.5
 beautifulsoup4==4.9.1
 PyMuPDF==1.17.2
