@@ -73,10 +73,13 @@ def _truncate_rowspan(soup: bs4.BeautifulSoup) -> None:
 
 
 def _remove_nav_bar(soup: bs4.BeautifulSoup) -> None:
-    """Remove navbar - specifically for MARADMIN"""
-    header_tag = soup.find('header', class_='navbar')
-    if header_tag:
+    """Remove navbar and links - specifically for MARADMIN"""
+    header_tags = soup.findAll('header', {"class": "navbar"})
+    header_tags += soup.findAll('div', {"class": "mobile-nav"})
+    header_tags += soup.findAll('footer')
+    for header_tag in header_tags:
         header_tag.decompose()
+        del header_tag
 
 def clean_html_for_pdf(markup: Union[IO, AnyStr]) -> str:
     """Cleans known issues from html that prevent pdf generation."""
