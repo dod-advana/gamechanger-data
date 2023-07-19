@@ -8,6 +8,7 @@ from datetime import datetime
 from hashlib import sha256
 from functools import reduce
 import shutil
+import subprocess
 
 
 def str_to_sha256_hex_digest(_str: str) -> str:
@@ -40,9 +41,10 @@ class NGAManualMetadata:
             print(f"An excel file has been passed in for the 'metadata_filename', please verify that the sheet containing"
                   f"the metadata to be parsed is {self.xlsx_data_sheet}. If it is not, set this value when instantiating"
                   f"from the class or by manually overwriting the 'xlsx_data_sheet' attribute")
-        self.all_processed_files = []
+        self.all_added_files = []
+        self.all_deleted_files = []
 
-    def create_metadata_files(self, input_directory, output_directory = None):
+    def create_metadata_files(self, input_directory, output_directory = None, files_to_delete_crawler_output = "crawler_output.json"):
         # if output_directory was passed in, create the directory if doesn't currently exist
         if output_directory:
             if not os.path.exists(output_directory):
@@ -54,6 +56,11 @@ class NGAManualMetadata:
             # if no output directory specified, make new files in the input directory
             output_directory=input_directory
 
+        files_to_delete_crawler_output_full_path = os.path.join(output_directory, files_to_delete_crawler_output)
+        if not os.path.exists(files_to_delete_crawler_output):
+            print(f"{files_to_delete_crawler_output} doesn't exist, creating file in {output_directory}")
+            with open(files_to_delete_crawler_output_full_path, 'w') as fp:
+                pass
 
         try:
             if self.metadata_filename.endswith(".csv"):
@@ -127,13 +134,37 @@ class NGAManualMetadata:
                     with open(metadata_outfile, "w") as f:
                         f.write(json.dumps(doc))
                         # fully processed the file, write to all_processed_files
-                        self.all_processed_files.append(metadata_outfile)
+                        self.all_added_files.append(metadata_outfile)
+            else:
+                # Delete
+                metadata_fname = metadata_record['file_name']+".metadata"
+                s3_path = "s3://advana-data-zone/bronze/gamechanger/pdf/"+metadata_fname
+                copy_metadata_file = subprocess.run([
+                    "aws",
+                    "s3",
+                    "cp",
+                    s3_path,
+                    output_directory # add to /tmp
+                ])
+                if copy_metadata_file.returncode > 0:
+                    print(f"Failed to copy down {metadata_fname}")
+                else:
+                    # concatenate
+                    local_metadata_path = output_directory+"/"+metadata_fname
+                    with open(local_metadata_path) as f:
+                        for i, line in enumerate(f):
+                            json_object = json.loads(line)
+                            with open(files_to_delete_crawler_output_full_path, 'a') as output_json_file:
+                                jsoned_data = json.dumps(json_object)
+                                output_json_file.write(jsoned_data)
+                                output_json_file.write('\n')
+                    self.all_added_files.append(metadata_fname)
 
 
-
-# if __name__=="__main__":
-#     input_directory = "/Users/austinmishoe/Downloads/nga_files"
-#     nga_mm = NGAManualMetadata()
-#     nga_mm.create_metadata_files(input_directory,output_directory="/Users/austinmishoe/Downloads/nga_files2")
-#     print(nga_mm.all_processed_files)
-
+if __name__=="__main__":
+    input_directory = "/home/gamechanger/de_test_scripts/nga_files"
+    output_directory = input_directory+"output"
+    nga_mm = NGAManualMetadata(metadata_filename="ngapolicy_metadata.xlsx")
+    nga_mm.create_metadata_files(input_directory,output_directory=output_directory)
+    print(f"added files: {nga_mm.all_added_files}")
+    print(f"deleted files: {nga_mm.all_deleted_files}")
