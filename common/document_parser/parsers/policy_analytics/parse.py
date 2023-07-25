@@ -86,18 +86,20 @@ def parse(
 
 def process_ingest_date(doc_dict):
     """
-        adds two new fields if they don't already exist:
+        adds two new fields (or override existing)
             - original_ingest_date = when the document was first ingested
             - current_ingest_date = when the document was last ingested
-        if these fields exist, just update the current ingest_date
     """
     from dataPipelines.gc_ingest.tools.db.utils import CoreDBManager, DBType
     db_type = DBType('orch')
     db_manager = CoreDBManager("", "")
     db_engine = db_manager.get_db_engine(db_type=db_type)
     result = db_engine.execute(f"SELECT min(batch_timestamp), max(batch_timestamp) from public.versioned_docs where json_metadata->>'doc_name' = '{doc_dict['doc_name']}'")
-    if len(result) > 0:
-        print(result)
+    resultset = [dict(row) for row in result]
+    if len(resultset) > 0:
+        print(resultset)
+        doc_dict['original_ingest_date'] = resultset['min']
+        doc_dict['current_ingest_date'] = resultset['max']
     return doc_dict
 
 def post_process(doc_dict):
@@ -122,6 +124,7 @@ def post_process(doc_dict):
         doc_dict["access_timestamp_dt"] = datetime_utils.get_access_timestamp(doc_dict["meta_data"])
         doc_dict["publication_date_dt"] = datetime_utils.get_publication_date(doc_dict["meta_data"])
         doc_dict["is_revoked_b"] = False
+        doc_dict["doc_name"] = doc_dict["meta_data"]["doc_name"]
     else:
         doc_dict["is_revoked_b"] = False
 
