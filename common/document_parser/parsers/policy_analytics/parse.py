@@ -75,6 +75,7 @@ def parse(
         # TODO: ADD DATES ? ## Unsure what this note is referring to
         # doc_dict = dates.process(doc_dict) 
         doc_dict = post_process(doc_dict)
+        doc_dict = process_ingest_date(doc_dict)
 
         write_doc_dict_to_json.write(out_dir=out_dir, ex_dict=doc_dict)
     except Exception as e:
@@ -82,6 +83,22 @@ def parse(
     finally:
         if should_delete:
             os.remove(f_name)
+
+def process_ingest_date(doc_dict):
+    """
+        adds two new fields if they don't already exist:
+            - original_ingest_date = when the document was first ingested
+            - current_ingest_date = when the document was last ingested
+        if these fields exist, just update the current ingest_date
+    """
+    from dataPipelines.gc_ingest.tools.db.utils import CoreDBManager, DBType
+    db_type = DBType('orch')
+    db_manager = CoreDBManager("", "")
+    db_engine = db_manager.get_db_engine(db_type=db_type)
+    result = db_engine.execute(f"SELECT min(batch_timestamp), max(batch_timestamp) from public.versioned_docs where json_metadata->>'doc_name' = '{doc_dict['doc_name']}'")
+    if len(result) > 0:
+        print(result)
+    return doc_dict
 
 def post_process(doc_dict):
     doc_dict["raw_text"] = utf8_pass(doc_dict["text"])
