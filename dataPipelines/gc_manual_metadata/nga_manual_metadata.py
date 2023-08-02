@@ -163,7 +163,7 @@ class NGAManualMetadata:
 
                     # delete the extra metadata file after concatenation
                     try:
-                        os.remove(output_directory + "/" + metadata_fname)
+                        os.remove(local_metadata_path)
                     except Exception as e:
                         print("Error: ", e)
 
