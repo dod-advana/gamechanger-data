@@ -75,6 +75,9 @@ class NGAManualMetadata:
         except Exception as e:
             raise e
 
+
+        # NOTE: for preparation, all raw pdfs should be downloaded to the input_directory
+
         all_input_filepaths = Path(input_directory).glob("**/*")
         all_output_filepaths = Path(output_directory).glob("**/*")
         existing_files = [x for x in all_input_filepaths if x.is_file() and (x.suffix.lower() in (".pdf", ".html", ".txt")
@@ -86,9 +89,7 @@ class NGAManualMetadata:
         for metadata_record in metadata_records:
             # print(metadata_record["file_name"])
             filepath = os.path.join(input_directory,metadata_record["file_name"])
-            if Path(filepath).stem not in existing_metadata_files \
-                    and metadata_record['mod_type']=="Addition" \
-                    and Path(filepath) in existing_files:
+            if metadata_record['mod_type']=="Addition":
                 # before, part, after = Path(filepath).stem.partition("(")
 
                 doc_title = metadata_record.get('title', "")# if metadata_record.get('title') else (before.split("_")[5] if not after else before)
@@ -149,7 +150,7 @@ class NGAManualMetadata:
                 if copy_metadata_file.returncode > 0:
                     print(f"Failed to copy down {metadata_fname}")
                 else:
-                    # concatenate
+                    # concatenate to the output_json_file to prepare for deletion
                     local_metadata_path = output_directory+"/"+metadata_fname
                     with open(local_metadata_path) as f:
                         for i, line in enumerate(f):
@@ -159,6 +160,12 @@ class NGAManualMetadata:
                                 output_json_file.write(jsoned_data)
                                 output_json_file.write('\n')
                     self.all_added_files.append(metadata_fname)
+
+                    # delete the extra metadata file after concatenation
+                    try:
+                        os.remove(output_directory + "/" + metadata_fname)
+                    except Exception as e:
+                        print("Error: ", e)
 
 
 if __name__=="__main__":
