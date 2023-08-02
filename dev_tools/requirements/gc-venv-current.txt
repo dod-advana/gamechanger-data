@@ -4,7 +4,6 @@ aniso8601==8.0.0
 annoy==1.16.3
 appdirs==1.4.4
 APScheduler==3.6.3
-arabic-reshaper==2.1.0
 asgiref==3.2.10
 astunparse==1.6.3
 attrs==19.3.0
@@ -69,7 +68,7 @@ flask-restplus==0.13.0
 flatbuffers==1.12
 future==0.18.2
 gast==0.4.0
-gensim==4.1.2
+gensim==4.3.0
 gitdb==4.0.5
 GitPython==3.1.11
 google-auth==1.16.1
@@ -129,11 +128,11 @@ numpy==1.19.5
 oauthlib==3.1.0
 ocrmypdf==11.3.2
 opt-einsum==3.3.0
+openpyxl==3.0.10
 packaging==20.9
 pandas==1.0.4
 pansi==2020.7.3
 parsel==1.6.0
-pathy==0.5.2
 pdfminer.six==20201018
 pikepdf==2.16.1
 Pillow==8.0.1
@@ -161,7 +160,7 @@ pydotplus==2.0.2
 Pygments==2.3.1
 PyHamcrest==2.0.2
 pymagnitude-lite==0.1.143
-PyMuPDF==1.17.2
+PyMuPDF==1.19.0
 pyOpenSSL==19.1.0
 pyparsing==2.4.7
 PyPDF2==1.26.0
@@ -187,7 +186,7 @@ rsa==4.0
 s3transfer==0.3.3
 sacremoses==0.0.43
 scikit-learn==0.23.1
-scipy==1.4.1
+scipy==1.7.0
 Scrapy==2.1.0
 selenium==3.141.0
 sentence-transformers==0.4.1.2
@@ -197,7 +196,7 @@ service-identity==18.1.0
 simplejson==3.17.0
 six==1.15.0
 sklearn==0.0
-smart-open==3.0.0
+smart-open==5.2.1
 smmap==3.0.4
 sortedcontainers==2.2.2
 soupsieve==2.0.1

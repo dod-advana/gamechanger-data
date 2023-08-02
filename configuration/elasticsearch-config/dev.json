@@ -3,7 +3,7 @@
     "settings": {
       "index.mapping.nested_objects.limit": 100000,
       "index": {
-        "number_of_shards": 3,
+        "number_of_shards": 6,
         "number_of_replicas": 2,
         "mapping.nested_fields.limit": 20000
       },
@@ -32,6 +32,13 @@
           }
         },
         "analyzer": {
+          "lowercase_analyzer": {
+            "type": "custom",
+            "tokenizer": "standard",
+            "filter": [
+              "lowercase"
+            ]
+          },
           "gc_english": {
             "tokenizer": "standard",
             "filter": [
@@ -283,6 +290,26 @@
             }
           }
         },
+        "display_title": {
+          "type": "text",
+          "term_vector": "with_positions_offsets",
+          "fields": {
+            "raw": {
+              "type": "text",
+              "term_vector": "with_positions_offsets"
+            },
+            "raw_lower": {
+              "type": "text",
+              "analyzer": "lowercase_analyzer",
+              "term_vector": "with_positions_offsets"
+            },
+            "gc_english": {
+              "type": "text",
+              "analyzer": "gc_english",
+              "term_vector": "with_positions_offsets"
+            }
+          }
+        },
         "doc_num": {
           "type": "keyword",
           "store": true,
@@ -350,6 +377,53 @@
         "category_2": {
           "type": "keyword",
           "store": true
+        },
+        "sections": {
+          "type": "object",
+          "properties": {
+            "all_sections": {
+              "type": "text"
+            },
+            "responsibilities_section": {
+              "type": "text"
+            },
+            "references_section": {
+              "type": "text"
+            },
+            "purpose_section": {
+              "type": "text"
+            },
+            "subject_section": {
+              "type": "text"
+            },
+            "procedures_section": {
+              "type": "text"
+            },
+            "effective_date": {
+              "type": "text"
+            },
+            "applicability_section": {
+              "type": "text"
+            },
+            "policy_section": {
+              "type": "text"
+            },
+            "organizations_section": {
+              "type": "text"
+            },
+            "definitions_section": {
+              "type": "text"
+            },
+            "table_of_contents": {
+              "type": "text"
+            },
+            "glossary_section": {
+              "type": "text"
+            },
+            "summary_of_change_section": {
+              "type": "text"
+            }
+          }
         },
         "paragraphs": {
           "dynamic": "true",
