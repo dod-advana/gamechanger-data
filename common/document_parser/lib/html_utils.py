@@ -72,6 +72,15 @@ def _truncate_rowspan(soup: bs4.BeautifulSoup) -> None:
                         cell['rowspan'] = f'{max_row - i}'
 
 
+def _remove_nav_bar(soup: bs4.BeautifulSoup) -> None:
+    """Remove navbar and links - specifically for MARADMIN"""
+    header_tags = soup.findAll('header', {"class": "navbar"})
+    header_tags += soup.findAll('div', {"class": "mobile-nav"})
+    header_tags += soup.findAll('footer')
+    for header_tag in header_tags:
+        header_tag.decompose()
+        del header_tag
+
 def clean_html_for_pdf(markup: Union[IO, AnyStr]) -> str:
     """Cleans known issues from html that prevent pdf generation."""
     soup = bs4.BeautifulSoup(markup, 'html5lib')
@@ -88,6 +97,8 @@ def clean_html_for_pdf(markup: Union[IO, AnyStr]) -> str:
 
     # cap overly large rowspan values
     _truncate_rowspan(soup)
+
+    _remove_nav_bar(soup)
 
     return str(soup)
 
