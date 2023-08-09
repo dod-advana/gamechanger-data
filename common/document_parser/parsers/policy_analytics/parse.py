@@ -90,14 +90,16 @@ def process_ingest_date(doc_dict):
             - original_ingest_date = when the document was first ingested
             - current_ingest_date = when the document was last ingested
     """
+    from json import dumps
     from dataPipelines.gc_ingest.tools.db.utils import CoreDBManager, DBType
     db_type = DBType('orch')
     db_manager = CoreDBManager("", "")
     db_engine = db_manager.get_db_engine(db_type=db_type)
     result = db_engine.execute(f"SELECT min(batch_timestamp), max(batch_timestamp) from public.versioned_docs where json_metadata->>'doc_name' = '{doc_dict['doc_name']}'")
-    resultset = [dict(row) for row in result][0]
-    doc_dict['original_ingest_date'] = resultset['min'] if resultset['min'] != None else doc_dict["publication_date_dt"] 
-    doc_dict['current_ingest_date'] = resultset['max'] if resultset['max'] != None else doc_dict["publication_date_dt"]
+    resultset = [dict(row) for row in result]
+    if len(result) > 0:
+        doc_dict['original_ingest_date'] = resultset[0]['min'] if resultset[0]['min'] != None else doc_dict["publication_date_dt"] 
+        doc_dict['current_ingest_date'] = resultset[0]['max'] if resultset[0]['max'] != None else doc_dict["publication_date_dt"]
     return doc_dict
 
 def post_process(doc_dict):
