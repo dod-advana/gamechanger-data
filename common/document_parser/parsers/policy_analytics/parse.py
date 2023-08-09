@@ -97,7 +97,7 @@ def process_ingest_date(doc_dict):
     db_engine = db_manager.get_db_engine(db_type=db_type)
     result = db_engine.execute(f"SELECT min(batch_timestamp), max(batch_timestamp) from public.versioned_docs where json_metadata->>'doc_name' = '{doc_dict['doc_name']}'")
     resultset = [dict(row) for row in result]
-    if len(result) > 0:
+    if len(resultset) > 0:
         doc_dict['original_ingest_date'] = resultset[0]['min'] if resultset[0]['min'] != None else doc_dict["publication_date_dt"] 
         doc_dict['current_ingest_date'] = resultset[0]['max'] if resultset[0]['max'] != None else doc_dict["publication_date_dt"]
     return doc_dict
