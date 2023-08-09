@@ -332,6 +332,14 @@
           "type": "keyword",
           "store": true
         },
+        "original_ingest_date": {
+          "type": "keyword",
+          "store": true
+        },
+        "current_ingest_date": {
+          "type": "keyword",
+          "store": true
+        },
         "change_date": {
           "type": "keyword",
           "store": true
