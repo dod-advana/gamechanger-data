@@ -1,4 +1,5 @@
 import os
+import re
 from common.document_parser.lib import (
     pages,
     paragraphs,
@@ -46,7 +47,8 @@ def parse(
             f_name = ocr.get_ocr_filename(f_name, num_ocr_threads, force_ocr)
         if not str(f_name).endswith(".pdf"):
             f_name = file_utils.coerce_file_to_pdf(f_name)
-            should_delete = True
+            doc_dict['filename'] = re.sub(r'\.[^.]+$', '.pdf', doc_dict['filename'])
+            should_delete = False
         funcs = [
             ref_list.add_ref_list,
             entities.extract_entities,
