@@ -73,10 +73,16 @@ def _truncate_rowspan(soup: bs4.BeautifulSoup) -> None:
 
 
 def _remove_nav_bar(soup: bs4.BeautifulSoup) -> None:
-    """Remove navbar and links - specifically for MARADMIN"""
-    header_tags = soup.findAll('header', {"class": "navbar"})
-    header_tags += soup.findAll('div', {"class": "mobile-nav"})
-    header_tags += soup.findAll('footer')
+    """Remove navbar and links - specifically for MARADMIN, SAMM"""
+    soup_search_args = [
+        ('header', {"class": "navbar"}), # MARADMIN
+        ('div', {"class": "clearfix header-inside"}), # SAMM
+        ('div', {"class": "mobile-nav"}), # MARADMIN
+        ('footer', {}), # MARADMIN
+    ]
+    header_tags = []
+    for name, attrs in soup_search_args:
+        header_tags += soup.findAll(name=name, attrs=attrs)
     for header_tag in header_tags:
         header_tag.decompose()
         del header_tag
