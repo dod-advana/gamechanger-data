@@ -77,6 +77,7 @@ def parse(
         # TODO: ADD DATES ? ## Unsure what this note is referring to
         # doc_dict = dates.process(doc_dict) 
         doc_dict = post_process(doc_dict)
+        doc_dict = process_ingest_date(doc_dict)
 
         write_doc_dict_to_json.write(out_dir=out_dir, ex_dict=doc_dict)
     except Exception as e:
@@ -84,6 +85,25 @@ def parse(
     finally:
         if should_delete:
             os.remove(f_name)
+
+def process_ingest_date(doc_dict):
+    """
+        adds two new fields (or override existing)
+            - original_ingest_date = when the document was first ingested
+            - current_ingest_date = when the document was last ingested
+    """
+    from datetime import datetime
+    from json import dumps
+    from dataPipelines.gc_ingest.tools.db.utils import CoreDBManager, DBType
+    db_type = DBType('orch')
+    db_manager = CoreDBManager("", "")
+    db_engine = db_manager.get_db_engine(db_type=db_type)
+    result = db_engine.execute(f"SELECT min(batch_timestamp), max(batch_timestamp) from public.versioned_docs where json_metadata->>'doc_name' = '{doc_dict['doc_name']}'")
+    resultset = [dict(row) for row in result]
+    if len(resultset) > 0:
+        doc_dict['original_ingest_date'] = datetime.strftime(resultset[0]['min'], '%Y-%m-%dT%H:%M:%S') if resultset[0]['min'] != None else doc_dict["access_timestamp_dt"] 
+        doc_dict['current_ingest_date'] = datetime.strftime(resultset[0]['max'], '%Y-%m-%dT%H:%M:%S') if resultset[0]['max'] != None else doc_dict["access_timestamp_dt"]
+    return doc_dict
 
 def post_process(doc_dict):
     doc_dict["raw_text"] = utf8_pass(doc_dict["text"])
@@ -107,6 +127,7 @@ def post_process(doc_dict):
         doc_dict["access_timestamp_dt"] = datetime_utils.get_access_timestamp(doc_dict["meta_data"])
         doc_dict["publication_date_dt"] = datetime_utils.get_publication_date(doc_dict["meta_data"])
         doc_dict["is_revoked_b"] = False
+        doc_dict["doc_name"] = doc_dict["meta_data"]["doc_name"]
     else:
         doc_dict["is_revoked_b"] = False
 
