@@ -89,7 +89,7 @@ def _remove_nav_bar(soup: bs4.BeautifulSoup) -> None:
 
 def _remove_header_href(soup: bs4.BeautifulSoup) -> None:
     """Remove any a tag with the class 'visually-hidden. . .  etc' """
-    a_tag = soup.find('a', class_='visually-hidden focusable skip-link')
+    a_tag = soup.find('a', class_='visually-hidden focusable skip-link') # Targetting SAMM Chapters
     if a_tag is not None:
         a_tag.decompose()      
 
