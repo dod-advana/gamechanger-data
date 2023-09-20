@@ -79,7 +79,6 @@ def _remove_nav_bar(soup: bs4.BeautifulSoup) -> None:
         ('div', {"class": "clearfix header-inside"}), # SAMM
         ('div', {"class": "mobile-nav"}), # MARADMIN
         ('footer', {}), # MARADMIN
-        ('a', {"class": "visually-hidden focusable skip-link"}) # SAMM's 'Skip to main content'
     ]
     header_tags = []
     for name, attrs in soup_search_args:
@@ -87,6 +86,12 @@ def _remove_nav_bar(soup: bs4.BeautifulSoup) -> None:
     for header_tag in header_tags:
         header_tag.decompose()
         del header_tag
+
+def _remove_header_href(soup: bs4.BeautifulSoup) -> None:
+    """Remove any a tag with the class 'visually-hidden. . .  etc' """
+    a_tag = soup.find('a', class_='visually-hidden focusable skip-link')
+    if a_tag is not None:
+        a_tag.decompose()      
 
 def clean_html_for_pdf(markup: Union[IO, AnyStr]) -> str:
     """Cleans known issues from html that prevent pdf generation."""
@@ -106,6 +111,8 @@ def clean_html_for_pdf(markup: Union[IO, AnyStr]) -> str:
     _truncate_rowspan(soup)
 
     _remove_nav_bar(soup)
+
+    _remove_header_href(soup)
 
     return str(soup)
 
