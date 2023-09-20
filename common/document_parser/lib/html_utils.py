@@ -79,6 +79,7 @@ def _remove_nav_bar(soup: bs4.BeautifulSoup) -> None:
         ('div', {"class": "clearfix header-inside"}), # SAMM
         ('div', {"class": "mobile-nav"}), # MARADMIN
         ('footer', {}), # MARADMIN
+        ('a', {"class": "visually-hidden focusable skip-link"}) # SAMM's 'Skip to main content'
     ]
     header_tags = []
     for name, attrs in soup_search_args:
@@ -140,3 +141,5 @@ def convert_text_to_html(text: str) -> str:
 
     html = str(soup)
     return html
+
+
