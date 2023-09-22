@@ -87,6 +87,12 @@ def _remove_nav_bar(soup: bs4.BeautifulSoup) -> None:
         header_tag.decompose()
         del header_tag
 
+def _remove_header_href(soup: bs4.BeautifulSoup) -> None:
+    """Remove any a tag with the class 'visually-hidden. . .  etc' """
+    a_tag = soup.find('a', class_='visually-hidden focusable skip-link') # Targetting SAMM Chapters
+    if a_tag is not None:
+        a_tag.decompose()      
+
 def clean_html_for_pdf(markup: Union[IO, AnyStr]) -> str:
     """Cleans known issues from html that prevent pdf generation."""
     soup = bs4.BeautifulSoup(markup, 'html5lib')
@@ -105,6 +111,8 @@ def clean_html_for_pdf(markup: Union[IO, AnyStr]) -> str:
     _truncate_rowspan(soup)
 
     _remove_nav_bar(soup)
+
+    _remove_header_href(soup)
 
     return str(soup)
 
@@ -140,3 +148,5 @@ def convert_text_to_html(text: str) -> str:
 
     html = str(soup)
     return html
+
+
