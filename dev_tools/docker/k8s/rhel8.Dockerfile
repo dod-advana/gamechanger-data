@@ -1,4 +1,4 @@
-ARG BASE_IMAGE=registry.access.redhat.com/ubi8/ubi:8.4-211
+ARG BASE_IMAGE=registry.redhat.io/rhel8/postgresql-13:1-138
 FROM --platform=x86_64 $BASE_IMAGE
 
 ARG \
@@ -23,18 +23,14 @@ ENV LANG="C.utf8" \
     TESSDATA_PREFIX=/usr/local/share/tessdata/
 
 # Additional Repos
-RUN \
-      rpm --import https://download.postgresql.org/pub/repos/yum/RPM-GPG-KEY-PGDG \
-  &&  dnf install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-latest.noarch.rpm \
-  &&  rpm --import https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL \
+RUN rpm --import https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL \
   &&  rpm --import https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-8 \
   &&  dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
 
+
 # COMMON Packages & More Particular RPM Dependcies
-RUN \
-      dnf install -y glibc-locale-source.x86_64 \
-  &&  dnf install -y \
-        zip \
+RUN dnf install -y glibc-locale-source.x86_64 \
+  &&  dnf install -y zip \
         unzip \
         gzip \
         zlib \
@@ -57,9 +53,7 @@ RUN \
         python38 \
         python38-devel \
         python38-Cython \
-        "postgresql13" \
-        "postgresql13-devel" \
-        libpq5-devel-13.4-42PGDG.rhel8 \
+        libpq-devel \
         openblas \
         openblas-threads \
         diffutils \
@@ -82,37 +76,34 @@ RUN \
 #          <- (compiled) ghostscript 9.23+
 #          <- (compiled) qpdf 8.2.1
 
-RUN \
-  git clone --depth 1 --branch "release-qpdf-${QPDF_VERSION}" https://github.com/qpdf/qpdf.git /opt/qpdf \
+RUN git clone --depth 1 --branch "release-qpdf-${QPDF_VERSION}" https://github.com/qpdf/qpdf.git /opt/qpdf \
   && echo "[INFO] Installing from source: QPDF ..." && ( \
     cd /opt/qpdf \
     && ./autogen.sh \
     && ./configure \
-    && make \
+    && make -j \
     && make install \
     && ldconfig \
   ) 2>&1 1>/dev/null
 
 # leptonica - tesseract/jbig2enc dep
-RUN \
-  git clone --depth 1 --branch "${LEPTONICA_VERSION}" https://github.com/danbloomberg/leptonica.git /opt/leptonica \
+RUN git clone --depth 1 --branch "${LEPTONICA_VERSION}" https://github.com/danbloomberg/leptonica.git /opt/leptonica \
   && echo "[INFO] Installing from source: LEPTONICA ..." && ( \
     cd /opt/leptonica \
     && ./autogen.sh \
     && ./configure \
-    && make \
+    && make -j \
     && make install \
     && ldconfig \
   ) 2>&1 1>/dev/null
 
 # jbig2enc - optional ocrmypf/tesseract dep
-RUN \
-      git clone --depth 1 --branch "${JBIG2ENC_VERSION}" https://github.com/agl/jbig2enc.git /opt/jbig2enc \
+RUN  git clone --depth 1 --branch "${JBIG2ENC_VERSION}" https://github.com/agl/jbig2enc.git /opt/jbig2enc \
   &&  echo "[INFO] Installing from source: JBIG2ENC ..." && ( \
         cd /opt/jbig2enc \
         && ./autogen.sh \
         && ./configure \
-        && make \
+        && make -j \
         && make install \
         && ldconfig \
       ) 2>&1 1>/dev/null
@@ -124,7 +115,7 @@ RUN \
         cd /opt/tesseract \
         && ./autogen.sh \
         && ./configure \
-        && make \
+        && make -j \
         && make install \
         && ldconfig \
       ) 2>&1 1>/dev/null
@@ -148,7 +139,7 @@ RUN \
         cd "/opt/ghostscript-${GHOSTSCRIPT_VERSION}" \
         && ./autogen.sh \
         && ./configure \
-        && make \
+        && make -j \
         && make install \
         && ldconfig \
       ) 2>&1 1>/dev/null
@@ -159,8 +150,8 @@ RUN \
 
 # non-root app USER/GROUP
 ARG \
-  APP_UID=1001 \
-  APP_GID=1001
+  APP_UID=1000 \
+  APP_GID=1000
 
 # ensure user/group exists, formally
 RUN ( (getent group $APP_GID &> /dev/null) \
@@ -187,8 +178,15 @@ RUN \
     "${APP_VENV_CFG}" \
     "${APP_SRC}"
 
+
+#RUN ln -s /usr/pgsql-13/bin/pg_config /usr/sbin/pg_config
+#RUN export PATH=/usr/pgsql-13/bin/:$PATH
+#RUN export LD_LIBRARY_PATH=/usr/pgsql-13/lib
+RUN dnf install -y libpq-devel
+
 # setup venv
-COPY ./dev_tools/requirements/requirements.txt /tmp/requirements.txt
+COPY ./dev_tools/requirements/rhel8.locked.requirements.txt /tmp/requirements.txt
+
 RUN \
       python3 -m venv "${APP_VENV}" --prompt app-root \
   &&  "${APP_VENV}/bin/python" -m pip install --upgrade --no-cache-dir pip setuptools wheel \
