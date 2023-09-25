@@ -186,6 +186,7 @@ RUN dnf install -y libpq-devel
 
 # setup venv
 COPY ./dev_tools/requirements/rhel8.locked.requirements.txt /tmp/requirements.txt
+COPY ./dev_tools/combined_entities.csv ${APP_VENV}/lib/python3.8/site-packages/gamechangerml/data/combined_entities.csv 
 
 RUN \
       python3 -m venv "${APP_VENV}" --prompt app-root \
