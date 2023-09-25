@@ -7,8 +7,8 @@ attrs==21.2.0
 beautifulsoup4==4.10.0
 bert-extractive-summarizer==0.5.2
 blis==0.7.4
-boto3==1.15.18
-botocore==1.18.18
+boto3==1.26.50
+botocore~=1.29.50
 cachetools==4.2.4
 catalogue==2.0.6
 certifi==2021.10.8
@@ -24,8 +24,8 @@ elasticsearch==7.13.4
 en-core-web-lg @ https://github.com/explosion/spacy-models/releases/download/en_core_web_lg-3.0.0/en_core_web_lg-3.0.0.tar.gz
 en-core-web-md @ https://github.com/explosion/spacy-models/releases/download/en_core_web_md-3.0.0/en_core_web_md-3.0.0.tar.gz
 en-core-web-sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.0.0/en_core_web_sm-3.0.0.tar.gz
-faiss-cpu==1.7.1.post2
-faiss-gpu==1.7.1.post2
+faiss-cpu~=1.7.2
+faiss-gpu~=1.7.2
 fastapi==0.69.0
 fastapi-utils==0.2.1
 fasteners==0.16.3
@@ -35,9 +35,10 @@ filetype==1.0.8
 flatbuffers==1.12
 future==0.18.2
 fuzzywuzzy==0.18.0
-gamechangerml @ https://github.com/dod-advana/gamechanger-ml/archive/refs/heads/task/UOT-117914.zip
+# Use dod-advana/gamechanger-ml here once its versioning is fixed; issue 155
+gamechangerml @ git+https://github.com/neofob/gamechanger-ml.git@tp-dev
 gast==0.4.0
-gensim==3.8.3
+gensim==4.1.2
 google-auth==2.3.0
 google-auth-oauthlib==0.4.6
 google-pasta==0.2.0
@@ -48,14 +49,14 @@ h5py==3.1.0
 hnswlib==0.5.2
 html5lib==1.1
 httptools==0.1.2
-huggingface-hub==0.0.19
+huggingface-hub==0.16.4
 humanfriendly==10.0
 idna==3.3
 img2pdf==0.4.2
 importlib-resources==5.3.0
 iniconfig==1.1.1
 Jinja2==3.0.2
-jmespath==0.10.0
+jmespath==1.0.1
 joblib==1.1.0
 jsonschema==4.1.2
 keras-nightly==2.5.0.dev2021032900
@@ -83,7 +84,7 @@ pikepdf==2.16.1
 Pillow==8.4.0
 pluggy==1.0.0
 preshed==3.0.5
-protobuf==3.18.1
+protobuf==3.20.3
 psycopg2==2.8.6
 py==1.10.0
 pyasn1==0.4.8
@@ -102,16 +103,16 @@ python-dateutil==2.8.2
 pytz==2021.3
 PyYAML==5.4.1
 redis==3.5.3
-regex==2021.10.8
+regex==2023.8.8
 reportlab==3.6.2
 requests==2.26.0
 requests-oauthlib==1.3.0
 rsa==4.7.2
-s3transfer==0.3.7
+s3transfer==0.6.2
 sacremoses==0.0.46
 scikit-learn==0.24.2
 scipy==1.7.1
-sentence-transformers==2.0.0
+sentence-transformers==2.2.2
 sentencepiece==0.1.96
 six==1.15.0
 smart-open==5.2.1
@@ -120,7 +121,7 @@ sortedcontainers==2.4.0
 soupsieve==2.2.1
 spacy==3.0.7
 spacy-legacy==3.0.8
-SQLAlchemy==1.3.24
+SQLAlchemy~=1.4.0
 srsly==2.4.1
 starlette==0.15.0
 syntok==1.3.1
@@ -132,13 +133,13 @@ tensorflow-estimator==2.5.0
 termcolor==1.1.0
 thinc==8.0.11
 threadpoolctl==3.0.0
-tokenizers==0.10.3
+tokenizers==0.13.3
 toml==0.10.2
-torch==1.7.1
-torchvision==0.8.2
+torch==2.0.1
+torchvision==0.15.2
 tqdm==4.62.3
-transformers==4.11.3
-txtai==2.0.0
+transformers==4.32.0
+txtai==6.0.0
 typer==0.3.2
 typing-extensions==3.7.4.3
 urllib3==1.25.11
