@@ -29,7 +29,7 @@
 
 
 # Specify the crawler name
-CRAWLER_NAME="CNSS" # Targeted crawler to delete
+CRAWLER_NAME="army_pubs" # Targeted crawler to delete
 
 TIMESTAMP=$(date "+%Y-%m-%dT%H:%M:%S")  # This will generate a timestamp like 2023-10-05T16:08:01
 
@@ -53,7 +53,7 @@ EOF
 
 # Step 1: Pull down all metadata files
 echo "Downloading metadata files..." | tee -a "${LOG_FILE}" # Display to console and save log
-aws s3 cp s3://advana-data-zone/bronze/gamechanger/pdf/ "${LOCAL_DIR}" --exclude="*" --include="*.metadata" --recursive >> "${LOG_FILE}" 2>> "${ERROR_LOG_FILE}" #
+aws s3 cp s3://advana-data-zone/bronze/gamechanger/pdf/ "${LOCAL_DIR}" --exclude="*" --include="*.metadata" --recursive >> "${LOG_FILE}" 2>> "${ERROR_LOG_FILE}"
 # s3://advana-data-zone/bronze/gamechanger/data-pipelines/orchestration/crawlers/cumulative-manifest.json
 
 # Step 2: Filter out metadata files for the desired crawler
@@ -69,9 +69,9 @@ echo "Deleting from the manifest..." | tee -a "${LOG_FILE}"
 python dataPipelines/scripts/manifest_delete.py --input "${OUTPUT_JSON}" >> "${LOG_FILE}" 2>> "${ERROR_LOG_FILE}"
 
 # Step 5: Upload the updated JSON to a specified S3 path
-S3_DESTINATION_PATH="s3://advana-data-zone/bronze/gamechanger/data-pipelines/orchestration/crawlers/cumulative-manifest.json"  # Specify your S3 path here
+S3_DESTINATION_PATH="s3://advana-data-zone/bronze/gamechanger/data-pipelines/orchestration/crawlers/test-manifest/"  # Specify your S3 path here
 echo "Uploading the updated JSON to ${S3_DESTINATION_PATH}..." | tee -a "${LOG_FILE}"
-aws s3 cp "${OUTPUT_JSON}" "${S3_DESTINATION_PATH}" >> "${LOG_FILE}" 2>> "${ERROR_LOG_FILE}"
+aws s3 cp "${OUTPUT_JSON}" "${S3_DESTINATION_PATH}" --overwrite >> "${LOG_FILE}" 2>> "${ERROR_LOG_FILE}"
 
 # End timer and display elapsed time
 cat <<EOF
