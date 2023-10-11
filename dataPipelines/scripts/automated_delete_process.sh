@@ -58,7 +58,7 @@ aws s3 cp s3://advana-data-zone/bronze/gamechanger/pdf/ "${LOCAL_DIR}" --exclude
 
 # Step 2: Filter out metadata files for the desired crawler
 echo "Filtering metadata for ${CRAWLER_NAME}..." | tee -a "${LOG_FILE}"
-python ./gather_crawler_output.py --crawler "${CRAWLER_NAME}" --input-dir "${LOCAL_DIR}" --output "${OUTPUT_JSON}" >> "${LOG_FILE}" 2>> "${ERROR_LOG_FILE}"
+python3 ./gather_crawler_output.py --crawler "${CRAWLER_NAME}" --input-dir "${LOCAL_DIR}" --output "${OUTPUT_JSON}" >> "${LOG_FILE}" 2>> "${ERROR_LOG_FILE}"
 
 # Step 3: Delete data using delete.sh
 echo "Deleting data across s3, postgres, neo4j, and Elasticsearch..." | tee -a "${LOG_FILE}"
@@ -66,7 +66,7 @@ bash delete.sh --input "${OUTPUT_JSON}" >> "${LOG_FILE}" 2>> "${ERROR_LOG_FILE}"
 
 # Step 4: Delete from the manifest
 echo "Deleting from the manifest..." | tee -a "${LOG_FILE}"
-python dataPipelines/scripts/manifest_delete.py --input "${OUTPUT_JSON}" >> "${LOG_FILE}" 2>> "${ERROR_LOG_FILE}"
+python3 dataPipelines/scripts/manifest_delete.py --input "${OUTPUT_JSON}" >> "${LOG_FILE}" 2>> "${ERROR_LOG_FILE}"
 
 # Step 5: Upload the updated JSON to a specified S3 path
 S3_DESTINATION_PATH="s3://advana-data-zone/bronze/gamechanger/data-pipelines/orchestration/crawlers/test-manifest/"  # Specify your S3 path here
