@@ -132,7 +132,7 @@ class NGAManualMetadata:
 
                 # copy over the .pdf file to the output directory if the output directory was specified
                 if output_directory!=input_directory:
-                    files = [filename for filename in os.listdir(output_directory) if filename.startswith(doc['doc_name'])]
+                    files = [filename for filename in os.listdir(input_directory) if filename.startswith(doc['doc_name'])]
                     if len(files) == 0:
                         print(f"{doc['doc_name']} has no corresponding file!!")
                         continue
