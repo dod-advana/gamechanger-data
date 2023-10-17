@@ -44,7 +44,7 @@ class NGAManualMetadata:
         self.all_added_files = []
         self.all_deleted_files = []
 
-    def create_metadata_files(self, input_directory, output_directory = None, files_to_delete_crawler_output = "crawler_output.json"):
+    def create_metadata_files(self, input_directory, output_directory = None):
         # if output_directory was passed in, create the directory if doesn't currently exist
         if output_directory:
             if not os.path.exists(output_directory):
@@ -56,10 +56,16 @@ class NGAManualMetadata:
             # if no output directory specified, make new files in the input directory
             output_directory=input_directory
 
-        files_to_delete_crawler_output_full_path = os.path.join(output_directory, files_to_delete_crawler_output)
-        if not os.path.exists(files_to_delete_crawler_output):
-            print(f"{files_to_delete_crawler_output} doesn't exist, creating file in {output_directory}")
+        files_to_delete_crawler_output_full_path = os.path.join(output_directory, "crawler_output_nga_deletions.json")
+        if not os.path.exists(files_to_delete_crawler_output_full_path):
+            print(f"{files_to_delete_crawler_output_full_path} doesn't exist, creating file in {output_directory}")
             with open(files_to_delete_crawler_output_full_path, 'w') as fp:
+                pass
+
+        files_to_add_crawler_output_full_path = os.path.join(output_directory, "crawler_output_nga_additions.json")
+        if not os.path.exists(files_to_add_crawler_output_full_path):
+            print(f"{files_to_add_crawler_output_full_path} doesn't exist, creating file in {output_directory}")
+            with open(files_to_add_crawler_output_full_path, 'w') as fp:
                 pass
 
         try:
@@ -126,16 +132,24 @@ class NGAManualMetadata:
 
                 # copy over the .pdf file to the output directory if the output directory was specified
                 if output_directory!=input_directory:
+                    files = [filename for filename in os.listdir(output_directory) if filename.startswith(doc['doc_name'])]
+                    assert len(files) == 1
+                    input_filepath = files[0]
                     orig_copy_filepath = os.path.join(str(output_directory),metadata_record["file_name"])
-                    shutil.copy(filepath, orig_copy_filepath)
+                    shutil.copy(input_filepath, orig_copy_filepath)
                     metadata_outfile = orig_copy_filepath + '.metadata'
                 else:
                     metadata_outfile = str(filepath) + '.metadata'
                 if doc:
                     with open(metadata_outfile, "w") as f:
-                        f.write(json.dumps(doc))
+                        jsoned_data = json.dumps(doc)
+                        f.write(jsoned_data)
+                        with open(files_to_add_crawler_output_full_path, 'a') as output_json_file:
+                                output_json_file.write(jsoned_data)
+                                output_json_file.write('\n')
                         # fully processed the file, write to all_processed_files
                         self.all_added_files.append(metadata_outfile)
+                    
             else:
                 # Delete
                 metadata_fname = metadata_record['file_name']+".metadata"
@@ -159,7 +173,7 @@ class NGAManualMetadata:
                                 jsoned_data = json.dumps(json_object)
                                 output_json_file.write(jsoned_data)
                                 output_json_file.write('\n')
-                    self.all_added_files.append(metadata_fname)
+                    self.all_deleted_files.append(metadata_fname)
 
                     # delete the extra metadata file after concatenation
                     try:
@@ -169,9 +183,9 @@ class NGAManualMetadata:
 
 
 if __name__=="__main__":
-    input_directory = "/home/gamechanger/de_test_scripts/nga_files"
+    input_directory = "/data/gamechanger/gamechanger-data/tmp/nga_files_10162023/"
     output_directory = input_directory+"output"
-    nga_mm = NGAManualMetadata(metadata_filename="ngapolicy_metadata.xlsx")
+    nga_mm = NGAManualMetadata(metadata_filename="ngapolicy_metadata_20231016192512.xlsx")
     nga_mm.create_metadata_files(input_directory,output_directory=output_directory)
     print(f"added files: {nga_mm.all_added_files}")
     print(f"deleted files: {nga_mm.all_deleted_files}")
