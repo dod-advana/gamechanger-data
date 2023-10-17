@@ -139,7 +139,7 @@ class NGAManualMetadata:
                     if len(files) > 1:
                         print(f"{doc['doc_name']} has several corresponding files: {files}!!")
                         continue
-                    input_filepath = files[0]
+                    input_filepath = os.path.join(str(input_directory), files[0])
                     orig_copy_filepath = os.path.join(str(output_directory),metadata_record["file_name"])
                     shutil.copy(input_filepath, orig_copy_filepath)
                     metadata_outfile = orig_copy_filepath + '.metadata'
