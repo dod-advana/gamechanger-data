@@ -133,7 +133,12 @@ class NGAManualMetadata:
                 # copy over the .pdf file to the output directory if the output directory was specified
                 if output_directory!=input_directory:
                     files = [filename for filename in os.listdir(output_directory) if filename.startswith(doc['doc_name'])]
-                    assert len(files) == 1
+                    if len(files) == 0:
+                        print(f"{doc['doc_name']} has no corresponding file!!")
+                        continue
+                    if len(files) > 1:
+                        print(f"{doc['doc_name']} has several corresponding files: {files}!!")
+                        continue
                     input_filepath = files[0]
                     orig_copy_filepath = os.path.join(str(output_directory),metadata_record["file_name"])
                     shutil.copy(input_filepath, orig_copy_filepath)
