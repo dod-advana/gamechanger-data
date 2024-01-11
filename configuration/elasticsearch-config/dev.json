@@ -364,6 +364,10 @@
           "type": "keyword",
           "store": true
         },
+        "crawler_display_name ": {
+          "type": "keyword",
+          "store": true
+        },
         "title": {
           "type": "keyword",
           "store": true,
