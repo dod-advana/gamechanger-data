@@ -1,0 +1,2864 @@
+
+  STARTING PIPELINE RUN
+  DATE: 2023-12-14 TIME: 10:05:05
+
+
+CRAWLING INITIATED
+
+-- ARGS/VARS --
+download_output_dir=/var/tmp/output
+crawler_output_location=/var/tmp/output/crawler_output.json
+previous_manifest_location=/tmp/previous-manifest.json
+spiders_file_location=/tmp/spiders_to_run.txt
+slack_hook_channel_id=C0202F59DEX
+slack_hook_url=https://hooks.slack.com/services/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
+dont_filter_previous_hashes=False
+
+Done resolving spiders, will run 4
+ -  marine_corp_spider.py
+ -  milpersman_spider.py
+ -  bupers_spider.py
+ -  dfars_pgi_spider.py
+
+++ Initiating downloader for marine_pubs
+Reading in previous manifest
+1000 lines read in
+2000 lines read in
+3000 lines read in
+4000 lines read in
+5000 lines read in
+6000 lines read in
+7000 lines read in
+8000 lines read in
+9000 lines read in
+10000 lines read in
+11000 lines read in
+12000 lines read in
+13000 lines read in
+14000 lines read in
+15000 lines read in
+16000 lines read in
+17000 lines read in
+18000 lines read in
+19000 lines read in
+20000 lines read in
+21000 lines read in
+22000 lines read in
+23000 lines read in
+24000 lines read in
+25000 lines read in
+26000 lines read in
+27000 lines read in
+28000 lines read in
+29000 lines read in
+30000 lines read in
+31000 lines read in
+32000 lines read in
+33000 lines read in
+34000 lines read in
+35000 lines read in
+36000 lines read in
+37000 lines read in
+38000 lines read in
+39000 lines read in
+40000 lines read in
+41000 lines read in
+42000 lines read in
+43000 lines read in
+44000 lines read in
+45000 lines read in
+46000 lines read in
+47000 lines read in
+48000 lines read in
+49000 lines read in
+50000 lines read in
+51000 lines read in
+52000 lines read in
+53000 lines read in
+54000 lines read in
+55000 lines read in
+56000 lines read in
+57000 lines read in
+58000 lines read in
+59000 lines read in
+60000 lines read in
+61000 lines read in
+62000 lines read in
+63000 lines read in
+64000 lines read in
+65000 lines read in
+66000 lines read in
+67000 lines read in
+68000 lines read in
+69000 lines read in
+70000 lines read in
+71000 lines read in
+72000 lines read in
+73000 lines read in
+74000 lines read in
+75000 lines read in
+76000 lines read in
+77000 lines read in
+78000 lines read in
+79000 lines read in
+80000 lines read in
+81000 lines read in
+82000 lines read in
+83000 lines read in
+84000 lines read in
+85000 lines read in
+86000 lines read in
+87000 lines read in
+88000 lines read in
+89000 lines read in
+90000 lines read in
+91000 lines read in
+92000 lines read in
+93000 lines read in
+94000 lines read in
+95000 lines read in
+96000 lines read in
+97000 lines read in
+98000 lines read in
+99000 lines read in
+100000 lines read in
+101000 lines read in
+102000 lines read in
+103000 lines read in
+104000 lines read in
+105000 lines read in
+106000 lines read in
+107000 lines read in
+108000 lines read in
+109000 lines read in
+110000 lines read in
+111000 lines read in
+112000 lines read in
+113000 lines read in
+114000 lines read in
+115000 lines read in
+116000 lines read in
+117000 lines read in
+118000 lines read in
+119000 lines read in
+120000 lines read in
+121000 lines read in
+122000 lines read in
+123000 lines read in
+124000 lines read in
+125000 lines read in
+126000 lines read in
+127000 lines read in
+128000 lines read in
+129000 lines read in
+130000 lines read in
+131000 lines read in
+132000 lines read in
+133000 lines read in
+134000 lines read in
+135000 lines read in
+136000 lines read in
+137000 lines read in
+138000 lines read in
+139000 lines read in
+140000 lines read in
+141000 lines read in
+142000 lines read in
+143000 lines read in
+144000 lines read in
+145000 lines read in
+146000 lines read in
+147000 lines read in
+148000 lines read in
+149000 lines read in
+150000 lines read in
+151000 lines read in
+152000 lines read in
+153000 lines read in
+154000 lines read in
+155000 lines read in
+156000 lines read in
+157000 lines read in
+158000 lines read in
+159000 lines read in
+160000 lines read in
+161000 lines read in
+162000 lines read in
+163000 lines read in
+164000 lines read in
+165000 lines read in
+166000 lines read in
+167000 lines read in
+168000 lines read in
+169000 lines read in
+170000 lines read in
+171000 lines read in
+172000 lines read in
+173000 lines read in
+174000 lines read in
+175000 lines read in
+176000 lines read in
+177000 lines read in
+178000 lines read in
+179000 lines read in
+180000 lines read in
+181000 lines read in
+182000 lines read in
+183000 lines read in
+184000 lines read in
+185000 lines read in
+186000 lines read in
+187000 lines read in
+188000 lines read in
+189000 lines read in
+190000 lines read in
+191000 lines read in
+192000 lines read in
+193000 lines read in
+194000 lines read in
+195000 lines read in
+196000 lines read in
+197000 lines read in
+198000 lines read in
+199000 lines read in
+200000 lines read in
+201000 lines read in
+202000 lines read in
+203000 lines read in
+204000 lines read in
+205000 lines read in
+206000 lines read in
+207000 lines read in
+208000 lines read in
+209000 lines read in
+210000 lines read in
+Previous manifest loaded, will filter 52105 hashes
+Skipping download of MCWP 3-40 because it was in previous_hashes
+Skipping download of MCO 5200.17F because it was in previous_hashes
+Skipping download of MCO 5600.48D because it was in previous_hashes
+Skipping download of NAVMC 4000.6B because it was in previous_hashes
+Skipping download of MCO 1320.11H because it was in previous_hashes
+Skipping download of NAVMC 1700.4 because it was in previous_hashes
+Skipping download of MCBUL 10120 because it was in previous_hashes
+Skipping download of MCO 5401.1 because it was in previous_hashes
+Skipping download of MCO 3430.2D because it was in previous_hashes
+Skipping download of NAVMC 1200.1J because it was in previous_hashes
+Skipping download of MCTP 3-30D because it was in previous_hashes
+Skipping download of MCRP 6-10.1 because it was in previous_hashes
+Skipping download of MCO 1306.18B because it was in previous_hashes
+Skipping download of MCO 3502.40 because it was in previous_hashes
+Skipping download of MCBUL 3502 because it was in previous_hashes
+Skipping download of MCO 1553.3C because it was in previous_hashes
+Skipping download of MCTP 3-20E because it was in previous_hashes
+Skipping download of MCO 4000.57B because it was in previous_hashes
+Skipping download of MCTP 3-40D because it was in previous_hashes
+Skipping download of IRM- 2300-19 because it was in previous_hashes
+Skipping download of MCO 4733.1D because it was in previous_hashes
+Skipping download of MCRP 3-40B.6 because it was in previous_hashes
+Skipping download of MCRP 7-20A.1 because it was in previous_hashes
+Skipping download of MCO 5300.17A because it was in previous_hashes
+Skipping download of MCO 1738.1B because it was in previous_hashes
+Skipping download of MCO 3550.9A because it was in previous_hashes
+Skipping download of MCO 4450.15B because it was in previous_hashes
+Skipping download of MCBUL 1501 because it was in previous_hashes
+Skipping download of NAVMC 3500.57D because it was in previous_hashes
+**** MEDIA FAILED
+[Failure instance: Traceback: <class 'twisted.internet.error.TimeoutError'>: User timeout caused connection failure: Getting https://www.marines.mil/Portals/1/Publications/MCRP%202-10B.1.pdf?ver=WZgANNGDKsmcphvgtPdt-Q%3d%3d took longer than 3.5 seconds..
+/usr/local/lib/python3.6/site-packages/twisted/internet/defer.py:764:_startRunCallbacks
+/usr/local/lib/python3.6/site-packages/twisted/internet/defer.py:859:_runCallbacks
+/usr/local/lib/python3.6/site-packages/twisted/internet/defer.py:1751:gotResult
+/usr/local/lib/python3.6/site-packages/twisted/internet/defer.py:63:run
+--- <exception caught here> ---
+/usr/local/lib/python3.6/site-packages/twisted/internet/defer.py:1658:_inlineCallbacks
+/usr/local/lib/python3.6/site-packages/twisted/internet/defer.py:63:run
+/usr/local/lib/python3.6/site-packages/twisted/python/failure.py:500:throwExceptionIntoGenerator
+/usr/local/lib/python3.6/site-packages/scrapy/core/downloader/middleware.py:44:process_request
+/usr/local/lib/python3.6/site-packages/twisted/internet/defer.py:859:_runCallbacks
+/usr/local/lib/python3.6/site-packages/scrapy/core/downloader/handlers/http11.py:368:_cb_timeout
+]
+<MarineCorpSpider 'marine_pubs' at 0x7fbc55a65c18>
+Skipping download of MCBUL 5210 because it was in previous_hashes
+Skipping download of MCO 5512.11F because it was in previous_hashes
+Skipping download of NAVMC 3500.78C because it was in previous_hashes
+Skipping download of MCO 4690.1B because it was in previous_hashes
+Skipping download of NAVMC 3500.98C because it was in previous_hashes
+Skipping download of NAVMC 3500.116B because it was in previous_hashes
+Skipping download of NAVMC 1700.2 because it was in previous_hashes
+Skipping download of MCO 6320.4A because it was in previous_hashes
+Skipping download of NAVMC 4000.4B because it was in previous_hashes
+Skipping download of MCDP 8 because it was in previous_hashes
+Skipping download of MCO 3902.1E because it was in previous_hashes
+Skipping download of MCO 7000.1 because it was in previous_hashes
+Skipping download of MCTP 3-01C because it was in previous_hashes
+Skipping download of NAVMC 1700.41 because it was in previous_hashes
+Skipping download of MCO 3574.2M because it was in previous_hashes
+Skipping download of MCO 11010.16A because it was in previous_hashes
+Skipping download of NAVMC 4400.177A because it was in previous_hashes
+Skipping download of IRM-5231-01D because it was in previous_hashes
+Skipping download of MCO 5400.53A because it was in previous_hashes
+Skipping download of MCRP 10-10E.10 because it was in previous_hashes
+Skipping download of MCO 1754.10B because it was in previous_hashes
+Skipping download of MCRP 3-20.4 because it was in previous_hashes
+Skipping download of MCBUL 1300 because it was in previous_hashes
+Skipping download of NAVMC 4000.8 because it was in previous_hashes
+Skipping download of NAVMC 3500.20D because it was in previous_hashes
+Skipping download of MCO 4600.7A because it was in previous_hashes
+Skipping download of NAVMC 3500.38D because it was in previous_hashes
+Skipping download of MCBUL 1020 because it was in previous_hashes
+Skipping download of MCO 1400.31D because it was in previous_hashes
+Skipping download of NAVMC 3500.104C because it was in previous_hashes
+Skipping download of MCO 6110.3A because it was in previous_hashes
+Skipping download of MCO 1720.2A because it was in previous_hashes
+Skipping download of NAVMC 1720.1A because it was in previous_hashes
+Skipping download of MCO 1001.62C because it was in previous_hashes
+Skipping download of MCO 5580.7 because it was in previous_hashes
+Skipping download of MCO 11262.2C because it was in previous_hashes
+Skipping download of NAVMC 3500.130 because it was in previous_hashes
+No supported downloadable item for MCO 4030.33F
+Skipping download of MCO 1742.1C because it was in previous_hashes
+Skipping download of MCO 1755.3A because it was in previous_hashes
+Skipping download of NAVMC 3500.129 because it was in previous_hashes
+Skipping download of MCO 4400.39A because it was in previous_hashes
+Skipping download of MCO 1730.9 because it was in previous_hashes
+Skipping download of MCO 3500.11G because it was in previous_hashes
+Skipping download of MCO 5530.13 because it was in previous_hashes
+Skipping download of NAVMC 3500.51D because it was in previous_hashes
+Skipping download of NAVMC 4790.1D because it was in previous_hashes
+Skipping download of MCO 1524.2 because it was in previous_hashes
+Skipping download of MCO 8023.3D because it was in previous_hashes
+Skipping download of MCO 8020.14A because it was in previous_hashes
+Skipping download of NAVMC 4000.5D because it was in previous_hashes
+Skipping download of MCO 1754.11A because it was in previous_hashes
+Skipping download of NAVMC 1754.11 because it was in previous_hashes
+Skipping download of NAVMC 4000.6A because it was in previous_hashes
+Skipping download of MCO 5354.1F because it was in previous_hashes
+Skipping download of MCO 1001.65A because it was in previous_hashes
+Skipping download of MCTP 3-20C because it was in previous_hashes
+Skipping download of MCTP 11-10B because it was in previous_hashes
+Skipping download of MCRP 3-30.6 because it was in previous_hashes
+Skipping download of MCO 5250.1 because it was in previous_hashes
+Skipping download of MCO 12410.24A because it was in previous_hashes
+Skipping download of MCO 3501.36B because it was in previous_hashes
+No supported downloadable item for MCRP 3-10E.7
+Skipping download of MCO 8011.5B because it was in previous_hashes
+No supported downloadable item for MCTP 13-10M
+No supported downloadable item for MCRP 3-20F.8
+Skipping download of NAVMC 3500.94C because it was in previous_hashes
+Skipping download of NAVMC 3500.128A because it was in previous_hashes
+No supported downloadable item for JAGINST 5800.7G
+Skipping download of MCO 5510.20C because it was in previous_hashes
+Skipping download of MCO 1616.1 because it was in previous_hashes
+No supported downloadable item for MCRP 10-10F.5
+Skipping download of MCO 1130.62C because it was in previous_hashes
+Skipping download of MCO 1754.4C because it was in previous_hashes
+Skipping download of MCO 5400.55 because it was in previous_hashes
+Skipping download of NAVMC 3500.107C because it was in previous_hashes
+Skipping download of MCO 5100.29C because it was in previous_hashes
+Skipping download of NAVMC 3500.50E because it was in previous_hashes
+Skipping download of MCTP 3-03D because it was in previous_hashes
+Skipping download of MCO 3120.12A because it was in previous_hashes
+Skipping download of MCO 3030.1A because it was in previous_hashes
+Skipping download of MCO 6600.3B because it was in previous_hashes
+Skipping download of MCTP 3-30A because it was in previous_hashes
+Skipping download of MCO 1040R.31 because it was in previous_hashes
+Skipping download of MCBUL 4491 because it was in previous_hashes
+Skipping download of MCO 11240.118A because it was in previous_hashes
+Skipping download of MCO 3000.13B because it was in previous_hashes
+No supported downloadable item for MCTP 13-10K
+Skipping download of MCRP 3-20.1 because it was in previous_hashes
+Skipping download of NAVMC 3500.3E because it was in previous_hashes
+Skipping download of MCO 5710.6D because it was in previous_hashes
+Skipping download of NAVMC 3500.44D because it was in previous_hashes
+Skipping download of MCO 4400.200A because it was in previous_hashes
+Skipping download of IRM--2300 because it was in previous_hashes
+Skipping download of NAVMC 2922 because it was in previous_hashes
+Skipping download of NAVMC 3500.123 because it was in previous_hashes
+Skipping download of NAVMC 3500.82B because it was in previous_hashes
+Skipping download of NAVMC 3500.108B because it was in previous_hashes
+Skipping download of MCO 5000.12F because it was in previous_hashes
+Skipping download of MCO 1800.11A because it was in previous_hashes
+Skipping download of MCO 5585.5A because it was in previous_hashes
+Skipping download of MCO 1210.9A because it was in previous_hashes
+Skipping download of MCO 4700.4 because it was in previous_hashes
+Skipping download of NAVMC 3500.39D because it was in previous_hashes
+Skipping download of NAVMC 3500.9C because it was in previous_hashes
+Skipping download of MCO 4470.1B because it was in previous_hashes
+Skipping download of MCO 4151.22 because it was in previous_hashes
+Skipping download of MCO 3500.109A because it was in previous_hashes
+Skipping download of MCTP 3-40E because it was in previous_hashes
+Skipping download of MCTP 3-30G because it was in previous_hashes
+Skipping download of MCDP 7 because it was in previous_hashes
+Skipping download of MCBUL 4440 because it was in previous_hashes
+Skipping download of MCBUL 11000 because it was in previous_hashes
+Skipping download of MCO 3502.3C because it was in previous_hashes
+Skipping download of MCO 1500.59A because it was in previous_hashes
+Skipping download of MCO 7322.1 because it was in previous_hashes
+Skipping download of MCO 1326.2H because it was in previous_hashes
+Skipping download of MCO 1235.1A because it was in previous_hashes
+Skipping download of MCBUL 4000 because it was in previous_hashes
+Skipping download of MCO 1040.42B because it was in previous_hashes
+Skipping download of MCO 5370.8A because it was in previous_hashes
+Skipping download of MCO 5360.10C because it was in previous_hashes
+Skipping download of MCO 1524.1 because it was in previous_hashes
+Skipping download of MCO 5060.20 because it was in previous_hashes
+Skipping download of MCO 1752.5C because it was in previous_hashes
+Skipping download of MCTP 3-03B because it was in previous_hashes
+Skipping download of MCO 1700.23G because it was in previous_hashes
+Skipping download of MCO 1542.3D because it was in previous_hashes
+Skipping download of NAVMC 3500.102C because it was in previous_hashes
+Skipping download of NAVMC 1752.5 because it was in previous_hashes
+Skipping download of NAVMC 3500.83B because it was in previous_hashes
+Skipping download of NAVMC 3500.57C because it was in previous_hashes
+Skipping download of MCO 5104.2 because it was in previous_hashes
+Skipping download of NAVMC 3500.27D because it was in previous_hashes
+Skipping download of MCRP 3-10A.2 because it was in previous_hashes
+Skipping download of MCO 3501.1E because it was in previous_hashes
+Skipping download of MCO 3400.3H because it was in previous_hashes
+Skipping download of NAVMC 3500.117A because it was in previous_hashes
+Skipping download of NAVMC 3500.35C because it was in previous_hashes
+Skipping download of MCO 11240.106C because it was in previous_hashes
+Skipping download of MCO 6400.1A because it was in previous_hashes
+Skipping download of NAVMC 3500.96B because it was in previous_hashes
+Skipping download of MCO 3400.11 because it was in previous_hashes
+Skipping download of MCO 1900.16 because it was in previous_hashes
+Skipping download of MCO 1326.6 because it was in previous_hashes
+Skipping download of MCO 1700.36B because it was in previous_hashes
+Skipping download of MCTP 3-20B because it was in previous_hashes
+Skipping download of NAVMC 3500.121A because it was in previous_hashes
+Skipping download of MCRP 3-10E.6 because it was in previous_hashes
+Skipping download of MCRP 3-20B.1 because it was in previous_hashes
+Skipping download of MCO 6100.14 because it was in previous_hashes
+Skipping download of MCO 3502.10 because it was in previous_hashes
+Skipping download of MCO 1500.62 because it was in previous_hashes
+Skipping download of MCRP 3-03A.2 because it was in previous_hashes
+Skipping download of MCWP 11-10 because it was in previous_hashes
+Skipping download of MCO 1650.18 because it was in previous_hashes
+Skipping download of MCRP 10-10E.1 because it was in previous_hashes
+Skipping download of MCO 5000.23 because it was in previous_hashes
+Skipping download of MCO 5214.2G because it was in previous_hashes
+Skipping download of MCO 1730.6F because it was in previous_hashes
+Skipping download of MCBUL 5810 because it was in previous_hashes
+Skipping download of MCO 5351.11 because it was in previous_hashes
+Skipping download of MCO 1650.60 because it was in previous_hashes
+Skipping download of NAVMC 3500.69C because it was in previous_hashes
+Skipping download of MCO 12271.1 because it was in previous_hashes
+Skipping download of NAVMC 3500.71D because it was in previous_hashes
+Skipping download of NAVMC 3500.61C because it was in previous_hashes
+Skipping download of MCBUL 5603 because it was in previous_hashes
+Skipping download of MCO 5090.2 because it was in previous_hashes
+Skipping download of MCO 5600.20R because it was in previous_hashes
+Skipping download of NAVMC 3500.72B because it was in previous_hashes
+Skipping download of MCO 1740.13D because it was in previous_hashes
+Skipping download of NAVMC 3500.84B because it was in previous_hashes
+Skipping download of MCRP 2-10B.6 because it was in previous_hashes
+Skipping download of MCWP 2-10 because it was in previous_hashes
+Skipping download of MCO 5300.19 because it was in previous_hashes
+Skipping download of MCO 3710.7 because it was in previous_hashes
+Skipping download of MCO 1020.34H because it was in previous_hashes
+Skipping download of NAVMC 3500.55C because it was in previous_hashes
+Skipping download of NAVMC 3500.6C because it was in previous_hashes
+Skipping download of NAVMC 3500.59C because it was in previous_hashes
+Skipping download of NAVMC 3500.66C because it was in previous_hashes
+Skipping download of MCO 10110.14N because it was in previous_hashes
+Skipping download of MCRP 8-10B.6 because it was in previous_hashes
+Skipping download of MCO 6220.2 because it was in previous_hashes
+Skipping download of MCO 11000.22 because it was in previous_hashes
+Skipping download of MCO 6100.13A because it was in previous_hashes
+Skipping download of MCO 5600.31B because it was in previous_hashes
+Skipping download of MCO 5800.16 because it was in previous_hashes
+Skipping download of NAVMC 3500.10D because it was in previous_hashes
+Skipping download of MCBUL 3510 because it was in previous_hashes
+Skipping download of NAVMC 4000.2A because it was in previous_hashes
+Skipping download of MCO 1300R.65D because it was in previous_hashes
+Skipping download of NAVMC 3500.34C because it was in previous_hashes
+Skipping download of MCO 4000.59 because it was in previous_hashes
+Skipping download of NAVMC 3500.16B because it was in previous_hashes
+Skipping download of NAVMC 3500.23B because it was in previous_hashes
+Skipping download of MCO 1050.3J because it was in previous_hashes
+Skipping download of MCO 5100.34A because it was in previous_hashes
+Skipping download of MCO 1650.61 because it was in previous_hashes
+Skipping download of NAVMC 3500.53D because it was in previous_hashes
+Skipping download of NAVMC 3500.114 because it was in previous_hashes
+Skipping download of MCRP 3-40B.5 because it was in previous_hashes
+Skipping download of MCTP 3-40A because it was in previous_hashes
+Skipping download of MCTP 3-40C because it was in previous_hashes
+Skipping download of MCRP 3-40B.3 because it was in previous_hashes
+**** MEDIA FAILED
+[Failure instance: Traceback: <class 'twisted.internet.error.TimeoutError'>: User timeout caused connection failure: Getting https://marines.usmc.afpims.mil/portals/1/Publications/MCO%205230.19A.pdf?ver=2017-03-30-123002-280 took longer than 3.5 seconds..
+/usr/local/lib/python3.6/site-packages/twisted/internet/defer.py:764:_startRunCallbacks
+/usr/local/lib/python3.6/site-packages/twisted/internet/defer.py:859:_runCallbacks
+/usr/local/lib/python3.6/site-packages/twisted/internet/defer.py:1751:gotResult
+/usr/local/lib/python3.6/site-packages/twisted/internet/defer.py:63:run
+--- <exception caught here> ---
+/usr/local/lib/python3.6/site-packages/twisted/internet/defer.py:1658:_inlineCallbacks
+/usr/local/lib/python3.6/site-packages/twisted/internet/defer.py:63:run
+/usr/local/lib/python3.6/site-packages/twisted/python/failure.py:500:throwExceptionIntoGenerator
+/usr/local/lib/python3.6/site-packages/scrapy/core/downloader/middleware.py:44:process_request
+/usr/local/lib/python3.6/site-packages/twisted/internet/defer.py:859:_runCallbacks
+/usr/local/lib/python3.6/site-packages/scrapy/core/downloader/handlers/http11.py:368:_cb_timeout
+]
+<MarineCorpSpider 'marine_pubs' at 0x7fbc55a65c18>
+Skipping download of MCRP 8-10B.3 because it was in previous_hashes
+Skipping download of MCRP 3-40D.14 because it was in previous_hashes
+**** MEDIA FAILED
+[Failure instance: Traceback: <class 'twisted.internet.error.DNSLookupError'>: DNS lookup failed: no results for hostname lookup: marines.mil.
+/usr/local/lib/python3.6/site-packages/twisted/internet/defer.py:764:_startRunCallbacks
+/usr/local/lib/python3.6/site-packages/twisted/internet/defer.py:859:_runCallbacks
+/usr/local/lib/python3.6/site-packages/twisted/internet/defer.py:1751:gotResult
+/usr/local/lib/python3.6/site-packages/twisted/internet/defer.py:63:run
+--- <exception caught here> ---
+/usr/local/lib/python3.6/site-packages/twisted/internet/defer.py:1658:_inlineCallbacks
+/usr/local/lib/python3.6/site-packages/twisted/internet/defer.py:63:run
+/usr/local/lib/python3.6/site-packages/twisted/python/failure.py:500:throwExceptionIntoGenerator
+/usr/local/lib/python3.6/site-packages/scrapy/core/downloader/middleware.py:44:process_request
+/usr/local/lib/python3.6/site-packages/twisted/internet/defer.py:859:_runCallbacks
+/usr/local/lib/python3.6/site-packages/twisted/internet/endpoints.py:1023:startConnectionAttempts
+]
+<MarineCorpSpider 'marine_pubs' at 0x7fbc55a65c18>
+Skipping download of MCRP 3-40D.12 because it was in previous_hashes
+Skipping download of MCTP 10-10F because it was in previous_hashes
+Skipping download of MCO 7220.24P because it was in previous_hashes
+Skipping download of MCO 5711.1G because it was in previous_hashes
+Skipping download of NAVMC 3500.117 because it was in previous_hashes
+Skipping download of NAVMC 3500.12B because it was in previous_hashes
+Skipping download of MCO 1771.2 because it was in previous_hashes
+Skipping download of MCO 4000.56A because it was in previous_hashes
+Skipping download of NAVMC 3500.100B because it was in previous_hashes
+Skipping download of MCO 10110.49 because it was in previous_hashes
+Skipping download of NAVMC 1553.1A because it was in previous_hashes
+Skipping download of MCRP 3-34.3 because it was in previous_hashes
+Skipping download of MCO 5510.18B because it was in previous_hashes
+Skipping download of MCO 7220.52F because it was in previous_hashes
+Skipping download of MCO 1730.8 because it was in previous_hashes
+Skipping download of MCO 3900.20 because it was in previous_hashes
+Skipping download of MCO 3460.3 because it was in previous_hashes
+Skipping download of MCO 5215.17D because it was in previous_hashes
+Skipping download of MCO 1001R.65 because it was in previous_hashes
+Skipping download of MCWP 3-34 because it was in previous_hashes
+Skipping download of MCO 5220.13 because it was in previous_hashes
+Skipping download of MCRP 3-32D.1 because it was in previous_hashes
+Skipping download of MCO 1500.60 because it was in previous_hashes
+Skipping download of MCO 4600.39 because it was in previous_hashes
+Skipping download of MCO 4000.58 because it was in previous_hashes
+Skipping download of MCRP 4-11B because it was in previous_hashes
+Skipping download of MCRP 2-10B.5 because it was in previous_hashes
+Skipping download of MCTP 13-10C because it was in previous_hashes
+Skipping download of MCTP 2-10B because it was in previous_hashes
+Skipping download of MCTP 6-10A because it was in previous_hashes
+Skipping download of MCWP 6-10 because it was in previous_hashes
+Skipping download of MCO 11000.5 because it was in previous_hashes
+Skipping download of MCRP 6-12B because it was in previous_hashes
+Skipping download of NAVMC 1553.2 because it was in previous_hashes
+Skipping download of MCRP 2-10A.1 because it was in previous_hashes
+Skipping download of MCTP 3-40B because it was in previous_hashes
+Skipping download of MCRP 2-10A.5 because it was in previous_hashes
+Skipping download of NAVMC 3500.63 because it was in previous_hashes
+Skipping download of MCO 1754.14 because it was in previous_hashes
+Skipping download of MCO 3500.42C because it was in previous_hashes
+Skipping download of MCRP 3-25A because it was in previous_hashes
+Skipping download of MCWP 3-17.4 because it was in previous_hashes
+Skipping download of MCRP 1-10.1 because it was in previous_hashes
+Skipping download of MCRP 12-10A.1 because it was in previous_hashes
+Skipping download of MCO 5216.20B because it was in previous_hashes
+Skipping download of MCO 1580.7E because it was in previous_hashes
+Skipping download of MCO 1700.41 because it was in previous_hashes
+Skipping download of MCO 1326.7F because it was in previous_hashes
+Skipping download of MCO 1133R.27 because it was in previous_hashes
+Skipping download of MCO 5580.4 because it was in previous_hashes
+Skipping download of MCO 5580.2B because it was in previous_hashes
+Skipping download of MCRP 4-11.1F because it was in previous_hashes
+Skipping download of MCRP 5-12.1B because it was in previous_hashes
+Skipping download of MCO 1001R.1L because it was in previous_hashes
+Skipping download of MCO 1700.31 because it was in previous_hashes
+Skipping download of MCRP 2-3C because it was in previous_hashes
+Skipping download of MCRP 3-40A.9 because it was in previous_hashes
+Skipping download of MCRP 3-17.7A because it was in previous_hashes
+Skipping download of MCRP 3-20F.3 because it was in previous_hashes
+Skipping download of MCO 3110.5 because it was in previous_hashes
+Skipping download of MCWP 3-20.5 because it was in previous_hashes
+Skipping download of MCWP 3-31 because it was in previous_hashes
+Skipping download of MCWP 5-10 because it was in previous_hashes
+Skipping download of MCO 1700.22G because it was in previous_hashes
+Skipping download of MCO 5239.2B because it was in previous_hashes
+Skipping download of MCRP 2-10B.4 because it was in previous_hashes
+Skipping download of MCRP 3-10E.8 because it was in previous_hashes
+Skipping download of MCRP 3-20F.2 because it was in previous_hashes
+Skipping download of MCO 7220.56A because it was in previous_hashes
+Skipping download of MCO 5380.2 because it was in previous_hashes
+Skipping download of MCO 1700.33 because it was in previous_hashes
+Skipping download of NAVMC 3500.1C because it was in previous_hashes
+Skipping download of NAVMC 3500.31B because it was in previous_hashes
+Skipping download of NAVMC 3500.122 because it was in previous_hashes
+Skipping download of NAVMC 3500.93A because it was in previous_hashes
+Skipping download of DA PAM 27-17 because it was in previous_hashes
+Skipping download of NAVMC 3500.115 because it was in previous_hashes
+Skipping download of MCO 3571.2H because it was in previous_hashes
+Skipping download of MCO 12810.1 because it was in previous_hashes
+Skipping download of MCO 5720.74 because it was in previous_hashes
+Skipping download of MCO P10110.42B because it was in previous_hashes
+Skipping download of MCO P4030.31D because it was in previous_hashes
+Skipping download of MCO P4030.21D because it was in previous_hashes
+Skipping download of MCTP 3-32A because it was in previous_hashes
+Skipping download of MCO P1400.31C because it was in previous_hashes
+Skipping download of MCO 5210.11F because it was in previous_hashes
+Skipping download of MCO 3800.2B because it was in previous_hashes
+Skipping download of MCO 1650.39B because it was in previous_hashes
+Skipping download of MCO 3850.1J because it was in previous_hashes
+Skipping download of MCO 3120.11A because it was in previous_hashes
+Skipping download of MCO 1700.37 because it was in previous_hashes
+Skipping download of NAVMC 3500.62A because it was in previous_hashes
+Skipping download of MCO 1200.18 because it was in previous_hashes
+Skipping download of NAVMC 4855.1 because it was in previous_hashes
+Skipping download of MCO 7010.20 because it was in previous_hashes
+Skipping download of MCTP 3-10D because it was in previous_hashes
+Skipping download of MCO 11000.12 because it was in previous_hashes
+Skipping download of MCO 3500.14 because it was in previous_hashes
+Skipping download of MCO P12000.11A because it was in previous_hashes
+Skipping download of MCO 1130.56D because it was in previous_hashes
+Skipping download of MCO 1300.8 because it was in previous_hashes
+Skipping download of MCWP 3-02 because it was in previous_hashes
+Skipping download of MCO 5230.21 because it was in previous_hashes
+Skipping download of MCO 2281.1A because it was in previous_hashes
+Skipping download of MCO 3000.17 because it was in previous_hashes
+Skipping download of MCO 1230.5C because it was in previous_hashes
+Skipping download of MCO 3120.10A because it was in previous_hashes
+Skipping download of MCO 1700.38 because it was in previous_hashes
+Skipping download of NAVMC 3500.20B because it was in previous_hashes
+Skipping download of MCO 4650.39A because it was in previous_hashes
+Skipping download of NAVMC 3500.113 because it was in previous_hashes
+Skipping download of MCO 1520.11F because it was in previous_hashes
+Skipping download of MCO 7300.19 because it was in previous_hashes
+Skipping download of MCO 5500.6H because it was in previous_hashes
+Skipping download of MCO 5430.2 because it was in previous_hashes
+Skipping download of MCO 1510.32F because it was in previous_hashes
+Skipping download of MCO 3000.11E because it was in previous_hashes
+Skipping download of MCO 1000.6 because it was in previous_hashes
+Skipping download of MCO 3504.2A because it was in previous_hashes
+Skipping download of MCO 7220.12R because it was in previous_hashes
+Skipping download of MCO 5090.4A because it was in previous_hashes
+Skipping download of MCO 7220.21F because it was in previous_hashes
+Skipping download of MCO 3502.6A because it was in previous_hashes
+Skipping download of MCO 3900.19 because it was in previous_hashes
+Skipping download of MCO 1306.16F because it was in previous_hashes
+Skipping download of MCO 1553.4B because it was in previous_hashes
+Skipping download of MCO P4400.151B because it was in previous_hashes
+Skipping download of MCO 11000.25A because it was in previous_hashes
+Skipping download of MCO 4400.79 because it was in previous_hashes
+Skipping download of MCO 12771.3 because it was in previous_hashes
+Skipping download of MCO 5400.54 because it was in previous_hashes
+Skipping download of MCO 1550.25A because it was in previous_hashes
+Skipping download of MCO 1741.8 because it was in previous_hashes
+Skipping download of MCO 3090.2 because it was in previous_hashes
+Skipping download of MCO 1700.32 because it was in previous_hashes
+Skipping download of MCO 8000.7A because it was in previous_hashes
+Skipping download of MCO 1001.61A because it was in previous_hashes
+Skipping download of MCO 4410.29 because it was in previous_hashes
+Skipping download of MCO 8010.12A because it was in previous_hashes
+Skipping download of MCO 4200.22F because it was in previous_hashes
+Skipping download of MCO 4400.194 because it was in previous_hashes
+Skipping download of MCO 4410.27A because it was in previous_hashes
+Skipping download of MCO 3500.18A because it was in previous_hashes
+Skipping download of MCO P1700.27B because it was in previous_hashes
+Skipping download of MCO 1650.46B because it was in previous_hashes
+Skipping download of MCO 1741.11D because it was in previous_hashes
+Skipping download of MCO 1650.19J because it was in previous_hashes
+Skipping download of MCO 6310.1C because it was in previous_hashes
+Skipping download of NAVMC 3500.73 because it was in previous_hashes
+Skipping download of MCIP 3-03.1i because it was in previous_hashes
+Skipping download of MCO 3000.18B because it was in previous_hashes
+Skipping download of MCTP 3-30E because it was in previous_hashes
+Skipping download of MCDP 1-0 because it was in previous_hashes
+Skipping download of MCO 5230.20 because it was in previous_hashes
+Skipping download of MCO 1520.29 because it was in previous_hashes
+Skipping download of MCO 3710.8 because it was in previous_hashes
+Skipping download of MCO 3900.18 because it was in previous_hashes
+**** MEDIA FAILED
+[Failure instance: Traceback: <class 'twisted.internet.error.DNSLookupError'>: DNS lookup failed: no results for hostname lookup: www.doctrine.usmc.mil.
+/usr/local/lib/python3.6/site-packages/twisted/internet/defer.py:764:_startRunCallbacks
+/usr/local/lib/python3.6/site-packages/twisted/internet/defer.py:859:_runCallbacks
+/usr/local/lib/python3.6/site-packages/twisted/internet/defer.py:1751:gotResult
+/usr/local/lib/python3.6/site-packages/twisted/internet/defer.py:63:run
+--- <exception caught here> ---
+/usr/local/lib/python3.6/site-packages/twisted/internet/defer.py:1658:_inlineCallbacks
+/usr/local/lib/python3.6/site-packages/twisted/internet/defer.py:63:run
+/usr/local/lib/python3.6/site-packages/twisted/python/failure.py:500:throwExceptionIntoGenerator
+/usr/local/lib/python3.6/site-packages/scrapy/core/downloader/middleware.py:44:process_request
+/usr/local/lib/python3.6/site-packages/twisted/internet/defer.py:859:_runCallbacks
+/usr/local/lib/python3.6/site-packages/twisted/internet/endpoints.py:1023:startConnectionAttempts
+]
+<MarineCorpSpider 'marine_pubs' at 0x7fbc55a65c18>
+Skipping download of MCO 1650.52A because it was in previous_hashes
+Skipping download of MCO 3000.2J because it was in previous_hashes
+Skipping download of NAVMC 3500.103 because it was in previous_hashes
+Skipping download of MCO 1001.52K because it was in previous_hashes
+Skipping download of NAVMC 3500.53A because it was in previous_hashes
+Skipping download of MCO 1560.25 because it was in previous_hashes
+Skipping download of DA PAM 27-162 because it was in previous_hashes
+Skipping download of MCO 1001.59A because it was in previous_hashes
+Skipping download of MCO 3093.4 because it was in previous_hashes
+Skipping download of MCO 3093.3 because it was in previous_hashes
+Skipping download of MCO 1650.45B because it was in previous_hashes
+Skipping download of MCO 3500.110 because it was in previous_hashes
+Skipping download of MCO 3710.6A because it was in previous_hashes
+Skipping download of MCO 4790.24 because it was in previous_hashes
+Skipping download of MCO 8000.8 because it was in previous_hashes
+Skipping download of NAVMC 4790.02 because it was in previous_hashes
+Skipping download of MCO 2020.1 because it was in previous_hashes
+Skipping download of MCTP 3-20A because it was in previous_hashes
+Skipping download of MCO 1700.23F because it was in previous_hashes
+Skipping download of MCO 5530.17 because it was in previous_hashes
+Skipping download of MCO 5420R.8H because it was in previous_hashes
+Skipping download of MCO 4400.195 because it was in previous_hashes
+Skipping download of MCO 4443.13 because it was in previous_hashes
+Skipping download of MCO 1700.29 because it was in previous_hashes
+Skipping download of MCO 4400.160 because it was in previous_hashes
+Skipping download of NAVMC 3500.46B because it was in previous_hashes
+Skipping download of MCO 1500.53B because it was in previous_hashes
+Skipping download of MCO 5351.1 because it was in previous_hashes
+Skipping download of MCO 1560.21E because it was in previous_hashes
+Skipping download of MCO 7220.13H because it was in previous_hashes
+Skipping download of MCO 1326.5E because it was in previous_hashes
+Skipping download of MCO 3070.2A because it was in previous_hashes
+Skipping download of MCO 1650.57 because it was in previous_hashes
+Skipping download of MCO 5000.18 because it was in previous_hashes
+Skipping download of MCO 3100.4 because it was in previous_hashes
+Skipping download of MCO 4600.40B because it was in previous_hashes
+Skipping download of MCO 8010.13 because it was in previous_hashes
+Skipping download of MCO 10110.47A because it was in previous_hashes
+Skipping download of NAVMC 3500.52C because it was in previous_hashes
+Skipping download of MCO 5230.22 because it was in previous_hashes
+Skipping download of MCO 4790.25 because it was in previous_hashes
+Skipping download of MCO 4400.150 because it was in previous_hashes
+Skipping download of NAVMC 3500.76 because it was in previous_hashes
+Skipping download of DA PAM 385-63 because it was in previous_hashes
+Skipping download of MCO 3502.9 because it was in previous_hashes
+Skipping download of MCO 5200.28A because it was in previous_hashes
+Skipping download of MCO 6220.1 because it was in previous_hashes
+Skipping download of MCO 7040.12 because it was in previous_hashes
+Skipping download of MCO 12410.25 because it was in previous_hashes
+Skipping download of MCO 4066.18 because it was in previous_hashes
+Skipping download of MCO 4790.18C because it was in previous_hashes
+Skipping download of MCO 3058.1 because it was in previous_hashes
+Skipping download of MCO 3104.1B because it was in previous_hashes
+Skipping download of MCRP 3-10E.4 because it was in previous_hashes
+Skipping download of MCO 1553.10 because it was in previous_hashes
+Skipping download of MCO 6530.1 because it was in previous_hashes
+Skipping download of MCO 6530.2 because it was in previous_hashes
+Skipping download of MCO 6320.5 because it was in previous_hashes
+Skipping download of MCO 6400.1 because it was in previous_hashes
+Skipping download of MCO 7300.21B because it was in previous_hashes
+Skipping download of MCO 1751.3 because it was in previous_hashes
+Skipping download of MCO 5300.18 because it was in previous_hashes
+Skipping download of NAVMC 3500.29B because it was in previous_hashes
+Skipping download of NAVMC 3500.111A because it was in previous_hashes
+Skipping download of MCO 1710.30 because it was in previous_hashes
+Skipping download of MCRP 3-33.1J because it was in previous_hashes
+Skipping download of MCO 1040.43B because it was in previous_hashes
+Skipping download of MCO 3120.13 because it was in previous_hashes
+Skipping download of MCO 3150.4A because it was in previous_hashes
+Skipping download of MCO 5311.1E because it was in previous_hashes
+Skipping download of MCWP 3-32 because it was in previous_hashes
+Skipping download of MCWP 2-25 because it was in previous_hashes
+Skipping download of MCRP 3-35.1D because it was in previous_hashes
+Skipping download of MCRP 3-40.3A because it was in previous_hashes
+Skipping download of MCRP 3-40A.1 because it was in previous_hashes
+Skipping download of MCRP 4-11.1C because it was in previous_hashes
+Skipping download of MCO 4790.2 because it was in previous_hashes
+Skipping download of MCO 7220R.39 because it was in previous_hashes
+Skipping download of MCO 1700.39 because it was in previous_hashes
+Skipping download of MCRP 12-10A.2 because it was in previous_hashes
+Skipping download of MCTP 12-10A because it was in previous_hashes
+Skipping download of MCCP 1 because it was in previous_hashes
+Skipping download of MCRP 2-10A.7 because it was in previous_hashes
+Skipping download of MCRP 2-10A.6 because it was in previous_hashes
+Skipping download of MCRP 12-10B.1 because it was in previous_hashes
+Skipping download of MCRP 5-10.2 because it was in previous_hashes
+Skipping download of MCTP 2-10C because it was in previous_hashes
+Skipping download of MCTP 13-10B because it was in previous_hashes
+Skipping download of MCWP 7-10 because it was in previous_hashes
+Skipping download of MCO 4400.201 because it was in previous_hashes
+Skipping download of MCO 3502.7A because it was in previous_hashes
+Skipping download of MCO 5720.77 because it was in previous_hashes
+Skipping download of MCO 4200.34 because it was in previous_hashes
+Skipping download of MCO 6260.3A because it was in previous_hashes
+Skipping download of MCO 3440.8A because it was in previous_hashes
+Skipping download of MCO 1130.80B because it was in previous_hashes
+Skipping download of MCO 7100.13 because it was in previous_hashes
+Skipping download of MCO 6400.2 because it was in previous_hashes
+Skipping download of NAVMC 3500.70B because it was in previous_hashes
+Skipping download of MCO 1130.76D because it was in previous_hashes
+Skipping download of MCRP 8-10B.2 because it was in previous_hashes
+Skipping download of MCRP 3-40D.13 because it was in previous_hashes
+Skipping download of MCRP 3-40D.6 because it was in previous_hashes
+Skipping download of MCRP 3-40A.5 because it was in previous_hashes
+Skipping download of MCO 12451.2D because it was in previous_hashes
+Skipping download of NAVMC 3500.91A because it was in previous_hashes
+Skipping download of MCO 1300.64B because it was in previous_hashes
+Skipping download of MCWP 3-05 because it was in previous_hashes
+**** MEDIA FAILED
+[Failure instance: Traceback: <class 'twisted.internet.error.DNSLookupError'>: DNS lookup failed: no results for hostname lookup: marines.mil.
+/usr/local/lib/python3.6/site-packages/twisted/internet/defer.py:764:_startRunCallbacks
+/usr/local/lib/python3.6/site-packages/twisted/internet/defer.py:859:_runCallbacks
+/usr/local/lib/python3.6/site-packages/twisted/internet/defer.py:1751:gotResult
+/usr/local/lib/python3.6/site-packages/twisted/internet/defer.py:63:run
+--- <exception caught here> ---
+/usr/local/lib/python3.6/site-packages/twisted/internet/defer.py:1658:_inlineCallbacks
+/usr/local/lib/python3.6/site-packages/twisted/internet/defer.py:63:run
+/usr/local/lib/python3.6/site-packages/twisted/python/failure.py:500:throwExceptionIntoGenerator
+/usr/local/lib/python3.6/site-packages/scrapy/core/downloader/middleware.py:44:process_request
+/usr/local/lib/python3.6/site-packages/twisted/internet/defer.py:859:_runCallbacks
+/usr/local/lib/python3.6/site-packages/twisted/internet/endpoints.py:1023:startConnectionAttempts
+]
+<MarineCorpSpider 'marine_pubs' at 0x7fbc55a65c18>
+Skipping download of MCTP 3-01D because it was in previous_hashes
+Skipping download of MCO 1730.7B because it was in previous_hashes
+Skipping download of MCO 5710.8 because it was in previous_hashes
+Skipping download of MCO 1500.61 because it was in previous_hashes
+Skipping download of NAVMC 3500.110A because it was in previous_hashes
+Skipping download of MCO 11000.11A because it was in previous_hashes
+Skipping download of MCO 12301.1C because it was in previous_hashes
+Skipping download of MCO 3550.10 because it was in previous_hashes
+Skipping download of MCO 12510.2D because it was in previous_hashes
+Skipping download of MCTP 12-10B because it was in previous_hashes
+Skipping download of MCO 5200.24E because it was in previous_hashes
+Skipping download of MCRP 3-30.7 because it was in previous_hashes
+Skipping download of MCTP 3-01A because it was in previous_hashes
+Skipping download of NAVMC 3500.13D because it was in previous_hashes
+Skipping download of MCRP 3-20F.7 because it was in previous_hashes
+Skipping download of MCO 5215.16B because it was in previous_hashes
+Skipping download of MCO 13670.1G because it was in previous_hashes
+Skipping download of MCO 1650R.35F because it was in previous_hashes
+Skipping download of MCRP 3-40D.17 because it was in previous_hashes
+Skipping download of MCO 12250.3 because it was in previous_hashes
+Skipping download of MCO 5430.1A because it was in previous_hashes
+Skipping download of NAVMC 3500.85C because it was in previous_hashes
+Skipping download of NAVMC 3500.28C because it was in previous_hashes
+Skipping download of MCRP 10-10E.6 because it was in previous_hashes
+Skipping download of MCRP 12-10A.3 because it was in previous_hashes
+Skipping download of NAVMC 3500.49B because it was in previous_hashes
+Skipping download of MCTP 12-10C because it was in previous_hashes
+Skipping download of MCTP 3-03C because it was in previous_hashes
+Skipping download of MCTP 3-10B because it was in previous_hashes
+Skipping download of NAVMC 3500.127 because it was in previous_hashes
+Skipping download of MCO 3061.1 because it was in previous_hashes
+Skipping download of MCRP 3-40A.7 because it was in previous_hashes
+Skipping download of MCTP 3-01B because it was in previous_hashes
+Skipping download of NAVMC 4790.1B because it was in previous_hashes
+Skipping download of MCO 1754.9B because it was in previous_hashes
+Skipping download of MCO 5060.19C because it was in previous_hashes
+Skipping download of NAVMC 3500.92A because it was in previous_hashes
+Skipping download of MCO 6320.2F because it was in previous_hashes
+Skipping download of MCO 1070.1 because it was in previous_hashes
+Skipping download of MCO 3440.7C because it was in previous_hashes
+Skipping download of MCO 5320.12H because it was in previous_hashes
+Skipping download of MCO 3502.11 because it was in previous_hashes
+Skipping download of MCO 5040.6J because it was in previous_hashes
+Skipping download of MCRP 3-10B.1 because it was in previous_hashes
+Skipping download of MCO 1020.35 because it was in previous_hashes
+Skipping download of MCTP 3-40H because it was in previous_hashes
+Skipping download of MCO 5580.5 because it was in previous_hashes
+Skipping download of NAVMC 3500.100C because it was in previous_hashes
+Skipping download of MCRP 3-40A.3 because it was in previous_hashes
+Skipping download of MCO 1550.4E because it was in previous_hashes
+Skipping download of MCBUL 5580 because it was in previous_hashes
+Skipping download of MCO 4450.12A because it was in previous_hashes
+Skipping download of NAVMC 3500.89C because it was in previous_hashes
+No supported downloadable item for MCRP 2-10A.3
+Skipping download of NAVMC 3500.54E because it was in previous_hashes
+Skipping download of NAVMC 3500.41C because it was in previous_hashes
+Skipping download of NAVMC 3500.33C because it was in previous_hashes
+Skipping download of NAVMC 3500.18D because it was in previous_hashes
+Skipping download of NAVMC 3500.7C because it was in previous_hashes
+Skipping download of MCRP 1-10.2 because it was in previous_hashes
+No supported downloadable item for MCTP 10-10A
+Skipping download of MCO 3502.8A because it was in previous_hashes
+No supported downloadable item for MCTP 10-10F.1
+Skipping download of MCO 4610.37G because it was in previous_hashes
+Skipping download of MCO 11011.23A because it was in previous_hashes
+Skipping download of MCTP 3-10C because it was in previous_hashes
+Skipping download of MCRP 3-10A.1 because it was in previous_hashes
+No supported downloadable item for MCTP 3-02B
+No supported downloadable item for MCTP 10-10C
+Skipping download of NAVMC 3500.14E because it was in previous_hashes
+Skipping download of NAVMC 3500.47D because it was in previous_hashes
+Skipping download of MCWP 3-01 because it was in previous_hashes
+Skipping download of MCBUL 3000 because it was in previous_hashes
+Skipping download of MCO 1500.63 because it was in previous_hashes
+Skipping download of NAVMC 1700.1 because it was in previous_hashes
+Skipping download of MCO 5530.16A because it was in previous_hashes
+Skipping download of MCO 4200.33A because it was in previous_hashes
+Skipping download of NAVMC 3500.118B because it was in previous_hashes
+Skipping download of MCDP 1-4 because it was in previous_hashes
+Skipping download of MCTP 3-40F because it was in previous_hashes
+Skipping download of MCRP 3-10A.3 because it was in previous_hashes
+Skipping download of MCBUL 3967 because it was in previous_hashes
+Skipping download of MCRP 3-40E.1 because it was in previous_hashes
+Skipping download of MCRP 2-10A.9 because it was in previous_hashes
+No supported downloadable item for MCRP 3-10C.1
+No supported downloadable item for MCRP 3-40F.7
+Skipping download of MCO 8400.6A because it was in previous_hashes
+Skipping download of MCO 4000.60 because it was in previous_hashes
+**** MEDIA FAILED
+[Failure instance: Traceback: <class 'twisted.internet.error.TimeoutError'>: User timeout caused connection failure: Getting https://www.marines.mil/Portals/1/Publications/MCRP%203-10A.4.pdf?ver=0Ht6M15OjYQ7_XtmN302rA%3d%3d took longer than 3.5 seconds..
+/usr/local/lib/python3.6/site-packages/twisted/internet/defer.py:764:_startRunCallbacks
+/usr/local/lib/python3.6/site-packages/twisted/internet/defer.py:859:_runCallbacks
+/usr/local/lib/python3.6/site-packages/twisted/internet/defer.py:1751:gotResult
+/usr/local/lib/python3.6/site-packages/twisted/internet/defer.py:63:run
+--- <exception caught here> ---
+/usr/local/lib/python3.6/site-packages/twisted/internet/defer.py:1658:_inlineCallbacks
+/usr/local/lib/python3.6/site-packages/twisted/internet/defer.py:63:run
+/usr/local/lib/python3.6/site-packages/twisted/python/failure.py:500:throwExceptionIntoGenerator
+/usr/local/lib/python3.6/site-packages/scrapy/core/downloader/middleware.py:44:process_request
+/usr/local/lib/python3.6/site-packages/twisted/internet/defer.py:859:_runCallbacks
+/usr/local/lib/python3.6/site-packages/scrapy/core/downloader/handlers/http11.py:368:_cb_timeout
+]
+<MarineCorpSpider 'marine_pubs' at 0x7fbc55a65c18>
+Skipping download of MCO 3550.13 because it was in previous_hashes
+Skipping download of MCO 3550.12A because it was in previous_hashes
+Skipping download of MCO 5216.21 because it was in previous_hashes
+Skipping download of MCBUL 1800 because it was in previous_hashes
+Skipping download of MCO 1553.2D because it was in previous_hashes
+Skipping download of MCO 3550.14 because it was in previous_hashes
+Skipping download of NAVMC 3500.2D because it was in previous_hashes
+Skipping download of MCTP 10-10G because it was in previous_hashes
+Skipping download of NAVMC 3500.105C because it was in previous_hashes
+Skipping download of MCBUL 1500 because it was in previous_hashes
+Skipping download of MCO 5000.27 because it was in previous_hashes
+Skipping download of MCBUL 5800 because it was in previous_hashes
+Skipping download of MCO 4600.41B because it was in previous_hashes
+Skipping download of NAVMC 3500.119B because it was in previous_hashes
+Skipping download of MCO 5110.4B because it was in previous_hashes
+Skipping download of IRM-2300-16A because it was in previous_hashes
+Skipping download of IRM-2300-23 because it was in previous_hashes
+Skipping download of IRM-2300-20 because it was in previous_hashes
+Skipping download of NAVMC 3500.124A because it was in previous_hashes
+Skipping download of MCO 4061.1A because it was in previous_hashes
+Skipping download of MCO 3311.2A because it was in previous_hashes
+Skipping download of MCO 4400.177H because it was in previous_hashes
+Skipping download of NAVMC 3500.64D because it was in previous_hashes
+Skipping download of NAVMC 3500.120C because it was in previous_hashes
+Skipping download of MCBUL 6110 because it was in previous_hashes
+Skipping download of MCRP 7-20A.5 because it was in previous_hashes
+Skipping download of MCTP 7-20A because it was in previous_hashes
+Skipping download of MCRP 7-20A.2 because it was in previous_hashes
+Skipping download of MCRP 7-20A.4 because it was in previous_hashes
+Skipping download of MCRP 7-20A.3 because it was in previous_hashes
+Skipping download of MCRP 3-30B.1 because it was in previous_hashes
+Skipping download of MCDP 4 because it was in previous_hashes
+Skipping download of NAVMC 1008-A because it was in previous_hashes
+Skipping download of MCO 1610.7B because it was in previous_hashes
+Skipping download of MCRP 3-03D.1 because it was in previous_hashes
+Skipping download of NAVMC 3500.25E because it was in previous_hashes
+Skipping download of NAVMC 3500.106A because it was in previous_hashes
+Skipping download of MCO 3300.4A because it was in previous_hashes
+Skipping download of NAVMC 3500.42C because it was in previous_hashes
+Skipping download of MCRP 3-10.2 because it was in previous_hashes
+Skipping download of MCO 1040.31 because it was in previous_hashes
+Skipping download of MCO 7010.19 because it was in previous_hashes
+Skipping download of NAVMC 3500.90 because it was in previous_hashes
+Skipping download of MCO 4790.22 because it was in previous_hashes
+No supported downloadable item for MCRP 2-10A.2
+Skipping download of MCO 4410.28 because it was in previous_hashes
+Skipping download of MCO 2400.2A because it was in previous_hashes
+Skipping download of MCO 12620.2 because it was in previous_hashes
+Skipping download of MCO 1700.30 because it was in previous_hashes
+Skipping download of MCO 5400.52 because it was in previous_hashes
+Skipping download of MCO 4651.4 because it was in previous_hashes
+Skipping download of MCO 5760.4C because it was in previous_hashes
+Skipping download of MCO 5530.14A because it was in previous_hashes
+Skipping download of MCO 5750.1H because it was in previous_hashes
+Skipping download of MCO P1400.32D because it was in previous_hashes
+Skipping download of MCO 3500.26A because it was in previous_hashes
+Skipping download of MCO 3125.1B because it was in previous_hashes
+Skipping download of MCRP 7-20B.1 because it was in previous_hashes
+Skipping download of MCO 5530.15 because it was in previous_hashes
+Skipping download of NAVMC 3500.36A because it was in previous_hashes
+Skipping download of FMFRP 0-58 because it was in previous_hashes
+Skipping download of FMFM 6-1 because it was in previous_hashes
+Skipping download of MCRP 3-01B.1 because it was in previous_hashes
+Skipping download of FMFRP 0-53 because it was in previous_hashes
+Skipping download of MCRP 3-20F.9 because it was in previous_hashes
+Skipping download of MCWP 3-20 because it was in previous_hashes
+Skipping download of NAVMC 3500.21A because it was in previous_hashes
+Skipping download of DCG VOL 64 PGS 179-232 because it was in previous_hashes
+Skipping download of DCG VOL 64 PGS 117-180 because it was in previous_hashes
+Skipping download of DCG VOL 62 PGS 641-835 because it was in previous_hashes
+Skipping download of DCG VOL 62 PGS 37-64 because it was in previous_hashes
+Skipping download of DCG VOL 65 PGS 265-370 because it was in previous_hashes
+Skipping download of DCG VOL 65 PGS 177-263 because it was in previous_hashes
+Skipping download of DCG VOL 65 PGS 1-58 because it was in previous_hashes
+Skipping download of DCG VOL 64 PGS 813-919 because it was in previous_hashes
+Skipping download of DCG VOL 64 PGS 565-654 because it was in previous_hashes
+Skipping download of DCG VOL 64 PGS 501-564 because it was in previous_hashes
+Skipping download of DCG VOL 67 PGS 1-38 because it was in previous_hashes
+Skipping download of DCG VOL 67 PGS 107-165 because it was in previous_hashes
+Skipping download of DCG VOL 65 PGS 87-174 because it was in previous_hashes
+Skipping download of DCG VOL 65 PGS 823-914 because it was in previous_hashes
+Skipping download of DCG VOL 65 PGS 761-822 because it was in previous_hashes
+Skipping download of DCG VOL 65 PGS 689-760 because it was in previous_hashes
+Skipping download of DCG VOL 68 PGS 125-166 because it was in previous_hashes
+Skipping download of DCG VOL 67 PGS 503-551 because it was in previous_hashes
+Skipping download of DCG VOL 67 PGS 429-502 because it was in previous_hashes
+Skipping download of DCG VOL 67 PGS 395-428 because it was in previous_hashes
+Skipping download of DCG VOL 67 PGS 39-106 because it was in previous_hashes
+Skipping download of DCG VOL 67 PGS 553-605 because it was in previous_hashes
+Skipping download of DCG VOL 68 PGS 655-727 because it was in previous_hashes
+Skipping download of DCG VOL 68 PGS 573-653 because it was in previous_hashes
+Skipping download of DCG VOL 68 PGS 529-572 because it was in previous_hashes
+Skipping download of DCG VOL 68 PGS 451-527 because it was in previous_hashes
+Skipping download of DCG VOL 68 PGS 411-450 because it was in previous_hashes
+Skipping download of DCG VOL 70 PGS 165-224 because it was in previous_hashes
+Skipping download of DCG VOL 70 PGS 1-52 because it was in previous_hashes
+Skipping download of DCG VOL 70 PGS 115-164 because it was in previous_hashes
+Skipping download of DCG VOL 69 PGS 97-173 because it was in previous_hashes
+Skipping download of DCG VOL 69 PGS 691-758 because it was in previous_hashes
+Skipping download of DCG VOL 69 PGS 65-95 because it was in previous_hashes
+Skipping download of MCO 5100.8 because it was in previous_hashes
+Skipping download of MCO 5710.7 because it was in previous_hashes
+Skipping download of MCO 4790.21 because it was in previous_hashes
+Skipping download of DCG VOL 70 PGS 699-737 because it was in previous_hashes
+Skipping download of DCG VOL 70 PGS 661-698 because it was in previous_hashes
+Skipping download of DCG VOL 70 PGS 541-605 because it was in previous_hashes
+Skipping download of DCG VOL 47 PGS 701-959 because it was in previous_hashes
+Skipping download of DCG VOL 48 PGS 1-38 because it was in previous_hashes
+Skipping download of DCG VOL 47 PGS 475-504 because it was in previous_hashes
+Skipping download of DCG VOL 47 PGS 355-408 because it was in previous_hashes
+Skipping download of DCG VOL 47 PGS 187-220 because it was in previous_hashes
+Skipping download of DCG VOL 49 PGS 295-358 because it was in previous_hashes
+Skipping download of DCG VOL 49 PGS 139-218 because it was in previous_hashes
+Skipping download of DCG VOL 49 PGS 219-294 because it was in previous_hashes
+Skipping download of DCG VOL 47 PGS 221-320 because it was in previous_hashes
+Skipping download of DCG VOL 48 PGS 769-990 because it was in previous_hashes
+Skipping download of DCG VOL 50 PGS 325-378 because it was in previous_hashes
+Skipping download of DCG VOL 50 PGS 239-324 because it was in previous_hashes
+Skipping download of DCG VOL 50 PGS 1-70 because it was in previous_hashes
+Skipping download of DCG VOL 50 PGS 151-238 because it was in previous_hashes
+Skipping download of DCG VOL 49 PGS 819-1094 because it was in previous_hashes
+Skipping download of DCG VOL 49 PGS 753-818 because it was in previous_hashes
+Skipping download of DCG VOL 49 PGS 59-138 because it was in previous_hashes
+Skipping download of DCG VOL 49 PGS 649-752 because it was in previous_hashes
+Skipping download of DCG VOL 51 PGS 1-78 because it was in previous_hashes
+Skipping download of DCG VOL 51 PGS 141-188 because it was in previous_hashes
+Skipping download of DCG VOL 50 PGS 827-1056 because it was in previous_hashes
+Skipping download of DCG VOL 50 PGS 767-826 because it was in previous_hashes
+Skipping download of DCG VOL 50 PGS 71-150 because it was in previous_hashes
+Skipping download of DCG VOL 50 PGS 703-766 because it was in previous_hashes
+Skipping download of DCG VOL 50 PGS 601-702 because it was in previous_hashes
+Skipping download of DCG VOL 50 PGS 537-600 because it was in previous_hashes
+Skipping download of DCG VOL 52 PGS 1-56 because it was in previous_hashes
+Skipping download of DCG VOL 52 PGS 111-174 because it was in previous_hashes
+Skipping download of DCG VOL 51 PGS 775-1041 because it was in previous_hashes
+Skipping download of DCG VOL 51 PGS 627-700 because it was in previous_hashes
+Skipping download of DCG VOL 51 PGS 701-774 because it was in previous_hashes
+Skipping download of DCG VOL 52 PGS 909-1250 because it was in previous_hashes
+Skipping download of DCG VOL 52 PGS 621-754 because it was in previous_hashes
+Skipping download of DCG VOL 52 PGS 57-110 because it was in previous_hashes
+Skipping download of DCG VOL 52 PGS 569-620 because it was in previous_hashes
+Skipping download of DCG VOL 52 PGS 755-908 because it was in previous_hashes
+Skipping download of DCG VOL 52 PGS 469-567 because it was in previous_hashes
+Skipping download of DCG VOL 53 PGS 813-894 because it was in previous_hashes
+Skipping download of DCG VOL 53 PGS 733-812 because it was in previous_hashes
+Skipping download of DCG VOL 53 PGS 67-156 because it was in previous_hashes
+Skipping download of DCG VOL 53 PGS 653-732 because it was in previous_hashes
+Skipping download of DCG VOL 53 PGS 535-652 because it was in previous_hashes
+Skipping download of DCG VOL 53 PGS 393-450 because it was in previous_hashes
+Skipping download of DCG VOL 53 PGS 307-392 because it was in previous_hashes
+Skipping download of DCG VOL 54 PGS 819-936 because it was in previous_hashes
+Skipping download of DCG VOL 54 PGS 75-166 because it was in previous_hashes
+Skipping download of DCG VOL 54 PGS 709-818 because it was in previous_hashes
+Skipping download of DCG VOL 55 PGS 183-300 because it was in previous_hashes
+Skipping download of DCG VOL 55 PGS 1421-1843 because it was in previous_hashes
+Skipping download of DCG VOL 55 PGS 1337-1420 because it was in previous_hashes
+Skipping download of DCG VOL 55 PGS 1237-1336 because it was in previous_hashes
+Skipping download of DCG VOL 55 PGS 121-182 because it was in previous_hashes
+Skipping download of DCG VOL 55 PGS 1151-1236 because it was in previous_hashes
+Skipping download of DCG VOL 55 PGS 1-120 because it was in previous_hashes
+Skipping download of DCG VOL 56 PGS 209-322 because it was in previous_hashes
+Skipping download of DCG VOL 56 PGS 1-52 because it was in previous_hashes
+Skipping download of DCG VOL 56 PGS 111-208 because it was in previous_hashes
+Skipping download of DCG VOL 55 PGS 955-1050 because it was in previous_hashes
+Skipping download of DCG VOL 55 PGS 833-954 because it was in previous_hashes
+Skipping download of DCG VOL 55 PGS 679-832 because it was in previous_hashes
+Skipping download of DCG VOL 57 PGS 201-258 because it was in previous_hashes
+Skipping download of DCG VOL 57 PGS 1-42 because it was in previous_hashes
+Skipping download of DCG VOL 57 PGS 125-200 because it was in previous_hashes
+Skipping download of DCG VOL 56 PGS 943-1245 because it was in previous_hashes
+Skipping download of DCG VOL 56 PGS 847-942 because it was in previous_hashes
+Skipping download of DCG VOL 56 PGS 567-662 because it was in previous_hashes
+Skipping download of DCG VOL 56 PGS 53-110 because it was in previous_hashes
+Skipping download of DCG VOL 59 PGS 1-72 because it was in previous_hashes
+Skipping download of DCG VOL 59 PGS 115-188 because it was in previous_hashes
+Skipping download of DCG VOL 57 PGS 759-1050 because it was in previous_hashes
+Skipping download of DCG VOL 57 PGS 613-758 because it was in previous_hashes
+Skipping download of DCG VOL 57 PGS 583-612 because it was in previous_hashes
+Skipping download of DCG VOL 57 PGS 501-582 because it was in previous_hashes
+Skipping download of DCG VOL 60 PGS 1-56 because it was in previous_hashes
+Skipping download of DCG VOL 60 PGS 285-340 because it was in previous_hashes
+Skipping download of DCG VOL 60 PGS 151-218 because it was in previous_hashes
+Skipping download of DCG VOL 59 PGS 73-114 because it was in previous_hashes
+Skipping download of DCG VOL 59 PGS 691-917 because it was in previous_hashes
+Skipping download of DCG VOL 59 PGS 637-690 because it was in previous_hashes
+Skipping download of DCG VOL 61 PGS 1-66 because it was in previous_hashes
+Skipping download of DCG VOL 61 PGS 111-190 because it was in previous_hashes
+Skipping download of DCG VOL 60 PGS 97-150 because it was in previous_hashes
+Skipping download of DCG VOL 60 PGS 677-853 because it was in previous_hashes
+Skipping download of DCG VOL 60 PGS 623-676 because it was in previous_hashes
+Skipping download of DCG VOL 60 PGS 57-96 because it was in previous_hashes
+Skipping download of DCG VOL 60 PGS 561-622 because it was in previous_hashes
+Skipping download of DCG VOL 61 PGS 67-110 because it was in previous_hashes
+Skipping download of DCG VOL 61 PGS 553-587 because it was in previous_hashes
+Skipping download of DCG VOL 61 PGS 507-551 because it was in previous_hashes
+Skipping download of DCG VOL 61 PGS 431-506 because it was in previous_hashes
+Skipping download of DCG VOL 62 PGS 65-110 because it was in previous_hashes
+Skipping download of DCG VOL 61 PGS 377-430 because it was in previous_hashes
+Skipping download of DCG VOL 62 PGS 605-640 because it was in previous_hashes
+Skipping download of MCO 10110.44A because it was in previous_hashes
+Skipping download of MCO 5271.1B because it was in previous_hashes
+Skipping download of MCO 7042.6C because it was in previous_hashes
+Skipping download of MCO 5726.14F because it was in previous_hashes
+Skipping download of MCO 5600.43B because it was in previous_hashes
+Skipping download of MCO 5420R.15B because it was in previous_hashes
+Skipping download of MCO 5200.26B because it was in previous_hashes
+Skipping download of MCO 3960.6 because it was in previous_hashes
+Skipping download of MCRP 3-10F.2 because it was in previous_hashes
+Skipping download of MCTP 3-10E because it was in previous_hashes
+Skipping download of MCO P4400.105E because it was in previous_hashes
+Skipping download of NAVMC 2664 because it was in previous_hashes
+Skipping download of NAVMC 2645 because it was in previous_hashes
+Skipping download of MCRP 10-10E.7 because it was in previous_hashes
+Skipping download of MCTP 13-10D because it was in previous_hashes
+Skipping download of MCRP 3-20F.5 because it was in previous_hashes
+Skipping download of DA PAM 27-9 because it was in previous_hashes
+Skipping download of MCO 1040.42A because it was in previous_hashes
+Skipping download of MCO 10330.2D because it was in previous_hashes
+Skipping download of MCO 10110.15C because it was in previous_hashes
+Skipping download of MCO 12630.1 because it was in previous_hashes
+Skipping download of MCO 12515.1 because it was in previous_hashes
+Skipping download of MCO 12451.3B because it was in previous_hashes
+Skipping download of MCO 12430.2 because it was in previous_hashes
+Skipping download of MCO 1130.53R because it was in previous_hashes
+Skipping download of MCO 12335.1 because it was in previous_hashes
+Skipping download of MCO 11210.2D because it was in previous_hashes
+Skipping download of MCO 4860.3D because it was in previous_hashes
+Skipping download of MCO 4630.20 because it was in previous_hashes
+Skipping download of MCO 13480.1D because it was in previous_hashes
+Skipping download of MCO 1301.25C because it was in previous_hashes
+Skipping download of MCO 12920.1B because it was in previous_hashes
+Skipping download of MCO 12713.8 because it was in previous_hashes
+Skipping download of MCO 5216.19A because it was in previous_hashes
+Skipping download of MCO 5216.9Y because it was in previous_hashes
+Skipping download of MCO 5216.16B because it was in previous_hashes
+Skipping download of MCO 5211.4 because it was in previous_hashes
+Skipping download of MCO 5110.1D because it was in previous_hashes
+Skipping download of MCO 7220.39D because it was in previous_hashes
+Skipping download of MCO 5800.12 because it was in previous_hashes
+Skipping download of MCO 5802.2B because it was in previous_hashes
+**** MEDIA FAILED
+[Failure instance: Traceback: <class 'ValueError'>: invalid hostname: 
+--- <exception caught here> ---
+/usr/local/lib/python3.6/site-packages/twisted/internet/defer.py:63:run
+/usr/local/lib/python3.6/site-packages/scrapy/core/downloader/middleware.py:44:process_request
+]
+<MarineCorpSpider 'marine_pubs' at 0x7fbc55a65c18>
+Skipping download of MCO 5420.16D because it was in previous_hashes
+Skipping download of MCO 5360.9A because it was in previous_hashes
+Skipping download of MCO 5305.6 because it was in previous_hashes
+Skipping download of MCO 5740.4B because it was in previous_hashes
+Skipping download of MCO P11000R.20 because it was in previous_hashes
+Skipping download of MCO 8300.1D because it was in previous_hashes
+Skipping download of MCO P11000.14 because it was in previous_hashes
+Skipping download of MCO 7540.2E because it was in previous_hashes
+Skipping download of MCO 8025.1E because it was in previous_hashes
+Skipping download of MCO P4790.20 because it was in previous_hashes
+Skipping download of NAVMC 2727 because it was in previous_hashes
+Skipping download of NAVMC 2722 because it was in previous_hashes
+Skipping download of MCO P7301.104 because it was in previous_hashes
+Skipping download of MCO 4081.2 because it was in previous_hashes
+Skipping download of MCO 5215.1K because it was in previous_hashes
+Skipping download of MCO 3504.1 because it was in previous_hashes
+Skipping download of DCG VOL 69 PGS 359-432 because it was in previous_hashes
+Skipping download of MCTP 12-10D because it was in previous_hashes
+Skipping download of MCTP 3-30F because it was in previous_hashes
+Skipping download of MCRP 3-20.3 because it was in previous_hashes
+Skipping download of MCTP 3-20G because it was in previous_hashes
+Skipping download of MCRP 3-30D.2 because it was in previous_hashes
+Skipping download of MCRP 3-40G.1 because it was in previous_hashes
+Skipping download of MCO 1560R.30B because it was in previous_hashes
+Skipping download of MCO 1560.33 because it was in previous_hashes
+Skipping download of MCO 1550.26 because it was in previous_hashes
+Skipping download of MCO 1542.1H because it was in previous_hashes
+Skipping download of MCO 1540.32A because it was in previous_hashes
+Skipping download of MCO 1510.74A because it was in previous_hashes
+Skipping download of MCO 1500R.36G because it was in previous_hashes
+Skipping download of MCO 3570.1C because it was in previous_hashes
+Skipping download of MCO 3591.14A because it was in previous_hashes
+Skipping download of MCO 3500.40 because it was in previous_hashes
+Skipping download of MCO 3461.1 because it was in previous_hashes
+Skipping download of MCO 3430.3C because it was in previous_hashes
+Skipping download of MCO 3120.8A because it was in previous_hashes
+Skipping download of MCO 1771.1B because it was in previous_hashes
+Skipping download of MCO 1650.29H because it was in previous_hashes
+Skipping download of MCO 1650.47 because it was in previous_hashes
+Skipping download of MCO P3500.72A because it was in previous_hashes
+Skipping download of NAVMC 2743 because it was in previous_hashes
+Skipping download of NAVMC 2686 because it was in previous_hashes
+Skipping download of NAVMC 2642 because it was in previous_hashes
+Skipping download of NAVMC 2610-AH because it was in previous_hashes
+Skipping download of MCO P3590.13B because it was in previous_hashes
+Skipping download of MCO 3040.4 because it was in previous_hashes
+Skipping download of MCO P1710.16E because it was in previous_hashes
+Skipping download of MCO 1543.2D because it was in previous_hashes
+Skipping download of MCO 1510.62A because it was in previous_hashes
+Skipping download of MCO 1510.121A because it was in previous_hashes
+Skipping download of MCO 1500.52D because it was in previous_hashes
+Skipping download of MCO 3500.41 because it was in previous_hashes
+Skipping download of MCO 3500.32 because it was in previous_hashes
+Skipping download of MCO 3500.28 because it was in previous_hashes
+Skipping download of MCO 3430.1A because it was in previous_hashes
+Skipping download of MCO 1640.3F because it was in previous_hashes
+Skipping download of MCO 1710.23B because it was in previous_hashes
+Skipping download of MCO 1630.3D because it was in previous_hashes
+Skipping download of MCO 1620.3A because it was in previous_hashes
+Skipping download of MCO P3720.1C because it was in previous_hashes
+Skipping download of MCO P3000.15B because it was in previous_hashes
+Skipping download of MCO 1533.6E because it was in previous_hashes
+Skipping download of MCO P1510.94 because it was in previous_hashes
+Skipping download of MCO 4410.16A because it was in previous_hashes
+Skipping download of MCO 4400.16H because it was in previous_hashes
+Skipping download of MCO 3710.5 because it was in previous_hashes
+Skipping download of MCO 3502.2A because it was in previous_hashes
+Skipping download of MCO 1001.39K because it was in previous_hashes
+Skipping download of MCO 1000.8 because it was in previous_hashes
+Skipping download of MCO 1000.12 because it was in previous_hashes
+Skipping download of NAVMC 2795 because it was in previous_hashes
+Skipping download of MCDP 2 because it was in previous_hashes
+Skipping download of MCDP 1 because it was in previous_hashes
+Skipping download of MCDP 5 because it was in previous_hashes
+Skipping download of MCO 1000.14 because it was in previous_hashes
+Skipping download of MCDP 1-3 because it was in previous_hashes
+Skipping download of FMFRP 12-25 because it was in previous_hashes
+Skipping download of FMFRP 0-55 because it was in previous_hashes
+Skipping download of FMFRP 12-13 because it was in previous_hashes
+Skipping download of FMFRP 12-110 because it was in previous_hashes
+Skipping download of FMFRP 3-203 because it was in previous_hashes
+Skipping download of FMFRP 12-32 because it was in previous_hashes
+Skipping download of FMFRP 12-109-II because it was in previous_hashes
+Skipping download of FMFRP 12-109-I because it was in previous_hashes
+Skipping download of MCO 1650.17F because it was in previous_hashes
+Skipping download of FMFRP 12-15 because it was in previous_hashes
+Skipping download of FMFRP 12-17 because it was in previous_hashes
+Skipping download of FMFRP 12-5 because it was in previous_hashes
+Skipping download of FMFRP 12-37 because it was in previous_hashes
+Skipping download of FMFRP 12-14 because it was in previous_hashes
+Skipping download of FMFRP 12-11 because it was in previous_hashes
+Skipping download of FMFRP 12-12-II because it was in previous_hashes
+Skipping download of MCO 12630.2 because it was in previous_hashes
+Skipping download of MCDP 6 because it was in previous_hashes
+Skipping download of MCDP 1-2 because it was in previous_hashes
+Skipping download of MCDP 1-1 because it was in previous_hashes
+Skipping download of MCDP 3 because it was in previous_hashes
+Skipping download of MCO P1070.12K because it was in previous_hashes
+Skipping download of MCTP 2-10A because it was in previous_hashes
+Skipping download of NAVMC 2742 because it was in previous_hashes
+Skipping download of NAVMC 2704 because it was in previous_hashes
+Skipping download of NAVMC 2563 because it was in previous_hashes
+Skipping download of NAVMC 2550 because it was in previous_hashes
+Skipping download of MCO 3501.17 because it was in previous_hashes
+Skipping download of MCO 1620.2D because it was in previous_hashes
+Skipping download of MCO 1553.1B because it was in previous_hashes
+Skipping download of MCO 1331.2K because it was in previous_hashes
+Skipping download of MCO 1200.13G because it was in previous_hashes
+Skipping download of MCO 1200.15C because it was in previous_hashes
+Skipping download of NAVMC 2897 because it was in previous_hashes
+Skipping download of NAVMC 2747 because it was in previous_hashes
+Skipping download of MCO 4105.2 because it was in previous_hashes
+Skipping download of MCO 4000.52A because it was in previous_hashes
+Skipping download of MCO 1500.55 because it was in previous_hashes
+Skipping download of MCO 1640.5B because it was in previous_hashes
+Skipping download of MCO 1500.56 because it was in previous_hashes
+Skipping download of NAVMC 2701 because it was in previous_hashes
+Skipping download of MCTP 3-30B because it was in previous_hashes
+Skipping download of MCWP 3-40.7 because it was in previous_hashes
+Skipping download of MCWP 3-36 because it was in previous_hashes
+Skipping download of MCO 1754.6C because it was in previous_hashes
+Skipping download of MCO 10110.48 because it was in previous_hashes
+Skipping download of NAVMC 2933 because it was in previous_hashes
+Skipping download of NAVMC 2932 because it was in previous_hashes
+Skipping download of NAVMC 2904 because it was in previous_hashes
+Skipping download of MCO P4410.22C because it was in previous_hashes
+Skipping download of MCO 7510.2E because it was in previous_hashes
+Skipping download of MCO 7300.22A because it was in previous_hashes
+Skipping download of MCO 7220.50B because it was in previous_hashes
+Skipping download of MCO 5230.18 because it was in previous_hashes
+Skipping download of MCO 5223.3A because it was in previous_hashes
+Skipping download of MCO 5104.1C because it was in previous_hashes
+Skipping download of MCO 5050.13 because it was in previous_hashes
+Skipping download of MCO 5030.2C because it was in previous_hashes
+Skipping download of MCO 5000.14D because it was in previous_hashes
+Skipping download of MCO 4950.2 because it was in previous_hashes
+Skipping download of MCO 12713.7 because it was in previous_hashes
+Skipping download of MCO 12711.1A because it was in previous_hashes
+Skipping download of MCO 12713.6A because it was in previous_hashes
+Skipping download of MCO 12630.3 because it was in previous_hashes
+Skipping download of MCO 10550.8 because it was in previous_hashes
+Skipping download of MCO 1050.16A because it was in previous_hashes
+Skipping download of MCO 10510.76 because it was in previous_hashes
+Skipping download of MCTP 3-20D because it was in previous_hashes
+Skipping download of MCTP 3-10F because it was in previous_hashes
+Skipping download of MCRP 3-10 because it was in previous_hashes
+Skipping download of MCO P11000.9C because it was in previous_hashes
+Skipping download of MCO 12790.2 because it was in previous_hashes
+Skipping download of MCO 12000.10 because it was in previous_hashes
+Skipping download of MCO 10120.31F because it was in previous_hashes
+Skipping download of DCG VOL 62 PGS 419-502 because it was in previous_hashes
+Skipping download of DCG VOL 62 PGS 289-352 because it was in previous_hashes
+Skipping download of DCG VOL 62 PGS 157-226 because it was in previous_hashes
+Skipping download of DCG VOL 62 PGS 111-155 because it was in previous_hashes
+Skipping download of DCG VOL 61 PGS 317-376 because it was in previous_hashes
+Skipping download of DCG VOL 61 PGS 227-278 because it was in previous_hashes
+Skipping download of DCG VOL 61 PGS 191-226 because it was in previous_hashes
+Skipping download of DCG VOL 60 PGS 341-422 because it was in previous_hashes
+Skipping download of DCG VOL 60 PGS 423-494 because it was in previous_hashes
+Skipping download of DCG VOL 61 PGS 279-315 because it was in previous_hashes
+Skipping download of DCG VOL 59 PGS 509-568 because it was in previous_hashes
+Skipping download of DCG VOL 59 PGS 569-636 because it was in previous_hashes
+Skipping download of DCG VOL 59 PGS 431-508 because it was in previous_hashes
+Skipping download of DCG VOL 59 PGS 189-236 because it was in previous_hashes
+Skipping download of DCG VOL 60 PGS 495-560 because it was in previous_hashes
+Skipping download of DCG VOL 56 PGS 459-566 because it was in previous_hashes
+Skipping download of DCG VOL 57 PGS 447-500 because it was in previous_hashes
+Skipping download of DCG VOL 57 PGS 401-446 because it was in previous_hashes
+Skipping download of DCG VOL 57 PGS 321-400 because it was in previous_hashes
+Skipping download of DCG VOL 56 PGS 381-458 because it was in previous_hashes
+Skipping download of DCG VOL 56 PGS 323-380 because it was in previous_hashes
+Skipping download of DCG VOL 57 PGS 259-320 because it was in previous_hashes
+Skipping download of DCG VOL 55 PGS 609-678 because it was in previous_hashes
+Skipping download of DCG VOL 55 PGS 537-608 because it was in previous_hashes
+Skipping download of DCG VOL 55 PGS 301-426 because it was in previous_hashes
+Skipping download of DCG VOL 55 PGS 427-536 because it was in previous_hashes
+Skipping download of DCG VOL 55 PGS 1051-1150 because it was in previous_hashes
+Skipping download of DCG VOL 54 PGS 553-654 because it was in previous_hashes
+Skipping download of DCG VOL 54 PGS 999-1334 because it was in previous_hashes
+Skipping download of DCG VOL 54 PGS 937-998 because it was in previous_hashes
+Skipping download of DCG VOL 54 PGS 435-552 because it was in previous_hashes
+Skipping download of DCG VOL 54 PGS 1-74 because it was in previous_hashes
+Skipping download of DCG VOL 54 PGS 167-246 because it was in previous_hashes
+Skipping download of DCG VOL 54 PGS 247-332 because it was in previous_hashes
+Skipping download of DCG VOL 53 PGS 895-1305 because it was in previous_hashes
+Skipping download of DCG VOL 53 PGS 195-306 because it was in previous_hashes
+Skipping download of DCG VOL 53 PGS 157-194 because it was in previous_hashes
+Skipping download of DCG VOL 52 PGS 405-468 because it was in previous_hashes
+Skipping download of DCG VOL 52 PGS 253-308 because it was in previous_hashes
+Skipping download of DCG VOL 52 PGS 175-252 because it was in previous_hashes
+Skipping download of DCG VOL 51 PGS 541-626 because it was in previous_hashes
+Skipping download of DCG VOL 51 PGS 455-540 because it was in previous_hashes
+Skipping download of DCG VOL 51 PGS 329-390 because it was in previous_hashes
+Skipping download of DCG VOL 51 PGS 189-245 because it was in previous_hashes
+Skipping download of DCG VOL 51 PGS 255-328 because it was in previous_hashes
+Skipping download of DCG VOL 50 PGS 379-472 because it was in previous_hashes
+Skipping download of DCG VOL 50 PGS 473-536 because it was in previous_hashes
+Skipping download of DCG VOL 52 PGS 309-404 because it was in previous_hashes
+Skipping download of DCG VOL 49 PGS 527-648 because it was in previous_hashes
+Skipping download of DCG VOL 49 PGS 359-410 because it was in previous_hashes
+Skipping download of DCG VOL 48 PGS 651-718 because it was in previous_hashes
+Skipping download of DCG VOL 48 PGS 569-650 because it was in previous_hashes
+Skipping download of DCG VOL 48 PGS 457-514 because it was in previous_hashes
+Skipping download of DCG VOL 48 PGS 39-130 because it was in previous_hashes
+Skipping download of DCG VOL 48 PGS 377-456 because it was in previous_hashes
+Skipping download of DCG VOL 48 PGS 167-266 because it was in previous_hashes
+Skipping download of DCG VOL 47 PGS 147-186 because it was in previous_hashes
+Skipping download of MCO P10110.43G because it was in previous_hashes
+Skipping download of MCO P10110.31H because it was in previous_hashes
+Skipping download of MCO 7040.11A because it was in previous_hashes
+Skipping download of DCG VOL 70 PGS 459-539 because it was in previous_hashes
+Skipping download of DCG VOL 70 PGS 389-458 because it was in previous_hashes
+Skipping download of DCG VOL 70 PGS 313-389 because it was in previous_hashes
+Skipping download of DCG VOL 69 PGS 49-63 because it was in previous_hashes
+Skipping download of DCG VOL 69 PGS 433-491 because it was in previous_hashes
+Skipping download of DCG VOL 69 PGS 269-316 because it was in previous_hashes
+Skipping download of DCG VOL 69 PGS 1-48 because it was in previous_hashes
+Skipping download of DCG VOL 68 PGS 41-123 because it was in previous_hashes
+Skipping download of DCG VOL 68 PGS 363-410 because it was in previous_hashes
+Skipping download of DCG VOL 68 PGS 277-362 because it was in previous_hashes
+Skipping download of DCG VOL 68 PGS 213-276 because it was in previous_hashes
+Skipping download of DCG VOL 68 PGS 167-212 because it was in previous_hashes
+Skipping download of DCG VOL 67 PGS 371-393 because it was in previous_hashes
+Skipping download of DCG VOL 67 PGS 295-369 because it was in previous_hashes
+Skipping download of DCG VOL 67 PGS 217-293 because it was in previous_hashes
+Skipping download of DCG VOL 67 PGS 171-216 because it was in previous_hashes
+Skipping download of DCG VOL 65 PGS 605-688 because it was in previous_hashes
+Skipping download of DCG VOL 65 PGS 59-86 because it was in previous_hashes
+Skipping download of DCG VOL 65 PGS 549-604 because it was in previous_hashes
+Skipping download of DCG VOL 65 PGS 457-548 because it was in previous_hashes
+Skipping download of DCG VOL 64 PGS 45-116 because it was in previous_hashes
+Skipping download of DCG VOL 64 PGS 435-500 because it was in previous_hashes
+Skipping download of DCG VOL 64 PGS 319-434 because it was in previous_hashes
+Skipping download of DCG VOL 64 PGS 233-318 because it was in previous_hashes
+Skipping download of DCG VOL 62 PGS 1-35 because it was in previous_hashes
+Skipping download of MCO 1100R.78A because it was in previous_hashes
+Skipping download of FMFRP 0-63 because it was in previous_hashes
+Skipping download of NAVMC 3500.2 because it was in previous_hashes
+Skipping download of FMFRP 0-59 because it was in previous_hashes
+Skipping download of MCWP 3-10 because it was in previous_hashes
+Skipping download of MCCP 2 because it was in previous_hashes
+Skipping download of MCO 3900.17 because it was in previous_hashes
+Skipping download of MCO 3821.2 because it was in previous_hashes
+Skipping download of MCO 3440.9 because it was in previous_hashes
+Skipping download of FMFRP 12-102 because it was in previous_hashes
+Skipping download of NAVMC 3500.81 because it was in previous_hashes
+Skipping download of DCG VOL 70 PGS 53-113 because it was in previous_hashes
+Skipping download of DCG VOL 53 PGS 1-66 because it was in previous_hashes
+Skipping download of DCG VOL 61 PGS 589-814 because it was in previous_hashes
+Skipping download of MCO 10110.38C because it was in previous_hashes
+Skipping download of DCG VOL 54 PGS 655-708 because it was in previous_hashes
+++ Initiating downloader for milpersman_crawler
+Reading in previous manifest
+1000 lines read in
+2000 lines read in
+3000 lines read in
+4000 lines read in
+5000 lines read in
+6000 lines read in
+7000 lines read in
+8000 lines read in
+9000 lines read in
+10000 lines read in
+11000 lines read in
+12000 lines read in
+13000 lines read in
+14000 lines read in
+15000 lines read in
+16000 lines read in
+17000 lines read in
+18000 lines read in
+19000 lines read in
+20000 lines read in
+21000 lines read in
+22000 lines read in
+23000 lines read in
+24000 lines read in
+25000 lines read in
+26000 lines read in
+27000 lines read in
+28000 lines read in
+29000 lines read in
+30000 lines read in
+31000 lines read in
+32000 lines read in
+33000 lines read in
+34000 lines read in
+35000 lines read in
+36000 lines read in
+37000 lines read in
+38000 lines read in
+39000 lines read in
+40000 lines read in
+41000 lines read in
+42000 lines read in
+43000 lines read in
+44000 lines read in
+45000 lines read in
+46000 lines read in
+47000 lines read in
+48000 lines read in
+49000 lines read in
+50000 lines read in
+51000 lines read in
+52000 lines read in
+53000 lines read in
+54000 lines read in
+55000 lines read in
+56000 lines read in
+57000 lines read in
+58000 lines read in
+59000 lines read in
+60000 lines read in
+61000 lines read in
+62000 lines read in
+63000 lines read in
+64000 lines read in
+65000 lines read in
+66000 lines read in
+67000 lines read in
+68000 lines read in
+69000 lines read in
+70000 lines read in
+71000 lines read in
+72000 lines read in
+73000 lines read in
+74000 lines read in
+75000 lines read in
+76000 lines read in
+77000 lines read in
+78000 lines read in
+79000 lines read in
+80000 lines read in
+81000 lines read in
+82000 lines read in
+83000 lines read in
+84000 lines read in
+85000 lines read in
+86000 lines read in
+87000 lines read in
+88000 lines read in
+89000 lines read in
+90000 lines read in
+91000 lines read in
+92000 lines read in
+93000 lines read in
+94000 lines read in
+95000 lines read in
+96000 lines read in
+97000 lines read in
+98000 lines read in
+99000 lines read in
+100000 lines read in
+101000 lines read in
+102000 lines read in
+103000 lines read in
+104000 lines read in
+105000 lines read in
+106000 lines read in
+107000 lines read in
+108000 lines read in
+109000 lines read in
+110000 lines read in
+111000 lines read in
+112000 lines read in
+113000 lines read in
+114000 lines read in
+115000 lines read in
+116000 lines read in
+117000 lines read in
+118000 lines read in
+119000 lines read in
+120000 lines read in
+121000 lines read in
+122000 lines read in
+123000 lines read in
+124000 lines read in
+125000 lines read in
+126000 lines read in
+127000 lines read in
+128000 lines read in
+129000 lines read in
+130000 lines read in
+131000 lines read in
+132000 lines read in
+133000 lines read in
+134000 lines read in
+135000 lines read in
+136000 lines read in
+137000 lines read in
+138000 lines read in
+139000 lines read in
+140000 lines read in
+141000 lines read in
+142000 lines read in
+143000 lines read in
+144000 lines read in
+145000 lines read in
+146000 lines read in
+147000 lines read in
+148000 lines read in
+149000 lines read in
+150000 lines read in
+151000 lines read in
+152000 lines read in
+153000 lines read in
+154000 lines read in
+155000 lines read in
+156000 lines read in
+157000 lines read in
+158000 lines read in
+159000 lines read in
+160000 lines read in
+161000 lines read in
+162000 lines read in
+163000 lines read in
+164000 lines read in
+165000 lines read in
+166000 lines read in
+167000 lines read in
+168000 lines read in
+169000 lines read in
+170000 lines read in
+171000 lines read in
+172000 lines read in
+173000 lines read in
+174000 lines read in
+175000 lines read in
+176000 lines read in
+177000 lines read in
+178000 lines read in
+179000 lines read in
+180000 lines read in
+181000 lines read in
+182000 lines read in
+183000 lines read in
+184000 lines read in
+185000 lines read in
+186000 lines read in
+187000 lines read in
+188000 lines read in
+189000 lines read in
+190000 lines read in
+191000 lines read in
+192000 lines read in
+193000 lines read in
+194000 lines read in
+195000 lines read in
+196000 lines read in
+197000 lines read in
+198000 lines read in
+199000 lines read in
+200000 lines read in
+201000 lines read in
+202000 lines read in
+203000 lines read in
+204000 lines read in
+205000 lines read in
+206000 lines read in
+207000 lines read in
+208000 lines read in
+209000 lines read in
+210000 lines read in
+Previous manifest loaded, will filter 55757 hashes
+Skipping download of MILPERSMAN 1001-022 because it was in previous_hashes
+Skipping download of MILPERSMAN 1050-310 because it was in previous_hashes
+Skipping download of MILPERSMAN 1070-010 because it was in previous_hashes
+Skipping download of MILPERSMAN 1070-180 because it was in previous_hashes
+Skipping download of MILPERSMAN 1070-190 because it was in previous_hashes
+Skipping download of MILPERSMAN 1070-290 because it was in previous_hashes
+Skipping download of MILPERSMAN 1160-135 because it was in previous_hashes
+Skipping download of MILPERSMAN 1300-807 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-1007 because it was in previous_hashes
+Skipping download of MILPERSMAN 1640-110 because it was in previous_hashes
+Skipping download of MILPERSMAN 1640-140 because it was in previous_hashes
+Skipping download of MILPERSMAN 1640-150 because it was in previous_hashes
+Skipping download of MILPERSMAN 1770-020 because it was in previous_hashes
+Skipping download of MILPERSMAN 1900-808 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-308 because it was in previous_hashes
+Skipping download of MILPERSMAN 5815-010 because it was in previous_hashes
+Skipping download of MILPERSMAN 7220-110 because it was in previous_hashes
+Skipping download of MILPERSMAN 7220-182 because it was in previous_hashes
+Skipping download of MILPERSMAN 1300-140 because it was in previous_hashes
+Skipping download of MILPERSMAN 1301-235 because it was in previous_hashes
+Skipping download of MILPERSMAN 7220-120 because it was in previous_hashes
+Skipping download of MILPERSMAN 1900-015 because it was in previous_hashes
+Skipping download of MILPERSMAN 1900-020 because it was in previous_hashes
+Skipping download of MILPERSMAN 1900-030 because it was in previous_hashes
+Skipping download of MILPERSMAN 1900-040 because it was in previous_hashes
+Skipping download of MILPERSMAN 1900-120 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-010 because it was in previous_hashes
+Skipping download of MILPERSMAN 1800-010 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-050 because it was in previous_hashes
+Skipping download of MILPERSMAN 1800-020 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-100 because it was in previous_hashes
+Skipping download of MILPERSMAN 1800-040 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-102 because it was in previous_hashes
+Skipping download of MILPERSMAN 1800-060 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-104 because it was in previous_hashes
+Skipping download of MILPERSMAN 1800-070 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-106 because it was in previous_hashes
+Skipping download of MILPERSMAN 1810-010 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-108 because it was in previous_hashes
+Skipping download of MILPERSMAN 1810-020 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-110 because it was in previous_hashes
+Skipping download of MILPERSMAN 1810-080 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-112 because it was in previous_hashes
+Skipping download of MILPERSMAN 1810-081 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-118 because it was in previous_hashes
+Skipping download of MILPERSMAN 1810-082 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-124 because it was in previous_hashes
+Skipping download of MILPERSMAN 1811-010 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-125 because it was in previous_hashes
+Skipping download of MILPERSMAN 1700-010 because it was in previous_hashes
+Skipping download of MILPERSMAN 1820-010 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-126 because it was in previous_hashes
+Skipping download of MILPERSMAN 1700-020 because it was in previous_hashes
+Skipping download of MILPERSMAN 1820-020 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-127 because it was in previous_hashes
+Skipping download of MILPERSMAN 1710-010 because it was in previous_hashes
+Skipping download of MILPERSMAN 1820-030 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-128 because it was in previous_hashes
+Skipping download of MILPERSMAN 1730-010 because it was in previous_hashes
+Skipping download of MILPERSMAN 1820-040 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-130 because it was in previous_hashes
+Skipping download of MILPERSMAN 1730-020 because it was in previous_hashes
+Skipping download of MILPERSMAN 1820-050 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-132 because it was in previous_hashes
+Skipping download of MILPERSMAN 1731-010 because it was in previous_hashes
+Skipping download of MILPERSMAN 1830-010 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-133 because it was in previous_hashes
+Skipping download of MILPERSMAN 1740-020 because it was in previous_hashes
+Skipping download of MILPERSMAN 1830-020 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-134 because it was in previous_hashes
+Skipping download of MILPERSMAN 1740-030 because it was in previous_hashes
+Skipping download of MILPERSMAN 1830-030 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-136 because it was in previous_hashes
+Skipping download of MILPERSMAN 1741-020 because it was in previous_hashes
+Skipping download of MILPERSMAN 1600-010 because it was in previous_hashes
+Skipping download of MILPERSMAN 1830-040 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-138 because it was in previous_hashes
+Skipping download of MILPERSMAN 1741-030 because it was in previous_hashes
+Skipping download of MILPERSMAN 1600-020 because it was in previous_hashes
+Skipping download of MILPERSMAN 1500-010 because it was in previous_hashes
+Skipping download of MILPERSMAN 1830-060 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-140 because it was in previous_hashes
+Skipping download of MILPERSMAN 1746-010 because it was in previous_hashes
+Skipping download of MILPERSMAN 1600-030 because it was in previous_hashes
+Skipping download of MILPERSMAN 1500-020 because it was in previous_hashes
+Skipping download of MILPERSMAN 1830-070 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-142 because it was in previous_hashes
+Skipping download of MILPERSMAN 1746-020 because it was in previous_hashes
+Skipping download of MILPERSMAN 1600-040 because it was in previous_hashes
+Skipping download of MILPERSMAN 1401-010 because it was in previous_hashes
+Skipping download of MILPERSMAN 1500-030 because it was in previous_hashes
+Skipping download of MILPERSMAN 1850-010 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-144 because it was in previous_hashes
+Skipping download of MILPERSMAN 1746-030 because it was in previous_hashes
+Skipping download of MILPERSMAN 1600-050 because it was in previous_hashes
+Skipping download of MILPERSMAN 1401-020 because it was in previous_hashes
+Skipping download of MILPERSMAN 1510-030 because it was in previous_hashes
+Skipping download of MILPERSMAN 1850-020 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-146 because it was in previous_hashes
+Skipping download of MILPERSMAN 1750-010 because it was in previous_hashes
+Skipping download of MILPERSMAN 1600-060 because it was in previous_hashes
+Skipping download of MILPERSMAN 1300-010 because it was in previous_hashes
+Skipping download of MILPERSMAN 1414-010 because it was in previous_hashes
+Skipping download of MILPERSMAN 1520-020 because it was in previous_hashes
+Skipping download of MILPERSMAN 1850-030 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-152 because it was in previous_hashes
+Skipping download of MILPERSMAN 1754-010 because it was in previous_hashes
+Skipping download of MILPERSMAN 1600-070 because it was in previous_hashes
+Skipping download of MILPERSMAN 1300-035 because it was in previous_hashes
+Skipping download of MILPERSMAN 1420-010 because it was in previous_hashes
+Skipping download of MILPERSMAN 1520-030 because it was in previous_hashes
+Skipping download of MILPERSMAN 1850-040 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-153 because it was in previous_hashes
+Skipping download of MILPERSMAN 1754-020 because it was in previous_hashes
+Skipping download of MILPERSMAN 1600-090 because it was in previous_hashes
+Skipping download of MILPERSMAN 1300-060 because it was in previous_hashes
+Skipping download of MILPERSMAN 1420-030 because it was in previous_hashes
+Skipping download of MILPERSMAN 1520-040 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-154 because it was in previous_hashes
+Skipping download of MILPERSMAN 1754-030 because it was in previous_hashes
+Skipping download of MILPERSMAN 1600-100 because it was in previous_hashes
+Skipping download of MILPERSMAN 1300-070 because it was in previous_hashes
+Skipping download of MILPERSMAN 1420-050 because it was in previous_hashes
+Skipping download of MILPERSMAN 1520-050 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-156 because it was in previous_hashes
+Skipping download of MILPERSMAN 1100-011 because it was in previous_hashes
+Skipping download of MILPERSMAN 1200-010 because it was in previous_hashes
+Skipping download of MILPERSMAN 1754-040 because it was in previous_hashes
+Skipping download of MILPERSMAN 1600-120 because it was in previous_hashes
+Skipping download of MILPERSMAN 1300-081 because it was in previous_hashes
+Skipping download of MILPERSMAN 1420-060 because it was in previous_hashes
+Skipping download of MILPERSMAN 1520-060 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-158 because it was in previous_hashes
+Skipping download of MILPERSMAN 1100-020 because it was in previous_hashes
+Skipping download of MILPERSMAN 1200-020 because it was in previous_hashes
+Skipping download of MILPERSMAN 1770-010 because it was in previous_hashes
+Skipping download of MILPERSMAN 1610-010 because it was in previous_hashes
+Skipping download of MILPERSMAN 1300-082 because it was in previous_hashes
+Skipping download of MILPERSMAN 1420-070 because it was in previous_hashes
+Skipping download of MILPERSMAN 1530-020 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-160 because it was in previous_hashes
+Skipping download of MILPERSMAN 1100-030 because it was in previous_hashes
+Skipping download of MILPERSMAN 1200-030 because it was in previous_hashes
+Skipping download of MILPERSMAN 1770-030 because it was in previous_hashes
+Skipping download of MILPERSMAN 1610-015 because it was in previous_hashes
+Skipping download of MILPERSMAN 1300-090 because it was in previous_hashes
+Skipping download of MILPERSMAN 1420-100 because it was in previous_hashes
+Skipping download of MILPERSMAN 1531-010 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-162 because it was in previous_hashes
+Skipping download of MILPERSMAN 1100-050 because it was in previous_hashes
+Skipping download of MILPERSMAN 1200-040 because it was in previous_hashes
+Skipping download of MILPERSMAN 1770-040 because it was in previous_hashes
+Skipping download of MILPERSMAN 1610-020 because it was in previous_hashes
+Skipping download of MILPERSMAN 1300-100 because it was in previous_hashes
+Skipping download of MILPERSMAN 1426-010 because it was in previous_hashes
+Skipping download of MILPERSMAN 1531-020 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-164 because it was in previous_hashes
+Skipping download of MILPERSMAN 1100-060 because it was in previous_hashes
+Skipping download of MILPERSMAN 1200-050 because it was in previous_hashes
+Skipping download of MILPERSMAN 1770-060 because it was in previous_hashes
+Skipping download of MILPERSMAN 1610-030 because it was in previous_hashes
+Skipping download of MILPERSMAN 1300-110 because it was in previous_hashes
+Skipping download of MILPERSMAN 1427-010 because it was in previous_hashes
+Skipping download of MILPERSMAN 1540-010 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-166 because it was in previous_hashes
+Skipping download of MILPERSMAN 1000-020 because it was in previous_hashes
+Skipping download of MILPERSMAN 1131-040 because it was in previous_hashes
+Skipping download of MILPERSMAN 1200-070 because it was in previous_hashes
+Skipping download of MILPERSMAN 1770-090 because it was in previous_hashes
+Skipping download of MILPERSMAN 1610-040 because it was in previous_hashes
+Skipping download of MILPERSMAN 1300-120 because it was in previous_hashes
+Skipping download of MILPERSMAN 1430-010 because it was in previous_hashes
+Skipping download of MILPERSMAN 1542-010 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-168 because it was in previous_hashes
+Skipping download of MILPERSMAN 1000-021 because it was in previous_hashes
+Skipping download of MILPERSMAN 1131-050 because it was in previous_hashes
+Skipping download of MILPERSMAN 1210-010 because it was in previous_hashes
+Skipping download of MILPERSMAN 1770-100 because it was in previous_hashes
+Skipping download of MILPERSMAN 1611-010 because it was in previous_hashes
+Skipping download of MILPERSMAN 1300-130 because it was in previous_hashes
+Skipping download of MILPERSMAN 1430-020 because it was in previous_hashes
+Skipping download of MILPERSMAN 1542-020 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-182 because it was in previous_hashes
+Skipping download of MILPERSMAN 1000-025 because it was in previous_hashes
+Skipping download of MILPERSMAN 1133-020 because it was in previous_hashes
+Skipping download of MILPERSMAN 1210-020 because it was in previous_hashes
+Skipping download of MILPERSMAN 1770-130 because it was in previous_hashes
+Skipping download of MILPERSMAN 1611-020 because it was in previous_hashes
+Skipping download of MILPERSMAN 1300-150 because it was in previous_hashes
+Skipping download of MILPERSMAN 1430-040 because it was in previous_hashes
+Skipping download of MILPERSMAN 1570-010 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-184 because it was in previous_hashes
+Skipping download of MILPERSMAN 1000-030 because it was in previous_hashes
+Skipping download of MILPERSMAN 1133-060 because it was in previous_hashes
+Skipping download of MILPERSMAN 1210-030 because it was in previous_hashes
+Skipping download of MILPERSMAN 1770-140 because it was in previous_hashes
+Skipping download of MILPERSMAN 1616-010 because it was in previous_hashes
+Skipping download of MILPERSMAN 1300-160 because it was in previous_hashes
+Skipping download of MILPERSMAN 1430-050 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-186 because it was in previous_hashes
+Skipping download of MILPERSMAN 1000-060 because it was in previous_hashes
+Skipping download of MILPERSMAN 1133-061 because it was in previous_hashes
+Skipping download of MILPERSMAN 1210-040 because it was in previous_hashes
+Skipping download of MILPERSMAN 1770-150 because it was in previous_hashes
+Skipping download of MILPERSMAN 1616-030 because it was in previous_hashes
+Skipping download of MILPERSMAN 1300-170 because it was in previous_hashes
+Skipping download of MILPERSMAN 1440-010 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-202 because it was in previous_hashes
+Skipping download of MILPERSMAN 1000-090 because it was in previous_hashes
+Skipping download of MILPERSMAN 1133-062 because it was in previous_hashes
+Skipping download of MILPERSMAN 1210-081 because it was in previous_hashes
+Skipping download of MILPERSMAN 1770-160 because it was in previous_hashes
+Skipping download of MILPERSMAN 1616-040 because it was in previous_hashes
+Skipping download of MILPERSMAN 1300-180 because it was in previous_hashes
+Skipping download of MILPERSMAN 1440-011 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-206 because it was in previous_hashes
+Skipping download of MILPERSMAN 1000-100 because it was in previous_hashes
+Skipping download of MILPERSMAN 1133-070 because it was in previous_hashes
+Skipping download of MILPERSMAN 1210-090 because it was in previous_hashes
+Skipping download of MILPERSMAN 1770-170 because it was in previous_hashes
+Skipping download of MILPERSMAN 1616-050 because it was in previous_hashes
+Skipping download of MILPERSMAN 1300-190 because it was in previous_hashes
+Skipping download of MILPERSMAN 1440-020 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-208 because it was in previous_hashes
+Skipping download of MILPERSMAN 1000-110 because it was in previous_hashes
+Skipping download of MILPERSMAN 1133-090 because it was in previous_hashes
+Skipping download of MILPERSMAN 1210-100 because it was in previous_hashes
+Skipping download of MILPERSMAN 1770-200 because it was in previous_hashes
+Skipping download of MILPERSMAN 1620-010 because it was in previous_hashes
+Skipping download of MILPERSMAN 1300-200 because it was in previous_hashes
+Skipping download of MILPERSMAN 1440-040 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-210 because it was in previous_hashes
+Skipping download of MILPERSMAN 1000-120 because it was in previous_hashes
+Skipping download of MILPERSMAN 1160-010 because it was in previous_hashes
+Skipping download of MILPERSMAN 1210-110 because it was in previous_hashes
+Skipping download of MILPERSMAN 1770-210 because it was in previous_hashes
+Skipping download of MILPERSMAN 1620-020 because it was in previous_hashes
+Skipping download of MILPERSMAN 1300-210 because it was in previous_hashes
+Skipping download of MILPERSMAN 1450-010 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-212 because it was in previous_hashes
+Skipping download of MILPERSMAN 1000-130 because it was in previous_hashes
+Skipping download of MILPERSMAN 1160-020 because it was in previous_hashes
+Skipping download of MILPERSMAN 1210-120 because it was in previous_hashes
+Skipping download of MILPERSMAN 1770-230 because it was in previous_hashes
+Skipping download of MILPERSMAN 1626-010 because it was in previous_hashes
+Skipping download of MILPERSMAN 1300-300 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-214 because it was in previous_hashes
+Skipping download of MILPERSMAN 1000-131 because it was in previous_hashes
+Skipping download of MILPERSMAN 1160-030 because it was in previous_hashes
+Skipping download of MILPERSMAN 1210-130 because it was in previous_hashes
+Skipping download of MILPERSMAN 1770-260 because it was in previous_hashes
+Skipping download of MILPERSMAN 1626-020 because it was in previous_hashes
+Skipping download of MILPERSMAN 1300-302 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-216 because it was in previous_hashes
+Skipping download of MILPERSMAN 1000-140 because it was in previous_hashes
+Skipping download of MILPERSMAN 1160-031 because it was in previous_hashes
+Skipping download of MILPERSMAN 1210-140 because it was in previous_hashes
+Skipping download of MILPERSMAN 1770-270 because it was in previous_hashes
+Skipping download of MILPERSMAN 1626-030 because it was in previous_hashes
+Skipping download of MILPERSMAN 1300-306 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-218 because it was in previous_hashes
+Skipping download of MILPERSMAN 1000-150 because it was in previous_hashes
+Skipping download of MILPERSMAN 1160-040 because it was in previous_hashes
+Skipping download of MILPERSMAN 1210-145 because it was in previous_hashes
+Skipping download of MILPERSMAN 1770-271 because it was in previous_hashes
+Skipping download of MILPERSMAN 1640 because it was in previous_hashes
+Skipping download of MILPERSMAN 1300-308 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-220 because it was in previous_hashes
+Skipping download of MILPERSMAN 1000-160 because it was in previous_hashes
+Skipping download of MILPERSMAN 1160-050 because it was in previous_hashes
+Skipping download of MILPERSMAN 1210-150 because it was in previous_hashes
+Skipping download of MILPERSMAN 1770-275 because it was in previous_hashes
+Skipping download of MILPERSMAN 1640-010 because it was in previous_hashes
+Skipping download of MILPERSMAN 1300-310 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-222 because it was in previous_hashes
+Skipping download of MILPERSMAN 1000-170 because it was in previous_hashes
+Skipping download of MILPERSMAN 1160-060 because it was in previous_hashes
+Skipping download of MILPERSMAN 1210-160 because it was in previous_hashes
+Skipping download of MILPERSMAN 1770-280 because it was in previous_hashes
+Skipping download of MILPERSMAN 1640-020 because it was in previous_hashes
+Skipping download of MILPERSMAN 1300-312 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-224 because it was in previous_hashes
+Skipping download of MILPERSMAN 1001-020 because it was in previous_hashes
+Skipping download of MILPERSMAN 1160-070 because it was in previous_hashes
+Skipping download of MILPERSMAN 1210-170 because it was in previous_hashes
+Skipping download of MILPERSMAN 1780-011 because it was in previous_hashes
+Skipping download of MILPERSMAN 1640-030 because it was in previous_hashes
+Skipping download of MILPERSMAN 1300-314 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-226 because it was in previous_hashes
+Skipping download of MILPERSMAN 1001-021 because it was in previous_hashes
+Skipping download of MILPERSMAN 1160-100 because it was in previous_hashes
+Skipping download of MILPERSMAN 1210-180 because it was in previous_hashes
+Skipping download of MILPERSMAN 1640-060 because it was in previous_hashes
+Skipping download of MILPERSMAN 1300-316 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-228 because it was in previous_hashes
+Skipping download of MILPERSMAN 1001-030 because it was in previous_hashes
+Skipping download of MILPERSMAN 1160-120 because it was in previous_hashes
+Skipping download of MILPERSMAN 1210-190 because it was in previous_hashes
+Skipping download of MILPERSMAN 1640-070 because it was in previous_hashes
+Skipping download of MILPERSMAN 1300-318 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-230 because it was in previous_hashes
+Skipping download of MILPERSMAN 1001-040 because it was in previous_hashes
+Skipping download of MILPERSMAN 1160-140 because it was in previous_hashes
+Skipping download of MILPERSMAN 1210-200 because it was in previous_hashes
+Skipping download of MILPERSMAN 1640-080 because it was in previous_hashes
+Skipping download of MILPERSMAN 1300-320 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-232 because it was in previous_hashes
+Skipping download of MILPERSMAN 1001-060 because it was in previous_hashes
+Skipping download of MILPERSMAN 1210-210 because it was in previous_hashes
+Skipping download of MILPERSMAN 1640-090 because it was in previous_hashes
+Skipping download of MILPERSMAN 1300-400 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-233 because it was in previous_hashes
+Skipping download of MILPERSMAN 1001-070 because it was in previous_hashes
+Skipping download of MILPERSMAN 1210-220 because it was in previous_hashes
+Skipping download of MILPERSMAN 1640-100 because it was in previous_hashes
+Skipping download of MILPERSMAN 1300-500 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-300 because it was in previous_hashes
+Skipping download of MILPERSMAN 1001-080 because it was in previous_hashes
+Skipping download of MILPERSMAN 1210-230 because it was in previous_hashes
+Skipping download of MILPERSMAN 1640-105 because it was in previous_hashes
+Skipping download of MILPERSMAN 1300-600 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-302 because it was in previous_hashes
+Skipping download of MILPERSMAN 1001-090 because it was in previous_hashes
+Skipping download of MILPERSMAN 1210-240 because it was in previous_hashes
+Skipping download of MILPERSMAN 1300-700 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-304 because it was in previous_hashes
+Skipping download of MILPERSMAN 1001-100 because it was in previous_hashes
+Skipping download of MILPERSMAN 1210-250 because it was in previous_hashes
+Skipping download of MILPERSMAN 1300-800 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-306 because it was in previous_hashes
+Skipping download of MILPERSMAN 1001-125 because it was in previous_hashes
+Skipping download of MILPERSMAN 1210-260 because it was in previous_hashes
+Skipping download of MILPERSMAN 1300-802 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-402 because it was in previous_hashes
+Skipping download of MILPERSMAN 1001-135 because it was in previous_hashes
+Skipping download of MILPERSMAN 1210-270 because it was in previous_hashes
+Skipping download of MILPERSMAN 1300-803 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-406 because it was in previous_hashes
+Skipping download of MILPERSMAN 1001-145 because it was in previous_hashes
+Skipping download of MILPERSMAN 1210-280 because it was in previous_hashes
+Skipping download of MILPERSMAN 1300-804 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-408 because it was in previous_hashes
+Skipping download of MILPERSMAN 1001-150 because it was in previous_hashes
+Skipping download of MILPERSMAN 1210-300 because it was in previous_hashes
+Skipping download of MILPERSMAN 1300-996 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-410 because it was in previous_hashes
+Skipping download of MILPERSMAN 1001-155 because it was in previous_hashes
+Skipping download of MILPERSMAN 1210-310 because it was in previous_hashes
+Skipping download of MILPERSMAN 1300-1000 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-412 because it was in previous_hashes
+Skipping download of MILPERSMAN 1001-260 because it was in previous_hashes
+Skipping download of MILPERSMAN 1210-320 because it was in previous_hashes
+Skipping download of MILPERSMAN 1300-1100 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-414 because it was in previous_hashes
+Skipping download of MILPERSMAN 1050-010 because it was in previous_hashes
+Skipping download of MILPERSMAN 1212-010 because it was in previous_hashes
+Skipping download of MILPERSMAN 1300-1200 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-500 because it was in previous_hashes
+Skipping download of MILPERSMAN 1050-050 because it was in previous_hashes
+Skipping download of MILPERSMAN 1212-020 because it was in previous_hashes
+Skipping download of MILPERSMAN 1300-1205 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-502 because it was in previous_hashes
+Skipping download of MILPERSMAN 1050-070 because it was in previous_hashes
+Skipping download of MILPERSMAN 1212-030 because it was in previous_hashes
+Skipping download of MILPERSMAN 1300-1300 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-504 because it was in previous_hashes
+Skipping download of MILPERSMAN 1050-080 because it was in previous_hashes
+Skipping download of MILPERSMAN 1212-040 because it was in previous_hashes
+Skipping download of MILPERSMAN 1300-1306 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-506 because it was in previous_hashes
+Skipping download of MILPERSMAN 1050-081 because it was in previous_hashes
+Skipping download of MILPERSMAN 1212-050 because it was in previous_hashes
+Skipping download of MILPERSMAN 1300-1400 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-508 because it was in previous_hashes
+Skipping download of MILPERSMAN 1050-082 because it was in previous_hashes
+Skipping download of MILPERSMAN 1213-010 because it was in previous_hashes
+Skipping download of MILPERSMAN 1301-100 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-510 because it was in previous_hashes
+Skipping download of MILPERSMAN 1050-083 because it was in previous_hashes
+Skipping download of MILPERSMAN 1213-020 because it was in previous_hashes
+Skipping download of MILPERSMAN 1301-102 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-512 because it was in previous_hashes
+Skipping download of MILPERSMAN 1050-084 because it was in previous_hashes
+Skipping download of MILPERSMAN 1214-010 because it was in previous_hashes
+Skipping download of MILPERSMAN 1301-104 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-514 because it was in previous_hashes
+Skipping download of MILPERSMAN 1050-085 because it was in previous_hashes
+Skipping download of MILPERSMAN 1220-010 because it was in previous_hashes
+Skipping download of MILPERSMAN 1301-106 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-516 because it was in previous_hashes
+Skipping download of MILPERSMAN 1050-090 because it was in previous_hashes
+Skipping download of MILPERSMAN 1220-020 because it was in previous_hashes
+Skipping download of MILPERSMAN 1301-108 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-518 because it was in previous_hashes
+Skipping download of MILPERSMAN 1050-100 because it was in previous_hashes
+Skipping download of MILPERSMAN 1220-022 because it was in previous_hashes
+Skipping download of MILPERSMAN 1301-110 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-600 because it was in previous_hashes
+Skipping download of MILPERSMAN 1050-110 because it was in previous_hashes
+Skipping download of MILPERSMAN 1220-030 because it was in previous_hashes
+Skipping download of MILPERSMAN 1301-112 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-700 because it was in previous_hashes
+Skipping download of MILPERSMAN 1050-120 because it was in previous_hashes
+Skipping download of MILPERSMAN 1220-040 because it was in previous_hashes
+Skipping download of MILPERSMAN 1301-114 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-702 because it was in previous_hashes
+Skipping download of MILPERSMAN 1050-130 because it was in previous_hashes
+Skipping download of MILPERSMAN 1220-050 because it was in previous_hashes
+Skipping download of MILPERSMAN 1301-116 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-704 because it was in previous_hashes
+Skipping download of MILPERSMAN 1050-140 because it was in previous_hashes
+Skipping download of MILPERSMAN 1220-060 because it was in previous_hashes
+Skipping download of MILPERSMAN 1301-118 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-708 because it was in previous_hashes
+Skipping download of MILPERSMAN 1050-150 because it was in previous_hashes
+Skipping download of MILPERSMAN 1220-070 because it was in previous_hashes
+Skipping download of MILPERSMAN 1301-120 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-710 because it was in previous_hashes
+Skipping download of MILPERSMAN 1050-160 because it was in previous_hashes
+Skipping download of MILPERSMAN 1220-080 because it was in previous_hashes
+Skipping download of MILPERSMAN 1301-122 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-712 because it was in previous_hashes
+Skipping download of MILPERSMAN 1050-170 because it was in previous_hashes
+Skipping download of MILPERSMAN 1220-100 because it was in previous_hashes
+Skipping download of MILPERSMAN 1301-200 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-800 because it was in previous_hashes
+Skipping download of MILPERSMAN 1050-180 because it was in previous_hashes
+Skipping download of MILPERSMAN 1220-101 because it was in previous_hashes
+Skipping download of MILPERSMAN 1301-201 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-802 because it was in previous_hashes
+Skipping download of MILPERSMAN 1050-190 because it was in previous_hashes
+Skipping download of MILPERSMAN 1220-102 because it was in previous_hashes
+Skipping download of MILPERSMAN 1301-202 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-804 because it was in previous_hashes
+Skipping download of MILPERSMAN 1050-200 because it was in previous_hashes
+Skipping download of MILPERSMAN 1220-200 because it was in previous_hashes
+Skipping download of MILPERSMAN 1301-203 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-806 because it was in previous_hashes
+Skipping download of MILPERSMAN 1050-210 because it was in previous_hashes
+Skipping download of MILPERSMAN 1220-280 because it was in previous_hashes
+Skipping download of MILPERSMAN 1301-205 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-810 because it was in previous_hashes
+Skipping download of MILPERSMAN 1050-220 because it was in previous_hashes
+Skipping download of MILPERSMAN 1220-300 because it was in previous_hashes
+Skipping download of MILPERSMAN 1301-207 because it was in previous_hashes
+Skipping download of MILPERSMAN 1910-812 because it was in previous_hashes
+Skipping download of MILPERSMAN 1050-230 because it was in previous_hashes
+Skipping download of MILPERSMAN 1220-350 because it was in previous_hashes
+Skipping download of MILPERSMAN 1301-208 because it was in previous_hashes
+Skipping download of MILPERSMAN 1916-010 because it was in previous_hashes
+Skipping download of MILPERSMAN 1050-240 because it was in previous_hashes
+Skipping download of MILPERSMAN 1220-360 because it was in previous_hashes
+Skipping download of MILPERSMAN 1301-209 because it was in previous_hashes
+Skipping download of MILPERSMAN 1920-010 because it was in previous_hashes
+Skipping download of MILPERSMAN 1050-250 because it was in previous_hashes
+Skipping download of MILPERSMAN 1220-370 because it was in previous_hashes
+Skipping download of MILPERSMAN 1301-210 because it was in previous_hashes
+Skipping download of MILPERSMAN 1920-020 because it was in previous_hashes
+Skipping download of MILPERSMAN 1050-260 because it was in previous_hashes
+Skipping download of MILPERSMAN 1220-400 because it was in previous_hashes
+Skipping download of MILPERSMAN 1301-211 because it was in previous_hashes
+Skipping download of MILPERSMAN 1920-030 because it was in previous_hashes
+Skipping download of MILPERSMAN 1050-270 because it was in previous_hashes
+Skipping download of MILPERSMAN 1220-410 because it was in previous_hashes
+Skipping download of MILPERSMAN 1301-212 because it was in previous_hashes
+Skipping download of MILPERSMAN 1920-040 because it was in previous_hashes
+Skipping download of MILPERSMAN 1050-271 because it was in previous_hashes
+Skipping download of MILPERSMAN 1221-021 because it was in previous_hashes
+Skipping download of MILPERSMAN 1301-213 because it was in previous_hashes
+Skipping download of MILPERSMAN 1920-050 because it was in previous_hashes
+Skipping download of MILPERSMAN 1050-272 because it was in previous_hashes
+Skipping download of MILPERSMAN 1221-030 because it was in previous_hashes
+Skipping download of MILPERSMAN 1301-214 because it was in previous_hashes
+Skipping download of MILPERSMAN 1920-060 because it was in previous_hashes
+Skipping download of MILPERSMAN 1050-280 because it was in previous_hashes
+Skipping download of MILPERSMAN 1223-010 because it was in previous_hashes
+Skipping download of MILPERSMAN 1301-215 because it was in previous_hashes
+Skipping download of MILPERSMAN 1920-070 because it was in previous_hashes
+Skipping download of MILPERSMAN 1050-290 because it was in previous_hashes
+Skipping download of MILPERSMAN 1236-010 because it was in previous_hashes
+Skipping download of MILPERSMAN 1301-216 because it was in previous_hashes
+Skipping download of MILPERSMAN 1920-080 because it was in previous_hashes
+Skipping download of MILPERSMAN 1050-320 because it was in previous_hashes
+Skipping download of MILPERSMAN 1236-020 because it was in previous_hashes
+Skipping download of MILPERSMAN 1301-217 because it was in previous_hashes
+Skipping download of MILPERSMAN 1920-090 because it was in previous_hashes
+Skipping download of MILPERSMAN 1050-330 because it was in previous_hashes
+Skipping download of MILPERSMAN 1236-030 because it was in previous_hashes
+Skipping download of MILPERSMAN 1301-219 because it was in previous_hashes
+Skipping download of MILPERSMAN 1920-100 because it was in previous_hashes
+Skipping download of MILPERSMAN 1050-340 because it was in previous_hashes
+Skipping download of MILPERSMAN 1301-220 because it was in previous_hashes
+Skipping download of MILPERSMAN 1920-110 because it was in previous_hashes
+Skipping download of MILPERSMAN 1050-350 because it was in previous_hashes
+Skipping download of MILPERSMAN 1301-221 because it was in previous_hashes
+Skipping download of MILPERSMAN 1920-120 because it was in previous_hashes
+Skipping download of MILPERSMAN 1050-360 because it was in previous_hashes
+Skipping download of MILPERSMAN 1301-222 because it was in previous_hashes
+Skipping download of MILPERSMAN 1920-130 because it was in previous_hashes
+Skipping download of MILPERSMAN 1050-370 because it was in previous_hashes
+Skipping download of MILPERSMAN 1301-223 because it was in previous_hashes
+Skipping download of MILPERSMAN 1920-140 because it was in previous_hashes
+Skipping download of MILPERSMAN 1050-380 because it was in previous_hashes
+Skipping download of MILPERSMAN 1301-224 because it was in previous_hashes
+Skipping download of MILPERSMAN 1920-160 because it was in previous_hashes
+Skipping download of MILPERSMAN 1050-400 because it was in previous_hashes
+Skipping download of MILPERSMAN 1301-226 because it was in previous_hashes
+Skipping download of MILPERSMAN 1920-170 because it was in previous_hashes
+Skipping download of MILPERSMAN 1050-410 because it was in previous_hashes
+Skipping download of MILPERSMAN 1301-227 because it was in previous_hashes
+Skipping download of MILPERSMAN 1920-180 because it was in previous_hashes
+Skipping download of MILPERSMAN 1050-440 because it was in previous_hashes
+Skipping download of MILPERSMAN 1301-228 because it was in previous_hashes
+Skipping download of MILPERSMAN 1920-190 because it was in previous_hashes
+Skipping download of MILPERSMAN 1070-020 because it was in previous_hashes
+Skipping download of MILPERSMAN 1301-229 because it was in previous_hashes
+Skipping download of MILPERSMAN 1920-200 because it was in previous_hashes
+Skipping download of MILPERSMAN 1070-030 because it was in previous_hashes
+Skipping download of MILPERSMAN 1301-230 because it was in previous_hashes
+Skipping download of MILPERSMAN 1920-210 because it was in previous_hashes
+Skipping download of MILPERSMAN 1070-080 because it was in previous_hashes
+Skipping download of MILPERSMAN 1301-233 because it was in previous_hashes
+Skipping download of MILPERSMAN 1920-230 because it was in previous_hashes
+Skipping download of MILPERSMAN 1070-090 because it was in previous_hashes
+Skipping download of MILPERSMAN 1301-234 because it was in previous_hashes
+Skipping download of MILPERSMAN 1920-240 because it was in previous_hashes
+Skipping download of MILPERSMAN 1070-111 because it was in previous_hashes
+Skipping download of MILPERSMAN 1301-236 because it was in previous_hashes
+Skipping download of MILPERSMAN 1920-250 because it was in previous_hashes
+Skipping download of MILPERSMAN 1070-150 because it was in previous_hashes
+Skipping download of MILPERSMAN 1301-237 because it was in previous_hashes
+Skipping download of MILPERSMAN 1920-260 because it was in previous_hashes
+Skipping download of MILPERSMAN 1070-170 because it was in previous_hashes
+Skipping download of MILPERSMAN 1301-239 because it was in previous_hashes
+Skipping download of MILPERSMAN 1070-210 because it was in previous_hashes
+Skipping download of MILPERSMAN 1301-240 because it was in previous_hashes
+Skipping download of MILPERSMAN 1070-220 because it was in previous_hashes
+Skipping download of MILPERSMAN 1301-500 because it was in previous_hashes
+Skipping download of MILPERSMAN 1070-230 because it was in previous_hashes
+Skipping download of MILPERSMAN 1301-600 because it was in previous_hashes
+Skipping download of MILPERSMAN 1070-240 because it was in previous_hashes
+Skipping download of MILPERSMAN 1301-700 because it was in previous_hashes
+Skipping download of MILPERSMAN 1070-250 because it was in previous_hashes
+Skipping download of MILPERSMAN 1301-710 because it was in previous_hashes
+Skipping download of MILPERSMAN 1070-260 because it was in previous_hashes
+Skipping download of MILPERSMAN 1301-800 because it was in previous_hashes
+Skipping download of MILPERSMAN 1070-270 because it was in previous_hashes
+Skipping download of MILPERSMAN 1301-802 because it was in previous_hashes
+Skipping download of MILPERSMAN 1070-271 because it was in previous_hashes
+Skipping download of MILPERSMAN 1301-804 because it was in previous_hashes
+Skipping download of MILPERSMAN 1070-300 because it was in previous_hashes
+Skipping download of MILPERSMAN 1301-806 because it was in previous_hashes
+Skipping download of MILPERSMAN 1070-310 because it was in previous_hashes
+Skipping download of MILPERSMAN 1301-808 because it was in previous_hashes
+Skipping download of MILPERSMAN 1070-320 because it was in previous_hashes
+Skipping download of MILPERSMAN 1301-809 because it was in previous_hashes
+Skipping download of MILPERSMAN 1070-330 because it was in previous_hashes
+Skipping download of MILPERSMAN 1301-810 because it was in previous_hashes
+Skipping download of MILPERSMAN 1070-340 because it was in previous_hashes
+Skipping download of MILPERSMAN 1301-812 because it was in previous_hashes
+Skipping download of MILPERSMAN 1070-360 because it was in previous_hashes
+Skipping download of MILPERSMAN 1301-815 because it was in previous_hashes
+Skipping download of MILPERSMAN 1080-010 because it was in previous_hashes
+Skipping download of MILPERSMAN 1301-816 because it was in previous_hashes
+Skipping download of MILPERSMAN 1080-020 because it was in previous_hashes
+Skipping download of MILPERSMAN 1301-818 because it was in previous_hashes
+Skipping download of MILPERSMAN 1301-820 because it was in previous_hashes
+Skipping download of MILPERSMAN 1301-824 because it was in previous_hashes
+Skipping download of MILPERSMAN 1301-826 because it was in previous_hashes
+Skipping download of MILPERSMAN 1301-900 because it was in previous_hashes
+Skipping download of MILPERSMAN 1301-902 because it was in previous_hashes
+Skipping download of MILPERSMAN 1301-904 because it was in previous_hashes
+Skipping download of MILPERSMAN 1301-906 because it was in previous_hashes
+Skipping download of MILPERSMAN 1301-907 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-100 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-101 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-102 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-104 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-106 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-108 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-110 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-112 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-114 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-116 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-118 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-120 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-122 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-124 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-125 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-126 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-128 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-130 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-132 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-134 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-136 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-141 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-200 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-300 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-400 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-402 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-404 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-406 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-408 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-410 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-412 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-414 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-416 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-418 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-420 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-422 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-423 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-424 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-425 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-500 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-502 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-504 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-600 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-602 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-604 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-611 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-614 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-616 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-618 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-700 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-800 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-801 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-802 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-803 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-804 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-900 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-901 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-902 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-904 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-905 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-906 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-907 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-912 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-913 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-914 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-915 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-916 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-917 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-918 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-919 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-920 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-921 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-924 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-925 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-926 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-927 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-928 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-929 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-930 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-931 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-934 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-935 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-936 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-937 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-939 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-940 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-942 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-943 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-944 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-945 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-946 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-947 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-948 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-949 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-950 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-953 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-954 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-955 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-956 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-957 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-958 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-959 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-960 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-961 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-962 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-964 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-965 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-966 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-968 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-970 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-971 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-972 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-973 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-975 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-976 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-978 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-979 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-980 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-981 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-982 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-983 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-984 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-985 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-986 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-987 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-989 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-990 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-991 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-992 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-993 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-994 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-995 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-997 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-1000 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-1001 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-1005 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-1008 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-1010 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-1100 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-1500 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-1501 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-1502 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-1600 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-1700 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-1702 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-1704 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-1705 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-1706 because it was in previous_hashes
+Skipping download of MILPERSMAN 1306-1800 because it was in previous_hashes
+Skipping download of MILPERSMAN 1320-020 because it was in previous_hashes
+Skipping download of MILPERSMAN 1320-030 because it was in previous_hashes
+Skipping download of MILPERSMAN 1320-040 because it was in previous_hashes
+Skipping download of MILPERSMAN 1320-060 because it was in previous_hashes
+Skipping download of MILPERSMAN 1320-090 because it was in previous_hashes
+Skipping download of MILPERSMAN 1320-100 because it was in previous_hashes
+Skipping download of MILPERSMAN 1320-110 because it was in previous_hashes
+Skipping download of MILPERSMAN 1320-120 because it was in previous_hashes
+Skipping download of MILPERSMAN 1320-140 because it was in previous_hashes
+Skipping download of MILPERSMAN 1320-170 because it was in previous_hashes
+Skipping download of MILPERSMAN 1320-200 because it was in previous_hashes
+Skipping download of MILPERSMAN 1320-210 because it was in previous_hashes
+Skipping download of MILPERSMAN 1320-220 because it was in previous_hashes
+Skipping download of MILPERSMAN 1320-300 because it was in previous_hashes
+Skipping download of MILPERSMAN 1320-304 because it was in previous_hashes
+Skipping download of MILPERSMAN 1320-306 because it was in previous_hashes
+Skipping download of MILPERSMAN 1320-308 because it was in previous_hashes
+Skipping download of MILPERSMAN 1320-310 because it was in previous_hashes
+Skipping download of MILPERSMAN 1320-311 because it was in previous_hashes
+Skipping download of MILPERSMAN 1320-312 because it was in previous_hashes
+Skipping download of MILPERSMAN 1320-314 because it was in previous_hashes
+Skipping download of MILPERSMAN 1320-316 because it was in previous_hashes
+Skipping download of MILPERSMAN 1320-320 because it was in previous_hashes
+Skipping download of MILPERSMAN 1320-322 because it was in previous_hashes
+Skipping download of MILPERSMAN 1320-324 because it was in previous_hashes
+Skipping download of MILPERSMAN 1320-326 because it was in previous_hashes
+Skipping download of MILPERSMAN 1321-020 because it was in previous_hashes
+Skipping download of MILPERSMAN 1321-030 because it was in previous_hashes
+Skipping download of MILPERSMAN 1321-040 because it was in previous_hashes
+Skipping download of MILPERSMAN 1321-050 because it was in previous_hashes
+Skipping download of MILPERSMAN 1321-100 because it was in previous_hashes
+Skipping download of MILPERSMAN 1321-105 because it was in previous_hashes
+Skipping download of MILPERSMAN 1321-110 because it was in previous_hashes
+Skipping download of MILPERSMAN 1326-010 because it was in previous_hashes
+Skipping download of MILPERSMAN 1326-020 because it was in previous_hashes
+Skipping download of MILPERSMAN 1326-040 because it was in previous_hashes
+Skipping download of MILPERSMAN 1331-030 because it was in previous_hashes
+Skipping download of MILPERSMAN 1331-040 because it was in previous_hashes
+++ Initiating downloader for Bupers_Crawler
+Reading in previous manifest
+1000 lines read in
+2000 lines read in
+3000 lines read in
+4000 lines read in
+5000 lines read in
+6000 lines read in
+7000 lines read in
+8000 lines read in
+9000 lines read in
+10000 lines read in
+11000 lines read in
+12000 lines read in
+13000 lines read in
+14000 lines read in
+15000 lines read in
+16000 lines read in
+17000 lines read in
+18000 lines read in
+19000 lines read in
+20000 lines read in
+21000 lines read in
+22000 lines read in
+23000 lines read in
+24000 lines read in
+25000 lines read in
+26000 lines read in
+27000 lines read in
+28000 lines read in
+29000 lines read in
+30000 lines read in
+31000 lines read in
+32000 lines read in
+33000 lines read in
+34000 lines read in
+35000 lines read in
+36000 lines read in
+37000 lines read in
+38000 lines read in
+39000 lines read in
+40000 lines read in
+41000 lines read in
+42000 lines read in
+43000 lines read in
+44000 lines read in
+45000 lines read in
+46000 lines read in
+47000 lines read in
+48000 lines read in
+49000 lines read in
+50000 lines read in
+51000 lines read in
+52000 lines read in
+53000 lines read in
+54000 lines read in
+55000 lines read in
+56000 lines read in
+57000 lines read in
+58000 lines read in
+59000 lines read in
+60000 lines read in
+61000 lines read in
+62000 lines read in
+63000 lines read in
+64000 lines read in
+65000 lines read in
+66000 lines read in
+67000 lines read in
+68000 lines read in
+69000 lines read in
+70000 lines read in
+71000 lines read in
+72000 lines read in
+73000 lines read in
+74000 lines read in
+75000 lines read in
+76000 lines read in
+77000 lines read in
+78000 lines read in
+79000 lines read in
+80000 lines read in
+81000 lines read in
+82000 lines read in
+83000 lines read in
+84000 lines read in
+85000 lines read in
+86000 lines read in
+87000 lines read in
+88000 lines read in
+89000 lines read in
+90000 lines read in
+91000 lines read in
+92000 lines read in
+93000 lines read in
+94000 lines read in
+95000 lines read in
+96000 lines read in
+97000 lines read in
+98000 lines read in
+99000 lines read in
+100000 lines read in
+101000 lines read in
+102000 lines read in
+103000 lines read in
+104000 lines read in
+105000 lines read in
+106000 lines read in
+107000 lines read in
+108000 lines read in
+109000 lines read in
+110000 lines read in
+111000 lines read in
+112000 lines read in
+113000 lines read in
+114000 lines read in
+115000 lines read in
+116000 lines read in
+117000 lines read in
+118000 lines read in
+119000 lines read in
+120000 lines read in
+121000 lines read in
+122000 lines read in
+123000 lines read in
+124000 lines read in
+125000 lines read in
+126000 lines read in
+127000 lines read in
+128000 lines read in
+129000 lines read in
+130000 lines read in
+131000 lines read in
+132000 lines read in
+133000 lines read in
+134000 lines read in
+135000 lines read in
+136000 lines read in
+137000 lines read in
+138000 lines read in
+139000 lines read in
+140000 lines read in
+141000 lines read in
+142000 lines read in
+143000 lines read in
+144000 lines read in
+145000 lines read in
+146000 lines read in
+147000 lines read in
+148000 lines read in
+149000 lines read in
+150000 lines read in
+151000 lines read in
+152000 lines read in
+153000 lines read in
+154000 lines read in
+155000 lines read in
+156000 lines read in
+157000 lines read in
+158000 lines read in
+159000 lines read in
+160000 lines read in
+161000 lines read in
+162000 lines read in
+163000 lines read in
+164000 lines read in
+165000 lines read in
+166000 lines read in
+167000 lines read in
+168000 lines read in
+169000 lines read in
+170000 lines read in
+171000 lines read in
+172000 lines read in
+173000 lines read in
+174000 lines read in
+175000 lines read in
+176000 lines read in
+177000 lines read in
+178000 lines read in
+179000 lines read in
+180000 lines read in
+181000 lines read in
+182000 lines read in
+183000 lines read in
+184000 lines read in
+185000 lines read in
+186000 lines read in
+187000 lines read in
+188000 lines read in
+189000 lines read in
+190000 lines read in
+191000 lines read in
+192000 lines read in
+193000 lines read in
+194000 lines read in
+195000 lines read in
+196000 lines read in
+197000 lines read in
+198000 lines read in
+199000 lines read in
+200000 lines read in
+201000 lines read in
+202000 lines read in
+203000 lines read in
+204000 lines read in
+205000 lines read in
+206000 lines read in
+207000 lines read in
+208000 lines read in
+209000 lines read in
+210000 lines read in
+Previous manifest loaded, will filter 56396 hashes
+Skipping download of BUPERSINST 1000.22C because it was in previous_hashes
+Skipping download of BUPERSINST 1001.39F w_CH1 because it was in previous_hashes
+Skipping download of BUPERSINST 1001.40C because it was in previous_hashes
+Skipping download of BUPERSINST 1070.27E because it was in previous_hashes
+Skipping download of BUPERSINST 1080.54B because it was in previous_hashes
+Skipping download of BUPERSINST 1133.29M because it was in previous_hashes
+Skipping download of BUPERSINST 1150.1E because it was in previous_hashes
+Skipping download of BUPERSINST 1150.2 because it was in previous_hashes
+Skipping download of BUPERSINST 1301.40C because it was in previous_hashes
+Skipping download of BUPERSINST 1306.72H because it was in previous_hashes
+Skipping download of BUPERSINST 1306.77D because it was in previous_hashes
+Skipping download of BUPERSINST 1326.4E because it was in previous_hashes
+Skipping download of BUPERSINST 1401.4F because it was in previous_hashes
+Skipping download of BUPERSINST 1401.5C because it was in previous_hashes
+Skipping download of BUPERSINST 1430.16G CH1 because it was in previous_hashes
+Skipping download of BUPERSINST 1500.62E because it was in previous_hashes
+Skipping download of BUPERSINST 1510.100 because it was in previous_hashes
+Skipping download of BUPERSINST 1540.41E because it was in previous_hashes
+Skipping download of BUPERSINST 1560.20F because it was in previous_hashes
+Skipping download of BUPERSINST 1560.21F because it was in previous_hashes
+Skipping download of BUPERSINST 1600.7A because it was in previous_hashes
+Skipping download of BUPERSINST 1610.10F CH1 because it was in previous_hashes
+Skipping download of BUPERSINST 1620.6 because it was in previous_hashes
+Skipping download of BUPERSINST 1640.18L because it was in previous_hashes
+Skipping download of BUPERSINST 1640.21D because it was in previous_hashes
+Skipping download of BUPERSINST 1640.23 because it was in previous_hashes
+Skipping download of BUPERSINST 1640.24A because it was in previous_hashes
+Skipping download of BUPERSINST 1640.25A because it was in previous_hashes
+Skipping download of BUPERSINST 1640.26A because it was in previous_hashes
+Skipping download of BUPERSINST 1640.27A because it was in previous_hashes
+Skipping download of BUPERSINST 1640.28A because it was in previous_hashes
+Skipping download of BUPERSINST 1640.29A because it was in previous_hashes
+Skipping download of BUPERSINST 1640.30A because it was in previous_hashes
+Skipping download of BUPERSINST 1650.13A because it was in previous_hashes
+Skipping download of BUPERSINST 1700.22D because it was in previous_hashes
+Skipping download of BUPERSINST 1730.11A CH1 because it was in previous_hashes
+Skipping download of BUPERSINST 1750.10E because it was in previous_hashes
+++ Initiating downloader for dfars_pgi
+Reading in previous manifest
+1000 lines read in
+2000 lines read in
+3000 lines read in
+4000 lines read in
+5000 lines read in
+6000 lines read in
+7000 lines read in
+8000 lines read in
+9000 lines read in
+10000 lines read in
+11000 lines read in
+12000 lines read in
+13000 lines read in
+14000 lines read in
+15000 lines read in
+16000 lines read in
+17000 lines read in
+18000 lines read in
+19000 lines read in
+20000 lines read in
+21000 lines read in
+22000 lines read in
+23000 lines read in
+24000 lines read infatal: Not a git repository (or any of the parent directories): .git
+/usr/local/lib/python3.6/site-packages/scrapy/extensions/feedexport.py:210: ScrapyDeprecationWarning: The `FEED_URI` and `FEED_FORMAT` settings have been deprecated in favor of the `FEEDS` setting. Please see the `FEEDS` setting docs for more details
+  exporter = cls(crawler)
+/usr/local/lib/python3.6/site-packages/scrapy/extensions/feedexport.py:210: ScrapyDeprecationWarning: The `FEED_URI` and `FEED_FORMAT` settings have been deprecated in favor of the `FEEDS` setting. Please see the `FEEDS` setting docs for more details
+  exporter = cls(crawler)
+
+25000 lines read in
+26000 lines read in
+27000 lines read in
+28000 lines read in
+29000 lines read in
+30000 lines read in
+31000 lines read in
+32000 lines read in
+33000 lines read in
+34000 lines read in
+35000 lines read in
+36000 lines read in
+37000 lines read in
+38000 lines read in
+39000 lines read in
+40000 lines read in
+41000 lines read in
+42000 lines read in
+43000 lines read in
+44000 lines read in
+45000 lines read in
+46000 lines read in
+47000 lines read in
+48000 lines read in
+49000 lines read in
+50000 lines read in
+51000 lines read in
+52000 lines read in
+53000 lines read in
+54000 lines read in
+55000 lines read in
+56000 lines read in
+57000 lines read in
+58000 lines read in
+59000 lines read in
+60000 lines read in
+61000 lines read in
+62000 lines read in
+63000 lines read in
+64000 lines read in
+65000 lines read in
+66000 lines read in
+67000 lines read in
+68000 lines read in
+69000 lines read in
+70000 lines read in
+71000 lines read in
+72000 lines read in
+73000 lines read in
+74000 lines read in
+75000 lines read in
+76000 lines read in
+77000 lines read in
+78000 lines read in
+79000 lines read in
+80000 lines read in
+81000 lines read in
+82000 lines read in
+83000 lines read in
+84000 lines read in
+85000 lines read in
+86000 lines read in
+87000 lines read in
+88000 lines read in
+89000 lines read in
+90000 lines read in
+91000 lines read in
+92000 lines read in
+93000 lines read in
+94000 lines read in
+95000 lines read in
+96000 lines read in
+97000 lines read in
+98000 lines read in
+99000 lines read in
+100000 lines read in
+101000 lines read in
+102000 lines read in
+103000 lines read in
+104000 lines read in
+105000 lines read in
+106000 lines read in
+107000 lines read in
+108000 lines read in
+109000 lines read in
+110000 lines read in
+111000 lines read in
+112000 lines read in
+113000 lines read in
+114000 lines read in
+115000 lines read in
+116000 lines read in
+117000 lines read in
+118000 lines read in
+119000 lines read in
+120000 lines read in
+121000 lines read in
+122000 lines read in
+123000 lines read in
+124000 lines read in
+125000 lines read in
+126000 lines read in
+127000 lines read in
+128000 lines read in
+129000 lines read in
+130000 lines read in
+131000 lines read in
+132000 lines read in
+133000 lines read in
+134000 lines read in
+135000 lines read in
+136000 lines read in
+137000 lines read in
+138000 lines read in
+139000 lines read in
+140000 lines read in
+141000 lines read in
+142000 lines read in
+143000 lines read in
+144000 lines read in
+145000 lines read in
+146000 lines read in
+147000 lines read in
+148000 lines read in
+149000 lines read in
+150000 lines read in
+151000 lines read in
+152000 lines read in
+153000 lines read in
+154000 lines read in
+155000 lines read in
+156000 lines read in
+157000 lines read in
+158000 lines read in
+159000 lines read in
+160000 lines read in
+161000 lines read in
+162000 lines read in
+163000 lines read in
+164000 lines read in
+165000 lines read in
+166000 lines read in
+167000 lines read in
+168000 lines read in
+169000 lines read in
+170000 lines read in
+171000 lines read in
+172000 lines read in
+173000 lines read in
+174000 lines read in
+175000 lines read in
+176000 lines read in
+177000 lines read in
+178000 lines read in
+179000 lines read in
+180000 lines read in
+181000 lines read in
+182000 lines read in
+183000 lines read in
+184000 lines read in
+185000 lines read in
+186000 lines read in
+187000 lines read in
+188000 lines read in
+189000 lines read in
+190000 lines read in
+191000 lines read in
+192000 lines read in
+193000 lines read in
+194000 lines read in
+195000 lines read in
+196000 lines read in
+197000 lines read in
+198000 lines read in
+199000 lines read in
+200000 lines read in
+201000 lines read in
+202000 lines read in
+203000 lines read in
+204000 lines read in
+205000 lines read in
+206000 lines read in
+207000 lines read in
+208000 lines read in
+209000 lines read in
+210000 lines read in
+Previous manifest loaded, will filter 63444 hashes
+Done running spiders, stopping twisted.reactor and sending stats
+git error:  Command '['git', 'branch']' returned non-zero exit status 128.
+SENDING NOTIFICATIONS!!
+
+  SUCCESSFULLY FINISHED PIPELINE RUN
+  DATE: 2023-12-14 TIME: 11:08:53
+
+
+ 63 minutes and 48 seconds elapsed.

@@ -1,0 +1,15 @@
+Running job Crawler_Ingest :: through :: /home/gamechanger/gamechanger-data/paasJobs/jobs/crawler_ingest.sh
+
+  STARTING PIPELINE RUN
+  DATE: 2024-01-02 TIME: 15:06:01
+
+#### PIPELINE INFO #### Aggregating files for processing ...
+#### PIPELINE INFO #### Aggregating files from checkpoints ...
+#### PIPELINE INFO #### prefixes: [], all_prefixes: []
+#### PIPELINE INFO #### There was nothing to do, skipping remainder of ingest ...
+
+  SUCCESSFULLY FINISHED PIPELINE RUN
+  DATE: 2024-01-02 TIME: 15:06:04
+
+
+ 0h 0m 3s elapsed.

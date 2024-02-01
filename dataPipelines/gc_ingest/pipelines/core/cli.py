@@ -143,7 +143,7 @@ def core_local_ingest(core_ingest_config: CoreIngestConfig, **kwargs):
     CoreIngestSteps.refresh_materialized_tables(lic)
     CoreIngestSteps.update_es(lic)
     CoreIngestSteps.update_neo4j(lic)
-    CoreIngestSteps.update_revocations(lic)
+    #CoreIngestSteps.update_revocations(lic)
     CoreIngestSteps.update_crawler_status_completed(lic)
 
     announce("Pipeline Finished")
