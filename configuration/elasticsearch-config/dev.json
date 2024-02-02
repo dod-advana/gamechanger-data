@@ -1,486 +1,652 @@
 {
-  "index": {
-    "settings": {
-      "index.mapping.nested_objects.limit": 100000,
-      "index": {
-        "number_of_shards": 6,
-        "number_of_replicas": 2,
-        "mapping.nested_fields.limit": 20000
-      },
-      "analysis": {
-        "normalizer": {
-          "lowercase_normalizer": {
-            "type": "custom",
-            "char_filter": [],
-            "filter": [
-              "lowercase"
-            ]
-          }
-        },
-        "filter": {
-          "gc_stop": {
-            "type": "stop",
-            "stopwords": []
-          },
-          "english_stemmer": {
-            "type": "stemmer",
-            "language": "english"
-          },
-          "english_possessive_stemmer": {
-            "type": "stemmer",
-            "language": "possessive_english"
-          }
-        },
-        "analyzer": {
-          "lowercase_analyzer": {
-            "type": "custom",
-            "tokenizer": "standard",
-            "filter": [
-              "lowercase"
-            ]
-          },
-          "gc_english": {
-            "tokenizer": "standard",
-            "filter": [
-              "english_possessive_stemmer",
-              "lowercase",
-              "gc_stop",
-              "english_stemmer"
-            ]
-          }
-        }
-      }
-    },
-    "mappings": {
-      "dynamic_templates": [
-        {
-          "string": {
-            "match": "*_s",
-            "match_mapping_type": "string",
-            "mapping": {
-              "type": "keyword",
-              "store": true
+  "settings" : {
+        "index" : {
+          "mapping" : {
+            "nested_fields" : {
+              "limit" : "20000"
+            },
+            "nested_objects" : {
+              "limit" : "100000"
             }
-          }
-        },
-        {
-          "text": {
-            "match": "*_t",
-            "match_mapping_type": "string",
-            "mapping": {
-              "type": "text",
-              "store": true,
-              "analyzer": "gc_english"
-            }
-          }
-        },
-        {
-          "string_text": {
-            "match": "*_ks",
-            "match_mapping_type": "string",
-            "mapping": {
-              "type": "keyword",
-              "store": true,
-              "fields": {
-                "search": {
-                  "type": "keyword",
-                  "normalizer": "lowercase_normalizer"
-                }
+          },
+          "number_of_shards" : "6",
+          "analysis" : {
+            "filter" : {
+              "english_stemmer" : {
+                "type" : "stemmer",
+                "language" : "english"
+              },
+              "english_possessive_stemmer" : {
+                "type" : "stemmer",
+                "language" : "possessive_english"
+              },
+              "gc_stop" : {
+                "type" : "stop",
+                "stopwords" : [ "a", "able", "about", "above", "according", "accordingly", "across", "actually", "after", "afterwards", "again", "against", "aint", "all", "allow", "allows", "almost", "alone", "along", "already", "also", "although", "always", "am", "among", "amongst", "an", "and", "another", "any", "anybody", "anyhow", "anyone", "anything", "anyway", "anyways", "anywhere", "apart", "appear", "appreciate", "appropriate", "are", "arent", "around", "as", "aside", "ask", "asking", "associated", "at", "available", "away", "awfully", "b", "be", "became", "because", "become", "becomes", "becoming", "been", "before", "beforehand", "behind", "being", "believe", "below", "beside", "besides", "best", "better", "between", "beyond", "both", "brief", "but", "by", "c", "cmon", "cs", "came", "can", "cant", "cannot", "cant", "cause", "causes", "certain", "certainly", "changes", "clearly", "co", "com", "come", "comes", "concerning", "consequently", "consider", "considering", "contain", "containing", "contains", "corresponding", "could", "couldnt", "course", "currently", "d", "definitely", "described", "despite", "did", "didnt", "different", "do", "does", "doesnt", "doing", "dont", "done", "down", "downwards", "during", "e", "each", "edu", "eg", "eight", "either", "else", "elsewhere", "enough", "entirely", "especially", "et", "etc", "even", "ever", "every", "everybody", "everyone", "everything", "everywhere", "ex", "exactly", "example", "except", "f", "far", "few", "fifth", "first", "five", "followed", "following", "follows", "for", "former", "formerly", "forth", "four", "from", "further", "furthermore", "g", "get", "gets", "getting", "given", "gives", "go", "goes", "going", "gone", "got", "gotten", "greetings", "h", "had", "hadnt", "happens", "hardly", "has", "hasnt", "have", "havent", "having", "he", "hes", "hello", "help", "hence", "her", "here", "heres", "hereafter", "hereby", "herein", "hereupon", "hers", "herself", "hi", "him", "himself", "his", "hither", "hopefully", "how", "howbeit", "however", "i", "id", "ill", "im", "ive", "ie", "if", "ignored", "immediate", "in", "inasmuch", "inc", "indeed", "indicate", "indicated", "indicates", "inner", "insofar", "instead", "into", "inward", "is", "isnt", "it", "itd", "itll", "its", "its", "itself", "j", "just", "k", "keep", "keeps", "kept", "know", "knows", "known", "l", "last", "lately", "later", "latter", "latterly", "least", "less", "lest", "let", "lets", "like", "liked", "likely", "little", "look", "looking", "looks", "ltd", "m", "mainly", "many", "may", "maybe", "me", "mean", "meanwhile", "merely", "might", "more", "moreover", "most", "mostly", "much", "must", "my", "myself", "n", "name", "namely", "nd", "near", "nearly", "necessary", "need", "needs", "neither", "never", "nevertheless", "new", "next", "nine", "no", "nobody", "non", "none", "noone", "nor", "normally", "not", "nothing", "novel", "now", "nowhere", "o", "obviously", "of", "off", "often", "oh", "ok", "okay", "old", "on", "once", "one", "ones", "only", "onto", "or", "other", "others", "otherwise", "ought", "our", "ours", "ourselves", "out", "outside", "over", "overall", "own", "p", "particular", "particularly", "per", "perhaps", "placed", "please", "plus", "possible", "presumably", "probably", "provides", "q", "que", "quite", "qv", "r", "rather", "rd", "re", "really", "reasonably", "regarding", "regardless", "regards", "relatively", "respectively", "right", "s", "said", "same", "saw", "say", "saying", "says", "second", "secondly", "see", "seeing", "seem", "seemed", "seeming", "seems", "seen", "self", "selves", "sensible", "sent", "serious", "seriously", "seven", "several", "shall", "she", "should", "shouldnt", "since", "six", "so", "some", "somebody", "somehow", "someone", "something", "sometime", "sometimes", "somewhat", "somewhere", "soon", "sorry", "specified", "specify", "specifying", "still", "sub", "such", "sup", "sure", "t", "ts", "take", "taken", "tell", "tends", "th", "than", "thank", "thanks", "thanx", "that", "thats", "thats", "the", "their", "theirs", "them", "themselves", "then", "thence", "there", "theres", "thereafter", "thereby", "therefore", "therein", "theres", "thereupon", "these", "they", "theyd", "theyll", "theyre", "theyve", "think", "third", "this", "thorough", "thoroughly", "those", "though", "three", "through", "throughout", "thru", "thus", "to", "together", "too", "took", "toward", "towards", "tried", "tries", "truly", "try", "trying", "twice", "two", "u", "un", "under", "unfortunately", "unless", "unlikely", "until", "unto", "up", "upon", "us", "use", "used", "useful", "uses", "using", "usually", "uucp", "v", "value", "various", "very", "via", "viz", "vs", "w", "want", "wants", "was", "wasnt", "way", "we", "wed", "well", "were", "weve", "welcome", "well", "went", "were", "werent", "what", "whats", "whatever", "when", "whence", "whenever", "where", "wheres", "whereafter", "whereas", "whereby", "wherein", "whereupon", "wherever", "whether", "which", "while", "whither", "who", "whos", "whoever", "whole", "whom", "whose", "why", "will", "willing", "wish", "with", "within", "without", "wont", "wonder", "would", "would", "wouldnt", "x", "y", "yes", "yet", "you", "youd", "youll", "youre", "youve", "your", "yours", "yourself", "yourselves", "z", "zero" ]
+              }
+            },
+            "normalizer" : {
+              "lowercase_normalizer" : {
+                "filter" : [ "lowercase" ],
+                "type" : "custom",
+                "char_filter" : [ ]
+              }
+            },
+            "analyzer" : {
+              "lowercase_analyzer" : {
+                "filter" : [ "lowercase" ],
+                "type" : "custom",
+                "tokenizer" : "standard"
+              },
+              "gc_english" : {
+                "filter" : [ "english_possessive_stemmer", "lowercase", "gc_stop", "english_stemmer" ],
+                "tokenizer" : "standard"
               }
             }
           }
-        },
-        {
-          "integer": {
-            "match": "*_i",
-            "match_mapping_type": "long",
-            "mapping": {
-              "type": "integer",
-              "store": true
+        }
+      },
+      "mappings" : {
+        "dynamic_templates" : [
+          {
+            "string" : {
+              "match" : "*_s",
+              "match_mapping_type" : "string",
+              "mapping" : {
+                "store" : true,
+                "type" : "keyword"
+              }
+            }
+          },
+          {
+            "text" : {
+              "match" : "*_t",
+              "match_mapping_type" : "string",
+              "mapping" : {
+                "analyzer" : "gc_english",
+                "store" : true,
+                "type" : "text"
+              }
+            }
+          },
+          {
+            "string_text" : {
+              "match" : "*_ks",
+              "match_mapping_type" : "string",
+              "mapping" : {
+                "fields" : {
+                  "search" : {
+                    "normalizer" : "lowercase_normalizer",
+                    "type" : "keyword"
+                  }
+                },
+                "store" : true,
+                "type" : "keyword"
+              }
+            }
+          },
+          {
+            "integer" : {
+              "match" : "*_i",
+              "match_mapping_type" : "long",
+              "mapping" : {
+                "store" : true,
+                "type" : "integer"
+              }
+            }
+          },
+          {
+            "long" : {
+              "match" : "*_l",
+              "match_mapping_type" : "long",
+              "mapping" : {
+                "store" : true,
+                "type" : "long"
+              }
+            }
+          },
+          {
+            "boolean" : {
+              "match" : "*_b",
+              "match_mapping_type" : "boolean",
+              "mapping" : {
+                "store" : true,
+                "type" : "boolean"
+              }
+            }
+          },
+          {
+            "double" : {
+              "match" : "*_d",
+              "match_mapping_type" : "double",
+              "mapping" : {
+                "store" : true,
+                "type" : "double"
+              }
+            }
+          },
+          {
+            "float" : {
+              "match" : "*_f",
+              "match_mapping_type" : "double",
+              "mapping" : {
+                "store" : true,
+                "type" : "float"
+              }
+            }
+          },
+          {
+            "date" : {
+              "match" : "*_dt",
+              "mapping" : {
+                "format" : "yyyy-MM-dd'T'HH:mm:ss",
+                "store" : true,
+                "type" : "date"
+              }
+            }
+          },
+          {
+            "rank_feature" : {
+              "match" : "*_r",
+              "mapping" : {
+                "store" : true,
+                "type" : "rank_feature"
+              }
+            }
+          },
+          {
+            "rank_features" : {
+              "match" : "*_rs",
+              "mapping" : {
+                "store" : true,
+                "type" : "rank_features"
+              }
+            }
+          },
+          {
+            "nested_object" : {
+              "match" : "*_n",
+              "mapping" : {
+                "type" : "nested"
+              }
+            }
+          },
+          {
+            "default_type" : {
+              "path_match" : "*",
+              "mapping" : {
+                "fields" : {
+                  "keyword" : {
+                    "ignore_above" : 256,
+                    "store" : true,
+                    "fields" : {
+                      "search" : {
+                        "normalizer" : "lowercase_normalizer",
+                        "ignore_above" : 256,
+                        "type" : "keyword"
+                      }
+                    },
+                    "type" : "keyword"
+                  }
+                },
+                "store" : true,
+                "type" : "text"
+              }
             }
           }
-        },
-        {
-          "long": {
-            "match": "*_l",
-            "match_mapping_type": "long",
-            "mapping": {
-              "type": "long",
-              "store": true
+        ],
+        "properties" : {
+          "access_timestamp_dt" : {
+            "type" : "date",
+            "store" : true,
+            "format" : "yyyy-MM-dd'T'HH:mm:ss"
+          },
+          "author" : {
+            "type" : "keyword",
+            "store" : true
+          },
+          "cac_login_required_b" : {
+            "type" : "boolean",
+            "store" : true
+          },
+          "category_1" : {
+            "type" : "keyword",
+            "store" : true
+          },
+          "category_2" : {
+            "type" : "keyword",
+            "store" : true
+          },
+          "change_date" : {
+            "type" : "keyword",
+            "store" : true
+          },
+          "classification" : {
+            "type" : "keyword",
+            "store" : true
+          },
+        "crawler_display_name" : {
+          "type" : "keyword",
+          "store" : true,
+          "fields" : {
+            "search" : {
+              "type" : "keyword",
+              "ignore_above" : 256,
+              "normalizer" : "lowercase_normalizer"
+              }
             }
-          }
-        },
-        {
-          "boolean": {
-            "match": "*_b",
-            "match_mapping_type": "boolean",
-            "mapping": {
-              "type": "boolean",
-              "store": true
-            }
-          }
-        },
-        {
-          "double": {
-            "match": "*_d",
-            "match_mapping_type": "double",
-            "mapping": {
-              "type": "double",
-              "store": true
-            }
-          }
-        },
-        {
-          "float": {
-            "match": "*_f",
-            "match_mapping_type": "double",
-            "mapping": {
-              "type": "float",
-              "store": true
-            }
-          }
-        },
-        {
-          "date": {
-            "match": "*_dt",
-            "mapping": {
-              "type": "date",
-              "store": true,
-              "format": "yyyy-MM-dd'T'HH:mm:ss"
-            }
-          }
-        },
-        {
-          "rank_feature": {
-            "match": "*_r",
-            "mapping": {
-              "type": "rank_feature",
-              "store": true
-            }
-          }
-        },
-        {
-          "rank_features": {
-            "match": "*_rs",
-            "mapping": {
-              "type": "rank_features",
-              "store": true
-            }
-          }
-        },
-        {
-          "nested_object": {
-            "match": "*_n",
-            "mapping": {
-              "type": "nested"
-            }
-          }
-        },
-        {
-          "default_type": {
-            "path_match": "*",
-            "mapping": {
-              "type": "text",
-              "store": true,
-              "fields": {
-                "keyword": {
-                  "type": "keyword",
-                  "store": true,
-                  "ignore_above": 256,
-                  "fields": {
-                    "search": {
-                      "type": "keyword",
-                      "normalizer": "lowercase_normalizer",
-                      "ignore_above": 256
-                    }
+          },
+          "crawler_used_s" : {
+            "type" : "keyword",
+            "store" : true
+          },
+          "current_ingest_date" : {
+            "type" : "text",
+            "store" : true,
+            "fields" : {
+              "keyword" : {
+                "type" : "keyword",
+                "store" : true,
+                "ignore_above" : 256,
+                "fields" : {
+                  "search" : {
+                    "type" : "keyword",
+                    "ignore_above" : 256,
+                    "normalizer" : "lowercase_normalizer"
                   }
                 }
               }
             }
-          }
-        }
-      ],
-      "properties": {
-        "pagerank": {
-          "type": "rank_feature"
-        },
-        "kw_doc_score": {
-          "type": "rank_feature"
-        },
-        "orgs": {
-          "type": "rank_features"
-        },
-        "id": {
-          "type": "keyword",
-          "store": true
-        },
-        "filename": {
-          "type": "keyword",
-          "store": true,
-          "fields": {
-            "search": {
-              "type": "keyword",
-              "normalizer": "lowercase_normalizer"
+          },
+          "display_doc_type_s" : {
+            "type" : "keyword",
+            "store" : true,
+            "fields" : {
+              "search" : {
+                "type" : "keyword",
+                "normalizer" : "lowercase_normalizer"
+              }
             }
-          }
-        },
-        "type": {
-          "type": "keyword",
-          "store": true
-        },
-        "summary_30": {
-          "type": "text",
-          "store": true
-        },
-        "keyw_5": {
-          "type": "text",
-          "store": true
-        },
-        "page_count": {
-          "type": "integer",
-          "store": true
-        },
-        "doc_type": {
-          "type": "keyword",
-          "store": true,
-          "fields": {
-            "search": {
-              "type": "keyword",
-              "normalizer": "lowercase_normalizer"
+          },
+          "display_org_s" : {
+            "type" : "keyword",
+            "store" : true,
+            "fields" : {
+              "search" : {
+                "type" : "keyword",
+                "normalizer" : "lowercase_normalizer"
+              }
             }
-          }
-        },
-        "display_org_s": {
-          "type": "keyword",
-          "store": true,
-          "fields": {
-            "search": {
-              "type": "keyword",
-              "normalizer": "lowercase_normalizer"
+          },
+          "display_source_s" : {
+            "type" : "keyword",
+            "store" : true,
+            "fields" : {
+              "search" : {
+                "type" : "keyword",
+                "normalizer" : "lowercase_normalizer"
+              }
             }
-          }
-        },
-        "display_doc_type_s": {
-          "type": "keyword",
-          "store": true,
-          "fields": {
-            "search": {
-              "type": "keyword",
-              "normalizer": "lowercase_normalizer"
-            }
-          }
-        },
-        "display_source_s": {
-          "type": "keyword",
-          "store": true,
-          "fields": {
-            "search": {
-              "type": "keyword",
-              "normalizer": "lowercase_normalizer"
-            }
-          }
-        },
-        "display_title_s": {
-          "type": "keyword",
-          "store": true,
-          "fields": {
-            "search": {
-              "type": "keyword",
-              "normalizer": "lowercase_normalizer"
-            }
-          }
-        },
-        "display_title": {
-          "type": "text",
-          "term_vector": "with_positions_offsets",
-          "fields": {
-            "raw": {
-              "type": "text",
-              "term_vector": "with_positions_offsets"
-            },
-            "raw_lower": {
-              "type": "text",
-              "analyzer": "lowercase_analyzer",
-              "term_vector": "with_positions_offsets"
-            },
-            "gc_english": {
-              "type": "text",
-              "analyzer": "gc_english",
-              "term_vector": "with_positions_offsets"
-            }
-          }
-        },
-        "doc_num": {
-          "type": "keyword",
-          "store": true,
-          "fields": {
-            "search": {
-              "type": "keyword",
-              "normalizer": "lowercase_normalizer"
-            }
-          }
-        },
-        "pop_score": {
-          "type": "long",
-          "store": true
-        },
-        "ref_list": {
-          "type": "keyword",
-          "store": true
-        },
-        "init_date": {
-          "type": "keyword",
-          "store": true
-        },
-        "original_ingest_date": {
-          "type": "keyword",
-          "store": true
-        },
-        "current_ingest_date": {
-          "type": "keyword",
-          "store": true
-        },
-        "change_date": {
-          "type": "keyword",
-          "store": true
-        },
-        "entities": {
-          "type": "keyword",
-          "store": true
-        },
-        "author": {
-          "type": "keyword",
-          "store": true
-        },
-        "signature": {
-          "type": "keyword",
-          "store": true
-        },
-        "subject": {
-          "type": "keyword",
-          "store": true
-        },
-        "classification": {
-          "type": "keyword",
-          "store": true
-        },
-        "crawler_display_name ": {
-          "type": "keyword",
-          "store": true
-        },
-        "title": {
-          "type": "keyword",
-          "store": true,
-          "fields": {
-            "search": {
-              "type": "keyword",
-              "normalizer": "lowercase_normalizer"
-            }
-          }
-        },
-        "word_count": {
-          "type": "long",
-          "store": true
-        },
-        "category_1": {
-          "type": "keyword",
-          "store": true
-        },
-        "category_2": {
-          "type": "keyword",
-          "store": true
-        },
-        "sections": {
-          "type": "object",
-          "properties": {
-            "all_sections": {
-              "type": "text"
-            },
-            "responsibilities_section": {
-              "type": "text"
-            },
-            "references_section": {
-              "type": "text"
-            },
-            "purpose_section": {
-              "type": "text"
-            },
-            "subject_section": {
-              "type": "text"
-            },
-            "procedures_section": {
-              "type": "text"
-            },
-            "effective_date": {
-              "type": "text"
-            },
-            "applicability_section": {
-              "type": "text"
-            },
-            "policy_section": {
-              "type": "text"
-            },
-            "organizations_section": {
-              "type": "text"
-            },
-            "definitions_section": {
-              "type": "text"
-            },
-            "table_of_contents": {
-              "type": "text"
-            },
-            "glossary_section": {
-              "type": "text"
-            },
-            "summary_of_change_section": {
-              "type": "text"
-            }
-          }
-        },
-        "paragraphs": {
-          "dynamic": "true",
-          "type": "nested",
-          "properties": {
-            "id": {
-              "type": "keyword",
-              "store": true
-            },
-            "filename": {
-              "type": "keyword",
-              "store": true,
-              "fields": {
-                "search": {
-                  "type": "keyword",
-                  "normalizer": "lowercase_normalizer"
-                }
+          },
+          "display_title" : {
+            "type" : "text",
+            "fields" : {
+              "gc_english" : {
+                "type" : "text",
+                "term_vector" : "with_positions_offsets",
+                "analyzer" : "gc_english"
+              },
+              "raw" : {
+                "type" : "text",
+                "term_vector" : "with_positions_offsets"
+              },
+              "raw_lower" : {
+                "type" : "text",
+                "term_vector" : "with_positions_offsets",
+                "analyzer" : "lowercase_analyzer"
               }
             },
-            "type": {
-              "type": "keyword",
-              "store": true
-            },
-            "entities": {
-              "type": "nested",
-              "dynamic": "true"
-            },
-            "par_inc_count": {
-              "type": "long",
-              "store": true
-            },
-            "par_raw_text_t": {
-              "type": "text",
-              "store": true,
-              "analyzer": "standard",
-              "fields": {
-                "gc_english": {
-                  "type": "text",
-                  "analyzer": "gc_english"
+            "term_vector" : "with_positions_offsets"
+          },
+          "display_title_s" : {
+            "type" : "keyword",
+            "store" : true,
+            "fields" : {
+              "search" : {
+                "type" : "keyword",
+                "normalizer" : "lowercase_normalizer"
+              }
+            }
+          },
+          "doc_name" : {
+            "type" : "text",
+            "store" : true,
+            "fields" : {
+              "keyword" : {
+                "type" : "keyword",
+                "store" : true,
+                "ignore_above" : 256,
+                "fields" : {
+                  "search" : {
+                    "type" : "keyword",
+                    "ignore_above" : 256,
+                    "normalizer" : "lowercase_normalizer"
+                  }
                 }
               }
             }
+          },
+          "doc_num" : {
+            "type" : "keyword",
+            "store" : true,
+            "fields" : {
+              "search" : {
+                "type" : "keyword",
+                "normalizer" : "lowercase_normalizer"
+              }
+            }
+          },
+          "doc_type" : {
+            "type" : "keyword",
+            "store" : true,
+            "fields" : {
+              "search" : {
+                "type" : "keyword",
+                "normalizer" : "lowercase_normalizer"
+              }
+            }
+          },
+          "download_url_s" : {
+            "type" : "keyword",
+            "store" : true
+          },
+          "entities" : {
+            "type" : "keyword",
+            "store" : true
+          },
+          "file_ext_s" : {
+            "type" : "keyword",
+            "store" : true
+          },
+          "filename" : {
+            "type" : "keyword",
+            "store" : true,
+            "fields" : {
+              "search" : {
+                "type" : "keyword",
+                "normalizer" : "lowercase_normalizer"
+              }
+            }
+          },
+          "group_s" : {
+            "type" : "keyword",
+            "store" : true
+          },
+          "id" : {
+            "type" : "keyword",
+            "store" : true
+          },
+          "init_date" : {
+            "type" : "keyword",
+            "store" : true
+          },
+          "is_revoked_b" : {
+            "type" : "boolean",
+            "store" : true
+          },
+          "keyw_5" : {
+            "type" : "text",
+            "store" : true
+          },
+          "kw_doc_score" : {
+            "type" : "rank_feature"
+          },
+          "new_field" : {
+            "type" : "text",
+            "store" : true,
+            "fields" : {
+              "keyword" : {
+                "type" : "keyword",
+                "store" : true,
+                "ignore_above" : 256,
+                "fields" : {
+                  "search" : {
+                    "type" : "keyword",
+                    "ignore_above" : 256,
+                    "normalizer" : "lowercase_normalizer"
+                  }
+                }
+              }
+            }
+          },
+          "orgs" : {
+            "type" : "rank_features"
+          },
+          "original_ingest_date" : {
+            "type" : "text",
+            "store" : true,
+            "fields" : {
+              "keyword" : {
+                "type" : "keyword",
+                "store" : true,
+                "ignore_above" : 256,
+                "fields" : {
+                  "search" : {
+                    "type" : "keyword",
+                    "ignore_above" : 256,
+                    "normalizer" : "lowercase_normalizer"
+                  }
+                }
+              }
+            }
+          },
+          "page_count" : {
+            "type" : "integer",
+            "store" : true
+          },
+          "pagerank" : {
+            "type" : "rank_feature"
+          },
+          "pagerank_r" : {
+            "type" : "rank_feature"
+          },
+          "par_count_i" : {
+            "type" : "integer",
+            "store" : true
+          },
+          "paragraphs" : {
+            "type" : "nested",
+            "dynamic" : "true",
+            "properties" : {
+              "entities" : {
+                "type" : "nested",
+                "dynamic" : "true",
+                "properties" : {
+                  "ORG_s" : {
+                    "type" : "keyword",
+                    "store" : true
+                  },
+                  "PERSON_s" : {
+                    "type" : "keyword",
+                    "store" : true
+                  }
+                }
+              },
+              "filename" : {
+                "type" : "keyword",
+                "store" : true,
+                "fields" : {
+                  "search" : {
+                    "type" : "keyword",
+                    "normalizer" : "lowercase_normalizer"
+                  }
+                }
+              },
+              "id" : {
+                "type" : "keyword",
+                "store" : true
+              },
+              "page_num_i" : {
+                "type" : "integer",
+                "store" : true
+              },
+              "par_count_i" : {
+                "type" : "integer",
+                "store" : true
+              },
+              "par_inc_count" : {
+                "type" : "long",
+                "store" : true
+              },
+              "par_raw_text_t" : {
+                "type" : "text",
+                "store" : true,
+                "fields" : {
+                  "gc_english" : {
+                    "type" : "text",
+                    "analyzer" : "gc_english"
+                  }
+                },
+                "analyzer" : "standard"
+              },
+              "type" : {
+                "type" : "keyword",
+                "store" : true
+              }
+            }
+          },
+          "pop_score" : {
+            "type" : "long",
+            "store" : true
+          },
+          "publication_date_dt" : {
+            "type" : "date",
+            "store" : true,
+            "format" : "yyyy-MM-dd'T'HH:mm:ss"
+          },
+          "ref_list" : {
+            "type" : "keyword",
+            "store" : true
+          },
+          "sections" : {
+            "properties" : {
+              "all_sections" : {
+                "type" : "text"
+              },
+              "applicability_section" : {
+                "type" : "text"
+              },
+              "definitions_section" : {
+                "type" : "text"
+              },
+              "effective_date" : {
+                "type" : "text"
+              },
+              "effective_date_section" : {
+                "type" : "text",
+                "store" : true,
+                "fields" : {
+                  "keyword" : {
+                    "type" : "keyword",
+                    "store" : true,
+                    "ignore_above" : 256,
+                    "fields" : {
+                      "search" : {
+                        "type" : "keyword",
+                        "ignore_above" : 256,
+                        "normalizer" : "lowercase_normalizer"
+                      }
+                    }
+                  }
+                }
+              },
+              "glossary_section" : {
+                "type" : "text"
+              },
+              "organizations_section" : {
+                "type" : "text"
+              },
+              "policy_section" : {
+                "type" : "text"
+              },
+              "procedures_section" : {
+                "type" : "text"
+              },
+              "purpose_section" : {
+                "type" : "text"
+              },
+              "references_section" : {
+                "type" : "text"
+              },
+              "responsibilities_section" : {
+                "type" : "text"
+              },
+              "subject_section" : {
+                "type" : "text"
+              },
+              "summary_of_change_section" : {
+                "type" : "text"
+              },
+              "table_of_contents" : {
+                "type" : "text"
+              }
+            }
+          },
+          "signature" : {
+            "type" : "keyword",
+            "store" : true
+          },
+          "source_fqdn_s" : {
+            "type" : "keyword",
+            "store" : true
+          },
+          "source_page_url_s" : {
+            "type" : "keyword",
+            "store" : true
+          },
+          "source_title_s" : {
+            "type" : "keyword",
+            "store" : true
+          },
+          "subject" : {
+            "type" : "keyword",
+            "store" : true
+          },
+          "summary_30" : {
+            "type" : "text",
+            "store" : true
+          },
+          "title" : {
+            "type" : "keyword",
+            "store" : true,
+            "fields" : {
+              "search" : {
+                "type" : "keyword",
+                "normalizer" : "lowercase_normalizer"
+              }
+            }
+          },
+          "top_entities_t" : {
+            "type" : "text",
+            "store" : true,
+            "analyzer" : "gc_english"
+          },
+          "topics_s" : {
+            "type" : "keyword",
+            "store" : true
+          },
+          "type" : {
+            "type" : "keyword",
+            "store" : true
+          },
+          "version_hash_s" : {
+            "type" : "keyword",
+            "store" : true
+          },
+          "word_count" : {
+            "type" : "long",
+            "store" : true
           }
         }
       }
-    }
-  }
 }
