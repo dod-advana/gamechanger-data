@@ -1,0 +1,155 @@
+{
+  "Constitution": {
+    "United States Code": {
+      "President of the United States": {
+        "Executive Branch": {
+          "Secretary of Defense": {
+            "Department of Defense": {
+              "Inspector General": {
+                "Office of the Inspector General of the Department of Defense": {}
+              },
+              "Deputy Secretary of Defense": {
+                "Office of the Secretary of Defense": {
+                  "Under Secretary of Defense for Research and Engineering": {
+                    "Defense Advanced Research Projects Agency": {},
+                    "Missile Defense Agency": {},
+                    "Space Development Agency": {},
+                    "Defense Technical Information Center": {},
+                    "Department of Defense Test Resource Management Center": {}
+                  },
+                  "Under Secretary of Defense for Personnel and Readiness": {
+                    "Defense Commissary Agency": {},
+                    "Defense Health Agency": {},
+                    "Department of Defense Education Activity": {},
+                    "Department of Defense Human Resources Activity": {}
+                  },
+                  "Under Secretary of Defense (Comptroller)": {
+                    "Defense Contract Audit Agency": {},
+                    "Defense Finance and Accounting Service": {}
+                  },
+                  "Under Secretary of Defense for Acquisition and Sustainment": {
+                    "Defense Contract Management Agency": {},
+                    "Defense Logistics Agency": {},
+                    "Defense Threat Reduction Agency": {},
+                    "Office of Local Defense Community Cooperation": {}
+                  },
+                  "Under Secretary of Defense for Intelligence and Security": {
+                    "Defense Counterintelligence and Security Agency": {},
+                    "National Geospatial-Intelligence Agency": {},
+                    "National Reconnaissance Office": {},
+                    "National Security Agency/Central Security Service": {}
+                  },
+                  "Department of Defense Chief Information Officer": {
+                    "Defense Information Systems Agency": {}
+                  },
+                  "General Counsel of the Department of Defense": {
+                    "Defense Legal Services Agency": {}
+                  },
+                  "Under Secretary of Defense for Policy": {
+                    "Defense POW/MIA Accounting Agency": {},
+                    "Defense Security Cooperation Agency": {},
+                    "Defense Technology Security Administration": {}
+                  },
+                  "Director of Administration and Management": {
+                    "Pentagon Force Protection Agency": {},
+                    "Washington Headquarters Services": {}
+                  },
+                  "Assistant to the Secretary of Defense for Public Affairs": {
+                    "Defense Media Activity": {}
+                  }
+                }
+              },
+              "Secretary of the Navy": {
+                "Department of the Navy": {
+                  "Chief of Naval Operations": {
+                    "Office of the Chief of Naval Operations": {
+                      "United States Navy": {}
+                    }
+                  },
+                  "Office of the Secretary of the Navy": {},
+                  "Headquarters Marine Corps": {
+                    "Commandant of the Marine Corps": {
+                      "United States Marine Corps": {}
+                    }
+                  }
+                }
+              },
+              "Secretary of the Army": {
+                "Department of the Army": {
+                  "Office of the Secretary of the Army": {},
+                  "Chief of Staff of the Army": {
+                    "The Army Staff": {
+                      "United States Army": {}
+                    }
+                  },
+                  "National Guard Bureau": {}
+                }
+              },
+              "Secretary of the Air Force": {
+                "Department of the Air Force": {
+                  "National Guard Bureau": {},
+                  "Chief of Staff of the Air Force": {
+                    "The Air Staff": {
+                      "United States Air Force": {}
+                    }
+                  },
+                  "Office of the Secretary of the Air Force": {},
+                  "Chief of Space Operations": {
+                    "Office of the Chief of Space Operations": {
+                      "United States Space Force": {}
+                    }
+                  }
+                }
+              },
+              "Chairman of the Joint Chiefs of Staff": {
+                "Joint Chiefs of Staff": {
+                  "The Joint Staff": {},
+                  "Commander, United States Africa Command": {
+                    "United States Africa Command": {}
+                  },
+                  "Commander, United States Central Command": {
+                    "United States Central Command": {}
+                  },
+                  "Commander, United States Cyber Command": {
+                    "United States Cyber Command": {}
+                  },
+                  "Commander, United States European Command": {
+                    "United States European Command": {}
+                  },
+                  "Commander, United States Indo-Pacific Command": {
+                    "United States Indo-Pacific Command": {}
+                  },
+                  "Commander, United States Northern Command": {
+                    "United States Northern Command": {}
+                  },
+                  "Commander, United States Southern Command": {
+                    "United States Southern Command": {}
+                  },
+                  "Commander, United States Space Command": {
+                    "United States Space Command": {}
+                  },
+                  "Commander, United States Special Operations Command": {
+                    "United States Special Operations Command": {}
+                  },
+                  "Commander, United States Strategic Command": {
+                    "United States Strategic Command": {}
+                  },
+                  "Commander, United States Transportation Command": {
+                    "United States Transportation Command": {}
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "Statute": {},
+      "Legislative Branch": {
+        "United States Congress": {
+          "United States Senate": {},
+          "House of Representatives": {}
+        }
+      }
+    }
+  }
+}

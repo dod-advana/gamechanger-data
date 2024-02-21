@@ -1,0 +1,6 @@
+{
+    "queries": {
+        "network": ["connection", "communications"],
+        "weapons": ["enemy", "explosives"]
+    }
+}

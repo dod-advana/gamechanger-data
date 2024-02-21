@@ -1,0 +1,8 @@
+0 title q
+1 keyw_5 q
+2 topics q
+3 entities q
+4 textlength q
+5 paragraph q
+6 popscore q
+7 paragraph-phrase q

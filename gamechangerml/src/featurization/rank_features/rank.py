@@ -1,7 +1,8 @@
 import os
 import pandas as pd
 from tqdm import tqdm
-import requests
+
+# import requests
 import glob
 import json
 import networkx as nx
@@ -9,7 +10,8 @@ import logging
 import en_core_web_md
 from collections import Counter
 from gamechangerml.src.text_handling.process import preprocess
-from gamechangerml import DATA_PATH
+
+# from gamechangerml import DATA_PATH
 from gamechangerml.src.paths import COMMON_ORGS_FILE
 
 logger = logging.getLogger("gamechanger")
@@ -19,18 +21,18 @@ nlp = en_core_web_md.load()
 
 class Rank:
     def train():
-        """ train models
-            Args:
-            Returns:
+        """train models
+        Args:
+        Returns:
         """
         pass
 
     def rerank(self, response: list, alpha: float = 0.85):
-        """ rerank function organizes  response using an averaged weighted signal
-            Args:
-                response: list; search results json with 'docs' field
-            Returns:
-                same response with additional scores
+        """rerank function organizes  response using an averaged weighted signal
+        Args:
+            response: list; search results json with 'docs' field
+        Returns:
+            same response with additional scores
         """
         documents = response
 
@@ -58,12 +60,12 @@ class Rank:
             return response
 
     def get_pagerank(self, documents: list, alpha: float = 0.85):
-        """ get_pagerank appends pagerank score to document response
-            Args:
-                documents: LIST of documents with relevant fields
-                alpha: damping rate
-            Returns:
-                new_pr (LIST) same response with additional r_score field
+        """get_pagerank appends pagerank score to document response
+        Args:
+            documents: LIST of documents with relevant fields
+            alpha: damping rate
+        Returns:
+            new_pr (LIST) same response with additional r_score field
         """
         nodes = []
         edges = []
@@ -101,12 +103,12 @@ class Rank:
         return new_pr
 
     def get_pr_docs(self, directory: str, alpha: float = 0.85):
-        """ get_pagerank appends pagerank score to document response
-            Args:
-                documents: LIST of documents with relevant fields
-                alpha: damping rate
-            Returns:
-                new_pr (LIST) same response with additional r_score field
+        """get_pagerank appends pagerank score to document response
+        Args:
+            documents: LIST of documents with relevant fields
+            alpha: damping rate
+        Returns:
+            new_pr (LIST) same response with additional r_score field
         """
         nodes = []
         edges = []
@@ -175,21 +177,24 @@ class Rank:
                 "doc_id": doc_id,
                 "keywords": doc["keyw_5"],
                 "orgs": dict(counter),
-                "text_length": len(preprocess(doc['text'], remove_stopwords=True)) / doc['page_count']
+                "text_length": len(preprocess(doc["text"], remove_stopwords=True))
+                / doc["page_count"],
                 # "summary": doc["summary_30"],
             }
             corpus_df = corpus_df.append(corpus_data, ignore_index=True)
         # normalize
-        corpus_df['text_length'] = (corpus_df['text_length'] - corpus_df['text_length'].min()) / (corpus_df['text_length'].max() - corpus_df['text_length'].min())
-        corpus_df['text_length'].loc[corpus_df.text_length == 0] = 0.00001
+        corpus_df["text_length"] = (
+            corpus_df["text_length"] - corpus_df["text_length"].min()
+        ) / (corpus_df["text_length"].max() - corpus_df["text_length"].min())
+        corpus_df["text_length"].loc[corpus_df.text_length == 0] = 0.00001
         return corpus_df
 
     def get_norm_hitcounts(self, documents: list):
-        """ get_norm_hitcounts - hitcounts in both semantic and keyword
-            Args: 
-                documents: LIST; of documents with relevant fields
-            Returns:
-                LIST; same response with additional normhitcount field
+        """get_norm_hitcounts - hitcounts in both semantic and keyword
+        Args:
+            documents: LIST; of documents with relevant fields
+        Returns:
+            LIST; same response with additional normhitcount field
         """
         newList = []
         # if semantic
@@ -199,8 +204,7 @@ class Rank:
             maxHit = max(hitCount)
             for doc in documents:
                 # normalize
-                norm = (len(doc["relevant_paras"]) -
-                        minHit) / (maxHit - minHit)
+                norm = (len(doc["relevant_paras"]) - minHit) / (maxHit - minHit)
                 doc["norm_hit_score"] = norm
                 newList.append(doc)
 
@@ -216,18 +220,17 @@ class Rank:
         return newList
 
     def avg_scores(self, documents: list, weights=[0.3, 0.7]):
-        """ avg_scores averages weights for combined score
-            Args: 
-                documents: LIST of documents with relevant fields
-                weights: list or tuple of two weights, first for PR and second for norm hit score
-            Returns: 
-                LIST of same response with additional r_score field
+        """avg_scores averages weights for combined score
+        Args:
+            documents: LIST of documents with relevant fields
+            weights: list or tuple of two weights, first for PR and second for norm hit score
+        Returns:
+            LIST of same response with additional r_score field
         """
         newList = []
         for doc in documents:
             doc["r_score"] = (
-                (weights[0] * doc["r_score"]) +
-                (weights[1] * doc["norm_hit_score"])
+                (weights[0] * doc["r_score"]) + (weights[1] * doc["norm_hit_score"])
             ) / 2
             newList.append(doc)
         return newList
