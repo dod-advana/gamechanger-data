@@ -12,7 +12,7 @@ readonly REPO_DIR="$( cd "$SCRIPT_PARENT_DIR/../"  >/dev/null 2>&1 && pwd )"
 export PYTHONPATH="$REPO_DIR"
 
 # Check for the case that we're running this configuration in local to assign python path
-DEPLOYMENT_ENV="${DEPLOYMENT_ENV:-prod}"
+DEPLOYMENT_ENV="${DEPLOYMENT_ENV:-dev}"
 if [[ "${DEPLOYMENT_ENV}" != "local" ]]; then
   PYTHON_CMD="${PYTHON_CMD:-/opt/gc-venv-current/bin/python}"  # path to python executable
 else
@@ -23,9 +23,9 @@ S3_BUCKET_NAME="${S3_BUCKET_NAME:-advana-data-zone}"
 APP_CONFIG_NAME="${APP_CONFIG_NAME:-$DEPLOYMENT_ENV}"
 ES_CONFIG_NAME="${ES_CONFIG_NAME:-$DEPLOYMENT_ENV}"
 APP_CONFIG_LOCAL_PATH="${REPO_DIR}/configuration/app-config/${APP_CONFIG_NAME}.json"
-GAMECHANGERML_PKG_DIR="${GAMECHANGERML_PKG_DIR:-${REPO_DIR}/var/gamechanger-ml}"
-TOPIC_MODEL_LOCAL_DIR="${GAMECHANGERML_PKG_DIR}/gamechangerml/models/topic_model_20221129162954/models"
-TOPIC_MODEL_SCRIPT_LOCAL_DIR="${GAMECHANGERML_PKG_DIR}/gamechangerml/models/topic_model_20221129162954/"
+# GAMECHANGERML_PKG_DIR="${GAMECHANGERML_PKG_DIR:-${REPO_DIR}/var/gamechanger-ml}" // unused with manually added gamechangerml
+TOPIC_MODEL_LOCAL_DIR="${REPO_DIR}/gamechangerml/models/topic_model_20221129162954/models"
+TOPIC_MODEL_SCRIPT_LOCAL_DIR="${REPO_DIR}/gamechangerml/models/topic_model_20221129162954/"
 
 # Setting up s3 path variables depending on if running in prod or running in dev/local
 case $DEPLOYMENT_ENV in
@@ -47,21 +47,22 @@ case $DEPLOYMENT_ENV in
     ;;
 esac
 
+## Unused with manually added gamechanger ml dep, still need topic model download
+# ## Defining the functions to be run in the configuration ##
+# function ensure_gamechangerml_is_installed() {
+#   # This fuction makes sure that gamechanger-ml repo is cloned/installed in GAMECHANGERML_PKG_DIR defined above
+#   # running the clone
 
-## Defining the functions to be run in the configuration ##
-function ensure_gamechangerml_is_installed() {
-  # This fuction makes sure that gamechanger-ml repo is cloned/installed in GAMECHANGERML_PKG_DIR defined above
-  # running the clone
-  if [[ ! -d "$GAMECHANGERML_PKG_DIR" ]]; then
-    >&2 echo "[INFO] Downloading gamechangerml ..."
-    git clone https://github.com/dod-advana/gamechanger-ml.git "$GAMECHANGERML_PKG_DIR"
-  fi
-  # running the pip install
-  if $PYTHON_CMD -m pip freeze | grep -qv gamechangerml ; then
-    >&2 echo "[INFO] Installing gamechangerml in the user packages ..."
-    $PYTHON_CMD -m pip install --no-deps -e "$GAMECHANGERML_PKG_DIR"
-  fi
-}
+#   if [[ ! -d "$GAMECHANGERML_PKG_DIR" ]]; then
+#     >&2 echo "[INFO] Downloading gamechangerml to $GAMECHANGERML_PKG_DIR"
+#     git clone https://github.com/dod-advana/gamechanger-ml.git "$GAMECHANGERML_PKG_DIR"
+#   fi
+#   # running the pip install
+#   if $PYTHON_CMD -m pip freeze | grep -qv gamechangerml ; then
+#     >&2 echo "[INFO] Installing gamechangerml in the user packages ..."
+#     $PYTHON_CMD -m pip install --no-deps -e "$GAMECHANGERML_PKG_DIR"
+#   fi
+# }
 
 
 function install_app_config() {
@@ -135,7 +136,7 @@ EOF
 
 ## Running the configuration functions ##
 install_app_config
-ensure_gamechangerml_is_installed
+# ensure_gamechangerml_is_installed - manually added deps
 install_topic_models
 install_topic_model_script
 configure_repo
