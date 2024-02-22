@@ -1,235 +1,375 @@
 {
-  "settings" : {
-        "index" : {
-          "mapping" : {
-            "nested_fields" : {
-              "limit" : "20000"
-            },
-            "nested_objects" : {
-              "limit" : "100000"
-            }
+  "index": {
+    "settings": {
+      "index.mapping.nested_objects.limit": 100000,
+      "index": {
+        "number_of_shards": 6,
+        "number_of_replicas": 2,
+        "mapping.nested_fields.limit": 20000
+      },
+      "analysis": {
+        "normalizer": {
+          "lowercase_normalizer": {
+            "type": "custom",
+            "char_filter": [],
+            "filter": [
+              "lowercase"
+            ]
+          }
+        },
+        "filter": {
+          "gc_stop": {
+            "type": "stop",
+            "stopwords": [ "a", "able", "about", "above", "according", "accordingly", "across", "actually", "after", "afterwards", "again", "against", "aint", "all", "allow", "allows", "almost", "alone", "along", "already", "also", "although", "always", "am", "among", "amongst", "an", "and", "another", "any", "anybody", "anyhow", "anyone", "anything", "anyway", "anyways", "anywhere", "apart", "appear", "appreciate", "appropriate", "are", "arent", "around", "as", "aside", "ask", "asking", "associated", "at", "available", "away", "awfully", "b", "be", "became", "because", "become", "becomes", "becoming", "been", "before", "beforehand", "behind", "being", "believe", "below", "beside", "besides", "best", "better", "between", "beyond", "both", "brief", "but", "by", "c", "cmon", "cs", "came", "can", "cant", "cannot", "cant", "cause", "causes", "certain", "certainly", "changes", "clearly", "co", "com", "come", "comes", "concerning", "consequently", "consider", "considering", "contain", "containing", "contains", "corresponding", "could", "couldnt", "course", "currently", "d", "definitely", "described", "despite", "did", "didnt", "different", "do", "does", "doesnt", "doing", "dont", "done", "down", "downwards", "during", "e", "each", "edu", "eg", "eight", "either", "else", "elsewhere", "enough", "entirely", "especially", "et", "etc", "even", "ever", "every", "everybody", "everyone", "everything", "everywhere", "ex", "exactly", "example", "except", "f", "far", "few", "fifth", "first", "five", "followed", "following", "follows", "for", "former", "formerly", "forth", "four", "from", "further", "furthermore", "g", "get", "gets", "getting", "given", "gives", "go", "goes", "going", "gone", "got", "gotten", "greetings", "h", "had", "hadnt", "happens", "hardly", "has", "hasnt", "have", "havent", "having", "he", "hes", "hello", "help", "hence", "her", "here", "heres", "hereafter", "hereby", "herein", "hereupon", "hers", "herself", "hi", "him", "himself", "his", "hither", "hopefully", "how", "howbeit", "however", "i", "id", "ill", "im", "ive", "ie", "if", "ignored", "immediate", "in", "inasmuch", "inc", "indeed", "indicate", "indicated", "indicates", "inner", "insofar", "instead", "into", "inward", "is", "isnt", "it", "itd", "itll", "its", "its", "itself", "j", "just", "k", "keep", "keeps", "kept", "know", "knows", "known", "l", "last", "lately", "later", "latter", "latterly", "least", "less", "lest", "let", "lets", "like", "liked", "likely", "little", "look", "looking", "looks", "ltd", "m", "mainly", "many", "may", "maybe", "me", "mean", "meanwhile", "merely", "might", "more", "moreover", "most", "mostly", "much", "must", "my", "myself", "n", "name", "namely", "nd", "near", "nearly", "necessary", "need", "needs", "neither", "never", "nevertheless", "new", "next", "nine", "no", "nobody", "non", "none", "noone", "nor", "normally", "not", "nothing", "novel", "now", "nowhere", "o", "obviously", "of", "off", "often", "oh", "ok", "okay", "old", "on", "once", "one", "ones", "only", "onto", "or", "other", "others", "otherwise", "ought", "our", "ours", "ourselves", "out", "outside", "over", "overall", "own", "p", "particular", "particularly", "per", "perhaps", "placed", "please", "plus", "possible", "presumably", "probably", "provides", "q", "que", "quite", "qv", "r", "rather", "rd", "re", "really", "reasonably", "regarding", "regardless", "regards", "relatively", "respectively", "right", "s", "said", "same", "saw", "say", "saying", "says", "second", "secondly", "see", "seeing", "seem", "seemed", "seeming", "seems", "seen", "self", "selves", "sensible", "sent", "serious", "seriously", "seven", "several", "shall", "she", "should", "shouldnt", "since", "six", "so", "some", "somebody", "somehow", "someone", "something", "sometime", "sometimes", "somewhat", "somewhere", "soon", "sorry", "specified", "specify", "specifying", "still", "sub", "such", "sup", "sure", "t", "ts", "take", "taken", "tell", "tends", "th", "than", "thank", "thanks", "thanx", "that", "thats", "thats", "the", "their", "theirs", "them", "themselves", "then", "thence", "there", "theres", "thereafter", "thereby", "therefore", "therein", "theres", "thereupon", "these", "they", "theyd", "theyll", "theyre", "theyve", "think", "third", "this", "thorough", "thoroughly", "those", "though", "three", "through", "throughout", "thru", "thus", "to", "together", "too", "took", "toward", "towards", "tried", "tries", "truly", "try", "trying", "twice", "two", "u", "un", "under", "unfortunately", "unless", "unlikely", "until", "unto", "up", "upon", "us", "use", "used", "useful", "uses", "using", "usually", "uucp", "v", "value", "various", "very", "via", "viz", "vs", "w", "want", "wants", "was", "wasnt", "way", "we", "wed", "well", "were", "weve", "welcome", "well", "went", "were", "werent", "what", "whats", "whatever", "when", "whence", "whenever", "where", "wheres", "whereafter", "whereas", "whereby", "wherein", "whereupon", "wherever", "whether", "which", "while", "whither", "who", "whos", "whoever", "whole", "whom", "whose", "why", "will", "willing", "wish", "with", "within", "without", "wont", "wonder", "would", "would", "wouldnt", "x", "y", "yes", "yet", "you", "youd", "youll", "youre", "youve", "your", "yours", "yourself", "yourselves", "z", "zero" ]
           },
-          "number_of_shards" : "6",
-          "analysis" : {
-            "filter" : {
-              "english_stemmer" : {
-                "type" : "stemmer",
-                "language" : "minimal_english"
-              },
-              "english_possessive_stemmer" : {
-                "type" : "stemmer",
-                "language" : "possessive_english"
-              },
-              "gc_stop" : {
-                "type" : "stop",
-                "stopwords" : [ "a", "able", "about", "above", "according", "accordingly", "across", "actually", "after", "afterwards", "again", "against", "aint", "all", "allow", "allows", "almost", "alone", "along", "already", "also", "although", "always", "am", "among", "amongst", "an", "and", "another", "any", "anybody", "anyhow", "anyone", "anything", "anyway", "anyways", "anywhere", "apart", "appear", "appreciate", "appropriate", "are", "arent", "around", "as", "aside", "ask", "asking", "associated", "at", "available", "away", "awfully", "b", "be", "became", "because", "become", "becomes", "becoming", "been", "before", "beforehand", "behind", "being", "believe", "below", "beside", "besides", "best", "better", "between", "beyond", "both", "brief", "but", "by", "c", "cmon", "cs", "came", "can", "cant", "cannot", "cant", "cause", "causes", "certain", "certainly", "changes", "clearly", "co", "com", "come", "comes", "concerning", "consequently", "consider", "considering", "contain", "containing", "contains", "corresponding", "could", "couldnt", "course", "currently", "d", "definitely", "described", "despite", "did", "didnt", "different", "do", "does", "doesnt", "doing", "dont", "done", "down", "downwards", "during", "e", "each", "edu", "eg", "eight", "either", "else", "elsewhere", "enough", "entirely", "especially", "et", "etc", "even", "ever", "every", "everybody", "everyone", "everything", "everywhere", "ex", "exactly", "example", "except", "f", "far", "few", "fifth", "first", "five", "followed", "following", "follows", "for", "former", "formerly", "forth", "four", "from", "further", "furthermore", "g", "get", "gets", "getting", "given", "gives", "go", "goes", "going", "gone", "got", "gotten", "greetings", "h", "had", "hadnt", "happens", "hardly", "has", "hasnt", "have", "havent", "having", "he", "hes", "hello", "help", "hence", "her", "here", "heres", "hereafter", "hereby", "herein", "hereupon", "hers", "herself", "hi", "him", "himself", "his", "hither", "hopefully", "how", "howbeit", "however", "i", "id", "ill", "im", "ive", "ie", "if", "ignored", "immediate", "in", "inasmuch", "inc", "indeed", "indicate", "indicated", "indicates", "inner", "insofar", "instead", "into", "inward", "is", "isnt", "it", "itd", "itll", "its", "its", "itself", "j", "just", "k", "keep", "keeps", "kept", "know", "knows", "known", "l", "last", "lately", "later", "latter", "latterly", "least", "less", "lest", "let", "lets", "like", "liked", "likely", "little", "look", "looking", "looks", "ltd", "m", "mainly", "many", "may", "maybe", "me", "mean", "meanwhile", "merely", "might", "more", "moreover", "most", "mostly", "much", "must", "my", "myself", "n", "name", "namely", "nd", "near", "nearly", "necessary", "need", "needs", "neither", "never", "nevertheless", "new", "next", "nine", "no", "nobody", "non", "none", "noone", "nor", "normally", "not", "nothing", "novel", "now", "nowhere", "o", "obviously", "of", "off", "often", "oh", "ok", "okay", "old", "on", "once", "one", "ones", "only", "onto", "or", "other", "others", "otherwise", "ought", "our", "ours", "ourselves", "out", "outside", "over", "overall", "own", "p", "particular", "particularly", "per", "perhaps", "placed", "please", "plus", "possible", "presumably", "probably", "provides", "q", "que", "quite", "qv", "r", "rather", "rd", "re", "really", "reasonably", "regarding", "regardless", "regards", "relatively", "respectively", "right", "s", "said", "same", "saw", "say", "saying", "says", "second", "secondly", "see", "seeing", "seem", "seemed", "seeming", "seems", "seen", "self", "selves", "sensible", "sent", "serious", "seriously", "seven", "several", "shall", "she", "should", "shouldnt", "since", "six", "so", "some", "somebody", "somehow", "someone", "something", "sometime", "sometimes", "somewhat", "somewhere", "soon", "sorry", "specified", "specify", "specifying", "still", "sub", "such", "sup", "sure", "t", "ts", "take", "taken", "tell", "tends", "th", "than", "thank", "thanks", "thanx", "that", "thats", "thats", "the", "their", "theirs", "them", "themselves", "then", "thence", "there", "theres", "thereafter", "thereby", "therefore", "therein", "theres", "thereupon", "these", "they", "theyd", "theyll", "theyre", "theyve", "think", "third", "this", "thorough", "thoroughly", "those", "though", "three", "through", "throughout", "thru", "thus", "to", "together", "too", "took", "toward", "towards", "tried", "tries", "truly", "try", "trying", "twice", "two", "u", "un", "under", "unfortunately", "unless", "unlikely", "until", "unto", "up", "upon", "us", "use", "used", "useful", "uses", "using", "usually", "uucp", "v", "value", "various", "very", "via", "viz", "vs", "w", "want", "wants", "was", "wasnt", "way", "we", "wed", "well", "were", "weve", "welcome", "well", "went", "were", "werent", "what", "whats", "whatever", "when", "whence", "whenever", "where", "wheres", "whereafter", "whereas", "whereby", "wherein", "whereupon", "wherever", "whether", "which", "while", "whither", "who", "whos", "whoever", "whole", "whom", "whose", "why", "will", "willing", "wish", "with", "within", "without", "wont", "wonder", "would", "would", "wouldnt", "x", "y", "yes", "yet", "you", "youd", "youll", "youre", "youve", "your", "yours", "yourself", "yourselves", "z", "zero" ]
-              },
-              "gc_synonym_filter" : {
-                "type" : "synonym_graph",
-                "lenient" : true,
-                "synonyms" : ["AbilityOne Commission => US AbilityOne Commission", "Access Board => US Access Board", "Active Guard Reserve => AGR", "Administration for Children and Families => ACF", "Administration for Community Living => ACL", "Administration for Native Americans => ANA", "Administrative Conference of the United States => ACUS", "Administrative Office of the Courts => Administrative Office of the USCourts", "Advisory Council on Historic Preservation => ACHP", "African Development Foundation => ADF", "Agency for Global Media => AGM", "Agency for Healthcare Research and Quality => AHRQ", "Agency for International Development => USAID", "Agency for Toxic Substances and Disease Registry => ATSDR", "Agricultural Marketing Service => AMS", "Agricultural Research Service => ARS", "Air Combat Command => ACC", "Air Education and Training Command => AETC", "Air Force Association => AFA", "Air Force Base => AFB", "Air Force Global Strike Command => AFGSC", "Air Force Installation Contracting Center => AFMC", "Air Force Logistics Command => AFLC", "Air Force Materiel Command => AFMC", "Air Force Mortuary Affairs Operations => AFMAO", "Air Force Office of Special Investigations => AFOSI", "Air Force Personnel Center => AFPC", "Air Force Petroleum Agency => AFPA", "Air Force Research Laboratory => AFRL", "Air Force Reserve Command => AFRC", "Air Force Reserve Officer Training Corps => AFROTC", "Air Force Space Command => AFSPC", "Air Force Special Operations Command => AFSOC", "Air Mobility Command => AMC", "Air National Guard => ANG", "Alcohol and Tobacco Tax and Trade Bureau => TTB", "American Battle Monuments Commission => ABMC", "American Health Organization => AHO", "American Medical Association => AMA", "AmeriCorps => AmeriCorps", "Animal and Plant Health Inspection Service => APHIS", "Antitrust Division => ATR", "Appalachian Regional Commission => ARC", "Architect of the Capitol => AOC", "Arctic Research Commission => USARC", "Armed Forces Institute of Pathology => AFIP", "Armed Forces of the United States => Armed Forces", "Armed Forces Pest Management Board => AFPMB", "Armed Forces Radiobiology Research Institute => AFRRI", "Armed Forces Retirement Home => AFRH", "Armed Services Board of Contract Appeals => ASBCA", "Army and Air Force Exchange Service => AAFES", "Army Auditor General => AAG", "Army Aviation and Missile Command => AMCOM", "Army Center for Military History => CMH", "Army Digitization Office  => ADO", "Army Edgewood Chemical Biological Center => ECBC", "Army Medical Department => AMEDD", "Army National Guard => ARNG", "Army Research Laboratory => ARL", "Army Review Boards Agency  => ARBA", "Association for the Assessment and Accreditation of Laboratory Animal Care => AAALAC", "Board of Inspection and Survey => INSURV", "Bonneville Power Administration => BPA", "Bureau of Alcohol  Tobacco  Firearms and Explosives => ATF", "Bureau of Economic Analysis => BEA", "Bureau of Engraving and Printing => BEP", "Bureau of Indian Affairs => BIA", "Bureau of Industry and Security => BIS", "Bureau of International Labor Affairs => ILAB", "Bureau of Justice Statistics => BJS", "Bureau of Labor Statistics => BLS", "Bureau of Land Management => BLM", "Bureau of Medicine and Surgery => BUMED", "Bureau of Ocean Energy Management => BOEM", "Bureau of Prisons => BOP", "Bureau of Reclamation => USBR", "Bureau of Safety and Environmental Enforcement => BSEE", "Bureau of the Census => Census", "Bureau of Transportation Statistics => BTS", "CECOM Communications Security Logistics Activity => CCSLA", "Center for Disease Control => CDC", "Center for Food Safety and Applied Nutrition => CFSAN", "Center for Nutrition Policy and Promotion => CNPP", "Center for Parent Information and Resources => CPIR", "Centers for Disease Control and Prevention => CDC", "Centers for Medicare and Medicaid Services => CMS", "Central Intelligence Agency => CIA", "Central Joint Mortuary Affairs Board => CJMAB", "Central Joint Mortuary Affairs Office => CJMAO", "Central Operating Activity => COA", "Central Security Service => CSS", "Central Treaty Organization => CENTO", "Central Violations Bureau => CVB", "Chairman’s Controlled Activities => CCAs", "Chemical Safety Board => CSB", "Chemical Weapons Convention => CWC", "Chief of Naval Research => CNR", "Citizens' Stamp Advisory Committee => CSAC", "Civil Rights Division  United States Department of Justice => CRT", "Close Combat Lethality Task Force => CCLTF", "Cold Regions Research and Engineering Laboratory => CECRL", "Combat Operations Center => COC", "Combat Support Agencies => CSAs", "Combatant Command (Command Authority) => COCOM", "Command and Control Executive Steering Council => C2 ESC", "Commander  Naval Special Warfare Command => NAVSPECWARCOM", "Commission of Fine Arts => CFA", "Commission on Civil Rights => USCCR", "Commission on International Religious Freedom => USCIRF", "Commission on Security and Cooperation in Europe (Helsinki Commission) => CSCE", "Committee for the Implementation of Textile Agreements => CITA", "Committee on National Security Systems => CNSS", "Committee on National Security Systems Instruction => CNSSI", "Commodity Futures Trading Commission => CFTC", "Communications-Electronics Command => CECOM", "Community Oriented Policing Services => COPS", "Component Command Advisory Councils => CCACs", "Computer Emergency Readiness Team => USCERT", "Congressional Budget Office => CBO", "Congressional Research Service => CRS", "Construction Engineering Research Laboratory  => CECER", "Consumer Financial Protection Bureau => CFPB", "Consumer Product Safety Commission => CPSC", "Corporation for National and Community Service => CNCS", "Corps of Engineers  North Western Division => CENWD", "Council of Economic Advisers => CEA", "Council of the Inspectors General on Integrity and Efficiency => IGNET", "Council on Environmental Quality => CEQ", "Court of Appeals for the Federal Circuit => CAFC", "Court of Appeals for Veterans Claims => CAVC", "Court of Federal Claims => USCFC", "Court of International Trade => CIT", "Court Services and Offender Supervision Agency for the District of Columbia => CSOSA", "Customs and Border Protection => CBP", "Cybersecurity and Infrastructure Security Agency => CISA", "Defense Acquisition University => DAU", "Defense Advanced Research Projects Agency => DARPA", "Defense Air Reconnaissance Office => DARO", "Defense Attache System => DAS", "Defense Clandestine Service => DCSA", "Defense Commissary Agency => DeCA", "Defense Contract Audit Agency => DCAA", "Defense Contract Management Agency => DCMA", "Defense Counterintelligence and Security Agency => DCSA", "Defense Cover Office => DCO", "Defense Criminal Investigative Organizations => DCIO", "Defense Criminal Investigative Service => DCIS", "Defense Enrollment Eligibility Reporting System => DEERS", "Defense Finance and Accounting Service => DFAS", "Defense Health Agency => DHA", "Defense Human Resources Activity => DHRA ", "Defense Information Systems Agency => DISA", "Defense Intelligence Agency => DIA", "Defense Language and National Security Education Office => DLNSEO", "Defense Language Institute Foreign Language Center => DLIFLC", "Defense Legal Services Agency => DLSA", "Defense Logistics Agency => DLA", "Defense Logistics Agency Energy => DLA Energy", "Defense Media Activity => DMA ", "Defense Nuclear Facilities Safety Board => DNFSB", "Defense Office of Prepublication and Security Review => DOPSR", "Defense POW/MIA Accounting Agency => DPAA", "Defense Prisoner of War/Missing Personnel Office => DPMO", "Defense Privacy  Civil Liberties  and Transparency Division => PCLT", "Defense Security Cooperation Agency => DSCA", "Defense Security Service => DSS", "Defense Technical Information Center => DTIC", "Defense Technology Security Administration => DTSA ", "Defense Technology Security Agency => DTSA", "Defense Threat Reduction Agency => DTRA", "Defense Travel Management Office => DTMO", "Delaware River Basin Commission => DRBC", "Delta Regional Authority => DRA", "Department of Defense Defense Agencies => Defense Agencies", "Department of Defense Dependents Education Agency => DODDEA", "Department of Defense Education Activity => DODEA", "Department of Defense Human Resources Activity => DoDHRA", "Department of Defense Human Resources Agency => DODHRA", "Department of Defense Intelligence Agencies => DoD Intelligence Agencies", "Department of Defense Test Resource Management Center  => DOD TRMC", "Department of the Air Force => DAF", "Department of the Army => DA", "Department of the Navy => DoN", "Department of the Navy Chief Information Officer => DON CIO", "Department of the Navy Sexual Assault Prevention and Response Office => SAPRO", "Department of the Navy Special Access Program Central Office => SAPCO", "Dependents Education Council => DEC", "DoD Component => DoD Components", "Drug Enforcement Administration => DEA", "Economic Development Administration => EDA", "Economic Research Service => ERS", "Election Assistance Commission => EAC", "Electromagnetic Spectrum Operations Cross Functional Team  => EMSO CFT", "Employee Benefits Security Administration => EBSA", "Employer Support of the National Guard and Reserve => ESGR", "Employment and Training Administration => ETA", "Energy Information Administration => EIA", "Energy Star Program => ESP", "Environmental Protection Agency => EPA", "Equal Employment Opportunity Commission => EEOC", "Executive Office for Immigration Review => EOIR", "Executive Order => EXORD", "Export-Import Bank of the United States => EXIM", "Farm Credit Administration => FCA", "Farm Credit System Insurance Corporation => FCSIC", "Farm Service Agency => FSA", "Federal Accounting Standards Advisory Board => FASAB", "Federal Aviation Administration => FAA", "Federal Bureau of Investigation => FBI", "Federal Communications Commission => FCC", "Federal Consulting Group => FCG", "Federal Deposit Insurance Corporation => FDIC", "Federal Election Commission => FEC", "Federal Emergency Management Agency => FEMA", "Federal Energy Regulatory Commission => FERC", "Federal Executive Boards => FEB", "Federal Financial Institutions Examination Council => FFIEC", "Federal Financing Bank => FFB", "Federal Geographic Data Committee => FGDC", "Federal Government => United States Federal Government", "Federal Highway Administration => FHA", "Federal Home Loan Mortgage Corporation => Freddie Mac", "Federal Housing Administration => FHA", "Federal Housing Finance Agency => FHFA", "Federal Interagency Council on Statistical Policy => FedStats", "Federal Judicial Center => FJC", "Federal Labor Relations Authority => FLRA", "Federal Law Enforcement Training Center => FLETC", "Federal Library and Information Center Committee => FLICC", "Federal Maritime Commission => FMC", "Federal Mediation and Conciliation Service => FMCS", "Federal Mine Safety and Health Review Commission => FMSHRC", "Federal Motor Carrier Safety Administration => FMCSA", "Federal National Mortgage Association => Fannie Mae", "Federal Railroad Administration => FRA", "Federal Retirement Thrift Investment Board => FRTIB", "Federal Trade Commission => FTC", "Federal Transit Administration => FTA", "Federal Voting Assistance Program => FVAP", "Fire Administration => USFA", "Fish and Wildlife Service => FWS", "Food and Drug Administration => FDA", "Food and Nutrition Service => FNS", "Food Safety and Inspection Service => FSIS", "Force Fitness Readiness Center => FFRC", "Foreign Agricultural Service => FAS ", "Foreign Claims Settlement Commission => FCSC", "Forest Service => FS", "Fulbright Foreign Scholarship Board => FFSB", "Functional Combatant Command => FCC", "General Counsel of the Department of Defense => GC DoD", "General Services Administration => GSA", "Geographic Combatant Command => GCC", "Geological Survey => USGS", "Global Health Engagement Program => GHE", "Government Accountability Office => GAO", "Government National Mortgage Association => Ginnie Mae", "Government Publishing Office => GPO", "Grain Inspection  Packers and Stockyards Administration => GIPSA", "Great Lakes and Ohio River Division  => CELRD", "Headquarters Marine Corps => HQMC", "Helicopter Sea Combat Wing Atlantic => HELSEACOMBATWINGLANT", "Helicopter Sea Combat Wing Pacific => HELSEACOMBATWINGPAC", "Holocaust Memorial Museum => USHMM", "Identity Protection and Management Senior Coordinating Group => IPMSCG", "Immigration and Customs Enforcement => ICE", "Indian Arts and Crafts Board => IACB", "Indian Health Service => HIS", "Indoor Air Quality => IAQ", "Installation Advisory Committees => IACs", "Installation Planning and Review Board => IPRB", "Institute of Education Sciences => IES", "Institute of Museum and Library Services => IMLS", "Institute of Peace => USIP", "Intelligence Community => IC", "Interagency Committee for the Management of Noxious and Exotic Weeds => FICMNEW", "Interagency Council on Homelessness => USICH", "Internal Revenue Service  => IRS", "International Development Finance Corporation => DFC", "International Trade Administration => ITA", "International Trade Commission => USITC", "Japan-United States Friendship Commission => JUSFC", "John F. Kennedy Center for the Performing Arts => Kennedy Center", "Joint Artificial Intelligence Center => JAIC", "Joint Atomic Information Exchange Group => JAIEG", "Joint Automated Communications Electronics Operating Instruction System => JACS", "Joint Chiefs of Staff => JCS", "Joint Communications-Electronics Operating Instruction => JCEOI", "Joint Fire Science Program => JFSP", "Joint Forces Staff College => JFSC", "Joint History and Research Office => JHRO", "Joint Lessons Learned Information System => JLLIS", "Joint Lessons Learned Program => JLLP", "Joint Logistics System Center => JNTLOGSCEN", "Joint Mortuary Affairs Center => JMAC", "Joint Personnel Recovery Agency => JPRA", "Joint Petroleum Office => JPO", "Joint Program Executive Office for Chemical and Biological Defense => JPEOCBRND", "Joint Rapid Acquisition Cell => JRAC", "Joint Staff Directorate of Management => Joint Staff  Management Directorate", "Joint Staff Information Management Division => IMD", "Joint Terminal Attack Controller => JTAC", "Joint Weapon Safety Working Group => JWSWG", "Judicial Panel on Multidistrict Litigation => JPML", "Laser System Safety Working Group => LSSWG", "Legal Services Corporation => LSC", "Library of Congress => LOC", "Life-Cycle Item Identification Working-Level Integrated Process Team => LCII WIPT", "Major Command => MAJCOM", "Manning Control Authority => MCA", "Marine Corps Systems Command => MCSC", "Marine Expeditionary Units => MEU", "Marine Mammal Commission => MMC", "Maritime Administration => MARAD", "Medicaid and CHIP Payment and Access Commission => MACPAC", "Medicare Payment Advisory Commission => MedPAC", "Merit Systems Protection Board => MSPB", "Middle East Broadcasting Networks => Alhurra TV", "Migratory Bird Conservation Commission => MBCC", "Military Academy  West Point => USMA", "Military Housing Privatization Initiative => MHPI", "Military Intelligence Board => MIB", "Military Postal Service Agency => MPSA", "Military Sealift Command => MSC", "Military Targeting Committee => MTC", "Millennium Challenge Corporation => MCC", "Mine Safety and Health Administration => MSHA", "Minority Business Development Agency => MBDA", "Missile Defense Agency => MDA", "Mission Partner Environment Executive Steering Committee  => MPE ESC", "Mission to the United Nations => USUN", "Mississippi River Commission => MRC", "Mississippi Valley Division  => CEMVD", "National Aeronautics and Space Administration => NASA", "National Agricultural Library => NAL", "National Agricultural Statistics Service => NASS", "National Archives and Records Administration => NARA", "National Assessment Group => NAG", "National Cancer Institute => NCI", "National Capital Planning Commission => NCPC", "National Central Bureau - Interpol => Interpol", "National Council on Disability => NCD", "National Credit Union Administration => NCUA", "National Crime Information Center => NCIC", "National Defense Authorization Act => NDAA", "National Defense University => NDU", "National Endowment for the Arts => NEA", "National Endowment for the Humanities => NEH", "National Environmental Policy Act¬† => NEPA", "National Eye Institute => NEI", "National Flood Insurance Program => NFIP", "National Gallery of Art => NGA", "National Geospatial-Intelligence Agency => NGA", "National Guard Bureau => NGB", "National Health Information Center => NHIC", "National Heart  Lung  and Blood Institute => NHLBI", "National Highway Traffic Safety Administration => NHTSA", "National Indian Gaming Commission => NIGC", "National Institute of Arthritis  Musculoskeletal and Skin Diseases => NIAMS", "National Institute of Corrections => NIC", "National Institute of Deafness and Other Communication Disorders => NIDCD", "National Institute of Diabetes and Digestive and Kidney Diseases => NIDDK", "National Institute of Food and Agriculture => NIFA", "National Institute of General Medical Sciences => NIGMS", "National Institute of Justice => NIJ", "National Institute of Mental Health => NIMH", "National Institute of Neurological Disorders and Stroke => NINDS", "National Institute of Occupational Safety and Health => NIOSH", "National Institute of Standards and Technology => NIST", "National Institutes of Health => NIH", "National Intelligence University => NIU", "National Interagency Fire Center => NIFC", "National Labor Relations Board => NLRB", "National Mediation Board => NMB", "National Nuclear Security Administration => NNSA", "National Oceanic and Atmospheric Administration => NOAA", "National Park Service => NPS", "National Passport Information Center => NPIC", "National Pesticide Information Center => NPIC", "National Prevention Information Network => NPIN", "National Railroad Passenger Corporation => AMTRAK", "National Reconnaissance Office => NRO", "National Science and Technology Council => NSTC", "National Science Foundation => NSF", "National Security Agency => NSA", "National Security Council => NSC", "National Technical Information Service => NTIS", "National Telecommunications and Information Administration => NTIA", "National Transportation Safety Board => NTSB", "National Weather Service => NWS", "Natural Resources Conservation Service => NRCS", "Naval Air Systems Command => NAVAIR", "Naval Air Warfare Center Weapons Division => NAVAIRWARCENWPNDIV", "Naval Aviation Survival Training Program => NASTP", "Naval Criminal Investigative Service => NCIS", "Naval Education and Training Command => NETC", "Naval Facilities Engineering Systems Command => NAVFAC", "Naval Information Forces => NAVIFOR", "Naval Information Warfare Systems Command => NAVWAR", "Naval Medical Forces Support Command => NMFSC", "Naval Research Laboratory => NRL", "Naval Safety Center => SAFECEN", "Naval Sea Systems Command => NAVSEA", "Naval Station => NS", "Naval Strike and Air Warfare Center => NAVSTKAIRWARCEN", "Naval Supply Systems Command => NAVSUP", "Naval Survival Training Institute => NAVSURVTRAINST", "Navy and Marine Corps Public Health Center => NAVMCPUBHLTHCEN", "Navy Culture of Excelence Governance Board => Navy COE GB", "Navy Information Dominance Forces => NAVIDFOR", "NAVY MEDICINE MASTER TRAINING SPECIALIST PROGRAM => Navy Medicine MTS Program", "Navy Reserve Activities => NRA", "Navy Tactical Data System => NTDS", "North American Aerospace Defense Command => NORAD", "North Atlantic Division  => CENAD", "North Atlantic Treaty Organization => NATO", "Northern Border Regional Commission => NBRC", "Northwestern Division  => CENWD", "Nuclear Regulatory Commission => NRC", "Nuclear Waste Technical Review Board => NWTRB", "Oak Ridge National Laboratory => ORNL", "Occupational Safety and Health Administration => OSHA", "Occupational Safety and Health Review Commission => OSHRC", "Office for Civil Rights  United States Department of Education => OCR", "Office for Civil Rights  United States Department of Health and Human Services => OCR", "Office for Diversity  Equity and Inclusion  => Office for DEI", "Office of Administration and Management => OMA", "Office of Army Cemeteries => OAC", "Office of Career  Technical  and Adult Education => OCTAE", "Office of Chief Information Officer => OCIO", "Office of Chief Management Officer => OCMO", "Office of Chief of Naval Research => OCNR", "Office of Child Support Enforcement => OSCE", "Office of Civilian Human Resources => OCHR", "Office of Community Planning and Development => CPD", "Office of Compliance => OCWR", "Office of Cost Assessment and Program Evaluation => CAPE", "Office of Defense for Legislative Affairs => OLA", "Office of Disability Employment Policy => ODEP", "Office of Economic Adjustment => OEA", "Office of Elementary and Secondary Education => OESE", "Office of Environmental Management => EM", "Office of Fair Housing and Equal Opportunity => FHEO", "Office of Foreign Assets Control Regulations => OFAC", "Office of Fossil Energy => FE", "Office of Government Ethics => OGE", "Office of Immigrant and Employee Rights => IER", "Office of International Research Engagement and Cooperation => OIREC", "Office of Justice Programs => OJP", "Office of Juvenile Justice and Delinquency Prevention => OJJDP", "Office of Legislative Affairs => OLA", "Office of Local Defense Community Cooperation => OLDCC", "Office of Management and Budget => OMB", "Office of Manufactured Housing Programs => MHS", "Office of National Drug Control Policy => ONDCP", "Office of Natural Resources Revenue => ONRR", "Office of Naval Intelligence => ONI", "Office of Naval Research => ONR", "Office of Net Assessment => ONA", "Office of Personnel Management => OPM", "Office of Postsecondary Education => OPE", "Office of Refugee Resettlement => ORR", "Office of Science and Technology Policy => OSTP", "Office of Scientific and Technical Information => OSTI", "Office of Small Business Programs => OSBP", "Office of Special Counsel => OSC", "Office of Special Education and Rehabilitative Services => OSERS", "Office of Surface Mining  Reclamation and Enforcement => OSMRE", "Office of the Administrative Assistant to the Secretary of the Army => OAA", "Office of the Chairman of the Joint Chiefs of Staff and the Joint Staff => OCJCS", "Office of the Chief Legislative Liaison for the Army => OCLL", "Office of the Chief Management Officer => OCMO", "Office of the Chief of Naval Operations => OCNO", "Office of the Chief of Public Affairs => OCPA", "Office of the Chief of Space Operations => OCSO", "Office of the Comptroller of the Currency => OCC", "Office of the Department of Defense Chief Information Officer => Office of the DoD CIO", "Office of the Director of National Intelligence => ODNI", "Office of the General Counsel => OGC", "Office of the Inspector General => HHS OIG", "Office of the Inspector General of the Department of Defense => DoD OIG", "Office of the Joint Chiefs of Staff => OJCS", "Office of the Navy Judge Advocate General's => OJAG", "Office of the Secretary of Defense => OSD", "Office of the Secretary of the Air Force => OSAA", "Office of the Secretary of the Army => OSA", "Office of the Secretary of the Joint Staff => Office of the SJS", "Office of the Secretary of the Navy => OSN", "Office on Violence Against Women => OVW", "Organization of the Joint Chiefs of Staff => JCS", "Pacific Air Forces => PACAF", "Pacific Ocean Division  => CEPOD", "Parole Commission => USPC", "Patent and Trademark Office => USPTO", "Pension Benefit Guaranty Corporation => PBGC", "Pentagon Force Protection Agency => PFPA", "Pentagon Governance Council => PGC", "Pipeline and Hazardous Materials Safety Administration => PHMSA", "Postal Inspection Service => USPIS", "Postal Regulatory Commission => PRC", "President''s Council on Fitness  Sports and Nutrition => PCFSN", "Pretrial Services Agency for the District of Columbia => PSA", "Privacy and Civil Liberties Oversight Board => PCLOB", "ProcessQuik => PQ", "Protecting Critical Technology Task Force  => PCTTF", "Radio Free Asia => RFA", "Railroad Retirement Board => RRB", "Readiness and Mobilization Commands => REDCOM", "Real-Time Automated Personnel Identification System => RAPIDS", "Reserve Officers' Training Corps => ROTC", "Risk Management Agency => RMA", "Rural Development => RD", "School Advisory Committees => SACs", "Seafood Inspection Program => SIP", "Securities and Exchange Commission => SEC", "Selective Service System => SSS", "Sentencing Commission => USSC", "Site-Designated Accrediting Authorities => DAAs", "Small Business Administration => SBA", "Smithsonian Institution => SI", "Social Security Administration => SSA", "Social Security Advisory Board => SSAB", "South Atlantic Division  => CESAD", "South Pacific Division  => CESPD", "Southeastern Power Administration => SEPA", "Southwestern Division  => CESWD", "Southwestern Power Administration => SWPA", "Space and Missile Systems Center => SMC", "Space and Naval Warfare Command => SPAWARSCMD", "Space Development Agency => SDA", "Space Operations Command => SpOC", "Space Systems Command => SSC", "Space Training and Readiness Command => STARCOM", "Special Access Program Central Office => SAPCO", "State Justice Institute => SJI", "Strategic Systems Programs => SSP", "Subarea Petroleum Office => SAPO", "Substance Abuse and Mental Health Services Administration => SAMHSA", "Supreme Court of the United States => SCOTUS", "Supreme Headquarters Allied Powers Europe => SHAPE", "Surface Transportation Board => STB", "Susquehanna River Basin Commission => SRBC", "Tennessee Valley Authority => TVA", "Theater Education Councils => TECs", "Topographic Engineering Center => CETEC", "Trade and Development Agency => USTDA", "Trade Representative => USTR", "Transportation Security Administration => TSA", "Type Command => TYCOM", "Unified Combatant Commands => UCC", "Uniformed Services University of the Health Sciences => USUHS", "United Nations => UN", "United Nations Security Council => UN Security Council", "United Services Military Apprenticeship Program => USMAP", "United States Africa Command => USAFRICOM", "United States Air Force => USAF", "United States Air Forces in Europe => USAFE", "United States Armed Material Command => AMC", "United States Armed Material Command Logistics Data Analysis Center => AMC LDAC", "United States Army => USArmy", "United States Army Aeronautical Services Agency => USAASA", "United States Army Chaplain School => USACHS", "United States Army Chemical School => USACMLCS", "United States Army Combined Arms Support Command => USACASOM", "United States Army Community and Family Support Center => USACFSC", "United States Army Corps of Engineers => USACE", "United States Army Criminal Investigation Command => CIC", "United States Army Element School of Music => USAESOM", "United States Army Engineer School => USAES", "United States Army Field Artillery School => USAFAS", "United States Army Financial Management => USAFMCOM", "United States Army Futures Command => USAFC", "United States Army Intellegence and Security Command => INSCOM", "United States Army Intelligence and Threat Analysis Center => ITAC", "United States Army Intelligence Command => USAINTCS", "United States Army John F. Kennedy Special Warfare Center and School => USAJFKSWC", "United States Army Medical Logistics Command => AMLC", "United States Army Medical Materiel Agency => USAMMA", "United States Army Military Police School => USAMPS", "United States Army Missile and Munitions Center and School => USAMMCS", "United States Army Munitions Command/Joint Munitions Command => USAMCJMC", "United States Army National Guard Bureau => NGB", "United States Army Program Executive Officer for Simulation  Training  and Instrumentation => PEO STRI", "United States Army Provost Marshal General => PMG", "United States Army Quartermaster School => USAQMS", "United States Army Signal Center => USASC", "United States Army Signal School => USASIGS", "United States Army Soldier and Biological Chemical Command => SBCCOM", "United States Army Soldier Support Center => USASSC", "United States Army Surface Deployment and Distribution Command => SDDC", "United States Army Surface Deployment and Distribution Command Transportation Engineering Agency => SDDCTEA", "United States Army Tank-automotive and Armaments Command => TACOM", "United States Army Technical Support Activity => USATSA", "United States Army Training and Doctrine Command => TRADOC", "United States Army Training Support Center => USAATSC", "United States Army Transportation School => USATSCH", "United States Botanic Garden => USBG", "United States Capitol Police => USCP", "United States Capitol Visitor Center => Capitol Visitor Center", "United States Central Command => USCENTCOM", "United States Central Command Joint Petroleum Office => United States Central Command JPO", "United States Citizenship and Immigration Services => USCIS", "United States Coast Guard => USCG", "United States Congress => Congress", "United States Court of Appeals for the Armed Forces => USCAAF", "United States Courts of Appeal => Courts of Appeal", "United States Cyber Command => USCYBERCOM", "United States Department of Agriculture => USDA", "United States Department of Commerce => DOC", "United States Department of Defense => DOD", "United States Department of Education => ED", "United States Department of Energy => DOE", "United States Department of Health and Human Services => HHS", "United States Department of Homeland Security => DHS", "United States Department of Housing and Urban Development => HUD", "United States Department of Justice => DOJ", "United States Department of Labor => DOL", "United States Department of State => DOS", "United States Department of the Interior => DOI", "United States Department of the Treasury => Treasury", "United States Department of Transportation => DOT", "United States Department of Veterans Affairs => VA", "United States European Command => USEUCOM", "United States European Command Joint Petroleum Office => United States European Command JPO", "United States Fleet Forces Command => USFLTFORCOM", "United States Fleet Forces Command => USFF", "United States Government => USG", "United States House of Representatives => House of Representatives", "United States Indo-Pacific Command => PACOM", "United States Marine Corps => USMC", "United States Marine Corps Criminal Investigation Division => USMC CID", "United States Marine Forces Command => MARFORCOM", "United States Marshals Service => Marshals Service", "United States Military Entrance Processing Command => USMEPCOM", "United States Mint => Mint", "United States National Guard => National Guard", "United States Naval Academy => USNA", "United States Navy => Navy", "United States Navy Reserve => USNR", "United States Navy Systems Commands => SYSCOM", "United States Northern Command => USNORTHCOM", "United States Northern Command Joint Petroleum Office => United States Northern Command JPO", "United States Pacific Command Joint Petroleum Office => United States Pacific Command JPO", "United States Pacific Fleet => PACFLT", "United States Postal Service => USPS", "United States Senate => Senate", "United States Southern Command => USSOUTHCOM", "United States Southern Command Joint Petroleum Office => United States Southern Command JPO", "United States Space Command => USSPACECOM", "United States Space Force => USSF", "United States Special Operations Command => USSOCOM", "United States Strategic Command => USSTRATCOM", "United States Strategic Command Joint Petroleum Office => United States Strategic Command JPO", "United States Transportation Command => USTRANSCOM", "United States Transportation Command Joint Petroleum Office => United States Transportation Command JPO", "USAGov => Federal Citizen Information Center", "Veterans Benefits Administration => VBA", "Veterans Day National Committee => VDNC", "Veterans Employment and Training Service => VETS", "Veterans Health Administration => VHA", "Voice of America => VOA", "Wage and Hour Division => WHD", "Washington Headquarters Services => WHS", "Washington Headquarters Services Space Portfolio Management Division => WHS Space Portfolio Management Division", "Waterways Experiment Station => CEWES", "Western Area Power Administration => WAPA", "White House => WH", "White House Office of Domestic Climate Policy => Climate Policy Office", "White House Presidential Personnel Office => Office of Presidential Personnel", "Women's Bureau => WB", "World Health Organization => WHO", "Administrative Assistant to the Secretary of the Army => AASA", "Army Deputy Chief Of Staff => DCS", "Assistant Commandant of the Marine Corps => ACMC", "Assistant Deputy Chief Management Officer => ADCMO", "Assistant Deputy Chief  Operational Medicine & Capabilities Development => Assistant Deputy Chief  Capabilities Requirements", "Assistant Deputy Chiefs of Staff => ADCOS", "Assistant for Administration  Office of Under Secretary of the Navy => AAUSN", "Assistant Secretary of Defense => ASD", "Assistant Secretary of the Army => ASA", "Assistant Secretary of the Navy => ASN", "Assistant to the Chairman of the Joint Chiefs of Staff => Assistant to the Chairman", "Attorney General => AG", "Chair of the Federal Communications Commission => Chair  FCC", "Chair of the Identity Protection and Management Senior Coordinating Group => IPMSCG Chair", "Chair of the Joint Weapon Safety Working Group => Chair  JWSWG", "Chair of the Laser System Safety Working Group => Chair  LSSWG", "Chairman of the Joint Chiefs of Staff => CJCS", "Chief Financial Officers Council => CFOC", "Chief Human Capital Officers Council => CHCOC", "Chief Information Officers Council => CIOC", "Chief Management Officer => CMO", "Chief of Army Reserve => CAR", "Chief of Chaplains of the United States Army => CCH", "Chief of Naval Operations => CNO", "Chief of Naval Operations Assistant for Field Support  => CNO FSA", "Chief of Naval Personnel => CHNAVPERS", "Chief of Naval Research => CNR", "Chief of Space Operations => CSO", "Chief of Staff => COS", "Chief of the National Guard Bureau => CNGB", "Combatant Commanders => CCMDs", "Command Fitness Leader => CFL", "Commandant of the Defense Language Institute Foreign Language Center => Commandant of DLIFLC", "Commandant of the Marine Corps => CMC", "Commander  Air Force North => CDRAFNORTH", "Commander  Detainee Operations => CDO", "Commander  Fleet Forces Command => CFFC", "Commander  Fleet Readiness Centers => COMFRC", "Commander  Joint Special Operations Task Force => CDRJSOTF", "Commander  Marine Corps Logistic Bases => COMMARCORLOGBASES", "Commander  Marine Corps Systems Command => COMMARCORSYSCOM", "Commander  Military Sealift Command => COMSC", "Commander  Naval Air Systems Command => COMNAVAIRSYSCOM", "Commander  Naval Facilities Engineering Command  => NAVFACCOM", "Commander  Naval Personnel Command => COMNAVPERSCOM", "Commander  Naval Reserve Force => NAVRESFORCOM", "Commander  Naval Sea Systems Command => NAVSEASYSCOM", "Commander  Naval Special Warfare Command => COMNAVSPECWARCOM", "Commander  Naval Supply Systems Command => NAVSUPSYSCOM", "Commander  Navy Installations Command => CNIC", "Commander  Navy Reserve Forces => COMNAVRESFOR", "Commander  Navy Reserve Forces Command => COMNAVRESFORCOM", "Commander  North American Aerospace Defense Command => CDRNORAD", "Commander  Special Operations Joint Task Force => CDRSOJTF", "Commander  Tenth Fleet => COMTENTHFLT", "Commander  Theater Special Operations Command => CDRTSOC", "Commander  United States Africa Command => CDRUSAFRICOM", "Commander  United States Army  North => CDRUSARNORTH", "Commander  United States Cyber Command => CDRUSCYBERCOM", "Commander  United States Element  North American Aerospace Defense Command => CDRUSELEMNORAD", "Commander  United States European Command => CDRUSEUCOM", "Commander  United States Indo-Pacific Command => CDRUSINDOPACOM", "Commander  United States Marine Corps Forces Command => COMMARFORCOM", "Commander  United States Military Entrance Processing Command => CDUSMEPCOM", "Commander  United States Northern Command => CDRUSNORTHCOM", "Commander  United States Pacific Command => CDRUSPACOM", "Commander  United States Pacific Fleet => COMPACFLT", "Commander  United States Southern Command => CDRUSSOUTHCOM", "Commander  United States Space Command => CDRUSSPACECOM", "Commander  United States Special Operations Command => CDRUSSOCOM", "Commander  United States Strategic Command => CDRUSSTRATCOM", "Commander  United States Transportation Command => CDRUSTRANSCOM", "Commanding General  Marine Corps Combat Development Command => CG MCCDC", "Commanding Officer => Commanding officers", "Contracting Officer's Representative => COR", "Defense HUMINT Manager => DHM", "Department of Defense Executive Agent => DoD EA", "Deputy Attorney General => DAG", "Deputy Chief Management Officer => DCMO", "Deputy Chief  Total Force => DCTF", "Deputy Chiefs of Staff => DCOS", "Deputy Secretary of Defense => DepSecDef", "Deputy Under Secretary of The Army => DUSA", "Deputy Under Secretary of the Navy => DUSN", "Director for Administration  Logistics  and Operations => DALO", "Director of Army Staff => DAS", "Director of Navy Staff => DNS", "Director of the Naval Nuclear Propulsion Program => N00N", "Director  Cost Assessment and Program Evaluation => DCAPE", "Director  Defense Intelligence Agency => Director  DIA", "Director  Defense Legal Services Agency => Director  DLSA", "Director  Defense Logistics Agency => Director  DLA", "Director  Defense Media Activity => Director  DMA", "Director  Defense Personnel and Family Support Center => Director of the Defense Personnel and Family Support Center", "Director  Force Structure  Resources  and Assessment => Director for Force Structure  Resources  and Assessment", "Director  Force Transformation => OFT", "Director  Intelligence => Director for Intelligence", "Director  Joint Force Development => Director for Joint Force Development", "Director  Joint Staff => DJS", "Director  Logistics => Director for Logistics", "Director  Manpower and Personnel => Director  Manpower and Personnel", "Director  Mobility Forces => DIRMOBFOR", "Director  National Intelligence => DNI", "Director  National Security Agency => DIRNSA", "Director  Net Assessment => ONA", "Director  Office of Personnel Management => DOPM", "Director  Operations => Director for Operations", "Director  Space Forces => DIRSPACEFOR", "Director  Special Access Program Central Office => SAPCO Director", "Director  Strategic Systems Programs (CM3) => CM3DIRSSP", "Directors of the Department of Defense Intelligence Agencies  =>  Directors of the DoD Intelligence Agencies ", "DoD Chief Information Officer => CIO", "DoD Component Head => Component Heads", "DoD Executive Agent for the Recovered Chemical Warfare Material => DoD EA for the Recovered Chemical Warfare Material", "DoD Law Enforcement Officer => DoD LEOs", "Executive Director  Joint History => Executive Director for Joint History", "Executive Secretary of the Department of Defense => ExecSec", "Force Fitness Instructor => FFI", "General Council of the Army => GCA", "General Counsels of DoD Navy => General Counsels of the Navy", "Heads of Intelligence Community Elements => HICEs", "Health Facility Planning and Project Officers => HFPPO", "Inspector General => IG", "Joint Frequencyt Management Office => JFMO", "Joint Lessons Learned Information System Administrators => JLLIS Administrators", "Joint Qualified Officer => JQO", "Joint Satellite Communications Management Enterprise => JSME", "Joint Staff Deputy Director for Joint Training => Deputy Director for Joint Training  Joint Staff", "Joint Terminal Attack Controller program manager => JTAC program manager", "Master Chief Petty Officer of the Navy (MCPON) => N00D", "Military Command  Control  Communications  and Computers Executive Board => MC4EB", "Military Commanders => Military commanders", "Mission Partner Environment Executive Steering Committee Chairman => MPE ESC Chairman ", "Mission Partner Environment Executive Steering Committee Secretariat => MPE ESC Secretariat", "Naval Aviation Survival Training Program Course Curriculum Model Manager => NASTP Course Curriculum Model Manager", "Navy Assistant for Administration/Under Secretary of the Navy => AAUSN", "Navy Culture of Excelence Governance Board => Navy COE GB", "Navy Judge Advocate General's => JAG", "Navy Reserve Activity Commanding Officer => NRA CO", "Navy Reserve Activity Senior Enlisted Leader => NRA SEL", "Officer of Naval Intelligence => ONI", "Officer-in-Charge => OIC", "OSD Executive Secretary => ES  OSD", "Placement Coordinator => PC", "President of the United States => POTUS", "President  Board of Inspection and Survey => PRESINSURV", "Prospective Commanding Officer => PCO", "Secretaries of Military Departments => Secretaries of the MILDEPs", "Secretary General of the United Nations => UNSG", "Secretary of Defense => SECDEF", "Secretary of Health and Human Services => Secretary of HHS", "Secretary of the Air Force => SECAF", "Secretary of the Army => SECARMY", "Secretary of the Joint Staff => SJS", "Secretary of the Navy => Secretary  DON", "Senior Enlisted Advisor to the Chairman => SEAC", "Sergeant Major of the Army => SMA", "Sergeant Major of the Marine Corps => SMMC", "Special Assistant for Inspection Support => N09G", "Special Assistant for Legal Services => N09J", "Special Assistant for Legislative Support => N09L", "Special Assistant for Naval Investigative Matters and Security => N09N", "Special Assistant for Public Affairs Support => N09C", "Special Assistants => SA", "Systems Command Commanders => SYSCOM Commanders", "The Judge Advocate General of the Army => TJAG", "The Surgeon General of the Army => TSG", "Under Secretary of Defense => USECDEF", "Under Secretary of the Army => USA", "Under Secretary of the Navy => UNSECNAV", "Unified Commander => Unified Commanders", "United States National Military Representatives => USNMR", "Verifying Official => VO", "Vice Chairman  Joint Chiefs of Staff => VJCS", "Vice Chief of Naval Operations => VCNO", "Vice Director  Joint Staff => VDJS", "Vice President of the United States => VPOTUS"]
+          "gc_synonym_filter" : {
+            "type" : "synonym_graph",
+            "lenient" : true,
+            "synonyms" : ["Access Basing Overflight => ABO", "AbilityOne Commission => US AbilityOne Commission", "Access Board => US Access Board", "Active Guard Reserve => AGR", "Administration for Children and Families => ACF", "Administration for Community Living => ACL", "Administration for Native Americans => ANA", "Administrative Conference of the United States => ACUS", "Administrative Office of the Courts => Administrative Office of the USCourts", "Advisory Council on Historic Preservation => ACHP", "African Development Foundation => ADF", "Agency for Global Media => AGM", "Agency for Healthcare Research and Quality => AHRQ", "Agency for International Development => USAID", "Agency for Toxic Substances and Disease Registry => ATSDR", "Agricultural Marketing Service => AMS", "Agricultural Research Service => ARS", "Air Combat Command => ACC", "Air Education and Training Command => AETC", "Air Force Association => AFA", "Air Force Base => AFB", "Air Force Global Strike Command => AFGSC", "Air Force Installation Contracting Center => AFMC", "Air Force Logistics Command => AFLC", "Air Force Materiel Command => AFMC", "Air Force Mortuary Affairs Operations => AFMAO", "Air Force Office of Special Investigations => AFOSI", "Air Force Personnel Center => AFPC", "Air Force Petroleum Agency => AFPA", "Air Force Research Laboratory => AFRL", "Air Force Reserve Command => AFRC", "Air Force Reserve Officer Training Corps => AFROTC", "Air Force Space Command => AFSPC", "Air Force Special Operations Command => AFSOC", "Air Mobility Command => AMC", "Air National Guard => ANG", "Alcohol and Tobacco Tax and Trade Bureau => TTB", "American Battle Monuments Commission => ABMC", "American Health Organization => AHO", "American Medical Association => AMA", "AmeriCorps => AmeriCorps", "Animal and Plant Health Inspection Service => APHIS", "Antitrust Division => ATR", "Appalachian Regional Commission => ARC", "Architect of the Capitol => AOC", "Arctic Research Commission => USARC", "Armed Forces Institute of Pathology => AFIP", "Armed Forces of the United States => Armed Forces", "Armed Forces Pest Management Board => AFPMB", "Armed Forces Radiobiology Research Institute => AFRRI", "Armed Forces Retirement Home => AFRH", "Armed Services Board of Contract Appeals => ASBCA", "Army and Air Force Exchange Service => AAFES", "Army Auditor General => AAG", "Army Aviation and Missile Command => AMCOM", "Army Center for Military History => CMH", "Army Digitization Office  => ADO", "Army Edgewood Chemical Biological Center => ECBC", "Army Medical Department => AMEDD", "Army National Guard => ARNG", "Army Research Laboratory => ARL", "Army Review Boards Agency  => ARBA", "Association for the Assessment and Accreditation of Laboratory Animal Care => AAALAC", "Board of Inspection and Survey => INSURV", "Bonneville Power Administration => BPA", "Bureau of Alcohol  Tobacco  Firearms and Explosives => ATF", "Bureau of Economic Analysis => BEA", "Bureau of Engraving and Printing => BEP", "Bureau of Indian Affairs => BIA", "Bureau of Industry and Security => BIS", "Bureau of International Labor Affairs => ILAB", "Bureau of Justice Statistics => BJS", "Bureau of Labor Statistics => BLS", "Bureau of Land Management => BLM", "Bureau of Medicine and Surgery => BUMED", "Bureau of Ocean Energy Management => BOEM", "Bureau of Prisons => BOP", "Bureau of Reclamation => USBR", "Bureau of Safety and Environmental Enforcement => BSEE", "Bureau of the Census => Census", "Bureau of Transportation Statistics => BTS", "CECOM Communications Security Logistics Activity => CCSLA", "Center for Disease Control => CDC", "Center for Food Safety and Applied Nutrition => CFSAN", "Center for Nutrition Policy and Promotion => CNPP", "Center for Parent Information and Resources => CPIR", "Centers for Disease Control and Prevention => CDC", "Centers for Medicare and Medicaid Services => CMS", "Central Intelligence Agency => CIA", "Central Joint Mortuary Affairs Board => CJMAB", "Central Joint Mortuary Affairs Office => CJMAO", "Central Operating Activity => COA", "Central Security Service => CSS", "Central Treaty Organization => CENTO", "Central Violations Bureau => CVB", "Chairman’s Controlled Activities => CCAs", "Chemical Safety Board => CSB", "Chemical Weapons Convention => CWC", "Chief of Naval Research => CNR", "Citizens' Stamp Advisory Committee => CSAC", "Civil Rights Division  United States Department of Justice => CRT", "Close Combat Lethality Task Force => CCLTF", "Cold Regions Research and Engineering Laboratory => CECRL", "Combat Operations Center => COC", "Combat Support Agencies => CSAs", "Combatant Command (Command Authority) => COCOM", "Command and Control Executive Steering Council => C2 ESC", "Commander  Naval Special Warfare Command => NAVSPECWARCOM", "Commission of Fine Arts => CFA", "Commission on Civil Rights => USCCR", "Commission on International Religious Freedom => USCIRF", "Commission on Security and Cooperation in Europe (Helsinki Commission) => CSCE", "Committee for the Implementation of Textile Agreements => CITA", "Committee on National Security Systems => CNSS", "Committee on National Security Systems Instruction => CNSSI", "Commodity Futures Trading Commission => CFTC", "Communications-Electronics Command => CECOM", "Community Oriented Policing Services => COPS", "Component Command Advisory Councils => CCACs", "Computer Emergency Readiness Team => USCERT", "Congressional Budget Office => CBO", "Congressional Research Service => CRS", "Construction Engineering Research Laboratory  => CECER", "Consumer Financial Protection Bureau => CFPB", "Consumer Product Safety Commission => CPSC", "Corporation for National and Community Service => CNCS", "Corps of Engineers  North Western Division => CENWD", "Council of Economic Advisers => CEA", "Council of the Inspectors General on Integrity and Efficiency => IGNET", "Council on Environmental Quality => CEQ", "Court of Appeals for the Federal Circuit => CAFC", "Court of Appeals for Veterans Claims => CAVC", "Court of Federal Claims => USCFC", "Court of International Trade => CIT", "Court Services and Offender Supervision Agency for the District of Columbia => CSOSA", "Customs and Border Protection => CBP", "Cybersecurity and Infrastructure Security Agency => CISA", "Defense Acquisition University => DAU", "Defense Advanced Research Projects Agency => DARPA", "Defense Air Reconnaissance Office => DARO", "Defense Attache System => DAS", "Defense Clandestine Service => DCSA", "Defense Commissary Agency => DeCA", "Defense Contract Audit Agency => DCAA", "Defense Contract Management Agency => DCMA", "Defense Counterintelligence and Security Agency => DCSA", "Defense Cover Office => DCO", "Defense Criminal Investigative Organizations => DCIO", "Defense Criminal Investigative Service => DCIS", "Defense Enrollment Eligibility Reporting System => DEERS", "Defense Finance and Accounting Service => DFAS", "Defense Health Agency => DHA", "Defense Human Resources Activity => DHRA ", "Defense Information Systems Agency => DISA", "Defense Intelligence Agency => DIA", "Defense Language and National Security Education Office => DLNSEO", "Defense Language Institute Foreign Language Center => DLIFLC", "Defense Legal Services Agency => DLSA", "Defense Logistics Agency => DLA", "Defense Logistics Agency Energy => DLA Energy", "Defense Media Activity => DMA ", "Defense Nuclear Facilities Safety Board => DNFSB", "Defense Office of Prepublication and Security Review => DOPSR", "Defense POW/MIA Accounting Agency => DPAA", "Defense Prisoner of War/Missing Personnel Office => DPMO", "Defense Privacy  Civil Liberties  and Transparency Division => PCLT", "Defense Security Cooperation Agency => DSCA", "Defense Security Service => DSS", "Defense Technical Information Center => DTIC", "Defense Technology Security Administration => DTSA ", "Defense Technology Security Agency => DTSA", "Defense Threat Reduction Agency => DTRA", "Defense Travel Management Office => DTMO", "Delaware River Basin Commission => DRBC", "Delta Regional Authority => DRA", "Department of Defense Defense Agencies => Defense Agencies", "Department of Defense Dependents Education Agency => DODDEA", "Department of Defense Education Activity => DODEA", "Department of Defense Human Resources Activity => DoDHRA", "Department of Defense Human Resources Agency => DODHRA", "Department of Defense Intelligence Agencies => DoD Intelligence Agencies", "Department of Defense Test Resource Management Center  => DOD TRMC", "Department of the Air Force => DAF", "Department of the Army => DA", "Department of the Navy => DoN", "Department of the Navy Chief Information Officer => DON CIO", "Department of the Navy Sexual Assault Prevention and Response Office => SAPRO", "Department of the Navy Special Access Program Central Office => SAPCO", "Dependents Education Council => DEC", "DoD Component => DoD Components", "Drug Enforcement Administration => DEA", "Economic Development Administration => EDA", "Economic Research Service => ERS", "Election Assistance Commission => EAC", "Electromagnetic Spectrum Operations Cross Functional Team  => EMSO CFT", "Employee Benefits Security Administration => EBSA", "Employer Support of the National Guard and Reserve => ESGR", "Employment and Training Administration => ETA", "Energy Information Administration => EIA", "Energy Star Program => ESP", "Environmental Protection Agency => EPA", "Equal Employment Opportunity Commission => EEOC", "Executive Office for Immigration Review => EOIR", "Executive Order => EXORD", "Export-Import Bank of the United States => EXIM", "Farm Credit Administration => FCA", "Farm Credit System Insurance Corporation => FCSIC", "Farm Service Agency => FSA", "Federal Accounting Standards Advisory Board => FASAB", "Federal Aviation Administration => FAA", "Federal Bureau of Investigation => FBI", "Federal Communications Commission => FCC", "Federal Consulting Group => FCG", "Federal Deposit Insurance Corporation => FDIC", "Federal Election Commission => FEC", "Federal Emergency Management Agency => FEMA", "Federal Energy Regulatory Commission => FERC", "Federal Executive Boards => FEB", "Federal Financial Institutions Examination Council => FFIEC", "Federal Financing Bank => FFB", "Federal Geographic Data Committee => FGDC", "Federal Government => United States Federal Government", "Federal Highway Administration => FHA", "Federal Home Loan Mortgage Corporation => Freddie Mac", "Federal Housing Administration => FHA", "Federal Housing Finance Agency => FHFA", "Federal Interagency Council on Statistical Policy => FedStats", "Federal Judicial Center => FJC", "Federal Labor Relations Authority => FLRA", "Federal Law Enforcement Training Center => FLETC", "Federal Library and Information Center Committee => FLICC", "Federal Maritime Commission => FMC", "Federal Mediation and Conciliation Service => FMCS", "Federal Mine Safety and Health Review Commission => FMSHRC", "Federal Motor Carrier Safety Administration => FMCSA", "Federal National Mortgage Association => Fannie Mae", "Federal Railroad Administration => FRA", "Federal Retirement Thrift Investment Board => FRTIB", "Federal Trade Commission => FTC", "Federal Transit Administration => FTA", "Federal Voting Assistance Program => FVAP", "Fire Administration => USFA", "Fish and Wildlife Service => FWS", "Food and Drug Administration => FDA", "Food and Nutrition Service => FNS", "Food Safety and Inspection Service => FSIS", "Force Fitness Readiness Center => FFRC", "Foreign Agricultural Service => FAS ", "Foreign Claims Settlement Commission => FCSC", "Forest Service => FS", "Fulbright Foreign Scholarship Board => FFSB", "Functional Combatant Command => FCC", "General Counsel of the Department of Defense => GC DoD", "General Services Administration => GSA", "Geographic Combatant Command => GCC", "Geological Survey => USGS", "Global Health Engagement Program => GHE", "Government Accountability Office => GAO", "Government National Mortgage Association => Ginnie Mae", "Government Publishing Office => GPO", "Grain Inspection  Packers and Stockyards Administration => GIPSA", "Great Lakes and Ohio River Division  => CELRD", "Headquarters Marine Corps => HQMC", "Helicopter Sea Combat Wing Atlantic => HELSEACOMBATWINGLANT", "Helicopter Sea Combat Wing Pacific => HELSEACOMBATWINGPAC", "Holocaust Memorial Museum => USHMM", "Identity Protection and Management Senior Coordinating Group => IPMSCG", "Immigration and Customs Enforcement => ICE", "Indian Arts and Crafts Board => IACB", "Indian Health Service => HIS", "Indoor Air Quality => IAQ", "Installation Advisory Committees => IACs", "Installation Planning and Review Board => IPRB", "Institute of Education Sciences => IES", "Institute of Museum and Library Services => IMLS", "Institute of Peace => USIP", "Intelligence Community => IC", "Interagency Committee for the Management of Noxious and Exotic Weeds => FICMNEW", "Interagency Council on Homelessness => USICH", "Internal Revenue Service  => IRS", "International Development Finance Corporation => DFC", "International Trade Administration => ITA", "International Trade Commission => USITC", "Japan-United States Friendship Commission => JUSFC", "John F. Kennedy Center for the Performing Arts => Kennedy Center", "Joint Artificial Intelligence Center => JAIC", "Joint Atomic Information Exchange Group => JAIEG", "Joint Automated Communications Electronics Operating Instruction System => JACS", "Joint Chiefs of Staff => JCS", "Joint Communications-Electronics Operating Instruction => JCEOI", "Joint Fire Science Program => JFSP", "Joint Forces Staff College => JFSC", "Joint History and Research Office => JHRO", "Joint Lessons Learned Information System => JLLIS", "Joint Lessons Learned Program => JLLP", "Joint Logistics System Center => JNTLOGSCEN", "Joint Mortuary Affairs Center => JMAC", "Joint Personnel Recovery Agency => JPRA", "Joint Petroleum Office => JPO", "Joint Program Executive Office for Chemical and Biological Defense => JPEOCBRND", "Joint Rapid Acquisition Cell => JRAC", "Joint Staff Directorate of Management => Joint Staff  Management Directorate", "Joint Staff Information Management Division => IMD", "Joint Terminal Attack Controller => JTAC", "Joint Weapon Safety Working Group => JWSWG", "Judicial Panel on Multidistrict Litigation => JPML", "Laser System Safety Working Group => LSSWG", "Legal Services Corporation => LSC", "Library of Congress => LOC", "Life-Cycle Item Identification Working-Level Integrated Process Team => LCII WIPT", "Major Command => MAJCOM", "Manning Control Authority => MCA", "Marine Corps Systems Command => MCSC", "Marine Expeditionary Units => MEU", "Marine Mammal Commission => MMC", "Maritime Administration => MARAD", "Medicaid and CHIP Payment and Access Commission => MACPAC", "Medicare Payment Advisory Commission => MedPAC", "Merit Systems Protection Board => MSPB", "Middle East Broadcasting Networks => Alhurra TV", "Migratory Bird Conservation Commission => MBCC", "Military Academy  West Point => USMA", "Military Housing Privatization Initiative => MHPI", "Military Intelligence Board => MIB", "Military Postal Service Agency => MPSA", "Military Sealift Command => MSC", "Military Targeting Committee => MTC", "Millennium Challenge Corporation => MCC", "Mine Safety and Health Administration => MSHA", "Minority Business Development Agency => MBDA", "Missile Defense Agency => MDA", "Mission Partner Environment Executive Steering Committee  => MPE ESC", "Mission to the United Nations => USUN", "Mississippi River Commission => MRC", "Mississippi Valley Division  => CEMVD", "National Aeronautics and Space Administration => NASA", "National Agricultural Library => NAL", "National Agricultural Statistics Service => NASS", "National Archives and Records Administration => NARA", "National Assessment Group => NAG", "National Cancer Institute => NCI", "National Capital Planning Commission => NCPC", "National Central Bureau - Interpol => Interpol", "National Council on Disability => NCD", "National Credit Union Administration => NCUA", "National Crime Information Center => NCIC", "National Defense Authorization Act => NDAA", "National Defense University => NDU", "National Endowment for the Arts => NEA", "National Endowment for the Humanities => NEH", "National Environmental Policy Act¬† => NEPA", "National Eye Institute => NEI", "National Flood Insurance Program => NFIP", "National Gallery of Art => NGA", "National Geospatial-Intelligence Agency => NGA", "National Guard Bureau => NGB", "National Health Information Center => NHIC", "National Heart  Lung  and Blood Institute => NHLBI", "National Highway Traffic Safety Administration => NHTSA", "National Indian Gaming Commission => NIGC", "National Institute of Arthritis  Musculoskeletal and Skin Diseases => NIAMS", "National Institute of Corrections => NIC", "National Institute of Deafness and Other Communication Disorders => NIDCD", "National Institute of Diabetes and Digestive and Kidney Diseases => NIDDK", "National Institute of Food and Agriculture => NIFA", "National Institute of General Medical Sciences => NIGMS", "National Institute of Justice => NIJ", "National Institute of Mental Health => NIMH", "National Institute of Neurological Disorders and Stroke => NINDS", "National Institute of Occupational Safety and Health => NIOSH", "National Institute of Standards and Technology => NIST", "National Institutes of Health => NIH", "National Intelligence University => NIU", "National Interagency Fire Center => NIFC", "National Labor Relations Board => NLRB", "National Mediation Board => NMB", "National Nuclear Security Administration => NNSA", "National Oceanic and Atmospheric Administration => NOAA", "National Park Service => NPS", "National Passport Information Center => NPIC", "National Pesticide Information Center => NPIC", "National Prevention Information Network => NPIN", "National Railroad Passenger Corporation => AMTRAK", "National Reconnaissance Office => NRO", "National Science and Technology Council => NSTC", "National Science Foundation => NSF", "National Security Agency => NSA", "National Security Council => NSC", "National Technical Information Service => NTIS", "National Telecommunications and Information Administration => NTIA", "National Transportation Safety Board => NTSB", "National Weather Service => NWS", "Natural Resources Conservation Service => NRCS", "Naval Air Systems Command => NAVAIR", "Naval Air Warfare Center Weapons Division => NAVAIRWARCENWPNDIV", "Naval Aviation Survival Training Program => NASTP", "Naval Criminal Investigative Service => NCIS", "Naval Education and Training Command => NETC", "Naval Facilities Engineering Systems Command => NAVFAC", "Naval Information Forces => NAVIFOR", "Naval Information Warfare Systems Command => NAVWAR", "Naval Medical Forces Support Command => NMFSC", "Naval Research Laboratory => NRL", "Naval Safety Center => SAFECEN", "Naval Sea Systems Command => NAVSEA", "Naval Station => NS", "Naval Strike and Air Warfare Center => NAVSTKAIRWARCEN", "Naval Supply Systems Command => NAVSUP", "Naval Survival Training Institute => NAVSURVTRAINST", "Navy and Marine Corps Public Health Center => NAVMCPUBHLTHCEN", "Navy Culture of Excelence Governance Board => Navy COE GB", "Navy Information Dominance Forces => NAVIDFOR", "NAVY MEDICINE MASTER TRAINING SPECIALIST PROGRAM => Navy Medicine MTS Program", "Navy Reserve Activities => NRA", "Navy Tactical Data System => NTDS", "North American Aerospace Defense Command => NORAD", "North Atlantic Division  => CENAD", "North Atlantic Treaty Organization => NATO", "Northern Border Regional Commission => NBRC", "Northwestern Division  => CENWD", "Nuclear Regulatory Commission => NRC", "Nuclear Waste Technical Review Board => NWTRB", "Oak Ridge National Laboratory => ORNL", "Occupational Safety and Health Administration => OSHA", "Occupational Safety and Health Review Commission => OSHRC", "Office for Civil Rights  United States Department of Education => OCR", "Office for Civil Rights  United States Department of Health and Human Services => OCR", "Office for Diversity  Equity and Inclusion  => Office for DEI", "Office of Administration and Management => OMA", "Office of Army Cemeteries => OAC", "Office of Career  Technical  and Adult Education => OCTAE", "Office of Chief Information Officer => OCIO", "Office of Chief Management Officer => OCMO", "Office of Chief of Naval Research => OCNR", "Office of Child Support Enforcement => OSCE", "Office of Civilian Human Resources => OCHR", "Office of Community Planning and Development => CPD", "Office of Compliance => OCWR", "Office of Cost Assessment and Program Evaluation => CAPE", "Office of Defense for Legislative Affairs => OLA", "Office of Disability Employment Policy => ODEP", "Office of Economic Adjustment => OEA", "Office of Elementary and Secondary Education => OESE", "Office of Environmental Management => EM", "Office of Fair Housing and Equal Opportunity => FHEO", "Office of Foreign Assets Control Regulations => OFAC", "Office of Fossil Energy => FE", "Office of Government Ethics => OGE", "Office of Immigrant and Employee Rights => IER", "Office of International Research Engagement and Cooperation => OIREC", "Office of Justice Programs => OJP", "Office of Juvenile Justice and Delinquency Prevention => OJJDP", "Office of Legislative Affairs => OLA", "Office of Local Defense Community Cooperation => OLDCC", "Office of Management and Budget => OMB", "Office of Manufactured Housing Programs => MHS", "Office of National Drug Control Policy => ONDCP", "Office of Natural Resources Revenue => ONRR", "Office of Naval Intelligence => ONI", "Office of Naval Research => ONR", "Office of Net Assessment => ONA", "Office of Personnel Management => OPM", "Office of Postsecondary Education => OPE", "Office of Refugee Resettlement => ORR", "Office of Science and Technology Policy => OSTP", "Office of Scientific and Technical Information => OSTI", "Office of Small Business Programs => OSBP", "Office of Special Counsel => OSC", "Office of Special Education and Rehabilitative Services => OSERS", "Office of Surface Mining  Reclamation and Enforcement => OSMRE", "Office of the Administrative Assistant to the Secretary of the Army => OAA", "Office of the Chairman of the Joint Chiefs of Staff and the Joint Staff => OCJCS", "Office of the Chief Legislative Liaison for the Army => OCLL", "Office of the Chief Management Officer => OCMO", "Office of the Chief of Naval Operations => OCNO", "Office of the Chief of Public Affairs => OCPA", "Office of the Chief of Space Operations => OCSO", "Office of the Comptroller of the Currency => OCC", "Office of the Department of Defense Chief Information Officer => Office of the DoD CIO", "Office of the Director of National Intelligence => ODNI", "Office of the General Counsel => OGC", "Office of the Inspector General => HHS OIG", "Office of the Inspector General of the Department of Defense => DoD OIG", "Office of the Joint Chiefs of Staff => OJCS", "Office of the Navy Judge Advocate General's => OJAG", "Office of the Secretary of Defense => OSD", "Office of the Secretary of the Air Force => OSAA", "Office of the Secretary of the Army => OSA", "Office of the Secretary of the Joint Staff => Office of the SJS", "Office of the Secretary of the Navy => OSN", "Office on Violence Against Women => OVW", "Organization of the Joint Chiefs of Staff => JCS", "Pacific Air Forces => PACAF", "Pacific Ocean Division  => CEPOD", "Parole Commission => USPC", "Patent and Trademark Office => USPTO", "Pension Benefit Guaranty Corporation => PBGC", "Pentagon Force Protection Agency => PFPA", "Pentagon Governance Council => PGC", "Pipeline and Hazardous Materials Safety Administration => PHMSA", "Postal Inspection Service => USPIS", "Postal Regulatory Commission => PRC", "President''s Council on Fitness  Sports and Nutrition => PCFSN", "Pretrial Services Agency for the District of Columbia => PSA", "Privacy and Civil Liberties Oversight Board => PCLOB", "ProcessQuik => PQ", "Protecting Critical Technology Task Force  => PCTTF", "Radio Free Asia => RFA", "Railroad Retirement Board => RRB", "Readiness and Mobilization Commands => REDCOM", "Real-Time Automated Personnel Identification System => RAPIDS", "Reserve Officers' Training Corps => ROTC", "Risk Management Agency => RMA", "Rural Development => RD", "School Advisory Committees => SACs", "Seafood Inspection Program => SIP", "Securities and Exchange Commission => SEC", "Selective Service System => SSS", "Sentencing Commission => USSC", "Site-Designated Accrediting Authorities => DAAs", "Small Business Administration => SBA", "Smithsonian Institution => SI", "Social Security Administration => SSA", "Social Security Advisory Board => SSAB", "South Atlantic Division  => CESAD", "South Pacific Division  => CESPD", "Southeastern Power Administration => SEPA", "Southwestern Division  => CESWD", "Southwestern Power Administration => SWPA", "Space and Missile Systems Center => SMC", "Space and Naval Warfare Command => SPAWARSCMD", "Space Development Agency => SDA", "Space Operations Command => SpOC", "Space Systems Command => SSC", "Space Training and Readiness Command => STARCOM", "Special Access Program Central Office => SAPCO", "State Justice Institute => SJI", "Strategic Systems Programs => SSP", "Subarea Petroleum Office => SAPO", "Substance Abuse and Mental Health Services Administration => SAMHSA", "Supreme Court of the United States => SCOTUS", "Supreme Headquarters Allied Powers Europe => SHAPE", "Surface Transportation Board => STB", "Susquehanna River Basin Commission => SRBC", "Tennessee Valley Authority => TVA", "Theater Education Councils => TECs", "Topographic Engineering Center => CETEC", "Trade and Development Agency => USTDA", "Trade Representative => USTR", "Transportation Security Administration => TSA", "Type Command => TYCOM", "Unified Combatant Commands => UCC", "Uniformed Services University of the Health Sciences => USUHS", "United Nations => UN", "United Nations Security Council => UN Security Council", "United Services Military Apprenticeship Program => USMAP", "United States Africa Command => USAFRICOM", "United States Air Force => USAF", "United States Air Forces in Europe => USAFE", "United States Armed Material Command => AMC", "United States Armed Material Command Logistics Data Analysis Center => AMC LDAC", "United States Army => USArmy", "United States Army Aeronautical Services Agency => USAASA", "United States Army Chaplain School => USACHS", "United States Army Chemical School => USACMLCS", "United States Army Combined Arms Support Command => USACASOM", "United States Army Community and Family Support Center => USACFSC", "United States Army Corps of Engineers => USACE", "United States Army Criminal Investigation Command => CIC", "United States Army Element School of Music => USAESOM", "United States Army Engineer School => USAES", "United States Army Field Artillery School => USAFAS", "United States Army Financial Management => USAFMCOM", "United States Army Futures Command => USAFC", "United States Army Intellegence and Security Command => INSCOM", "United States Army Intelligence and Threat Analysis Center => ITAC", "United States Army Intelligence Command => USAINTCS", "United States Army John F. Kennedy Special Warfare Center and School => USAJFKSWC", "United States Army Medical Logistics Command => AMLC", "United States Army Medical Materiel Agency => USAMMA", "United States Army Military Police School => USAMPS", "United States Army Missile and Munitions Center and School => USAMMCS", "United States Army Munitions Command/Joint Munitions Command => USAMCJMC", "United States Army National Guard Bureau => NGB", "United States Army Program Executive Officer for Simulation  Training  and Instrumentation => PEO STRI", "United States Army Provost Marshal General => PMG", "United States Army Quartermaster School => USAQMS", "United States Army Signal Center => USASC", "United States Army Signal School => USASIGS", "United States Army Soldier and Biological Chemical Command => SBCCOM", "United States Army Soldier Support Center => USASSC", "United States Army Surface Deployment and Distribution Command => SDDC", "United States Army Surface Deployment and Distribution Command Transportation Engineering Agency => SDDCTEA", "United States Army Tank-automotive and Armaments Command => TACOM", "United States Army Technical Support Activity => USATSA", "United States Army Training and Doctrine Command => TRADOC", "United States Army Training Support Center => USAATSC", "United States Army Transportation School => USATSCH", "United States Botanic Garden => USBG", "United States Capitol Police => USCP", "United States Capitol Visitor Center => Capitol Visitor Center", "United States Central Command => USCENTCOM", "United States Central Command Joint Petroleum Office => United States Central Command JPO", "United States Citizenship and Immigration Services => USCIS", "United States Coast Guard => USCG", "United States Congress => Congress", "United States Court of Appeals for the Armed Forces => USCAAF", "United States Courts of Appeal => Courts of Appeal", "United States Cyber Command => USCYBERCOM", "United States Department of Agriculture => USDA", "United States Department of Commerce => DOC", "United States Department of Defense => DOD", "United States Department of Education => ED", "United States Department of Energy => DOE", "United States Department of Health and Human Services => HHS", "United States Department of Homeland Security => DHS", "United States Department of Housing and Urban Development => HUD", "United States Department of Justice => DOJ", "United States Department of Labor => DOL", "United States Department of State => DOS", "United States Department of the Interior => DOI", "United States Department of the Treasury => Treasury", "United States Department of Transportation => DOT", "United States Department of Veterans Affairs => VA", "United States European Command => USEUCOM", "United States European Command Joint Petroleum Office => United States European Command JPO", "United States Fleet Forces Command => USFLTFORCOM", "United States Fleet Forces Command => USFF", "United States Government => USG", "United States House of Representatives => House of Representatives", "United States Indo-Pacific Command => PACOM", "United States Marine Corps => USMC", "United States Marine Corps Criminal Investigation Division => USMC CID", "United States Marine Forces Command => MARFORCOM", "United States Marshals Service => Marshals Service", "United States Military Entrance Processing Command => USMEPCOM", "United States Mint => Mint", "United States National Guard => National Guard", "United States Naval Academy => USNA", "United States Navy => Navy", "United States Navy Reserve => USNR", "United States Navy Systems Commands => SYSCOM", "United States Northern Command => USNORTHCOM", "United States Northern Command Joint Petroleum Office => United States Northern Command JPO", "United States Pacific Command Joint Petroleum Office => United States Pacific Command JPO", "United States Pacific Fleet => PACFLT", "United States Postal Service => USPS", "United States Senate => Senate", "United States Southern Command => USSOUTHCOM", "United States Southern Command Joint Petroleum Office => United States Southern Command JPO", "United States Space Command => USSPACECOM", "United States Space Force => USSF", "United States Special Operations Command => USSOCOM", "United States Strategic Command => USSTRATCOM", "United States Strategic Command Joint Petroleum Office => United States Strategic Command JPO", "United States Transportation Command => USTRANSCOM", "United States Transportation Command Joint Petroleum Office => United States Transportation Command JPO", "USAGov => Federal Citizen Information Center", "Veterans Benefits Administration => VBA", "Veterans Day National Committee => VDNC", "Veterans Employment and Training Service => VETS", "Veterans Health Administration => VHA", "Voice of America => VOA", "Wage and Hour Division => WHD", "Washington Headquarters Services => WHS", "Washington Headquarters Services Space Portfolio Management Division => WHS Space Portfolio Management Division", "Waterways Experiment Station => CEWES", "Western Area Power Administration => WAPA", "White House => WH", "White House Office of Domestic Climate Policy => Climate Policy Office", "White House Presidential Personnel Office => Office of Presidential Personnel", "Women's Bureau => WB", "World Health Organization => WHO", "Administrative Assistant to the Secretary of the Army => AASA", "Army Deputy Chief Of Staff => DCS", "Assistant Commandant of the Marine Corps => ACMC", "Assistant Deputy Chief Management Officer => ADCMO", "Assistant Deputy Chief  Operational Medicine & Capabilities Development => Assistant Deputy Chief  Capabilities Requirements", "Assistant Deputy Chiefs of Staff => ADCOS", "Assistant for Administration  Office of Under Secretary of the Navy => AAUSN", "Assistant Secretary of Defense => ASD", "Assistant Secretary of the Army => ASA", "Assistant Secretary of the Navy => ASN", "Assistant to the Chairman of the Joint Chiefs of Staff => Assistant to the Chairman", "Attorney General => AG", "Chair of the Federal Communications Commission => Chair  FCC", "Chair of the Identity Protection and Management Senior Coordinating Group => IPMSCG Chair", "Chair of the Joint Weapon Safety Working Group => Chair  JWSWG", "Chair of the Laser System Safety Working Group => Chair  LSSWG", "Chairman of the Joint Chiefs of Staff => CJCS", "Chief Financial Officers Council => CFOC", "Chief Human Capital Officers Council => CHCOC", "Chief Information Officers Council => CIOC", "Chief Management Officer => CMO", "Chief of Army Reserve => CAR", "Chief of Chaplains of the United States Army => CCH", "Chief of Naval Operations => CNO", "Chief of Naval Operations Assistant for Field Support  => CNO FSA", "Chief of Naval Personnel => CHNAVPERS", "Chief of Naval Research => CNR", "Chief of Space Operations => CSO", "Chief of Staff => COS", "Chief of the National Guard Bureau => CNGB", "Combatant Commanders => CCMDs", "Command Fitness Leader => CFL", "Commandant of the Defense Language Institute Foreign Language Center => Commandant of DLIFLC", "Commandant of the Marine Corps => CMC", "Commander  Air Force North => CDRAFNORTH", "Commander  Detainee Operations => CDO", "Commander  Fleet Forces Command => CFFC", "Commander  Fleet Readiness Centers => COMFRC", "Commander  Joint Special Operations Task Force => CDRJSOTF", "Commander  Marine Corps Logistic Bases => COMMARCORLOGBASES", "Commander  Marine Corps Systems Command => COMMARCORSYSCOM", "Commander  Military Sealift Command => COMSC", "Commander  Naval Air Systems Command => COMNAVAIRSYSCOM", "Commander  Naval Facilities Engineering Command  => NAVFACCOM", "Commander  Naval Personnel Command => COMNAVPERSCOM", "Commander  Naval Reserve Force => NAVRESFORCOM", "Commander  Naval Sea Systems Command => NAVSEASYSCOM", "Commander  Naval Special Warfare Command => COMNAVSPECWARCOM", "Commander  Naval Supply Systems Command => NAVSUPSYSCOM", "Commander  Navy Installations Command => CNIC", "Commander  Navy Reserve Forces => COMNAVRESFOR", "Commander  Navy Reserve Forces Command => COMNAVRESFORCOM", "Commander  North American Aerospace Defense Command => CDRNORAD", "Commander  Special Operations Joint Task Force => CDRSOJTF", "Commander  Tenth Fleet => COMTENTHFLT", "Commander  Theater Special Operations Command => CDRTSOC", "Commander  United States Africa Command => CDRUSAFRICOM", "Commander  United States Army  North => CDRUSARNORTH", "Commander  United States Cyber Command => CDRUSCYBERCOM", "Commander  United States Element  North American Aerospace Defense Command => CDRUSELEMNORAD", "Commander  United States European Command => CDRUSEUCOM", "Commander  United States Indo-Pacific Command => CDRUSINDOPACOM", "Commander  United States Marine Corps Forces Command => COMMARFORCOM", "Commander  United States Military Entrance Processing Command => CDUSMEPCOM", "Commander  United States Northern Command => CDRUSNORTHCOM", "Commander  United States Pacific Command => CDRUSPACOM", "Commander  United States Pacific Fleet => COMPACFLT", "Commander  United States Southern Command => CDRUSSOUTHCOM", "Commander  United States Space Command => CDRUSSPACECOM", "Commander  United States Special Operations Command => CDRUSSOCOM", "Commander  United States Strategic Command => CDRUSSTRATCOM", "Commander  United States Transportation Command => CDRUSTRANSCOM", "Commanding General  Marine Corps Combat Development Command => CG MCCDC", "Commanding Officer => Commanding officers", "Contracting Officer's Representative => COR", "Defense HUMINT Manager => DHM", "Department of Defense Executive Agent => DoD EA", "Deputy Attorney General => DAG", "Deputy Chief Management Officer => DCMO", "Deputy Chief  Total Force => DCTF", "Deputy Chiefs of Staff => DCOS", "Deputy Secretary of Defense => DepSecDef", "Deputy Under Secretary of The Army => DUSA", "Deputy Under Secretary of the Navy => DUSN", "Director for Administration  Logistics  and Operations => DALO", "Director of Army Staff => DAS", "Director of Navy Staff => DNS", "Director of the Naval Nuclear Propulsion Program => N00N", "Director  Cost Assessment and Program Evaluation => DCAPE", "Director  Defense Intelligence Agency => Director  DIA", "Director  Defense Legal Services Agency => Director  DLSA", "Director  Defense Logistics Agency => Director  DLA", "Director  Defense Media Activity => Director  DMA", "Director  Defense Personnel and Family Support Center => Director of the Defense Personnel and Family Support Center", "Director  Force Structure  Resources  and Assessment => Director for Force Structure  Resources  and Assessment", "Director  Force Transformation => OFT", "Director  Intelligence => Director for Intelligence", "Director  Joint Force Development => Director for Joint Force Development", "Director  Joint Staff => DJS", "Director  Logistics => Director for Logistics", "Director  Manpower and Personnel => Director  Manpower and Personnel", "Director  Mobility Forces => DIRMOBFOR", "Director  National Intelligence => DNI", "Director  National Security Agency => DIRNSA", "Director  Net Assessment => ONA", "Director  Office of Personnel Management => DOPM", "Director  Operations => Director for Operations", "Director  Space Forces => DIRSPACEFOR", "Director  Special Access Program Central Office => SAPCO Director", "Director  Strategic Systems Programs (CM3) => CM3DIRSSP", "Directors of the Department of Defense Intelligence Agencies  =>  Directors of the DoD Intelligence Agencies ", "DoD Chief Information Officer => CIO", "DoD Component Head => Component Heads", "DoD Executive Agent for the Recovered Chemical Warfare Material => DoD EA for the Recovered Chemical Warfare Material", "DoD Law Enforcement Officer => DoD LEOs", "Executive Director  Joint History => Executive Director for Joint History", "Executive Secretary of the Department of Defense => ExecSec", "Force Fitness Instructor => FFI", "General Council of the Army => GCA", "General Counsels of DoD Navy => General Counsels of the Navy", "Heads of Intelligence Community Elements => HICEs", "Health Facility Planning and Project Officers => HFPPO", "Inspector General => IG", "Joint Frequencyt Management Office => JFMO", "Joint Lessons Learned Information System Administrators => JLLIS Administrators", "Joint Qualified Officer => JQO", "Joint Satellite Communications Management Enterprise => JSME", "Joint Staff Deputy Director for Joint Training => Deputy Director for Joint Training  Joint Staff", "Joint Terminal Attack Controller program manager => JTAC program manager", "Master Chief Petty Officer of the Navy (MCPON) => N00D", "Military Command  Control  Communications  and Computers Executive Board => MC4EB", "Military Commanders => Military commanders", "Mission Partner Environment Executive Steering Committee Chairman => MPE ESC Chairman ", "Mission Partner Environment Executive Steering Committee Secretariat => MPE ESC Secretariat", "Naval Aviation Survival Training Program Course Curriculum Model Manager => NASTP Course Curriculum Model Manager", "Navy Assistant for Administration/Under Secretary of the Navy => AAUSN", "Navy Culture of Excelence Governance Board => Navy COE GB", "Navy Judge Advocate General's => JAG", "Navy Reserve Activity Commanding Officer => NRA CO", "Navy Reserve Activity Senior Enlisted Leader => NRA SEL", "Officer of Naval Intelligence => ONI", "Officer-in-Charge => OIC", "OSD Executive Secretary => ES  OSD", "Placement Coordinator => PC", "President of the United States => POTUS", "President  Board of Inspection and Survey => PRESINSURV", "Prospective Commanding Officer => PCO", "Secretaries of Military Departments => Secretaries of the MILDEPs", "Secretary General of the United Nations => UNSG", "Secretary of Defense => SECDEF", "Secretary of Health and Human Services => Secretary of HHS", "Secretary of the Air Force => SECAF", "Secretary of the Army => SECARMY", "Secretary of the Joint Staff => SJS", "Secretary of the Navy => Secretary  DON", "Senior Enlisted Advisor to the Chairman => SEAC", "Sergeant Major of the Army => SMA", "Sergeant Major of the Marine Corps => SMMC", "Special Assistant for Inspection Support => N09G", "Special Assistant for Legal Services => N09J", "Special Assistant for Legislative Support => N09L", "Special Assistant for Naval Investigative Matters and Security => N09N", "Special Assistant for Public Affairs Support => N09C", "Special Assistants => SA", "Systems Command Commanders => SYSCOM Commanders", "The Judge Advocate General of the Army => TJAG", "The Surgeon General of the Army => TSG", "Under Secretary of Defense => USECDEF", "Under Secretary of the Army => USA", "Under Secretary of the Navy => UNSECNAV", "Unified Commander => Unified Commanders", "United States National Military Representatives => USNMR", "Verifying Official => VO", "Vice Chairman  Joint Chiefs of Staff => VJCS", "Vice Chief of Naval Operations => VCNO", "Vice Director  Joint Staff => VDJS", "Vice President of the United States => VPOTUS"]
+          },
+          "english_stemmer": {
+            "type": "stemmer",
+            "language": "minimal_english"
+          },
+          "english_possessive_stemmer": {
+            "type": "stemmer",
+            "language": "possessive_english"
+          }
+        },
+        "analyzer": {
+          "lowercase_analyzer": {
+            "type": "custom",
+            "tokenizer": "standard",
+            "filter": [
+              "lowercase"
+            ]
+          },
+          "gc_english": {
+            "tokenizer": "standard",
+            "filter": [
+              "english_possessive_stemmer",
+              "lowercase",
+              "gc_stop",
+              "english_stemmer",
+              "gc_synonym_filter"
+            ]
+          }
+        }
+      }
+    },
+    "mappings": {
+      "dynamic_templates": [
+        {
+          "string": {
+            "match": "*_s",
+            "match_mapping_type": "string",
+            "mapping": {
+              "type": "keyword",
+              "store": true
+            }
+          }
+        },
+        {
+          "text": {
+            "match": "*_t",
+            "match_mapping_type": "string",
+            "mapping": {
+              "type": "text",
+              "store": true,
+              "analyzer": "gc_english"
+            }
+          }
+        },
+        {
+          "string_text": {
+            "match": "*_ks",
+            "match_mapping_type": "string",
+            "mapping": {
+              "type": "keyword",
+              "store": true,
+              "fields": {
+                "search": {
+                  "type": "keyword",
+                  "normalizer": "lowercase_normalizer"
+                }
               }
-            },
-            "normalizer" : {
-              "lowercase_normalizer" : {
-                "filter" : [ "lowercase" ],
-                "type" : "custom",
-                "char_filter" : [ ]
-              }
-            },
-            "analyzer" : {
-              "lowercase_analyzer" : {
-                "filter" : [ "lowercase" ],
-                "type" : "custom",
-                "tokenizer" : "standard"
-              },
-              "gc_english" : {
-                "filter" : [ "english_possessive_stemmer", "lowercase", "gc_stop", "english_stemmer", "gc_synonym_filter"],
-                "tokenizer" : "standard"
+            }
+          }
+        },
+        {
+          "integer": {
+            "match": "*_i",
+            "match_mapping_type": "long",
+            "mapping": {
+              "type": "integer",
+              "store": true
+            }
+          }
+        },
+        {
+          "long": {
+            "match": "*_l",
+            "match_mapping_type": "long",
+            "mapping": {
+              "type": "long",
+              "store": true
+            }
+          }
+        },
+        {
+          "boolean": {
+            "match": "*_b",
+            "match_mapping_type": "boolean",
+            "mapping": {
+              "type": "boolean",
+              "store": true
+            }
+          }
+        },
+        {
+          "double": {
+            "match": "*_d",
+            "match_mapping_type": "double",
+            "mapping": {
+              "type": "double",
+              "store": true
+            }
+          }
+        },
+        {
+          "float": {
+            "match": "*_f",
+            "match_mapping_type": "double",
+            "mapping": {
+              "type": "float",
+              "store": true
+            }
+          }
+        },
+        {
+          "date": {
+            "match": "*_dt",
+            "mapping": {
+              "type": "date",
+              "store": true,
+              "format": "yyyy-MM-dd'T'HH:mm:ss"
+            }
+          }
+        },
+        {
+          "rank_feature": {
+            "match": "*_r",
+            "mapping": {
+              "type": "rank_feature",
+              "store": true
+            }
+          }
+        },
+        {
+          "rank_features": {
+            "match": "*_rs",
+            "mapping": {
+              "type": "rank_features",
+              "store": true
+            }
+          }
+        },
+        {
+          "nested_object": {
+            "match": "*_n",
+            "mapping": {
+              "type": "nested"
+            }
+          }
+        },
+        {
+          "default_type": {
+            "path_match": "*",
+            "mapping": {
+              "type": "text",
+              "store": true,
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "store": true,
+                  "ignore_above": 256,
+                  "fields": {
+                    "search": {
+                      "type": "keyword",
+                      "normalizer": "lowercase_normalizer",
+                      "ignore_above": 256
+                    }
+                  }
+                }
               }
             }
           }
         }
-      },
-      "mappings" : {
-        "dynamic_templates" : [
-          {
-            "string" : {
-              "match" : "*_s",
-              "match_mapping_type" : "string",
-              "mapping" : {
-                "store" : true,
-                "type" : "keyword"
-              }
-            }
-          },
-          {
-            "text" : {
-              "match" : "*_t",
-              "match_mapping_type" : "string",
-              "mapping" : {
-                "analyzer" : "gc_english",
-                "store" : true,
-                "type" : "text"
-              }
-            }
-          },
-          {
-            "string_text" : {
-              "match" : "*_ks",
-              "match_mapping_type" : "string",
-              "mapping" : {
-                "fields" : {
-                  "search" : {
-                    "normalizer" : "lowercase_normalizer",
-                    "type" : "keyword"
-                  }
-                },
-                "store" : true,
-                "type" : "keyword"
-              }
-            }
-          },
-          {
-            "integer" : {
-              "match" : "*_i",
-              "match_mapping_type" : "long",
-              "mapping" : {
-                "store" : true,
-                "type" : "integer"
-              }
-            }
-          },
-          {
-            "long" : {
-              "match" : "*_l",
-              "match_mapping_type" : "long",
-              "mapping" : {
-                "store" : true,
-                "type" : "long"
-              }
-            }
-          },
-          {
-            "boolean" : {
-              "match" : "*_b",
-              "match_mapping_type" : "boolean",
-              "mapping" : {
-                "store" : true,
-                "type" : "boolean"
-              }
-            }
-          },
-          {
-            "double" : {
-              "match" : "*_d",
-              "match_mapping_type" : "double",
-              "mapping" : {
-                "store" : true,
-                "type" : "double"
-              }
-            }
-          },
-          {
-            "float" : {
-              "match" : "*_f",
-              "match_mapping_type" : "double",
-              "mapping" : {
-                "store" : true,
-                "type" : "float"
-              }
-            }
-          },
-          {
-            "date" : {
-              "match" : "*_dt",
-              "mapping" : {
-                "format" : "yyyy-MM-dd'T'HH:mm:ss",
-                "store" : true,
-                "type" : "date"
-              }
-            }
-          },
-          {
-            "rank_feature" : {
-              "match" : "*_r",
-              "mapping" : {
-                "store" : true,
-                "type" : "rank_feature"
-              }
-            }
-          },
-          {
-            "rank_features" : {
-              "match" : "*_rs",
-              "mapping" : {
-                "store" : true,
-                "type" : "rank_features"
-              }
-            }
-          },
-          {
-            "nested_object" : {
-              "match" : "*_n",
-              "mapping" : {
-                "type" : "nested"
-              }
-            }
-          },
-          {
-            "default_type" : {
-              "path_match" : "*",
-              "mapping" : {
-                "fields" : {
-                  "keyword" : {
-                    "ignore_above" : 256,
-                    "store" : true,
-                    "fields" : {
-                      "search" : {
-                        "normalizer" : "lowercase_normalizer",
-                        "ignore_above" : 256,
-                        "type" : "keyword"
-                      }
-                    },
-                    "type" : "keyword"
-                  }
-                },
-                "store" : true,
-                "type" : "text"
-              }
+      ],
+      "properties": {
+        "pagerank": {
+          "type": "rank_feature"
+        },
+        "kw_doc_score": {
+          "type": "rank_feature"
+        },
+        "orgs": {
+          "type": "rank_features"
+        },
+        "id": {
+          "type": "keyword",
+          "store": true
+        },
+        "filename": {
+          "type": "keyword",
+          "store": true,
+          "fields": {
+            "search": {
+              "type": "keyword",
+              "normalizer": "lowercase_normalizer"
             }
           }
-        ],
-        "properties" : {
-          "access_timestamp_dt" : {
-            "type" : "date",
-            "store" : true,
-            "format" : "yyyy-MM-dd'T'HH:mm:ss"
-          },
-          "author" : {
-            "type" : "keyword",
-            "store" : true
-          },
-          "cac_login_required_b" : {
-            "type" : "boolean",
-            "store" : true
-          },
-          "category_1" : {
-            "type" : "keyword",
-            "store" : true
-          },
-          "category_2" : {
-            "type" : "keyword",
-            "store" : true
-          },
-          "change_date" : {
-            "type" : "keyword",
-            "store" : true
-          },
-          "classification" : {
-            "type" : "keyword",
-            "store" : true
-          },
+        },
+        "type": {
+          "type": "keyword",
+          "store": true
+        },
+        "summary_30": {
+          "type": "text",
+          "store": true
+        },
+        "keyw_5": {
+          "type": "text",
+          "store": true
+        },
+        "page_count": {
+          "type": "integer",
+          "store": true
+        },
+        "doc_type": {
+          "type": "keyword",
+          "store": true,
+          "fields": {
+            "search": {
+              "type": "keyword",
+              "normalizer": "lowercase_normalizer"
+            }
+          }
+        },
+        "display_org_s": {
+          "type": "keyword",
+          "store": true,
+          "fields": {
+            "search": {
+              "type": "keyword",
+              "normalizer": "lowercase_normalizer"
+            }
+          }
+        },
+        "display_doc_type_s": {
+          "type": "keyword",
+          "store": true,
+          "fields": {
+            "search": {
+              "type": "keyword",
+              "normalizer": "lowercase_normalizer"
+            }
+          }
+        },
+        "display_source_s": {
+          "type": "keyword",
+          "store": true,
+          "fields": {
+            "search": {
+              "type": "keyword",
+              "normalizer": "lowercase_normalizer"
+            }
+          }
+        },
+        "display_title_s": {
+          "type": "keyword",
+          "store": true,
+          "fields": {
+            "search": {
+              "type": "keyword",
+              "normalizer": "lowercase_normalizer"
+            }
+          }
+        },
+        "display_title": {
+          "type": "text",
+          "term_vector": "with_positions_offsets",
+          "fields": {
+            "raw": {
+              "type": "text",
+              "term_vector": "with_positions_offsets"
+            },
+            "raw_lower": {
+              "type": "text",
+              "analyzer": "lowercase_analyzer",
+              "term_vector": "with_positions_offsets"
+            },
+            "gc_english": {
+              "type": "text",
+              "analyzer": "gc_english",
+              "term_vector": "with_positions_offsets"
+            }
+          }
+        },
+        "doc_num": {
+          "type": "keyword",
+          "store": true,
+          "fields": {
+            "search": {
+              "type": "keyword",
+              "normalizer": "lowercase_normalizer"
+            }
+          }
+        },
+        "pop_score": {
+          "type": "long",
+          "store": true
+        },
+        "ref_list": {
+          "type": "keyword",
+          "store": true
+        },
+        "init_date": {
+          "type": "keyword",
+          "store": true
+        },
+        "original_ingest_date": {
+          "type": "keyword",
+          "store": true
+        },
+        "current_ingest_date": {
+          "type": "keyword",
+          "store": true
+        },
+        "change_date": {
+          "type": "keyword",
+          "store": true
+        },
+        "entities": {
+          "type": "keyword",
+          "store": true
+        },
+        "author": {
+          "type": "keyword",
+          "store": true
+        },
+        "signature": {
+          "type": "keyword",
+          "store": true
+        },
+        "subject": {
+          "type": "keyword",
+          "store": true
+        },
+        "classification": {
+          "type": "keyword",
+          "store": true
+        },
         "crawler_display_name" : {
           "type" : "keyword",
           "store" : true,
@@ -241,417 +381,119 @@
               }
             }
           },
-          "crawler_used_s" : {
-            "type" : "keyword",
-            "store" : true
-          },
-          "current_ingest_date" : {
-            "type" : "text",
-            "store" : true,
-            "fields" : {
-              "keyword" : {
-                "type" : "keyword",
-                "store" : true,
-                "ignore_above" : 256,
-                "fields" : {
-                  "search" : {
-                    "type" : "keyword",
-                    "ignore_above" : 256,
-                    "normalizer" : "lowercase_normalizer"
-                  }
+        "title": {
+          "type": "keyword",
+          "store": true,
+          "fields": {
+            "search": {
+              "type": "keyword",
+              "normalizer": "lowercase_normalizer"
+            }
+          }
+        },
+        "word_count": {
+          "type": "long",
+          "store": true
+        },
+        "category_1": {
+          "type": "keyword",
+          "store": true
+        },
+        "category_2": {
+          "type": "keyword",
+          "store": true
+        },
+        "sections": {
+          "type": "object",
+          "properties": {
+            "all_sections": {
+              "type": "text"
+            },
+            "responsibilities_section": {
+              "type": "text"
+            },
+            "references_section": {
+              "type": "text"
+            },
+            "purpose_section": {
+              "type": "text"
+            },
+            "subject_section": {
+              "type": "text"
+            },
+            "procedures_section": {
+              "type": "text"
+            },
+            "effective_date": {
+              "type": "text"
+            },
+            "applicability_section": {
+              "type": "text"
+            },
+            "policy_section": {
+              "type": "text"
+            },
+            "organizations_section": {
+              "type": "text"
+            },
+            "definitions_section": {
+              "type": "text"
+            },
+            "table_of_contents": {
+              "type": "text"
+            },
+            "glossary_section": {
+              "type": "text"
+            },
+            "summary_of_change_section": {
+              "type": "text"
+            }
+          }
+        },
+        "paragraphs": {
+          "dynamic": "true",
+          "type": "nested",
+          "properties": {
+            "id": {
+              "type": "keyword",
+              "store": true
+            },
+            "filename": {
+              "type": "keyword",
+              "store": true,
+              "fields": {
+                "search": {
+                  "type": "keyword",
+                  "normalizer": "lowercase_normalizer"
                 }
-              }
-            }
-          },
-          "display_doc_type_s" : {
-            "type" : "keyword",
-            "store" : true,
-            "fields" : {
-              "search" : {
-                "type" : "keyword",
-                "normalizer" : "lowercase_normalizer"
-              }
-            }
-          },
-          "display_org_s" : {
-            "type" : "keyword",
-            "store" : true,
-            "fields" : {
-              "search" : {
-                "type" : "keyword",
-                "normalizer" : "lowercase_normalizer"
-              }
-            }
-          },
-          "display_source_s" : {
-            "type" : "keyword",
-            "store" : true,
-            "fields" : {
-              "search" : {
-                "type" : "keyword",
-                "normalizer" : "lowercase_normalizer"
-              }
-            }
-          },
-          "display_title" : {
-            "type" : "text",
-            "fields" : {
-              "gc_english" : {
-                "type" : "text",
-                "term_vector" : "with_positions_offsets",
-                "analyzer" : "gc_english"
-              },
-              "raw" : {
-                "type" : "text",
-                "term_vector" : "with_positions_offsets"
-              },
-              "raw_lower" : {
-                "type" : "text",
-                "term_vector" : "with_positions_offsets",
-                "analyzer" : "lowercase_analyzer"
               }
             },
-            "term_vector" : "with_positions_offsets"
-          },
-          "display_title_s" : {
-            "type" : "keyword",
-            "store" : true,
-            "fields" : {
-              "search" : {
-                "type" : "keyword",
-                "normalizer" : "lowercase_normalizer"
-              }
-            }
-          },
-          "doc_name" : {
-            "type" : "text",
-            "store" : true,
-            "fields" : {
-              "keyword" : {
-                "type" : "keyword",
-                "store" : true,
-                "ignore_above" : 256,
-                "fields" : {
-                  "search" : {
-                    "type" : "keyword",
-                    "ignore_above" : 256,
-                    "normalizer" : "lowercase_normalizer"
-                  }
+            "type": {
+              "type": "keyword",
+              "store": true
+            },
+            "entities": {
+              "type": "nested",
+              "dynamic": "true"
+            },
+            "par_inc_count": {
+              "type": "long",
+              "store": true
+            },
+            "par_raw_text_t": {
+              "type": "text",
+              "store": true,
+              "analyzer": "standard",
+              "fields": {
+                "gc_english": {
+                  "type": "text",
+                  "analyzer": "gc_english"
                 }
               }
             }
-          },
-          "doc_num" : {
-            "type" : "keyword",
-            "store" : true,
-            "fields" : {
-              "search" : {
-                "type" : "keyword",
-                "normalizer" : "lowercase_normalizer"
-              }
-            }
-          },
-          "doc_type" : {
-            "type" : "keyword",
-            "store" : true,
-            "fields" : {
-              "search" : {
-                "type" : "keyword",
-                "normalizer" : "lowercase_normalizer"
-              }
-            }
-          },
-          "download_url_s" : {
-            "type" : "keyword",
-            "store" : true
-          },
-          "entities" : {
-            "type" : "keyword",
-            "store" : true
-          },
-          "file_ext_s" : {
-            "type" : "keyword",
-            "store" : true
-          },
-          "filename" : {
-            "type" : "keyword",
-            "store" : true,
-            "fields" : {
-              "search" : {
-                "type" : "keyword",
-                "normalizer" : "lowercase_normalizer"
-              }
-            }
-          },
-          "group_s" : {
-            "type" : "keyword",
-            "store" : true
-          },
-          "id" : {
-            "type" : "keyword",
-            "store" : true
-          },
-          "init_date" : {
-            "type" : "keyword",
-            "store" : true
-          },
-          "is_revoked_b" : {
-            "type" : "boolean",
-            "store" : true
-          },
-          "keyw_5" : {
-            "type" : "text",
-            "store" : true
-          },
-          "kw_doc_score" : {
-            "type" : "rank_feature"
-          },
-          "new_field" : {
-            "type" : "text",
-            "store" : true,
-            "fields" : {
-              "keyword" : {
-                "type" : "keyword",
-                "store" : true,
-                "ignore_above" : 256,
-                "fields" : {
-                  "search" : {
-                    "type" : "keyword",
-                    "ignore_above" : 256,
-                    "normalizer" : "lowercase_normalizer"
-                  }
-                }
-              }
-            }
-          },
-          "orgs" : {
-            "type" : "rank_features"
-          },
-          "original_ingest_date" : {
-            "type" : "text",
-            "store" : true,
-            "fields" : {
-              "keyword" : {
-                "type" : "keyword",
-                "store" : true,
-                "ignore_above" : 256,
-                "fields" : {
-                  "search" : {
-                    "type" : "keyword",
-                    "ignore_above" : 256,
-                    "normalizer" : "lowercase_normalizer"
-                  }
-                }
-              }
-            }
-          },
-          "page_count" : {
-            "type" : "integer",
-            "store" : true
-          },
-          "pagerank" : {
-            "type" : "rank_feature"
-          },
-          "pagerank_r" : {
-            "type" : "rank_feature"
-          },
-          "par_count_i" : {
-            "type" : "integer",
-            "store" : true
-          },
-          "paragraphs" : {
-            "type" : "nested",
-            "dynamic" : "true",
-            "properties" : {
-              "entities" : {
-                "type" : "nested",
-                "dynamic" : "true",
-                "properties" : {
-                  "ORG_s" : {
-                    "type" : "keyword",
-                    "store" : true
-                  },
-                  "PERSON_s" : {
-                    "type" : "keyword",
-                    "store" : true
-                  }
-                }
-              },
-              "filename" : {
-                "type" : "keyword",
-                "store" : true,
-                "fields" : {
-                  "search" : {
-                    "type" : "keyword",
-                    "normalizer" : "lowercase_normalizer"
-                  }
-                }
-              },
-              "id" : {
-                "type" : "keyword",
-                "store" : true
-              },
-              "page_num_i" : {
-                "type" : "integer",
-                "store" : true
-              },
-              "par_count_i" : {
-                "type" : "integer",
-                "store" : true
-              },
-              "par_inc_count" : {
-                "type" : "long",
-                "store" : true
-              },
-              "par_raw_text_t" : {
-                "type" : "text",
-                "store" : true,
-                "fields" : {
-                  "gc_english" : {
-                    "type" : "text",
-                    "analyzer" : "gc_english"
-                  }
-                },
-                "analyzer" : "standard"
-              },
-              "type" : {
-                "type" : "keyword",
-                "store" : true
-              }
-            }
-          },
-          "pop_score" : {
-            "type" : "long",
-            "store" : true
-          },
-          "publication_date_dt" : {
-            "type" : "date",
-            "store" : true,
-            "format" : "yyyy-MM-dd'T'HH:mm:ss"
-          },
-          "ref_list" : {
-            "type" : "keyword",
-            "store" : true
-          },
-          "sections" : {
-            "properties" : {
-              "all_sections" : {
-                "type" : "text"
-              },
-              "applicability_section" : {
-                "type" : "text"
-              },
-              "definitions_section" : {
-                "type" : "text"
-              },
-              "effective_date" : {
-                "type" : "text"
-              },
-              "effective_date_section" : {
-                "type" : "text",
-                "store" : true,
-                "fields" : {
-                  "keyword" : {
-                    "type" : "keyword",
-                    "store" : true,
-                    "ignore_above" : 256,
-                    "fields" : {
-                      "search" : {
-                        "type" : "keyword",
-                        "ignore_above" : 256,
-                        "normalizer" : "lowercase_normalizer"
-                      }
-                    }
-                  }
-                }
-              },
-              "glossary_section" : {
-                "type" : "text"
-              },
-              "organizations_section" : {
-                "type" : "text"
-              },
-              "policy_section" : {
-                "type" : "text"
-              },
-              "procedures_section" : {
-                "type" : "text"
-              },
-              "purpose_section" : {
-                "type" : "text"
-              },
-              "references_section" : {
-                "type" : "text"
-              },
-              "responsibilities_section" : {
-                "type" : "text"
-              },
-              "subject_section" : {
-                "type" : "text"
-              },
-              "summary_of_change_section" : {
-                "type" : "text"
-              },
-              "table_of_contents" : {
-                "type" : "text"
-              }
-            }
-          },
-          "signature" : {
-            "type" : "keyword",
-            "store" : true
-          },
-          "source_fqdn_s" : {
-            "type" : "keyword",
-            "store" : true
-          },
-          "source_page_url_s" : {
-            "type" : "keyword",
-            "store" : true
-          },
-          "source_title_s" : {
-            "type" : "keyword",
-            "store" : true
-          },
-          "subject" : {
-            "type" : "keyword",
-            "store" : true
-          },
-          "summary_30" : {
-            "type" : "text",
-            "store" : true
-          },
-          "title" : {
-            "type" : "keyword",
-            "store" : true,
-            "fields" : {
-              "search" : {
-                "type" : "keyword",
-                "normalizer" : "lowercase_normalizer"
-              }
-            }
-          },
-          "top_entities_t" : {
-            "type" : "text",
-            "store" : true,
-            "analyzer" : "gc_english"
-          },
-          "topics_s" : {
-            "type" : "keyword",
-            "store" : true
-          },
-          "type" : {
-            "type" : "keyword",
-            "store" : true
-          },
-          "version_hash_s" : {
-            "type" : "keyword",
-            "store" : true
-          },
-          "word_count" : {
-            "type" : "long",
-            "store" : true
           }
         }
       }
+    }
+  }
 }
