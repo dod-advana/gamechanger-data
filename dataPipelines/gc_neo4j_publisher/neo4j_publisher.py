@@ -353,19 +353,26 @@ class Neo4jPublisher:
             process_query(cypher)
 
     def process_dir(self, files: t.List[str], file_dir: str, q: mp.Queue, max_threads: int) -> None:
-        if not files:
-            return
 
-        with ThreadPoolExecutor(max_workers=min(max_threads, 16)) as ex:
-            futures = []
-            for filename in files:
-                try:
-                    if filename.endswith('.json'):
-                        futures.append(ex.submit(self.process_json(os.path.join(file_dir, filename), q)))
-                except Exception as err:
-                    print('RuntimeError in: ' + filename + ' Error: ' + str(err), file=sys.stderr)
-                    q.put(1)
-        return
+        try:
+            if not files:
+                return
+
+            with ThreadPoolExecutor(max_workers=min(max_threads, 16)) as ex:
+                futures = []
+                for filename in files:
+                    try:
+                        if filename.endswith('.json'):
+                            futures.append(ex.submit(self.process_json(os.path.join(file_dir, filename), q)))
+                    except Exception as err:
+                        print('RuntimeError in: ' + filename + ' Error: ' + str(err), file=sys.stderr)
+                        q.put(1)
+                        return
+        except Exception as e:
+            print(f"Error in process_dir {e}", file=sys.stderr)
+            q.put(1)
+        finally:
+            return
 
     def filter_ents(self, ent: str) -> str:
         new_ent = process_ent(ent)

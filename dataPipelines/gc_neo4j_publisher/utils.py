@@ -152,15 +152,25 @@ class Neo4jJobManager:
         publisher.ingest_hierarchy_information()
 
         q = mp.Queue()
-        proc = mp.Process(target=self.listener, args=(q, len(files)))
-        proc.start()
-        workers = [mp.Process(target=self.process_files, args=(file_chunks[i], file_dir, q, publisher, max_threads)) for i in range(n)]
+        # proc = mp.Process(target=self.listener, args=(q, len(files)))
+        # proc.start()
+        workers = [
+            mp.Process(
+                    target=self.process_files, args=(file_chunks[i], file_dir, q, publisher, max_threads)
+                ) 
+                for i in range(n)
+            ]
+        print("starting workers", file=sys.stderr)
         for worker in workers:
+            print(f"worker start: {worker}", file=sys.stderr)
             worker.start()
+
         for worker in workers:
+            print(f"join worker: {worker}", file=sys.stderr)
             worker.join()
+
         q.put(None)
-        proc.join()
+        # proc.join()
 
         if scrape_wiki:
             publisher.process_crowdsourced_ents(without_web_scraping, infobox_dir)
