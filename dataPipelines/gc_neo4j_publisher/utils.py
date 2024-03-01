@@ -153,29 +153,32 @@ class Neo4jJobManager:
         publisher.process_roles()
         publisher.ingest_hierarchy_information()
 
-        q = mp.Queue()
-        proc = mp.Process(target=self.listener, args=(q, len(files)))
-        proc.start()
-        workers = [
-            mp.Process(
-                    target=self.process_files, args=(file_chunks[i], file_dir, q, publisher, max_threads)
-                ) 
-                for i in range(n)
-            ]
-        print("starting workers", file=sys.stderr)
-        for worker in workers:
-            print(f"worker start: {worker}", file=sys.stderr)
-            worker.start()
-            print(f"after start worker: {worker}", file=sys.stderr)
+        for i in range(n):
+            publisher.process_dir_serial(file_chunks[i], file_dir)
 
-        print(f"before join workers loop", file=sys.stderr)
-        for worker in workers:
-            print(f"join worker: {worker}", file=sys.stderr)
-            worker.join()
+        # q = mp.Queue()
+        # proc = mp.Process(target=self.listener, args=(q, len(files)))
+        # proc.start()
+        # workers = [
+        #     mp.Process(
+        #             target=self.process_files, args=(file_chunks[i], file_dir, q, publisher, max_threads)
+        #         ) 
+        #         for i in range(n)
+        #     ]
+        # print("starting workers", file=sys.stderr)
+        # for worker in workers:
+        #     print(f"worker start: {worker}", file=sys.stderr)
+        #     worker.start()
+        #     print(f"after start worker: {worker}", file=sys.stderr)
 
-        print(f"after join workers loop", file=sys.stderr)
-        q.put(None)
-        proc.join()
+        # print(f"before join workers loop", file=sys.stderr)
+        # for worker in workers:
+        #     print(f"join worker: {worker}", file=sys.stderr)
+        #     worker.join()
+
+        # print(f"after join workers loop", file=sys.stderr)
+        # q.put(None)
+        # proc.join()
 
         print(f"if scrape_wiki: {scrape_wiki}", file=sys.stderr)
         if scrape_wiki:
