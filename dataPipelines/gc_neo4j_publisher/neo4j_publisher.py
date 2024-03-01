@@ -353,14 +353,16 @@ class Neo4jPublisher:
             process_query(cypher)
 
     def process_dir(self, files: t.List[str], file_dir: str, q: mp.Queue, max_threads: int) -> None:
-
+        print(f"process dir started", file=sys.stderr)
         try:
             if not files:
                 return
-
+            print(f"has files", file=sys.stderr)
             with ThreadPoolExecutor(max_workers=min(max_threads, 16)) as ex:
                 futures = []
+                print(f"thread pool {ex}", file=sys.stderr)
                 for filename in files:
+                    print(f"filename {filename}", file=sys.stderr)
                     try:
                         if filename.endswith('.json'):
                             futures.append(ex.submit(self.process_json(os.path.join(file_dir, filename), q)))
@@ -371,7 +373,9 @@ class Neo4jPublisher:
         except Exception as e:
             print(f"Error in process_dir {e}", file=sys.stderr)
             q.put(1)
+            return
         finally:
+            print(f"process dir finally block, return", file=sys.stderr)
             return
 
     def filter_ents(self, ent: str) -> str:
