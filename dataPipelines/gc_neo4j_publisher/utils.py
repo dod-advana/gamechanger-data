@@ -51,10 +51,12 @@ class Neo4jJobManager:
     def listener(q: mp.Queue, total: int) -> None:
         pbar = tqdm(total=total)
         for item in iter(q.get, None):
+            print(f"iter q.get to keep from hanging join", file=sys.stderr)
             pbar.update()
 
     @staticmethod
     def process_files(files: t.List[str], file_dir: str, q: mp.Queue, publisher: Neo4jPublisher, max_threads: int) -> None:
+        print(f"process files", file=sys.stderr)
         publisher.process_dir(files, file_dir, q, max_threads)
 
     @staticmethod
@@ -152,8 +154,8 @@ class Neo4jJobManager:
         publisher.ingest_hierarchy_information()
 
         q = mp.Queue()
-        # proc = mp.Process(target=self.listener, args=(q, len(files)))
-        # proc.start()
+        proc = mp.Process(target=self.listener, args=(q, len(files)))
+        proc.start()
         workers = [
             mp.Process(
                     target=self.process_files, args=(file_chunks[i], file_dir, q, publisher, max_threads)
@@ -164,17 +166,22 @@ class Neo4jJobManager:
         for worker in workers:
             print(f"worker start: {worker}", file=sys.stderr)
             worker.start()
+            print(f"after start worker: {worker}", file=sys.stderr)
 
+        print(f"before join workers loop", file=sys.stderr)
         for worker in workers:
             print(f"join worker: {worker}", file=sys.stderr)
             worker.join()
 
+        print(f"after join workers loop", file=sys.stderr)
         q.put(None)
         # proc.join()
 
+        print(f"if scrape_wiki: {scrape_wiki}", file=sys.stderr)
         if scrape_wiki:
             publisher.process_crowdsourced_ents(without_web_scraping, infobox_dir)
 
+        print(f"with scope for references", file=sys.stderr)
         with Config.connection_helper.neo4j_session_scope() as session:
             # Create UKN Documents and create REFERENCES and REFERENCES_UKN links
             try:
