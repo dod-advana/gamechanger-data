@@ -175,7 +175,7 @@ class Neo4jJobManager:
 
         print(f"after join workers loop", file=sys.stderr)
         q.put(None)
-        # proc.join()
+        proc.join()
 
         print(f"if scrape_wiki: {scrape_wiki}", file=sys.stderr)
         if scrape_wiki:
