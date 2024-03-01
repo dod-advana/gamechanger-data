@@ -120,56 +120,62 @@ class Neo4jPublisher:
         self.crowdsourcedEnts = set()
 
     def process_json(self, filepath: str, q: mp.Queue) -> str:
-        with open(filepath) as f:
-            j = json.load(f)
-            o = {}
+        id = -1
+        try:
+            with open(filepath) as f:
+                j = json.load(f)
+                o = {}
 
-            o["id"] = j.get("id", "")
-            o["doc_num"] = j.get("doc_num", "")
-            o["doc_type"] = j.get("doc_type", "")
-            o["display_title_s"] = j.get("display_title_s", "")
-            o["display_org_s"] = j.get("display_org_s", "")
-            o["display_doc_type_s"] = j.get("display_doc_type_s", "")
-            o["ref_list"] = [s.replace("'", '\"') for s in j.get("ref_list", [])]
-            o["access_timestamp_dt"] = j.get("access_timestamp_dt", "")
-            o["publication_date_dt"] = (j.get("publication_date_dt", "") or "")
-            o["crawler_used_s"] = j.get("crawler_used_s", "")
-            o["source_fqdn_s"] = j.get("source_fqdn_s", "")
-            o["source_page_url_s"] = j.get("source_page_url_s", "")
-            o["download_url_s"] = j.get("download_url_s", '')
-            o["cac_login_required_b"] = j.get("cac_login_required_b", False)
-            o["title"] = j.get("title", "").replace('"', "\'")
-            o["keyw_5"] = [s.encode('ascii', 'ignore').decode('utf-8') for s in j.get("keyw_5", [])]
-            o["filename"] = j.get("filename", "")
-            o["summary_30"] = j.get("summary_30", "")
-            o["type"] = j.get("type", "")
-            o["page_count"] = j.get("page_count", 0)
-            o["topics_rs"] = j.get("topics_s", [])
-            o["init_date"] = j.get("init_date", "")
-            o["change_date"] = j.get("change_date", "")
-            o["author"] = j.get("author", "")
-            o["signature"] = j.get("signature", "")
-            o["subject"] = j.get("subject", "")
-            o["classification"] = j.get("classification", "")
-            o["group_s"] = j.get("group_s", "")
-            o["pagerank_r"] = j.get("pagerank_r", 0)
-            o["kw_doc_score_r"] = j.get("kw_doc_score_r", 0)
-            o["version_hash_s"] = j.get("version_hash_s", "")
-            o["is_revoked_b"] = j.get("is_revoked_b", False)
-            o["entities"] = self.process_entity_list(j, "entities")
-            o["orgs"] = self.process_entity_list(j, "orgs")
-            o["roles"] = self.process_entity_list(j, "roles")
-            process_query('CALL policy.createDocumentNodesFromJson(' + json.dumps(json.dumps(o)) + ')')
+                o["id"] = j.get("id", "")
+                id = o["id"]
+                o["doc_num"] = j.get("doc_num", "")
+                o["doc_type"] = j.get("doc_type", "")
+                o["display_title_s"] = j.get("display_title_s", "")
+                o["display_org_s"] = j.get("display_org_s", "")
+                o["display_doc_type_s"] = j.get("display_doc_type_s", "")
+                o["ref_list"] = [s.replace("'", '\"') for s in j.get("ref_list", [])]
+                o["access_timestamp_dt"] = j.get("access_timestamp_dt", "")
+                o["publication_date_dt"] = (j.get("publication_date_dt", "") or "")
+                o["crawler_used_s"] = j.get("crawler_used_s", "")
+                o["source_fqdn_s"] = j.get("source_fqdn_s", "")
+                o["source_page_url_s"] = j.get("source_page_url_s", "")
+                o["download_url_s"] = j.get("download_url_s", '')
+                o["cac_login_required_b"] = j.get("cac_login_required_b", False)
+                o["title"] = j.get("title", "").replace('"', "\'")
+                o["keyw_5"] = [s.encode('ascii', 'ignore').decode('utf-8') for s in j.get("keyw_5", [])]
+                o["filename"] = j.get("filename", "")
+                o["summary_30"] = j.get("summary_30", "")
+                o["type"] = j.get("type", "")
+                o["page_count"] = j.get("page_count", 0)
+                o["topics_rs"] = j.get("topics_s", [])
+                o["init_date"] = j.get("init_date", "")
+                o["change_date"] = j.get("change_date", "")
+                o["author"] = j.get("author", "")
+                o["signature"] = j.get("signature", "")
+                o["subject"] = j.get("subject", "")
+                o["classification"] = j.get("classification", "")
+                o["group_s"] = j.get("group_s", "")
+                o["pagerank_r"] = j.get("pagerank_r", 0)
+                o["kw_doc_score_r"] = j.get("kw_doc_score_r", 0)
+                o["version_hash_s"] = j.get("version_hash_s", "")
+                o["is_revoked_b"] = j.get("is_revoked_b", False)
+                o["entities"] = self.process_entity_list(j, "entities")
+                o["orgs"] = self.process_entity_list(j, "orgs")
+                o["roles"] = self.process_entity_list(j, "roles")
+                process_query('CALL policy.createDocumentNodesFromJson(' + json.dumps(json.dumps(o)) + ')')
 
-            # # TODO responsibilities
-            # text = j["text"]
-            # self.process_responsibilities(text)
+                # # TODO responsibilities
+                # text = j["text"]
+                # self.process_responsibilities(text)
 
-            # TODO paragraphs
-            # self.process_paragraphs(j, doc_id)
-
-        q.put(1)
-        return id
+                # TODO paragraphs
+                # self.process_paragraphs(j, doc_id)
+        except Exception as e:
+            print(f"process_json error: {e}", file=sys.stderr)
+        finally:
+            q.put(1)
+            print(f"finally id {id}", file=sys.stderr)
+            return id
 
     def process_responsibilities(self, text: str) -> None:
         resp = get_responsibilities(text, agencies=self.verified_entities_list)
@@ -365,7 +371,12 @@ class Neo4jPublisher:
                     print(f"filename {filename}", file=sys.stderr)
                     try:
                         if filename.endswith('.json'):
-                            futures.append(ex.submit(self.process_json(os.path.join(file_dir, filename), q)))
+                            print(f"ThreadPoolExecutor submit", file=sys.stderr)
+                            futures.append(
+                                ex.submit(
+                                        self.process_json(os.path.join(file_dir, filename), q)
+                                    )
+                                )
                     except Exception as err:
                         print('RuntimeError in: ' + filename + ' Error: ' + str(err), file=sys.stderr)
                         q.put(1)
