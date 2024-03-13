@@ -10,6 +10,7 @@ configuration/rendered/
 # Envs
 venv/*
 .env
+venv/
 
 # Python cache/test/build files
 
@@ -43,6 +44,7 @@ mlruns/
 
 # variable files (runtime artifacts, etc.)
 /var/**
+var/
 
 # Don't ignore .gitkeep files
 !**/.gitkeep

@@ -1,52 +1,42 @@
-# Pull Tesseract 5..2.0 docker image from AWS Elastic Container Registry account: 092912502985
-FROM 092912502985.dkr.ecr.us-east-1.amazonaws.com/registry1.dso.mil/ironbank/opensource/tesseract-ocr/tesseract:5.2.0
+# Use Ubuntu 20.04 as the base image
+FROM ubuntu:20.04
 
-# Set container as a root user:
-USER root
 
-# Copy the gamechanger-data parsing requirements file
-COPY /dev_tools/requirements/parse-requirements.txt .
+# Install Tesseract OCR and Python 3.8 along with essential build tools
+RUN apt-get update && \
+    apt-get install -y tesseract-ocr \
+                       python3.8 \
+                       python3-pip \
+                       python3.8-dev \
+                       python3.8-venv \
+                       build-essential \
+                       libpng-dev \
+                       libtiff-dev \
+                       libjpeg-dev \
+                       libwebp-dev \
+                       git \
+                       git-lfs \
+                       zip \
+                       unzip \
+                       gzip \
+                       zlib1g-dev && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
-# Install RHEL tools:
-RUN dnf -y update \
-    && dnf install -y glibc-locale-source.x86_64 \
-    && dnf -y install \
-        zip \
-        unzip \
-        gzip \
-        zlib \
-        zlib-devel \
-        git \
-        git-lfs \
-        make \
-        automake \
-        autoconf \
-        libtool \
-        gcc \
-        gcc-c++ \
-        gcc-gfortran \
-        libpng \
-        libpng-devel \
-        libtiff \
-        libtiff-devel \
-        libjpeg-turbo \
-        libjpeg-turbo-devel \
-        python38 \
-        python38-devel.x86_64 \
-        python38-Cython \
-        openblas \
-        openblas-threads \
-        diffutils \
-        file \
-    && dnf clean all \
-    && rm -rf /var/cache/yum
+# Update pip, setuptools, and wheel
+RUN python3.8 -m pip install --upgrade pip setuptools wheel
 
-RUN ln -s /usr/bin/python3 /usr/bin/python & ln -s /usr/bin/pip3 /usr/bin/pip
+# Install the AWS CLI
+RUN pip install awscli
 
-# Install requirements
-RUN pip install --upgrade pip setuptools wheel \
-    && pip install -r parse-requirements.txt --no-deps
+# Copy files into the container
+COPY . /gamechanger-data/
 
+# Install Python dependencies
+RUN pip install --no-deps -r /gamechanger-data/dev_tools/requirements/gc-venv-current.txt
+
+# Set the working directory for the container
 WORKDIR /gamechanger-data
 
+# Set bash as the default entry point
 ENTRYPOINT ["bash"]

@@ -9,6 +9,11 @@
 `gamechanger-data` focuses on the data engineering work of gamechanger. To see all repositories [gamechanger](https://github.com/dod-advana/gamechanger)
 
 
+# Important Note!
+- Configuration of repo is reliant on being able to hit advana-data-zone's s3 bucket. If you do not have access to advana-data-zone's s3 bucket, you will need to fill in your own values in config script; like topic_models __(for ML features)__ and configure_app __(ElasticSearch, Postgres, and Neo4j)__
+- Once venv is set up, set ``DEPLOYMENT_ENV`` variable and run ``./paasJobs/configure_repo.sh`` or ``paasJobs/configure_repo.bat`` <br>
+Example ``DEPLOYMENT_ENV=local ./paasJobs/configure_repo.sh`` or ``set DEPLOYMENT_ENV=local \paasJobs\configure_repo.bat``
+
 ## (Linux) Dev/Prod Deployment Instructions
 
 - Clone fresh `gamechanger-data` repo
@@ -37,7 +42,7 @@
     - `pip install -e '.[dev]'`  (quoting around .[dev] is <span style="color:red">important</span>)
 - That's it.
 
-### Windows
+### Windows (WSL Version)
 
 - Setup Windows Subsystem for Linux (WSL) environment
     - `https://docs.microsoft.com/en-us/windows/wsl/install-win10`
@@ -55,6 +60,29 @@
         - `pip install -e '.[dev]'` (quoting around .[dev] is <span style="color:red">important</span>)
     - That's it, just activate that conda env if you want to use it inside the terminal.
     
+### Windows
+Create venv
+```python -m venv [venv-name]```
+Activate
+```\[venv-name]\Scripts\activate```
+Update venv
+```python -m pip install --upgrade pip setuptools wheel```
+Install requirements.txt
+```pip install --no-deps -r dev_tools\requirements\gc-venv-current.txt```
+
+Run Configure Repo, Steps at the top of this README
+
+__To-Do:__
+- convert .sh scripts to .bat to support window users
+
+### Docker
+```shell
+docker build -t gc-data --no-cache .
+docker rm -f gc-data-test || true
+docker run -it --name gc-data gc-data
+```
+Configure Repo
+
 ## IDE SETUP
 
 ### How to Setup PyCharm IDE
