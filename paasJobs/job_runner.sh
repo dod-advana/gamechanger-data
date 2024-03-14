@@ -11,20 +11,6 @@ set -o pipefail
 ##    job_runner.sh <location-of-the-job-conf-file>
 #
 ## EXAMPLE: job.conf file - params affect how notifications/logs are handled and which job script is launched
-#
-# JOB_NAME="Dummy Job"
-# JOB_SCRIPT="/gamechanger-data/tmp/dummy_job.sh"
-# SEND_NOTIFICATIONS="yes"
-# UPLOAD_LOGS="no"
-# SLACK_HOOK_CHANNEL="#gc-alerts-dev"
-# SLACK_HOOK_URL="https://hooks.slack.com/services/12312123/3534153245"
-# S3_BASE_LOG_PATH_URL="s3://somebucket/someplace"
-# AWS_DEFAULT_REGION="us-east-1"
-# CLEANUP="yes"
-# TMPDIR="/tmp"
-# VENV_ACTIVATE_SCRIPT="/opt/gc-venv-current/bin/activate"
-# PYTHONPATH=/gamechanger-data
-# REPO_DIR=/gamechanger-data
 
 readonly RUNNER_PARENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
