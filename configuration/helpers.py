@@ -2,7 +2,7 @@ import botocore.client
 import boto3
 import elasticsearch
 import sqlalchemy
-import neo4j
+import paasJobs.neo4jTest as neo4jTest
 from sqlalchemy.orm import Session
 import redis
 import requests
@@ -244,9 +244,9 @@ class ConnectionHelper:
         return self.db_session_scope(engine=self.orch_db_engine, session_mode=session_mode)
 
     @property
-    def neo4j_driver(self) -> neo4j.Driver:
+    def neo4j_driver(self) -> neo4jTest.Driver:
         if hasattr(self, '_neo4j_driver_settings'):
-            return neo4j.GraphDatabase.driver(**self._neo4j_driver_settings)
+            return neo4jTest.GraphDatabase.driver(**self._neo4j_driver_settings)
 
         host = self.conf['neo4j']['host']
         port = self.conf['neo4j']['port']
@@ -259,12 +259,12 @@ class ConnectionHelper:
 
         try:
             with raise_on_timeout(5):
-                return neo4j.GraphDatabase.driver(uri, auth=(user, password))
+                return neo4jTest.GraphDatabase.driver(uri, auth=(user, password))
         except ContextTimeout:
             raise TimeoutError("Timed out trying to connect to neo4j")
 
     @contextmanager  # type: ignore
-    def neo4j_session_scope(self) -> t.ContextManager[neo4j.Session]:
+    def neo4j_session_scope(self) -> t.ContextManager[neo4jTest.Session]:
         """Ctx manager for a neo4j session"""
         session = self.neo4j_driver.session()
         try:

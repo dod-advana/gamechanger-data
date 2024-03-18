@@ -14,7 +14,7 @@ from gamechangerml.src.featurization.abbreviation import expand_abbreviations_no
 from gamechangerml.src.featurization.responsibilities import get_responsibilities
 from dataPipelines.gc_neo4j_publisher.config import Config
 from dataPipelines.gc_neo4j_publisher import wiki_utils as wu
-from neo4j import exceptions
+from paasJobs.neo4jTest import exceptions
 import common.utils.text_utils as tu
 import re
 from .config import Config as MainConfig
