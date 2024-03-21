@@ -46,7 +46,8 @@ def filter_and_move():
     zips_as_s3_objs = get_filename_s3_obj_map()
     print('objs :', zips_as_s3_objs.values())
     for zip_filename, s3_obj in zips_as_s3_objs.items():
-        print('checking', zip_filename)
+        constZip_filename = zip_filename # zip_filename gets reassigned, this is to keep the value throughout
+        print('\nchecking', zip_filename, '.zip')
         # archive keeps the original filename so zip_filename irrelevant when searching in the zip but it is useful for identifying the zip name
 
         external_uploads_dt = datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%S')
@@ -54,24 +55,49 @@ def filter_and_move():
         # set prefix dt per zip so multiple zips dont end up in the same timestamped output
 
         crawler_used = None
+
+        # """
+        # zip folder needs to follow this format!!!:
+        # 
+        # in s3, there needs to be a exampleName.zip
+        # inside the folder, needs to contain the same exampleName folder.
+        # example --> exampleName.zip/exampleName/ and the exampleName folder needs to house the following:
+        # crawler_output.json, pdf/html + .metadata and manifest.json
+        # """
+
         try:
             # create in memory zip file object
             in_memory_zip = create_byte_obj(s3_obj)
 
-            with ZipFile(in_memory_zip, 'r') as zf:
-                zip_names = zf.namelist()
-                # in archive base name (ie the original folder name when zipped)
-                base_dir = base_dir_heuristic(zip_names)
+            with ZipFile(in_memory_zip, 'r') as zf: # zf -> zip files
+                file_names = zf.namelist()
+
+                print('file names -> ' , file_names)
+
+                base_dir = base_dir_heuristic(file_names)
+                if not base_dir:
+                    print('improper file zip structure, no base dir. skipping ', zip_filename, '.zip \n')
+                    continue # Skip to next zip
+                else:
+                    print('base_dir --> ', base_dir)
 
                 corrected_manifest_jdocs: typing.List[dict] = []
-                # immediately try to upload this so it will error if not in the archive
+
+                # immediately upload this so it will error if not in the archive
+                crawler_output_loc = f'{base_dir}crawler_output.json' # test/crawler_output.json required format
+                if crawler_output_loc == '': 
+                    'crawler_output.json not found, stopping execution'
+                    continue 
+
                 upload_file_from_zip(
-                    zf_ref=zf, zip_filename=f'{base_dir}crawler_output.json', prefix=destination_prefix_dt)
+                    zf_ref=zf, zip_filename=crawler_output_loc, prefix=destination_prefix_dt, bucket=destination_bucket, base_dir=base_dir)
+                print('successfully created ', external_uploads_dt, 'at ', destination_prefix_dt)
 
                 # get crawler name from manifest file
+                # test prefix manifest source 2024-03-07T10:30:01/
                 try:
-                    with zf.open(f'{base_dir}manifest.json') as manifest:
-
+                    with zf.open(f'{base_dir}manifest.json') as manifest: # test/manifest.json required format
+                        print('manifest found in zip to compare')
                         for line in manifest.readlines():
                             # decode the line in the manifest files
                             line = codecs.decode(line, 'utf-8-sig')
@@ -96,11 +122,12 @@ def filter_and_move():
 
                 previous_hashes, cmltv_manifest_s3_obj, cmltv_manifest_lines = get_previous_manifest_for_crawler(
                     crawler_used)
+                print('pulled previous manifest from ', get_cumulative_manifest_prefix(crawler_used) )
 
                 not_in_previous_hashes = set()
 
                 # sorting through the version hashes and checking for new files
-                for name in zip_names:
+                for name in file_names:
                     if name.endswith('.metadata'):
                         with zf.open(name) as metadata:
                             # we need to correct the metadata for utf-8 first, then read everything else
@@ -110,9 +137,10 @@ def filter_and_move():
                         metadata.close()
 
                         # print for error checking (to be removed)
-                        print("raw data: " + data.decode() + "\n")
-                        print("cleaned metadata: " +
-                              str(corrected_metadata) + "\n")
+                        # print("raw data: " + data.decode() + "\n")
+                        # print("cleaned metadata: " +
+                        #       str(corrected_metadata) + "\n")
+
                         # clean just in case for newlines
                         corrected_metadata = corrected_metadata.replace(
                             "\n", "")
@@ -131,13 +159,21 @@ def filter_and_move():
                             # upload all of the files not in previous version hashes to s3
                             zip_filename = name.replace(
                                 '.metadata', '')  # name of the main file
-                            if zip_filename in zip_names:
+                            
+                            print('zip_filename: ', zip_filename)
+                            print('file_names: ', file_names)
+
+                            # if base_dir in file_names:
+                            for file_name in file_names:
+                                zip_filename = f'{base_dir}{file_name}' if not file_name.startswith(base_dir) else file_name
+                                stripped_name = file_name[len(base_dir):].lstrip('/') if name.startswith(base_dir) else name
                                 # upload the main file
                                 upload_file_from_zip(
-                                    zf_ref=zf, zip_filename=zip_filename, prefix=destination_prefix_dt)
-                                # upload the metadata
-                                upload_jsonlines(
-                                    lines=[jsondoc], filename=name, prefix=destination_prefix_dt)
+                                    zf_ref=zf, zip_filename=zip_filename, prefix=destination_prefix_dt, base_dir=base_dir)
+                                print('uploaded ', stripped_name, " to ", destination_prefix_dt)
+                                
+                            print('move complete for ', constZip_filename, '.zip to ', destination_prefix_dt)
+
 
                 # upload the manifest file after getting all correctd metadata jdocs
                 upload_jsonlines(
@@ -192,39 +228,30 @@ def filter_and_move():
 
         # if no errors, go ahead and delete the zip so it won't be picked up again
         s3_obj.delete()
-
-
+  
 def base_dir_heuristic(zip_names: list):
-    dirs = [zn for zn in zip_names if zn.endswith("/")]
-    if len(dirs) == 0:
-        print(f'no dirs detected, attempting just filenames from {zip_names}')
+    if not zip_names:
         return ''
-    elif len(dirs) == 1:
-        return dirs[0]
-    else:
-        base_dirs = []
-        for zdir in dirs:
-            count = 0
-            for letter in zdir:
-                if letter == '/':
-                    count += 1
-                if count > 1:
-                    break
-
-        if len(base_dirs) == 1:
-            return base_dirs[0]
-        else:
-            raise RuntimeError(
-                f'More than one dir detected in zip, cant find root dir from: {base_dirs}')
+    
+    # Initialize base_dir with the directory of the first file
+    base_dir = '/'.join(zip_names[0].split('/')[:-1]) + '/' if '/' in zip_names[0] else ''
+    
+    # Check if all files start with the same base dir
+    for name in zip_names:
+        current_dir = '/'.join(name.split('/')[:-1]) + '/' if '/' in name else ''
+        if current_dir != base_dir:
+            base_dir = ''
+            break
+    return base_dir
 
 
 def undo_uploads(prefix):
     s3.Bucket(destination_bucket).objects.filter(Prefix=prefix).delete()
 
-
+# Creates directory if not present
+# Targets crawler's specific cumulative-manifest, not overall cumu-manif
 def get_cumulative_manifest_prefix(crawler_used):
     return f"bronze/gamechanger/data-pipelines/orchestration/crawlers_rpa/{crawler_used}/cumulative-manifest.json"
-
 
 def get_previous_manifest_for_crawler(crawler_used) -> typing.Tuple[set, typing.Union[None, object]]:
     previous_hashes = set()
@@ -273,12 +300,23 @@ def create_byte_obj(s3_obj):
     bytes_obj = BytesIO(body_bytes)
     return bytes_obj
 
-
-def upload_file_from_zip(zf_ref, zip_filename, prefix, bucket=destination_bucket):
+def upload_file_from_zip(zf_ref, zip_filename, prefix, bucket=destination_bucket, base_dir=''):
     with zf_ref.open(zip_filename, "r") as f:
-        _, __, filename = zip_filename.rpartition('/')
-        s3_client.upload_fileobj(
-            f, bucket, f"{prefix}/{filename}")
+        # Remove the base_dir from zip_filename
+        if base_dir and zip_filename.startswith(base_dir):
+            filename = zip_filename[len(base_dir):].lstrip('/')
+        else:
+            filename = zip_filename
+        s3_client.upload_fileobj(f, bucket, f"{prefix}/{filename}")
+        
+def delete_empty_base_dir(bucket, base_dir_prefix):
+    # Check if base_dir is empty
+    base_dir_contents = list(s3_client.list_objects_v2(Bucket=bucket, Prefix=base_dir_prefix)['Contents'])
+    if len(base_dir_contents) == 1 and base_dir_contents[0]['Key'].endswith('/'):
+        s3_client.delete_object(Bucket=bucket, Key=base_dir_contents[0]['Key'])
+        print('\ndeleted ', base_dir_prefix)
+    else:
+        print('\n', base_dir_prefix, ' was not empty, did not delete')
 
 
 def upload_jsonlines(lines: typing.List[dict], filename: str, prefix: str, bucket=destination_bucket):
