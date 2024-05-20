@@ -1,25 +1,29 @@
-from gamechangerml.configs import BertSummConfig
-#from gamechangerml.src.featurization.summary import GensimSumm
+import os
 
 
-
-def get_summary(text: str) -> str:
-
-    if len(text) < BertSummConfig.MODEL_ARGS['doc_limit']:
-        long_doc = False
-    else:
-        long_doc = True
-
-    try:
+def get_placeholder() -> str:
+    """Returns empty string in PROD and lorem ipsum... otherwise"""
+    if os.environ["DEPLOYMENT_ENV"] == "PROD":
         return ""
-        # TODO 09/14/2021 - refine summary generation
-        #return GensimSumm(text, long_doc=long_doc, word_count=30).make_summary()
-    except Exception as e:
-        print(e)
-        return ""
+    return (
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sodales urna massa. "
+        "Integer id lorem nec felis hendrerit sagittis non nec arcu. "
+        "Curabitur maximus lacus est, et rhoncus lorem ultricies sed. "
+        "Curabitur ultricies, metus ac placerat viverra, mauris libero mollis diam, "
+        "et fringilla libero metus in ipsum. "
+        "In interdum molestie velit, in efficitur tellus tincidunt eu. "
+        "Sed bibendum elementum quam, quis tempus tortor pretium quis. "
+        "Nam mattis magna volutpat ante auctor, sed varius magna interdum. "
+        "Nam vel arcu eget orci faucibus aliquet. "
+        "Aenean velit massa, varius a lectus id, tincidunt lacinia magna. "
+        "Interdum et malesuada fames ac ante ipsum primis in faucibus. "
+        "Duis tristique mollis fermentum. Quisque id posuere diam. "
+        "Duis vitae gravida lorem. Pellentesque sed odio commodo felis ultrices posuere in vel mi."
+    )
 
 
 def add_summary(doc_dict):
-    summary = get_summary(doc_dict["text"])
+    """Add summary_30 field to doc dict"""
+    summary = get_placeholder()
     doc_dict["summary_30"] = summary
     return doc_dict
