@@ -3,7 +3,9 @@ import os
 
 def get_placeholder() -> str:
     """Returns empty string in PROD and lorem ipsum... otherwise"""
-    if os.environ["DEPLOYMENT_ENV"] == "PROD":
+
+    deployment_env = os.environ.get("DEPLOYMENT_ENV", "").lower()
+    if deployment_env == "prod":
         return ""
     return (
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sodales urna massa. "
