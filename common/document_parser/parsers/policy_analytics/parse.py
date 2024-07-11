@@ -39,6 +39,7 @@ def parse(
     try:
         meta_dict = read_meta.read_metadata(meta_data)
         doc_dict = init_doc.create_doc_dict_with_meta(meta_dict)
+        
 
         init_doc.assign_f_name_fields(f_name, doc_dict)
         init_doc.assign_other_fields(doc_dict)
@@ -49,6 +50,15 @@ def parse(
             f_name = file_utils.coerce_file_to_pdf(f_name)
             doc_dict['filename'] = re.sub(r'\.[^.]+$', '.pdf', doc_dict['filename'])
             should_delete = False
+            
+
+
+        doc_obj = pdf_reader.get_fitz_doc_obj(f_name)
+        pages.handle_pages(doc_obj, doc_dict)
+        doc_obj.close()
+
+        paragraphs.add_paragraphs(doc_dict)
+
         funcs = [
             ref_list.add_ref_list,
             entities.extract_entities,
@@ -61,13 +71,7 @@ def parse(
             text_length.add_word_count,
             add_sections,
         ]
-
-        doc_obj = pdf_reader.get_fitz_doc_obj(f_name)
-        pages.handle_pages(doc_obj, doc_dict)
-        doc_obj.close()
-
-        paragraphs.add_paragraphs(doc_dict)
-
+        
         for func in funcs:
             try:
                 func(doc_dict)
@@ -78,10 +82,13 @@ def parse(
         # doc_dict = dates.process(doc_dict) 
         doc_dict = post_process(doc_dict)
         doc_dict = process_ingest_date(doc_dict)
+        
+        ## NEW
+        doc_dict = crawler_info(doc_dict)
 
         write_doc_dict_to_json.write(out_dir=out_dir, ex_dict=doc_dict)
     except Exception as e:
-        print("ERROR in policy_analytics.parse:", e)
+        print("ERROR in policy_analytics.parse:", repr(e))
     finally:
         if should_delete:
             os.remove(f_name)
@@ -103,6 +110,23 @@ def process_ingest_date(doc_dict):
     if len(resultset) > 0:
         doc_dict['original_ingest_date'] = datetime.strftime(resultset[0]['min'], '%Y-%m-%dT%H:%M:%S') if resultset[0]['min'] != None else doc_dict["access_timestamp_dt"] 
         doc_dict['current_ingest_date'] = datetime.strftime(resultset[0]['max'], '%Y-%m-%dT%H:%M:%S') if resultset[0]['max'] != None else doc_dict["access_timestamp_dt"]
+    return doc_dict
+
+### NEW FUNCION ###
+def crawler_info(doc_dict):
+    from json import dumps
+    from dataPipelines.gc_ingest.tools.db.utils import CoreDBManager, DBType
+    db_type = DBType('orch')
+    db_manager = CoreDBManager("", "")
+    db_engine = db_manager.get_db_engine(db_type=db_type)
+
+    result = db_engine.execute(f"SELECT source_title, data_source_s from public.crawler_info where crawler = '{doc_dict['crawler_used_s']}'")
+    resultset = [dict(row) for row in result]
+    if len(resultset) > 0:
+        if resultset[0]['source_title'] == 'none':
+            doc_dict['crawler_display_name'] = resultset[0]['data_source_s']
+        else:
+            doc_dict['crawler_display_name'] = f"{resultset[0]['data_source_s']} - {resultset[0]['source_title']}"
     return doc_dict
 
 def post_process(doc_dict):

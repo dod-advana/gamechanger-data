@@ -102,7 +102,7 @@ class Document:
         self.set_field(FieldNames.PAR_COUNT, 0)
 
         for page_num, _ in enumerate(pages):
-            page_text = self.get_page_raw_text(page_num)
+            page_text = self.get_page_raw_text(page_num) #  else p_raw_text
 
             for par_num, tokens in enumerate(process(page_text)):
                 par_text = Document.tokens_to_str(tokens)

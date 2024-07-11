@@ -41,18 +41,14 @@ def get_responsibilities(text, agencies=None):
         prev = text.split("RESPONSIBILITIES", 1)[0].strip().split(" ")[-2:]
         while new[0] == ".":
             if "RESPONSIBILITIES" in new:
-                prev = (
-                    new.split("RESPONSIBILITIES", 1)[0].strip().split(" ")[-2:]
-                )
+                prev = new.split("RESPONSIBILITIES", 1)[0].strip().split(" ")[-2:]
                 new = new.split("RESPONSIBILITIES", 1)[1].lstrip()
             else:
                 check = False
                 break
         if new.split(" ")[0] == "SECTION":
             if "RESPONSIBILITIES" in new:
-                prev = (
-                    new.split("RESPONSIBILITIES", 1)[0].strip().split(" ")[-2:]
-                )
+                prev = new.split("RESPONSIBILITIES", 1)[0].strip().split(" ")[-2:]
                 new = new.split("RESPONSIBILITIES", 1)[1].lstrip()
         if check:
             prev = " ".join(prev)
@@ -60,9 +56,7 @@ def get_responsibilities(text, agencies=None):
             prev = re.sub(pattern=r"\s+", repl=r" ", string=prev)
             first = prev.split(" ")[-1]
             if re.match("([0-9].)+", first) is not None:
-                it = re.sub(
-                    "(\d+)(?!.*\d)", lambda x: str(int(x.group(0)) + 1), first
-                )
+                it = re.sub("(\d+)(?!.*\d)", lambda x: str(int(x.group(0)) + 1), first)
             elif any(i.isdigit() for i in first):
                 it = prev.split(" ")[-2]
             else:
@@ -82,9 +76,7 @@ def parse(ptext):
     if "1." in it:
         text = text.split(" ", 1)[1]
         while it in ptext:
-            it = re.sub(
-                "(\d+)(?!.*\d)", lambda x: str(int(x.group(0)) + 1), it
-            )
+            it = re.sub("(\d+)(?!.*\d)", lambda x: str(int(x.group(0)) + 1), it)
             temp.append(text.split(it, 1)[0])
             if len(text.split(it, 1)) > 1:
                 text = text.split(it, 1)[1]

@@ -117,7 +117,7 @@
       "group_s":{
          "type":"string"
       },
-      "keyw_5":{
+      "":{
          "type":"array",
          "additionalItems":false,
          "items":{

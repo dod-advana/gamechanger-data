@@ -1,16 +1,17 @@
 from gensim.parsing.preprocessing import STOPWORDS
 from gensim.utils import simple_preprocess
-from gamechangerml import MODEL_PATH
-from transformers import AutoTokenizer
-import os
+
+# from gamechangerml import MODEL_PATH
+# from transformers import AutoTokenizer
+# import os
 
 
-def get_tokenizer(
-    model_name: str = os.path.join(
-        MODEL_PATH, "transformers/msmarco-distilbert-base-v2"
-    )
-):
-    return AutoTokenizer.from_pretrained(model_name)
+# def get_tokenizer(
+#     model_name: str = os.path.join(
+#         MODEL_PATH, "transformers/msmarco-distilbert-base-v2"
+#     )
+# ):
+#     return AutoTokenizer.from_pretrained(model_name)
 
 
 def preprocess(

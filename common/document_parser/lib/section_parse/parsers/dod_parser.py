@@ -1,3 +1,4 @@
+import sys
 from os.path import splitext
 from re import match, search, fullmatch, IGNORECASE
 from typing import List
