@@ -25,7 +25,7 @@ ENV LANG="C.utf8" \
 
 # Additional Repos
 RUN \
-      rpm --import https://download.postgresql.org/pub/repos/yum/RPM-GPG-KEY-PGDG \
+      rpm --import https://download.postgresql.org/pub/repos/yum/keys/RPM-GPG-KEY-PGDG \
   &&  yum install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm \
   &&  rpm --import https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL \
   &&  rpm --import https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-7 \
@@ -175,7 +175,7 @@ RUN \
     "${APP_SRC}"
 
 # setup venv
-COPY ./dev_tools/requirements/requirements.txt /tmp/requirements.txt
+COPY ./dev_tools/requirements/gc-venv-currnet.txt /tmp/requirements.txt
 RUN \
       scl enable "rh-python${PYTHON_VERSION}" -- python -m venv "${APP_VENV}" --prompt app-root \
   &&  "${APP_VENV}/bin/python" -m pip install --upgrade --no-cache-dir pip setuptools wheel \

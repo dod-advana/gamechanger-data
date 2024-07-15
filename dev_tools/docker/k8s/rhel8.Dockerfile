@@ -24,7 +24,7 @@ ENV LANG="C.utf8" \
 
 # Additional Repos
 RUN \
-      rpm --import https://download.postgresql.org/pub/repos/yum/RPM-GPG-KEY-PGDG \
+      rpm --import https://download.postgresql.org/pub/repos/yum/keys/RPM-GPG-KEY-PGDG \
   &&  dnf install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-latest.noarch.rpm \
   &&  rpm --import https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL \
   &&  rpm --import https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-8 \
@@ -32,8 +32,9 @@ RUN \
 
 # COMMON Packages & More Particular RPM Dependcies
 RUN \
-      dnf install -y glibc-locale-source.x86_64 \
-  &&  dnf install -y \
+      dnf update -y \
+  &&  dnf install -y glibc-locale-source.x86_64 \
+  &&  dnf install -y --skip-broken \
         zip \
         unzip \
         gzip \
@@ -59,7 +60,7 @@ RUN \
         python38-Cython \
         "postgresql13" \
         "postgresql13-devel" \
-        libpq5-devel-13.4-42PGDG.rhel8 \
+        libpq5-devel \
         openblas \
         openblas-threads \
         diffutils \
@@ -188,7 +189,7 @@ RUN \
     "${APP_SRC}"
 
 # setup venv
-COPY ./dev_tools/requirements/requirements.txt /tmp/requirements.txt
+COPY ./dev_tools/requirements/rhel8.locked.requirements.txt /tmp/requirements.txt
 RUN \
       python3 -m venv "${APP_VENV}" --prompt app-root \
   &&  "${APP_VENV}/bin/python" -m pip install --upgrade --no-cache-dir pip setuptools wheel \
